@@ -14,7 +14,7 @@ export default class SvgIcon extends Vue {
         required: true,
         default: ''
     })
-    iconClass!: string;
+    name!: string;
 
     @Prop({
         type: String,
@@ -23,7 +23,7 @@ export default class SvgIcon extends Vue {
     className!: string;
 
     get iconName() {
-        return `#icon-${this.iconClass}`;
+        return `#icon-${this.name}`;
     }
 
     get svgClass() {
@@ -35,7 +35,7 @@ export default class SvgIcon extends Vue {
     }
     
     // mounted() {
-    //     // console.log('mounted', this.iconClass, this.className);
+    //     // console.log('mounted', this.name, this.className);
     // }
 }
 </script>

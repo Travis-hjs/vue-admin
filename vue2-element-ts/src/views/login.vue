@@ -8,22 +8,26 @@
             <h3 class="title">{{ title }}</h3>
             <el-form-item prop="username">
                 <span class="svg-container">
-                    <svg-icon iconClass="user"/>
+                    <svg-icon name="user"/>
                 </span>
                 <el-input v-model="loginForm.username" name="username" type="text" auto-complete="off" placeholder="用户名或者账号" />
             </el-form-item>
             <el-form-item prop="password">
                 <span class="svg-container">
-                    <svg-icon iconClass="password"/>
+                    <svg-icon name="password"/>
                 </span>
                 <el-input :type="pwdType" v-model="loginForm.password" name="password" auto-complete="off" placeholder="密码" @keyup.enter.native="handleLogin" />
                 <span class="show-pwd" @click="showPwd">
-                    <svg-icon :iconClass="pwdType === 'password' ? 'eye-off' : 'eye-on'"/>
+                    <svg-icon :name="pwdType === 'password' ? 'eye-off' : 'eye-on'"/>
                 </span>
             </el-form-item>
             <el-form-item>
                 <el-button :loading="loading" class="btn" type="primary" @click="handleLogin">登录</el-button>
             </el-form-item>
+            <div class="tips" v-for="(item, index) in tipList" :key="index">
+                <span>账号：{{ item }}</span>
+                <span>密码 : 随便填</span>
+            </div>
         </el-form>
 
         <a class="copyright" :href="tipLink">{{ tipLink }}</a>
@@ -34,6 +38,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '../modules/utils';
 import apiUser from '../api/user';
+import store from '../modules/store';
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
@@ -54,6 +59,7 @@ function validatePass(rule: any, value: string, callback: Function) {
 export default class Login extends Vue {
     title = 'vue2-element-ts';
     tipLink = 'https://github.com/Hansen-hjs';
+    tipList = store.testUserList;
 
     /** 背景信息 */
     background = {
@@ -94,7 +100,7 @@ export default class Login extends Vue {
         if (!this.loginForm.username) return this['$message'].error('账号不能为空！');
         if (!this.loginForm.password) return this['$message'].error('密码不能为空！');
         this.loading = true;
-        console.log(this.loginForm);
+        console.log('用户登录信息：', this.loginForm);
         apiUser.login(this.loginForm, (res: any) => {
             // console.log('success', res);
             this.loading = false;

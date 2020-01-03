@@ -1,99 +1,169 @@
 <template>
-    <div class="layout-wrap">
-        <div class="sidebar">
-            <div class="sidebar-view">
-                <ul class="menu-list" v-for="(item, index) in menuList" :key="index">
-                    <div class="menu-title" v-if="!item.hidden && item.meta">{{ item.meta.title }}</div>
-                    <li class="menu-item" v-for="(item1, index1) in item.children" :key="index1">{{ item1.meta.title }}</li>
-                </ul>
+    <div :class="classObj" class="app-wrapper">
+        <div
+            v-if="classObj.mobile && sidebar.opened"
+            class="drawer-bg"
+            @click="handleClickOutside"
+        />
+        <sidebar class="sidebar-container" />
+        <div :class="{hasTagsView: showTagsView}" class="main-container">
+            <div :class="{'fixed-header': fixedHeader}">
+                <navbar />
+                <tags-view v-if="showTagsView" />
             </div>
+            <app-main />
+            <right-panel v-if="showSettings">
+                <settings />
+            </right-panel>
         </div>
-        <div class="main-box"></div>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import store from '../modules/store';
+import { Component } from "vue-property-decorator";
+import { mixins } from "vue-class-component";
+import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
+import RightPanel from "../components/RightPanel/index.vue";
+import ResizeMixin from "./mixin/resize";
+import store from "../modules/store";
 
-@Component({})
-export default class Layout extends Vue {
-    
-    /** 导航列表 */
-    private menuList = store.addRouters;
+@Component({
+    name: "Layout",
+    components: {
+        AppMain,
+        Navbar,
+        RightPanel,
+        Settings,
+        Sidebar,
+        TagsView
+    }
+})
+export default class extends mixins(ResizeMixin) {
+    get classObj() {
+        return {
+            hideSidebar: !store.layoutState.sidebarOpen,
+            openSidebar: store.layoutState.sidebarOpen,
+            withoutAnimation: store.layoutState.sidebarWithoutAnimation,
+            mobile: this.device === 'mobile'
+        };
+    }
 
-    mounted() {
-        console.log('slide', this.menuList);
+    get showSettings() {
+        return true;
+        // return SettingsModule.showSettings;
+    }
+
+    get showTagsView() {
+        return true;
+        // return SettingsModule.showTagsView;
+    }
+
+    get fixedHeader() {
+        return false;
+        // return SettingsModule.fixedHeader;
+    }
+
+    private handleClickOutside() {
+        store.layoutState.sidebarWithoutAnimation = false;
+        // AppModule.CloseSideBar(false);
     }
 }
 </script>
 
-<style lang="scss">
-$bg: rgb(48, 65, 86);
-$color: rgb(191, 203, 217);
-$hoverBg: rgb(38,52,69);
-$sideWidth: 210px;
-$menuTitleHeight: 56px;
-$menuItemHeight: 50px;
-$menuItemBg: #1f2d3d;
-$menuItemHoverBg: #001528;
-
-.layout-wrap {
-    ul {
-        box-sizing: border-box;
-        list-style: none; 
-        padding: 0; 
-        margin: 0;
-    }
+<style lang="scss" scoped>
+.app-wrapper {
+    @include clearfix;
     position: relative;
-    width: 100%;
     height: 100%;
-    display: flex;
-    .sidebar {
-        width: $sideWidth;
-        height: 100%;
-        background-color: $bg;
-        overflow: hidden;
-        .sidebar-view{
-            width: 227px;
-            height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            .menu-list {
-                max-height: $menuTitleHeight;
-                width: $sideWidth;
-                overflow: hidden;
-                color: $color;
-                font-size: 14px;
-                cursor: pointer;
-                .menu-title{
-                    width: 100%;
-                    height: $menuTitleHeight;
-                    line-height: $menuTitleHeight;
-                    padding: 0 20px;
-                    box-sizing: border-box;
-                    transition: .3s all;
-                    &:hover{
-                        background-color: $hoverBg;
-                    }
-                }
-                .menu-item{
-                    width: 100%;
-                    height: $menuItemHeight;
-                    line-height: $menuItemHeight;
-                    padding: 0 20px;
-                    box-sizing: border-box;
-                    transition: .3s all;
-                    background-color: $menuItemBg;
-                    &:hover{
-                        background-color: $menuItemHoverBg;
-                    }
-                }
-            }
+    width: 100%;
+}
+
+.drawer-bg {
+    background: #000;
+    opacity: 0.3;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
+}
+
+.main-container {
+    min-height: 100%;
+    transition: margin-left 0.28s;
+    margin-left: $sideBarWidth;
+    position: relative;
+}
+
+.sidebar-container {
+    transition: width 0.28s;
+    width: $sideBarWidth !important;
+    height: 100%;
+    position: fixed;
+    font-size: 0px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.fixed-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9;
+    width: calc(100% - #{$sideBarWidth});
+    transition: width 0.28s;
+}
+
+.hideSidebar {
+    .main-container {
+        margin-left: 54px;
+    }
+
+    .sidebar-container {
+        width: 54px !important;
+    }
+
+    .fixed-header {
+        width: calc(100% - 54px);
+    }
+}
+
+/* for mobile response 适配移动端 */
+.mobile {
+    .main-container {
+        margin-left: 0px;
+    }
+
+    .sidebar-container {
+        transition: transform 0.28s;
+        width: $sideBarWidth !important;
+    }
+
+    &.openSidebar {
+        position: fixed;
+        top: 0;
+    }
+
+    &.hideSidebar {
+        .sidebar-container {
+            pointer-events: none;
+            transition-duration: 0.3s;
+            transform: translate3d(-$sideBarWidth, 0, 0);
         }
     }
-    .main-box {
-        height: 100%;
+
+    .fixed-header {
+        width: 100%;
+    }
+}
+
+.withoutAnimation {
+    .main-container,
+    .sidebar-container {
+        transition: none;
     }
 }
 </style>

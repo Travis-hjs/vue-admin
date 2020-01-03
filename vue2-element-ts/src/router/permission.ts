@@ -1,4 +1,4 @@
-import { router, admin1, admin2 } from './index';
+import { router, admin, editor } from './index';
 import apiUser from '../api/user';
 import store from '../modules/store';
 
@@ -17,13 +17,13 @@ router.beforeEach((to, from, next) => {
             } else {
                 switch (userInfo.loginType) {
                     case 1:
-                        router.addRoutes(admin1);
-                        store.addRouters = admin1;
+                        store.addRouters = admin;
+                        router.addRoutes(admin);
                         break;
                 
                     case 2:
-                        router.addRoutes(admin2);
-                        store.addRouters = admin2;
+                        store.addRouters = editor;
+                        router.addRoutes(editor);
                         break;
                 }
                 next({ ...to, replace: true });

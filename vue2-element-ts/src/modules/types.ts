@@ -41,3 +41,38 @@ export interface userState {
     /** 用户id */
     userId: number | string
 }
+
+interface routeMeta {
+    /** 导航文字 */
+    title: string
+    /** 导航icon */
+    icon?: string
+}
+
+/** 路由数组对象 */
+export interface routeItem {
+    name?: string
+    /** 路由组件 */
+    component: any
+    /** 路由路径 */
+    path: string
+    /** 路由信息 */
+    meta?: routeMeta
+    /** 是否导航隐藏 */
+    hidden?: boolean
+    /** 定义菜单组件时用到的展开 */
+    open?: boolean
+    /** 子路由 */
+    children?: Array<routeItem>
+}
+
+export interface layoutStateType {
+    /** 侧边栏展开 */
+    sidebarOpen: boolean
+    /** 侧边栏动画 */
+    sidebarWithoutAnimation: boolean
+    /** 历史记录列表 */
+    cachedViews: Array<string>
+    /** 系统信息 */
+    device: 'desktop' | 'mobile'
+}
