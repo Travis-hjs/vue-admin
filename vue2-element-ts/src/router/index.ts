@@ -4,6 +4,7 @@ import store from '../modules/store';
 import Layout from '../layout/index.vue';
 
 Vue.use(VueRouter);
+
 /**
  * 基础路由
  * learn: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
