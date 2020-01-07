@@ -40,11 +40,11 @@ export default class NoPower extends Vue {
     private images = store.pageImage;
 
     private back() {
-        // if (this['$route'].query.noGoBack) {
-        //     this['$route'].push({ path: '/' });
-        // } else {
-        //     this['$route'].go(-1);
-        // }
+        if (this.$route.query.noGoBack) {
+            this.$router.push({ path: '/' });
+        } else {
+            this.$router.go(-1);
+        }
     }
 }
 </script>

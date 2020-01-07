@@ -95,14 +95,15 @@ class ModuleUtil {
         const valid = ['admin', 'editor']
         return valid.indexOf(str.trim()) >= 0
     }
-    
+
     isExternal(path: string) {
         return /^(https?:|mailto:|tel:)/.test(path)
     }
-    
+
     isValidPassowrd(psd: string) {
         return /^[\w]{6,10}$/.test(psd)
     }
+    
 }
 
 /** 工具模块 */

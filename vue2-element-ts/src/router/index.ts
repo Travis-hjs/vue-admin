@@ -1,157 +1,107 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import { routeItem } from '../modules/types';
 import store from '../modules/store';
 import Layout from '../layout/index.vue';
-import Login from '../views/login.vue';
-import Page404 from '../views/404.vue';
-import Page401 from '../views/401.vue';
 
 Vue.use(VueRouter);
-
-const base: Array<routeItem> = [
+/**
+ * 基础路由
+ * learn: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
+ */
+export const base: Array<RouteConfig> = [
     {
         path: store.loginPath,
         name: 'login',
         component: () => import('@/views/login.vue'),
-        hidden: true,
+        meta: { hidden: true },
     }, {
         path: '/404',
         name: 'page-404',
         component: () => import('@/views/404.vue'),
-        hidden: true,
+        meta: { hidden: true, title: '不存在该页面' },
     }, {
         path: '/401',
         name: 'page-401',
         component: () => import('@/views/401.vue'),
-        hidden: true,
+        meta: { hidden: true, title: '暂无权限访问' },
     }
 ];
 
-export const admin: Array<routeItem> = [
+/** 用户类型一路由 */
+export const admin: Array<RouteConfig> = [
     {
         path: '/',
-        name: 'home',
+        name: 'index',
+        redirect: '/home',
         component: Layout,
-        hidden: false,
         meta: { title: '首页', icon: 'excel' }, 
         children: [
             {
-                path: 'about',
-                meta: { title: '选项一', icon: 'international' },
-                component: () => import('../views/About.vue'),
+                path: 'home',
+                meta: { title: '首页展示', icon: 'guide' },
+                component: () => import('../views/pages/page-1.vue')
+            },
+            {
+                path: 'class',
+                name: 'class',
+                meta: { title: '多级菜单', icon: 'tree-table' },
+                component: () => import('../views/pages/page-2.vue'),
                 children: [
                     {
-                        path: 'about',
-                        meta: { title: '2-1', icon: 'international' },
-                        component: Page404
+                        path: 'class1',
+                        name: 'class/2-1',
+                        meta: { title: 'class/2-1', icon: 'tree' },
+                        component: () => import('../views/pages/page-3.vue')
                     }, {
-                        path: 'about',
-                        meta: { title: '2-2', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-1', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-2', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-1', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-2', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-1', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-2', icon: 'international' },
-                        component: Page404
+                        path: 'class2',
+                        name: 'class/2-2',
+                        meta: { title: 'class/2-2', icon: 'tree' },
+                        component: () => import('../views/pages/page-4.vue')
                     }
                 ]
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
-            }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
             }
         ]
     },
     {
-        path: '/about',
-        name: 'about',
-        meta: { title: '栏目', icon: 'excel' }, 
+        path: '/column',
+        name: 'column',
+        redirect: '/column/column1',
+        meta: { title: '栏目', icon: 'dashboard' }, 
         component: Layout,
-        // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
         children: [
             {
-                path: 'about',
-                meta: { title: '选项一', icon: 'international' },
-                component: () => import('../views/About.vue'),
-                children: [
-                    {
-                        path: 'about',
-                        meta: { title: '2-1', icon: 'international' },
-                        component: Page404
-                    }, {
-                        path: 'about',
-                        meta: { title: '2-2', icon: 'international' },
-                        component: Page404
-                    }
-                ]
+                path: 'column1',
+                name: 'column1',
+                meta: { title: '栏目一', icon: 'theme' },
+                component: () => import('../views/pages/page-5.vue'),
             }, {
-                path: 'about',
-                meta: { title: '选项二', icon: 'guide' },
-                component: Page404
+                path: 'column2',
+                name: 'column2',
+                meta: { title: '栏目二', icon: 'table' },
+                component: () => import('../views/pages/page-6.vue')
+            }
+        ]
+    },
+    {
+        path: '/icon',
+        component: Layout,
+        children: [
+            {
+                path: 'index',
+                component: () => import(/* webpackChunkName: "icons" */ '../views/pages/icons.vue'),
+                name: 'Icons',
+                meta: {
+                    title: 'icons',
+                    icon: 'icon',
+                    noCache: true
+                }
             }
         ]
     }
 ]
 
-export const editor: Array<routeItem> = [
-    {
-        path: '/',
-        name: 'home',
-        component: Layout
-    },
-    {
-        path: '/about',
-        name: 'about',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-    }
-]
+/** 用户类型二路由（懒得整多一份了，直接用上面的） */
+export const editor = admin;
 
 export const router = new VueRouter({
     routes: base

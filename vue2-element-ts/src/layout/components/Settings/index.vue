@@ -1,10 +1,10 @@
 <template>
     <div class="drawer-container">
         <div>
-            <h3 class="drawer-title">{{ $t('settings.title') }}</h3>
+            <h3 class="drawer-title">系统布局配置</h3>
 
             <div class="drawer-item">
-                <span>{{ $t('settings.theme') }}</span>
+                <span>主题色</span>
                 <theme-picker
                     style="float: right;height: 26px;margin: -3px 8px 0 0;"
                     @change="themeChange"
@@ -12,23 +12,23 @@
             </div>
 
             <div class="drawer-item">
-                <span>{{ $t('settings.showTagsView') }}</span>
-                <el-switch v-model="showTagsView" class="drawer-switch" />
+                <span>显示 Tags-View</span>
+                <el-switch v-model="pageState.showTagsView" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">
-                <span>{{ $t('settings.showSidebarLogo') }}</span>
-                <el-switch v-model="showSidebarLogo" class="drawer-switch" />
+                <span>显示侧边栏 Logo</span>
+                <el-switch v-model="pageState.showSidebarLogo" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">
-                <span>{{ $t('settings.fixedHeader') }}</span>
-                <el-switch v-model="fixedHeader" class="drawer-switch" />
+                <span>固定 Header</span>
+                <el-switch v-model="pageState.fixedHeader" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">
-                <span>{{ $t('settings.sidebarTextTheme') }}</span>
-                <el-switch v-model="sidebarTextTheme" class="drawer-switch" />
+                <span>侧边栏文字主题色</span>
+                <el-switch v-model="pageState.sidebarTextTheme" class="drawer-switch" />
             </div>
         </div>
     </div>
@@ -36,8 +36,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { SettingsModule } from "@/store/modules/settings";
-import ThemePicker from "@/components/ThemePicker/index.vue";
+import ThemePicker from "../../../components/ThemePicker.vue";
+import store from "../../../modules/store";
 
 @Component({
     name: "Settings",
@@ -45,41 +45,38 @@ import ThemePicker from "@/components/ThemePicker/index.vue";
         ThemePicker
     }
 })
-export default class extends Vue {
-    get fixedHeader() {
-        return SettingsModule.fixedHeader;
-    }
+export default class Settings extends Vue {
 
-    set fixedHeader(value) {
-        SettingsModule.ChangeSetting({ key: "fixedHeader", value });
-    }
+    private pageState = store.layoutState;
 
-    get showTagsView() {
-        return SettingsModule.showTagsView;
-    }
+    private colorSwitch: boolean = false;
 
-    set showTagsView(value) {
-        SettingsModule.ChangeSetting({ key: "showTagsView", value });
-    }
-
-    get showSidebarLogo() {
-        return SettingsModule.showSidebarLogo;
-    }
-
-    set showSidebarLogo(value) {
-        SettingsModule.ChangeSetting({ key: "showSidebarLogo", value });
-    }
-
-    get sidebarTextTheme() {
-        return SettingsModule.sidebarTextTheme;
-    }
-
-    set sidebarTextTheme(value) {
-        SettingsModule.ChangeSetting({ key: "sidebarTextTheme", value });
+    /**
+     * 更新`css`样式
+     * @description 这里我单独修改`switch`组件的样式，`vue-typescript-admin`原版是直接插入并修改整个UI库的样式，我觉得有点浪费资源，所以这里单独修改
+     * @param value
+     */
+    private updateCss(value: string) {
+        let style = (document.getElementById('the-switch') as HTMLStyleElement);
+        if (!style) {
+            style = document.createElement('style');
+            style.id = 'the-switch';
+            document.head.appendChild(style);
+        }
+        style.textContent = `.el-switch.is-checked .el-switch__core{border-color: ${value};background-color: ${value};`;
     }
 
     private themeChange(value: string) {
-        SettingsModule.ChangeSetting({ key: "theme", value });
+        if (this.pageState.theme != value) {
+            this.pageState.theme = value;
+            this.updateCss(value);
+        }
+    }
+
+    mounted() {
+        if (this.pageState.theme) {
+            this.updateCss(this.pageState.theme);
+        }
     }
 }
 </script>

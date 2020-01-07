@@ -1,10 +1,10 @@
 <template>
-    <div :class="{'has-logo': showLogo}">
-        <sidebar-logo v-if="showLogo" :collapse="isCollapse" />
+    <div :class="{'has-logo': pageState.showSidebarLogo}">
+        <sidebar-logo v-if="pageState.showSidebarLogo" :collapse="!pageState.sidebarOpen" />
         <el-scrollbar wrap-class="scrollbar-wrapper">
             <el-menu
                 :default-active="activeMenu"
-                :collapse="isCollapse"
+                :collapse="!pageState.sidebarOpen"
                 :background-color="variables.menuBg"
                 :text-color="variables.menuText"
                 :active-text-color="menuActiveTextColor"
@@ -17,7 +17,7 @@
                     :key="route.path"
                     :item="route"
                     :base-path="route.path"
-                    :is-collapse="isCollapse"
+                    :is-collapse="!pageState.sidebarOpen"
                 />
             </el-menu>
         </el-scrollbar>
@@ -26,12 +26,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { AppModule } from "@/store/modules/app";
-import { PermissionModule } from "@/store/modules/permission";
-import { SettingsModule } from "@/store/modules/settings";
+import { base } from "../../../router"
 import SidebarItem from "./SidebarItem.vue";
 import SidebarLogo from "./SidebarLogo.vue";
-import variables from "@/styles/_variables.scss";
+import store from "../../../modules/store";
 
 @Component({
     name: "SideBar",
@@ -40,29 +38,26 @@ import variables from "@/styles/_variables.scss";
         SidebarLogo
     }
 })
-export default class extends Vue {
-    get sidebar() {
-        return AppModule.sidebar;
+export default class SideBar extends Vue {
+
+    private variables = {
+        menuActiveText: '#409EFF',
+        menuBg: '#304156',
+        menuText: '#bfcbd9'
     }
+
+    private pageState = store.layoutState;
 
     get routes() {
-        return PermissionModule.routes;
-    }
-
-    get showLogo() {
-        return SettingsModule.showSidebarLogo;
+        return store.completeRouters;
     }
 
     get menuActiveTextColor() {
-        if (SettingsModule.sidebarTextTheme) {
-            return SettingsModule.theme;
+        if (store.layoutState.sidebarTextTheme) {
+            return store.layoutState.theme;
         } else {
-            return variables.menuActiveText;
+            return this.variables.menuActiveText;
         }
-    }
-
-    get variables() {
-        return variables;
     }
 
     get activeMenu() {
@@ -75,9 +70,6 @@ export default class extends Vue {
         return path;
     }
 
-    get isCollapse() {
-        return !this.sidebar.opened;
-    }
 }
 </script>
 
@@ -85,8 +77,7 @@ export default class extends Vue {
 .sidebar-container {
     // reset element-ui css
     .horizontal-collapse-transition {
-        transition: 0s width ease-in-out, 0s padding-left ease-in-out,
-            0s padding-right ease-in-out;
+        transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
     }
 
     .scrollbar-wrapper {

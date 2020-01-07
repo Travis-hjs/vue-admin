@@ -9,14 +9,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { isExternal } from "@/utils/validate";
+import utils from "../../../modules/utils";
 
 @Component({
     name: "SidebarItemLink"
 })
-export default class extends Vue {
+export default class SidebarItemLink extends Vue {
     @Prop({ required: true }) private to!: string;
 
-    private isExternal = isExternal;
+    private isExternal = utils.isExternal;
 }
 </script>

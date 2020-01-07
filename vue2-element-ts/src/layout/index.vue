@@ -1,18 +1,18 @@
 <template>
     <div :class="classObj" class="app-wrapper">
         <div
-            v-if="classObj.mobile && sidebar.opened"
+            v-if="classObj.mobile && pageState.sidebarOpen"
             class="drawer-bg"
             @click="handleClickOutside"
         />
         <sidebar class="sidebar-container" />
-        <div :class="{hasTagsView: showTagsView}" class="main-container">
-            <div :class="{'fixed-header': fixedHeader}">
+        <div :class="{'hasTagsView': pageState.showTagsView}" class="main-container">
+            <div :class="{'fixed-header': pageState.fixedHeader}">
                 <navbar />
-                <tags-view v-if="showTagsView" />
+                <tags-view v-if="pageState.showTagsView" />
             </div>
             <app-main />
-            <right-panel v-if="showSettings">
+            <right-panel v-if="pageState.showSettings">
                 <settings />
             </right-panel>
         </div>
@@ -20,57 +20,90 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { mixins } from "vue-class-component";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
-import RightPanel from "../components/RightPanel/index.vue";
-import ResizeMixin from "./mixin/resize";
+import RightPanel from "../components/RightPanel.vue";
 import store from "../modules/store";
+
+const WIDTH = 992;
 
 @Component({
     name: "Layout",
     components: {
-        AppMain,
-        Navbar,
-        RightPanel,
-        Settings,
-        Sidebar,
-        TagsView
+        "app-main": AppMain,
+        navbar: Navbar,
+        "right-panel": RightPanel,
+        settings: Settings,
+        sidebar: Sidebar,
+        'tags-view': TagsView
     }
 })
-export default class extends mixins(ResizeMixin) {
+export default class Layout extends Vue {
+    /** 页面状态 */
+    private pageState = store.layoutState;
+
     get classObj() {
         return {
-            hideSidebar: !store.layoutState.sidebarOpen,
-            openSidebar: store.layoutState.sidebarOpen,
-            withoutAnimation: store.layoutState.sidebarWithoutAnimation,
-            mobile: this.device === 'mobile'
+            hideSidebar: !this.pageState.sidebarOpen,
+            openSidebar: this.pageState.sidebarOpen,
+            withoutAnimation: this.pageState.sidebarWithoutAnimation,
+            mobile: this.pageState.device === "mobile"
         };
     }
 
-    get showSettings() {
-        return true;
-        // return SettingsModule.showSettings;
+    @Watch("$route")
+    private onRouteChange() {
+        if (this.pageState.device === "mobile" && this.pageState.sidebarOpen) {
+            this.pageState.sidebarWithoutAnimation = false;
+        }
     }
 
-    get showTagsView() {
-        return true;
-        // return SettingsModule.showTagsView;
-    }
-
-    get fixedHeader() {
-        return false;
-        // return SettingsModule.fixedHeader;
-    }
+    // methods ===============================
 
     private handleClickOutside() {
-        store.layoutState.sidebarWithoutAnimation = false;
-        // AppModule.CloseSideBar(false);
+        this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
+    }
+
+    private isMobile() {
+        const rect = document.body.getBoundingClientRect();
+        return rect.width - 1 < WIDTH;
+    }
+
+    private resizeHandler() {
+        if (!document.hidden) {
+            const isMobile = this.isMobile();
+            this.pageState.device = isMobile ? "mobile" : "desktop";
+            if (isMobile) {
+                this.pageState.sidebarWithoutAnimation = true;
+            }
+        }
+    }
+
+    // life cycle ================================
+
+    beforeMount() {
+        window.addEventListener("resize", this.resizeHandler);
+    }
+
+    beforeDestroy() {
+        window.removeEventListener("resize", this.resizeHandler);
+    }
+
+    mounted() {
+        const isMobile = this.isMobile();
+        if (isMobile) {
+            this.pageState.device = "mobile";
+            this.pageState.sidebarWithoutAnimation = true;
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/_mixins.scss';
+@import '@/styles/_variables.scss';
+
 .app-wrapper {
     @include clearfix;
     position: relative;

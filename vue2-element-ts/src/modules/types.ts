@@ -1,3 +1,5 @@
+import { RouteConfig } from 'vue-router';
+
 export interface AjaxType {
     /** 请求路径 */
     url: string,
@@ -36,43 +38,31 @@ export interface userState {
     username?: string,
     /** 用户token */
     accessToken: string,
-    /** 用户类型 1：广告 | 2：流量 */
+    /** 用户类型 1：admin | 2：editor */
     loginType: 1 | 2,
     /** 用户id */
     userId: number | string
 }
 
-interface routeMeta {
-    /** 导航文字 */
-    title: string
-    /** 导航icon */
-    icon?: string
-}
-
-/** 路由数组对象 */
-export interface routeItem {
-    name?: string
-    /** 路由组件 */
-    component: any
-    /** 路由路径 */
-    path: string
-    /** 路由信息 */
-    meta?: routeMeta
-    /** 是否导航隐藏 */
-    hidden?: boolean
-    /** 定义菜单组件时用到的展开 */
-    open?: boolean
-    /** 子路由 */
-    children?: Array<routeItem>
-}
-
 export interface layoutStateType {
+    /** 显示设置 */
+    showSettings: boolean
+    /** 显示历史记录列表 */
+    showTagsView: boolean
+    /** 固定头部 */
+    fixedHeader: boolean
     /** 侧边栏展开 */
     sidebarOpen: boolean
+    /** 显示侧边栏logo */
+    showSidebarLogo: boolean
+    /** 显示侧边栏文字主题色 */
+    sidebarTextTheme: boolean
     /** 侧边栏动画 */
     sidebarWithoutAnimation: boolean
     /** 历史记录列表 */
-    cachedViews: Array<string>
+    cachedViews: Array<RouteConfig>
     /** 系统信息 */
     device: 'desktop' | 'mobile'
+    /** 主题颜色 */
+    theme: string
 }

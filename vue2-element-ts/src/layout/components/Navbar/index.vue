@@ -2,21 +2,12 @@
     <div class="navbar">
         <hamburger
             id="hamburger-container"
-            :is-active="sidebar.sidebarOpen"
+            :is-active="pageState.sidebarOpen"
             class="hamburger-container"
             @toggleClick="toggleSideBar"
         />
         <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
         <div class="right-menu">
-            <template v-if="device !== 'mobile'">
-                <header-search class="right-menu-item" />
-                <error-log class="errLog-container right-menu-item hover-effect" />
-                <screenfull class="right-menu-item hover-effect" />
-                <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-                    <size-select class="right-menu-item hover-effect" />
-                </el-tooltip>
-                <lang-select class="right-menu-item hover-effect" />
-            </template>
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
                     <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
@@ -24,22 +15,19 @@
                 </div>
                 <el-dropdown-menu slot="dropdown">
                     <router-link to="/profile/">
-                        <el-dropdown-item>{{ $t('navbar.profile') }}</el-dropdown-item>
+                        <el-dropdown-item>个人中心</el-dropdown-item>
                     </router-link>
                     <router-link to="/">
-                        <el-dropdown-item>{{ $t('navbar.dashboard') }}</el-dropdown-item>
+                        <el-dropdown-item>首页</el-dropdown-item>
                     </router-link>
-                    <a
-                        target="_blank"
-                        href="https://github.com/armour/vue-typescript-admin-template/"
-                    >
-                        <el-dropdown-item>{{ $t('navbar.github') }}</el-dropdown-item>
+                    <a target="_blank" href="https://github.com/armour/vue-typescript-admin-template/">
+                        <el-dropdown-item>项目地址</el-dropdown-item>
                     </a>
                     <a target="_blank" href="https://armour.github.io/vue-typescript-admin-docs/">
                         <el-dropdown-item>Docs</el-dropdown-item>
                     </a>
                     <el-dropdown-item divided>
-                        <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
+                        <span style="display:block;" @click="logout">退出登录</span>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -48,51 +36,43 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import Breadcrumb from "../../../components/Breadcrumb/index.vue";
-import ErrorLog from "../../../components/ErrorLog/index.vue";
-import Hamburger from "../../../components/Hamburger/index.vue";
-import HeaderSearch from "../../../components/HeaderSearch/index.vue";
-import LangSelect from "../../../components/LangSelect/index.vue";
-import Screenfull from "../../../components/Screenfull/index.vue";
-import SizeSelect from "../../../components/SizeSelect/index.vue";
+import { Component, Vue, Watch } from "vue-property-decorator";
+import Hamburger from "../../../components/Hamburger.vue";
+import Breadcrumb from "../../../components/Breadcrumb.vue";
 import store from "../../../modules/store";
+import apiUser from "../../../api/user";
 
 @Component({
     name: "Navbar",
     components: {
-        Breadcrumb,
-        ErrorLog,
-        Hamburger,
-        HeaderSearch,
-        LangSelect,
-        Screenfull,
-        SizeSelect
+        'hamburger': Hamburger,
+        'breadcrumb': Breadcrumb,
     }
 })
-export default class extends Vue {
-    get sidebar() {
-        return store.layoutState;
-        // return AppModule.sidebar;
+export default class Navbar extends Vue {
+
+    private pageState = store.layoutState;
+
+    @Watch('pageState', {
+        deep: true
+    })
+    private onLayoutChange() {
+        store.saveLayout();
     }
 
-    get device() {
-        return store.layoutState.device;
-        // return AppModule.device.toString();
-    }
-
-    get avatar() {
-        const gif = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif';
-        return gif;
-    }
+    private avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif';
 
     private toggleSideBar() {
-        store.layoutState.sidebarWithoutAnimation = false;
+        this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
+        this.pageState.sidebarWithoutAnimation = false;
     }
 
     private logout() {
-        // await UserModule.LogOut();
-        this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+        // 退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
+        // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
+        // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
+        apiUser.removeUserState();
+        location.reload();
     }
 }
 </script>
@@ -106,7 +86,8 @@ export default class extends Vue {
     box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
     .hamburger-container {
-        line-height: 46px;
+        display: flex;
+        align-items: center;
         height: 100%;
         float: left;
         padding: 0 15px;
@@ -132,7 +113,7 @@ export default class extends Vue {
         float: right;
         height: 100%;
         line-height: 50px;
-
+        
         &:focus {
             outline: none;
         }

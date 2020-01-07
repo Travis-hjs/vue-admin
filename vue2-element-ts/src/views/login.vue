@@ -97,17 +97,17 @@ export default class Login extends Vue {
 
     // 点击登录
     handleLogin() {
-        if (!this.loginForm.username) return this['$message'].error('账号不能为空！');
-        if (!this.loginForm.password) return this['$message'].error('密码不能为空！');
+        if (!this.loginForm.username) return this.$message.error('账号不能为空！');
+        if (!this.loginForm.password) return this.$message.error('密码不能为空！');
         this.loading = true;
         console.log('用户登录信息：', this.loginForm);
         apiUser.login(this.loginForm, (res: any) => {
             // console.log('success', res);
             this.loading = false;
-            this['$router'].push('/');
+            this.$router.push('/');
         }, err => {
             this.loading = false;
-            this['$message'].error(err.message);
+            this.$message.error(err.message);
         });
     }
 }

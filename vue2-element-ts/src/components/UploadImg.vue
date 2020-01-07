@@ -8,7 +8,7 @@
 import { Component, Prop, Emit, Vue } from 'vue-property-decorator';
 
 @Component({})
-export default class UploadImgComponent extends Vue {
+export default class UploadImg extends Vue {
 
     /** 上传的图片路径 */
     @Prop({

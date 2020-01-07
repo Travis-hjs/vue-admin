@@ -13,7 +13,7 @@
                     <span
                         v-if="theOnlyOneChild.meta.title"
                         slot="title"
-                    >{{ $t('route.' + theOnlyOneChild.meta.title) }}</span>
+                    >{{ theOnlyOneChild.meta.title }}</span>
                 </el-menu-item>
             </sidebar-item-link>
         </template>
@@ -23,7 +23,7 @@
                 <span
                     v-if="item.meta && item.meta.title"
                     slot="title"
-                >{{ $t('route.' + item.meta.title) }}</span>
+                >{{ item.meta.title }}</span>
             </template>
             <template v-if="item.children">
                 <sidebar-item
@@ -44,8 +44,8 @@
 import path from "path";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Route, RouteConfig } from "vue-router";
-import { isExternal } from "@/utils/validate";
 import SidebarItemLink from "./SidebarItemLink.vue";
+import utils from "../../../modules/utils";
 
 @Component({
     // Set 'name' here to prevent uglifyjs from causing recursive component not work
@@ -55,7 +55,7 @@ import SidebarItemLink from "./SidebarItemLink.vue";
         SidebarItemLink
     }
 })
-export default class extends Vue {
+export default class SidebarItem extends Vue {
     @Prop({ required: true }) private item!: RouteConfig;
     @Prop({ default: false }) private isCollapse!: boolean;
     @Prop({ default: true }) private isFirstLevel!: boolean;
@@ -99,10 +99,10 @@ export default class extends Vue {
     }
 
     private resolvePath(routePath: string) {
-        if (isExternal(routePath)) {
+        if (utils.isExternal(routePath)) {
             return routePath;
         }
-        if (isExternal(this.basePath)) {
+        if (utils.isExternal(this.basePath)) {
             return this.basePath;
         }
         return path.resolve(this.basePath, routePath);
@@ -111,6 +111,7 @@ export default class extends Vue {
 </script>
 
 <style lang="scss">
+@import '@/styles/_variables.scss';
 .el-submenu.is-active > .el-submenu__title {
     color: $subMenuActiveText !important;
 }

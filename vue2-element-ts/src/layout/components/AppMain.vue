@@ -1,8 +1,8 @@
 <template>
     <section class="app-main">
         <transition name="fade-transform" mode="out-in">
-            <keep-alive :include="cachedViews">
-                <router-view :key="key" />
+            <keep-alive :include="pageState.cachedViews">
+                <router-view :key="$route.path" />
             </keep-alive>
         </transition>
     </section>
@@ -15,14 +15,8 @@ import store from "../../modules/store";
 @Component({
     name: "AppMain"
 })
-export default class extends Vue {
-    get cachedViews() {
-        return store.layoutState.cachedViews;
-    }
-
-    get key() {
-        return this.$route.path;
-    }
+export default class AppMain extends Vue {
+    private pageState = store.layoutState;
 }
 </script>
 
@@ -31,24 +25,25 @@ export default class extends Vue {
     /* 50= navbar  50  */
     min-height: calc(100vh - 50px);
     width: 100%;
+    padding: 14px; 
     position: relative;
     overflow: hidden;
 }
 
 .fixed-header + .app-main {
-    padding-top: 50px;
+    padding-top: 64px;
     height: 100vh;
     overflow: auto;
 }
 
 .hasTagsView {
     .app-main {
-        /* 84 = navbar + tags-view = 50 + 34 */
-        min-height: calc(100vh - 84px);
+        /* 98 = navbar + tags-view = 50 + 34 + 14 */
+        min-height: calc(100vh - 98px);
     }
 
     .fixed-header + .app-main {
-        padding-top: 84px;
+        padding-top: 98px;
     }
 }
 </style>
