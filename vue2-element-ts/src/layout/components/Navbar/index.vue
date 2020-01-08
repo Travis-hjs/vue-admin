@@ -20,11 +20,8 @@
                     <router-link to="/">
                         <el-dropdown-item>首页</el-dropdown-item>
                     </router-link>
-                    <a target="_blank" href="https://github.com/armour/vue-typescript-admin-template/">
+                    <a target="_blank" href="https://github.com/Hansen-hjs/vue-admin">
                         <el-dropdown-item>项目地址</el-dropdown-item>
-                    </a>
-                    <a target="_blank" href="https://armour.github.io/vue-typescript-admin-docs/">
-                        <el-dropdown-item>Docs</el-dropdown-item>
                     </a>
                     <el-dropdown-item divided>
                         <span style="display:block;" @click="logout">退出登录</span>
