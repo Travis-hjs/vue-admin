@@ -46,7 +46,7 @@
 
 [原版文档](https://armour.github.io/vue-typescript-admin-docs/zh)
 
-[掘金介绍]()
+[掘金介绍](https://juejin.im/post/5e154afae51d45410f123afc)
 
 ## 预览地址
 
