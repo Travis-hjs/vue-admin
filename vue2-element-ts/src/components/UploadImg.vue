@@ -42,7 +42,10 @@ export default class UploadImg extends Vue {
 
     /** 上传图片 */
     private uploadImg() {
-        const input = (this.$refs.uploadinput as HTMLInputElement);
+        // 这样写也可以，但是命令台会报错，浏览器不会
+        // const input = (this.$refs.uploadinput as HTMLInputElement);
+
+        const input: any = this.$refs.uploadinput;
 
         const file: File = input.files[0];
         // console.log('上传图片文件 >>', file);
