@@ -60,6 +60,12 @@ export const admin: Array<RouteConfig> = [
                         component: () => import('../views/pages/page-4.vue')
                     }
                 ]
+            },
+            {
+                path: 'upload',
+                name: 'upload',
+                meta: { title: '自定义组件', icon: 'international' },
+                component: () => import('../views/pages/page-5.vue')
             }
         ]
     },
@@ -74,12 +80,12 @@ export const admin: Array<RouteConfig> = [
                 path: 'column1',
                 name: 'column1',
                 meta: { title: '栏目一', icon: 'theme' },
-                component: () => import('../views/pages/page-5.vue'),
+                component: () => import('../views/pages/page-6.vue'),
             }, {
                 path: 'column2',
                 name: 'column2',
                 meta: { title: '栏目二', icon: 'table' },
-                component: () => import('../views/pages/page-6.vue')
+                component: () => import('../views/pages/page-7.vue')
             }
         ]
     },

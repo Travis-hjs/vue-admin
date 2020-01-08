@@ -69,17 +69,43 @@ class ApiUser {
             
         }
         testLogin();
-        return;
-        baseRequest('POST', '/login', data, (res: any) => {
-            // 录成功后缓存用户信息
-            res.username = data.username;
-            store.userStateInfo = res;
-            this.saveUserState(res);
-            // console.log('录成功后缓存用户信息', res);
-            if (success) success(res);
-        }, err => {
-            if (fail) fail(err);
-        });
+        
+        // baseRequest('POST', '/login', data, (res: any) => {
+        //     // 录成功后缓存用户信息
+        //     res.username = data.username;
+        //     store.userStateInfo = res;
+        //     this.saveUserState(res);
+        //     // console.log('录成功后缓存用户信息', res);
+        //     if (success) success(res);
+        // }, err => {
+        //     if (fail) fail(err);
+        // });
+    }
+
+    /**
+     * 上传图片
+     * @param data 图片`FromData` 这里我模拟上传，所以类型是`File`，接口上传时才是`FromData`
+     * @param success 成功回调
+     * @param fail 失败回调
+     */
+    uploadImg(data: File, success: Function, fail?: (error: requestFail) => void) {
+        /** 模拟上传 */
+        const testUpload = () => {
+            const reader = new FileReader();
+            reader.onload = function() {
+                setTimeout(() => {
+                    if (success) success(reader.result);
+                }, 500);
+            }
+            reader.readAsDataURL(data);
+        }
+        testUpload();
+        
+        // baseRequest('POST', '/uploadImg', {}, (res: any) => {
+        //     if (success) success(res);
+        // }, err => {
+        //     if (fail) fail(err);
+        // }, data);
     }
 }
 
