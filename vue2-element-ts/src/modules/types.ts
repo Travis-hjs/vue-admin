@@ -12,11 +12,11 @@ export interface AjaxType {
     /** 是否上传文件 通常是图片 */
     file?: FormData,
     /** 成功回调 */
-    success?: Function,
+    success?: (res: any) => void,
     /** 失败回调 */
-    fail?: Function,
+    fail?: (value: XMLHttpRequest) => void,
     /** 超时回调 */
-    timeout?: Function,
+    timeout?: (value: XMLHttpRequest) => void,
     /** 请求进度 (ev: ProgressEvent<XMLHttpRequestEventTarget>) => void */
     progress?: (ev: any) => void
 }

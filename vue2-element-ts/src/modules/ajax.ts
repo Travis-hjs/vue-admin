@@ -88,25 +88,25 @@ const webUrl = '';
 
 /**
  * 基础请求
- * @param method post | get
+ * @param method 请求方式
  * @param url 请求接口
  * @param data 请求数据 
  * @param success 成功回调
  * @param fail 失败回调
  * @param upload 上传图片 FormData
  */
-export default function baseRequest(method: AjaxType['method'], url: string, data: object, success?: Function, fail?: (error: requestFail) => void, upload?: AjaxType['file']) {
+export default function baseRequest(method: AjaxType['method'], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxType['file']) {
     ajax({
         url: webUrl + url,
         method: method,
         data: data,
         file: upload,
         overtime: 8000,
-        success(res: any) {
+        success(res) {
             // console.log('请求成功', res);
             if (success) success(res);
         },
-        fail(err: any) {
+        fail(err) {
             // console.log('请求失败', err);
             let error = {
                 message: '接口报错',
