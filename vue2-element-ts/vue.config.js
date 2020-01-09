@@ -7,9 +7,11 @@ function resolve(dir) {
 module.exports = {
     /** 打包构建后的资源路径 */
     publicPath: './',
+
     devServer: {
         port: 2048,
     },
+
     chainWebpack(config) {
         // set svg-sprite-loader
         config.module
@@ -27,5 +29,8 @@ module.exports = {
                 symbolId: 'icon-[name]'
             })
             .end()
-    }
+    },
+
+    /** 剔除.map文件构建 */
+    productionSourceMap: false
 }
