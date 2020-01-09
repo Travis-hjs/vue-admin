@@ -12,7 +12,7 @@
             </div>
 
             <div class="drawer-item">
-                <span>显示 Tags-View</span>
+                <span>显示历史记录列表</span>
                 <el-switch v-model="pageState.showTagsView" class="drawer-switch" />
             </div>
 
