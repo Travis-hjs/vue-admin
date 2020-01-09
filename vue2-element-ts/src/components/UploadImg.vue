@@ -70,12 +70,12 @@ export default class UploadImg extends Vue {
         // formData.append('file', file);
 
         this.loading = true;
-        apiUser.uploadImg(file, (res: any) => {
+        apiUser.uploadImg(file, res => {
             this.loading = false;
             /** 图片路径 */
             let src: string = res;
             this.sendImgSrc(src);
-        }, (err: any) => {
+        }, err => {
             this.loading = false;
             this.$message.error('上传图片失败');
             // console.log('上传图片失败 >>', err);
