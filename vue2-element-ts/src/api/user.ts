@@ -39,7 +39,7 @@ class ApiUser {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    login(data: loginParam, success: Function, fail?: (error: requestFail) => void) {
+    login(data: loginParam, success: (res?: userState) => void, fail?: (error: requestFail) => void) {
         /** 模拟登录 */
         const testLogin = () => {
             /** 缓存信息  */
@@ -88,7 +88,7 @@ class ApiUser {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    uploadImg(data: File, success: Function, fail?: (error: requestFail) => void) {
+    uploadImg(data: File, success: (res?: any) => void, fail?: (error: requestFail) => void) {
         /** 模拟上传 */
         const testUpload = () => {
             const reader = new FileReader();
