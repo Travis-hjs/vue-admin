@@ -101,7 +101,7 @@ export default class Login extends Vue {
         if (!this.loginForm.password) return this.$message.error('密码不能为空！');
         this.loading = true;
         console.log('用户登录信息：', this.loginForm);
-        apiUser.login(this.loginForm, (res: any) => {
+        apiUser.login(this.loginForm, res => {
             // console.log('success', res);
             this.loading = false;
             this.$router.push('/');
