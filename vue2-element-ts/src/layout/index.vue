@@ -1,5 +1,5 @@
 <template>
-    <div :class="classObj" class="app-wrapper">
+    <div :class="classObj" class="app-wrapper clearfix">
         <div
             v-if="classObj.mobile && pageState.sidebarOpen"
             class="drawer-bg"
@@ -101,11 +101,9 @@ export default class Layout extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/_mixins.scss';
-@import '@/styles/_variables.scss';
+@import '@/styles/variables.scss';
 
 .app-wrapper {
-    @include clearfix;
     position: relative;
     height: 100%;
     width: 100%;

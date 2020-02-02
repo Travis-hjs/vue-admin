@@ -30,6 +30,7 @@ import { base } from "../../../router"
 import SidebarItem from "./SidebarItem.vue";
 import SidebarLogo from "./SidebarLogo.vue";
 import store from "../../../modules/store";
+import variables from "../../../styles/variables.scss";
 
 @Component({
     name: "SideBar",
@@ -40,11 +41,7 @@ import store from "../../../modules/store";
 })
 export default class SideBar extends Vue {
 
-    private variables = {
-        menuActiveText: '#409EFF',
-        menuBg: '#304156',
-        menuText: '#bfcbd9'
-    }
+    private variables = variables;
 
     private pageState = store.layoutState;
 
@@ -70,6 +67,10 @@ export default class SideBar extends Vue {
         return path;
     }
 
+    mounted() {
+        // console.log('variables', variables);
+        
+    }
 }
 </script>
 

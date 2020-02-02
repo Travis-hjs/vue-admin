@@ -1,5 +1,5 @@
 export interface IScssVariables {
-  theme: string
+    theme: string
 }
 
 export const variables: IScssVariables

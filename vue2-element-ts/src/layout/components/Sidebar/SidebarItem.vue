@@ -111,7 +111,7 @@ export default class SidebarItem extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/styles/_variables.scss';
+@import '@/styles/variables.scss';
 .el-submenu.is-active > .el-submenu__title {
     color: $subMenuActiveText !important;
 }
