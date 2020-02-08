@@ -1,5 +1,5 @@
 <template>
-    <div class="page-1">
+    <div class="home">
         <hello-world :msg="content" />
     </div>
 </template>
@@ -13,8 +13,8 @@ import HelloWorld from "../../components/HelloWorld.vue";
         'hello-world': HelloWorld
     }
 })
-export default class Page1 extends Vue {
-    content = '首页'
+export default class Home extends Vue {
+    content = '首页';
 }
 </script>
 

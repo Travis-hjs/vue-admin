@@ -24,7 +24,7 @@ class ModuleStore {
     /** `layout`操作状态 */
     public layoutState: layoutStateType = {
         sidebarTextTheme: false,
-        showSidebarLogo: false,
+        showSidebarLogo: true,
         fixedHeader: false,
         showSettings: true,
         showTagsView: true,
@@ -62,7 +62,7 @@ class ModuleStore {
     /** 保存`layout`操作状态 */
     public saveLayout() {
         // 这个方法我用在了`Navbar`组件中用`watch`监听了数据的变动然后执行
-        // 这里我只是简单做了两层拷贝，只保存要用到的信息（够了）
+        // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
         const value: any = this.layoutState;
         const data: any = {};
         for (const key in value) {

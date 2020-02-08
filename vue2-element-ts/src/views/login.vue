@@ -25,8 +25,9 @@
                 <el-button :loading="loading" class="btn" type="primary" @click="handleLogin">登录</el-button>
             </el-form-item>
             <div class="tips" v-for="(item, index) in tipList" :key="index">
-                <span>账号：{{ item }}</span>
-                <span>密码 : 随便填</span>
+                <el-button size="mini" type="success" @click="copyAccount(item)">点击复制</el-button>
+                <span class="tips-text">账号：{{ item }}</span>
+                <span class="tips-text">密码 : 随便填</span>
             </div>
         </el-form>
 
@@ -47,6 +48,7 @@ function validateUsername(rule: any, value: string, callback: Function) {
         callback();
     }
 }
+
 function validatePass(rule: any, value: string, callback: Function) {
     if (!utils.isValidPassowrd(value)) {
         callback(new Error("密码不能小于6位"));
@@ -95,12 +97,22 @@ export default class Login extends Vue {
         }
     }
 
+    /**
+     * 复制账户
+     * @param vaule 复制内容
+     */
+    copyAccount(value: string) {
+        utils.copyText(value, () => {
+            this.$message.success('复制成功');
+        });
+    }
+
     // 点击登录
     handleLogin() {
         if (!this.loginForm.username) return this.$message.error('账号不能为空！');
         if (!this.loginForm.password) return this.$message.error('密码不能为空！');
         this.loading = true;
-        console.log('用户登录信息：', this.loginForm);
+        // console.log('用户登录信息：', this.loginForm);
         apiUser.login(this.loginForm, res => {
             // console.log('success', res);
             this.loading = false;
@@ -170,7 +182,10 @@ $dark_gray: #889aa4;
         font-size: 14px;
         color: #fff;
         margin-bottom: 10px;
-        span {
+        .el-button {
+            margin-right: 16px;
+        }
+        .tips-text {
             &:first-of-type {
                 margin-right: 16px;
             }
