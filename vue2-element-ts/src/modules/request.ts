@@ -1,4 +1,5 @@
 import { AjaxParams, requestFail } from './types';
+import { Message } from 'element-ui';
 
 /**
  * `http`请求
@@ -116,6 +117,8 @@ export default function request(method: AjaxParams['method'], url: string, data:
                 error.data = JSON.parse(err.response);
             }
             if (fail) fail(error);
+            // 全局的请求错误提示，不需要可以去掉
+            Message.error(error.message); 
         },
         timeout() {
             console.warn('XMLHttpRequest 请求超时 !!!');
@@ -124,6 +127,8 @@ export default function request(method: AjaxParams['method'], url: string, data:
                 data: null
             }
             if (fail) fail(error);
+            // 全局的请求超时提示，不需要可以去掉
+            Message.warning(error.message);
         }
     });
 }
