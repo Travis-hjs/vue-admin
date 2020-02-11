@@ -1,4 +1,4 @@
-import baseRequest from '../modules/ajax';
+import request from '../modules/request';
 import { loginParam, requestFail, userState } from '../modules/types';
 import store from '../modules/store';
 
@@ -70,7 +70,7 @@ class ApiUser {
         }
         testLogin();
         
-        // baseRequest('POST', '/login', data, res => {
+        // request('POST', '/login', data, res => {
         //     // 录成功后缓存用户信息
         //     res.username = data.username;
         //     store.userStateInfo = res;
@@ -101,7 +101,7 @@ class ApiUser {
         }
         testUpload();
         
-        // baseRequest('POST', '/uploadImg', {}, res => {
+        // request('POST', '/uploadImg', {}, res => {
         //     if (success) success(res);
         // }, err => {
         //     if (fail) fail(err);

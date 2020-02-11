@@ -1,6 +1,6 @@
 import { RouteConfig } from 'vue-router';
 
-export interface AjaxType {
+export interface AjaxParams {
     /** 请求路径 */
     url: string,
     /** 请求方法 */

@@ -1,11 +1,11 @@
-import { AjaxType, requestFail } from './types';
+import { AjaxParams, requestFail } from './types';
 
 /**
  * `http`请求
  * @author https://github.com/Hansen-hjs
  * @description learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  */
-function ajax(param: AjaxType) {
+function ajax(param: AjaxParams) {
     /** XMLHttpRequest */
     const XHR = new XMLHttpRequest();
     /** 请求方法 */
@@ -95,7 +95,7 @@ const webUrl = '';
  * @param fail 失败回调
  * @param upload 上传图片 FormData
  */
-export default function baseRequest(method: AjaxType['method'], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxType['file']) {
+export default function request(method: AjaxParams['method'], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxParams['file']) {
     ajax({
         url: webUrl + url,
         method: method,
