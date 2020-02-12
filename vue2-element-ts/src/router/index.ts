@@ -108,7 +108,7 @@ export const admin: Array<RouteConfig> = [
 ]
 
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */
-export const editor = admin;
+export const editor = [admin[0], admin[2]];
 
 export const router = new VueRouter({
     routes: base
