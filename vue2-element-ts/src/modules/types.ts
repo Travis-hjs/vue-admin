@@ -48,7 +48,7 @@ export interface layoutStateType {
     /** 显示设置 */
     showSettings: boolean
     /** 显示历史记录列表 */
-    showTagsView: boolean
+    showHistoryView: boolean
     /** 固定头部 */
     fixedHeader: boolean
     /** 侧边栏展开 */
@@ -60,7 +60,7 @@ export interface layoutStateType {
     /** 侧边栏动画 */
     sidebarWithoutAnimation: boolean
     /** 历史记录列表 */
-    cachedViews: Array<RouteConfig>
+    historyViews: Array<RouteConfig>
     /** 系统信息 */
     device: 'desktop' | 'mobile'
     /** 主题颜色 */

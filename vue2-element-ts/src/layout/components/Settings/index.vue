@@ -13,7 +13,7 @@
 
             <div class="drawer-item">
                 <span>显示历史记录列表</span>
-                <el-switch v-model="pageState.showTagsView" class="drawer-switch" />
+                <el-switch v-model="pageState.showHistoryView" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">

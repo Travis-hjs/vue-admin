@@ -6,10 +6,10 @@
             @click="handleClickOutside"
         />
         <sidebar class="sidebar-container" />
-        <div :class="{'hasTagsView': pageState.showTagsView}" class="main-container">
+        <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
             <div :class="{'fixed-header': pageState.fixedHeader}">
                 <navbar />
-                <tags-view v-if="pageState.showTagsView" />
+                <tags-view v-if="pageState.showHistoryView" />
             </div>
             <app-main />
             <right-panel v-if="pageState.showSettings">
@@ -25,8 +25,6 @@ import { mixins } from "vue-class-component";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import RightPanel from "../components/RightPanel.vue";
 import store from "../modules/store";
-
-const WIDTH = 992;
 
 @Component({
     name: "Layout",
@@ -67,7 +65,7 @@ export default class Layout extends Vue {
 
     private isMobile() {
         const rect = document.body.getBoundingClientRect();
-        return rect.width - 1 < WIDTH;
+        return rect.width - 1 < 990;
     }
 
     private resizeHandler() {

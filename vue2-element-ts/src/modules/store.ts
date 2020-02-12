@@ -27,10 +27,10 @@ class ModuleStore {
         showSidebarLogo: true,
         fixedHeader: false,
         showSettings: true,
-        showTagsView: true,
+        showHistoryView: true,
         sidebarOpen: true,
         sidebarWithoutAnimation: false,
-        cachedViews: [],
+        historyViews: [],
         device: 'desktop',
         theme: '#409EFF'
     }
@@ -67,7 +67,7 @@ class ModuleStore {
         const data: any = {};
         for (const key in value) {
             data[key] = value[key]
-            if (key === 'cachedViews') {
+            if (key === 'historyViews') {
                 data[key] = value[key].map((item: any) => {
                     return {
                         name: item.name,

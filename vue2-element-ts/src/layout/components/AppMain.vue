@@ -1,7 +1,7 @@
 <template>
     <section class="app-main">
         <transition name="fade-transform" mode="out-in">
-            <keep-alive :include="pageState.cachedViews">
+            <keep-alive :include="pageState.historyViews">
                 <router-view :key="$route.path" />
             </keep-alive>
         </transition>
