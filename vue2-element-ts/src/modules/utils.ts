@@ -72,12 +72,11 @@ class ModuleUtil {
     copyText(text: string, success?: Function, fail?: (res: string) => void) {
         text = text.replace(/(^\s*)|(\s*$)/g, '');
         if (!text) {
-            if (typeof fail === 'function') fail('复制的内容不能为空！');
+            fail && fail('复制的内容不能为空！');
             return;
         }
         const id = 'the-clipboard';
-        const t: any = document.getElementById(id);
-        let clipboard: HTMLTextAreaElement = t;
+        let clipboard = (document.getElementById(id) as HTMLTextAreaElement);
         if (!clipboard) {
             clipboard = document.createElement('textarea');
             clipboard.id = id;
@@ -88,7 +87,7 @@ class ModuleUtil {
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
         document.execCommand('copy');
-        if (success) success();
+        success && success();
     }
 
     isvalidUsername(str: string) {

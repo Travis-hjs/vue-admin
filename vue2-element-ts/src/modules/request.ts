@@ -44,9 +44,9 @@ function ajax(param: AjaxParams) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            if (param.success) param.success(JSON.parse(XHR.response));
+            param.success && param.success(JSON.parse(XHR.response));
         } else {
-            if (param.fail) param.fail(XHR);
+            param.fail && param.fail(XHR);
         }
     }
 
@@ -77,7 +77,7 @@ function ajax(param: AjaxParams) {
         XHR.timeout = overtime;
         XHR.ontimeout = function () {
             XHR.abort();
-            if (param.timeout) param.timeout(XHR);
+            param.timeout && param.timeout(XHR);
         }
     }
 
@@ -105,7 +105,7 @@ export default function request(method: AjaxParams['method'], url: string, data:
         overtime: 8000,
         success(res) {
             // console.log('请求成功', res);
-            if (success) success(res);
+            success && success(res);
         },
         fail(err) {
             // console.log('请求失败', err);
@@ -116,7 +116,7 @@ export default function request(method: AjaxParams['method'], url: string, data:
             if (err.response.charAt(0) == '{') {
                 error.data = JSON.parse(err.response);
             }
-            if (fail) fail(error);
+            fail && fail(error);
             // 全局的请求错误提示，不需要可以去掉
             Message.error(error.message); 
         },
@@ -126,7 +126,7 @@ export default function request(method: AjaxParams['method'], url: string, data:
                 message: '请求超时',
                 data: null
             }
-            if (fail) fail(error);
+            fail && fail(error);
             // 全局的请求超时提示，不需要可以去掉
             Message.warning(error.message);
         }

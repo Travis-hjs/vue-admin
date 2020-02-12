@@ -53,17 +53,17 @@ class ApiUser {
                 case store.testUserList[0]:
                     info.loginType = 1;
                     this.saveUserState(info);
-                    if (success) success(info);
+                    success && success(info);
                     break;
 
                 case store.testUserList[1]:
                     info.loginType = 2;
                     this.saveUserState(info);
-                    if (success) success(info);
+                    success && success(info);
                     break;
 
                 default:
-                    if (fail) fail({ message: '账户不存在' });
+                    fail && fail({ message: '账户不存在' });
                     break;
             }
             
@@ -76,9 +76,9 @@ class ApiUser {
         //     store.userStateInfo = res;
         //     this.saveUserState(res);
         //     // console.log('录成功后缓存用户信息', res);
-        //     if (success) success(res);
+        //     success && success(res);
         // }, err => {
-        //     if (fail) fail(err);
+        //     fail && fail(err);
         // });
     }
 
@@ -94,7 +94,7 @@ class ApiUser {
             const reader = new FileReader();
             reader.onload = function() {
                 setTimeout(() => {
-                    if (success) success(reader.result);
+                    success && success(reader.result);
                 }, 500);
             }
             reader.readAsDataURL(data);
@@ -102,9 +102,9 @@ class ApiUser {
         testUpload();
         
         // request('POST', '/uploadImg', {}, res => {
-        //     if (success) success(res);
+        //     success && success(res);
         // }, err => {
-        //     if (fail) fail(err);
+        //     fail && fail(err);
         // }, data);
     }
 }
