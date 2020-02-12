@@ -40,24 +40,24 @@ export const admin: Array<RouteConfig> = [
             {
                 path: 'home',
                 meta: { title: '首页展示', icon: 'guide' },
-                component: () => import('../views/pages/home.vue')
+                component: () => import('@/views/pages/home.vue')
             },
             {
                 path: 'nested',
                 name: 'nested',
                 meta: { title: '多级菜单嵌套', icon: 'tree-table' },
-                component: () => import('../views/pages/nested.vue'),
+                component: () => import('@/views/pages/nested.vue'),
                 children: [
                     {
                         path: 'menu-1',
                         name: 'nested/menu-1',
                         meta: { title: '菜单 2-1', icon: 'tree' },
-                        component: () => import('../views/pages/menu-1.vue')
+                        component: () => import('@/views/pages/menu-1.vue')
                     }, {
                         path: 'menu-2',
                         name: 'nested/menu-2',
                         meta: { title: '菜单 2-2', icon: 'tree' },
-                        component: () => import('../views/pages/menu-2.vue')
+                        component: () => import('@/views/pages/menu-2.vue')
                     }
                 ]
             },
@@ -65,7 +65,7 @@ export const admin: Array<RouteConfig> = [
                 path: 'the-component',
                 name: 'the-component',
                 meta: { title: '自定义组件', icon: 'international' },
-                component: () => import('../views/pages/the-component.vue')
+                component: () => import('@/views/pages/the-component.vue')
             }
         ]
     },
@@ -80,12 +80,12 @@ export const admin: Array<RouteConfig> = [
                 path: 'column-1',
                 name: 'column-1',
                 meta: { title: '栏目一', icon: 'theme' },
-                component: () => import('../views/pages/column-1.vue'),
+                component: () => import('@/views/pages/column-1.vue'),
             }, {
                 path: 'column-2',
                 name: 'column-2',
                 meta: { title: '栏目二', icon: 'table' },
-                component: () => import('../views/pages/column-2.vue')
+                component: () => import('@/views/pages/column-2.vue')
             }
         ]
     },
@@ -95,7 +95,7 @@ export const admin: Array<RouteConfig> = [
         children: [
             {
                 path: 'index',
-                component: () => import(/* webpackChunkName: "icons" */ '../views/pages/icons.vue'),
+                component: () => import(/* webpackChunkName: "icons" */ '@/views/pages/icons.vue'),
                 name: 'Icons',
                 meta: {
                     title: 'icons',
