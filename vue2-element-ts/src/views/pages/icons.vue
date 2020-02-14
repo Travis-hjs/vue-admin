@@ -1,20 +1,13 @@
 <template>
     <div class="icons-container">
         <aside>
-            <a
-                href="https://armour.github.io/vue-typescript-admin-docs/guide/advanced/icon.html"
-                target="_blank"
-            >Add and use</a>
+            <a href="https://armour.github.io/vue-typescript-admin-docs/guide/advanced/icon.html" target="_blank">Add and use</a>
         </aside>
         <el-tabs type="border-card">
             <el-tab-pane label="Icons">
-                <div
-                    v-for="item of svgIcons"
-                    :key="item"
-                    @click="handleClipboard(generateSvgIconCode(item))"
-                >
+                <div v-for="item of svgIcons" :key="item" @click="copyIconCode(getSvgIconCode(item))">
                     <el-tooltip placement="top">
-                        <div slot="content">{{ generateSvgIconCode(item) }}</div>
+                        <div slot="content">{{ getSvgIconCode(item) }}</div>
                         <div class="icon-item">
                             <svg-icon :name="item" class="disabled" />
                             <span>{{ item }}</span>
@@ -23,13 +16,9 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="Element-UI Icons">
-                <div
-                    v-for="item of elementIcons"
-                    :key="item"
-                    @click="handleClipboard(generateElementIconCode(item))"
-                >
+                <div v-for="item of elementIcons" :key="item" @click="copyIconCode(getElementIconCode(item))">
                     <el-tooltip placement="top">
-                        <div slot="content">{{ generateElementIconCode(item) }}</div>
+                        <div slot="content">{{ getElementIconCode(item) }}</div>
                         <div class="icon-item">
                             <i :class="'el-icon-' + item" />
                             <span>{{ item }}</span>
@@ -48,40 +37,41 @@ const elementIcons = ["info","error","success","warning","question","back","arro
 const req = require.context('../../icons/svg', false, /\.svg$/);
 const re = /\.\/(.*)\.svg/;
 const requireAll = (requireContext: any) => requireContext.keys();
-const icons = requireAll(req).map((str: string) => {
-  return str.match(re)![1];
+const svgIcons = requireAll(req).map((str: string) => {
+    return str.match(re)![1];
 });
 
 @Component({
     name: "Icons"
 })
 export default class Icons extends Vue {
-    private svgIcons = icons;
+
+    private svgIcons = svgIcons;
+
     private elementIcons = elementIcons;
 
     /**
      * 点击复制
      * @param content 复制的内容
      */
-    private handleClipboard(content: string) {
+    private copyIconCode(content: string) {
         utils.copyText(content, () => {
             this.$message.success('复制成功');
         });
     };
-
-    private generateElementIconCode(symbol: string) {
+    
+    private getElementIconCode(symbol: string) {
         return `<i class="el-icon-${symbol}" />`;
     }
 
-    private generateSvgIconCode(symbol: string) {
+    private getSvgIconCode(symbol: string) {
         return `<svg-icon name="${symbol}" />`;
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .icons-container {
-    margin: 10px 20px 0;
     overflow: hidden;
 
     .icon-item {

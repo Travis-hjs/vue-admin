@@ -94,5 +94,14 @@ export default class NoPower extends Vue {
             }
         }
     }
+    
+    .link-type, .link-type:focus {
+        color: #337ab7;
+        cursor: pointer;
+
+        &:hover {
+            color: rgb(32, 160, 255);
+        }
+    }
 }
 </style>
