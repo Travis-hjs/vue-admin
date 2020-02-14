@@ -6,7 +6,7 @@
                 <i class="el-icon-close" />
             </div>
         </div>
-        <div v-else class="upload flex fvertical fcenter" :style="{ 'minHeight': width + 'px' }">
+        <div v-else class="upload flex fvertical fcenter" :style="{ 'height': width + 'px' }">
             <div class="add-icon"></div>
             <input class="upload-input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
         </div>
