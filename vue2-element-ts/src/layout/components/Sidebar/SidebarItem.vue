@@ -5,25 +5,16 @@
     >
         <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
             <sidebar-item-link v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
-                <el-menu-item
-                    :index="resolvePath(theOnlyOneChild.path)"
-                    :class="{'submenu-title-noDropdown': isFirstLevel}"
-                >
+                <el-menu-item :index="resolvePath(theOnlyOneChild.path)" :class="{'submenu-title-noDropdown': isFirstLevel}">
                     <svg-icon v-if="theOnlyOneChild.meta.icon" :name="theOnlyOneChild.meta.icon" />
-                    <span
-                        v-if="theOnlyOneChild.meta.title"
-                        slot="title"
-                    >{{ theOnlyOneChild.meta.title }}</span>
+                    <span v-if="theOnlyOneChild.meta.title" slot="title">{{ theOnlyOneChild.meta.title }}</span>
                 </el-menu-item>
             </sidebar-item-link>
         </template>
         <el-submenu v-else :index="resolvePath(item.path)" popper-append-to-body>
             <template slot="title">
                 <svg-icon v-if="item.meta && item.meta.icon" :name="item.meta.icon" />
-                <span
-                    v-if="item.meta && item.meta.title"
-                    slot="title"
-                >{{ item.meta.title }}</span>
+                <span v-if="item.meta && item.meta.title" slot="title">{{ item.meta.title }}</span>
             </template>
             <template v-if="item.children">
                 <sidebar-item
@@ -52,7 +43,7 @@ import utils from "../../../modules/utils";
     // See https://medium.com/haiiro-io/element-component-name-with-vue-class-component-f3b435656561 for detail
     name: "SidebarItem",
     components: {
-        SidebarItemLink
+        'sidebar-item-link': SidebarItemLink
     }
 })
 export default class SidebarItem extends Vue {

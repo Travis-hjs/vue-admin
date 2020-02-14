@@ -35,8 +35,8 @@ import variables from "../../../styles/variables.scss";
 @Component({
     name: "SideBar",
     components: {
-        SidebarItem,
-        SidebarLogo
+        'sidebar-item': SidebarItem,
+        'sidebar-logo' : SidebarLogo
     }
 })
 export default class SideBar extends Vue {

@@ -7,7 +7,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-@Component({})
+@Component({
+    name: 'SvgIcon'
+})
 export default class SvgIcon extends Vue {
     @Prop({
         type: String,
@@ -40,12 +42,20 @@ export default class SvgIcon extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.svg-icon{
+<style lang="scss">
+.svg-icon {
+    display: inline-block;
     width: 1em;
     height: 1em;
-    vertical-align: -0.15em;
-    fill: currentColor;
+    color: inherit;
     overflow: hidden;
+    vertical-align: middle;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+.svg-fill {
+    fill: currentColor;
+    stroke: none;
 }
 </style>
