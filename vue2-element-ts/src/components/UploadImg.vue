@@ -56,12 +56,14 @@ export default class UploadImg extends Vue {
         // 判断文件类型
         if (typeStr.indexOf(file.type) < 0) {
             this.$message.warning('文件格式只支持：jpg 和 png');
+            input.value = null;
             return;
         }
 
         // 判断大小
         if (file.size > 2 * 1024 * 1024) {
             this.$message.warning('上传的文件不能大于2M');
+            input.value = null;
             return;
         }
 
