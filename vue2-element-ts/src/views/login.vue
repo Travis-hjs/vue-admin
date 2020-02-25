@@ -25,7 +25,7 @@
                 <el-button :loading="loading" class="btn" type="primary" @click="handleLogin">登录</el-button>
             </el-form-item>
             <div class="tips" v-for="(item, index) in tipList" :key="index">
-                <el-button size="mini" type="success" @click="copyAccount(item)">点击复制</el-button>
+                <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
                 <span class="tips-text">账号：{{ item }}</span>
                 <span class="tips-text">密码 : 随便填</span>
             </div>
@@ -95,16 +95,6 @@ export default class Login extends Vue {
         } else {
             this.pwdType = 'password';
         }
-    }
-
-    /**
-     * 复制账户
-     * @param vaule 复制内容
-     */
-    copyAccount(value: string) {
-        utils.copyText(value, () => {
-            this.$message.success('复制成功');
-        });
     }
 
     // 点击登录
