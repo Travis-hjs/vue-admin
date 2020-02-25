@@ -64,19 +64,16 @@ aside {
 // See https://vuejs.org/v2/guide/transitions.html for detail
 
 // fade
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active, .fade-leave-active {
     transition: opacity 0.28s;
 }
 
-.fade-enter,
-.fade-leave-active {
+.fade-enter, .fade-leave-active {
     opacity: 0;
 }
 
 // fade-transform
-.fade-transform-leave-active,
-.fade-transform-enter-active {
+.fade-transform-leave-active, .fade-transform-enter-active {
     transition: all .5s;
 }
 
@@ -91,13 +88,11 @@ aside {
 }
 
 // breadcrumb
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
+.breadcrumb-enter-active, .breadcrumb-leave-active {
     transition: all .5s;
 }
 
-.breadcrumb-enter,
-.breadcrumb-leave-active {
+.breadcrumb-enter, .breadcrumb-leave-active {
     opacity: 0;
     transform: translateX(20px);
 }
@@ -118,6 +113,14 @@ aside {
 
 /* 垂直居中 */
 .fvertical{ align-items: center; }
-/* 水平居中 */
 
+/* 水平居中 */
 .fcenter{ justify-content: center; }
+
+/* 溢出...显示 当前节点生效 */
+.ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 溢出...显示 子节点生效 */
+.ellipsis-1{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
+.ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
