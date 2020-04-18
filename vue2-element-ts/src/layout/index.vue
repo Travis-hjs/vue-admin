@@ -74,6 +74,7 @@ export default class Layout extends Vue {
             this.pageState.device = isMobile ? "mobile" : "desktop";
             if (isMobile) {
                 this.pageState.sidebarWithoutAnimation = true;
+                this.pageState.sidebarOpen = false;
             }
         }
     }

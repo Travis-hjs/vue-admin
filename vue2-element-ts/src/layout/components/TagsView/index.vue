@@ -77,7 +77,7 @@ export default class TagsView extends Vue {
     private addhistoryViews() {
         const hasItem = this.pageState.historyViews.some(item => item.path === this.$route.path);
         // console.log(hasItem, this.$route.path);
-        if (!hasItem) {
+        if (!hasItem && !this.$route.meta.noCache) {
             this.pageState.historyViews.push(this.$route);
         }
     }
