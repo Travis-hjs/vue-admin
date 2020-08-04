@@ -44,6 +44,11 @@
 }
 ```
 
+### sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化
+```
+set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+```
+
 ## 参考文档（其实看我代码注释就够了）
 
 [原版文档](https://armour.github.io/vue-typescript-admin-docs/zh)
