@@ -2,9 +2,8 @@ import { AjaxParams, requestFail } from './types';
 import { Message } from 'element-ui';
 
 /**
- * `http`请求
+ * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * @author https://github.com/Hansen-hjs
- * @description learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  */
 function ajax(param: AjaxParams) {
     /** XMLHttpRequest */
@@ -15,28 +14,24 @@ function ajax(param: AjaxParams) {
     const overtime = param.overtime || 0;
     /** 请求链接 */
     let url = param.url;
-    /** POST请求传参 */
-    let dataPost = null;
-    /** GET请求传参 */
-    let dataGet = '';
+    /** 非`GET`请求传参 */
+    let payload = null;
+    /** `GET`请求传参 */
+    let query = '';
 
     // 传参处理
-    switch (method) {
-        case 'POST':
-            // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-            dataPost = JSON.stringify(param.data);
-            break;
-
-        case 'GET':
-            // 解析对象传参
-            for (const key in param.data) {
-                dataGet += '&' + key + '=' + param.data[key];
-            }
-            if (dataGet) {
-                dataGet = '?' + dataGet.slice(1);
-                url += dataGet;
-            }
-            break;
+    if (method === 'GET') {
+        // 解析对象传参
+        for (const key in param.data) {
+            query += '&' + key + '=' + param.data[key];
+        }
+        if (query) {
+            query = '?' + query.slice(1);
+            url += query;
+        }
+    } else {
+        // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
+        payload = JSON.stringify(param.data);
     }
 
     // 监听请求变化
@@ -62,7 +57,7 @@ function ajax(param: AjaxParams) {
 
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
     if (param.file) {
-        dataPost = param.file;
+        payload = param.file;
     } else {
         /**
          * @example 
@@ -81,7 +76,7 @@ function ajax(param: AjaxParams) {
         }
     }
 
-    XHR.send(dataPost);
+    XHR.send(payload);
 }
 
 /** 接口域名 */

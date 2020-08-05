@@ -4,7 +4,7 @@ export interface AjaxParams {
     /** 请求路径 */
     url: string,
     /** 请求方法 */
-    method: 'POST' | 'GET',
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     /** 传参对象 */
     data: any,
     /** 超时毫秒 */
