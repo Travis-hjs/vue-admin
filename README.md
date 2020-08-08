@@ -35,7 +35,7 @@
         "@vue/cli-plugin-router": "^4.0.5",
         "@vue/cli-plugin-typescript": "^4.1.0",
         "@vue/cli-service": "^4.1.0",
-        "node-sass": "^4.13.0",
+        "node-sass": "^4.14.1",
         "sass-loader": "^8.0.0",
         "svg-sprite-loader": "^4.1.6",
         "typescript": "~3.5.3",
