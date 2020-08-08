@@ -10,7 +10,7 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component({})
 export default class Nested extends Vue {
-    content = 'nested'
+    content = "nested"
 }
 </script>
 

@@ -8,7 +8,7 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component({})
 export default class Column2 extends Vue {
-    content = '栏目-2'
+    content = "栏目-2"
 }
 </script>
 

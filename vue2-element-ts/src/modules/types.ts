@@ -1,10 +1,10 @@
-import { RouteConfig } from 'vue-router';
+import { RouteConfig } from "vue-router";
 
 export interface AjaxParams {
     /** 请求路径 */
     url: string,
     /** 请求方法 */
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+    method: "GET" | "POST" | "PUT" | "DELETE",
     /** 传参对象 */
     data: any,
     /** 超时毫秒 */
@@ -62,7 +62,7 @@ export interface layoutStateType {
     /** 历史记录列表 */
     historyViews: Array<RouteConfig>
     /** 系统信息 */
-    device: 'desktop' | 'mobile'
+    device: "desktop" | "mobile"
     /** 主题颜色 */
     theme: string
 }

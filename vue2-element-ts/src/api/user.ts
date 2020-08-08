@@ -1,9 +1,9 @@
-import request from '../modules/request';
-import { loginParam, requestFail, userState } from '../modules/types';
-import store from '../modules/store';
+import request from "../modules/request";
+import { loginParam, requestFail, userState } from "../modules/types";
+import store from "../modules/store";
 
 /** 缓存`key`值 */
-const cacheName = 'systemCache';
+const cacheName = "systemCache";
 
 class ApiUser { 
     /**
@@ -18,8 +18,8 @@ class ApiUser {
     fetchUserState() {
         /** 缓存信息  */
         let data: userState = {
-            username: '',
-            accessToken: '',
+            username: "",
+            accessToken: "",
             loginType: 1,
             userId: 0
         }
@@ -63,19 +63,19 @@ class ApiUser {
                     break;
 
                 default:
-                    fail && fail({ message: '账户不存在' });
+                    fail && fail({ message: "账户不存在" });
                     break;
             }
             
         }
         testLogin();
         
-        // request('POST', '/login', data, res => {
+        // request("POST", "/login", data, res => {
         //     // 录成功后缓存用户信息
         //     res.username = data.username;
         //     store.userStateInfo = res;
         //     this.saveUserState(res);
-        //     // console.log('录成功后缓存用户信息', res);
+        //     // console.log("录成功后缓存用户信息", res);
         //     success && success(res);
         // }, err => {
         //     fail && fail(err);
@@ -101,7 +101,7 @@ class ApiUser {
         }
         testUpload();
         
-        // request('POST', '/uploadImg', {}, res => {
+        // request("POST", "/uploadImg", {}, res => {
         //     success && success(res);
         // }, err => {
         //     fail && fail(err);

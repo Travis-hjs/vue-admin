@@ -12,15 +12,15 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import store from "../modules/store";
 
-const version = '2.13.0' // require("element-ui/package.json").version; // element-ui version from node_modules
-const ORIGINAL_THEME = "#409EFF"; // default color
+const version = "2.13.0" // require("element-ui/package.json").version; // element-ui version from node_modules
+const defaultColor = "#409EFF"; // default color
 
 @Component({
     name: "ThemePicker"
 })
 export default class ThemePicker extends Vue {
 
-    private theme = store.layoutState.theme || ORIGINAL_THEME;
+    private theme = store.layoutState.theme || defaultColor;
 
     private onChange() {
         this.$emit("change", this.theme);
@@ -42,7 +42,7 @@ export default class ThemePicker extends Vue {
     // @Watch("theme")
     // private async onThemeChange(value: string) {
     //     if (!value) return;
-    //     const oldValue = this.chalk ? this.theme : ORIGINAL_THEME;
+    //     const oldValue = this.chalk ? this.theme : defaultColor;
     //     const themeCluster = this.getThemeCluster(value.replace("#", ""));
     //     const originalCluster = this.getThemeCluster(oldValue.replace("#", ""));
     //     const message = this.$message({
@@ -61,7 +61,7 @@ export default class ThemePicker extends Vue {
     //     const getHandler = (variable: string, id: string) => {
     //         return () => {
     //             const originalCluster = this.getThemeCluster(
-    //                 ORIGINAL_THEME.replace("#", "")
+    //                 defaultColor.replace("#", "")
     //             );
     //             const newStyle = this.updateStyle(
     //                 (this as any)[variable],

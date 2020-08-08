@@ -1,5 +1,5 @@
-import { AjaxParams, requestFail } from './types';
-import { Message } from 'element-ui';
+import { AjaxParams, requestFail } from "./types";
+import { Message } from "element-ui";
 
 /**
  * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
@@ -17,16 +17,16 @@ function ajax(param: AjaxParams) {
     /** 非`GET`请求传参 */
     let payload = null;
     /** `GET`请求传参 */
-    let query = '';
+    let query = "";
 
     // 传参处理
-    if (method === 'GET') {
+    if (method === "GET") {
         // 解析对象传参
         for (const key in param.data) {
-            query += '&' + key + '=' + param.data[key];
+            query += "&" + key + "=" + param.data[key];
         }
         if (query) {
-            query = '?' + query.slice(1);
+            query = "?" + query.slice(1);
             url += query;
         }
     } else {
@@ -47,10 +47,10 @@ function ajax(param: AjaxParams) {
 
     // 判断请求进度
     if (param.progress) {
-        XHR.addEventListener('progress', param.progress, false);
+        XHR.addEventListener("progress", param.progress, false);
     }
 
-    // XHR.responseType = 'json';
+    // XHR.responseType = "json";
     // 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
     // XHR.withCredentials = true;	
     XHR.open(method, url, true);
@@ -61,10 +61,10 @@ function ajax(param: AjaxParams) {
     } else {
         /**
          * @example 
-         * XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-         * XHR.setRequestHeader('Content-Type', 'application/json')
+         * XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+         * XHR.setRequestHeader("Content-Type", "application/json")
          */
-        XHR.setRequestHeader('Content-Type', 'application/json');
+        XHR.setRequestHeader("Content-Type", "application/json");
     }
 
     // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
@@ -80,7 +80,7 @@ function ajax(param: AjaxParams) {
 }
 
 /** 接口域名 */
-const webUrl = '';
+const webUrl = "";
 
 /**
  * 基础请求
@@ -91,7 +91,7 @@ const webUrl = '';
  * @param fail 失败回调
  * @param upload 上传图片 FormData
  */
-export default function request(method: AjaxParams['method'], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxParams['file']) {
+export default function request(method: AjaxParams["method"], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxParams["file"]) {
     ajax({
         url: webUrl + url,
         method: method,
@@ -99,16 +99,16 @@ export default function request(method: AjaxParams['method'], url: string, data:
         file: upload,
         overtime: 8000,
         success(res) {
-            // console.log('请求成功', res);
+            // console.log("请求成功", res);
             success && success(res);
         },
         fail(err) {
-            // console.log('请求失败', err);
+            // console.log("请求失败", err);
             let error = {
-                message: '接口报错',
+                message: "接口报错",
                 data: null
             };
-            if (err.response.charAt(0) == '{') {
+            if (err.response.charAt(0) == "{") {
                 error.data = JSON.parse(err.response);
             }
             fail && fail(error);
@@ -116,9 +116,9 @@ export default function request(method: AjaxParams['method'], url: string, data:
             Message.error(error.message); 
         },
         timeout() {
-            console.warn('XMLHttpRequest 请求超时 !!!');
+            console.warn("XMLHttpRequest 请求超时 !!!");
             let error = {
-                message: '请求超时',
+                message: "请求超时",
                 data: null
             }
             fail && fail(error);

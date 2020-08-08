@@ -44,7 +44,7 @@ export default class TagsView extends Vue {
     private left: number = 0;
     /** 选择路由对象 */
     private selectedTag: any = {
-        path: ''
+        path: ""
     };
     
     private pageState = store.layoutState;

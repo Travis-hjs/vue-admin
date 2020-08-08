@@ -1,10 +1,6 @@
 <template>
     <div :class="classObj" class="app-wrapper clearfix">
-        <div
-            v-if="classObj.mobile && pageState.sidebarOpen"
-            class="drawer-bg"
-            @click="handleClickOutside"
-        />
+        <div v-if="classObj.mobile && pageState.sidebarOpen" class="drawer-bg" @click="handleClickOutside" />
         <sidebar class="sidebar-container" />
         <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
             <div :class="{'fixed-header': pageState.fixedHeader}">
@@ -30,10 +26,10 @@ import store from "../modules/store";
     name: "Layout",
     components: {
         "app-main": AppMain,
-        navbar: Navbar,
+        "navbar": Navbar,
         "right-panel": RightPanel,
-        settings: Settings,
-        sidebar: Sidebar,
+        "settings": Settings,
+        "sidebar": Sidebar,
         'tags-view': TagsView
     }
 })

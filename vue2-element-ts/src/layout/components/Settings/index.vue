@@ -57,10 +57,10 @@ export default class Settings extends Vue {
      * @param value
      */
     private updateCss(value: string) {
-        let style = (document.getElementById('the-switch') as HTMLStyleElement);
+        let style = (document.getElementById("the-switch") as HTMLStyleElement);
         if (!style) {
-            style = document.createElement('style');
-            style.id = 'the-switch';
+            style = document.createElement("style");
+            style.id = "the-switch";
             document.head.appendChild(style);
         }
         style.textContent = `.el-switch.is-checked .el-switch__core{border-color: ${value};background-color: ${value};`;

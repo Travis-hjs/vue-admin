@@ -36,10 +36,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import utils from '../modules/utils';
-import apiUser from '../api/user';
-import store from '../modules/store';
+import { Component, Vue } from "vue-property-decorator";
+import utils from "../modules/utils";
+import apiUser from "../api/user";
+import store from "../modules/store";
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
@@ -59,54 +59,54 @@ function validatePass(rule: any, value: string, callback: Function) {
 
 @Component({})
 export default class Login extends Vue {
-    title = 'vue2-element-ts';
-    tipLink = 'https://github.com/Hansen-hjs';
+    title = "vue2-element-ts";
+    tipLink = "https://github.com/Hansen-hjs";
     tipList = store.testUserList;
 
     /** 背景信息 */
     background = {
-        poster: 'https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YXByZXZpZXdfaW1hZ2UucG5n.png',
-        video: 'https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YS5tcDQ_p_p100_p_3D.mp4'
+        poster: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YXByZXZpZXdfaW1hZ2UucG5n.png",
+        video: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YS5tcDQ_p_p100_p_3D.mp4"
     }
     /** 登录信息 */
     loginForm = {
-        username: '',
-        password: ''
+        username: "",
+        password: ""
     }
     loginRules = {
         username: [
             {
                 required: true,
-                trigger: 'blur',
+                trigger: "blur",
                 validator: validateUsername
             }
         ],
         password: [
-            { required: true, trigger: 'blur', validator: validatePass }
+            { required: true, trigger: "blur", validator: validatePass }
         ]
     }
     loading = false;
-    pwdType = 'password'
+    pwdType = "password"
     redirect = false;
 
     showPwd() {
-        if (this.pwdType === 'password') {
-            this.pwdType = '';
+        if (this.pwdType === "password") {
+            this.pwdType = "";
         } else {
-            this.pwdType = 'password';
+            this.pwdType = "password";
         }
     }
 
     // 点击登录
     handleLogin() {
-        if (!this.loginForm.username) return this.$message.error('账号不能为空！');
-        if (!this.loginForm.password) return this.$message.error('密码不能为空！');
+        if (!this.loginForm.username) return this.$message.error("账号不能为空！");
+        if (!this.loginForm.password) return this.$message.error("密码不能为空！");
         this.loading = true;
-        // console.log('用户登录信息：', this.loginForm);
+        // console.log("用户登录信息：", this.loginForm);
         apiUser.login(this.loginForm, res => {
-            // console.log('success', res);
+            // console.log("success", res);
             this.loading = false;
-            this.$router.push('/');
+            this.$router.push("/");
         }, err => {
             this.loading = false;
             this.$message.error(err.message);

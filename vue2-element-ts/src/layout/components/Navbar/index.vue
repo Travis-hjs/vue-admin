@@ -42,22 +42,22 @@ import apiUser from "../../../api/user";
 @Component({
     name: "Navbar",
     components: {
-        'hamburger': Hamburger,
-        'breadcrumb': Breadcrumb,
+        "hamburger": Hamburger,
+        "breadcrumb": Breadcrumb,
     }
 })
 export default class Navbar extends Vue {
 
     private pageState = store.layoutState;
 
-    @Watch('pageState', {
+    @Watch("pageState", {
         deep: true
     })
     private onLayoutChange() {
         store.saveLayout();
     }
 
-    private avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif';
+    private avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
     private toggleSideBar() {
         this.pageState.sidebarOpen = !this.pageState.sidebarOpen;

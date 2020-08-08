@@ -5,22 +5,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component({
-    name: 'SvgIcon'
+    name: "SvgIcon"
 })
 export default class SvgIcon extends Vue {
     @Prop({
         type: String,
         required: true,
-        default: ''
+        default: ""
     })
     name!: string;
 
     @Prop({
         type: String,
-        default: ''
+        default: ""
     })
     className!: string;
 
@@ -37,7 +37,7 @@ export default class SvgIcon extends Vue {
     }
     
     // mounted() {
-    //     // console.log('mounted', this.name, this.className);
+    //     // console.log("mounted", this.name, this.className);
     // }
 }
 </script>

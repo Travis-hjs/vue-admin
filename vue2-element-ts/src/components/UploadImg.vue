@@ -14,8 +14,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Emit, Vue } from 'vue-property-decorator';
-import apiUser from '../api/user';
+import { Component, Prop, Emit, Vue } from "vue-property-decorator";
+import apiUser from "../api/user";
 
 @Component({})
 export default class UploadImg extends Vue {
@@ -23,7 +23,7 @@ export default class UploadImg extends Vue {
     /** 上传的图片路径 */
     @Prop({
         type: String,
-        default: ''
+        default: ""
     })
     private imgUrl!: string;
 
@@ -38,7 +38,7 @@ export default class UploadImg extends Vue {
     private loading = false;
 
     /** 发送数据到父组件中 */
-    @Emit('getImgUrl') sendImgSrc(src: string) {}
+    @Emit("getImgUrl") sendImgSrc(src: string) {}
 
     /** 上传图片 */
     private uploadImg() {
@@ -48,28 +48,28 @@ export default class UploadImg extends Vue {
         const input: any = this.$refs.uploadinput;
 
         const file: File = input.files[0];
-        // console.log('上传图片文件 >>', file);
+        // console.log("上传图片文件 >>", file);
         
         /** 上传类型数组 */
-        let typeStr = ['image/jpg', 'image/png', 'image/jpeg', 'image/gif'];
+        let typeStr = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
         // 判断文件类型
         if (typeStr.indexOf(file.type) < 0) {
-            this.$message.warning('文件格式只支持：jpg 和 png');
+            this.$message.warning("文件格式只支持：jpg 和 png");
             input.value = null;
             return;
         }
 
         // 判断大小
         if (file.size > 2 * 1024 * 1024) {
-            this.$message.warning('上传的文件不能大于2M');
+            this.$message.warning("上传的文件不能大于2M");
             input.value = null;
             return;
         }
 
         // const formData = new FormData();
 
-        // formData.append('file', file);
+        // formData.append("file", file);
 
         this.loading = true;
         apiUser.uploadImg(file, res => {
@@ -79,14 +79,14 @@ export default class UploadImg extends Vue {
             this.sendImgSrc(src);
         }, err => {
             this.loading = false;
-            this.$message.error('上传图片失败');
-            // console.log('上传图片失败 >>', err);
+            this.$message.error("上传图片失败");
+            // console.log("上传图片失败 >>", err);
         });
     }
 
     /** 清除当前图片 */
     private removeImg() {
-        this.sendImgSrc('');
+        this.sendImgSrc("");
     }
 }
 </script>

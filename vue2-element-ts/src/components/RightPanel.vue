@@ -37,9 +37,9 @@ export default class RightPanel extends Vue {
             this.addEventClick();
         }
         if (value) {
-            document.body.classList.add('showRightPanel');
+            document.body.classList.add("showRightPanel");
         } else {
-            document.body.classList.remove('showRightPanel');
+            document.body.classList.remove("showRightPanel");
         }
     }
 
@@ -48,7 +48,7 @@ export default class RightPanel extends Vue {
     }
 
     beforeDestroy() {
-        const elx = this.$refs.rightPanel as Element;
+        const elx = this.$refs.rightPanel as HTMLElement;
         elx.remove();
     }
 
@@ -65,7 +65,7 @@ export default class RightPanel extends Vue {
     }
 
     private insertToBody() {
-        const elx = this.$refs.rightPanel as Element;
+        const elx = this.$refs.rightPanel as HTMLElement;
         const body = document.querySelector("body");
         if (body) {
             body.insertBefore(elx, body.firstChild);

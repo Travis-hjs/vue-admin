@@ -39,11 +39,11 @@ import SidebarItemLink from "./SidebarItemLink.vue";
 import utils from "../../../modules/utils";
 
 @Component({
-    // Set 'name' here to prevent uglifyjs from causing recursive component not work
+    // Set "name" here to prevent uglifyjs from causing recursive component not work
     // See https://medium.com/haiiro-io/element-component-name-with-vue-class-component-f3b435656561 for detail
     name: "SidebarItem",
     components: {
-        'sidebar-item-link': SidebarItemLink
+        "sidebar-item-link": SidebarItemLink
     }
 })
 export default class SidebarItem extends Vue {
@@ -85,7 +85,7 @@ export default class SidebarItem extends Vue {
             }
         }
         // If there is no children, return itself with path removed,
-        // because this.basePath already conatins item's path information
+        // because this.basePath already conatins item"s path information
         return { ...this.item, path: "" };
     }
 
@@ -102,7 +102,7 @@ export default class SidebarItem extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 .el-submenu.is-active > .el-submenu__title {
     color: $subMenuActiveText !important;
 }

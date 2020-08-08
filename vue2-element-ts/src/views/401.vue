@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import store from '../modules/store';
+import store from "../modules/store";
 
 @Component({})
 export default class NoPower extends Vue {
@@ -41,7 +41,7 @@ export default class NoPower extends Vue {
 
     private back() {
         if (this.$route.query.noGoBack) {
-            this.$router.push({ path: '/' });
+            this.$router.push({ path: "/" });
         } else {
             this.$router.go(-1);
         }

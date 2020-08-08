@@ -8,7 +8,7 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component({})
 export default class Menu1 extends Vue {
-    content = '菜单 2-1'
+    content = "菜单 2-1"
 }
 </script>
 

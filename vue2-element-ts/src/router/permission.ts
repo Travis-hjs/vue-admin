@@ -1,8 +1,8 @@
-import { router, base, admin, editor } from './index';
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
-import apiUser from '../api/user';
-import store from '../modules/store';
+import { router, base, admin, editor } from "./index";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+import apiUser from "../api/user";
+import store from "../modules/store";
 
 // NProgress.configure({ showSpinner: false });
 
@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
                     break;
             }
             router.addRoutes(store.addRouters);
-            router.addRoutes([{ path: '*', redirect: '/404' }]); // 在最后加一个404重定向的路由进去
+            router.addRoutes([{ path: "*", redirect: "/404" }]); // 在最后加一个404重定向的路由进去
             store.completeRouters = base.concat(store.addRouters);
             next({ ...to, replace: true });
         }
@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
     // try {
     // } catch (error) {
     //     console.log(error);
-    //     next('/404');
+    //     next("/404");
     // }
     
 });

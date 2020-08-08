@@ -10,11 +10,11 @@ import HelloWorld from "../../components/HelloWorld.vue";
 
 @Component({
     components: {
-        'hello-world': HelloWorld
+        "hello-world": HelloWorld
     }
 })
 export default class Home extends Vue {
-    content = '首页';
+    content = "首页";
 }
 </script>
 
