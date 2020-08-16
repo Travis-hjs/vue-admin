@@ -45,9 +45,7 @@ export default class SideBar extends Vue {
 
     private pageState = store.layoutState;
 
-    get routes() {
-        return store.completeRouters;
-    }
+    routes = store.completeRouters;
 
     get menuActiveTextColor() {
         if (store.layoutState.sidebarTextTheme) {
