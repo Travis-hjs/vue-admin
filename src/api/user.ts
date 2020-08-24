@@ -1,6 +1,6 @@
 import request from "../modules/request";
 import { loginParam, requestFail, userState } from "../modules/types";
-import store from "../modules/store";
+import store from "../store";
 
 /** 缓存`key`值 */
 const cacheName = "systemCache";

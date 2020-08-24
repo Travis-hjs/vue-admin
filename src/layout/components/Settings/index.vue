@@ -37,7 +37,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import ThemePicker from "../../../components/ThemePicker.vue";
-import store from "../../../modules/store";
+import store from "../../../store";
 
 @Component({
     name: "Settings",

@@ -20,7 +20,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { mixins } from "vue-class-component";
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
 import RightPanel from "../components/RightPanel.vue";
-import store from "../modules/store";
+import store from "../store";
 
 @Component({
     name: "Layout",

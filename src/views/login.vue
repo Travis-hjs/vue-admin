@@ -4,7 +4,7 @@
             <source type="video/mp4" :src="background.video">   
         </video>
         <div class="mask"></div>
-        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+        <el-form ref="loginFormEl" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
             <h3 class="title">{{ title }}</h3>
             <el-form-item prop="username">
                 <span class="svg-container">
@@ -39,7 +39,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import utils from "../modules/utils";
 import apiUser from "../api/user";
-import store from "../modules/store";
+import store from "../store";
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
@@ -97,20 +97,23 @@ export default class Login extends Vue {
         }
     }
 
-    // 点击登录
+    /** 点击登录 */
     handleLogin() {
-        if (!this.loginForm.username) return this.$message.error("账号不能为空！");
-        if (!this.loginForm.password) return this.$message.error("密码不能为空！");
-        this.loading = true;
-        // console.log("用户登录信息：", this.loginForm);
-        apiUser.login(this.loginForm, res => {
-            // console.log("success", res);
-            this.loading = false;
-            this.$router.push("/");
-        }, err => {
-            this.loading = false;
-            this.$message.error(err.message);
-        });
+        const elementForm: any = this.$refs["loginFormEl"];
+        elementForm.validate((valid: boolean) => {
+            if (valid) {
+                this.loading = true;
+                // console.log("用户登录信息：", this.loginForm);
+                apiUser.login(this.loginForm, res => {
+                    // console.log("success", res);
+                    this.loading = false;
+                    this.$router.push("/");
+                }, err => {
+                    this.loading = false;
+                    this.$message.error(err.message);
+                });
+            }
+        })
     }
 }
 </script>

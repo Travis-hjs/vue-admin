@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import store from "../modules/store";
+import store from "../store";
 
 @Component({})
 export default class NoFind extends Vue {

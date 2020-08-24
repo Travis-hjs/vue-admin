@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import store from "../modules/store";
+import store from "../store";
 
 @Component({
     name: "RightPanel"

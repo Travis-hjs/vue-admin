@@ -2,7 +2,7 @@ import { router, base, admin, editor } from "./index";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import apiUser from "../api/user";
-import store from "../modules/store";
+import store from "../store";
 
 // NProgress.configure({ showSpinner: false });
 

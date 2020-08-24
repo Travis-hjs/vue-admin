@@ -92,38 +92,43 @@ const webUrl = "";
  * @param upload 上传图片 FormData
  */
 export default function request(method: AjaxParams["method"], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxParams["file"]) {
-    ajax({
-        url: webUrl + url,
-        method: method,
-        data: data,
-        file: upload,
-        overtime: 8000,
-        success(res) {
-            // console.log("请求成功", res);
-            success && success(res);
-        },
-        fail(err) {
-            // console.log("请求失败", err);
-            let error = {
-                message: "接口报错",
-                data: null
-            };
-            if (err.response.charAt(0) == "{") {
-                error.data = JSON.parse(err.response);
+    return new Promise<any>(function(resolve, reject) {
+        ajax({
+            url: webUrl + url,
+            method: method,
+            data: data,
+            file: upload,
+            overtime: 8000,
+            success(res) {
+                // console.log("请求成功", res);
+                success && success(res);
+                resolve(res);
+            },
+            fail(err) {
+                // console.log("请求失败", err);
+                let error = {
+                    message: "接口报错",
+                    data: null
+                };
+                if (err.response.charAt(0) == "{") {
+                    error.data = JSON.parse(err.response);
+                }
+                // 全局的请求错误提示，不需要可以去掉
+                Message.error(error.message); 
+                fail && fail(error);
+                reject(error);
+            },
+            timeout() {
+                console.warn("XMLHttpRequest 请求超时 !!!");
+                let error = {
+                    message: "请求超时",
+                    data: null
+                }
+                // 全局的请求超时提示，不需要可以去掉
+                Message.warning(error.message);
+                fail && fail(error);
+                reject(error);
             }
-            fail && fail(error);
-            // 全局的请求错误提示，不需要可以去掉
-            Message.error(error.message); 
-        },
-        timeout() {
-            console.warn("XMLHttpRequest 请求超时 !!!");
-            let error = {
-                message: "请求超时",
-                data: null
-            }
-            fail && fail(error);
-            // 全局的请求超时提示，不需要可以去掉
-            Message.warning(error.message);
-        }
-    });
+        });
+    })
 }
