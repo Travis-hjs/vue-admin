@@ -2,16 +2,13 @@ import request from "../modules/request";
 import { loginParam, requestFail, userState } from "../modules/types";
 import store from "../store";
 
-/** 缓存`key`值 */
-const cacheName = "systemCache";
-
 class ApiUser { 
     /**
      * 缓存用户登录信息
      * @param data 缓存的对象
      */
     saveUserState(data: userState) {
-        sessionStorage.setItem(cacheName, JSON.stringify(data));
+        sessionStorage.setItem(ApiUser.name, JSON.stringify(data));
     }
 
     /** 获取缓存信息 */
@@ -23,14 +20,14 @@ class ApiUser {
             loginType: 1,
             userId: 0
         }
-        const cacheInfo =  sessionStorage.getItem(cacheName);
+        const cacheInfo =  sessionStorage.getItem(ApiUser.name);
         data = cacheInfo ? JSON.parse(cacheInfo) : null;
         return data;
     }
 
     /** 清空缓存信息 */
     removeUserState() {
-        sessionStorage.removeItem(cacheName);
+        sessionStorage.removeItem(ApiUser.name);
     }
 
     /**

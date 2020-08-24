@@ -37,7 +37,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import Hamburger from "../../../components/Hamburger.vue";
 import Breadcrumb from "../../../components/Breadcrumb.vue";
 import store from "../../../store";
-import apiUser from "../../../api/user";
+import apiUser from "../../../api/User";
 
 @Component({
     name: "Navbar",

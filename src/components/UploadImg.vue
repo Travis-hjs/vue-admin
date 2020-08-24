@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Prop, Emit, Vue } from "vue-property-decorator";
-import apiUser from "../api/user";
+import apiUser from "../api/User";
 
 @Component({})
 export default class UploadImg extends Vue {
