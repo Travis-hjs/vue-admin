@@ -69,7 +69,7 @@ class ModuleUtil {
      * @param success 成功回调
      * @param fail 出错回调
      */
-    copyText(text: string, success?: Function, fail?: (res: string) => void) {
+    copyText(text: string, success?: () => void, fail?: (res: string) => void) {
         text = text.replace(/(^\s*)|(\s*$)/g, "");
         if (!text) {
             fail && fail("复制的内容不能为空！");
@@ -87,6 +87,7 @@ class ModuleUtil {
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
         document.execCommand("copy");
+        clipboard.blur();
         success && success();
     }
 
