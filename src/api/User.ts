@@ -2,13 +2,14 @@ import request from "../modules/request";
 import { loginParam, requestFail, userState } from "../modules/types";
 import store from "../store";
 
+const cacheName = "ApiUserInfo";
 class ApiUser { 
     /**
      * 缓存用户登录信息
      * @param data 缓存的对象
      */
     saveUserState(data: userState) {
-        sessionStorage.setItem(ApiUser.name, JSON.stringify(data));
+        sessionStorage.setItem(cacheName, JSON.stringify(data));
     }
 
     /** 获取缓存信息 */
@@ -20,14 +21,14 @@ class ApiUser {
             loginType: 1,
             userId: 0
         }
-        const cacheInfo =  sessionStorage.getItem(ApiUser.name);
+        const cacheInfo = sessionStorage.getItem(cacheName);
         data = cacheInfo ? JSON.parse(cacheInfo) : null;
         return data;
     }
 
     /** 清空缓存信息 */
     removeUserState() {
-        sessionStorage.removeItem(ApiUser.name);
+        sessionStorage.removeItem(cacheName);
     }
 
     /**
@@ -40,7 +41,7 @@ class ApiUser {
         /** 模拟登录 */
         const testLogin = () => {
             /** 缓存信息  */
-            let info: userState = {
+            const info: userState = {
                 username: data.username,
                 accessToken: Math.random().toString(36).substr(2),
                 loginType: 1,

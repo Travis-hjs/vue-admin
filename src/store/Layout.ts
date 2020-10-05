@@ -1,6 +1,7 @@
 import { layoutStateType, userState } from "../modules/types";
 import { RouteConfig } from "vue-router";
 
+const cacheName = "ModuleLayoutInfo";
 export default class ModuleLayout {
     constructor() {
         this.updateLayout();
@@ -31,7 +32,7 @@ export default class ModuleLayout {
 
     /** 更新`layout`操作状态 */
     private updateLayout() {
-        const value = sessionStorage.getItem(ModuleLayout.name);
+        const value = sessionStorage.getItem(cacheName);
         const data = value ? JSON.parse(value) : null;
         if (data) {
             this.layoutState = data;
@@ -58,7 +59,7 @@ export default class ModuleLayout {
             }
         }
         // console.log(JSON.stringify(data));
-        sessionStorage.setItem(ModuleLayout.name, JSON.stringify(data));
+        sessionStorage.setItem(cacheName, JSON.stringify(data));
     }
 
 }
