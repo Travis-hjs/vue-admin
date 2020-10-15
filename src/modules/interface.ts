@@ -21,19 +21,19 @@ export interface AjaxParams {
     progress?: (ev: any) => void
 }
 
-export interface requestFail {
+export interface RequestFail {
     /** 请求错误提示信息 */
     message: string,
     /** 请求错误数据 */
     data?: any
 }
 
-export interface loginParam {
+export interface LoginParam {
     username: string,
     password: string
 }
 
-export interface userState {
+export interface UserInfo {
     /** 用户名 */
     username?: string,
     /** 用户token */
@@ -44,7 +44,7 @@ export interface userState {
     userId: number | string
 }
 
-export interface layoutStateType {
+export interface LayoutStateType {
     /** 显示设置 */
     showSettings: boolean
     /** 显示历史记录列表 */
@@ -66,3 +66,9 @@ export interface layoutStateType {
     /** 主题颜色 */
     theme: string
 }
+
+/** 运算符号 */
+export type NumberSymbols = "+" | "-"| "*" | "/";
+
+/** JavaScript类型 */
+export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined";

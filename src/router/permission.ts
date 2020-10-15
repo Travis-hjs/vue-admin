@@ -11,7 +11,7 @@ router.beforeEach((to, from, next) => {
     NProgress.start();
 
     /** 缓存信息 */
-    const userInfo = store.userStateInfo || apiUser.fetchUserState();
+    const userInfo = apiUser.userStateInfo || apiUser.fetchUserState();
 
     if (userInfo && userInfo.accessToken) {
         if (store.addRouters.length > 0) {

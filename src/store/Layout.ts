@@ -1,14 +1,18 @@
-import { layoutStateType, userState } from "../modules/types";
 import { RouteConfig } from "vue-router";
+import { ModuleModifyObject } from "./ModifyObject";
+import { 
+    LayoutStateType,
+} from "../modules/interface";
 
 const cacheName = "ModuleLayoutInfo";
-export default class ModuleLayout {
+export default class ModuleLayout extends ModuleModifyObject {
     constructor() {
+        super();
         this.updateLayout();
     }
 
     /** `layout`操作状态 */
-    public layoutState: layoutStateType = {
+    public readonly layoutState: LayoutStateType = {
         sidebarTextTheme: false,
         showSidebarLogo: true,
         fixedHeader: false,
@@ -27,15 +31,12 @@ export default class ModuleLayout {
     /** (基础路由+动态路由)列表 */
     public completeRouters: Array<RouteConfig> = [];
 
-    /** 用户登录状态信息 */
-    public userStateInfo!: userState;
-
     /** 更新`layout`操作状态 */
     private updateLayout() {
         const value = sessionStorage.getItem(cacheName);
         const data = value ? JSON.parse(value) : null;
         if (data) {
-            this.layoutState = data;
+            this.modify(this.layoutState, data);
         }
     }
 

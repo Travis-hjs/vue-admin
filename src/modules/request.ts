@@ -1,5 +1,8 @@
-import { AjaxParams, requestFail } from "./types";
 import { Message } from "element-ui";
+import { 
+    AjaxParams, 
+    RequestFail 
+} from "./interface";
 
 /**
  * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
@@ -91,7 +94,7 @@ const webUrl = "";
  * @param fail 失败回调
  * @param upload 上传图片 FormData
  */
-export default function request(method: AjaxParams["method"], url: string, data: object, success?: (res: any) => void, fail?: (error: requestFail) => void, upload?: AjaxParams["file"]) {
+export default function request(method: AjaxParams["method"], url: string, data: object, success?: (res: any) => void, fail?: (error: RequestFail) => void, upload?: AjaxParams["file"]) {
     return new Promise<any>(function(resolve, reject) {
         ajax({
             url: webUrl + url,

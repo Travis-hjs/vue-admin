@@ -1,21 +1,35 @@
 import request from "../modules/request";
-import { loginParam, requestFail, userState } from "../modules/types";
 import store from "../store";
+import { 
+    LoginParam, 
+    RequestFail, 
+    UserInfo 
+} from "../modules/interface";
 
 const cacheName = "ApiUserInfo";
 class ApiUser { 
+
+    /** 用户登录状态信息 */
+    public readonly userStateInfo: UserInfo = {
+        username: "",
+        accessToken: "",
+        loginType: 1,
+        userId: 0
+    };
+
     /**
      * 缓存用户登录信息
-     * @param data 缓存的对象
+     * @param value 缓存的对象
      */
-    saveUserState(data: userState) {
-        sessionStorage.setItem(cacheName, JSON.stringify(data));
+    saveUserState(value: UserInfo) {
+        store.modify(this.userStateInfo, value);
+        sessionStorage.setItem(cacheName, JSON.stringify(value));
     }
 
     /** 获取缓存信息 */
     fetchUserState() {
         /** 缓存信息  */
-        let data: userState = {
+        let data: UserInfo = {
             username: "",
             accessToken: "",
             loginType: 1,
@@ -37,11 +51,11 @@ class ApiUser {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    login(data: loginParam, success: (res?: userState) => void, fail?: (error: requestFail) => void) {
+    login(data: LoginParam, success: (res?: UserInfo) => void, fail?: (error: RequestFail) => void) {
         /** 模拟登录 */
         const testLogin = () => {
             /** 缓存信息  */
-            const info: userState = {
+            const info: UserInfo = {
                 username: data.username,
                 accessToken: Math.random().toString(36).substr(2),
                 loginType: 1,
@@ -70,9 +84,8 @@ class ApiUser {
         
         // request("POST", "/login", data, res => {
         //     // 录成功后缓存用户信息
-        //     res.username = data.username;
-        //     store.userStateInfo = res;
-        //     this.saveUserState(res);
+        //     res.data.username = data.username;
+        //     this.saveUserState(res.data);
         //     // console.log("录成功后缓存用户信息", res);
         //     success && success(res);
         // }, err => {
@@ -86,7 +99,7 @@ class ApiUser {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    uploadImg(data: File, success: (res?: any) => void, fail?: (error: requestFail) => void) {
+    uploadImg(data: File, success: (res?: any) => void, fail?: (error: RequestFail) => void) {
         /** 模拟上传 */
         const testUpload = () => {
             const reader = new FileReader();
