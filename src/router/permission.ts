@@ -10,19 +10,16 @@ import store from "../store";
 router.beforeEach((to, from, next) => {
     NProgress.start();
 
-    /** 缓存信息 */
-    const userInfo = apiUser.userStateInfo || apiUser.fetchUserState();
-
-    if (userInfo && userInfo.accessToken) {
+    if (apiUser.userInfo.token) {
         if (store.addRouters.length > 0) {
             next();
         } else {
-            switch (userInfo.loginType) {
-                case 1:
+            switch (apiUser.userInfo.userType) {
+                case "admin":
                     store.addRouters = admin;
                     break;
             
-                case 2:
+                case "editor":
                     store.addRouters = editor;
                     break;
             }
@@ -49,7 +46,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(to => {
     NProgress.done();
-    
+    // 根据路由名动态设置文档的标题
     if (to.meta.title) {
         document.title = to.meta.title
     }

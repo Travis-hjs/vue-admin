@@ -10,13 +10,13 @@ export class ModuleModifyObject {
     modify<T>(target: T, value: T) {
         for (const key in value) {
             if (Object.prototype.hasOwnProperty.call(target, key)) {
-                target[key] = value[key];
+                // target[key] = value[key];
                 // 需要的话，深层逐个赋值
-                // if (utils.checkType(target[key]) === "object") {
-                //     this.modify(target[key], value[key])
-                // } else {
-                //     target[key] = value[key];
-                // }
+                if (utils.checkType(target[key]) === "object") {
+                    this.modify(target[key], value[key])
+                } else {
+                    target[key] = value[key];
+                }
             }
         }
     }

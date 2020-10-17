@@ -33,15 +33,15 @@ export interface LoginParam {
     password: string
 }
 
-export interface UserInfo {
+export interface UserInfoType {
+    /** 用户`id` */
+    id: number | string
     /** 用户名 */
-    username?: string,
-    /** 用户token */
-    accessToken: string,
-    /** 用户类型 1：admin | 2：editor */
-    loginType: 1 | 2,
-    /** 用户id */
-    userId: number | string
+    name: string
+    /** 登录接口中返回的`token`字段 */
+    token: string
+    /** 用户类型 */
+    userType: "admin" | "editor" | ""
 }
 
 export interface LayoutStateType {
@@ -72,3 +72,10 @@ export type NumberSymbols = "+" | "-"| "*" | "/";
 
 /** JavaScript类型 */
 export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined";
+
+export interface UploadImage {
+    /** 和当前上传组件绑定的`id` */
+    id: string | number
+    /** 图片路径 */
+    src: string
+}

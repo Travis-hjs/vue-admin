@@ -1,31 +1,38 @@
 <template>
-    <div class="the-upload-img" v-loading="loading" :style="{'width': width + 'px'}">
-        <div v-if="imgUrl" class="img-box" :style="{ 'minHeight': width + 'px' }">
+    <div class="the_upload_img" v-loading="loading" :style="{'width': width + 'px'}">
+        <div v-if="imgUrl" class="image_box">
             <img class="image" :src="imgUrl">
             <div @click="removeImg()" class="remove flex fvertical fcenter">
                 <i class="el-icon-close" />
             </div>
         </div>
-        <div v-else class="upload flex fvertical fcenter" :style="{ 'height': width + 'px' }">
-            <div class="add-icon"></div>
-            <input class="upload-input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
+        <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': width + 'px' }">
+            <div class="add_icon"></div>
+            <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Emit, Vue } from "vue-property-decorator";
-import apiUser from "../api/User";
+import { UploadImage } from "../modules/interface";
+import api from "../api/index";
 
 @Component({})
 export default class UploadImg extends Vue {
 
-    /** 上传的图片路径 */
+    /** 组件上传图片路径 */
     @Prop({
         type: String,
         default: ""
     })
     private imgUrl!: string;
+    
+    @Prop({
+        type: [String, Number],
+        default: ""
+    })
+    private uploadId!: UploadImage["id"];
 
     /** 图片宽度 */
     @Prop({
@@ -38,7 +45,7 @@ export default class UploadImg extends Vue {
     private loading = false;
 
     /** 发送数据到父组件中 */
-    @Emit("getImgUrl") sendImgSrc(src: string) {}
+    @Emit("change") sendImgSrc(info: UploadImage) {}
 
     /** 上传图片 */
     private uploadImg() {
@@ -72,11 +79,13 @@ export default class UploadImg extends Vue {
         // formData.append("file", file);
 
         this.loading = true;
-        apiUser.uploadImg(file, res => {
+        api.uploadImg(file, res => {
             this.loading = false;
-            /** 图片路径 */
-            let src: string = res;
-            this.sendImgSrc(src);
+            const result: string = res;
+            this.sendImgSrc({
+                id: this.uploadId,
+                src: result
+            });
         }, err => {
             this.loading = false;
             this.$message.error("上传图片失败");
@@ -86,26 +95,30 @@ export default class UploadImg extends Vue {
 
     /** 清除当前图片 */
     private removeImg() {
-        this.sendImgSrc("");
+        this.sendImgSrc({
+            id: this.uploadId,
+            src: ""
+        });
     }
+
 }
 </script>
 
 <style lang="scss">
-.the-upload-img {
+.the_upload_img {
     border: 1px dashed #d9d9d9;
     border-radius: 5px;
     overflow: hidden;
     &:hover{ border-color: #409eff; }
-    .img-box{ 
+    .image_box{ 
         position: relative; width: 100%; height: 100%; overflow: hidden;
         .image{ display: block; width: 100%; }
         .remove{ position: absolute; top: 0; right: 0; line-height: normal; border-radius: 100%; cursor: pointer; width: 30px; height: 30px; background-color: rgba(0,0,0,0.5); font-size: 28px; color: #fff; }
     }
-    .upload{ 
+    .upload_box{ 
         width: 100%; position: relative; 
-        .upload-input{ width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; cursor: pointer; }
-        .add-icon{
+        .upload_input{ width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; cursor: pointer; }
+        .add_icon{
             position: relative; width: 30px; height: 30px;
             &::after{ content: ""; position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background-color: #999; transform: translateX(-50%); }
             &::before{ content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background-color: #999; transform: translateY(-50%); }

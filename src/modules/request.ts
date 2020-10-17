@@ -1,3 +1,4 @@
+import config from "../config";
 import { Message } from "element-ui";
 import { 
     AjaxParams, 
@@ -82,9 +83,6 @@ function ajax(param: AjaxParams) {
     XHR.send(payload);
 }
 
-/** 接口域名 */
-const webUrl = "";
-
 /**
  * 基础请求
  * @param method 请求方式
@@ -94,12 +92,12 @@ const webUrl = "";
  * @param fail 失败回调
  * @param upload 上传图片 FormData
  */
-export default function request(method: AjaxParams["method"], url: string, data: object, success?: (res: any) => void, fail?: (error: RequestFail) => void, upload?: AjaxParams["file"]) {
+export default function request(method: AjaxParams["method"], url: string, data?: object, success?: (res: any) => void, fail?: (error: RequestFail) => void, upload?: AjaxParams["file"]) {
     return new Promise<any>(function(resolve, reject) {
         ajax({
-            url: webUrl + url,
+            url: config.getDomain() + url,
             method: method,
-            data: data,
+            data: data || {},
             file: upload,
             overtime: 8000,
             success(res) {

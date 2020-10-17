@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 　　
 const resolve = dir => path.join(__dirname, dir);
 
@@ -8,7 +8,7 @@ const resolve = dir => path.join(__dirname, dir);
  */
 module.exports = {
     /** 打包构建后的资源路径 */
-    publicPath: './',
+    publicPath: "./",
 
     /**
      * @learn https://blog.csdn.net/Liu_yunzhao/article/details/90520028
@@ -21,11 +21,11 @@ module.exports = {
          * 打包到线上的时候则要把`request.ts`里面的`webUrl`请求域名换成正式环境域名
          * 所以比较繁琐，干脆直接让后台打开跨域好了
          */
-        // proxy: 'http://10.0.18.207',
+        // proxy: "http://10.0.18.207",
         // proxy: {
-        //     '/api': {
+        //     "/api": {
         //         //要访问的跨域的域名
-        //         target: 'http://10.0.18.207',
+        //         target: "http://10.0.18.207",
         //         /** 是否启用websockets */
         //         ws: false,
         //         /** 使用的是http协议则设置为false，https协议则设置为true */
@@ -34,7 +34,7 @@ module.exports = {
         //         changOrigin: true,
         //         /** 对应上面的即可 */
         //         pathRewrite: {
-        //             '^/api': '/api'
+        //             "^/api": "/api"
         //         }
         //     }
         // }
@@ -43,18 +43,18 @@ module.exports = {
     chainWebpack(config) {
         // set svg-sprite-loader
         config.module
-            .rule('svg')
-            .exclude.add(resolve('src/icons'))
+            .rule("svg")
+            .exclude.add(resolve("src/icons"))
             .end()
         config.module
-            .rule('icons')
+            .rule("icons")
             .test(/\.svg$/)
-            .include.add(resolve('src/icons'))
+            .include.add(resolve("src/icons"))
             .end()
-            .use('svg-sprite-loader')
-            .loader('svg-sprite-loader')
+            .use("svg-sprite-loader")
+            .loader("svg-sprite-loader")
             .options({
-                symbolId: 'icon-[name]'
+                symbolId: "icon-[name]"
             })
             .end()
     },

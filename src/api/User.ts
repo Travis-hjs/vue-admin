@@ -1,76 +1,87 @@
 import request from "../modules/request";
 import store from "../store";
+import { ModuleModifyObject } from "../store/ModifyObject";
 import { 
     LoginParam, 
     RequestFail, 
-    UserInfo 
+    UserInfoType 
 } from "../modules/interface";
 
+/** 缓存名称 */
 const cacheName = "ApiUserInfo";
-class ApiUser { 
 
-    /** 用户登录状态信息 */
-    public readonly userStateInfo: UserInfo = {
-        username: "",
-        accessToken: "",
-        loginType: 1,
-        userId: 0
-    };
+/** 创建用户信息 */
+function createUserInfo(): UserInfoType {
+    return {
+        id: "",
+        name: "",
+        token: "",
+        userType: "",
+    }
+}
+
+class ApiUser extends ModuleModifyObject { 
+
+    constructor() {
+        super();
+        const userInfo = this.fetchUserState();
+        if (userInfo) {
+            this.modify(this.userInfo, userInfo);
+        }
+    }
+
+    /** 用户信息（包含登录状态） */
+    public readonly userInfo = createUserInfo();
 
     /**
-     * 缓存用户登录信息
+     * 更新当前的`userInfo`值并缓存到本地
      * @param value 缓存的对象
      */
-    saveUserState(value: UserInfo) {
-        store.modify(this.userStateInfo, value);
+    private updateUserState(value: Partial<UserInfoType>) {
+        this.modify(this.userInfo, value);
         sessionStorage.setItem(cacheName, JSON.stringify(value));
     }
 
     /** 获取缓存信息 */
-    fetchUserState() {
-        /** 缓存信息  */
-        let data: UserInfo = {
-            username: "",
-            accessToken: "",
-            loginType: 1,
-            userId: 0
-        }
+    private fetchUserState() {
+        let userInfo = createUserInfo();
         const cacheInfo = sessionStorage.getItem(cacheName);
-        data = cacheInfo ? JSON.parse(cacheInfo) : null;
-        return data;
+        userInfo = cacheInfo ? JSON.parse(cacheInfo) : null;
+        return userInfo;
     }
 
     /** 清空缓存信息 */
     removeUserState() {
+        this.modify(this.userInfo, createUserInfo());
         sessionStorage.removeItem(cacheName);
     }
 
     /**
      * 登录
-     * @param data 登录信息
+     * @param params 登录信息
      * @param success 成功回调
      * @param fail 失败回调
      */
-    login(data: LoginParam, success: (res?: UserInfo) => void, fail?: (error: RequestFail) => void) {
+    login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: RequestFail) => void) {
         /** 模拟登录 */
         const testLogin = () => {
             /** 缓存信息  */
-            const info: UserInfo = {
-                username: data.username,
-                accessToken: Math.random().toString(36).substr(2),
-                loginType: 1,
-                userId: Math.random().toString(36).substr(10)
+            const info: UserInfoType = {
+                name: params.username,
+                token: Math.random().toString(36).substr(2),
+                userType: "",
+                id: Math.random().toString(36).substr(10)
             }
-            switch (info.username) {
+            switch (info.name) {
                 case store.testUserList[0]:
-                    info.loginType = 1;
-                    this.saveUserState(info);
+                    info.userType = "admin";
+                    this.updateUserState(info);
                     success && success(info);
                     break;
 
                 case store.testUserList[1]:
-                    info.loginType = 2;
-                    this.saveUserState(info);
+                    info.userType = "editor";
+                    this.updateUserState(info);
                     success && success(info);
                     break;
 
@@ -82,10 +93,10 @@ class ApiUser {
         }
         testLogin();
         
-        // request("POST", "/login", data, res => {
+        // request("POST", "/login", params, res => {
         //     // 录成功后缓存用户信息
-        //     res.data.username = data.username;
-        //     this.saveUserState(res.data);
+        //     res.data.name = params.username;
+        //     this.updateUserState(res.data);
         //     // console.log("录成功后缓存用户信息", res);
         //     success && success(res);
         // }, err => {
@@ -93,31 +104,6 @@ class ApiUser {
         // });
     }
 
-    /**
-     * 上传图片
-     * @param data 图片`FromData` 这里我模拟上传，所以类型是`File`，接口上传时才是`FromData`
-     * @param success 成功回调
-     * @param fail 失败回调
-     */
-    uploadImg(data: File, success: (res?: any) => void, fail?: (error: RequestFail) => void) {
-        /** 模拟上传 */
-        const testUpload = () => {
-            const reader = new FileReader();
-            reader.onload = function() {
-                setTimeout(() => {
-                    success && success(reader.result);
-                }, 500);
-            }
-            reader.readAsDataURL(data);
-        }
-        testUpload();
-        
-        // request("POST", "/uploadImg", {}, res => {
-        //     success && success(res);
-        // }, err => {
-        //     fail && fail(err);
-        // }, data);
-    }
 }
 
 /** 用户类型接口 */

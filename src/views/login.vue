@@ -4,30 +4,30 @@
             <source type="video/mp4" :src="background.video">   
         </video>
         <div class="mask"></div>
-        <el-form ref="loginFormEl" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+        <el-form class="login_form" label-position="left" ref="loginFormEl" :model="loginForm" :rules="loginRules">
             <h3 class="title">{{ title }}</h3>
             <el-form-item prop="username">
-                <span class="svg-container">
+                <span class="svg_container">
                     <svg-icon name="user"/>
                 </span>
-                <el-input v-model="loginForm.username" name="username" type="text" auto-complete="off" placeholder="用户名或者账号" />
+                <el-input v-model="loginForm.username" type="text" placeholder="用户名或者账号" />
             </el-form-item>
             <el-form-item prop="password">
-                <span class="svg-container">
+                <span class="svg_container">
                     <svg-icon name="password"/>
                 </span>
-                <el-input :type="pwdType" v-model="loginForm.password" name="password" auto-complete="off" placeholder="密码" @keyup.enter.native="handleLogin" />
-                <span class="show-pwd" @click="showPwd">
+                <el-input :type="pwdType" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="handleLogin(false)" />
+                <span class="password_icon" @click="switchInput()">
                     <svg-icon :name="pwdType === 'password' ? 'eye-off' : 'eye-on'"/>
                 </span>
             </el-form-item>
             <el-form-item>
-                <el-button :loading="loading" class="btn" type="primary" @click="handleLogin">登录</el-button>
+                <el-button :loading="loading" class="btn" type="primary" @click="handleLogin(false)">登录</el-button>
             </el-form-item>
-            <div class="tips" v-for="(item, index) in tipList" :key="index">
+            <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
                 <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
-                <span class="tips-text">账号：{{ item }}</span>
-                <span class="tips-text">密码 : 随便填</span>
+                <div class="tips_text f1">账号：{{ item }} 密码 : 随便填</div>
+                <el-button size="mini" type="primary" @click="setLoginInfo(item)">一键登录</el-button>
             </div>
         </el-form>
 
@@ -75,11 +75,7 @@ export default class Login extends Vue {
     }
     loginRules = {
         username: [
-            {
-                required: true,
-                trigger: "blur",
-                validator: validateUsername
-            }
+            { required: true, trigger: "blur", validator: validateUsername }
         ],
         password: [
             { required: true, trigger: "blur", validator: validatePass }
@@ -89,29 +85,44 @@ export default class Login extends Vue {
     pwdType = "password"
     redirect = false;
 
-    showPwd() {
-        if (this.pwdType === "password") {
-            this.pwdType = "";
-        } else {
-            this.pwdType = "password";
-        }
+    switchInput() {
+        this.pwdType = this.pwdType === "password" ? "text" : "password";
     }
 
-    /** 点击登录 */
-    handleLogin() {
+    /**
+     * 一键登录
+     * @param account 账号
+     */
+    setLoginInfo(account: string) {
+        this.loginForm.username = account;
+        this.loginForm.password = Math.random().toString(36).substr(2);
+        this.handleLogin(true);
+    }
+
+    /** 
+     * 点击登录 
+     * @param adopt 是否不校验直接通过
+    */
+    handleLogin(adopt: boolean) {
         const elementForm: any = this.$refs["loginFormEl"];
+        const start = () => {
+            this.loading = true;
+            // console.log("用户登录信息：", this.loginForm);
+            apiUser.login(this.loginForm, res => {
+                // console.log("success", res);
+                this.loading = false;
+                this.$router.push("/");
+            }, err => {
+                this.loading = false;
+                this.$message.error(err.message);
+            });
+        }
+        if (adopt) {
+            return start();
+        }
         elementForm.validate((valid: boolean) => {
             if (valid) {
-                this.loading = true;
-                // console.log("用户登录信息：", this.loginForm);
-                apiUser.login(this.loginForm, res => {
-                    // console.log("success", res);
-                    this.loading = false;
-                    this.$router.push("/");
-                }, err => {
-                    this.loading = false;
-                    this.$message.error(err.message);
-                });
+                start();
             }
         })
     }
@@ -119,7 +130,7 @@ export default class Login extends Vue {
 </script>
 
 <style lang="scss">
-$bg: #2d3a4b;
+$bg: rgba(0,0,0,0);
 $light_gray: #eee;
 $dark_gray: #889aa4;
 .login {
@@ -141,9 +152,9 @@ $dark_gray: #889aa4;
         display: inline-block;
         height: 47px;
         width: 85%;
-        background-color: transparent;
+        background-color: $bg;
         input {
-            background: transparent;
+            background-color: $bg;
             border: 0px;
             -webkit-appearance: none;
             border-radius: 0px;
@@ -151,7 +162,7 @@ $dark_gray: #889aa4;
             color: $light_gray;
             height: 47px;
             &:-webkit-autofill {
-                box-shadow: 0 0 0px 1000px $bg inset !important;
+                box-shadow: 0 0 0px 1000px rgba(0,0,0,0.6) inset !important;
                 -webkit-text-fill-color: #fff !important;
             }
         }
@@ -164,7 +175,7 @@ $dark_gray: #889aa4;
     }
     .btn{ width: 100%; }
     .copyright{ position: fixed; bottom:20px; z-index: 10; left: 50%; color:#ccc;transform: translate(-50%,-50%); font-size: 14px; }
-    .login-form {
+    .login_form {
         position: absolute;
         left: 50%;
         top: 30%;
@@ -175,16 +186,11 @@ $dark_gray: #889aa4;
         font-size: 14px;
         color: #fff;
         margin-bottom: 10px;
-        .el-button {
-            margin-right: 16px;
-        }
-        .tips-text {
-            &:first-of-type {
-                margin-right: 16px;
-            }
+        .tips_text {
+            margin: 0 16px;
         }
     }
-    .svg-container {
+    .svg_container {
         color: $dark_gray;
         padding: 6px 5px 6px 15px;
         vertical-align: middle;
@@ -198,7 +204,7 @@ $dark_gray: #889aa4;
         text-align: center;
         font-weight: bold;
     }
-    .show-pwd {
+    .password_icon {
         position: absolute;
         right: 10px;
         top: 7px;
