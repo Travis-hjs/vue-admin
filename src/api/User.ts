@@ -37,7 +37,7 @@ class ApiUser extends ModuleModifyObject {
      * 更新当前的`userInfo`值并缓存到本地
      * @param value 缓存的对象
      */
-    private updateUserState(value: Partial<UserInfoType>) {
+    private updateUserInfo(value: Partial<UserInfoType>) {
         this.modify(this.userInfo, value);
         sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
     }
@@ -75,13 +75,13 @@ class ApiUser extends ModuleModifyObject {
             switch (info.name) {
                 case store.testUserList[0]:
                     info.userType = "admin";
-                    this.updateUserState(info);
+                    this.updateUserInfo(info);
                     success && success(info);
                     break;
 
                 case store.testUserList[1]:
                     info.userType = "editor";
-                    this.updateUserState(info);
+                    this.updateUserInfo(info);
                     success && success(info);
                     break;
 
@@ -96,7 +96,7 @@ class ApiUser extends ModuleModifyObject {
         // request("POST", "/login", params, res => {
         //     // 录成功后缓存用户信息
         //     res.data.name = params.username;
-        //     this.updateUserState(res.data);
+        //     this.updateUserInfo(res.data);
         //     // console.log("录成功后缓存用户信息", res);
         //     success && success(res);
         // }, err => {
