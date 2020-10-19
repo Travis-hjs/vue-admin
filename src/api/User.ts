@@ -39,7 +39,7 @@ class ApiUser extends ModuleModifyObject {
      */
     private updateUserState(value: Partial<UserInfoType>) {
         this.modify(this.userInfo, value);
-        sessionStorage.setItem(cacheName, JSON.stringify(value));
+        sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
     }
 
     /** 获取缓存信息 */
