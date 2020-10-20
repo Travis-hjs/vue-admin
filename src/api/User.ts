@@ -26,7 +26,7 @@ class ApiUser extends ModuleModifyObject {
         super();
         const userInfo = this.fetchUserState();
         if (userInfo) {
-            this.modify(this.userInfo, userInfo);
+            this.modifyData(this.userInfo, userInfo);
         }
     }
 
@@ -38,7 +38,7 @@ class ApiUser extends ModuleModifyObject {
      * @param value 缓存的对象
      */
     private updateUserInfo(value: Partial<UserInfoType>) {
-        this.modify(this.userInfo, value);
+        this.modifyData(this.userInfo, value);
         sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
     }
 
@@ -52,7 +52,7 @@ class ApiUser extends ModuleModifyObject {
 
     /** 清空缓存信息 */
     removeUserState() {
-        this.modify(this.userInfo, createUserInfo());
+        this.modifyData(this.userInfo, createUserInfo());
         sessionStorage.removeItem(cacheName);
     }
 

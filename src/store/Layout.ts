@@ -36,7 +36,7 @@ export default class ModuleLayout extends ModuleModifyObject {
         const value = sessionStorage.getItem(cacheName);
         const data = value ? JSON.parse(value) : null;
         if (data) {
-            this.modify(this.layoutState, data);
+            this.modifyData(this.layoutState, data);
         }
     }
 
