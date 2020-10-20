@@ -1,7 +1,8 @@
 import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import VueRouter from "vue-router";
 import store from "../store/";
 import Layout from "../layout/index.vue";
+import { RouteItem } from "../modules/interface";
 
 Vue.use(VueRouter);
 
@@ -9,7 +10,7 @@ Vue.use(VueRouter);
  * 基础路由
  * learn: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
  */
-export const base: Array<RouteConfig> = [
+export const base: Array<RouteItem> = [
     {
         path: store.loginPath,
         name: "login",
@@ -29,7 +30,7 @@ export const base: Array<RouteConfig> = [
 ];
 
 /** 用户类型一路由 */
-export const admin: Array<RouteConfig> = [
+export const admin: Array<RouteItem> = [
     {
         path: "/",
         name: "index",
@@ -104,7 +105,14 @@ export const admin: Array<RouteConfig> = [
                 }
             }
         ]
-    }
+    },
+    // {
+    //     path: "https://github.com/Hansen-hjs/vue-admin",
+    //     meta: {
+    //         icon: "star",
+    //         title: "跳转外部链接"
+    //     }
+    // }
 ]
 
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */

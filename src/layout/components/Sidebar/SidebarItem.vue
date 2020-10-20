@@ -1,7 +1,7 @@
 <template>
     <div
-        v-if="!item.meta || !item.meta.hidden"
         :class="['menu-wrapper', isCollapse ? 'simple-mode' : 'full-mode', {'first-level': isFirstLevel}]"
+        v-if="!item.meta || !item.meta.hidden"
     >
         <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
             <sidebar-item-link v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
@@ -34,9 +34,11 @@
 <script lang="ts">
 import path from "path";
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Route, RouteConfig } from "vue-router";
 import SidebarItemLink from "./SidebarItemLink.vue";
 import utils from "../../../modules/utils";
+import { 
+    RouteItem 
+} from "../../../modules/interface";
 
 @Component({
     // Set "name" here to prevent uglifyjs from causing recursive component not work
@@ -47,7 +49,7 @@ import utils from "../../../modules/utils";
     }
 })
 export default class SidebarItem extends Vue {
-    @Prop({ required: true }) private item!: RouteConfig;
+    @Prop({ required: true }) private item!: RouteItem;
     @Prop({ default: false }) private isCollapse!: boolean;
     @Prop({ default: true }) private isFirstLevel!: boolean;
     @Prop({ default: "" }) private basePath!: string;

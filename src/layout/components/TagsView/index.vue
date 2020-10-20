@@ -6,7 +6,7 @@
                 ref="tag"
                 :key="tag.path"
                 :class="isActive(tag) ? 'active' : ''"
-                :to="{path: tag.path, query: tag.query, fullPath: tag.fullPath}"
+                :to="tag.path"
                 tag="span"
                 class="tags-view-item"
                 @contextmenu.prevent.native="openMenu(tag, $event)"
@@ -25,9 +25,9 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import VueRouter, { Route, RouteRecord, RouteConfig } from "vue-router";
 import ScrollPane from "./ScrollPane.vue";
 import store from "../../../store";
+import { RouteItem } from "../../../modules/interface";
 
 @Component({
     name: "TagsView",
@@ -43,7 +43,7 @@ export default class TagsView extends Vue {
     /** 鼠标位置`X` */
     private left: number = 0;
     /** 选择路由对象 */
-    private selectedTag: any = {
+    private selectedTag: RouteItem = {
         path: ""
     };
     
@@ -69,7 +69,7 @@ export default class TagsView extends Vue {
      * 是否高亮
      * @param item item路由对象
      */
-    private isActive(item: Route) {
+    private isActive(item: RouteItem) {
         return item.path === this.$route.path;
     }
 
@@ -86,7 +86,7 @@ export default class TagsView extends Vue {
      * 找到对应路由`item`索引
      * @param item item路由对象
      */
-    private findItemIndex(item: Route) {
+    private findItemIndex(item: RouteItem) {
         let index = 0;
         const list = this.pageState.historyViews;
         for (let i = 0; i < list.length; i++) {
@@ -103,7 +103,7 @@ export default class TagsView extends Vue {
      * 关闭选中
      * @param item item路由对象
      */
-    private closeSelectedTag(item: Route) {
+    private closeSelectedTag(item: RouteItem) {
         if (this.pageState.historyViews.length == 0) return;
         const index = this.findItemIndex(item);
         this.pageState.historyViews.splice(index, 1);
@@ -135,7 +135,7 @@ export default class TagsView extends Vue {
      * @param item 路由对象
      * @param e 鼠标事件
      */
-    private openMenu(item: Route, e: MouseEvent) {
+    private openMenu(item: RouteItem, e: MouseEvent) {
         const menuMinWidth = 105;
         const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
         const offsetWidth = (this.$el as HTMLElement).offsetWidth; // container width

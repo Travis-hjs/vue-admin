@@ -24,10 +24,7 @@ class ApiUser extends ModuleModifyObject {
 
     constructor() {
         super();
-        const userInfo = this.fetchUserState();
-        if (userInfo) {
-            this.modifyData(this.userInfo, userInfo);
-        }
+        this.init();
     }
 
     /** 用户信息（包含登录状态） */
@@ -42,12 +39,13 @@ class ApiUser extends ModuleModifyObject {
         sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
     }
 
-    /** 获取缓存信息 */
-    private fetchUserState() {
-        let userInfo = createUserInfo();
+    /** 初始化缓存信息 */
+    private init() {
         const cacheInfo = sessionStorage.getItem(cacheName);
-        userInfo = cacheInfo ? JSON.parse(cacheInfo) : null;
-        return userInfo;
+        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
+        if (value) {
+            this.modifyData(this.userInfo, value);
+        }
     }
 
     /** 清空缓存信息 */

@@ -44,6 +44,12 @@ export interface UserInfoType {
     userType: "admin" | "editor" | ""
 }
 
+/** 自定义的路由类型-继承`RouteConfig` */
+export interface RouteItem extends RouteConfig {
+    /** 完整地址 */
+    fullPath?: string
+}
+
 export interface LayoutStateType {
     /** 显示设置 */
     showSettings: boolean
@@ -60,12 +66,14 @@ export interface LayoutStateType {
     /** 侧边栏动画 */
     sidebarWithoutAnimation: boolean
     /** 历史记录列表 */
-    historyViews: Array<RouteConfig>
+    historyViews: Array<RouteItem>
     /** 系统信息 */
     device: "desktop" | "mobile"
     /** 主题颜色 */
     theme: string
 }
+
+export type LayoutStateKeys = keyof LayoutStateType;
 
 /** 运算符号 */
 export type NumberSymbols = "+" | "-"| "*" | "/";

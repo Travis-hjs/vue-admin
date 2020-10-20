@@ -1,14 +1,15 @@
-import { RouteConfig } from "vue-router";
 import { ModuleModifyObject } from "./ModifyObject";
-import { 
+import {
     LayoutStateType,
+    RouteItem,
+    LayoutStateKeys,
 } from "../modules/interface";
 
 const cacheName = "ModuleLayoutInfo";
 export default class ModuleLayout extends ModuleModifyObject {
     constructor() {
         super();
-        this.updateLayout();
+        this.initLayout();
     }
 
     /** `layout`操作状态 */
@@ -26,17 +27,17 @@ export default class ModuleLayout extends ModuleModifyObject {
     }
 
     /** 动态添加的权限路由 */
-    public addRouters: Array<RouteConfig> = [];
+    public addRouters: Array<RouteItem> = [];
 
     /** (基础路由+动态路由)列表 */
-    public completeRouters: Array<RouteConfig> = [];
+    public completeRouters: Array<RouteItem> = [];
 
-    /** 更新`layout`操作状态 */
-    private updateLayout() {
-        const value = sessionStorage.getItem(cacheName);
-        const data = value ? JSON.parse(value) : null;
-        if (data) {
-            this.modifyData(this.layoutState, data);
+    /** 初始化`layout`操作状态 */
+    private initLayout() {
+        const cacheInfo = sessionStorage.getItem(cacheName);
+        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
+        if (value) {
+            this.modifyData(this.layoutState, value);
         }
     }
 
@@ -44,19 +45,21 @@ export default class ModuleLayout extends ModuleModifyObject {
     public saveLayout() {
         // 这个方法我用在了`Navbar`组件中用`watch`监听了数据的变动然后执行
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
-        const value: any = this.layoutState;
+        const value = this.layoutState;
         const data: any = {};
         for (const key in value) {
-            data[key] = value[key]
-            if (key === "historyViews") {
-                data[key] = value[key].map((item: any) => {
+            const k = key as LayoutStateKeys;
+            if (k === "historyViews") {
+                data[k] = value[k].map(item => {
                     return {
                         name: item.name,
                         meta: {...item.meta},
                         path: item.path,
-                        fullPath: item.fullPath
+                        // fullPath: item.fullPath || ""
                     }
                 });
+            } else {
+                data[k] = value[k];
             }
         }
         // console.log(JSON.stringify(data));
