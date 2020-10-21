@@ -1,4 +1,4 @@
-import config from "../config";
+import config from "./Config";
 import { Message } from "element-ui";
 import { 
     AjaxParams, 
@@ -95,7 +95,7 @@ function ajax(param: AjaxParams) {
 export default function request(method: AjaxParams["method"], url: string, data?: object, success?: (res: any) => void, fail?: (error: RequestFail) => void, upload?: AjaxParams["file"]) {
     return new Promise<any>(function(resolve, reject) {
         ajax({
-            url: config.getDomain() + url,
+            url: config.baseUrl + url,
             method: method,
             data: data || {},
             file: upload,
