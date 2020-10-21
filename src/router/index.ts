@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "../store/";
 import Layout from "../layout/index.vue";
-import { RouteItem } from "../modules/interface";
+import { RouteItem } from "../modules/interfaces";
 
 Vue.use(VueRouter);
 

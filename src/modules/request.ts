@@ -3,7 +3,7 @@ import { Message } from "element-ui";
 import { 
     AjaxParams, 
     RequestFail 
-} from "./interface";
+} from "./interfaces";
 
 /**
  * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)

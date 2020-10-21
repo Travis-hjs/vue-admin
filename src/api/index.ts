@@ -1,7 +1,7 @@
 import request from "../modules/request";
 import { 
     RequestFail 
-} from "../modules/interface";
+} from "../modules/interfaces";
 
 class ModuleApi {
     /**

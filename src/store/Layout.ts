@@ -3,7 +3,7 @@ import {
     LayoutStateType,
     RouteItem,
     LayoutStateKeys,
-} from "../modules/interface";
+} from "../modules/interfaces";
 
 const cacheName = "ModuleLayoutInfo";
 export default class ModuleLayout extends ModuleModifyObject {

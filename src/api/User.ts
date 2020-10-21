@@ -5,7 +5,7 @@ import {
     LoginParam, 
     RequestFail, 
     UserInfoType 
-} from "../modules/interface";
+} from "../modules/interfaces";
 
 /** 缓存名称 */
 const cacheName = "ApiUserInfo";
