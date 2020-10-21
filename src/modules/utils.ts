@@ -35,19 +35,32 @@ class ModuleUtil {
     }
 
     /**
-     * 时间戳生成 
-     * @param num 1时为明天，-1为昨天天，以此类推
-     * @description 返回格式："yyyy/mm/dd hh:mm:ss"
+     * 格式化日期
+     * @param value 指定日期
+     * @param format 格式化的规则
+     * @example
+     * ```js
+     * formatDate();
+     * formatDate(1603264465956);
+     * formatDate(1603264465956, "h:m:s");
+     * formatDate(1603264465956, "Y年M月D日");
+     * ```
      */
-    getDateFormat(num: number = 0) {
-        const date = new Date(Date.now() + (num * 24 * 3600 * 1000));
-        const year = date.getFullYear();
-        const month = `0${date.getMonth() + 1}`.slice(-2);
-        const day = `0${date.getDate()}`.slice(-2);
-        const hour = `0${date.getHours()}`.slice(-2);
-        const minute = `0${date.getMinutes()}`.slice(-2);
-        const second = `0${date.getSeconds()}`.slice(-2);
-        return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+    formatDate(value: string | number | Date = Date.now(), format = "Y-M-D h:m:s") {
+        const formatNumber = (n: number) => `0${n}`.slice(-2);
+        const date = new Date(value);
+        const formatList = ["Y", "M", "D", "h", "m", "s"];
+        const resultList = [];
+        resultList.push(date.getFullYear().toString());
+        resultList.push(formatNumber(date.getMonth() + 1));
+        resultList.push(formatNumber(date.getDate()));
+        resultList.push(formatNumber(date.getHours()));
+        resultList.push(formatNumber(date.getMinutes()));
+        resultList.push(formatNumber(date.getSeconds()));
+        for (let i = 0; i < resultList.length; i++) {
+            format = format.replace(formatList[i], resultList[i]);
+        }
+        return format;
     }
 
     /**
@@ -113,9 +126,11 @@ class ModuleUtil {
      * @param type 计算方式
      * @param b 后面的值
      * @example 
+     * ```js
      * // 可链式调用
      * const res = computeNumber(1.3, "-", 1.2).next("+", 1.5).next("*", 2.3).next("/", 0.2).result;
      * console.log(res);
+     * ```
      */
     computeNumber(a: number, type: NumberSymbols, b: number) {
         const THAT = this;
