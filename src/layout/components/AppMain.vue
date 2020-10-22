@@ -12,11 +12,9 @@
 import { Component, Vue } from "vue-property-decorator";
 import store from "../../store";
 
-@Component({
-    name: "AppMain"
-})
+@Component({})
 export default class AppMain extends Vue {
-    private pageState = store.layoutState;
+    readonly pageState = store.layoutState;
 }
 </script>
 

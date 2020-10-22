@@ -4,12 +4,12 @@
         v-if="!item.meta || !item.meta.hidden"
     >
         <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
-            <sidebar-item-link v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
+            <SidebarItemLink v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
                 <el-menu-item :index="resolvePath(theOnlyOneChild.path)" :class="{'submenu-title-noDropdown': isFirstLevel}">
                     <svg-icon v-if="theOnlyOneChild.meta.icon" :name="theOnlyOneChild.meta.icon" />
                     <span v-if="theOnlyOneChild.meta.title" slot="title">{{ theOnlyOneChild.meta.title }}</span>
                 </el-menu-item>
-            </sidebar-item-link>
+            </SidebarItemLink>
         </template>
         <el-submenu v-else :index="resolvePath(item.path)" popper-append-to-body>
             <template slot="title">
@@ -38,14 +38,11 @@ import SidebarItemLink from "./SidebarItemLink.vue";
 import utils from "../../../modules/utils";
 import { 
     RouteItem 
-} from "../../../modules/interface";
+} from "../../../modules/interfaces";
 
 @Component({
-    // Set "name" here to prevent uglifyjs from causing recursive component not work
-    // See https://medium.com/haiiro-io/element-component-name-with-vue-class-component-f3b435656561 for detail
-    name: "SidebarItem",
     components: {
-        "sidebar-item-link": SidebarItemLink
+        SidebarItemLink
     }
 })
 export default class SidebarItem extends Vue {

@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 
 /**
  * 基础路由
+ * 路由第一层要加"/"，之后的不用加，路由重定向也是
  * learn: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
  */
 export const base: Array<RouteItem> = [
@@ -46,6 +47,7 @@ export const admin: Array<RouteItem> = [
             {
                 path: "nested",
                 name: "nested",
+                redirect: "nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
                 component: () => import("@/views/pages/nested.vue"),
                 children: [
@@ -73,18 +75,18 @@ export const admin: Array<RouteItem> = [
     {
         path: "/column",
         name: "column",
-        redirect: "/column/column1",
+        redirect: "/column/column-1",
         meta: { title: "栏目", icon: "dashboard" }, 
         component: Layout,
         children: [
             {
                 path: "column-1",
-                name: "column-1",
+                name: "column/column-1",
                 meta: { title: "栏目一", icon: "theme" },
                 component: () => import("@/views/pages/column-1.vue"),
             }, {
                 path: "column-2",
-                name: "column-2",
+                name: "column/column-2",
                 meta: { title: "栏目二", icon: "table" },
                 component: () => import("@/views/pages/column-2.vue")
             }

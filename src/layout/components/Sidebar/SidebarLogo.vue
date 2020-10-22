@@ -15,9 +15,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-@Component({
-    name: "SidebarLogo"
-})
+@Component({})
 export default class SidebarLogo extends Vue {
     @Prop({ required: true }) private collapse!: boolean;
 

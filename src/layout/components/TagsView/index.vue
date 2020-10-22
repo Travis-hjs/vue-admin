@@ -1,6 +1,6 @@
 <template>
     <div id="tags-view-container" class="tags-view-container">
-        <scroll-pane ref="scrollPane" class="tags-view-wrapper">
+        <ScrollPane ref="scrollPane" class="tags-view-wrapper">
             <router-link
                 v-for="tag in pageState.historyViews"
                 ref="tag"
@@ -14,7 +14,7 @@
                 {{ tag.meta.title }}
                 <span v-show="pageState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
             </router-link>
-        </scroll-pane>
+        </ScrollPane>
         <ul v-show="visible" :style="{left: left + 'px', top: top+'px'}" class="contextmenu">
             <li @click="closeSelectedTag(selectedTag)">关闭</li>
             <li @click="closeOthersTags">关闭其他</li>
@@ -27,7 +27,7 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import ScrollPane from "./ScrollPane.vue";
 import store from "../../../store";
-import { RouteItem } from "../../../modules/interface";
+import { RouteItem } from "../../../modules/interfaces";
 
 @Component({
     name: "TagsView",

@@ -1,43 +1,45 @@
 <template>
-    <div :class="classObj" class="app-wrapper clearfix">
-        <div v-if="classObj.mobile && pageState.sidebarOpen" class="drawer-bg" @click="handleClickOutside" />
-        <sidebar class="sidebar-container" />
+    <div :class="classInfo" class="app-wrapper clearfix">
+        <div v-if="classInfo.mobile && pageState.sidebarOpen" class="drawer-bg" @click="handleClickOutside" />
+        <Sidebar class="sidebar-container" />
         <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
             <div :class="{'fixed-header': pageState.fixedHeader}">
-                <navbar />
-                <tags-view v-if="pageState.showHistoryView" />
+                <Navbar />
+                <TagsView v-if="pageState.showHistoryView" />
             </div>
-            <app-main />
-            <right-panel v-if="pageState.showSettings">
-                <settings />
-            </right-panel>
+            <AppMain />
+            <RightPanel v-if="pageState.showSettings">
+                <Settings />
+            </RightPanel>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { mixins } from "vue-class-component";
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from "./components";
-import RightPanel from "../components/RightPanel.vue";
+import AppMain from "./components/AppMain.vue";
+import Navbar from "./components/Navbar/index.vue";
+import RightPanel from "./components/RightPanel.vue";
+import Settings from "./components/Settings/index.vue";
+import Sidebar from "./components/Sidebar/index.vue";
+import TagsView from "./components/TagsView/index.vue";
 import store from "../store";
 
 @Component({
-    name: "Layout",
     components: {
-        "app-main": AppMain,
-        "navbar": Navbar,
-        "right-panel": RightPanel,
-        "settings": Settings,
-        "sidebar": Sidebar,
-        'tags-view': TagsView
+        AppMain,
+        Navbar,
+        RightPanel,
+        Settings,
+        Sidebar,
+        TagsView
     }
 })
 export default class Layout extends Vue {
     /** 页面状态 */
     private pageState = store.layoutState;
 
-    get classObj() {
+    get classInfo() {
         return {
             hideSidebar: !this.pageState.sidebarOpen,
             openSidebar: this.pageState.sidebarOpen,
@@ -96,7 +98,7 @@ export default class Layout extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/variables.scss';
+@import "@/styles/variables.scss";
 
 .app-wrapper {
     position: relative;

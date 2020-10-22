@@ -1,12 +1,7 @@
 <template>
     <div class="navbar">
-        <hamburger
-            id="hamburger-container"
-            :is-active="pageState.sidebarOpen"
-            class="hamburger-container"
-            @toggleClick="toggleSideBar"
-        />
-        <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
+        <Hamburger :is-active="pageState.sidebarOpen" class="hamburger-container" @toggleClick="toggleSideBar()" />
+        <Breadcrumb class="breadcrumb-container" />
         <div class="right-menu">
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
@@ -24,7 +19,7 @@
                         <el-dropdown-item>项目地址</el-dropdown-item>
                     </a>
                     <el-dropdown-item divided>
-                        <span style="display:block;" @click="logout">退出登录</span>
+                        <div @click="logout">退出登录</div>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -34,21 +29,20 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import Hamburger from "../../../components/Hamburger.vue";
-import Breadcrumb from "../../../components/Breadcrumb.vue";
+import Hamburger from "./Hamburger.vue";
+import Breadcrumb from "./Breadcrumb.vue";
 import store from "../../../store";
 import apiUser from "../../../api/User";
 
 @Component({
-    name: "Navbar",
     components: {
-        "hamburger": Hamburger,
-        "breadcrumb": Breadcrumb,
+        Hamburger,
+        Breadcrumb,
     }
 })
 export default class Navbar extends Vue {
 
-    private pageState = store.layoutState;
+    readonly pageState = store.layoutState;
 
     @Watch("pageState", {
         deep: true

@@ -36,20 +36,17 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import ThemePicker from "../../../components/ThemePicker.vue";
+import ThemePicker from "./ThemePicker.vue";
 import store from "../../../store";
 
 @Component({
-    name: "Settings",
     components: {
         ThemePicker
     }
 })
 export default class Settings extends Vue {
 
-    private pageState = store.layoutState;
-
-    private colorSwitch: boolean = false;
+    readonly pageState = store.layoutState;
 
     /**
      * 更新`css`样式

@@ -2,11 +2,7 @@
     <div ref="rightPanel" :class="{show: show}" class="rightPanel-container">
         <div class="rightPanel-background" />
         <div class="rightPanel">
-            <div
-                class="handle-button"
-                :style="{'top': buttonTop +'px','background-color': pageState.theme}"
-                @click="show =! show"
-            >
+            <div class="handle-button" :style="{'top': buttonTop +'px','background-color': pageState.theme}" @click="show =! show">
                 <i :class="show?'el-icon-close':'el-icon-setting'" />
             </div>
             <div class="rightPanel-items">
@@ -18,16 +14,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import store from "../store";
+import store from "../../store";
 
-@Component({
-    name: "RightPanel"
-})
+@Component({})
 export default class RightPanel extends Vue {
     @Prop({ default: false }) private clickNotClose!: boolean;
     @Prop({ default: 250 }) private buttonTop!: number;
 
-    private pageState = store.layoutState;
+    readonly pageState = store.layoutState;
 
     private show = false;
 

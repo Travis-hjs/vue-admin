@@ -2,7 +2,7 @@
     <el-color-picker
         v-model="theme"
         :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d']"
-        @change="onChange"
+        @change="onChange()"
         class="theme-picker"
         popper-class="theme-picker-dropdown"
     />
@@ -10,14 +10,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import store from "../store";
+import store from "../../../store";
 
 const version = "2.13.0" // require("element-ui/package.json").version; // element-ui version from node_modules
 const defaultColor = "#409EFF"; // default color
 
-@Component({
-    name: "ThemePicker"
-})
+@Component({})
 export default class ThemePicker extends Vue {
 
     private theme = store.layoutState.theme || defaultColor;

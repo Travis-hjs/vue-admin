@@ -1,6 +1,6 @@
 <template>
     <div :class="{'has-logo': pageState.showSidebarLogo}">
-        <sidebar-logo v-if="pageState.showSidebarLogo" :collapse="!pageState.sidebarOpen" />
+        <SidebarLogo v-if="pageState.showSidebarLogo" :collapse="!pageState.sidebarOpen" />
         <el-scrollbar wrap-class="scrollbar-wrapper">
             <el-menu
                 :default-active="activeMenu"
@@ -12,7 +12,7 @@
                 :collapse-transition="false"
                 mode="vertical"
             >
-                <sidebar-item
+                <SidebarItem
                     v-for="route in routes"
                     :key="route.path"
                     :item="route"
@@ -33,19 +33,18 @@ import store from "../../../store";
 import variables from "../../../styles/variables.scss";
 
 @Component({
-    name: "SideBar",
     components: {
-        "sidebar-item": SidebarItem,
-        "sidebar-logo" : SidebarLogo
+        SidebarItem,
+        SidebarLogo
     }
 })
 export default class SideBar extends Vue {
 
-    private variables = variables;
+    readonly variables = variables;
 
-    private pageState = store.layoutState;
+    readonly pageState = store.layoutState;
 
-    routes = store.completeRouters;
+    readonly routes = store.completeRouters;
 
     get menuActiveTextColor() {
         if (store.layoutState.sidebarTextTheme) {
