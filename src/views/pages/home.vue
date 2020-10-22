@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <hello-world :msg="content" />
+        <HelloWorld :msg="content" />
     </div>
 </template>
 
@@ -10,7 +10,7 @@ import HelloWorld from "../../components/HelloWorld.vue";
 
 @Component({
     components: {
-        "hello-world": HelloWorld
+        HelloWorld
     }
 })
 export default class Home extends Vue {

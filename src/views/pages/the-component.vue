@@ -4,10 +4,10 @@
         <el-alert :title="pageData.dec" type="success" />
         <div class="flex">
             <div v-for="(item, index) in pageData.uploadList" :key="index" style="margin-right: 16px;">
-                <upload-img :imgUrl="item.image" :uploadId="index" @change="getPicUrl" />
+                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" />
             </div>
             <div>
-                <upload-img :imgUrl="pageData.single" @change="getSingleUrl" />
+                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" />
             </div>
         </div>
     </div>
@@ -20,7 +20,7 @@ import UploadImg from "../../components/UploadImg.vue";
 
 @Component({
     components: {
-        "upload-img": UploadImg
+        UploadImg
     }
 })
 export default class Page5 extends Vue {
