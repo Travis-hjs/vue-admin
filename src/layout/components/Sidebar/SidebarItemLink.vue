@@ -11,9 +11,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import utils from "../../../modules/utils";
 
-@Component({
-    name: "SidebarItemLink"
-})
+@Component({})
 export default class SidebarItemLink extends Vue {
     @Prop({ required: true }) private to!: string;
 

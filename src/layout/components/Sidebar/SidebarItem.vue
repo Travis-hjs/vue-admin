@@ -17,7 +17,8 @@
                 <span v-if="item.meta && item.meta.title" slot="title">{{ item.meta.title }}</span>
             </template>
             <template v-if="item.children">
-                <sidebar-item
+                <!-- 注意！！！这里的 SidebarItem 是自身，Component({ name: SidebarItem }) -->
+                <SidebarItem
                     v-for="child in item.children"
                     :key="child.path"
                     :item="child"
@@ -41,6 +42,7 @@ import {
 } from "../../../modules/interfaces";
 
 @Component({
+    name: "SidebarItem", // 必须要有 name 值才上面才可以引用自身组件
     components: {
         SidebarItemLink
     }
