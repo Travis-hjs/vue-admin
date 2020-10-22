@@ -10,10 +10,10 @@ import {
 class ModuleUtil {
     /**
      * 获取日期周几
-     * @param date 日期 "2019/04/28" & "2019/04/28 12:12:12"
+     * @param value 指定日期
      */
-    getDateDayString(date: string | Date) {
-        return "周" + "日一二三四五六".charAt(new Date(date).getDay());
+    getDateDayString(value: string | number | Date) {
+        return "周" + "日一二三四五六".charAt(new Date(value).getDay());
     }
 
     /**
