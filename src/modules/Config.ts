@@ -1,4 +1,4 @@
-class ModuleConfig {
+export class ModuleConfig {
     constructor() {
         this.env = process.env.NODE_ENV === "development" ? "dev" : "prod";
     }
@@ -10,12 +10,12 @@ class ModuleConfig {
     readonly requestOvertime = 8000;
 
     /** 开发环境 */
-    private dev = {
+    protected dev = {
         base: "http://192.168.89.53/api",
     }
     
     /** 生产环境 */
-    private prod = {
+    protected prod = {
         base: "https://huangjingsheng.com/api"
     }
 
