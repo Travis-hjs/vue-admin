@@ -18,9 +18,7 @@ Vue.config.productionTip = false;
 Vue.directive("copy", {
     inserted(el, binding) {
         el.addEventListener("click", function () {
-            utils.copyText(binding.value, function () {
-                ElementUI.Message.success("复制成功");
-            });
+            utils.copyText(binding.value, () => ElementUI.Message.success("复制成功"), tip => ElementUI.Message.warning(tip));
         });
     }
 })
