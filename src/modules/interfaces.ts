@@ -12,13 +12,18 @@ export interface AjaxParams {
     /** 是否上传文件 通常是图片 */
     file?: FormData,
     /** 成功回调 */
-    success?: (res: any) => void,
+    success?: (
+        /** 响应结果 */
+        res: any,
+        /** 响应原数据结果 */ 
+        response: XMLHttpRequest
+    ) => void,
     /** 失败回调 */
     fail?: (value: XMLHttpRequest) => void,
     /** 超时回调 */
     timeout?: (value: XMLHttpRequest) => void,
-    /** 请求进度 (ev: ProgressEvent<XMLHttpRequestEventTarget>) => void */
-    progress?: (ev: any) => void
+    /** 请求进度 */
+    progress?: (event: ProgressEvent<XMLHttpRequestEventTarget>) => void
 }
 
 export interface RequestFail {

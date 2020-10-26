@@ -43,7 +43,7 @@ function ajax(param: AjaxParams) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            param.success && param.success(JSON.parse(XHR.response));
+            param.success && param.success(JSON.parse(XHR.response), XHR);
         } else {
             param.fail && param.fail(XHR);
         }
@@ -51,7 +51,7 @@ function ajax(param: AjaxParams) {
 
     // 判断请求进度
     if (param.progress) {
-        XHR.addEventListener("progress", param.progress, false);
+        XHR.addEventListener("progress", param.progress);
     }
 
     // XHR.responseType = "json";
@@ -62,12 +62,9 @@ function ajax(param: AjaxParams) {
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
     if (param.file) {
         payload = param.file;
+        // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
-        /**
-         * @example 
-         * XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-         * XHR.setRequestHeader("Content-Type", "application/json")
-         */
+        // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         XHR.setRequestHeader("Content-Type", "application/json");
     }
 
@@ -92,7 +89,14 @@ function ajax(param: AjaxParams) {
  * @param fail 失败回调
  * @param upload 上传图片 FormData
  */
-export default function request(method: AjaxParams["method"], url: string, data?: object, success?: (res: any) => void, fail?: (error: RequestFail) => void, upload?: AjaxParams["file"]) {
+export default function request(
+    method: AjaxParams["method"],
+    url: string,
+    data?: object,
+    success?: (res: any, xhr: XMLHttpRequest) => void,
+    fail?: (error: RequestFail) => void,
+    upload?: AjaxParams["file"]
+) {
     return new Promise<any>(function(resolve, reject) {
         ajax({
             url: config.baseUrl + url,
@@ -100,9 +104,9 @@ export default function request(method: AjaxParams["method"], url: string, data?
             data: data || {},
             file: upload,
             overtime: 8000,
-            success(res) {
+            success(res, xhr) {
                 // console.log("请求成功", res);
-                success && success(res);
+                success && success(res, xhr);
                 resolve(res);
             },
             fail(err) {
