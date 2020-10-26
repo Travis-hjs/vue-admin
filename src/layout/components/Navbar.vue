@@ -31,8 +31,8 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
-import store from "../../../store";
-import apiUser from "../../../api/User";
+import store from "../../store";
+import apiUser from "../../api/User";
 
 @Component({
     components: {
@@ -70,7 +70,7 @@ export default class Navbar extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .navbar {
     height: 50px;
     overflow: hidden;
@@ -89,7 +89,7 @@ export default class Navbar extends Vue {
         -webkit-tap-highlight-color: transparent;
 
         &:hover {
-            background: rgba(0, 0, 0, 0.025);
+            background: rgba(0, 0, 0, 0.08);
         }
     }
 

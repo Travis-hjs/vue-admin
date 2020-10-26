@@ -95,23 +95,20 @@ export default class SideBar extends Vue {
             display: none;
         }
     }
-}
-</style>
-
-<style lang="scss" scoped>
-.el-scrollbar {
-    height: 100%;
-}
-
-.has-logo {
     .el-scrollbar {
-        height: calc(100% - 50px);
+        height: 100%;
     }
-}
 
-.el-menu {
-    border: none;
-    height: 100%;
-    width: 100% !important;
+    .has-logo {
+        .el-scrollbar {
+            height: calc(100% - 50px);
+        }
+    }
+
+    .el-menu {
+        border: none;
+        height: 100%;
+        width: 100% !important;
+    }
 }
 </style>

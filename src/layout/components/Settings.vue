@@ -5,8 +5,8 @@
 
             <div class="drawer-item">
                 <span>主题色</span>
-                <theme-picker
-                    style="float: right;height: 26px;margin: -3px 8px 0 0;"
+                <ThemePicker
+                    style="float: right; height: 26px; margin: -3px 8px 0 0;"
                     @change="themeChange"
                 />
             </div>
@@ -37,7 +37,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import ThemePicker from "./ThemePicker.vue";
-import store from "../../../store";
+import store from "../../store";
 
 @Component({
     components: {
@@ -78,7 +78,7 @@ export default class Settings extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .drawer-container {
     padding: 24px;
     font-size: 14px;

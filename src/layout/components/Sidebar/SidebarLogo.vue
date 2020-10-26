@@ -23,7 +23,7 @@ export default class SidebarLogo extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .sidebarLogoFade-enter-active {
     transition: opacity 1.5s;
 }

@@ -10,9 +10,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import store from "../../../store";
+import store from "../../store";
 
-const version = "2.13.0" // require("element-ui/package.json").version; // element-ui version from node_modules
+// const version = "2.13.0" // require("element-ui/package.json").version; // element-ui version from node_modules
 const defaultColor = "#409EFF"; // default color
 
 @Component({})

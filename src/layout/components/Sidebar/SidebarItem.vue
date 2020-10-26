@@ -1,6 +1,6 @@
 <template>
     <div
-        :class="['menu-wrapper', isCollapse ? 'simple-mode' : 'full-mode', {'first-level': isFirstLevel}]"
+        :class="['menu-wrapper', isCollapse ? 'simple-mode' : 'full-mode', {'first-level': isFirstLevel}, 'sidebar-item']"
         v-if="!item.meta || !item.meta.hidden"
     >
         <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
@@ -126,16 +126,16 @@ export default class SidebarItem extends Vue {
             padding: 0 !important;
             position: relative;
 
-            .el-tooltip {
-                padding: 0 !important;
-            }
+            // .el-tooltip {
+            //     padding: 0 !important;
+            // }
         }
 
         .el-submenu {
             overflow: hidden;
 
             & > .el-submenu__title {
-                padding: 0px !important;
+                // padding: 0px !important;
 
                 .el-submenu__icon-arrow {
                     display: none;
@@ -148,16 +148,15 @@ export default class SidebarItem extends Vue {
         }
     }
 }
-</style>
-
-<style lang="scss" scoped>
-.svg-icon {
-    margin-right: 16px;
-}
-
-.simple-mode {
+.sidebar-item{
     .svg-icon {
-        margin-left: 20px;
+        margin-right: 16px;
+    }
+
+    .simple-mode {
+        .svg-icon {
+            margin-left: 20px;
+        }
     }
 }
 </style>

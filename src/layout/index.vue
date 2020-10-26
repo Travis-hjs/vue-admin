@@ -18,11 +18,11 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import AppMain from "./components/AppMain.vue";
-import Navbar from "./components/Navbar/index.vue";
+import Navbar from "./components/Navbar.vue";
 import RightPanel from "./components/RightPanel.vue";
-import Settings from "./components/Settings/index.vue";
+import Settings from "./components/Settings.vue";
 import Sidebar from "./components/Sidebar/index.vue";
-import TagsView from "./components/TagsView/index.vue";
+import TagsView from "./components/TagsView.vue";
 import store from "../store";
 
 @Component({
@@ -97,7 +97,7 @@ export default class Layout extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "@/styles/variables.scss";
 
 .app-wrapper {

@@ -20,9 +20,7 @@ export default class Breadcrumb extends Vue {
     @Watch("$route")
     private onRouteChange(route: Route) {
         // 如果转到重定向页面，就不更新面包屑
-        if (route.path.startsWith("/redirect/")) {
-            return;
-        }
+        if (route.path.startsWith("/redirect/")) return;
         this.getBreadcrumb();
     }
 
@@ -38,7 +36,7 @@ export default class Breadcrumb extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .el-breadcrumb__inner,
 .el-breadcrumb__inner a {
     font-weight: 400 !important;
