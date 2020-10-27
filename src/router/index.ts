@@ -65,66 +65,6 @@ export const admin: Array<RouteItem> = [
                 ]
             },
             {
-                path: "nested1",
-                name: "nested1",
-                redirect: "nested/menu-1",
-                meta: { title: "多级菜单嵌套", icon: "tree-table" },
-                component: () => import("@/views/pages/nested.vue"),
-                children: [
-                    {
-                        path: "menu-1",
-                        name: "nested/menu-1",
-                        meta: { title: "菜单 2-1", icon: "tree" },
-                        component: () => import("@/views/pages/menu-1.vue")
-                    }, {
-                        path: "menu-2",
-                        name: "nested/menu-2",
-                        meta: { title: "菜单 2-2", icon: "tree" },
-                        component: () => import("@/views/pages/menu-2.vue")
-                    }
-                ]
-            },
-            {
-                path: "nested2",
-                name: "nested2",
-                redirect: "nested/menu-1",
-                meta: { title: "多级菜单嵌套", icon: "tree-table" },
-                component: () => import("@/views/pages/nested.vue"),
-                children: [
-                    {
-                        path: "menu-1",
-                        name: "nested/menu-1",
-                        meta: { title: "菜单 2-1", icon: "tree" },
-                        component: () => import("@/views/pages/menu-1.vue")
-                    }, {
-                        path: "menu-2",
-                        name: "nested/menu-2",
-                        meta: { title: "菜单 2-2", icon: "tree" },
-                        component: () => import("@/views/pages/menu-2.vue")
-                    }
-                ]
-            },
-            {
-                path: "nested3",
-                name: "nested3",
-                redirect: "nested/menu-1",
-                meta: { title: "多级菜单嵌套", icon: "tree-table" },
-                component: () => import("@/views/pages/nested.vue"),
-                children: [
-                    {
-                        path: "menu-1",
-                        name: "nested/menu-1",
-                        meta: { title: "菜单 2-1", icon: "tree" },
-                        component: () => import("@/views/pages/menu-1.vue")
-                    }, {
-                        path: "menu-2",
-                        name: "nested/menu-2",
-                        meta: { title: "菜单 2-2", icon: "tree" },
-                        component: () => import("@/views/pages/menu-2.vue")
-                    }
-                ]
-            },
-            {
                 path: "the-component",
                 name: "the-component",
                 meta: { title: "自定义组件", icon: "international" },
