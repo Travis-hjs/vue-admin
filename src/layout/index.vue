@@ -1,6 +1,6 @@
 <template>
     <div :class="classInfo" class="app-wrapper clearfix">
-        <div v-if="classInfo.mobile && pageState.sidebarOpen" class="drawer-bg" @click="handleClickOutside" />
+        <div v-if="classInfo.mobile && pageState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
         <Sidebar class="sidebar-container" />
         <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
             <div :class="{'fixed-header': pageState.fixedHeader}">
@@ -55,18 +55,18 @@ export default class Layout extends Vue {
         }
     }
 
-    // methods ===============================
-
-    private handleClickOutside() {
+    /** 切换侧边栏 */
+    private switchSidebar() {
         this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
     }
 
     private isMobile() {
-        const rect = document.body.getBoundingClientRect();
-        return rect.width - 1 < 990;
+        const width = document.body.clientWidth;
+        return width < 900;
     }
 
-    private resizeHandler() {
+    /** 检测窗口变动并更新侧边栏的样式切换 */
+    private checkResize() {
         if (!document.hidden) {
             const isMobile = this.isMobile();
             this.pageState.device = isMobile ? "mobile" : "desktop";
@@ -77,14 +77,12 @@ export default class Layout extends Vue {
         }
     }
 
-    // life cycle ================================
-
     beforeMount() {
-        window.addEventListener("resize", this.resizeHandler);
+        window.addEventListener("resize", this.checkResize);
     }
 
     beforeDestroy() {
-        window.removeEventListener("resize", this.resizeHandler);
+        window.removeEventListener("resize", this.checkResize);
     }
 
     mounted() {
