@@ -117,6 +117,18 @@ export const admin: Array<RouteItem> = [
     // }
 ]
 
+// ========================== 测试 ==========================
+// for (let i = 3; i < 18; i++) {
+//     const first = admin[0].children as Array<RouteItem>
+//     const second = first[1].children as Array<RouteItem>
+//     second.push({
+//         path: "menu-" + i,
+//         name: "nested/menu-" + i,
+//         meta: { title: "菜单 2-" + i, icon: "tree" },
+//         component: () => import("@/views/pages/menu-1.vue")
+//     })
+// }
+
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */
 export const editor = [admin[0]];
 

@@ -1,7 +1,7 @@
 <template>
     <div :class="{'has-logo': pageState.showSidebarLogo}">
         <SidebarLogo v-if="pageState.showSidebarLogo" :collapse="!pageState.sidebarOpen" />
-        <el-scrollbar wrap-class="scrollbar-wrapper">
+        <el-scrollbar wrap-class="sidebar-scrollbar" :style="{'background-color' : variables.menuBg}">
             <el-menu
                 :default-active="activeMenu"
                 :collapse="!pageState.sidebarOpen"
@@ -55,41 +55,36 @@ export default class SideBar extends Vue {
     }
 
     get activeMenu() {
-        const route = this.$route;
-        const { meta, path } = route;
-        // if set path, the sidebar will highlight the path you set
+        const { meta, path } = this.$route;
+        // 判断是否激活的菜单
         if (meta.activeMenu) {
             return meta.activeMenu;
         }
         return path;
     }
 
-    mounted() {
-        // console.log('variables', variables);
-        
-    }
+    // mounted() {
+    //     console.log("variables", variables);
+    // }
 }
 </script>
 
 <style lang="scss">
 .sidebar-container {
-    // reset element-ui css
-    .horizontal-collapse-transition {
-        transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
-    }
-
-    .scrollbar-wrapper {
+    // 这里必须设置，不然底部会出现滚动条
+    .sidebar-scrollbar {
         overflow-x: hidden !important;
     }
 
-    .el-scrollbar__view {
-        height: 100%;
-    }
+    // 设置这个会导致没有滚动条
+    // .el-scrollbar__view {
+    //     height: 100%;
+    // }
 
     .el-scrollbar__bar {
-        &.is-vertical {
-            right: 0px;
-        }
+        // &.is-vertical {
+        //     right: 0px;
+        // }
 
         &.is-horizontal {
             display: none;
