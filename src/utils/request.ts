@@ -1,4 +1,4 @@
-import config from "./Config";
+import config from "../modules/Config";
 import { Message } from "element-ui";
 import { 
     AjaxParams, 

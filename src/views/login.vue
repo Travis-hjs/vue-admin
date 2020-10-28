@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import utils from "../modules/utils";
+import utils from "../utils";
 import apiUser from "../api/User";
 import store from "../store";
 

@@ -1,9 +1,9 @@
-import { ModuleModifyObject } from "./ModifyObject";
+import { ModuleModifyObject } from "../modules/ModifyObject";
 import {
     LayoutStateType,
     RouteItem,
     LayoutStateKeys,
-} from "../modules/interfaces";
+} from "../utils/interfaces";
 
 const cacheName = "ModuleLayoutInfo";
 export default class ModuleLayout extends ModuleModifyObject {

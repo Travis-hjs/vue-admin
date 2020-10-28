@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import utils from "../../../modules/utils";
+import utils from "../../../utils";
 
 @Component({})
 export default class SidebarItemLink extends Vue {

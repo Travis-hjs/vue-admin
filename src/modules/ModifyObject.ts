@@ -1,4 +1,4 @@
-import utils from "../modules/utils";
+import utils from "../utils";
 
 export class ModuleModifyObject {
 

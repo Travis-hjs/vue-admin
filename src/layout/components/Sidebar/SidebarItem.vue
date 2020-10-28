@@ -36,10 +36,10 @@
 import path from "path";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import SidebarItemLink from "./SidebarItemLink.vue";
-import utils from "../../../modules/utils";
+import utils from "../../../utils";
 import { 
     RouteItem 
-} from "../../../modules/interfaces";
+} from "../../../utils/interfaces";
 
 @Component({
     name: "SidebarItem", // 必须要有 name 值才上面才可以引用自身组件

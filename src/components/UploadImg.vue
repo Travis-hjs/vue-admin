@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Prop, Emit, Vue } from "vue-property-decorator";
-import { UploadImage } from "../modules/interfaces";
+import { UploadImage } from "../utils/interfaces";
 import api from "../api/index";
 
 @Component({})

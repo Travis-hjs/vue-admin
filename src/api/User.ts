@@ -1,11 +1,11 @@
-import request from "../modules/request";
+import request from "../utils/request";
 import store from "../store";
-import { ModuleModifyObject } from "../store/ModifyObject";
+import { ModuleModifyObject } from "../modules/ModifyObject";
 import { 
     LoginParam, 
     RequestFail, 
     UserInfoType 
-} from "../modules/interfaces";
+} from "../utils/interfaces";
 
 /** 缓存名称 */
 const cacheName = "ApiUserInfo";
