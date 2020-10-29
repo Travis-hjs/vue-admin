@@ -195,6 +195,34 @@ class ModuleUtil {
         return /^[\w]{6,10}$/.test(value)
     }
     
+    /**
+     * 范围随机整数
+     * @param min 最小数
+     * @param max 最大数
+     */
+    ranInt(min: number, max: number) {
+        return Math.round(Math.random() * (max - min) + min);
+    }
+
+    /**
+     * 随机生成中文
+     * @param min 
+     * @param max 
+     */
+    randomText(min: number, max: number) {
+        const len = Math.floor(Math.random() * max) + min;
+        const base = 20000;
+        const range = 1000;
+        let result = "";
+        let i = 0;
+        while (i < len) {
+            i++;
+            const lower = Math.floor(Math.random() * range);
+            result += String.fromCharCode(base + lower);
+        }
+        return result;
+    }
+    
 }
 
 /** 工具模块 */

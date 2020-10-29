@@ -93,6 +93,33 @@ export const admin: Array<RouteItem> = [
         ]
     },
     {
+        path: "/excel",
+        name: "excel",
+        redirect: "/excel/export",
+        meta: { title: "excel表格", icon: "excel" },
+        component: Layout,
+        children: [
+            {
+                path: "export",
+                name: "export-excel",
+                meta: { title: "导出excel", icon: "excel" },
+                component: () => import("@/views/excel/exportExcel.vue"),
+            },
+            {
+                path: "merge",
+                name: "export-merge",
+                meta: { title: "导出多级表头", icon: "excel" },
+                component: () => import("@/views/excel/exportMergeExcel.vue"),
+            },
+            {
+                path: "import",
+                name: "import-excel",
+                meta: { title: "导入excel", icon: "excel" },
+                component: () => import("@/views/excel/importExcel.vue"),
+            },
+        ]
+    },
+    {
         path: "/icon",
         component: Layout,
         children: [
