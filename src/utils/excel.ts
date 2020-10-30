@@ -16,15 +16,15 @@ interface ExportExcelParams {
     filename?: string
     /** 表格头部列表 */
     multiHeader?: Array<Array<string>>
-    /** 合并的数组 */
-    merges?: Array<any>
+    /** 合并的表格头数组 */
+    merges?: Array<string>
     /** 导出的表格内容自动填充宽度 */
     autoWidth?: boolean
     /** 导出的文件类型 */
     fileType?: WritingOptions["bookType"]
 }
 
-interface FormatJsonParams<T> {
+interface FormatJsonOption<T> {
     /** 
      * 索引的位置
      * ```js
@@ -36,7 +36,7 @@ interface FormatJsonParams<T> {
     /** 表头字段 */
     header: string
     /** 对应表头的字段`key` */
-    key: string
+    key: keyof T
     /** 条件处理函数 */
     handle?: (item: T) => number | string
 }
@@ -50,7 +50,7 @@ function datenum(date: Date) {
     return (+date - +new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000)
 }
 
-function sheetFromDataArray(data: any) {
+function sheetFromDataArray(data: Array<Array<any>>) {
     const ws: { [key: string]: any } = {}
     const range = {
         s: {
@@ -113,41 +113,46 @@ export function exportExcel(options: ExportExcelParams) {
     const merges = options.merges || [];
     const fileType = options.fileType || "xlsx";
 
-    data.unshift(options.header)
+    data.unshift(options.header);
     for (let i = multiHeader.length - 1; i > -1; i--) {
-        data.unshift(multiHeader[i])
+        data.unshift(multiHeader[i]);
     }
 
-    const wsName = "SheetJS"
-    const wb = new Workbook()
-    const ws = sheetFromDataArray(data)
+    const wsName = "SheetJS";
+    const wb = new Workbook();
+    const ws = sheetFromDataArray(data);
 
     if (merges.length > 0) {
         if (!ws["!merges"]) {
-            ws["!merges"] = []
+            ws["!merges"] = [];
         }
         merges.forEach(item => {
-            ws["!merges"].push(XLSX.utils.decode_range(item))
+            ws["!merges"].push(XLSX.utils.decode_range(item));
         })
     }
 
     if (options.autoWidth) {
-        // 设置worksheet每列的最大宽度
-        const colWidth = data.map((row: any) => row.map((val: any) => {
-            // 先判断是否为 null/undefined
-            if (val == null) {
-                return {
-                    wch: 10
-                }
-                // 再判断是否为中文
-            } else if (val.toString().charCodeAt(0) > 255) {
-                return {
-                    wch: val.toString().length * 2
-                }
+        const chRegExp = /[\u4e00-\u9fa5]/g; // /\p{Unified_Ideograph}/ug
+        // 设置 worksheet 每列的最大宽度
+        const colWidth = data.map(row => row.map((value: string | number | null | undefined) => {
+            let number = 0;
+            // 先判断是否为 null 和 undefined
+            if (value == null) {
+                number = 10;
+            // 再判断是否为中文
+            } else if (chRegExp.test(value.toString())) {
+                /** 中文计数 */
+                let count = 0;
+                const en = value.toString().replace(chRegExp, function() {
+                    count++;
+                    return "";
+                });
+                number = en.length + count * 2; // 中文的字体宽度要乘以2
             } else {
-                return {
-                    wch: val.toString().length
-                }
+                number = value.toString().length;
+            }
+            return {
+                wch: number
             }
         }))
         // 以第一行为初始值
@@ -182,25 +187,24 @@ export function exportExcel(options: ExportExcelParams) {
  * @param target 处理的目标数组
  * @param options 处理配置数组，字段顺序按照这个来
  */
-export function formatJson<T>(target: Array<T>, options: Array<FormatJsonParams<T>>) {
-    const headers: Array<string> = [];
+export function formatJson<T>(target: Array<T>, options: Array<FormatJsonOption<T>>) {
+    const headers = options.map(item => item.header);
     const list: Array<Array<any>> = [];
-    for (let i = 0; i < options.length; i++) {
-        headers.push(options[i].header);
-    }
 
     for (let i = 0; i < target.length; i++) {
         const item = target[i];
         list[i] = [];
         for (let j = 0; j < options.length; j++) {
             const option = options[j];
-            const key = option.key as keyof T;
+            const key = option.key;
             if (Object.prototype.hasOwnProperty.call(item, key)) {
                 if (option.handle) {
                     list[i].push(option.handle(item));
                 } else {
-                    list[i].push(item[key])
+                    list[i].push(item[key]);
                 }
+            } else {
+                console.warn("function formatJson >> item 中不存在对应的 key 值");
             }
         }
     }
