@@ -9,11 +9,11 @@
 
 2. `vuex` 的使用方式我换成了更好的代码提示追踪和更少的代码实现方式，参考 [你不需要vuex](https://juejin.im/post/5d425a83f265da03d8719cb8) 。
 
-3. `layout` 特别说明：组件代码部分基本重写、代码会比原作者的更少、代码提示更直观、功能效果和原版保持一致。
+3. `layout` 特别说明：组件代码大部分基本重写、代码会比原作者的更少、代码提示更直观、功能效果和原版保持一致。
 
-4. `图表`、`富文本编辑`、`Excel`等一些扩展根据自己项目选择喜欢的导入使用，终于不用每次`npm run serve`、`npm run build`的时候等半天了，我这个快得一匹。
+4. 大写字母的文件均是`calss`模块。
 
-5. 大写字母的文件均是`calss`模块
+5. 为保证每次`npm run serve`、`npm run build`的时候有极致的编译速度，像`图表`、`富文本编辑`、`Excel`等一些扩展功能根据自己项目选择喜欢的导入使用，这里只提供一个基础的框架模板，另外`hjs`分支是我个人用的一个分支，会有额外的功能扩展模块例如：`Excel`，也是根据个人使用的频率添加的一个实用功能，后续会按需增加。
 
 **后续 `vue-3.0` 正式发布后会继续更新多一套**
 
@@ -59,6 +59,17 @@
 ### sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化
 ```
 set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+```
+
+**项目启动的时候命令窗口会有一个类型模块的报错，这个不是代码问题，是`typescript`版本的问题，之后升级到`vue3.0`之后会做调整，所以可以忽略，有强迫症的可以这样操作**
+
+```ts
+// 找到 node_modules/@type/node/globals.d.ts 文件
+// 把下面这两行注释掉就行
+
+// interface NodeRequire extends NodeJS.Require {} 
+interface RequireResolve extends NodeJS.RequireResolve {}
+// interface NodeModule extends NodeJS.Module {} 
 ```
 
 ## Project setup
