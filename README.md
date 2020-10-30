@@ -3,13 +3,13 @@
 ## 描述
 参考原版 [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template) 重写的一个超轻量的模板（`typescript`+`element-ui`），只保留了核心功能`layout`、`vue-router`、`svg-icon`、`路由权限管理`。主要是想提供一个项目体积更小、可根据实际情况更自由地扩展的一套中后台管理基础模板。
 
-**部分功能说明**
+## 功能说明
 
-1. `http请求` 这里我使用的是根据个人习惯用原生写的`ajax`（[参考地址](https://github.com/Hansen-hjs/my-note/blob/master/JavaScript/js/ajax.js)）， 可根据自己喜好可以扩展 `axios` 这类型第三方库。
+1. `layout` 特别说明：组件代码大部分基本重写、代码会比原作者的更少、代码提示更直观、功能效果和原版保持一致。
 
-2. `vuex` 的使用方式我换成了更好的代码提示追踪和更少的代码实现方式，参考 [你不需要vuex](https://juejin.im/post/5d425a83f265da03d8719cb8) 。
+2. `http请求` 这里我使用的是根据个人习惯用原生写的`ajax`（[参考地址](https://github.com/Hansen-hjs/my-note/blob/master/JavaScript/js/ajax.js)）， 可根据自己喜好可以扩展 `axios` 这类型第三方库。
 
-3. `layout` 特别说明：组件代码大部分基本重写、代码会比原作者的更少、代码提示更直观、功能效果和原版保持一致。
+3. `vuex` 的使用方式我换成了更好的代码提示追踪和更少的代码实现方式，参考 [你不需要vuex](https://juejin.im/post/5d425a83f265da03d8719cb8) 。
 
 4. 大写字母的文件均是`calss`模块。
 
