@@ -1,5 +1,10 @@
 import { RouteConfig } from "vue-router";
 
+/** 深层递归所有属性为可选 */
+export type DeepPartial<T> = {
+    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+}
+
 export interface AjaxParams {
     /** 请求路径 */
     url: string,
