@@ -91,9 +91,16 @@ export type NumberSymbols = "+" | "-"| "*" | "/";
 /** JavaScript类型 */
 export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined";
 
-export interface UploadImage {
+export interface UploadChange {
     /** 和当前上传组件绑定的`id` */
     id: string | number
     /** 图片路径 */
     src: string
+}
+
+export interface RichTextChange {
+    /** 组件`id`，一个页面多个富文本时需要用到`id` */
+    id: string | number
+    /** 富文本变动返回的内容 */
+    value: string
 }

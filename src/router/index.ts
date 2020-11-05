@@ -120,6 +120,21 @@ export const admin: Array<RouteItem> = [
         ]
     },
     {
+        path: "/richtext",
+        name: "richtext",
+        redirect: "/richtext/home",
+        meta: { title: "富文本", icon: "component" },
+        component: Layout,
+        children: [
+            {
+                path: "home",
+                name: "richtext-home",
+                meta: { title: "富文本", icon: "component" },
+                component: () => import("@/views/richtext/index.vue"),
+            }
+        ]
+    },
+    {
         path: "/icon",
         component: Layout,
         children: [

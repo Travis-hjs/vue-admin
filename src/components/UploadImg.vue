@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Prop, Emit, Vue } from "vue-property-decorator";
-import { UploadImage } from "../utils/interfaces";
+import { UploadChange } from "../utils/interfaces";
 import api from "../api/index";
 
 @Component({})
@@ -32,7 +32,7 @@ export default class UploadImg extends Vue {
         type: [String, Number],
         default: ""
     })
-    private uploadId!: UploadImage["id"];
+    private uploadId!: UploadChange["id"];
 
     /** 图片宽度 */
     @Prop({
@@ -45,7 +45,7 @@ export default class UploadImg extends Vue {
     private loading = false;
 
     /** 发送数据到父组件中 */
-    @Emit("change") sendImgSrc(info: UploadImage) {}
+    @Emit("change") sendImgSrc(info: UploadChange) {}
 
     /** 上传图片 */
     private uploadImg() {
