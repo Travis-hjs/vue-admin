@@ -91,7 +91,7 @@ export type NumberSymbols = "+" | "-"| "*" | "/";
 /** JavaScript类型 */
 export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined";
 
-export interface UploadImage {
+export interface UploadChange {
     /** 和当前上传组件绑定的`id` */
     id: string | number
     /** 图片路径 */

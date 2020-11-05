@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { UploadImage } from "../../utils/interfaces";
+import { UploadChange } from "../../utils/interfaces";
 import UploadImg from "../../components/UploadImg.vue";
 
 @Component({
@@ -40,12 +40,12 @@ export default class Page5 extends Vue {
         single: ""
     }
 
-    private getPicUrl(info: UploadImage) {
+    private getPicUrl(info: UploadChange) {
         const index = info.id as number;
         this.pageData.uploadList[index].image = info.src;
     }
 
-    getSingleUrl(info: UploadImage) {
+    getSingleUrl(info: UploadChange) {
         this.pageData.single = info.src;
     }
 
