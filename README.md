@@ -30,19 +30,18 @@
         "vue-property-decorator": "^8.3.0",
         "vue-router": "^3.1.3"
     },
-	"devDependencies": {
-        "@types/node": "^13.1.4",
+    "devDependencies": {
+        "@types/node": "^14.14.6",
         "@types/nprogress": "^0.2.0",
-        "@vue/cli-plugin-babel": "^4.1.0",
-        "@vue/cli-plugin-router": "^4.0.5",
-        "@vue/cli-plugin-typescript": "^4.1.0",
+        "@vue/cli-plugin-router": "^4.5.8",
+        "@vue/cli-plugin-typescript": "^4.5.8",
         "@vue/cli-service": "^4.1.0",
         "node-sass": "^4.14.1",
         "sass-loader": "^8.0.0",
         "svg-sprite-loader": "^4.1.6",
-        "typescript": "~3.5.3",
+        "typescript": "^4.0.5",
         "vue-template-compiler": "^2.6.10"
-    },
+    }
 }
 ```
 ## 参考文档（其实看我代码注释就够了）
@@ -59,17 +58,6 @@
 ### sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化
 ```
 set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-```
-
-**项目启动的时候命令窗口会有一个类型模块的报错，这个不是代码问题，是`typescript`版本的问题，之后升级到`vue3.0`之后会做调整，所以可以忽略，有强迫症的可以这样操作**
-
-```ts
-// 找到 node_modules/@type/node/globals.d.ts 文件
-// 把下面这两行注释掉就行
-
-// interface NodeRequire extends NodeJS.Require {} 
-interface RequireResolve extends NodeJS.RequireResolve {}
-// interface NodeModule extends NodeJS.Module {} 
 ```
 
 ## Project setup
