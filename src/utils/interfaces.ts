@@ -27,8 +27,8 @@ export interface AjaxParams {
     fail?: (value: XMLHttpRequest) => void,
     /** 超时回调 */
     timeout?: (value: XMLHttpRequest) => void,
-    /** 请求进度 (event: ProgressEvent<XMLHttpRequestEventTarget>) => void */
-    progress?: (event: any) => void
+    /** 请求进度 */
+    progress?: (event: ProgressEvent<XMLHttpRequestEventTarget>) => void
 }
 
 export interface RequestFail {
