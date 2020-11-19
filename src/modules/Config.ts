@@ -4,18 +4,18 @@ export class ModuleConfig {
     }
 
     /** 当前开发环境 */
-    protected env!: "dev" | "prod"
+    protected readonly env!: "dev" | "prod"
 
     /** 请求超时毫秒 */
     readonly requestOvertime = 8000;
 
     /** 开发环境 */
-    protected dev = {
+    protected readonly dev = {
         base: "http://192.168.89.53/api",
     }
     
     /** 生产环境 */
-    protected prod = {
+    protected readonly prod = {
         base: "https://huangjingsheng.com/api"
     }
 
