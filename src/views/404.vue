@@ -28,7 +28,7 @@ import store from "../store";
 @Component({})
 export default class NoFind extends Vue {
     private message = "404 Page Not Found";
-    private images = store.pageImage;
+    private images = store.imageInfo;
 }
 </script>
 
