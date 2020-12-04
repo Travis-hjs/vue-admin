@@ -45,7 +45,7 @@ export default class Layout extends Vue {
             openSidebar: this.pageState.sidebarOpen,
             withoutAnimation: this.pageState.sidebarWithoutAnimation,
             mobile: this.pageState.device === "mobile"
-        };
+        }
     }
 
     @Watch("$route")

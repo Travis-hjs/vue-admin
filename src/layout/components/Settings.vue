@@ -5,10 +5,7 @@
 
             <div class="drawer-item">
                 <span>主题色</span>
-                <ThemePicker
-                    style="float: right; height: 26px; margin: -3px 8px 0 0;"
-                    @change="themeChange"
-                />
+                <ThemePicker style="float: right; height: 26px; margin: -3px 8px 0 0;" @change="themeChange" />
             </div>
 
             <div class="drawer-item">
@@ -54,13 +51,14 @@ export default class Settings extends Vue {
      * @param value
      */
     private updateCss(value: string) {
-        let style = (document.getElementById("the-switch") as HTMLStyleElement);
-        if (!style) {
-            style = document.createElement("style");
-            style.id = "the-switch";
-            document.head.appendChild(style);
+        const id = "the_switch_style"
+        let label = (document.getElementById(id) as HTMLStyleElement);
+        if (!label) {
+            label = document.createElement("style");
+            label.id = id;
+            document.head.appendChild(label);
         }
-        style.textContent = `.el-switch.is-checked .el-switch__core{border-color: ${value};background-color: ${value};`;
+        label.textContent = `.el-switch.is-checked .el-switch__core{border-color: ${value}; background-color: ${value};`;
     }
 
     private themeChange(value: string) {

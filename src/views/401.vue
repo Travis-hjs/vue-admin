@@ -37,7 +37,7 @@ import store from "../store";
 @Component({})
 export default class NoPower extends Vue {
     private dialogVisible = false;
-    private images = store.pageImage;
+    private images = store.imageInfo;
 
     private back() {
         if (this.$route.query.noGoBack) {
