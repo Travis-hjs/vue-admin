@@ -19,19 +19,22 @@ class ModuleUtil {
     /**
      * 将秒数换成时分秒格式
      * @param value 秒数
+     * @param withDay 是否带天数倒计
      */
-    secondFormat(value: number) {
-        let day: string | number = 0, hour: string | number = 0, minute: string | number = 0, second: string | number = 0;
-        day = Math.floor(value / (24 * 3600));
-        hour = Math.floor(value / 3600) - (day * 24);
-        minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
-        second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+    formatSecond(value: number, withDay: boolean = false) {
+        let day: number | string = Math.floor(value / (24 * 3600));
+        let hour: number | string = Math.floor(value / 3600) - day * 24;
+        let minute: number | string = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
+        let second: number | string = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+        if (!withDay) {
+            hour = hour + day * 24;
+        }
         // 格式化
-        day = ("0" + day).slice(-2);
-        hour = ("0" + hour).slice(-2);
+        day = day < 10 ? ("0" + day).slice(-2) : day.toString();
+        hour = hour < 10 ? ("0" + hour).slice(-2) : hour.toString();
         minute = ("0" + minute).slice(-2);
         second = ("0" + second).slice(-2);
-        return { day, hour, minute, second };
+        return { day, hour, minute, second }
     }
 
     /**
