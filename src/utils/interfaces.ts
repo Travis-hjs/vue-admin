@@ -10,36 +10,10 @@ export type DeepReadonly<T> = {
     readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
 }
 
-/** 深层递归所有属性为必选选 */
+/** 深层递归所有属性为必选选（貌似不生效） */
 export type DeepRequired<T> = {
     [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P]
 }
-
-interface HHH {
-    name?: string,
-    info?: {
-        value?: string | number
-    }
-}
-
-const info: DeepRequired<HHH> = {
-    name: '123',
-    info: {
-        
-    }
-}
-
-
-function getStr(params: DeepRequired<HHH>) {
-    return JSON.stringify(params)
-}
-
-getStr({
-    name: "hjs",
-    info: {
-        
-    }
-})
 
 export interface AjaxParams {
     /** 请求路径 */
