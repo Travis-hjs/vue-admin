@@ -101,6 +101,7 @@ class ModuleUtil {
         if (!clipboard) {
             clipboard = document.createElement("textarea");
             clipboard.id = id;
+            clipboard.readOnly = true;
             clipboard.style.cssText = "font-size: 15px; position: fixed; top: -1000%; left: -1000%;";
             document.body.appendChild(clipboard);
         }
@@ -108,8 +109,12 @@ class ModuleUtil {
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
         document.execCommand("copy");
-        clipboard.blur();
-        success && success();
+        const state = document.execCommand("copy");
+        if (state) {
+            success && success();
+        } else {
+            fail && fail("复制失败");
+        }
     }
 
     /**
