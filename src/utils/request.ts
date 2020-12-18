@@ -9,15 +9,15 @@ import {
  * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * @author https://github.com/Hansen-hjs
  */
-function ajax(param: AjaxParams) {
+function ajax(params: AjaxParams) {
     /** XMLHttpRequest */
     const XHR = new XMLHttpRequest();
     /** 请求方法 */
-    const method = param.method;
+    const method = params.method;
     /** 超时检测 */
-    const overtime = param.overtime || 0;
+    const overtime = params.overtime || 0;
     /** 请求链接 */
-    let url = param.url;
+    let url = params.url;
     /** 非`GET`请求传参 */
     let payload = null;
     /** `GET`请求传参 */
@@ -26,8 +26,8 @@ function ajax(param: AjaxParams) {
     // 传参处理
     if (method === "GET") {
         // 解析对象传参
-        for (const key in param.data) {
-            query += "&" + key + "=" + param.data[key];
+        for (const key in params.data) {
+            query += "&" + key + "=" + params.data[key];
         }
         if (query) {
             query = "?" + query.slice(1);
@@ -35,7 +35,7 @@ function ajax(param: AjaxParams) {
         }
     } else {
         // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-        payload = JSON.stringify(param.data);
+        payload = JSON.stringify(params.data);
     }
 
     // 监听请求变化
@@ -43,15 +43,15 @@ function ajax(param: AjaxParams) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            param.success && param.success(JSON.parse(XHR.response), XHR);
+            params.success && params.success(JSON.parse(XHR.response), XHR);
         } else {
-            param.fail && param.fail(XHR);
+            params.fail && params.fail(XHR);
         }
     }
 
     // 判断请求进度
-    if (param.progress) {
-        XHR.addEventListener("progress", param.progress);
+    if (params.progress) {
+        XHR.addEventListener("progress", params.progress);
     }
 
     // XHR.responseType = "json";
@@ -60,8 +60,8 @@ function ajax(param: AjaxParams) {
     XHR.open(method, url, true);
 
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
-    if (param.file) {
-        payload = param.file;
+    if (params.file) {
+        payload = params.file;
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -73,7 +73,7 @@ function ajax(param: AjaxParams) {
         XHR.timeout = overtime;
         XHR.ontimeout = function () {
             XHR.abort();
-            param.timeout && param.timeout(XHR);
+            params.timeout && params.timeout(XHR);
         }
     }
 
