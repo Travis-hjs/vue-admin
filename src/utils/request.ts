@@ -99,7 +99,7 @@ export default function request(
 ) {
     return new Promise<any>(function(resolve, reject) {
         ajax({
-            url: config.baseUrl + url,
+            url: config.apiUrl + url,
             method: method,
             data: data || {},
             file: upload,

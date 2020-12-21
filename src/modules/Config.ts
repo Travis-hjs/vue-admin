@@ -11,17 +11,17 @@ export class ModuleConfig {
 
     /** 开发环境 */
     protected readonly dev = {
-        base: "http://192.168.89.53/api",
+        api: "http://192.168.89.53/api",
     }
     
     /** 生产环境 */
     protected readonly prod = {
-        base: "https://huangjingsheng.com/api"
+        api: "https://huangjingsheng.com/api"
     }
 
     /** 基础请求域名 */
-    get baseUrl() {
-        return this[this.env].base;
+    get apiUrl() {
+        return this[this.env].api;
     }
 }
 
