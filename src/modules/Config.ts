@@ -19,7 +19,7 @@ export class ModuleConfig {
         api: "https://huangjingsheng.com/api"
     }
 
-    /** 基础请求域名 */
+    /** `api`请求域名 */
     get apiUrl() {
         return this[this.env].api;
     }
