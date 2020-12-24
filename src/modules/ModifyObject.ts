@@ -28,10 +28,9 @@ export class ModuleModifyObject {
      */
     setData<T>(target: T, value: T) {
         for (const key in value) {
+            target[key] = value[key];
             if (utils.checkType(target[key]) === "object") {
                 this.setData(target[key], value[key])
-            } else {
-                target[key] = value[key];
             }
         }
     }
