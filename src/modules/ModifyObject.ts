@@ -28,9 +28,6 @@ export class ModuleModifyObject {
      */
     setData<T>(target: T, value: T) {
         for (const key in value) {
-            if (!Object.prototype.hasOwnProperty.call(target, key)) {
-                target[key] = {} as any;
-            }
             if (utils.checkType(target[key]) === "object") {
                 this.setData(target[key], value[key])
             } else {
