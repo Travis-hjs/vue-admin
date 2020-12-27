@@ -91,6 +91,8 @@ function getResultInfo(result: { statusCode: number, data: any }) {
             info.msg = "ok";
             info.data = result.data;
             break;
+        case 400:
+            info.msg = "接口传参不正确";
         case 403:
             info.msg = "登录已过期";
             break;
