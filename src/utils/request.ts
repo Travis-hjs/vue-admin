@@ -2,7 +2,7 @@ import config from "../modules/Config";
 import { Message } from "element-ui";
 import { 
     AjaxParams, 
-    RequestFail 
+    ApiResult
 } from "./interfaces";
 
 /**
@@ -80,6 +80,32 @@ function ajax(params: AjaxParams) {
     XHR.send(payload);
 }
 
+function getResultInfo(result: { statusCode: number, data: any }) {
+    const info: ApiResult = { state: -1, msg: "网络出错了", data: null }
+    switch (result.statusCode) {
+        case config.requestOvertime:
+            info.msg = "网络超时了";
+            break;
+        case 200:
+            info.state = 1;
+            info.msg = "ok";
+            info.data = result.data;
+            break;
+        case 403:
+            info.msg = "登录已过期";
+            break;
+        case 404:
+            info.msg = "接口不存在";
+            break;
+        default:
+            break;
+    }
+    if (result.statusCode >= 500) {
+        info.msg = "服务器闹脾气了";
+    }
+    return info;
+}
+
 /**
  * 基础请求
  * @param method 请求方式
@@ -93,8 +119,8 @@ export default function request(
     method: AjaxParams["method"],
     url: string,
     data?: object,
-    success?: (res: any, xhr: XMLHttpRequest) => void,
-    fail?: (error: RequestFail) => void,
+    success?: (res: ApiResult, xhr: XMLHttpRequest) => void,
+    fail?: (error: ApiResult) => void,
     upload?: AjaxParams["file"]
 ) {
     return new Promise<any>(function(resolve, reject) {
@@ -103,36 +129,30 @@ export default function request(
             method: method,
             data: data || {},
             file: upload,
-            overtime: 8000,
+            overtime: config.requestOvertime,
             success(res, xhr) {
                 // console.log("请求成功", res);
-                success && success(res, xhr);
-                resolve(res);
+                const info = getResultInfo({ statusCode: xhr.status, data: res });
+                success && success(info, xhr);
+                resolve(info);
             },
             fail(err) {
-                // console.log("请求失败", err);
-                let error = {
-                    message: "接口报错",
-                    data: null
-                };
+                const info = getResultInfo({ statusCode: err.status, data: null });
                 if (err.response.charAt(0) == "{") {
-                    error.data = JSON.parse(err.response);
+                    info.data = JSON.parse(err.response);
                 }
                 // 全局的请求错误提示，不需要可以去掉
-                Message.error(error.message); 
-                fail && fail(error);
-                reject(error);
+                Message.error(info.msg); 
+                fail && fail(info);
+                resolve(info);
             },
             timeout() {
                 console.warn("XMLHttpRequest 请求超时 !!!");
-                let error = {
-                    message: "请求超时",
-                    data: null
-                }
+                const info = getResultInfo({ statusCode: config.requestOvertime, data: null });
                 // 全局的请求超时提示，不需要可以去掉
-                Message.warning(error.message);
-                fail && fail(error);
-                reject(error);
+                Message.warning(info.msg);
+                fail && fail(info);
+                resolve(info);
             }
         });
     })
