@@ -32,7 +32,6 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import store from "../../store";
-import apiUser from "../../api/User";
 
 @Component({
     components: {
@@ -59,7 +58,7 @@ export default class Navbar extends Vue {
     }
 
     private logout() {
-        apiUser.removeUserState();
+        store.removeUserState();
         // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
         store.layoutState.historyViews = [];
         // 退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api

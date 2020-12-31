@@ -1,7 +1,6 @@
 import { router, base, admin, editor } from "./index";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import apiUser from "../api/User";
 import store from "../store";
 
 // NProgress.configure({ showSpinner: false });
@@ -10,11 +9,11 @@ import store from "../store";
 router.beforeEach((to, from, next) => {
     NProgress.start();
 
-    if (apiUser.userInfo.token) {
+    if (store.userInfo.token) {
         if (store.addRouters.length > 0) {
             next();
         } else {
-            switch (apiUser.userInfo.userType) {
+            switch (store.userInfo.userType) {
                 case "admin":
                     store.addRouters = admin;
                     break;
