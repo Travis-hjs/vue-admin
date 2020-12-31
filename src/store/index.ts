@@ -69,7 +69,11 @@ class ModuleStore extends ModuleLayout {
 
 }
 
-/** 状态管理模块 */
+/**
+ * 状态管理模块
+ * 
+ * [你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
+*/
 const store = new ModuleStore();
 
 export default store;
