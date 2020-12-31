@@ -41,11 +41,14 @@ export interface AjaxParams {
     progress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
 }
 
-export interface RequestFail {
-    /** 请求错误提示信息 */
-    message: string,
-    /** 请求错误数据 */
-    data?: any
+/** 接口请求基础响应数据 */
+export interface ApiResult {
+    /** 接口状态（1为成功） */
+    state: number
+    /** 接口响应数据 */
+    data: any
+    /** 接口响应信息 */
+    msg: string
 }
 
 export interface LoginParam {

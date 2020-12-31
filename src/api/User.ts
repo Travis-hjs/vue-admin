@@ -2,7 +2,7 @@ import request from "../utils/request";
 import store from "../store";
 import { 
     LoginParam, 
-    RequestFail, 
+    ApiResult, 
     UserInfoType 
 } from "../utils/interfaces";
 
@@ -14,7 +14,7 @@ class ApiUser {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: RequestFail) => void) {
+    login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: ApiResult) => void) {
         /** 模拟登录 */
         const testLogin = () => {
             /** 缓存信息  */
@@ -38,7 +38,7 @@ class ApiUser {
                     break;
 
                 default:
-                    fail && fail({ message: "账户不存在" });
+                    fail && fail({ state: -1, msg: "账户不存在", data: null });
                     break;
             }
             

@@ -1,6 +1,6 @@
 import request from "../utils/request";
 import { 
-    RequestFail 
+    ApiResult 
 } from "../utils/interfaces";
 
 class ModuleApi {
@@ -10,7 +10,7 @@ class ModuleApi {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    uploadImg(fromData: File, success?: (res: any) => void, fail?: (error: RequestFail) => void) {
+    uploadImg(fromData: File, success?: (res: any) => void, fail?: (error: ApiResult) => void) {
         /** 模拟上传 */
         function testUpload() {
             const reader = new FileReader();
