@@ -1,8 +1,8 @@
 import ModuleLayout from "./Layout";
 import { DeepReadonly, UserInfoType } from "../utils/interfaces";
 
-/** 缓存名称 */
-const UserCacheName = "ApiUserInfo";
+/** 用户信息缓存字段 */
+const userInfoCacheName = "store-user-info";
 
 /** 创建用户信息 */
 function createUserInfo(): DeepReadonly<UserInfoType> {
@@ -45,7 +45,7 @@ class ModuleStore extends ModuleLayout {
 
     /** 初始化缓存信息 */
     private init() {
-        const cacheInfo = sessionStorage.getItem(UserCacheName);
+        const cacheInfo = sessionStorage.getItem(userInfoCacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
             this.modifyData(this.userInfo, value);
@@ -58,13 +58,13 @@ class ModuleStore extends ModuleLayout {
      */
     updateUserInfo(value: Partial<UserInfoType>) {
         this.modifyData(this.userInfo, value);
-        sessionStorage.setItem(UserCacheName, JSON.stringify(this.userInfo));
+        sessionStorage.setItem(userInfoCacheName, JSON.stringify(this.userInfo));
     }
 
     /** 清空缓存信息 */
     removeUserState() {
         this.modifyData(this.userInfo, createUserInfo());
-        sessionStorage.removeItem(UserCacheName);
+        sessionStorage.removeItem(userInfoCacheName);
     }
 
 }

@@ -114,7 +114,7 @@ export default class Login extends Vue {
                 this.$router.push("/");
             }, err => {
                 this.loading = false;
-                this.$message.error(err.message);
+                this.$message.error(err.msg);
             });
         }
         if (adopt) {
