@@ -73,6 +73,7 @@ export interface RouteItem extends RouteConfig {
     fullPath?: string
 }
 
+/** `layout`状态类型 */
 export interface LayoutStateType {
     /** 显示设置 */
     showSettings: boolean
@@ -95,8 +96,6 @@ export interface LayoutStateType {
     /** 主题颜色 */
     theme: string
 }
-
-export type LayoutStateKeys = keyof LayoutStateType;
 
 /** 运算符号 */
 export type NumberSymbols = "+" | "-"| "*" | "/";

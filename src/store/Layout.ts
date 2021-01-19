@@ -1,8 +1,7 @@
 import { ModuleModifyObject } from "../modules/ModifyObject";
 import {
     LayoutStateType,
-    RouteItem,
-    LayoutStateKeys,
+    RouteItem
 } from "../utils/interfaces";
 
 const cacheName = "ModuleLayoutInfo";
@@ -48,9 +47,8 @@ export default class ModuleLayout extends ModuleModifyObject {
         const value = this.layoutState;
         const data: any = {};
         for (const key in value) {
-            const k = key as LayoutStateKeys;
-            if (k === "historyViews") {
-                data[k] = value[k].map(item => {
+            if (key === "historyViews") {
+                data[key] = value["historyViews"].map(item => {
                     return {
                         name: item.name,
                         meta: {...item.meta},
@@ -59,7 +57,7 @@ export default class ModuleLayout extends ModuleModifyObject {
                     }
                 });
             } else {
-                data[k] = value[k];
+                data[key] = value[key as keyof LayoutStateType];
             }
         }
         // console.log(JSON.stringify(data));
