@@ -20,6 +20,8 @@
                     :is-collapse="!pageState.sidebarOpen"
                 />
             </el-menu>
+            <!-- 不知是不是`el-scrollbar`组件的原因，滚动高度会小于实际高度，所以这里要增加一个导航高度去补回来 -->
+            <div style="height: 56px"></div>
         </el-scrollbar>
     </div>
 </template>
