@@ -51,7 +51,7 @@ function validateUsername(rule: any, value: string, callback: Function) {
 }
 
 function validatePass(rule: any, value: string, callback: Function) {
-    if (!utils.isValidPassowrd(value)) {
+    if (value.trim().length < 6) {
         callback(new Error("密码不能小于6位"));
     } else {
         callback();

@@ -19,25 +19,25 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { useRoute } from "vue-router";
+// import { useRoute } from "vue-router";
 import store from "../../store";
 
 export default defineComponent({
     name: "AppMain",
     setup() {
-        const route = useRoute();
         const layoutState = store.layoutState;
-        const Component = computed(function() {
-            const item = layoutState.historyViews.find(item => item.path == route.path);
-            if (item) {
-                return item.component
-            }
-            return null
-        })
+        // const route = useRoute();
+        // const Component = computed(function() {
+        //     const item = layoutState.historyViews.find(item => item.path == route.path);
+        //     if (item) {
+        //         return item.component
+        //     }
+        //     return null
+        // })
 
         return {
             layoutState,
-            Component
+            // Component
         }
     }
 })

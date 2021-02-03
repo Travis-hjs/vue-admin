@@ -1,4 +1,4 @@
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import TsxCard from "./card";
 
 const TsxExample = defineComponent({
@@ -20,6 +20,11 @@ const TsxExample = defineComponent({
         }
         
         console.clear();
+
+        onMounted(function() {
+            console.log("on mounted");
+            
+        })
 
         return () => (
             <div class="tsx-example">

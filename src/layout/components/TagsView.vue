@@ -73,10 +73,10 @@ export default defineComponent({
 
         watch(visible, function(value) {
             if (value) {
-            document.body.addEventListener("click", closeMenu);
-        } else {
-            document.body.removeEventListener("click", closeMenu);
-        }
+                document.body.addEventListener("click", closeMenu);
+            } else {
+                document.body.removeEventListener("click", closeMenu);
+            }
         })
 
         /**

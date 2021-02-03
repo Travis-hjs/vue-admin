@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
+import { defineComponent, onMounted, onUnmounted, ref } from "vue";
 import store from "../../store";
 
 export default defineComponent({
@@ -33,20 +33,12 @@ export default defineComponent({
     setup(props, context) {
         const body = document.body;
         const layoutState = store.layoutState;
+        const elRightPanel = ref<HTMLElement>(null as any);
         let show = ref(false);
-        
-        watch(show, function(value) {
-            if (value) {
-                body.classList.add("showRightPanel");
-            } else {
-                body.classList.remove("showRightPanel");
-            }
-        })
 
         /** 插入到body的顶层节点中，保证层级在最上面 */
         function insertToBody() {
-            // const elx = context.$refs.elRightPanel as HTMLElement;
-            // body.insertBefore(elx, body.firstChild);
+            body.appendChild(elRightPanel.value);
         }
 
         /**
@@ -56,6 +48,11 @@ export default defineComponent({
         function switchShow(isMask = false) {
             if (isMask && props.clickNotClose) return; 
             show.value = !show.value;
+            if (show.value) {
+                body.classList.add("showRightPanel");
+            } else {
+                body.classList.remove("showRightPanel");
+            }
         }
 
         onMounted(function() {
@@ -63,11 +60,11 @@ export default defineComponent({
         })
 
         onUnmounted(function() {
-            // const elx = context.$refs.elRightPanel as HTMLElement;
-            // elx.remove();
+            elRightPanel.value.remove();
         })
 
         return {
+            elRightPanel,
             layoutState,
             show,
             switchShow

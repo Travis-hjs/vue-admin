@@ -47,7 +47,7 @@ export default defineComponent({
 
         watch(layoutState, function() {
             store.saveLayout();
-        }, { deep: true })
+        })
 
         function toggleSideBar() {
             layoutState.sidebarOpen = !layoutState.sidebarOpen;

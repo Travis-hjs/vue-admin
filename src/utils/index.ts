@@ -229,14 +229,6 @@ class ModuleUtil extends ModuleElementUI {
     isExternal(path: string) {
         return /^(https?:|mailto:|tel:)/.test(path)
     }
-
-    /**
-     * 校验密码
-     * @param value 
-     */
-    isValidPassowrd(value: string) {
-        return /^[\w]{6,10}$/.test(value)
-    }
     
 }
 

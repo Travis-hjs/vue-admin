@@ -16,8 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, watch, onMounted, onUnmounted } from "vue";
-import { useRoute } from "vue-router";
+import { defineComponent, computed, onMounted, onUnmounted } from "vue";
 import AppMain from "./components/AppMain.vue";
 import Navbar from "./components/Navbar.vue";
 import RightPanel from "./components/RightPanel.vue";
@@ -37,7 +36,6 @@ export default defineComponent({
         TagsView
     },
     setup() {
-        const route = useRoute();
         const layoutState = store.layoutState;
         const classInfo = computed(function() {
             return {
@@ -47,15 +45,6 @@ export default defineComponent({
                 mobile: layoutState.device === "mobile"
             }
         })
-
-        function onRouteChange() {
-            if (layoutState.device === "mobile" && layoutState.sidebarOpen) {
-                layoutState.sidebarWithoutAnimation = false;
-            }
-        }
-
-        // 监听路由变动
-        watch(route, onRouteChange);
 
         function isMobile() {
             const width = document.body.clientWidth;
@@ -75,6 +64,9 @@ export default defineComponent({
                 if (mobile) {
                     layoutState.sidebarWithoutAnimation = true;
                     layoutState.sidebarOpen = false;
+                } else {
+                    // layoutState.sidebarWithoutAnimation = false;
+                    // layoutState.sidebarOpen = true;
                 }
             }
         }
