@@ -16,15 +16,15 @@
                 <span class="svg_container">
                     <svg-icon name="password"/>
                 </span>
-                <el-input :type="pwdType" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="handleLogin(false)" />
+                <el-input :type="inputType" v-model="loginForm.password" placeholder="密码" @keyup.enter="handleLogin(false)" />
                 <span class="password_icon" @click="switchInput()">
-                    <svg-icon :name="pwdType === 'password' ? 'eye-off' : 'eye-on'"/>
+                    <svg-icon :name="inputType === 'password' ? 'eye-off' : 'eye-on'"/>
                 </span>
             </el-form-item>
             <el-form-item>
                 <el-button :loading="loading" class="btn" type="primary" @click="handleLogin(false)">登录</el-button>
             </el-form-item>
-            <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
+            <div class="tips flex fvertical" v-for="(item, index) in testUserList" :key="index">
                 <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
                 <div class="tips_text f1">账号：{{ item }} 密码 : 随便填</div>
                 <el-button size="mini" type="primary" @click="setLoginInfo(item)">一键登录</el-button>
@@ -36,11 +36,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import utils from "../utils";
 import apiUser from "../api/User";
-import store from "../store";
 import openNextPage from "../router/permission";
+import store from "../store";
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
@@ -58,76 +58,98 @@ function validatePass(rule: any, value: string, callback: Function) {
     }
 }
 
-@Component({})
-export default class Login extends Vue {
-    title = "vue2-element-ts";
-    tipLink = "https://github.com/Hansen-hjs";
-    tipList = store.testUserList;
+export default defineComponent({
+    setup() {
+        const title = "vue3-element-ts";
+        const tipLink = "https://github.com/Hansen-hjs";
 
-    /** 背景信息 */
-    background = {
-        poster: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YXByZXZpZXdfaW1hZ2UucG5n.png",
-        video: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YS5tcDQ_p_p100_p_3D.mp4"
-    }
-    /** 登录信息 */
-    loginForm = {
-        username: "",
-        password: ""
-    }
-    loginRules = {
-        username: [
-            { required: true, trigger: "blur", validator: validateUsername }
-        ],
-        password: [
-            { required: true, trigger: "blur", validator: validatePass }
-        ]
-    }
-    loading = false;
-    pwdType = "password"
-    redirect = false;
-
-    switchInput() {
-        this.pwdType = this.pwdType === "password" ? "text" : "password";
-    }
-
-    /**
-     * 一键登录
-     * @param account 账号
-     */
-    setLoginInfo(account: string) {
-        this.loginForm.username = account;
-        this.loginForm.password = Math.random().toString(36).substr(2);
-        this.handleLogin(true);
-    }
-
-    /** 
-     * 点击登录 
-     * @param adopt 是否不校验直接通过
-    */
-    handleLogin(adopt: boolean) {
-        const elementForm: any = this.$refs["loginFormEl"];
-        const start = () => {
-            this.loading = true;
-            // console.log("用户登录信息：", this.loginForm);
-            apiUser.login(this.loginForm, res => {
-                // console.log("success", res);
-                this.loading = false;
-                openNextPage();
-            }, err => {
-                this.loading = false;
-                this.$message.error(err.msg);
-            });
+        /** 背景信息 */
+        const background = {
+            poster: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YXByZXZpZXdfaW1hZ2UucG5n.png",
+            video: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YS5tcDQ_p_p100_p_3D.mp4"
         }
-        if (adopt) {
-            return start();
-        }
-        elementForm.validate((valid: boolean) => {
-            if (valid) {
-                start();
-            }
+        /** 登录信息 */
+        const loginForm = reactive({
+            username: "",
+            password: ""
         })
+
+        /** 登录验证对象 */
+        const loginRules = {
+            username: [
+                { required: true, trigger: "blur", validator: validateUsername }
+            ],
+            password: [
+                { required: true, trigger: "blur", validator: validatePass }
+            ]
+        }
+
+        let loading = ref(false);
+
+        /** 密码输入框类型 */
+        let inputType = ref("password" as "text" | "password");
+
+        function switchInput() {
+            inputType.value = inputType.value === "password" ? "text" : "password";
+        }
+
+        /**
+         * 一键登录
+         * @param account 账号
+         */
+        function setLoginInfo(account: string) {
+            loginForm.username = account;
+            loginForm.password = Math.random().toString(36).substr(2);
+            handleLogin(true);
+        }
+
+        /** 登录表单 */
+        const loginFormEl: any = ref(null);
+
+        /** 
+         * 点击登录 
+         * @param adopt 是否不校验直接通过
+        */
+        function handleLogin(adopt: boolean) {
+            function start() {
+                loading.value = true;
+                // console.log("用户登录信息：", loginForm);
+                apiUser.login(loginForm, res => {
+                    // console.log("success", res);
+                    loading.value = false;
+                    openNextPage();
+                }, err => {
+                    loading.value = false;
+                    utils.showMessage.error(err.msg);
+                });
+            }
+            if (adopt) {
+                return start();
+            }
+            loginFormEl.value.validate((valid: boolean) => {
+                if (valid) {
+                    start();
+                }
+            })
+        }
+
+        return {
+            loginFormEl,
+            testUserList: store.testUserList,
+            title,
+            tipLink,
+            background,
+            loginForm,
+            loginRules,
+            loading,
+            inputType,
+            switchInput,
+            setLoginInfo,
+            handleLogin
+        }
     }
-}
+})
+
 </script>
 
 <style lang="scss">

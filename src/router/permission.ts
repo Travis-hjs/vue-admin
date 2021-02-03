@@ -12,35 +12,40 @@ const routerTo = {
 }
 
 // 权限管理
-router.beforeEach((to, from, next) => {
+router.beforeEach(function(to, from, next) {
     NProgress.start();
 
     if (store.userInfo.token) {
-        if (store.addRouters.length > 0) {
+        if (store.layoutRoute.add.length > 0) {
             next();
         } else {
             switch (store.userInfo.userType) {
-                case "admin":
-                    store.addRouters = admin;
+                case store.testUserList[0]:
+                    store.layoutRoute.add = admin;
                     break;
             
-                case "editor":
-                    store.addRouters = editor;
+                case store.testUserList[1]:
+                    store.layoutRoute.add = editor;
                     break;
             }
-            router.addRoutes(store.addRouters);
+            for (let i = 0; i < store.layoutRoute.add.length; i++) {
+                const item = store.layoutRoute.add[i];
+                router.addRoute(item);
+            }
             // 在最后加一个404重定向的路由进去
-            router.addRoutes([{ path: "*", redirect: "/404" }]);
-            store.completeRouters = base.concat(store.addRouters);
+            // learn https://my.oschina.net/qinghuo111/blog/4832051
+            // router.addRoute({ path: "*", redirect: "/404" });
+            router.addRoute({ path: "/:catchAll(.*)", redirect: "/404" });
+            store.layoutRoute.complete = base.concat(store.layoutRoute.add);
             next({ ...to, replace: true });
         }
     } else {
-        if (to.path === store.loginPath) {
+        if (to.path === "/login") {
             next();
         } else {
             routerTo.path = to.path;
             routerTo.query = to.query;
-            next({ path: store.loginPath });
+            next({ path: "/login" });
             NProgress.done();
         }
     }

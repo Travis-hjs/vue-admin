@@ -22,14 +22,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 import store from "../store";
 
-@Component({})
-export default class NoFind extends Vue {
-    private message = "404 Page Not Found";
-    private images = store.imageInfo;
-}
+export default defineComponent({
+    name: "404",
+    setup() {
+        const images = store.imageInfo;
+        let message = "404 Page Not Found";
+        return {
+            images,
+            message
+        }
+    }
+})
+
 </script>
 
 <style lang="scss">

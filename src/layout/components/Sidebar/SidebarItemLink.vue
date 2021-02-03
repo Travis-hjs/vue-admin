@@ -8,13 +8,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 import utils from "../../../utils";
 
-@Component({})
-export default class SidebarItemLink extends Vue {
-    @Prop({ required: true }) private to!: string;
-
-    private isExternal = utils.isExternal;
-}
+export default defineComponent({
+    name: "SidebarItemLink",
+    props: {
+        to: {
+            type: String,
+            required: true
+        }
+    },
+    setup() {
+        return {
+            isExternal: utils.isExternal
+        }
+    }
+})
 </script>

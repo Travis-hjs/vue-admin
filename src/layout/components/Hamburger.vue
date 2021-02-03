@@ -5,16 +5,26 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 
-@Component({})
-export default class Hamburger extends Vue {
-    @Prop({ default: false }) private isActive!: boolean;
+export default defineComponent({
+    name: "Hamburger",
+    props: {
+        isActive: {
+            type: Boolean,
+            default: false
+        }
+    },
+    setup(props, context) {
+        function toggleClick() {
+            context.emit("toggleClick");
+        }
 
-    private toggleClick() {
-        this.$emit("toggleClick");
+        return {
+            toggleClick
+        }
     }
-}
+})
 </script>
 
 <style lang="scss">

@@ -4,7 +4,7 @@
             <div class="rightPanel-background" v-show="show" @click="switchShow(true)"></div>
         </transition>
         <div :class="['rightPanel', show ? 'rightPanel-show' : null]">
-            <div class="handle-button" :style="{'top': buttonTop + 'px','background-color': pageState.theme}" @click="switchShow(false)">
+            <div class="handle-button" :style="{'top': buttonTop + 'px','background-color': layoutState.theme}" @click="switchShow(false)">
                 <i :class="[show ? 'el-icon-close' : 'el-icon-setting']" />
             </div>
             <div class="rightPanel-items">
@@ -15,54 +15,65 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
 import store from "../../store";
 
-const body = document.body;
+export default defineComponent({
+    name: "RightPanel",
+    props: {
+        clickNotClose: {
+            type: Boolean,
+            default: false
+        },
+        buttonTop: {
+            type: Number,
+            default: 250
+        }
+    },
+    setup(props, context) {
+        const body = document.body;
+        const layoutState = store.layoutState;
+        let show = ref(false);
+        
+        watch(show, function(value) {
+            if (value) {
+                body.classList.add("showRightPanel");
+            } else {
+                body.classList.remove("showRightPanel");
+            }
+        })
 
-@Component({})
-export default class RightPanel extends Vue {
-    @Prop({ default: false }) private clickNotClose!: boolean;
-    @Prop({ default: 250 }) private buttonTop!: number;
+        /** 插入到body的顶层节点中，保证层级在最上面 */
+        function insertToBody() {
+            // const elx = context.$refs.elRightPanel as HTMLElement;
+            // body.insertBefore(elx, body.firstChild);
+        }
 
-    readonly pageState = store.layoutState;
+        /**
+         * 切换显示
+         * @param isMask 是否为遮罩层点击
+         */
+        function switchShow(isMask = false) {
+            if (isMask && props.clickNotClose) return; 
+            show.value = !show.value;
+        }
 
-    private show = false;
+        onMounted(function() {
+            insertToBody();
+        })
 
-    @Watch("show")
-    private onShowChange(value: boolean) {
-        if (value) {
-            body.classList.add("showRightPanel");
-        } else {
-            body.classList.remove("showRightPanel");
+        onUnmounted(function() {
+            // const elx = context.$refs.elRightPanel as HTMLElement;
+            // elx.remove();
+        })
+
+        return {
+            layoutState,
+            show,
+            switchShow
         }
     }
-
-    /** 插入到body的顶层节点中，保证层级在最上面 */
-    private insertToBody() {
-        const elx = this.$refs.elRightPanel as HTMLElement;
-        body.insertBefore(elx, body.firstChild);
-    }
-
-    /**
-     * 切换显示
-     * @param isMask 是否为遮罩层点击
-     */
-    private switchShow(isMask = false) {
-        if (isMask && this.clickNotClose) return; 
-        this.show = !this.show;
-    }
-
-    mounted() {
-        this.insertToBody();
-    }
-
-    beforeDestroy() {
-        const elx = this.$refs.elRightPanel as HTMLElement;
-        elx.remove();
-    }
-
-}
+})
 </script>
 
 <style lang="scss">

@@ -5,19 +5,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 import HelloWorld from "../../components/HelloWorld.vue";
 
-@Component({
+export default defineComponent({
     components: {
         HelloWorld
+    },
+    setup() {
+        const content = "首页";
+        return {
+            content
+        }
     }
 })
-export default class Home extends Vue {
-    content = "首页";
-}
 </script>
-
-<style>
-
-</style>

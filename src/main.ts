@@ -1,29 +1,31 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
+import SvgIcon from "./icons/index.vue"; 
 import router from "./router";
-import ElementUI from "element-ui";
 import utils from "./utils";
+import ElementUI from "element-plus";
 // element-variables.scss里面已经引入了，所以这里可以不用
 // import "element-ui/lib/theme-chalk/index.css";
-import "./icons";
-import "./router/permission";
 import "./styles/element-variables.scss";
 import "./styles/index.scss";
+import "./router/permission";
 
-Vue.use(ElementUI);
+const app = createApp(App);
 
-Vue.config.productionTip = false;
+// 注册全局组件: `svg-icon`
+app.component("svg-icon", SvgIcon);
 
 // 添加一个自定义指令`v-copy`点击复制内容
-Vue.directive("copy", {
-    inserted(el, binding) {
+app.directive("copy", {
+    mounted(el: HTMLElement, binding) {
         el.addEventListener("click", function () {
-            utils.copyText(binding.value, () => ElementUI.Message.success("复制成功"), tip => ElementUI.Message.warning(tip));
+            utils.copyText(binding.value, () => utils.showMessage.success("复制成功"), tip => utils.showMessage.warning(tip));
         });
     }
 })
 
-new Vue({
-    router,
-    render: h => h(App)
-}).$mount("#app")
+app.use(ElementUI);
+
+app.use(router);
+
+app.mount("#app");

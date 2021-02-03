@@ -1,5 +1,5 @@
-import config from "../modules/Config";
-import { Message } from "element-ui";
+import config from "./Config";
+import utils from "./index";
 import { 
     AjaxParams, 
     ApiResult
@@ -93,8 +93,11 @@ function getResultInfo(result: { statusCode: number, data: any }) {
             break;
         case 400:
             info.msg = "接口传参不正确";
-        case 403:
+        case 401:
             info.msg = "登录已过期";
+            break;
+        case 403:
+            info.msg = "暂无权限";
             break;
         case 404:
             info.msg = "接口不存在";
@@ -144,7 +147,7 @@ export default function request(
                     info.data = JSON.parse(err.response);
                 }
                 // 全局的请求错误提示，不需要可以去掉
-                Message.error(info.msg); 
+                utils.showError(info.msg);
                 fail && fail(info);
                 resolve(info);
             },
@@ -152,7 +155,7 @@ export default function request(
                 console.warn("XMLHttpRequest 请求超时 !!!");
                 const info = getResultInfo({ statusCode: config.requestOvertime, data: null });
                 // 全局的请求超时提示，不需要可以去掉
-                Message.warning(info.msg);
+                utils.showWarning(info.msg);
                 fail && fail(info);
                 resolve(info);
             }

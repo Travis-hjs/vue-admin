@@ -1,18 +1,18 @@
 <template>
-    <div id="app">
-        <router-view />
-    </div>
+    <router-view />
 </template>
-
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent, onMounted } from "vue";
 
-@Component({})
-export default class App extends Vue {
-    
-}
+export default defineComponent({
+    name: "App",
+    setup() {
+        // onMounted(() => {
+        //     console.log("App.vue onMounted");
+        // })
+    }
+})
 </script>
-
 <style lang="scss">
 
 </style>

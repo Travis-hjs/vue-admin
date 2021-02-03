@@ -1,8 +1,10 @@
+import { reactive } from "vue";
 import ModuleLayout from "./Layout";
+import utils from "../utils";
 import { DeepReadonly, UserInfoType } from "../utils/interfaces";
 
 /** 用户信息缓存字段 */
-const userInfoCacheName = "store-user-info";
+const cacheName = "store-user-info";
 
 /** 创建用户信息 */
 function createUserInfo(): DeepReadonly<UserInfoType> {
@@ -17,11 +19,11 @@ function createUserInfo(): DeepReadonly<UserInfoType> {
 class ModuleStore extends ModuleLayout {
     constructor() {
         super();
-        this.init();
+        this.initUserInfo();
     }
 
     /** 页面图片资源 */
-    get imageInfo () {
+    get imageInfo() {
         return {
             /** 404图片 */
             image404: require("@/assets/404-images/404.png"),
@@ -33,46 +35,43 @@ class ModuleStore extends ModuleLayout {
             image401ewizardClap: "https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646"
         }
     }
-    
-    /** 登录路由路径 */
-    readonly loginPath = "/login";
-
-    /** 测试用户类型 */
-    readonly testUserList = ["admin", "editor"];
 
     /** 用户信息（包含登录状态） */
-    readonly userInfo = createUserInfo();
+    readonly userInfo = reactive(createUserInfo());
 
     /** 初始化缓存信息 */
-    private init() {
-        const cacheInfo = sessionStorage.getItem(userInfoCacheName);
+    private initUserInfo() {
+        const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            this.modifyData(this.userInfo, value);
+            utils.modifyData(this.userInfo, value);
         }
     }
 
     /**
      * 更新当前的`userInfo`值并缓存到本地
-     * @param value 缓存的对象
+     * @param value 更新内容
      */
     updateUserInfo(value: Partial<UserInfoType>) {
-        this.modifyData(this.userInfo, value);
-        sessionStorage.setItem(userInfoCacheName, JSON.stringify(this.userInfo));
+        utils.modifyData(this.userInfo, value);
+        sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
     }
 
     /** 清空缓存信息 */
     removeUserState() {
-        this.modifyData(this.userInfo, createUserInfo());
-        sessionStorage.removeItem(userInfoCacheName);
+        utils.modifyData(this.userInfo, createUserInfo());
+        sessionStorage.removeItem(cacheName);
     }
 
+    /** 测试用户类型 */
+    readonly testUserList = ["admin", "editor"];
+    
 }
 
 /**
- * 状态管理模块
+ * 状态管理模块实例对象
  * 
- * [你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
+ * 参考[你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
 */
 const store = new ModuleStore();
 

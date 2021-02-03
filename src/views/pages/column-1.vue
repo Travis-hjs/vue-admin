@@ -5,13 +5,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-@Component({})
-export default class Column1 extends Vue {
-    content = "栏目-1"
-}
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    setup() {
+        const content = "栏目-1";
+        return {
+            content
+        }
+    }
+})
 </script>
-
-<style>
-
-</style>

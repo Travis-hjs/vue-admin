@@ -1,14 +1,14 @@
 <template>
     <div :class="classInfo" class="app-wrapper clearfix">
-        <div v-if="classInfo.mobile && pageState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
+        <div v-if="classInfo.mobile && layoutState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
         <Sidebar class="sidebar-container" />
-        <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
-            <div :class="{'fixed-header': pageState.fixedHeader}">
+        <div :class="{'hasTagsView': layoutState.showHistoryView}" class="main-container">
+            <div :class="{'fixed-header': layoutState.fixedHeader}">
                 <Navbar />
-                <TagsView v-if="pageState.showHistoryView" />
+                <TagsView v-if="layoutState.showHistoryView" />
             </div>
             <AppMain />
-            <RightPanel v-if="pageState.showSettings">
+            <RightPanel v-if="layoutState.showSettings">
                 <Settings />
             </RightPanel>
         </div>
@@ -16,7 +16,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { defineComponent, computed, watch, onMounted, onUnmounted } from "vue";
+import { useRoute } from "vue-router";
 import AppMain from "./components/AppMain.vue";
 import Navbar from "./components/Navbar.vue";
 import RightPanel from "./components/RightPanel.vue";
@@ -25,7 +26,8 @@ import Sidebar from "./components/Sidebar/index.vue";
 import TagsView from "./components/TagsView.vue";
 import store from "../store";
 
-@Component({
+export default defineComponent({
+    name: "Layout",
     components: {
         AppMain,
         Navbar,
@@ -33,66 +35,70 @@ import store from "../store";
         Settings,
         Sidebar,
         TagsView
-    }
-})
-export default class Layout extends Vue {
-    /** 页面状态 */
-    private pageState = store.layoutState;
+    },
+    setup() {
+        const route = useRoute();
+        const layoutState = store.layoutState;
+        const classInfo = computed(function() {
+            return {
+                hideSidebar: !layoutState.sidebarOpen,
+                openSidebar: layoutState.sidebarOpen,
+                withoutAnimation: layoutState.sidebarWithoutAnimation,
+                mobile: layoutState.device === "mobile"
+            }
+        })
 
-    get classInfo() {
-        return {
-            hideSidebar: !this.pageState.sidebarOpen,
-            openSidebar: this.pageState.sidebarOpen,
-            withoutAnimation: this.pageState.sidebarWithoutAnimation,
-            mobile: this.pageState.device === "mobile"
-        }
-    }
-
-    @Watch("$route")
-    private onRouteChange() {
-        if (this.pageState.device === "mobile" && this.pageState.sidebarOpen) {
-            this.pageState.sidebarWithoutAnimation = false;
-        }
-    }
-
-    /** 切换侧边栏 */
-    private switchSidebar() {
-        this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
-    }
-
-    private isMobile() {
-        const width = document.body.clientWidth;
-        return width < 900;
-    }
-
-    /** 检测窗口变动并更新侧边栏的样式切换 */
-    private checkResize() {
-        if (!document.hidden) {
-            const isMobile = this.isMobile();
-            this.pageState.device = isMobile ? "mobile" : "desktop";
-            if (isMobile) {
-                this.pageState.sidebarWithoutAnimation = true;
-                this.pageState.sidebarOpen = false;
+        function onRouteChange() {
+            if (layoutState.device === "mobile" && layoutState.sidebarOpen) {
+                layoutState.sidebarWithoutAnimation = false;
             }
         }
-    }
 
-    beforeMount() {
-        window.addEventListener("resize", this.checkResize);
-    }
+        // 监听路由变动
+        watch(route, onRouteChange);
 
-    beforeDestroy() {
-        window.removeEventListener("resize", this.checkResize);
-    }
+        function isMobile() {
+            const width = document.body.clientWidth;
+            return width < 900;
+        }
 
-    mounted() {
-        const isMobile = this.isMobile();
-        if (isMobile) {
-            this.pageState.device = "mobile";
-            this.pageState.sidebarWithoutAnimation = true;
+        /** 切换侧边栏 */
+        function switchSidebar() {
+            layoutState.sidebarOpen = !layoutState.sidebarOpen;
+        }
+        
+        /** 检测窗口变动并更新侧边栏的样式切换 */
+        function checkResize() {
+            if (!document.hidden) {
+                const mobile = isMobile();
+                layoutState.device = mobile ? "mobile" : "desktop";
+                if (mobile) {
+                    layoutState.sidebarWithoutAnimation = true;
+                    layoutState.sidebarOpen = false;
+                }
+            }
+        }
+
+        onUnmounted(function() {
+            window.removeEventListener("resize", checkResize);
+        })
+
+        onMounted(function() {
+            const mobile = isMobile();
+            if (mobile) {
+                layoutState.device = "mobile";
+                layoutState.sidebarWithoutAnimation = true;
+            }
+            window.addEventListener("resize", checkResize);
+        })
+        
+        return {
+            layoutState,
+            classInfo,
+            switchSidebar
         }
     }
-}
+})
 </script>
 
 <style lang="scss">

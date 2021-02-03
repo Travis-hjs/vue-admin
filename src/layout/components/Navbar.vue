@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        <Hamburger :is-active="pageState.sidebarOpen" class="hamburger-container" @toggleClick="toggleSideBar()" />
+        <Hamburger :is-active="layoutState.sidebarOpen" class="hamburger-container" @toggleClick="toggleSideBar()" />
         <Breadcrumb class="breadcrumb-container" />
         <div class="right-menu">
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -8,65 +8,71 @@
                     <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" />
                     <i class="el-icon-caret-bottom" />
                 </div>
-                <el-dropdown-menu slot="dropdown">
-                    <router-link to="/profile/">
-                        <el-dropdown-item>个人中心</el-dropdown-item>
-                    </router-link>
-                    <router-link to="/">
-                        <el-dropdown-item>首页</el-dropdown-item>
-                    </router-link>
-                    <a target="_blank" href="https://github.com/Hansen-hjs/vue-admin">
-                        <el-dropdown-item>项目地址</el-dropdown-item>
-                    </a>
-                    <el-dropdown-item divided>
-                        <div @click="logout">退出登录</div>
-                    </el-dropdown-item>
-                </el-dropdown-menu>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <router-link to="/profile/">
+                            <el-dropdown-item>个人中心</el-dropdown-item>
+                        </router-link>
+                        <router-link to="/">
+                            <el-dropdown-item>首页</el-dropdown-item>
+                        </router-link>
+                        <a target="_blank" href="https://github.com/Hansen-hjs/vue-admin">
+                            <el-dropdown-item>项目地址</el-dropdown-item>
+                        </a>
+                        <el-dropdown-item divided>
+                            <div @click="logout()">退出登录</div>
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
             </el-dropdown>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { defineComponent, ref, watch } from "vue";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import store from "../../store";
 
-@Component({
+export default defineComponent({
+    name: "Navbar",
     components: {
         Hamburger,
         Breadcrumb,
+    },
+    setup() {
+        const avatar = ref("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        const layoutState = store.layoutState;
+
+        watch(layoutState, function() {
+            store.saveLayout();
+        }, { deep: true })
+
+        function toggleSideBar() {
+            layoutState.sidebarOpen = !layoutState.sidebarOpen;
+            layoutState.sidebarWithoutAnimation = false;
+        }
+
+        function logout() {
+            store.removeUserState();
+            // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
+            layoutState.historyViews = [];
+            // 退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
+            // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
+            // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
+            location.reload();
+        }
+
+        return {
+            layoutState,
+            avatar,
+            toggleSideBar,
+            logout
+        }
     }
 })
-export default class Navbar extends Vue {
 
-    readonly pageState = store.layoutState;
-
-    @Watch("pageState", {
-        deep: true
-    })
-    private onLayoutChange() {
-        store.saveLayout();
-    }
-
-    private avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
-
-    private toggleSideBar() {
-        this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
-        this.pageState.sidebarWithoutAnimation = false;
-    }
-
-    private logout() {
-        store.removeUserState();
-        // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
-        store.layoutState.historyViews = [];
-        // 退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
-        // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
-        // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
-        location.reload();
-    }
-}
 </script>
 
 <style lang="scss">

@@ -1,18 +1,23 @@
-import { ModuleModifyObject } from "../modules/ModifyObject";
+import { reactive } from "vue";
+import utils from "../utils";
 import {
-    LayoutStateType,
-    RouteItem
+    layoutRouteType,
+    LayoutStateKeys,
+    LayoutStateType
 } from "../utils/interfaces";
 
 const cacheName = "ModuleLayoutInfo";
-export default class ModuleLayout extends ModuleModifyObject {
+
+/**
+ * `layout`状态管理模块
+ */
+export default class ModuleLayout {
     constructor() {
-        super();
         this.initLayout();
     }
 
     /** `layout`操作状态 */
-    public readonly layoutState: LayoutStateType = {
+    readonly layoutState = reactive<LayoutStateType>({
         sidebarTextTheme: false,
         showSidebarLogo: true,
         fixedHeader: false,
@@ -23,32 +28,35 @@ export default class ModuleLayout extends ModuleModifyObject {
         historyViews: [],
         device: "desktop",
         theme: "#409EFF"
+    });
+
+    /**
+     * `layout`路由列表对象
+     * @description 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
+    */
+    readonly layoutRoute: layoutRouteType = {
+        add: [],
+        complete: []
     }
-
-    /** 动态添加的权限路由 */
-    public addRouters: Array<RouteItem> = [];
-
-    /** (基础路由+动态路由)列表 */
-    public completeRouters: Array<RouteItem> = [];
 
     /** 初始化`layout`操作状态 */
     private initLayout() {
         const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            this.modifyData(this.layoutState, value);
+            utils.modifyData(this.layoutState, value);
         }
     }
 
     /** 保存`layout`操作状态 */
-    public saveLayout() {
+    saveLayout() {
         // 这个方法我用在了`Navbar`组件中用`watch`监听了数据的变动然后执行
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
-        const value = this.layoutState;
         const data: any = {};
-        for (const key in value) {
-            if (key === "historyViews") {
-                data[key] = value["historyViews"].map(item => {
+        for (const key in this.layoutState) {
+            const k = key as LayoutStateKeys;
+            if (k === "historyViews") {
+                data[k] = this.layoutState[k].map(item => {
                     return {
                         name: item.name,
                         meta: {...item.meta},
@@ -57,11 +65,10 @@ export default class ModuleLayout extends ModuleModifyObject {
                     }
                 });
             } else {
-                data[key] = value[key as keyof LayoutStateType];
+                data[k] = this.layoutState[k];
             }
         }
         // console.log(JSON.stringify(data));
         sessionStorage.setItem(cacheName, JSON.stringify(data));
     }
-
 }

@@ -6,6 +6,7 @@ import {
     UserInfoType 
 } from "../utils/interfaces";
 
+
 class ApiUser {
 
     /**
@@ -16,7 +17,7 @@ class ApiUser {
      */
     login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: ApiResult) => void) {
         /** 模拟登录 */
-        const testLogin = () => {
+        function testLogin() {
             /** 缓存信息  */
             const info: UserInfoType = {
                 name: params.username,

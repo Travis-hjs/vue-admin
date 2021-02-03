@@ -24,29 +24,40 @@
                 <img :src="images.image401" class="some-gif" width="313" height="428" alt="Girl has dropped her ice cream." />
             </el-col>
         </el-row>
-        <el-dialog :visible.sync="dialogVisible" title="随便看">
+        <el-dialog :visible="dialogVisible" title="随便看">
             <img :src="images.image401ewizardClap" class="some-img" />
         </el-dialog>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 
-@Component({})
-export default class NoPower extends Vue {
-    private dialogVisible = false;
-    private images = store.imageInfo;
+export default defineComponent({
+    name: "401",
+    setup() {
+        let dialogVisible = ref(false);
+        const images = store.imageInfo;
 
-    private back() {
-        if (this.$route.query.noGoBack) {
-            this.$router.push({ path: "/" });
-        } else {
-            this.$router.go(-1);
+        function back() {
+            const route = useRoute();
+            const router = useRouter();
+            if (route.query.noGoBack) {
+                router.push({ path: "/" });
+            } else {
+                router.go(-1);
+            }
+        }
+
+        return {
+            dialogVisible,
+            back,
+            images
         }
     }
-}
+})
 </script>
 
 <style lang="scss">

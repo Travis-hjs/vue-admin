@@ -1,18 +1,18 @@
 <template>
-    <div id="tags-view-container" class="tags-view-container">
+    <div class="tags-view-container" ref="el">
         <ScrollPane ref="scrollPane" class="tags-view-wrapper">
             <router-link
-                v-for="tag in pageState.historyViews"
+                v-for="tag in layoutState.historyViews"
                 ref="tag"
                 :key="tag.path"
                 :class="isActive(tag) ? 'active' : ''"
                 :to="tag.path"
                 tag="span"
                 class="tags-view-item"
-                @contextmenu.prevent.native="openMenu(tag, $event)"
+                @contextmenu.prevent="openMenu(tag, $event)"
             >
                 {{ tag.meta.title }}
-                <span v-show="pageState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+                <span v-show="layoutState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
             </router-link>
         </ScrollPane>
         <ul v-show="visible" :style="{left: left + 'px', top: top+'px'}" class="contextmenu">
@@ -24,144 +24,161 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import router from "../../router";
 import ScrollPane from "./ScrollPane.vue";
 import store from "../../store";
 import { RouteItem } from "../../utils/interfaces";
 
-@Component({
+export default defineComponent({
     name: "TagsView",
     components: {
         ScrollPane
+    },
+    setup(props, context) {
+        const route = useRoute();
+        const layoutState = store.layoutState;
+        /** 是否隐藏右键菜单 */
+        let visible = ref(false);
+        /** 鼠标位置`Y` */
+        let top = ref(0);
+        /** 鼠标位置`X` */
+        let left = ref(0);
+        /** 选择路由对象 */
+        let selectedTag = reactive({
+            path: ""
+        } as RouteItem);
+
+        /** 添加记录 */
+        function addhistoryViews() {
+            const hasItem = layoutState.historyViews.some(item => item.path === route.path);
+            // console.log(hasItem, route.path);
+            if (!hasItem && !route.meta.noCache) {
+                // 参考`store.saveLayout`需要的字段
+                layoutState.historyViews.push({
+                    name: route.name,
+                    meta: route.meta,
+                    path: route.path
+                } as any);
+            }
+        }
+
+        /** 关闭窗口 */
+        function closeMenu() {
+            visible.value = false;
+        }
+
+        watch(route, addhistoryViews)
+
+        watch(visible, function(value) {
+            if (value) {
+            document.body.addEventListener("click", closeMenu);
+        } else {
+            document.body.removeEventListener("click", closeMenu);
+        }
+        })
+
+        /**
+         * 是否高亮
+         * @param item item路由对象
+         */
+        function isActive(item: RouteItem) {
+            return item.path === route.path;
+        }
+
+        /**
+         * 找到对应路由`item`索引
+         * @param item item路由对象
+         */
+        function findItemIndex(item: RouteItem) {
+            let index = 0;
+            const list = layoutState.historyViews;
+            for (let i = 0; i < list.length; i++) {
+                const obj = list[i];
+                if (obj.path === item.path) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        }
+        
+        /**
+         * 关闭选中
+         * @param item item路由对象
+         */
+        function closeSelectedTag(item: RouteItem) {
+            if (layoutState.historyViews.length == 0) return;
+            const index = findItemIndex(item);
+            layoutState.historyViews.splice(index, 1);
+            if (isActive(item)) {
+                if (layoutState.historyViews.length) {
+                    router.push({ path: layoutState.historyViews[layoutState.historyViews.length - 1].path });
+                }
+            }
+        }
+
+        /** 关闭其他 */
+        function closeOthersTags() {
+            if (selectedTag.path !== route.path) {
+                router.push(selectedTag.path);
+            }
+            layoutState.historyViews = [selectedTag];
+        }
+
+        /** 关闭所有 */
+        function closeAllTags() {
+            if (layoutState.historyViews.length > 1) {
+                layoutState.historyViews = [];
+                router.push('/');
+            }
+        }
+
+        /** 当前组件节点 */
+        const el = ref<HTMLElement>(null as any);
+
+        /**
+         * 右键打开菜单
+         * @param item 路由对象
+         * @param e 鼠标事件
+         */
+        function openMenu(item: RouteItem, e: MouseEvent) {
+            const menuMinWidth = 105;
+            const offsetLeft = el.value.getBoundingClientRect().left; // container margin left
+            const offsetWidth = el.value.offsetWidth; // container width
+            const maxLeft = offsetWidth - menuMinWidth; // left boundary
+            const _left = e.clientX - offsetLeft + 15; // 15: margin right
+            if (_left > maxLeft) {
+                left.value = maxLeft;
+            } else {
+                left.value = _left;
+            }
+            top.value = e.clientY;
+            visible.value = true;
+            selectedTag = item;
+        }
+
+
+        onMounted(function() {
+            addhistoryViews();
+        })
+
+        return {
+            layoutState,
+            visible,
+            top,
+            left,
+            selectedTag,
+            isActive,
+            closeSelectedTag,
+            closeOthersTags,
+            closeAllTags,
+            openMenu,
+            el
+        }
     }
 })
-export default class TagsView extends Vue {
-    /** 是否隐藏右键菜单 */
-    private visible: boolean = false;
-    /** 鼠标位置`Y` */
-    private top: number = 0;
-    /** 鼠标位置`X` */
-    private left: number = 0;
-    /** 选择路由对象 */
-    private selectedTag: RouteItem = {
-        path: ""
-    };
-    
-    private pageState = store.layoutState;
-
-    @Watch("$route")
-    private onRouteChange() {
-        this.addhistoryViews();
-    }
-
-    @Watch("visible")
-    private onVisibleChange(value: boolean) {
-        if (value) {
-            document.body.addEventListener("click", this.closeMenu);
-        } else {
-            document.body.removeEventListener("click", this.closeMenu);
-        }
-    }
-
-    // methods ===========================================================
-
-    /**
-     * 是否高亮
-     * @param item item路由对象
-     */
-    private isActive(item: RouteItem) {
-        return item.path === this.$route.path;
-    }
-
-    /** 添加记录 */
-    private addhistoryViews() {
-        const hasItem = this.pageState.historyViews.some(item => item.path === this.$route.path);
-        // console.log(hasItem, this.$route.path);
-        if (!hasItem && !this.$route.meta.noCache) {
-            this.pageState.historyViews.push(this.$route);
-        }
-    }
-
-    /**
-     * 找到对应路由`item`索引
-     * @param item item路由对象
-     */
-    private findItemIndex(item: RouteItem) {
-        let index = 0;
-        const list = this.pageState.historyViews;
-        for (let i = 0; i < list.length; i++) {
-            const obj = list[i];
-            if (obj.path === item.path) {
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-    
-    /**
-     * 关闭选中
-     * @param item item路由对象
-     */
-    private closeSelectedTag(item: RouteItem) {
-        if (this.pageState.historyViews.length == 0) return;
-        const index = this.findItemIndex(item);
-        this.pageState.historyViews.splice(index, 1);
-        if (this.isActive(item)) {
-            if (this.pageState.historyViews.length) {
-                this.$router.push({ path: this.pageState.historyViews[this.pageState.historyViews.length - 1].path });
-            }
-        }
-    }
-
-    /** 关闭其他 */
-    private closeOthersTags() {
-        if (this.selectedTag.path !== this.$route.path) {
-            this.$router.push(this.selectedTag.path);
-        }
-        this.pageState.historyViews = [this.selectedTag];
-    }
-
-    /** 关闭所有 */
-    private closeAllTags() {
-        if (this.pageState.historyViews.length > 1) {
-            this.pageState.historyViews = [];
-            this.$router.push('/');
-        }
-    }
-
-    /**
-     * 右键打开菜单
-     * @param item 路由对象
-     * @param e 鼠标事件
-     */
-    private openMenu(item: RouteItem, e: MouseEvent) {
-        const menuMinWidth = 105;
-        const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
-        const offsetWidth = (this.$el as HTMLElement).offsetWidth; // container width
-        const maxLeft = offsetWidth - menuMinWidth; // left boundary
-        const left = e.clientX - offsetLeft + 15; // 15: margin right
-        if (left > maxLeft) {
-            this.left = maxLeft;
-        } else {
-            this.left = left;
-        }
-        this.top = e.clientY;
-        this.visible = true;
-        this.selectedTag = item;
-    }
-
-    /** 关闭窗口 */
-    private closeMenu() {
-        this.visible = false;
-    }
-
-    // life cycle =========================================================
-
-    mounted() {
-        this.addhistoryViews();
-    }
-}
 </script>
 
 <style lang="scss">

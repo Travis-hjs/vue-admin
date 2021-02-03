@@ -1,23 +1,23 @@
 <template>
-    <div :class="{'has-logo': pageState.showSidebarLogo}">
-        <SidebarLogo v-if="pageState.showSidebarLogo" :collapse="!pageState.sidebarOpen" />
-        <el-scrollbar wrap-class="sidebar-scrollbar" :style="{'background-color' : variables.menuBg}">
+    <div :class="{'has-logo': layoutState.showSidebarLogo}">
+        <SidebarLogo v-if="layoutState.showSidebarLogo" :collapse="!layoutState.sidebarOpen" />
+        <el-scrollbar wrap-class="sidebar-scrollbar" :style="{'background-color' : variable.menuBg}">
             <el-menu
                 :default-active="activeMenu"
-                :collapse="!pageState.sidebarOpen"
-                :background-color="variables.menuBg"
-                :text-color="variables.menuText"
+                :collapse="!layoutState.sidebarOpen"
+                :background-color="variable.menuBg"
+                :text-color="variable.menuText"
                 :active-text-color="menuActiveTextColor"
                 :unique-opened="false"
                 :collapse-transition="false"
                 mode="vertical"
             >
                 <SidebarItem
-                    v-for="route in routes"
+                    v-for="route in layoutRoute.complete"
                     :key="route.path"
                     :item="route"
                     :base-path="route.path"
-                    :is-collapse="!pageState.sidebarOpen"
+                    :is-collapse="!layoutState.sidebarOpen"
                 />
             </el-menu>
             <!-- 不知是不是`el-scrollbar`组件的原因，滚动高度会小于实际高度，所以这里要增加一个导航高度去补回来 -->
@@ -27,47 +27,52 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent, reactive, computed } from "vue";
+import { useRoute } from "vue-router";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarLogo from "./SidebarLogo.vue";
 import store from "../../../store";
 import variables from "../../../styles/variables.scss";
 
-@Component({
+export default defineComponent({
+    name: "SideBar",
     components: {
         SidebarItem,
         SidebarLogo
+    },
+    setup(props, context) {
+        const route = useRoute();
+        
+        const layoutState = store.layoutState;
+
+        const variable = reactive(variables);
+
+        const menuActiveTextColor = computed(function() {
+            if (layoutState.sidebarTextTheme) {
+                return layoutState.theme;
+            } else {
+                return variable.menuActiveText;
+            }
+        });
+
+        const activeMenu = computed(function () {
+            const { meta, path } = route;
+            // 判断是否激活的菜单
+            if (meta.activeMenu) {
+                return meta.activeMenu;
+            }
+            return path;
+        })
+
+        return {
+            layoutState,
+            layoutRoute: store.layoutRoute,
+            variable,
+            menuActiveTextColor,
+            activeMenu
+        }
     }
 })
-export default class SideBar extends Vue {
-
-    readonly variables = variables;
-
-    readonly pageState = store.layoutState;
-
-    readonly routes = store.completeRouters;
-
-    get menuActiveTextColor() {
-        if (store.layoutState.sidebarTextTheme) {
-            return store.layoutState.theme;
-        } else {
-            return this.variables.menuActiveText;
-        }
-    }
-
-    get activeMenu() {
-        const { meta, path } = this.$route;
-        // 判断是否激活的菜单
-        if (meta.activeMenu) {
-            return meta.activeMenu;
-        }
-        return path;
-    }
-
-    // mounted() {
-    //     console.log("variables", variables);
-    // }
-}
 </script>
 
 <style lang="scss">

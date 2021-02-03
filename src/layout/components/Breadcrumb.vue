@@ -1,8 +1,8 @@
 <template>
     <el-breadcrumb class="app-breadcrumb" separator="/">
         <transition-group name="breadcrumb">
-            <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
-                <span v-if="item.redirect === 'noredirect' || index === breadcrumbs.length - 1" class="no-redirect">{{ item.meta.title }}</span>
+            <el-breadcrumb-item v-for="(item, index) in list" :key="item.path">
+                <span v-if="index === list.length - 1" class="no-redirect">{{ item.meta.title }}</span>
                 <router-link v-else :to="item.path">{{ item.meta.title }}</router-link>
             </el-breadcrumb-item>
         </transition-group>
@@ -10,30 +10,36 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
-import { RouteRecord, Route } from "vue-router";
+import { defineComponent, watch, ref } from "vue";
+import { useRoute, RouteLocationMatched } from "vue-router";
 
-@Component({})
-export default class Breadcrumb extends Vue {
-    private breadcrumbs: Array<RouteRecord> = [];
+export default defineComponent({
+    name: "Breadcrumb",
+    setup() {
+        const route = useRoute();
+        /** 路由列表 */
+        let list = ref([] as Array<RouteLocationMatched>);
+        
+        function updateList() {
+            const matched = route.matched.filter(item => item.meta && item.meta.title);
+            // console.log(matched);
+            list.value = matched; // matched.filter(item => item.meta && item.meta.title);
+        }
 
-    @Watch("$route")
-    private onRouteChange(route: Route) {
-        // 如果转到重定向页面，就不更新面包屑
-        if (route.path.startsWith("/redirect/")) return;
-        this.getBreadcrumb();
+        // 监听路由变动
+        watch(route, function(res) {
+            // 如果转到重定向页面，就不更新面包屑
+            if (res.path.startsWith("/redirect/")) return;
+            updateList();
+        });
+
+        updateList();
+
+        return {
+            list
+        }
     }
-
-    created() {
-        this.getBreadcrumb();
-    }
-
-    private getBreadcrumb() {
-        const matched = this.$route.matched.filter(item => item.meta && item.meta.title);
-        this.breadcrumbs = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false);
-    }
-
-}
+})
 </script>
 
 <style lang="scss">

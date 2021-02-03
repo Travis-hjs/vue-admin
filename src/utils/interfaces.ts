@@ -1,4 +1,4 @@
-import { RouteConfig } from "vue-router";
+import { RouteRecordRaw } from "vue-router";
 
 /** 深层递归所有属性为可选 */
 export type DeepPartial<T> = {
@@ -67,13 +67,12 @@ export interface UserInfoType {
     userType: "admin" | "editor" | ""
 }
 
-/** 自定义的路由类型-继承`RouteConfig` */
-export interface RouteItem extends RouteConfig {
+/** 自定义的路由类型-继承`RouteRecordRaw` */
+export type RouteItem = {
     /** 完整地址 */
     fullPath?: string
-}
+} & RouteRecordRaw
 
-/** `layout`状态类型 */
 export interface LayoutStateType {
     /** 显示设置 */
     showSettings: boolean
@@ -96,6 +95,15 @@ export interface LayoutStateType {
     /** 主题颜色 */
     theme: string
 }
+
+export interface layoutRouteType {
+    /** 动态添加的权限路由 */
+    add: Array<RouteItem>
+    /** (基础路由+动态路由)列表 */
+    complete: Array<RouteItem>
+}
+
+export type LayoutStateKeys = keyof LayoutStateType;
 
 /** 运算符号 */
 export type NumberSymbols = "+" | "-"| "*" | "/";

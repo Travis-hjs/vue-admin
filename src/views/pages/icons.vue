@@ -7,7 +7,9 @@
             <el-tab-pane label="Icons">
                 <div v-for="item of svgIcons" :key="item" v-copy="getSvgIconCode(item)">
                     <el-tooltip placement="top">
-                        <div slot="content">{{ getSvgIconCode(item) }}</div>
+                        <template #content>
+                            <div>{{ getSvgIconCode(item) }}</div>
+                        </template>
                         <div class="icon-item">
                             <svg-icon :name="item" class="disabled" />
                             <span>{{ item }}</span>
@@ -18,7 +20,9 @@
             <el-tab-pane label="Element-UI Icons">
                 <div v-for="item of elementIcons" :key="item" v-copy="getElementIconCode(item)">
                     <el-tooltip placement="top">
-                        <div slot="content">{{ getElementIconCode(item) }}</div>
+                        <template #content>
+                            <div>{{ getElementIconCode(item) }}</div>
+                        </template>
                         <div class="icon-item">
                             <i :class="'el-icon-' + item" />
                             <span>{{ item }}</span>
@@ -31,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 const elementIcons = ["info","error","success","warning","question","back","arrow-left","arrow-down","arrow-right","arrow-up","caret-left","caret-bottom","caret-top","caret-right","d-arrow-left","d-arrow-right","minus","plus","remove","circle-plus","remove-outline","circle-plus-outline","close","check","circle-close","circle-check","zoom-out","zoom-in","d-caret","sort","sort-down","sort-up","tickets","document","goods","sold-out","news","message","date","printer","time","bell","mobile-phone","service","view","menu","more","more-outline","star-on","star-off","location","location-outline","phone","phone-outline","picture","picture-outline","delete","search","edit","edit-outline","rank","refresh","share","setting","upload","upload2","download","loading"];
 const req = require.context('../../icons/svg', false, /\.svg$/);
 const re = /\.\/(.*)\.svg/;
@@ -40,23 +44,24 @@ const svgIcons = requireAll(req).map((str: string) => {
     return str.match(re)![1];
 });
 
-@Component({
-    name: "Icons"
+export default defineComponent({
+    name: "Icons",
+    setup() {
+        function getElementIconCode(symbol: string) {
+            return `<i class="el-icon-${symbol}" />`;
+        }
+
+        function getSvgIconCode(symbol: string) {
+            return `<svg-icon name="${symbol}" />`;
+        }
+        return {
+            svgIcons,
+            elementIcons,
+            getElementIconCode,
+            getSvgIconCode
+        }
+    }
 })
-export default class Icons extends Vue {
-
-    private svgIcons = svgIcons;
-
-    private elementIcons = elementIcons;
-    
-    private getElementIconCode(symbol: string) {
-        return `<i class="el-icon-${symbol}" />`;
-    }
-
-    private getSvgIconCode(symbol: string) {
-        return `<svg-icon name="${symbol}" />`;
-    }
-}
 </script>
 
 <style lang="scss">

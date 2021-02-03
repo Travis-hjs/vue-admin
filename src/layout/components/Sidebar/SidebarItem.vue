@@ -7,17 +7,20 @@
             <SidebarItemLink v-if="theOnlyOneChild.meta" :to="resolvePath(theOnlyOneChild.path)">
                 <el-menu-item :index="resolvePath(theOnlyOneChild.path)" :class="{'submenu-title-noDropdown': isFirstLevel}">
                     <svg-icon v-if="theOnlyOneChild.meta.icon" :name="theOnlyOneChild.meta.icon" />
-                    <span v-if="theOnlyOneChild.meta.title" slot="title">{{ theOnlyOneChild.meta.title }}</span>
+                    <template #title v-if="theOnlyOneChild.meta.title">
+                        <span>{{ theOnlyOneChild.meta.title }}</span>
+                    </template>
                 </el-menu-item>
             </SidebarItemLink>
         </template>
         <el-submenu v-else :index="resolvePath(item.path)" popper-append-to-body>
-            <template slot="title">
+            <template #title>
                 <svg-icon v-if="item.meta && item.meta.icon" :name="item.meta.icon" />
-                <span v-if="item.meta && item.meta.title" slot="title">{{ item.meta.title }}</span>
+                <!-- <span v-if="item.meta && item.meta.title" #title>{{ item.meta.title }}</span> -->
+                <span v-if="item.meta && item.meta.title">{{ item.meta.title }}</span>
             </template>
             <template v-if="item.children">
-                <!-- 注意！！！这里的 SidebarItem 是自身，Component({ name: SidebarItem }) -->
+                <!-- 注意！！！这里的 SidebarItem 是自身，defineComponent({ name: SidebarItem }) -->
                 <SidebarItem
                     v-for="child in item.children"
                     :key="child.path"
@@ -34,72 +37,91 @@
 
 <script lang="ts">
 import path from "path";
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent, PropType, computed } from "vue";
 import SidebarItemLink from "./SidebarItemLink.vue";
 import utils from "../../../utils";
 import { 
     RouteItem 
 } from "../../../utils/interfaces";
 
-@Component({
+export default defineComponent({
     name: "SidebarItem", // 必须要有 name 值才上面才可以引用自身组件
     components: {
         SidebarItemLink
-    }
-})
-export default class SidebarItem extends Vue {
-    @Prop({ required: true }) private item!: RouteItem;
-    @Prop({ default: false }) private isCollapse!: boolean;
-    @Prop({ default: true }) private isFirstLevel!: boolean;
-    @Prop({ default: "" }) private basePath!: string;
-
-    get alwaysShowRootMenu() {
-        if (this.item.meta && this.item.meta.alwaysShow) {
-            return true;
+    },
+    props: {
+        item: {
+            type: Object as PropType<RouteItem>,
+            required: true
+        },
+        isCollapse: {
+            type: Boolean,
+            default: false,
+        },
+        isFirstLevel: {
+            type: Boolean,
+            default: true,
+        },
+        basePath: {
+            type: String,
+            default: "",
         }
-        return false;
-    }
+    },
+    setup(props, context) {
+        const alwaysShowRootMenu = computed(function() {
+            if (props.item.meta && props.item.meta.alwaysShow) {
+                return true;
+            }
+            return false;
+        })
 
-    get showingChildNumber() {
-        if (this.item.children) {
-            const showingChildren = this.item.children.filter(item => {
-                if (item.meta && item.meta.hidden) {
-                    return false;
-                } else {
-                    return true;
-                }
-            });
-            return showingChildren.length;
-        }
-        return 0;
-    }
+        const showingChildNumber = computed(function() {
+            if (props.item.children) {
+                const showingChildren = props.item.children.filter(item => {
+                    if (item.meta && item.meta.hidden) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+                return showingChildren.length;
+            }
+            return 0;
+        })
 
-    get theOnlyOneChild() {
-        if (this.showingChildNumber > 1) {
-            return null;
-        }
-        if (this.item.children) {
-            for (let child of this.item.children) {
-                if (!child.meta || !child.meta.hidden) {
-                    return child;
+        const theOnlyOneChild = computed(function() {
+            if (showingChildNumber.value > 1) {
+                return null;
+            }
+            if (props.item.children) {
+                for (let child of props.item.children) {
+                    if (!child.meta || !child.meta.hidden) {
+                        return child;
+                    }
                 }
             }
-        }
-        // If there is no children, return itself with path removed,
-        // because this.basePath already conatins item"s path information
-        return { ...this.item, path: "" };
-    }
+            // If there is no children, return itself with path removed,
+            // because props.basePath already conatins item"s path information
+            return { ...props.item, path: "" };
+        })
 
-    private resolvePath(routePath: string) {
-        if (utils.isExternal(routePath)) {
-            return routePath;
+        function resolvePath(routePath: string) {
+            if (utils.isExternal(routePath)) {
+                return routePath;
+            }
+            if (utils.isExternal(props.basePath)) {
+                return props.basePath;
+            }
+            return path.resolve(props.basePath, routePath);
         }
-        if (utils.isExternal(this.basePath)) {
-            return this.basePath;
+
+        return {
+            alwaysShowRootMenu,
+            theOnlyOneChild,
+            resolvePath
         }
-        return path.resolve(this.basePath, routePath);
     }
-}
+})
 </script>
 
 <style lang="scss">

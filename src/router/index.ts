@@ -1,19 +1,16 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "../store/";
+import { createRouter, createWebHashHistory } from "vue-router"
 import Layout from "../layout/index.vue";
 import { RouteItem } from "../utils/interfaces";
 
-Vue.use(VueRouter);
-
 /**
  * 基础路由
+ * 
  * 路由第一层要加"/"，之后的不用加，路由重定向也是
- * learn: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
+ * 重定向`redirect`也要加"/"
  */
 export const base: Array<RouteItem> = [
     {
-        path: store.loginPath,
+        path: "/login",
         name: "login",
         component: () => import("@/views/login.vue"),
         meta: { hidden: true },
@@ -47,7 +44,7 @@ export const admin: Array<RouteItem> = [
             {
                 path: "nested",
                 name: "nested",
-                redirect: "nested/menu-1",
+                redirect: "/nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
                 component: () => import("@/views/pages/nested.vue"),
                 children: [
@@ -89,6 +86,11 @@ export const admin: Array<RouteItem> = [
                 name: "column/column-2",
                 meta: { title: "栏目二", icon: "table" },
                 component: () => import("@/views/pages/column-2.vue")
+            }, {
+                path: "tsx",
+                name: "tsx-example",
+                meta: { title: "tsx-示例", icon: "skill" },
+                component: () => import("@/views/tsx/example")
             }
         ]
     },
@@ -108,15 +110,16 @@ export const admin: Array<RouteItem> = [
             }
         ]
     },
-    // {
-    //     path: "https://github.com/Hansen-hjs/vue-admin",
-    //     meta: {
-    //         icon: "star",
-    //         title: "跳转外部链接"
-    //     }
-    // }
+    // order
 ]
-
+// var order: any = {
+//     path: "https://github.com/Hansen-hjs/vue-admin",
+//     component: null,
+//     meta: {
+//         icon: "star",
+//         title: "跳转外部链接"
+//     }
+// }
 // ========================== 测试 ==========================
 // for (let i = 3; i < 18; i++) {
 //     const first = admin[0].children as Array<RouteItem>
@@ -132,9 +135,10 @@ export const admin: Array<RouteItem> = [
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */
 export const editor = [admin[0]];
 
-/** `VueRouter`路由实例化对象 */
-const router = new VueRouter({
+/** 路由实例 */
+const router = createRouter({
+    history: createWebHashHistory(),
     routes: base
-});
+})
 
-export default router;
+export default router

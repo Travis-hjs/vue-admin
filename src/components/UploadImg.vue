@@ -8,100 +8,100 @@
         </div>
         <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': width + 'px' }">
             <div class="add_icon"></div>
-            <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
+            <input class="upload_input" type="file" name="picture" ref="uploadinput" @change.stop="uploadImg()">
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Emit, Vue } from "vue-property-decorator";
+import { defineComponent, PropType, ref } from "vue";
 import { UploadChange } from "../utils/interfaces";
 import api from "../api/index";
+import utils from "../utils";
 
-@Component({})
-export default class UploadImg extends Vue {
-
-    /** 组件上传图片路径 */
-    @Prop({
-        type: String,
-        default: ""
-    })
-    private imgUrl!: string;
-    
-    @Prop({
-        type: [String, Number],
-        default: ""
-    })
-    private uploadId!: UploadChange["id"];
-
-    /** 图片宽度 */
-    @Prop({
-        type: Number,
-        default: 240
-    })
-    width!: number;
-
-    /** 加载动画 */
-    private loading = false;
-
-    /** 发送数据到父组件中 */
-    @Emit("change") sendImgSrc(info: UploadChange) {}
-
-    /** 上传图片 */
-    private uploadImg() {
-        // 这样写也可以，但是命令台会报错，浏览器不会
-        // const input = (this.$refs.uploadinput as HTMLInputElement);
-
-        const input: any = this.$refs.uploadinput;
-
-        const file: File = input.files[0];
-        // console.log("上传图片文件 >>", file);
-        
-        /** 上传类型数组 */
-        let typeStr = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
-
-        // 判断文件类型
-        if (typeStr.indexOf(file.type) < 0) {
-            this.$message.warning("文件格式只支持：jpg 和 png");
-            input.value = null;
-            return;
+export default defineComponent({
+    name: "UploadImg",
+    props: {
+        /** 组件上传图片路径 */
+        imgUrl: {
+            type: String,
+            default: ""
+        },
+        /** 上传组件`id` */
+        uploadId: {
+            type: [String, Number] as PropType<UploadChange["id"]>,
+            default: ""
+        },
+        /** 图片宽度 */
+        width: {
+            type: Number,
+            default: 240
         }
+    },
+    setup(props, context) {
+        /** 上传组件`input`节点 */
+        const uploadinput = ref<HTMLInputElement>(null as any);
+        /** 上传状态 */
+        let loading = ref(false);
 
-        // 判断大小
-        if (file.size > 2 * 1024 * 1024) {
-            this.$message.warning("上传的文件不能大于2M");
-            input.value = null;
-            return;
-        }
+        /** 上传图片 */
+        function uploadImg() {
+            const input = uploadinput.value;
+            const file = (input.files as FileList)[0];
+            // console.log("上传图片文件 >>", file);
+            
+            /** 上传类型数组 */
+            let typeStr = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
-        // const formData = new FormData();
+            // 判断文件类型
+            if (typeStr.indexOf(file.type) < 0) {
+                utils.showWarning("文件格式只支持：jpg 和 png")
+                input.value = "";
+                return;
+            }
 
-        // formData.append("file", file);
+            // 判断大小
+            if (file.size > 2 * 1024 * 1024) {
+                utils.showWarning("上传的文件不能大于2M");
+                input.value = "";
+                return;
+            }
 
-        this.loading = true;
-        api.uploadImg(file, res => {
-            this.loading = false;
-            const result: string = res;
-            this.sendImgSrc({
-                id: this.uploadId,
-                src: result
+            // const formData = new FormData();
+
+            // formData.append("file", file);
+
+            loading.value = true;
+            api.uploadImg(file, res => {
+                loading.value = false;
+                const result: string = res;
+                context.emit("change", {
+                    id: props.uploadId,
+                    src: result
+                })
+            }, err => {
+                loading.value = false;
+                utils.showError("上传图片失败");
+                // console.log("上传图片失败 >>", err);
             });
-        }, err => {
-            this.loading = false;
-            this.$message.error("上传图片失败");
-            // console.log("上传图片失败 >>", err);
-        });
-    }
+        }
 
-    /** 清除当前图片 */
-    private removeImg() {
-        this.sendImgSrc({
-            id: this.uploadId,
-            src: ""
-        });
-    }
+        /** 清除当前图片 */
+        function removeImg() {
+            context.emit("change", {
+                id: props.uploadId,
+                src: ""
+            })
+        }
 
-}
+        return {
+            uploadinput,
+            loading,
+            uploadImg,
+            removeImg
+        }
+    }
+})
 </script>
 
 <style lang="scss">

@@ -13,14 +13,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-
-@Component({})
-export default class SidebarLogo extends Vue {
-    @Prop({ required: true }) private collapse!: boolean;
-
-    private title = "Vue Typescript Admin";
-}
+import { defineComponent, ref } from "vue";
+export default defineComponent({
+    name: "SidebarLogo",
+    props: {
+        collapse: {
+            type: Boolean,
+            required: true
+        }
+    },
+    setup() {
+        let title = ref("Vue Typescript Admin");
+        return {
+            title
+        }
+    }
+})
 </script>
 
 <style lang="scss">

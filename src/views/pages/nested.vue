@@ -7,11 +7,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-@Component({})
-export default class Nested extends Vue {
-    content = "nested"
-}
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    setup() {
+        const content = "nested";
+        return {
+            content
+        }
+    }
+})
 </script>
 
 <style>

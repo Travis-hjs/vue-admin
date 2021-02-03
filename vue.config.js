@@ -15,7 +15,7 @@ module.exports = {
      * @learn https://blog.csdn.net/qq_38910842/article/details/102972197
      */
     devServer: {
-        port: 2048,
+        port: 2020,
         /**
          * 这边设置代理域名的时候，`request.ts`里面的`webUrl`请求域名要换成本机地址 => `location.origin`
          * 打包到线上的时候则要把`request.ts`里面的`webUrl`请求域名换成正式环境域名

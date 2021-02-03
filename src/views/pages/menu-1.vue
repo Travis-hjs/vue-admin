@@ -5,11 +5,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-@Component({})
-export default class Menu1 extends Vue {
-    content = "菜单 2-1"
-}
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    setup() {
+        const content = "菜单 2-1";
+        return {
+            content
+        }
+    }
+})
 </script>
 
 <style>
