@@ -132,7 +132,7 @@ $time: 0.28s;
         top: 0;
         right: 0;
         z-index: 9;
-        width: calc(100% - $sideBarWidth);
+        width: calc(100% - #{$sideBarWidth});
         transition: $time;
     }
 }
@@ -153,7 +153,7 @@ $time: 0.28s;
     }
 
     .fixed-header {
-        width: calc(100% - $minSideBarWidth);
+        width: calc(100% - #{$minSideBarWidth});
     }
 }
 
