@@ -36,11 +36,6 @@ export default defineComponent({
         const elRightPanel = ref<HTMLElement>(null as any);
         let show = ref(false);
 
-        /** 插入到body的顶层节点中，保证层级在最上面 */
-        function insertToBody() {
-            body.appendChild(elRightPanel.value);
-        }
-
         /**
          * 切换显示
          * @param isMask 是否为遮罩层点击
@@ -56,11 +51,13 @@ export default defineComponent({
         }
 
         onMounted(function() {
-            insertToBody();
+            body.appendChild(elRightPanel.value);
         })
 
         onUnmounted(function() {
-            elRightPanel.value.remove();
+            if (elRightPanel.value.parentNode) {
+                elRightPanel.value.parentNode.removeChild(elRightPanel.value);
+            }
         })
 
         return {

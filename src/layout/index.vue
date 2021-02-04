@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, onUnmounted } from "vue";
+import { defineComponent, computed, onMounted, onUnmounted, watch } from "vue";
 import AppMain from "./components/AppMain.vue";
 import Navbar from "./components/Navbar.vue";
 import RightPanel from "./components/RightPanel.vue";
@@ -44,7 +44,12 @@ export default defineComponent({
                 mobile: layoutState.device === "mobile"
             }
         })
-
+        
+        watch(layoutState, function() {
+            // console.count("store.saveLayout");
+            store.saveLayout();
+        })
+        
         function isMobile() {
             const width = document.body.clientWidth;
             return width < 900;

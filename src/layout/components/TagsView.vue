@@ -12,19 +12,19 @@
                 @contextmenu.prevent="openMenu(tag, $event)"
             >
                 {{ tag.meta.title }}
-                <span v-show="layoutState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+                <span v-show="layoutState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"></span>
             </router-link>
         </ScrollPane>
-        <ul v-show="visible" :style="{left: left + 'px', top: top+'px'}" class="contextmenu">
+        <ul v-show="visible" :style="{ 'left': left + 'px', 'top': top + 'px'}" class="contextmenu">
             <li @click="closeSelectedTag(selectedTag)">关闭</li>
-            <li @click="closeOthersTags">关闭其他</li>
-            <li @click="closeAllTags">关闭所有</li>
+            <li @click="closeOthersTags()">关闭其他</li>
+            <li @click="closeAllTags()">关闭所有</li>
         </ul>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, reactive, ref, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import router from "../../router";
 import ScrollPane from "./ScrollPane.vue";
@@ -39,6 +39,8 @@ export default defineComponent({
     setup(props, context) {
         const route = useRoute();
         const layoutState = store.layoutState;
+        /** 当前组件节点 */
+        const el = ref<HTMLElement>(null as any);
         /** 是否隐藏右键菜单 */
         let visible = ref(false);
         /** 鼠标位置`Y` */
@@ -69,7 +71,11 @@ export default defineComponent({
             visible.value = false;
         }
 
-        watch(route, addhistoryViews)
+        // 监听路由变动
+        watchEffect(addhistoryViews);
+
+        // 监听路由变动 注意这里如果使用`watch`来监听路由控制台会出现警告，打包之后会直接卡死，但不报错
+        // watch(route, addhistoryViews)
 
         watch(visible, function(value) {
             if (value) {
@@ -135,9 +141,6 @@ export default defineComponent({
             }
         }
 
-        /** 当前组件节点 */
-        const el = ref<HTMLElement>(null as any);
-
         /**
          * 右键打开菜单
          * @param item 路由对象
@@ -155,10 +158,9 @@ export default defineComponent({
                 left.value = _left;
             }
             top.value = e.clientY;
-            visible.value = true;
             selectedTag = item;
+            visible.value = true;
         }
-
 
         onMounted(function() {
             addhistoryViews();

@@ -10,28 +10,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, ref } from "vue";
-import { useRoute, RouteLocationMatched } from "vue-router";
+import { defineComponent, ref, watchEffect } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
     name: "Breadcrumb",
     setup() {
         const route = useRoute();
         /** 路由列表 */
-        let list = ref([] as Array<RouteLocationMatched>);
+        let list = ref<Array<{ path: string, meta: any }>>([]);
         
         function updateList() {
-            const matched = route.matched.filter(item => item.meta && item.meta.title);
-            // console.log(matched);
-            list.value = matched; // matched.filter(item => item.meta && item.meta.title);
+            const matched = route.matched.filter(item => item.meta && item.meta.title).map(item => {
+                return {
+                    path: item.path,
+                    meta: {...item.meta}
+                }
+            });
+            list.value = matched;
         }
 
         // 监听路由变动
-        watch(route, function(res) {
-            // 如果转到重定向页面，就不更新面包屑
-            if (res.path.startsWith("/redirect/")) return;
+        watchEffect(function() {
+            // console.log(route.path);
+            if (route.path.startsWith("/redirect/")) return;
             updateList();
-        });
+        })
+
+        // 监听路由变动 注意这里如果使用`watch`来监听路由控制台会出现警告，打包之后会直接卡死，但不报错
+        // watch(route, function(res) {
+        //     // 如果转到重定向页面，就不更新面包屑
+        //     if (res.path.startsWith("/redirect/")) return;
+        //     updateList();
+        // });
 
         updateList();
 
