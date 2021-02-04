@@ -30,19 +30,19 @@ export default defineComponent({
             list.value = matched;
         }
 
-        // 监听路由变动
-        watchEffect(function() {
-            // console.log(route.path);
-            if (route.path.startsWith("/redirect/")) return;
-            updateList();
-        })
-
         // 监听路由变动 注意这里如果使用`watch`来监听路由控制台会出现警告，打包之后会直接卡死，但不报错
         // watch(route, function(res) {
         //     // 如果转到重定向页面，就不更新面包屑
         //     if (res.path.startsWith("/redirect/")) return;
         //     updateList();
         // });
+        
+        // 所有响应式数据变动
+        watchEffect(function() {
+            // console.log(route.path);
+            if (route.path.startsWith("/redirect/")) return;
+            updateList();
+        })
 
         updateList();
 

@@ -55,8 +55,9 @@ export default defineComponent({
         })
 
         onUnmounted(function() {
-            if (elRightPanel.value.parentNode) {
-                elRightPanel.value.parentNode.removeChild(elRightPanel.value);
+            const el = elRightPanel.value;
+            if (el && el.parentNode) {
+                el.parentNode.removeChild(el);
             }
         })
 

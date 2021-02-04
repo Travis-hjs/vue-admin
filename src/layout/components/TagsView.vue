@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch, watchEffect } from "vue";
+import { defineComponent, onMounted, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import router from "../../router";
 import ScrollPane from "./ScrollPane.vue";
@@ -71,19 +71,18 @@ export default defineComponent({
             visible.value = false;
         }
 
-        // 监听路由变动
-        watchEffect(addhistoryViews);
-
         // 监听路由变动 注意这里如果使用`watch`来监听路由控制台会出现警告，打包之后会直接卡死，但不报错
         // watch(route, addhistoryViews)
 
-        watch(visible, function(value) {
-            if (value) {
+        // 所有响应式数据变动
+        watchEffect(function() {
+            addhistoryViews();
+            if (visible.value) {
                 document.body.addEventListener("click", closeMenu);
             } else {
                 document.body.removeEventListener("click", closeMenu);
             }
-        })
+        });
 
         /**
          * 是否高亮
@@ -148,7 +147,7 @@ export default defineComponent({
         function closeAllTags() {
             if (layoutState.historyViews.length > 1) {
                 router.push("/").then(() => {
-                    // watch的回调会监听layoutState.historyViews的变动，所以可以写在路由跳转之后
+                    // watch & watchEffect 的回调会监听 layoutState.historyViews 的变动，所以可以写在路由跳转之后，上面路由操作也一样
                     layoutState.historyViews = [];
                 });
             }
