@@ -51,7 +51,6 @@ export default defineComponent({
 
         function toggleSideBar() {
             layoutState.sidebarOpen = !layoutState.sidebarOpen;
-            layoutState.sidebarWithoutAnimation = false;
         }
 
         function logout() {

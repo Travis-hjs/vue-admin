@@ -41,7 +41,6 @@ export default defineComponent({
             return {
                 hideSidebar: !layoutState.sidebarOpen,
                 openSidebar: layoutState.sidebarOpen,
-                withoutAnimation: layoutState.sidebarWithoutAnimation,
                 mobile: layoutState.device === "mobile"
             }
         })
@@ -62,11 +61,7 @@ export default defineComponent({
                 const mobile = isMobile();
                 layoutState.device = mobile ? "mobile" : "desktop";
                 if (mobile) {
-                    layoutState.sidebarWithoutAnimation = true;
                     layoutState.sidebarOpen = false;
-                } else {
-                    // layoutState.sidebarWithoutAnimation = false;
-                    // layoutState.sidebarOpen = true;
                 }
             }
         }
@@ -76,11 +71,7 @@ export default defineComponent({
         })
 
         onMounted(function() {
-            const mobile = isMobile();
-            if (mobile) {
-                layoutState.device = "mobile";
-                layoutState.sidebarWithoutAnimation = true;
-            }
+            checkResize();
             window.addEventListener("resize", checkResize);
         })
         
@@ -95,6 +86,8 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@/styles/variables.scss";
+$minSideBarWidth: 54px;
+$time: 0.28s;
 
 .app-wrapper {
     position: relative;
@@ -112,13 +105,13 @@ export default defineComponent({
 
     .main-container {
         min-height: 100%;
-        transition: margin-left 0.28s;
+        transition: $time;
         margin-left: $sideBarWidth;
         position: relative;
     }
 
     .sidebar-container {
-        transition: width 0.28s;
+        transition: $time;
         width: $sideBarWidth !important;
         height: 100%;
         position: fixed;
@@ -136,21 +129,27 @@ export default defineComponent({
         right: 0;
         z-index: 9;
         width: calc(100% - #{$sideBarWidth});
-        transition: width 0.28s;
+        transition: $time;
+    }
+}
+
+.openSidebar {
+    .sidebar-container {
+        transform: translate3d(0%, 0, 0);
     }
 }
 
 .hideSidebar {
     .main-container {
-        margin-left: 54px;
+        margin-left: $minSideBarWidth;
     }
 
     .sidebar-container {
-        width: 54px !important;
+        width: $minSideBarWidth !important;
     }
 
     .fixed-header {
-        width: calc(100% - 54px);
+        width: calc(100% - #{$minSideBarWidth});
     }
 }
 
@@ -159,34 +158,25 @@ export default defineComponent({
     .main-container {
         margin-left: 0px;
     }
-
-    .sidebar-container {
-        transition: transform 0.28s;
-        width: $sideBarWidth !important;
-    }
-
+    
     &.openSidebar {
         position: fixed;
         top: 0;
+        .sidebar-container {
+            width: $sideBarWidth !important;
+        }
     }
 
     &.hideSidebar {
         .sidebar-container {
+            width: $minSideBarWidth !important;
             pointer-events: none;
-            transition-duration: 0.3s;
-            transform: translate3d(-$sideBarWidth, 0, 0);
+            transform: translate3d(-100%, 0, 0);
         }
     }
 
     .fixed-header {
         width: 100%;
-    }
-}
-
-.withoutAnimation {
-    .main-container,
-    .sidebar-container {
-        transition: none;
     }
 }
 </style>

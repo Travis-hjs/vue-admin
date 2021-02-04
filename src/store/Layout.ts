@@ -24,7 +24,6 @@ export default class ModuleLayout {
         showSettings: true,
         showHistoryView: true,
         sidebarOpen: true,
-        sidebarWithoutAnimation: false,
         historyViews: [],
         device: "desktop",
         theme: "#409EFF"

@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar-logo-container" :class="{'collapse': collapse}">
-        <transition name="sidebarLogoFade">
+        <transition name="el-fade-in-linear" mode="out-in">
             <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
                 <img src="favicon.ico" class="sidebar-logo" />
             </router-link>
@@ -23,7 +23,7 @@ export default defineComponent({
         }
     },
     setup() {
-        let title = ref("Vue Typescript Admin");
+        const title = ref("Vue Typescript Admin");
         return {
             title
         }
@@ -32,14 +32,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.sidebarLogoFade-enter-active {
-    transition: opacity 1.5s;
-}
-
-.sidebarLogoFade-enter,
-.sidebarLogoFade-leave-to {
-    opacity: 0;
-}
 
 .sidebar-logo-container {
     position: relative;
@@ -50,27 +42,27 @@ export default defineComponent({
     text-align: center;
     overflow: hidden;
 
-    & .sidebar-logo-link {
+    .sidebar-logo-link {
         height: 100%;
-        width: 100%;
+        width: 100%;      
+    }
 
-        & .sidebar-logo {
-            width: 32px;
-            height: 32px;
-            vertical-align: middle;
-            margin-right: 12px;
-        }
+    .sidebar-logo {
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+        margin-right: 12px;
+    }  
 
-        & .sidebar-title {
-            display: inline-block;
-            margin: 0;
-            color: #fff;
-            font-weight: 600;
-            line-height: 50px;
-            font-size: 14px;
-            font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
-            vertical-align: middle;
-        }
+    .sidebar-title {
+        display: inline-block;
+        margin: 0;
+        color: #fff;
+        font-weight: 600;
+        line-height: 50px;
+        font-size: 14px;
+        font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+        vertical-align: middle;
     }
 
     &.collapse {
