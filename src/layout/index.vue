@@ -37,41 +37,38 @@ import store from "../store";
 })
 export default class Layout extends Vue {
     /** 页面状态 */
-    private pageState = store.layoutState;
+    readonly pageState = store.layoutState;
+
+    @Watch("pageState", { deep: true })
+    onLayoutChange() {
+        // console.count("store.saveLayout");
+        store.saveLayout();
+    }
 
     get classInfo() {
         return {
             hideSidebar: !this.pageState.sidebarOpen,
             openSidebar: this.pageState.sidebarOpen,
-            withoutAnimation: this.pageState.sidebarWithoutAnimation,
             mobile: this.pageState.device === "mobile"
         }
     }
 
-    @Watch("$route")
-    private onRouteChange() {
-        if (this.pageState.device === "mobile" && this.pageState.sidebarOpen) {
-            this.pageState.sidebarWithoutAnimation = false;
-        }
-    }
-
     /** 切换侧边栏 */
-    private switchSidebar() {
+    switchSidebar() {
         this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
     }
 
-    private isMobile() {
+    isMobile() {
         const width = document.body.clientWidth;
         return width < 900;
     }
 
     /** 检测窗口变动并更新侧边栏的样式切换 */
-    private checkResize() {
+    checkResize() {
         if (!document.hidden) {
             const isMobile = this.isMobile();
             this.pageState.device = isMobile ? "mobile" : "desktop";
             if (isMobile) {
-                this.pageState.sidebarWithoutAnimation = true;
                 this.pageState.sidebarOpen = false;
             }
         }
@@ -86,17 +83,14 @@ export default class Layout extends Vue {
     }
 
     mounted() {
-        const isMobile = this.isMobile();
-        if (isMobile) {
-            this.pageState.device = "mobile";
-            this.pageState.sidebarWithoutAnimation = true;
-        }
+        this.checkResize();
     }
 }
 </script>
 
 <style lang="scss">
 @import "@/styles/variables.scss";
+$minSideBarWidth: 54px;
 
 .app-wrapper {
     position: relative;
@@ -114,13 +108,13 @@ export default class Layout extends Vue {
 
     .main-container {
         min-height: 100%;
-        transition: margin-left 0.28s;
+        transition: 0.28s;
         margin-left: $sideBarWidth;
         position: relative;
     }
 
     .sidebar-container {
-        transition: width 0.28s;
+        transition: 0.28s;
         width: $sideBarWidth !important;
         height: 100%;
         position: fixed;
@@ -137,22 +131,28 @@ export default class Layout extends Vue {
         top: 0;
         right: 0;
         z-index: 9;
-        width: calc(100% - #{$sideBarWidth});
-        transition: width 0.28s;
+        width: calc(100% - $sideBarWidth);
+        transition: 0.28s;
+    }
+}
+
+.openSidebar {
+    .sidebar-container {
+        transform: translate3d(0%, 0, 0);
     }
 }
 
 .hideSidebar {
     .main-container {
-        margin-left: 54px;
+        margin-left: $minSideBarWidth;
     }
 
     .sidebar-container {
-        width: 54px !important;
+        width: $minSideBarWidth !important;
     }
 
     .fixed-header {
-        width: calc(100% - 54px);
+        width: calc(100% - $minSideBarWidth);
     }
 }
 
@@ -161,22 +161,20 @@ export default class Layout extends Vue {
     .main-container {
         margin-left: 0px;
     }
-
-    .sidebar-container {
-        transition: transform 0.28s;
-        width: $sideBarWidth !important;
-    }
-
+    
     &.openSidebar {
         position: fixed;
         top: 0;
+        .sidebar-container {
+            width: $sideBarWidth !important;
+        }
     }
 
     &.hideSidebar {
         .sidebar-container {
+            width: $minSideBarWidth !important;
             pointer-events: none;
-            transition-duration: 0.3s;
-            transform: translate3d(-$sideBarWidth, 0, 0);
+            transform: translate3d(-100%, 0, 0);
         }
     }
 
@@ -185,10 +183,4 @@ export default class Layout extends Vue {
     }
 }
 
-.withoutAnimation {
-    .main-container,
-    .sidebar-container {
-        transition: none;
-    }
-}
 </style>

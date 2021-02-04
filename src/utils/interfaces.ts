@@ -87,8 +87,6 @@ export interface LayoutStateType {
     showSidebarLogo: boolean
     /** 显示侧边栏文字主题色 */
     sidebarTextTheme: boolean
-    /** 侧边栏动画 */
-    sidebarWithoutAnimation: boolean
     /** 历史记录列表 */
     historyViews: Array<RouteItem>
     /** 系统信息 */

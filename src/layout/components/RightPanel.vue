@@ -22,35 +22,31 @@ const body = document.body;
 
 @Component({})
 export default class RightPanel extends Vue {
-    @Prop({ default: false }) private clickNotClose!: boolean;
-    @Prop({ default: 250 }) private buttonTop!: number;
+    @Prop({ default: false }) clickNotClose!: boolean;
+    @Prop({ default: 250 }) buttonTop!: number;
 
     readonly pageState = store.layoutState;
 
-    private show = false;
+    show = false;
 
-    @Watch("show")
-    private onShowChange(value: boolean) {
-        if (value) {
-            body.classList.add("showRightPanel");
-        } else {
-            body.classList.remove("showRightPanel");
-        }
-    }
-
-    /** 插入到body的顶层节点中，保证层级在最上面 */
-    private insertToBody() {
+    /** 插入到`body`节点中，保证层级在最上面 */
+    insertToBody() {
         const elx = this.$refs.elRightPanel as HTMLElement;
-        body.insertBefore(elx, body.firstChild);
+        body.appendChild(elx);
     }
 
     /**
      * 切换显示
      * @param isMask 是否为遮罩层点击
      */
-    private switchShow(isMask = false) {
+    switchShow(isMask = false) {
         if (isMask && this.clickNotClose) return; 
         this.show = !this.show;
+        if (this.show) {
+            body.classList.add("showRightPanel");
+        } else {
+            body.classList.remove("showRightPanel");
+        }
     }
 
     mounted() {

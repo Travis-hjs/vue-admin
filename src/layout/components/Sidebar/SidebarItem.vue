@@ -48,10 +48,10 @@ import {
     }
 })
 export default class SidebarItem extends Vue {
-    @Prop({ required: true }) private item!: RouteItem;
-    @Prop({ default: false }) private isCollapse!: boolean;
-    @Prop({ default: true }) private isFirstLevel!: boolean;
-    @Prop({ default: "" }) private basePath!: string;
+    @Prop({ required: true }) item!: RouteItem;
+    @Prop({ default: false }) isCollapse!: boolean;
+    @Prop({ default: true }) isFirstLevel!: boolean;
+    @Prop({ default: "" }) basePath!: string;
 
     get alwaysShowRootMenu() {
         if (this.item.meta && this.item.meta.alwaysShow) {
@@ -90,7 +90,7 @@ export default class SidebarItem extends Vue {
         return { ...this.item, path: "" };
     }
 
-    private resolvePath(routePath: string) {
+    resolvePath(routePath: string) {
         if (utils.isExternal(routePath)) {
             return routePath;
         }

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import store from "../../store";
@@ -43,21 +43,13 @@ export default class Navbar extends Vue {
 
     readonly pageState = store.layoutState;
 
-    @Watch("pageState", {
-        deep: true
-    })
-    private onLayoutChange() {
-        store.saveLayout();
-    }
+    avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
-    private avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
-
-    private toggleSideBar() {
+    toggleSideBar() {
         this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
-        this.pageState.sidebarWithoutAnimation = false;
     }
 
-    private logout() {
+    logout() {
         store.removeUserState();
         // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
         store.layoutState.historyViews = [];

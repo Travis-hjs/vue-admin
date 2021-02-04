@@ -37,25 +37,25 @@ import { RouteItem } from "../../utils/interfaces";
 })
 export default class TagsView extends Vue {
     /** 是否隐藏右键菜单 */
-    private visible: boolean = false;
+    visible: boolean = false;
     /** 鼠标位置`Y` */
-    private top: number = 0;
+    top: number = 0;
     /** 鼠标位置`X` */
-    private left: number = 0;
+    left: number = 0;
     /** 选择路由对象 */
-    private selectedTag: RouteItem = {
+    selectedTag: RouteItem = {
         path: ""
     };
     
-    private pageState = store.layoutState;
+    pageState = store.layoutState;
 
     @Watch("$route")
-    private onRouteChange() {
+    onRouteChange() {
         this.addhistoryViews();
     }
 
     @Watch("visible")
-    private onVisibleChange(value: boolean) {
+    onVisibleChange(value: boolean) {
         if (value) {
             document.body.addEventListener("click", this.closeMenu);
         } else {
@@ -69,12 +69,12 @@ export default class TagsView extends Vue {
      * 是否高亮
      * @param item item路由对象
      */
-    private isActive(item: RouteItem) {
+    isActive(item: RouteItem) {
         return item.path === this.$route.path;
     }
 
     /** 添加记录 */
-    private addhistoryViews() {
+    addhistoryViews() {
         const hasItem = this.pageState.historyViews.some(item => item.path === this.$route.path);
         // console.log(hasItem, this.$route.path);
         if (!hasItem && !this.$route.meta.noCache) {
@@ -86,7 +86,7 @@ export default class TagsView extends Vue {
      * 找到对应路由`item`索引
      * @param item item路由对象
      */
-    private findItemIndex(item: RouteItem) {
+    findItemIndex(item: RouteItem) {
         let index = 0;
         const list = this.pageState.historyViews;
         for (let i = 0; i < list.length; i++) {
@@ -103,7 +103,7 @@ export default class TagsView extends Vue {
      * 关闭选中
      * @param item item路由对象
      */
-    private closeSelectedTag(item: RouteItem) {
+    closeSelectedTag(item: RouteItem) {
         if (this.pageState.historyViews.length == 0) return;
         const index = this.findItemIndex(item);
         this.pageState.historyViews.splice(index, 1);
@@ -115,7 +115,7 @@ export default class TagsView extends Vue {
     }
 
     /** 关闭其他 */
-    private closeOthersTags() {
+    closeOthersTags() {
         if (this.selectedTag.path !== this.$route.path) {
             this.$router.push(this.selectedTag.path);
         }
@@ -123,7 +123,7 @@ export default class TagsView extends Vue {
     }
 
     /** 关闭所有 */
-    private closeAllTags() {
+    closeAllTags() {
         if (this.pageState.historyViews.length > 1) {
             this.pageState.historyViews = [];
             this.$router.push('/');
@@ -135,7 +135,7 @@ export default class TagsView extends Vue {
      * @param item 路由对象
      * @param e 鼠标事件
      */
-    private openMenu(item: RouteItem, e: MouseEvent) {
+    openMenu(item: RouteItem, e: MouseEvent) {
         const menuMinWidth = 105;
         const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
         const offsetWidth = (this.$el as HTMLElement).offsetWidth; // container width
@@ -152,7 +152,7 @@ export default class TagsView extends Vue {
     }
 
     /** 关闭窗口 */
-    private closeMenu() {
+    closeMenu() {
         this.visible = false;
     }
 

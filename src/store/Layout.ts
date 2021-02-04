@@ -19,7 +19,6 @@ export default class ModuleLayout extends ModuleModifyObject {
         showSettings: true,
         showHistoryView: true,
         sidebarOpen: true,
-        sidebarWithoutAnimation: false,
         historyViews: [],
         device: "desktop",
         theme: "#409EFF"
@@ -40,9 +39,11 @@ export default class ModuleLayout extends ModuleModifyObject {
         }
     }
 
-    /** 保存`layout`操作状态 */
+    /**
+     * 保存`layout`操作状态
+     * @description 这个方法我用在了`src/layout/index.vue`组件中用`watch`监听了数据的变动然后执行
+    */
     public saveLayout() {
-        // 这个方法我用在了`Navbar`组件中用`watch`监听了数据的变动然后执行
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
         const value = this.layoutState;
         const data: any = {};
