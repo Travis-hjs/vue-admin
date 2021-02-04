@@ -16,7 +16,7 @@
             </router-link>
         </ScrollPane>
         <ul v-show="visible" :style="{ 'left': left + 'px', 'top': top + 'px'}" class="contextmenu">
-            <li @click="closeSelectedTag(selectedTag)">关闭</li>
+            <li @click="closeSelectedTag()">关闭</li>
             <li @click="closeOthersTags()">关闭其他</li>
             <li @click="closeAllTags()">关闭所有</li>
         </ul>
@@ -48,9 +48,9 @@ export default defineComponent({
         /** 鼠标位置`X` */
         let left = ref(0);
         /** 选择路由对象 */
-        let selectedTag = reactive({
+        let selectedItem = {
             path: ""
-        } as RouteItem);
+        } as RouteItem;
 
         /** 添加记录 */
         function addhistoryViews() {
@@ -114,30 +114,43 @@ export default defineComponent({
          * 关闭选中
          * @param item item路由对象
          */
-        function closeSelectedTag(item: RouteItem) {
-            if (layoutState.historyViews.length == 0) return;
-            const index = findItemIndex(item);
-            layoutState.historyViews.splice(index, 1);
-            if (isActive(item)) {
-                if (layoutState.historyViews.length) {
-                    router.push({ path: layoutState.historyViews[layoutState.historyViews.length - 1].path });
+        function closeSelectedTag(value?: RouteItem) {
+            if (value) {
+                selectedItem = value;
+            }
+            const list = layoutState.historyViews;
+            if (list.length <= 1) return;
+            const index = findItemIndex(selectedItem);
+            if (isActive(selectedItem)) {
+                if (list.length > 0) {
+                    const path = index == 0 ? list[index + 1].path : list[index - 1].path;
+                    router.push(path).then(() => {
+                        list.splice(index, 1);
+                    })
                 }
+            } else {
+                layoutState.historyViews.splice(index, 1);
             }
         }
 
         /** 关闭其他 */
         function closeOthersTags() {
-            if (selectedTag.path !== route.path) {
-                router.push(selectedTag.path);
+            if (selectedItem.path !== route.path) {
+                router.push(selectedItem.path).then(() => {
+                    layoutState.historyViews = [selectedItem];
+                });
+            } else {
+                layoutState.historyViews = [selectedItem];
             }
-            layoutState.historyViews = [selectedTag];
         }
 
         /** 关闭所有 */
         function closeAllTags() {
             if (layoutState.historyViews.length > 1) {
-                layoutState.historyViews = [];
-                router.push('/');
+                router.push("/").then(() => {
+                    // watch的回调会监听layoutState.historyViews的变动，所以可以写在路由跳转之后
+                    layoutState.historyViews = [];
+                });
             }
         }
 
@@ -158,7 +171,7 @@ export default defineComponent({
                 left.value = _left;
             }
             top.value = e.clientY;
-            selectedTag = item;
+            selectedItem = item;
             visible.value = true;
         }
 
@@ -171,7 +184,6 @@ export default defineComponent({
             visible,
             top,
             left,
-            selectedTag,
             isActive,
             closeSelectedTag,
             closeOthersTags,
