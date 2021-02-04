@@ -26,7 +26,7 @@
 
 ## 预览地址
 
-[vue-admin](https://huangjingsheng.gitee.io/hjs/vue2-admin/)
+[vue-admin](https://huangjingsheng.gitee.io/hjs/vue3-admin/)
 
 ## sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化**
 
