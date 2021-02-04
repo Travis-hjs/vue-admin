@@ -1,43 +1,34 @@
 <template>
     <section class="app-main">
-        <!-- el-fade-in -->
-        <transition name="fade_slide" mode="out-in">
+        <!-- vue 2.x 写法 -->
+        <!-- <transition name="fadeSlideX" mode="out-in">
             <keep-alive :include="layoutState.historyViews">
                 <router-view :key="$route.path" />
             </keep-alive>
-        </transition>
+        </transition> -->
 
-        <!-- <router-view v-slot="{ Component }">
-            <transition name="fade_slide" mode="out-in">
-                <keep-alive>
-                    <component :is="Component" />
-                </keep-alive>
+        <!-- vue 3.x 写法 -->
+        <router-view v-slot="{ Component, route }">
+            <transition name="fadeSlideX" mode="out-in">
+                <!-- 需要保持缓存时开启 -->
+                <!-- <keep-alive> -->
+                    <component :is="Component" :key="route.path" />
+                <!-- </keep-alive> -->
             </transition>
-        </router-view> -->
+        </router-view>
     </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-// import { useRoute } from "vue-router";
-import store from "../../store";
+import { defineComponent } from "vue";
+// import store from "../../store";
 
 export default defineComponent({
     name: "AppMain",
     setup() {
-        const layoutState = store.layoutState;
-        // const route = useRoute();
-        // const Component = computed(function() {
-        //     const item = layoutState.historyViews.find(item => item.path == route.path);
-        //     if (item) {
-        //         return item.component
-        //     }
-        //     return null
-        // })
 
         return {
-            layoutState,
-            // Component
+            // layoutState: store.layoutState
         }
     }
 })
@@ -68,26 +59,6 @@ export default defineComponent({
     .fixed-header + .app-main {
         padding-top: 98px;
     }
-}
-
-// ================== 定义过渡动画 ==================
-.fade_slide-leave-active, .fade_slide-enter-active {
-    transition: all .4s;
-}
-
-.fade_slide-enter-active,
-.fade_slide-leave-active {
-    opacity: 1;
-    transform: translateX(0px);
-}
-
-.fade_slide-enter-from {
-    opacity: 0;
-    transform: translateX(-40px);
-}
-.fade_slide-leave-to {
-    opacity: 0;
-    transform: translateX(40px);
 }
 
 </style>
