@@ -91,6 +91,7 @@ export default class Layout extends Vue {
 <style lang="scss">
 @import "@/styles/variables.scss";
 $minSideBarWidth: 54px;
+$time: 0.28s;
 
 .app-wrapper {
     position: relative;
@@ -108,13 +109,13 @@ $minSideBarWidth: 54px;
 
     .main-container {
         min-height: 100%;
-        transition: 0.28s;
+        transition: $time;
         margin-left: $sideBarWidth;
         position: relative;
     }
 
     .sidebar-container {
-        transition: 0.28s;
+        transition: $time;
         width: $sideBarWidth !important;
         height: 100%;
         position: fixed;
@@ -132,7 +133,7 @@ $minSideBarWidth: 54px;
         right: 0;
         z-index: 9;
         width: calc(100% - $sideBarWidth);
-        transition: 0.28s;
+        transition: $time;
     }
 }
 
