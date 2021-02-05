@@ -135,10 +135,13 @@ export const admin: Array<RouteItem> = [
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */
 export const editor = [admin[0]];
 
-/** 路由实例 */
+/**
+ * 路由实例 
+ * [文档地址](https://next.router.vuejs.org/introduction.html)
+*/
 const router = createRouter({
     history: createWebHashHistory(),
     routes: base
 })
 
-export default router
+export default router;

@@ -11,6 +11,12 @@ const routerTo = {
     query: {}
 }
 
+/**
+ * 404的路径匹配
+ * @learn https://my.oschina.net/qinghuo111/blog/4832051
+ */
+const path404 = "/:catchAll(.*)";
+
 // 权限管理
 router.beforeEach(function(to, from, next) {
     NProgress.start();
@@ -28,15 +34,25 @@ router.beforeEach(function(to, from, next) {
                     store.layoutRoute.add = editor;
                     break;
             }
+
+            // 逐个添加进去
             for (let i = 0; i < store.layoutRoute.add.length; i++) {
                 const item = store.layoutRoute.add[i];
                 router.addRoute(item);
             }
+
             // 在最后加一个404重定向的路由进去
-            // learn https://my.oschina.net/qinghuo111/blog/4832051
+
+            // vue 2.x 写法
             // router.addRoute({ path: "*", redirect: "/404" });
-            router.addRoute({ path: "/:catchAll(.*)", redirect: "/404" });
+
+            // vue 3.x 之后路由取消了自动匹配，要手动设置匹配方式
+            if (router.hasRoute(path404)) {
+                router.addRoute({ path: path404, redirect: "/404" });
+            }
+
             store.layoutRoute.complete = base.concat(store.layoutRoute.add);
+
             next({ ...to, replace: true });
         }
     } else {
@@ -64,9 +80,28 @@ router.afterEach(to => {
  * 跳转路由初始化页面 
  * @description 登录成功之后用
 */
-export default function openNextPage() {
+export function openNextPage() {
     router.replace({
         path: routerTo.path,
         query: routerTo.query
     })
+}
+
+/** 
+ * 移除已添加的路由列表 
+ * @description 不知道为什么在`src/layout/components/Navbar.vue`文件中使用`import { removeRoutes } from "../../router/permission"`;
+ * 会导致`router`为`undefined`，所以暂时不使用
+*/
+export function removeRoutes() {
+    const list = store.layoutRoute.add;
+    for (let i = 0; i < list.length; i++) {
+        const item = list[i];
+        if (router.hasRoute(item.path)) {
+            router.removeRoute(item.path);
+        }
+    }
+    // 和上面对应的 404
+    router.removeRoute(path404);
+    // 清空缓存对象
+    store.layoutRoute.add = store.layoutRoute.complete = [];
 }

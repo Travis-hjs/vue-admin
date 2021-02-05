@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import utils from "../utils";
 import {
     layoutRouteType,
@@ -14,6 +14,7 @@ const cacheName = "ModuleLayoutInfo";
 export default class ModuleLayout {
     constructor() {
         this.initLayout();
+        watch(this.layoutState, this.saveLayout.bind(this));
     }
 
     /** `layout`操作状态 */
@@ -48,10 +49,10 @@ export default class ModuleLayout {
     }
 
     /**
-     * 保存`layout`操作状态
-     * @description 这个方法我用在了`src/layout/index.vue`组件中用`watch`监听了数据的变动然后执行
+     * 保存`layout`操作状
     */
-    saveLayout() {
+    private saveLayout() {
+        // console.count("saveLayout");
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
         const data: any = {};
         for (const key in this.layoutState) {

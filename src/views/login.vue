@@ -36,11 +36,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from "vue";
-import utils from "../utils";
-import apiUser from "../api/User";
-import openNextPage from "../router/permission";
+import { defineComponent, reactive, ref } from "vue";
 import store from "../store";
+import apiUser from "../api/User";
+import utils from "../utils";
+import { openNextPage } from "../router/permission";
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
@@ -104,7 +104,7 @@ export default defineComponent({
         }
 
         /** 登录表单 */
-        const loginFormEl: any = ref(null);
+        const loginFormEl = ref<any>(null);
 
         /** 
          * 点击登录 

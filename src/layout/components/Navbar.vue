@@ -34,6 +34,8 @@ import { defineComponent, ref } from "vue";
 import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import store from "../../store";
+import router from "../../router";
+// import { removeRoutes } from "../../router/permission";
 
 export default defineComponent({
     name: "Navbar",
@@ -52,11 +54,17 @@ export default defineComponent({
         function logout() {
             store.removeUserState();
             // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
-            layoutState.historyViews = [];
-            // 退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
-            // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
-            // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
-            location.reload();
+            router.push("/login").then(() => {
+                layoutState.historyViews = [];
+
+                // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
+                // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
+                // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
+                location.reload();
+
+                // 现在不需要了，vue 3.x 之后路由增加了删除路由方法
+                // removeRoutes();
+            })
         }
 
         return {
