@@ -12,10 +12,9 @@ const routerTo = {
 }
 
 /**
- * 404的路径匹配
- * @learn https://my.oschina.net/qinghuo111/blog/4832051
+ * 重定向到`/404`的路由名
  */
-const path404 = "/:catchAll(.*)";
+const redirectRouteName = "redirect404";
 
 // 权限管理
 router.beforeEach(function(to, from, next) {
@@ -47,8 +46,9 @@ router.beforeEach(function(to, from, next) {
             // router.addRoute({ path: "*", redirect: "/404" });
 
             // vue 3.x 之后路由取消了自动匹配，要手动设置匹配方式
-            if (router.hasRoute(path404)) {
-                router.addRoute({ path: path404, redirect: "/404" });
+            // learn https://my.oschina.net/qinghuo111/blog/4832051
+            if (!router.hasRoute(redirectRouteName)) {
+                router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
             }
 
             store.layoutRoute.complete = base.concat(store.layoutRoute.add);
@@ -90,18 +90,20 @@ export function openNextPage() {
 /** 
  * 移除已添加的路由列表 
  * @description 不知道为什么在`src/layout/components/Navbar.vue`文件中使用`import { removeRoutes } from "../../router/permission"`;
- * 会导致`router`为`undefined`，所以暂时不使用
+ * 会导致`router.beforeEach`为`undefined`，所以暂时不使用导出方式使用，改用下面挂载在`window`上去调用，之后找到解决方法再改回来
 */
 export function removeRoutes() {
     const list = store.layoutRoute.add;
-    for (let i = 0; i < list.length; i++) {
+    for (let i = list.length - 1; i > -1; i--) {
         const item = list[i];
-        if (router.hasRoute(item.path)) {
-            router.removeRoute(item.path);
+        if (item.name && router.hasRoute(item.name)) {
+            router.removeRoute(item.name);
         }
     }
     // 和上面对应的 404
-    router.removeRoute(path404);
-    // 清空缓存对象
+    router.removeRoute(redirectRouteName);
+    // 清空路由缓存对象
     store.layoutRoute.add = store.layoutRoute.complete = [];
 }
+
+(window as any).removeRoutes = removeRoutes;

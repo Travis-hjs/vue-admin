@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, onUnmounted } from "vue";
+import { defineComponent, computed, onMounted, onBeforeUnmount } from "vue";
 import AppMain from "./components/AppMain.vue";
 import Navbar from "./components/Navbar.vue";
 import RightPanel from "./components/RightPanel.vue";
@@ -66,7 +66,7 @@ export default defineComponent({
             }
         }
 
-        onUnmounted(function() {
+        onBeforeUnmount(function() {
             window.removeEventListener("resize", checkResize);
         })
 

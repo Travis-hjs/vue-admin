@@ -60,10 +60,11 @@ export default defineComponent({
                 // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
                 // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
                 // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
-                location.reload();
+                // location.reload();
 
                 // 现在不需要了，vue 3.x 之后路由增加了删除路由方法
                 // removeRoutes();
+                (window as any).removeRoutes();
             })
         }
 

@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
 import store from "../../store";
 
 export default defineComponent({
@@ -54,7 +54,7 @@ export default defineComponent({
             body.appendChild(elRightPanel.value);
         })
 
-        onUnmounted(function() {
+        onBeforeUnmount(function() {
             const el = elRightPanel.value;
             if (el && el.parentNode) {
                 el.parentNode.removeChild(el);

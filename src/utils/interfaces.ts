@@ -71,6 +71,8 @@ export interface UserInfoType {
 export type RouteItem = {
     /** 完整地址 */
     fullPath?: string
+    /** 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一 */
+    name: string
 } & RouteRecordRaw
 
 export interface LayoutStateType {

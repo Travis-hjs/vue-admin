@@ -4,8 +4,7 @@ import { RouteItem } from "../utils/interfaces";
 
 /**
  * 基础路由
- * 
- * 路由第一层要加"/"，之后的不用加，路由重定向也是
+ * @description vue 3.x之后，路由第一层要加"/"，之后的不用加，路由重定向也是
  * 重定向`redirect`也要加"/"
  */
 export const base: Array<RouteItem> = [
@@ -97,6 +96,7 @@ export const admin: Array<RouteItem> = [
     {
         path: "/icon",
         component: Layout,
+        name: "icon",
         children: [
             {
                 path: "index",
