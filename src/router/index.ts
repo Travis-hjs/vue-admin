@@ -94,6 +94,21 @@ export const admin: Array<RouteItem> = [
         ]
     },
     {
+        path: "/request",
+        name: "request",
+        redirect: "/request/weather",
+        meta: { title: "http请求", icon: "guide" },
+        component: Layout,
+        children: [
+            {
+                path: "weather",
+                name: "request/weather",
+                meta: { title: "获取天气数据", icon: "international" },
+                component: () => import("@/views/tsx/http"),
+            }
+        ]
+    },
+    {
         path: "/icon",
         component: Layout,
         name: "icon",

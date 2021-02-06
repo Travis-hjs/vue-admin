@@ -88,9 +88,8 @@ export function openNextPage() {
 }
 
 /** 
- * 移除已添加的路由列表 
- * @description 不知道为什么在`src/layout/components/Navbar.vue`文件中使用`import { removeRoutes } from "../../router/permission"`;
- * 会导致`router.beforeEach`为`undefined`，所以暂时不使用导出方式使用，改用下面挂载在`window`上去调用，之后找到解决方法再改回来
+ * 移除已添加的路由列表
+ * @description 退出登录时用
 */
 export function removeRoutes() {
     const list = store.layoutRoute.add;
@@ -105,5 +104,3 @@ export function removeRoutes() {
     // 清空路由缓存对象
     store.layoutRoute.add = store.layoutRoute.complete = [];
 }
-
-(window as any).removeRoutes = removeRoutes;

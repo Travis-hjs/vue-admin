@@ -65,7 +65,17 @@ function ajax(params: AjaxParams) {
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        XHR.setRequestHeader("Content-Type", "application/json");
+        // XHR.setRequestHeader("Content-Type", "application/json");
+        // 设置默认响应头
+        if (!params.headers) XHR.setRequestHeader("Content-Type", "application/json");
+    }
+
+    // 判断设置配置头信息
+    if (params.headers) {
+        for (const key in params.headers) {
+            const value = params.headers[key];
+            XHR.setRequestHeader(key, value);
+        }
     }
 
     // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
@@ -115,30 +125,28 @@ function getResultInfo(result: { statusCode: number, data: any }) {
  * 基础请求
  * @param method 请求方式
  * @param url 请求接口
- * @param data 请求数据 
- * @param success 成功回调
  * @param fail 失败回调
  * @param upload 上传图片 FormData
+ * @param headers 配置头信息对象
  */
 export default function request(
     method: AjaxParams["method"],
     url: string,
-    data?: object,
-    success?: (res: ApiResult, xhr: XMLHttpRequest) => void,
-    fail?: (error: ApiResult) => void,
-    upload?: AjaxParams["file"]
+    data?: object | null,
+    upload?: AjaxParams["file"],
+    headers?: AjaxParams["headers"],
 ) {
-    return new Promise<any>(function(resolve, reject) {
+    return new Promise<ApiResult>(function(resolve, reject) {
         ajax({
             url: config.apiUrl + url,
             method: method,
+            headers: headers,
             data: data || {},
             file: upload,
             overtime: config.requestOvertime,
             success(res, xhr) {
                 // console.log("请求成功", res);
                 const info = getResultInfo({ statusCode: xhr.status, data: res });
-                success && success(info, xhr);
                 resolve(info);
             },
             fail(err) {
@@ -148,7 +156,6 @@ export default function request(
                 }
                 // 全局的请求错误提示，不需要可以去掉
                 utils.showError(info.msg);
-                fail && fail(info);
                 resolve(info);
             },
             timeout() {
@@ -156,7 +163,6 @@ export default function request(
                 const info = getResultInfo({ statusCode: config.requestOvertime, data: null });
                 // 全局的请求超时提示，不需要可以去掉
                 utils.showWarning(info.msg);
-                fail && fail(info);
                 resolve(info);
             }
         });

@@ -45,7 +45,7 @@ export default defineComponent({
         let loading = ref(false);
 
         /** 上传图片 */
-        function uploadImg() {
+        async function uploadImg() {
             const input = uploadinput.value;
             const file = (input.files as FileList)[0];
             // console.log("上传图片文件 >>", file);
@@ -72,18 +72,18 @@ export default defineComponent({
             // formData.append("file", file);
 
             loading.value = true;
-            api.uploadImg(file, res => {
-                loading.value = false;
-                const result: string = res;
+            const res = await api.uploadImg(file)
+            loading.value = false;
+            console.log("上传图片 >>", res);
+            if (res.state === 1) {
+                const result: string = res.data.img;
                 context.emit("change", {
                     id: props.uploadId,
                     src: result
                 })
-            }, err => {
-                loading.value = false;
-                utils.showError("上传图片失败");
-                // console.log("上传图片失败 >>", err);
-            });
+            } else {
+                utils.showError(res.msg);
+            }
         }
 
         /** 清除当前图片 */

@@ -46,14 +46,12 @@ class ApiUser {
         }
         testLogin();
         
-        // request("POST", "/login", params, res => {
+        // request("POST", "/login", params).then(res => {
         //     // 录成功后缓存用户信息
         //     res.data.name = params.username;
         //     store.updateUserInfo(res.data);
         //     // console.log("录成功后缓存用户信息", res);
         //     success && success(res);
-        // }, err => {
-        //     fail && fail(err);
         // });
     }
 

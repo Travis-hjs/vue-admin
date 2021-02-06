@@ -26,6 +26,8 @@ export interface AjaxParams {
     overtime?: number,
     /** 是否上传文件 通常是图片 */
     file?: FormData,
+    /** `XMLHttpRequest.header`设置对象 */
+    headers?: { [key: string]: string }
     /** 成功回调 */
     success?(
         /** 响应结果 */
