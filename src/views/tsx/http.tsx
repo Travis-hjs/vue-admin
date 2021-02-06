@@ -36,7 +36,7 @@ const TsxHttpRequest = defineComponent({
             }
         }
         
-        if (location.protocol === "https") {
+        if (location.origin.includes("https")) {
             state.showTip = true;
         }
 
