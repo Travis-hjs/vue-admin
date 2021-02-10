@@ -11,12 +11,12 @@ export class ModuleConfig {
 
     /** 开发环境 */
     protected readonly dev = {
-        api: "http://192.168.89.53/api",
+        api: "http://wthrcdn.etouch.cn"
     }
     
     /** 生产环境 */
     protected readonly prod = {
-        api: "https://huangjingsheng.com/api"
+        api: "http://wthrcdn.etouch.cn"
     }
 
     /** `api`请求域名 */

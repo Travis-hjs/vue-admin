@@ -26,13 +26,13 @@ export default class UploadImg extends Vue {
         type: String,
         default: ""
     })
-    private imgUrl!: string;
+    imgUrl!: string;
     
     @Prop({
         type: [String, Number],
         default: ""
     })
-    private uploadId!: UploadChange["id"];
+    uploadId!: UploadChange["id"];
 
     /** 图片宽度 */
     @Prop({
@@ -42,13 +42,13 @@ export default class UploadImg extends Vue {
     width!: number;
 
     /** 加载动画 */
-    private loading = false;
+    loading = false;
 
     /** 发送数据到父组件中 */
     @Emit("change") sendImgSrc(info: UploadChange) {}
 
     /** 上传图片 */
-    private uploadImg() {
+    async uploadImg() {
         // 这样写也可以，但是命令台会报错，浏览器不会
         // const input = (this.$refs.uploadinput as HTMLInputElement);
 
@@ -79,22 +79,22 @@ export default class UploadImg extends Vue {
         // formData.append("file", file);
 
         this.loading = true;
-        api.uploadImg(file, res => {
-            this.loading = false;
-            const result: string = res;
+        const res = await api.uploadImg(file)
+        this.loading = false;
+        console.log("上传图片 >>", res);
+        if (res.state === 1) {
+            const result: string = res.data.img;
             this.sendImgSrc({
                 id: this.uploadId,
                 src: result
             });
-        }, err => {
-            this.loading = false;
+        } else {
             this.$message.error("上传图片失败");
-            // console.log("上传图片失败 >>", err);
-        });
+        }
     }
 
     /** 清除当前图片 */
-    private removeImg() {
+    removeImg() {
         this.sendImgSrc({
             id: this.uploadId,
             src: ""

@@ -10,24 +10,40 @@ class ModuleApi {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    uploadImg(fromData: File, success?: (res: any) => void, fail?: (error: ApiResult) => void) {
-        /** 模拟上传 */
-        function testUpload() {
+    uploadImg(fromData: File) {
+        // 模拟上传
+        return new Promise<ApiResult>(function(resolve) {
             const reader = new FileReader();
             reader.onload = function() {
-                setTimeout(() => {
-                    success && success(reader.result);
+                setTimeout(function() {
+                    resolve({
+                        state: 1,
+                        data: { img: reader.result },
+                        msg: "上传成功"
+                    })
                 }, 500);
             }
+            reader.onerror = function() {
+                resolve({
+                    state: -1,
+                    data: null,
+                    msg: "上传失败"
+                })
+            }
             reader.readAsDataURL(fromData);
-        }
-        testUpload();
+        })
         
-        // request("POST", "/uploadImg", {}, res => {
-        //     success && success(res);
-        // }, err => {
-        //     fail && fail(err);
-        // }, fromData);
+        // return request("POST", "/uploadImg", null, fromData);
+    }
+
+    /**
+     * 获取天气预报数据
+     * @param city 城市名
+     */
+    getWeather(city: string) {
+        return request("GET", "/weather_mini", {
+            city: encodeURIComponent(city)
+        })
     }
 }
 

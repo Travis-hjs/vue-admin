@@ -47,7 +47,7 @@ export const admin: Array<RouteItem> = [
             {
                 path: "nested",
                 name: "nested",
-                redirect: "nested/menu-1",
+                redirect: "/nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
                 component: () => import("@/views/pages/nested.vue"),
                 children: [
@@ -89,6 +89,21 @@ export const admin: Array<RouteItem> = [
                 name: "column/column-2",
                 meta: { title: "栏目二", icon: "table" },
                 component: () => import("@/views/pages/column-2.vue")
+            }
+        ]
+    },
+    {
+        path: "/request",
+        name: "request",
+        redirect: "/request/weather",
+        meta: { title: "http请求", icon: "guide" },
+        component: Layout,
+        children: [
+            {
+                path: "weather",
+                name: "request/weather",
+                meta: { title: "获取天气数据", icon: "international" },
+                component: () => import("@/views/pages/http.vue"),
             }
         ]
     },
