@@ -30,7 +30,9 @@ router.beforeEach((to, from, next) => {
             }
             router.addRoutes(store.addRouters);
             // 在最后加一个404重定向的路由进去
-            router.addRoutes([{ path: "*", redirect: "/404" }]);
+            // router.addRoutes([{ path: "*", redirect: "/404" }]);
+            // 不重定向到`/404`
+            router.addRoutes([{...base[1], path: "*"}]);
             store.completeRouters = base.concat(store.addRouters);
             next({ ...to, replace: true });
         }
