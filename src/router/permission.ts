@@ -48,7 +48,9 @@ router.beforeEach(function(to, from, next) {
             // vue 3.x 之后路由取消了自动匹配，要手动设置匹配方式
             // learn https://my.oschina.net/qinghuo111/blog/4832051
             if (!router.hasRoute(redirectRouteName)) {
-                router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
+                // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
+                // 不从定向到`/404`
+                router.addRoute({...base[1], path: "/:catchAll(.*)", name: redirectRouteName });
             }
 
             store.layoutRoute.complete = base.concat(store.layoutRoute.add);
