@@ -49,7 +49,7 @@ router.beforeEach(function(to, from, next) {
             // learn https://my.oschina.net/qinghuo111/blog/4832051
             if (!router.hasRoute(redirectRouteName)) {
                 // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
-                // 不从定向到`/404`
+                // 不重定向到`/404`
                 router.addRoute({...base[1], path: "/:catchAll(.*)", name: redirectRouteName });
             }
 
