@@ -71,19 +71,6 @@ export default defineComponent({
             visible.value = false;
         }
 
-        // 监听路由变动 注意这里如果使用`watch`来监听路由控制台会出现警告，打包之后会直接卡死，但不报错
-        // watch(route, addhistoryViews)
-
-        // 所有响应式数据变动
-        watchEffect(function() {
-            addhistoryViews();
-            if (visible.value) {
-                document.body.addEventListener("click", closeMenu);
-            } else {
-                document.body.removeEventListener("click", closeMenu);
-            }
-        });
-
         /**
          * 是否高亮
          * @param item item路由对象
@@ -174,9 +161,23 @@ export default defineComponent({
             visible.value = true;
         }
 
-        onMounted(function() {
+        // 监听路由变动 注意这里如果使用`watch`来监听路由控制台会出现警告，打包之后会直接卡死，但不报错
+        // watch(route, addhistoryViews)
+
+        // 所有响应式数据变动
+        watchEffect(function() {
             addhistoryViews();
-        })
+            if (visible.value) {
+                document.body.addEventListener("click", closeMenu);
+            } else {
+                document.body.removeEventListener("click", closeMenu);
+            }
+        });
+
+        // onMounted(function() {
+        //     // watchEffect已经立即执行过一次了，所以这里不需要
+        //     addhistoryViews();
+        // })
 
         return {
             layoutState,
