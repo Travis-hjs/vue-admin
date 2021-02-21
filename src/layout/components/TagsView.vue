@@ -11,7 +11,7 @@
                 class="tags-view-item"
                 @contextmenu.prevent="openMenu(tag, $event)"
             >
-                {{ tag.meta.title }}
+                {{ formatTitle(tag.meta.title) }}
                 <span v-show="layoutState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)"></span>
             </router-link>
         </ScrollPane>
@@ -179,6 +179,14 @@ export default defineComponent({
         //     addhistoryViews();
         // })
 
+        /**
+         * 格式化`title`值
+         * @param value 要处理的内容
+         */
+        function formatTitle(value: string) {
+            return " " + value.trim();
+        }
+
         return {
             layoutState,
             visible,
@@ -189,7 +197,8 @@ export default defineComponent({
             closeOthersTags,
             closeAllTags,
             openMenu,
-            el
+            el,
+            formatTitle
         }
     }
 })
