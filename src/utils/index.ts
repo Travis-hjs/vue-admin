@@ -14,6 +14,16 @@ class ModuleUtil extends ModuleElementUI {
     }
 
     /**
+     * 检测类型
+     * @param target 检测的目标
+     */
+    checkType(target: any) {
+        const value: string = Object.prototype.toString.call(target);
+        const result = (value.match(/\[object (\S*)\]/) as RegExpMatchArray)[1];
+        return result.toLocaleLowerCase() as JavaScriptTypes;
+    }
+    
+    /**
      * 修改属性值-只修改之前存在的值
      * @param target 修改的目标
      * @param value 修改的内容
@@ -23,7 +33,7 @@ class ModuleUtil extends ModuleElementUI {
             if (Object.prototype.hasOwnProperty.call(target, key)) {
                 // target[key] = value[key];
                 // 需要的话，深层逐个赋值
-                if (utils.checkType(target[key]) === "object") {
+                if (this.checkType(target[key]) === "object") {
                     this.modifyData(target[key], value[key]);
                 } else {
                     target[key] = value[key];
@@ -150,16 +160,6 @@ class ModuleUtil extends ModuleElementUI {
         } else {
             fail && fail("复制失败");
         }
-    }
-
-    /**
-     * 检测类型
-     * @param target 检测的目标
-     */
-    checkType(target: any) {
-        const value: string = Object.prototype.toString.call(target);
-        const result = (value.match(/\[object (\S*)\]/) as RegExpMatchArray)[1];
-        return result.toLocaleLowerCase() as JavaScriptTypes;
     }
 
     /**
