@@ -1,13 +1,12 @@
-import { ModuleModifyObject } from "../modules/ModifyObject";
+import utils from "../utils";
 import {
     LayoutStateType,
     RouteItem
 } from "../utils/interfaces";
 
 const cacheName = "ModuleLayoutInfo";
-export default class ModuleLayout extends ModuleModifyObject {
+export default class ModuleLayout {
     constructor() {
-        super();
         this.initLayout();
     }
 
@@ -35,7 +34,7 @@ export default class ModuleLayout extends ModuleModifyObject {
         const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            this.modifyData(this.layoutState, value);
+            utils.modifyData(this.layoutState, value);
         }
     }
 

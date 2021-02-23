@@ -1,4 +1,5 @@
 import ModuleLayout from "./Layout";
+import utils from "../utils";
 import { DeepReadonly, UserInfoType } from "../utils/interfaces";
 
 /** 用户信息缓存字段 */
@@ -48,7 +49,7 @@ class ModuleStore extends ModuleLayout {
         const cacheInfo = sessionStorage.getItem(userInfoCacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            this.modifyData(this.userInfo, value);
+            utils.modifyData(this.userInfo, value);
         }
     }
 
@@ -57,13 +58,13 @@ class ModuleStore extends ModuleLayout {
      * @param value 缓存的对象
      */
     updateUserInfo(value: Partial<UserInfoType>) {
-        this.modifyData(this.userInfo, value);
+        utils.modifyData(this.userInfo, value);
         sessionStorage.setItem(userInfoCacheName, JSON.stringify(this.userInfo));
     }
 
     /** 清空缓存信息 */
     removeUserState() {
-        this.modifyData(this.userInfo, createUserInfo());
+        utils.modifyData(this.userInfo, createUserInfo());
         sessionStorage.removeItem(userInfoCacheName);
     }
 

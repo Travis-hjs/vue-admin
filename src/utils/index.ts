@@ -8,6 +8,47 @@ import {
  * @description 工具类
  */
 class ModuleUtil {
+    
+    /**
+     * 检测类型
+     * @param target 检测的目标
+     */
+    checkType(target: any) {
+        const value: string = Object.prototype.toString.call(target);
+        const result = (value.match(/\[object (\S*)\]/) as RegExpMatchArray)[1];
+        return result.toLocaleLowerCase() as JavaScriptTypes;
+    }
+
+    /**
+     * 修改属性值-只修改之前存在的值
+     * @param target 修改的目标
+     * @param value 修改的内容
+     */
+    modifyData<T>(target: T, value: T) {
+        for (const key in value) {
+            if (Object.prototype.hasOwnProperty.call(target, key)) {
+                // target[key] = value[key];
+                // 需要的话，深层逐个赋值
+                if (this.checkType(target[key]) === "object") {
+                    this.modifyData(target[key], value[key]);
+                } else {
+                    target[key] = value[key];
+                }
+            }
+        }
+    }
+
+    /**
+     * 设置属性值-之前不存在的值也根据传入的`value`值去设置
+     * @param target 设置的目标
+     * @param value 设置的内容
+     */
+    setData<T>(target: T, value: T) {
+        for (const key in value) {
+            target[key] = value[key];
+        }
+    }
+    
     /**
      * 获取日期周几
      * @param value 指定日期
@@ -115,16 +156,6 @@ class ModuleUtil {
         } else {
             fail && fail("复制失败");
         }
-    }
-
-    /**
-     * 检测类型
-     * @param target 检测的目标
-     */
-    checkType(target: any) {
-        const value: string = Object.prototype.toString.call(target);
-        const result = (value.match(/\[object (\S*)\]/) as RegExpMatchArray)[1];
-        return result.toLocaleLowerCase() as JavaScriptTypes;
     }
 
     /**
