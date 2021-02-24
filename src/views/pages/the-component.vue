@@ -33,7 +33,8 @@ export default class Page5 extends Vue {
             {
                 image: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
             }, {
-                image: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                // image: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                image: "https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fcb3645c82654a4b9d7feab62dc6e332~tplv-k3u1fbpfcp-watermark.image"
             }
         ],
 

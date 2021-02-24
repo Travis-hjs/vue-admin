@@ -1,14 +1,12 @@
-import { ModuleModifyObject } from "../modules/ModifyObject";
+import utils from "../utils";
 import {
     LayoutStateType,
-    RouteItem,
-    LayoutStateKeys,
+    RouteItem
 } from "../utils/interfaces";
 
 const cacheName = "ModuleLayoutInfo";
-export default class ModuleLayout extends ModuleModifyObject {
+export default class ModuleLayout {
     constructor() {
-        super();
         this.initLayout();
     }
 
@@ -20,7 +18,6 @@ export default class ModuleLayout extends ModuleModifyObject {
         showSettings: true,
         showHistoryView: true,
         sidebarOpen: true,
-        sidebarWithoutAnimation: false,
         historyViews: [],
         device: "desktop",
         theme: "#409EFF"
@@ -37,20 +34,21 @@ export default class ModuleLayout extends ModuleModifyObject {
         const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            this.modifyData(this.layoutState, value);
+            utils.modifyData(this.layoutState, value);
         }
     }
 
-    /** 保存`layout`操作状态 */
+    /**
+     * 保存`layout`操作状态
+     * @description 这个方法我用在了`src/layout/index.vue`组件中用`watch`监听了数据的变动然后执行
+    */
     public saveLayout() {
-        // 这个方法我用在了`Navbar`组件中用`watch`监听了数据的变动然后执行
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
         const value = this.layoutState;
         const data: any = {};
         for (const key in value) {
-            const k = key as LayoutStateKeys;
-            if (k === "historyViews") {
-                data[k] = value[k].map(item => {
+            if (key === "historyViews") {
+                data[key] = value["historyViews"].map(item => {
                     return {
                         name: item.name,
                         meta: {...item.meta},
@@ -59,7 +57,7 @@ export default class ModuleLayout extends ModuleModifyObject {
                     }
                 });
             } else {
-                data[k] = value[k];
+                data[key] = value[key as keyof LayoutStateType];
             }
         }
         // console.log(JSON.stringify(data));

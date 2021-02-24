@@ -47,7 +47,7 @@ export const admin: Array<RouteItem> = [
             {
                 path: "nested",
                 name: "nested",
-                redirect: "nested/menu-1",
+                redirect: "/nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
                 component: () => import("@/views/pages/nested.vue"),
                 children: [
@@ -135,6 +135,21 @@ export const admin: Array<RouteItem> = [
         ]
     },
     {
+        path: "/request",
+        name: "request",
+        redirect: "/request/weather",
+        meta: { title: "http请求", icon: "guide" },
+        component: Layout,
+        children: [
+            {
+                path: "weather",
+                name: "request/weather",
+                meta: { title: "获取天气数据", icon: "international" },
+                component: () => import("@/views/pages/http.vue"),
+            }
+        ]
+    },
+    {
         path: "/icon",
         component: Layout,
         children: [
@@ -174,7 +189,9 @@ export const admin: Array<RouteItem> = [
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */
 export const editor = [admin[0]];
 
-export const router = new VueRouter({
+/** `VueRouter`路由实例化对象 */
+const router = new VueRouter({
     routes: base
 });
 
+export default router;

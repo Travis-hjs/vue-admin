@@ -1,20 +1,25 @@
-import { router, base, admin, editor } from "./index";
+import router, { base, admin, editor } from "./index";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import apiUser from "../api/User";
 import store from "../store";
 
 // NProgress.configure({ showSpinner: false });
+
+/** 路由初始化时信息对象 */
+const routerTo = {
+    path: "/",
+    query: {}
+}
 
 // 权限管理
 router.beforeEach((to, from, next) => {
     NProgress.start();
 
-    if (apiUser.userInfo.token) {
+    if (store.userInfo.token) {
         if (store.addRouters.length > 0) {
             next();
         } else {
-            switch (apiUser.userInfo.userType) {
+            switch (store.userInfo.userType) {
                 case "admin":
                     store.addRouters = admin;
                     break;
@@ -24,7 +29,10 @@ router.beforeEach((to, from, next) => {
                     break;
             }
             router.addRoutes(store.addRouters);
-            router.addRoutes([{ path: "*", redirect: "/404" }]); // 在最后加一个404重定向的路由进去
+            // 在最后加一个404重定向的路由进去
+            // router.addRoutes([{ path: "*", redirect: "/404" }]);
+            // 不重定向到`/404`
+            router.addRoutes([{...base[1], name: "page404", path: "*"}]);
             store.completeRouters = base.concat(store.addRouters);
             next({ ...to, replace: true });
         }
@@ -32,15 +40,12 @@ router.beforeEach((to, from, next) => {
         if (to.path === store.loginPath) {
             next();
         } else {
+            routerTo.path = to.path;
+            routerTo.query = to.query;
             next({ path: store.loginPath });
             NProgress.done();
         }
     }
-    // try {
-    // } catch (error) {
-    //     console.log(error);
-    //     next("/404");
-    // }
     
 });
 
@@ -51,3 +56,14 @@ router.afterEach(to => {
         document.title = to.meta.title
     }
 })
+
+/**
+ * 跳转路由初始化页面 
+ * @description 登录成功之后用
+*/
+export default function openNextPage() {
+    router.replace({
+        path: routerTo.path,
+        query: routerTo.query
+    })
+}

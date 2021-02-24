@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import { router } from "./router";
+import router from "./router";
 import ElementUI from "element-ui";
 import utils from "./utils";
 // element-variables.scss里面已经引入了，所以这里可以不用

@@ -5,6 +5,16 @@ export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 }
 
+/** 深层递归所有属性为只读 */
+export type DeepReadonly<T> = {
+    readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+}
+
+/** 深层递归所有属性为必选选（貌似不生效） */
+export type DeepRequired<T> = {
+    [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P]
+}
+
 export interface AjaxParams {
     /** 请求路径 */
     url: string,
@@ -16,6 +26,8 @@ export interface AjaxParams {
     overtime?: number,
     /** 是否上传文件 通常是图片 */
     file?: FormData,
+    /** `XMLHttpRequest.header`设置对象 */
+    headers?: { [key: string]: string }
     /** 成功回调 */
     success?(
         /** 响应结果 */
@@ -31,11 +43,14 @@ export interface AjaxParams {
     progress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
 }
 
-export interface RequestFail {
-    /** 请求错误提示信息 */
-    message: string,
-    /** 请求错误数据 */
-    data?: any
+/** 接口请求基础响应数据 */
+export interface ApiResult {
+    /** 接口状态（1为成功） */
+    state: number
+    /** 接口响应数据 */
+    data: any
+    /** 接口响应信息 */
+    msg: string
 }
 
 export interface LoginParam {
@@ -60,6 +75,7 @@ export interface RouteItem extends RouteConfig {
     fullPath?: string
 }
 
+/** `layout`状态类型 */
 export interface LayoutStateType {
     /** 显示设置 */
     showSettings: boolean
@@ -73,8 +89,6 @@ export interface LayoutStateType {
     showSidebarLogo: boolean
     /** 显示侧边栏文字主题色 */
     sidebarTextTheme: boolean
-    /** 侧边栏动画 */
-    sidebarWithoutAnimation: boolean
     /** 历史记录列表 */
     historyViews: Array<RouteItem>
     /** 系统信息 */
@@ -82,8 +96,6 @@ export interface LayoutStateType {
     /** 主题颜色 */
     theme: string
 }
-
-export type LayoutStateKeys = keyof LayoutStateType;
 
 /** 运算符号 */
 export type NumberSymbols = "+" | "-"| "*" | "/";
@@ -104,3 +116,27 @@ export interface RichTextChange {
     /** 富文本变动返回的内容 */
     value: string
 }
+
+/** 折线图表数据 */
+export interface ChartLineData {
+    /** x轴底部显示数据 */
+    bottom: Array<string | number>
+    /** 图表数据 */
+    data: Array<{
+        /** 标题 */
+        title: string | number
+        /** 显示值数据（长度与`bottom`一致） */
+        value: Array<number>
+        /** 当前线条颜色 */
+        color: string
+    }>
+}
+
+/** 圆环图表数据 */
+export type ChartRingData = Array<{
+    color: string
+    /** 显示值数据 */
+    value: number
+    /** 对应的名称 */
+    name: string | number
+}>

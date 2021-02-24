@@ -17,9 +17,9 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class SidebarLogo extends Vue {
-    @Prop({ required: true }) private collapse!: boolean;
+    @Prop({ required: true }) collapse!: boolean;
 
-    private title = "Vue Typescript Admin";
+    title = "Vue Typescript Admin";
 }
 </script>
 

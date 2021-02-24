@@ -1,23 +1,23 @@
-import config from "../modules/Config";
+import config from "./Config";
 import { Message } from "element-ui";
 import { 
     AjaxParams, 
-    RequestFail 
+    ApiResult
 } from "./interfaces";
 
 /**
  * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * @author https://github.com/Hansen-hjs
  */
-function ajax(param: AjaxParams) {
+function ajax(params: AjaxParams) {
     /** XMLHttpRequest */
     const XHR = new XMLHttpRequest();
     /** 请求方法 */
-    const method = param.method;
+    const method = params.method;
     /** 超时检测 */
-    const overtime = param.overtime || 0;
+    const overtime = params.overtime || 0;
     /** 请求链接 */
-    let url = param.url;
+    let url = params.url;
     /** 非`GET`请求传参 */
     let payload = null;
     /** `GET`请求传参 */
@@ -26,8 +26,8 @@ function ajax(param: AjaxParams) {
     // 传参处理
     if (method === "GET") {
         // 解析对象传参
-        for (const key in param.data) {
-            query += "&" + key + "=" + param.data[key];
+        for (const key in params.data) {
+            query += "&" + key + "=" + params.data[key];
         }
         if (query) {
             query = "?" + query.slice(1);
@@ -35,7 +35,7 @@ function ajax(param: AjaxParams) {
         }
     } else {
         // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-        payload = JSON.stringify(param.data);
+        payload = JSON.stringify(params.data);
     }
 
     // 监听请求变化
@@ -43,15 +43,15 @@ function ajax(param: AjaxParams) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            param.success && param.success(JSON.parse(XHR.response), XHR);
+            params.success && params.success(JSON.parse(XHR.response), XHR);
         } else {
-            param.fail && param.fail(XHR);
+            params.fail && params.fail(XHR);
         }
     }
 
     // 判断请求进度
-    if (param.progress) {
-        XHR.addEventListener("progress", param.progress);
+    if (params.progress) {
+        XHR.addEventListener("progress", params.progress);
     }
 
     // XHR.responseType = "json";
@@ -60,12 +60,22 @@ function ajax(param: AjaxParams) {
     XHR.open(method, url, true);
 
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
-    if (param.file) {
-        payload = param.file;
+    if (params.file) {
+        payload = params.file;
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        XHR.setRequestHeader("Content-Type", "application/json");
+        // XHR.setRequestHeader("Content-Type", "application/json");
+        // 设置默认响应头
+        if (!params.headers) XHR.setRequestHeader("Content-Type", "application/json");
+    }
+
+    // 判断设置配置头信息
+    if (params.headers) {
+        for (const key in params.headers) {
+            const value = params.headers[key];
+            XHR.setRequestHeader(key, value);
+        }
     }
 
     // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
@@ -73,11 +83,39 @@ function ajax(param: AjaxParams) {
         XHR.timeout = overtime;
         XHR.ontimeout = function () {
             XHR.abort();
-            param.timeout && param.timeout(XHR);
+            params.timeout && params.timeout(XHR);
         }
     }
 
     XHR.send(payload);
+}
+
+function getResultInfo(result: { statusCode: number, data: any }) {
+    const info: ApiResult = { state: -1, msg: "网络出错了", data: null }
+    switch (result.statusCode) {
+        case config.requestOvertime:
+            info.msg = "网络超时了";
+            break;
+        case 200:
+            info.state = 1;
+            info.msg = "ok";
+            info.data = result.data;
+            break;
+        case 400:
+            info.msg = "接口传参不正确";
+        case 403:
+            info.msg = "登录已过期";
+            break;
+        case 404:
+            info.msg = "接口不存在";
+            break;
+        default:
+            break;
+    }
+    if (result.statusCode >= 500) {
+        info.msg = "服务器闹脾气了";
+    }
+    return info;
 }
 
 /**
@@ -93,46 +131,37 @@ export default function request(
     method: AjaxParams["method"],
     url: string,
     data?: object,
-    success?: (res: any, xhr: XMLHttpRequest) => void,
-    fail?: (error: RequestFail) => void,
-    upload?: AjaxParams["file"]
+    upload?: AjaxParams["file"],
+    headers?: AjaxParams["headers"]
 ) {
     return new Promise<any>(function(resolve, reject) {
         ajax({
-            url: config.baseUrl + url,
+            url: config.apiUrl + url,
             method: method,
+            headers: headers,
             data: data || {},
             file: upload,
-            overtime: 8000,
+            overtime: config.requestOvertime,
             success(res, xhr) {
                 // console.log("请求成功", res);
-                success && success(res, xhr);
-                resolve(res);
+                const info = getResultInfo({ statusCode: xhr.status, data: res });
+                resolve(info);
             },
             fail(err) {
-                // console.log("请求失败", err);
-                let error = {
-                    message: "接口报错",
-                    data: null
-                };
+                const info = getResultInfo({ statusCode: err.status, data: null });
                 if (err.response.charAt(0) == "{") {
-                    error.data = JSON.parse(err.response);
+                    info.data = JSON.parse(err.response);
                 }
                 // 全局的请求错误提示，不需要可以去掉
-                Message.error(error.message); 
-                fail && fail(error);
-                reject(error);
+                Message.error(info.msg);
+                resolve(info);
             },
             timeout() {
                 console.warn("XMLHttpRequest 请求超时 !!!");
-                let error = {
-                    message: "请求超时",
-                    data: null
-                }
+                const info = getResultInfo({ statusCode: config.requestOvertime, data: null });
                 // 全局的请求超时提示，不需要可以去掉
-                Message.warning(error.message);
-                fail && fail(error);
-                reject(error);
+                Message.warning(info.msg);
+                resolve(info);
             }
         });
     })

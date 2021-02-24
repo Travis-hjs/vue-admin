@@ -85,9 +85,9 @@ export default class RichText extends Vue {
             // console.log(resultFiles);
             // const formData = new FormData();
             // formData.append("img", resultFiles[0]);
-            api.uploadImg(resultFiles[0], res => {
+            api.uploadImg(resultFiles[0]).then(res => {
                 // console.log(res);
-                insertImgFn(res);
+                insertImgFn(res.data.img);
                 this.loading = false;
             })
             // resultFiles 是 input 中选中的文件列表

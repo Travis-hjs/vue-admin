@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import store from "../../store";
 
 // const version = "2.13.0" // require("element-ui/package.json").version; // element-ui version from node_modules
@@ -18,27 +18,27 @@ const defaultColor = "#409EFF"; // default color
 @Component({})
 export default class ThemePicker extends Vue {
 
-    private theme = store.layoutState.theme || defaultColor;
+    theme = store.layoutState.theme || defaultColor;
 
-    private onChange() {
+    onChange() {
         this.$emit("change", this.theme);
     }
 
     // `vue-typescript-admin`原版的代码，我不需要引入整个UI库，所以注释了
 
-    // private chalk = ""; // The content of theme-chalk css
+    // chalk = ""; // The content of theme-chalk css
 
     // get defaultTheme() {
     //     return store.layoutState.theme;
     // }
 
     // @Watch("defaultTheme", { immediate: true })
-    // private onDefaultThemeChange(value: string) {
+    // onDefaultThemeChange(value: string) {
     //     this.theme = value;
     // }
 
     // @Watch("theme")
-    // private async onThemeChange(value: string) {
+    // async onThemeChange(value: string) {
     //     if (!value) return;
     //     const oldValue = this.chalk ? this.theme : defaultColor;
     //     const themeCluster = this.getThemeCluster(value.replace("#", ""));
@@ -103,7 +103,7 @@ export default class ThemePicker extends Vue {
     //     message.close();
     // }
 
-    // private updateStyle(style: string, oldCluster: string[], newCluster: string[]) {
+    // updateStyle(style: string, oldCluster: string[], newCluster: string[]) {
     //     let newStyle = style;
     //     oldCluster.forEach((color, index) => {
     //         newStyle = newStyle.replace(
@@ -114,7 +114,7 @@ export default class ThemePicker extends Vue {
     //     return newStyle;
     // }
 
-    // private getCSSString(url: string, variable: string) {
+    // getCSSString(url: string, variable: string) {
     //     return new Promise(resolve => {
     //         const xhr = new XMLHttpRequest();
     //         xhr.onreadystatechange = () => {
@@ -131,7 +131,7 @@ export default class ThemePicker extends Vue {
     //     });
     // }
 
-    // private getThemeCluster(theme: string) {
+    // getThemeCluster(theme: string) {
     //     const tintColor = (color: string, tint: number) => {
     //         let red = parseInt(color.slice(0, 2), 16);
     //         let green = parseInt(color.slice(2, 4), 16);

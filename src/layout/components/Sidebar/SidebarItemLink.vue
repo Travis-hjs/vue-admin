@@ -13,8 +13,8 @@ import utils from "../../../utils";
 
 @Component({})
 export default class SidebarItemLink extends Vue {
-    @Prop({ required: true }) private to!: string;
+    @Prop({ required: true }) to!: string;
 
-    private isExternal = utils.isExternal;
+    isExternal = utils.isExternal;
 }
 </script>

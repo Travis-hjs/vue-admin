@@ -50,7 +50,7 @@ export default class Settings extends Vue {
      * @description 这里我单独修改`switch`组件的样式，`vue-typescript-admin`原版是直接插入并修改整个UI库的样式，我觉得有点浪费资源，所以这里单独修改
      * @param value
      */
-    private updateCss(value: string) {
+    updateCss(value: string) {
         const id = "the_switch_style"
         let label = (document.getElementById(id) as HTMLStyleElement);
         if (!label) {
@@ -61,7 +61,7 @@ export default class Settings extends Vue {
         label.textContent = `.el-switch.is-checked .el-switch__core{border-color: ${value}; background-color: ${value};`;
     }
 
-    private themeChange(value: string) {
+    themeChange(value: string) {
         if (this.pageState.theme != value) {
             this.pageState.theme = value;
             this.updateCss(value);

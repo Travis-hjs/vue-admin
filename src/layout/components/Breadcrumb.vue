@@ -15,22 +15,22 @@ import { RouteRecord, Route } from "vue-router";
 
 @Component({})
 export default class Breadcrumb extends Vue {
-    private breadcrumbs: Array<RouteRecord> = [];
+    breadcrumbs: Array<RouteRecord> = [];
 
     @Watch("$route")
-    private onRouteChange(route: Route) {
+    onRouteChange(route: Route) {
         // 如果转到重定向页面，就不更新面包屑
         if (route.path.startsWith("/redirect/")) return;
         this.getBreadcrumb();
     }
 
-    created() {
-        this.getBreadcrumb();
-    }
-
-    private getBreadcrumb() {
+    getBreadcrumb() {
         const matched = this.$route.matched.filter(item => item.meta && item.meta.title);
         this.breadcrumbs = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false);
+    }
+    
+    created() {
+        this.getBreadcrumb();
     }
 
 }

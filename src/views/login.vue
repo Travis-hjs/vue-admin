@@ -40,6 +40,7 @@ import { Component, Vue } from "vue-property-decorator";
 import utils from "../utils";
 import apiUser from "../api/User";
 import store from "../store";
+import openNextPage from "../router/permission";
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
@@ -111,10 +112,10 @@ export default class Login extends Vue {
             apiUser.login(this.loginForm, res => {
                 // console.log("success", res);
                 this.loading = false;
-                this.$router.push("/");
+                openNextPage();
             }, err => {
                 this.loading = false;
-                this.$message.error(err.message);
+                this.$message.error(err.msg);
             });
         }
         if (adopt) {

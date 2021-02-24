@@ -1,58 +1,12 @@
 import request from "../utils/request";
 import store from "../store";
-import { ModuleModifyObject } from "../modules/ModifyObject";
 import { 
     LoginParam, 
-    RequestFail, 
+    ApiResult, 
     UserInfoType 
 } from "../utils/interfaces";
 
-/** 缓存名称 */
-const cacheName = "ApiUserInfo";
-
-/** 创建用户信息 */
-function createUserInfo(): UserInfoType {
-    return {
-        id: "",
-        name: "",
-        token: "",
-        userType: "",
-    }
-}
-
-class ApiUser extends ModuleModifyObject { 
-
-    constructor() {
-        super();
-        this.init();
-    }
-
-    /** 用户信息（包含登录状态） */
-    public readonly userInfo = createUserInfo();
-
-    /**
-     * 更新当前的`userInfo`值并缓存到本地
-     * @param value 缓存的对象
-     */
-    private updateUserInfo(value: Partial<UserInfoType>) {
-        this.modifyData(this.userInfo, value);
-        sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
-    }
-
-    /** 初始化缓存信息 */
-    private init() {
-        const cacheInfo = sessionStorage.getItem(cacheName);
-        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
-        if (value) {
-            this.modifyData(this.userInfo, value);
-        }
-    }
-
-    /** 清空缓存信息 */
-    removeUserState() {
-        this.modifyData(this.userInfo, createUserInfo());
-        sessionStorage.removeItem(cacheName);
-    }
+class ApiUser {
 
     /**
      * 登录
@@ -60,7 +14,7 @@ class ApiUser extends ModuleModifyObject {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: RequestFail) => void) {
+    login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: ApiResult) => void) {
         /** 模拟登录 */
         const testLogin = () => {
             /** 缓存信息  */
@@ -73,32 +27,30 @@ class ApiUser extends ModuleModifyObject {
             switch (info.name) {
                 case store.testUserList[0]:
                     info.userType = "admin";
-                    this.updateUserInfo(info);
+                    store.updateUserInfo(info);
                     success && success(info);
                     break;
 
                 case store.testUserList[1]:
                     info.userType = "editor";
-                    this.updateUserInfo(info);
+                    store.updateUserInfo(info);
                     success && success(info);
                     break;
 
                 default:
-                    fail && fail({ message: "账户不存在" });
+                    fail && fail({ state: -1, msg: "账户不存在", data: null });
                     break;
             }
             
         }
         testLogin();
         
-        // request("POST", "/login", params, res => {
+        // request("POST", "/login", params).then(res => {
         //     // 录成功后缓存用户信息
         //     res.data.name = params.username;
-        //     this.updateUserInfo(res.data);
+        //     store.updateUserInfo(res.data);
         //     // console.log("录成功后缓存用户信息", res);
         //     success && success(res);
-        // }, err => {
-        //     fail && fail(err);
         // });
     }
 
