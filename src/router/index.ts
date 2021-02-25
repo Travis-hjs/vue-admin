@@ -135,6 +135,21 @@ export const admin: Array<RouteItem> = [
         ]
     },
     {
+        path: "/chart",
+        name: "chart",
+        redirect: "/chart/home",
+        meta: { title: "Echarts", icon: "component" },
+        component: Layout,
+        children: [
+            {
+                path: "home",
+                name: "chart-home",
+                meta: { title: "图表", icon: "chart" },
+                component: () => import("@/views/chart/index.vue"),
+            }
+        ]
+    },
+    {
         path: "/request",
         name: "request",
         redirect: "/request/weather",
