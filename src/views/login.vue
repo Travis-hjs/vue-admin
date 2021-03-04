@@ -111,17 +111,16 @@ export default defineComponent({
          * @param adopt 是否不校验直接通过
         */
         function handleLogin(adopt: boolean) {
-            function start() {
+            async function start() {
                 loading.value = true;
                 // console.log("用户登录信息：", loginForm);
-                apiUser.login(loginForm, res => {
-                    // console.log("success", res);
-                    loading.value = false;
+                const res = await apiUser.login(loginForm)
+                loading.value = false;
+                if (res.state === 1) {
                     openNextPage();
-                }, err => {
-                    loading.value = false;
-                    utils.showMessage.error(err.msg);
-                });
+                } else {
+                    utils.showMessage.error(res.msg);   
+                }
             }
             if (adopt) {
                 return start();

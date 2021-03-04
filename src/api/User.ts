@@ -15,9 +15,9 @@ class ApiUser {
      * @param success 成功回调
      * @param fail 失败回调
      */
-    login(params: LoginParam, success?: (res: UserInfoType) => void, fail?: (error: ApiResult) => void) {
-        /** 模拟登录 */
-        function testLogin() {
+    login(params: LoginParam) {
+        // 模拟登录
+        return new Promise<ApiResult>(function(resolve) {
             /** 缓存信息  */
             const info: UserInfoType = {
                 name: params.username,
@@ -25,34 +25,34 @@ class ApiUser {
                 userType: "",
                 id: Math.random().toString(36).substr(10)
             }
-            switch (info.name) {
-                case store.testUserList[0]:
-                    info.userType = "admin";
-                    store.updateUserInfo(info);
-                    success && success(info);
-                    break;
-
-                case store.testUserList[1]:
-                    info.userType = "editor";
-                    store.updateUserInfo(info);
-                    success && success(info);
-                    break;
-
-                default:
-                    fail && fail({ state: -1, msg: "账户不存在", data: null });
-                    break;
-            }
-            
-        }
-        testLogin();
+            setTimeout(() => {
+                switch (info.name) {
+                    case store.testUserList[0]:
+                        info.userType = "admin";
+                        store.updateUserInfo(info);
+                        resolve({ state: 1, msg: "ok", data: info });
+                        break;
+    
+                    case store.testUserList[1]:
+                        info.userType = "editor";
+                        store.updateUserInfo(info);
+                        resolve({ state: 1, msg: "ok", data: info });
+                        break;
+    
+                    default:
+                        resolve({ state: -1, msg: "账户不存在", data: null });
+                        break;
+                }
+            }, 600);
+        })
         
-        // request("POST", "/login", params).then(res => {
+        // const res = await request("POST", "/login", params)
+        // if (res.state === 1) {
         //     // 录成功后缓存用户信息
         //     res.data.name = params.username;
         //     store.updateUserInfo(res.data);
-        //     // console.log("录成功后缓存用户信息", res);
-        //     success && success(res);
-        // });
+        // }
+        // return res;
     }
 
 }
