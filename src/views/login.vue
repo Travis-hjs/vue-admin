@@ -106,17 +106,16 @@ export default class Login extends Vue {
     */
     handleLogin(adopt: boolean) {
         const elementForm: any = this.$refs["loginFormEl"];
-        const start = () => {
+        const start = async () => {
             this.loading = true;
             // console.log("用户登录信息：", this.loginForm);
-            apiUser.login(this.loginForm, res => {
-                // console.log("success", res);
-                this.loading = false;
+            const res = await apiUser.login(this.loginForm);
+            this.loading = false;
+            if (res.state === 1) {
                 openNextPage();
-            }, err => {
-                this.loading = false;
-                this.$message.error(err.msg);
-            });
+            } else {
+                this.$message.error(res.msg);
+            }
         }
         if (adopt) {
             return start();
