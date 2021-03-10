@@ -12,8 +12,6 @@ class ApiUser {
     /**
      * 登录
      * @param params 登录信息
-     * @param success 成功回调
-     * @param fail 失败回调
      */
     login(params: LoginParam) {
         // 模拟登录
