@@ -17,7 +17,7 @@ class ModuleApi {
             reader.onload = function() {
                 setTimeout(function() {
                     resolve({
-                        state: 1,
+                        code: 1,
                         data: { img: reader.result },
                         msg: "上传成功"
                     })
@@ -25,7 +25,7 @@ class ModuleApi {
             }
             reader.onerror = function() {
                 resolve({
-                    state: -1,
+                    code: -1,
                     data: null,
                     msg: "上传失败"
                 })

@@ -116,7 +116,7 @@ export default defineComponent({
                 // console.log("用户登录信息：", loginForm);
                 const res = await apiUser.login(loginForm)
                 loading.value = false;
-                if (res.state === 1) {
+                if (res.code === 1) {
                     openNextPage();
                 } else {
                     utils.showMessage.error(res.msg);   

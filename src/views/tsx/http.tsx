@@ -31,7 +31,7 @@ const TsxHttpRequest = defineComponent({
             const res = await api.getWeather(state.city)
             state.loading = false;
             console.log("获取天气预报数据 >>", res);
-            if (res.state === 1) {
+            if (res.code === 1) {
                 state.content = JSON.stringify(res.data, null, 4);
             }
         }

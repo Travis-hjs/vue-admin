@@ -75,7 +75,7 @@ export default defineComponent({
             const res = await api.uploadImg(file)
             loading.value = false;
             console.log("上传图片 >>", res);
-            if (res.state === 1) {
+            if (res.code === 1) {
                 const result: string = res.data.img;
                 context.emit("change", {
                     id: props.uploadId,
