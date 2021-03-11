@@ -53,7 +53,7 @@ router.afterEach(to => {
     NProgress.done();
     // 根据路由名动态设置文档的标题
     if (to.meta.title) {
-        document.title = to.meta.title
+        document.title = to.meta.title as string;
     }
 })
 

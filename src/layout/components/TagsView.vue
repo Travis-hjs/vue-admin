@@ -165,12 +165,14 @@ export default class TagsView extends Vue {
 </script>
 
 <style lang="scss">
+@import "@/styles/variables.scss";
+
 .tags-view-container {
-    height: 34px;
+    height: $tagsViewHeight;
     width: 100%;
     background: #fff;
     border-bottom: 1px solid #d8dce5;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px $tagsViewShadowHeight 0 rgba(0, 0, 0, 0.12), 0 0 $tagsViewShadowHeight 0 rgba(0, 0, 0, 0.04);
 
     .tags-view-wrapper {
         padding-top: 4px;

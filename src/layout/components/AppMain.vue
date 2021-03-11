@@ -2,7 +2,7 @@
     <section class="app-main">
         <transition name="fade-transform" mode="out-in">
             <keep-alive :include="pageState.historyViews">
-                <router-view :key="$route.path" />
+                <router-view class="page" :key="$route.path" />
             </keep-alive>
         </transition>
     </section>
@@ -19,29 +19,42 @@ export default class AppMain extends Vue {
 </script>
 
 <style lang="scss">
+@import "@/styles/variables.scss";
+
+// .app-main padding
+$appPadding: 12px;
+
 .app-main {
-    /* 50= navbar  50  */
-    min-height: calc(100vh - 50px);
+    min-height: calc(100vh - #{$navbarHeight});
     width: 100%;
-    padding: 14px; 
+    padding: $appPadding; 
     position: relative;
     overflow: hidden;
+    .page {
+        transition: $time all;
+    }
 }
 
 .fixed-header + .app-main {
-    padding-top: 64px;
+    padding-top: calc(#{$navbarHeight} + #{$appPadding});
     height: 100vh;
     overflow: auto;
+    background-color: #eee;
+    .page {
+        width: 100%;
+        min-height: 100%;
+        padding: 14px;
+        background-color: #fff;
+    }
 }
 
 .hasTagsView {
     .app-main {
-        /* 98 = navbar + tags-view = 50 + 34 + 14 */
-        min-height: calc(100vh - 98px);
+        min-height: calc(100vh - #{$navbarHeight} - #{$tagsViewHeight});
     }
 
     .fixed-header + .app-main {
-        padding-top: 98px;
+        padding-top: calc(#{$navbarHeight} + #{$appPadding} + #{$tagsViewHeight});
     }
 }
 </style>
