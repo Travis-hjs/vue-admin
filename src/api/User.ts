@@ -11,8 +11,6 @@ class ApiUser {
     /**
      * 登录
      * @param params 登录信息
-     * @param success 成功回调
-     * @param fail 失败回调
      */
     login(params: LoginParam) {
         // 模拟登录
@@ -29,24 +27,24 @@ class ApiUser {
                     case store.testUserList[0]:
                         info.userType = "admin";
                         store.updateUserInfo(info);
-                        resolve({ state: 1, msg: "ok", data: info });
+                        resolve({ code: 1, msg: "ok", data: info });
                         break;
     
                     case store.testUserList[1]:
                         info.userType = "editor";
                         store.updateUserInfo(info);
-                        resolve({ state: 1, msg: "ok", data: info });
+                        resolve({ code: 1, msg: "ok", data: info });
                         break;
     
                     default:
-                        resolve({ state: -1, msg: "账户不存在", data: null });
+                        resolve({ code: -1, msg: "账户不存在", data: null });
                         break;
                 }
             }, 600);
         })
         
         // const res = await request("POST", "/login", params)
-        // if (res.state === 1) {
+        // if (res.code === 1) {
         //     // 录成功后缓存用户信息
         //     res.data.name = params.username;
         //     store.updateUserInfo(res.data);

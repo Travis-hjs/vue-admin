@@ -46,7 +46,7 @@ export interface AjaxParams {
 /** 接口请求基础响应数据 */
 export interface ApiResult {
     /** 接口状态（1为成功） */
-    state: number
+    code: number
     /** 接口响应数据 */
     data: any
     /** 接口响应信息 */
