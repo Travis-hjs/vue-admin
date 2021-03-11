@@ -82,8 +82,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import "@/styles/variables.scss";
+
 .navbar {
-    height: 50px;
+    height: $navbarHeight;
     overflow: hidden;
     position: relative;
     background: #fff;

@@ -3,7 +3,7 @@
         <div v-if="classInfo.mobile && layoutState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
         <Sidebar class="sidebar-container" />
         <div :class="{'hasTagsView': layoutState.showHistoryView}" class="main-container">
-            <div :class="{'fixed-header': layoutState.fixedHeader}">
+            <div :class="['app-header', {'fixed-header': layoutState.fixedHeader}]">
                 <Navbar />
                 <TagsView v-if="layoutState.showHistoryView" />
             </div>
@@ -86,8 +86,6 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@/styles/variables.scss";
-$minSideBarWidth: 54px;
-$time: 0.28s;
 
 .app-wrapper {
     position: relative;
@@ -123,6 +121,11 @@ $time: 0.28s;
         overflow: hidden;
     }
 
+    .app-header {
+        position: relative;
+        z-index: 5;
+    }
+    
     .fixed-header {
         position: fixed;
         top: 0;

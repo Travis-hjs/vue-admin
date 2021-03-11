@@ -58,7 +58,7 @@ aside {
 
 // ================== 定义过渡动画 ==================
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
-    transition: .5s all;
+    transition: .5s all !important;
 }
 
 .fadeSlideX-enter-active, .fadeSlideX-leave-active {
