@@ -36,7 +36,7 @@ export default class HttpRequest extends Vue {
         const res = await api.getWeather(this.pageData.city)
         this.pageData.loading = false;
         console.log("获取天气预报数据 >>", res);
-        if (res.state === 1) {
+        if (res.code === 1) {
             this.pageData.content = JSON.stringify(res.data, null, 4);
         }
     }

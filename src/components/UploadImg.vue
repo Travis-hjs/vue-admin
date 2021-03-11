@@ -82,7 +82,7 @@ export default class UploadImg extends Vue {
         const res = await api.uploadImg(file)
         this.loading = false;
         console.log("上传图片 >>", res);
-        if (res.state === 1) {
+        if (res.code === 1) {
             const result: string = res.data.img;
             this.sendImgSrc({
                 id: this.uploadId,
