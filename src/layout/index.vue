@@ -3,7 +3,7 @@
         <div v-if="classInfo.mobile && pageState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
         <Sidebar class="sidebar-container" />
         <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
-            <div :class="{'fixed-header': pageState.fixedHeader}">
+            <div :class="['app-header', {'fixed-header': pageState.fixedHeader}]">
                 <Navbar />
                 <TagsView v-if="pageState.showHistoryView" />
             </div>
@@ -90,8 +90,6 @@ export default class Layout extends Vue {
 
 <style lang="scss">
 @import "@/styles/variables.scss";
-$minSideBarWidth: 54px;
-$time: 0.28s;
 
 .app-wrapper {
     position: relative;
@@ -125,6 +123,11 @@ $time: 0.28s;
         left: 0;
         z-index: 1001;
         overflow: hidden;
+    }
+
+    .app-header {
+        position: relative;
+        z-index: 5;
     }
 
     .fixed-header {
