@@ -14,9 +14,9 @@ Vue.use(VueRouter);
 export const base: Array<RouteItem> = [
     {
         path: store.loginPath,
-        name: "login",
+        name: "/login",
         component: () => import("@/views/login.vue"),
-        meta: { hidden: true },
+        meta: { hidden: true, title: "请登陆" },
     }, {
         path: "/404",
         name: "page-404",
