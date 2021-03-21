@@ -1,6 +1,6 @@
-/* Variables */
+/* 全局变量文件 */
 
-// Base color
+// ================ 基础颜色 ================
 $blue:#324157;
 $light-blue:#3A71A8;
 $red:#C03639;
@@ -10,20 +10,27 @@ $tiffany: #4AB7BD;
 $yellow:#FEC171;
 $panGreen: #30B08F;
 
-// Sidebar
+// ================ layout相关 ================
+// Sidebar 默认宽度
 $sideBarWidth: 210px;
+// Sidebar 最小宽度
+$minSideBarWidth: 54px;
+// .tags-view-container 高度
+$tagsViewHeight: 34px;
+// .tags-view-container 阴影高度
+$tagsViewShadowHeight: 3px;
+// .navbar 高度
+$navbarHeight: 50px;
+// 动画持续时间
+$time: 0.28s;
+
 $subMenuBg:#1f2d3d;
 $subMenuHover:#001528;
 $subMenuActiveText:#f4f4f5;
 $menuBg:#304156;
 $menuText:#bfcbd9;
-$menuActiveText:#409EFF; // Also see settings.sidebarTextTheme
-
-// Login page
-$lightGray: #eee;
-$darkGray:#889aa4;
-$loginBg: #2d3a4b;
-$loginCursorColor: #fff;
+// sidebarTextTheme 默认颜色
+$menuActiveText:#409EFF;
 
 // The :export directive is the magic sauce for webpack
 // https://mattferderer.com/use-sass-variables-in-typescript-and-javascript

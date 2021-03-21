@@ -62,8 +62,10 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="scss">
+@import "@/styles/variables.scss";
+
 .navbar {
-    height: 50px;
+    height: $navbarHeight;
     overflow: hidden;
     position: relative;
     background: #fff;

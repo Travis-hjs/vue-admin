@@ -7,8 +7,6 @@ class ModuleApi {
     /**
      * 上传图片
      * @param fromData 图片`FromData` 这里我模拟上传，所以类型是`File`，接口上传时才是`FromData`
-     * @param success 成功回调
-     * @param fail 失败回调
      */
     uploadImg(fromData: File) {
         // 模拟上传
@@ -17,7 +15,7 @@ class ModuleApi {
             reader.onload = function() {
                 setTimeout(function() {
                     resolve({
-                        state: 1,
+                        code: 1,
                         data: { img: reader.result },
                         msg: "上传成功"
                     })
@@ -25,7 +23,7 @@ class ModuleApi {
             }
             reader.onerror = function() {
                 resolve({
-                    state: -1,
+                    code: -1,
                     data: null,
                     msg: "上传失败"
                 })
