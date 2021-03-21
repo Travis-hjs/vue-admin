@@ -219,6 +219,26 @@ class ModuleUtil {
     }
 
     /**
+     * 输入只能是数字
+     * @param value 
+     * @param decimal 是否要保留小数
+     */
+     inputOnlyNumber(value: string | number, decimal?: boolean) {
+        let result = value.toString().trim();
+        if (result.length == 0) return "";
+        if (decimal) {
+            result = result.replace(/[^0-9.]+/ig, "");
+            let array = result.split(".");
+            if (array.length > 1) {
+                result = array[0] + "." + array[1];
+            }
+        } else {
+            result = result.replace(/[^0-9]+/ig, "");
+        }
+        return result;
+    }
+
+    /**
      * 判断是否外部链接
      * @param path 路径
      */
