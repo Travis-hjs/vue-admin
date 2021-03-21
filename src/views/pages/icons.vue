@@ -1,7 +1,7 @@
 <template>
     <div class="icons-container">
         <el-tabs type="border-card">
-            <el-tab-pane label="Icons">
+            <el-tab-pane label="Svg Icons">
                 <div v-for="item of svgIcons" :key="item" v-copy="getSvgIconCode(item)">
                     <el-tooltip placement="top">
                         <template #content>
