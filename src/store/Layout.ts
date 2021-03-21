@@ -4,7 +4,13 @@ import {
     RouteItem
 } from "../utils/interfaces";
 
+import elementVariables from "../styles/element-variables.scss";
+
 const cacheName = "ModuleLayoutInfo";
+
+/**
+ * `layout`状态管理模块
+ */
 export default class ModuleLayout {
     constructor() {
         this.initLayout();
@@ -20,8 +26,14 @@ export default class ModuleLayout {
         sidebarOpen: true,
         historyViews: [],
         device: "desktop",
-        theme: "#409EFF"
+        theme: elementVariables.theme
     }
+
+    /**
+     * 默认主题颜色
+     * @description `/styles/element-variables.scss`中的`$--color-primary`
+    */
+     readonly defaultTheme = elementVariables.theme;
 
     /** 动态添加的权限路由 */
     public addRouters: Array<RouteItem> = [];

@@ -3,7 +3,7 @@ import utils from "../utils";
 import { DeepReadonly, UserInfoType } from "../utils/interfaces";
 
 /** 用户信息缓存字段 */
-const userInfoCacheName = "store-user-info";
+const userInfoCacheName = "StoreUserInfo";
 
 /** 创建用户信息 */
 function createUserInfo(): DeepReadonly<UserInfoType> {

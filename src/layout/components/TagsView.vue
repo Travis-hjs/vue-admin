@@ -1,6 +1,6 @@
 <template>
     <div id="tags-view-container" class="tags-view-container">
-        <ScrollPane ref="scrollPane" class="tags-view-wrapper">
+        <ScrollPane class="tags-view-wrapper">
             <router-link
                 v-for="tag in pageState.historyViews"
                 ref="tag"

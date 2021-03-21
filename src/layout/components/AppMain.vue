@@ -2,7 +2,7 @@
     <section class="app-main">
         <transition name="fade-transform" mode="out-in">
             <keep-alive :include="pageState.historyViews">
-                <router-view class="page" :key="$route.path" />
+                <router-view class="app-page" :key="$route.path" />
             </keep-alive>
         </transition>
     </section>
@@ -30,7 +30,7 @@ $appPadding: 12px;
     padding: $appPadding; 
     position: relative;
     overflow: hidden;
-    .page {
+    .app-page {
         transition: $time all;
     }
 }
@@ -40,7 +40,7 @@ $appPadding: 12px;
     height: 100vh;
     overflow: auto;
     background-color: #eee;
-    .page {
+    .app-page {
         width: 100%;
         min-height: 100%;
         padding: 14px;
