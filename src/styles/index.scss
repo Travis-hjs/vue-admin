@@ -2,7 +2,8 @@
 
 *, *:before, *:after {
     box-sizing: border-box;
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 html, body, #app{ 
@@ -38,32 +39,8 @@ label {
     }
 }
 
-aside {
-    background: #eef1f6;
-    color: #2c3e50;
-    padding: 8px 24px;
-    margin-bottom: 20px;
-    border-radius: 2px;
-    display: block;
-    line-height: 32px;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+// ================== 定义过渡动画 ==================
 
-    a {
-        color: #337ab7;
-        cursor: pointer;
-
-        &:hover {
-            color: rgb(32, 160, 255);
-        }
-    }
-}
-
-/* Global transition */
-// See https://vuejs.org/v2/guide/transitions.html for detail
-
-// fade
 .fade-enter-active, .fade-leave-active {
     transition: opacity 0.28s;
 }
@@ -72,7 +49,6 @@ aside {
     opacity: 0;
 }
 
-// fade-transform
 .fade-transform-leave-active, .fade-transform-enter-active {
     transition: all .5s !important;
 }
@@ -87,7 +63,6 @@ aside {
     transform: translateX(30px);
 }
 
-// breadcrumb
 .breadcrumb-enter-active, .breadcrumb-leave-active {
     transition: all .5s;
 }
