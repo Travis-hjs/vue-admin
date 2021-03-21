@@ -1,6 +1,6 @@
 <template>
     <div class="tags-view-container" ref="el">
-        <ScrollPane ref="scrollPane" class="tags-view-wrapper">
+        <ScrollPane class="tags-view-wrapper">
             <router-link
                 v-for="tag in layoutState.historyViews"
                 ref="tag"
@@ -42,11 +42,11 @@ export default defineComponent({
         /** 当前组件节点 */
         const el = ref<HTMLElement>(null as any);
         /** 是否隐藏右键菜单 */
-        let visible = ref(false);
+        const visible = ref(false);
         /** 鼠标位置`Y` */
-        let top = ref(0);
+        const top = ref(0);
         /** 鼠标位置`X` */
-        let left = ref(0);
+        const left = ref(0);
         /** 选择路由对象 */
         let selectedItem = {
             path: ""

@@ -13,7 +13,7 @@ const TsxCard = defineComponent({
     },
     setup(props, context) {
         // console.log(props.images);
-        let index = ref(0);
+        const index = ref(0);
 
         const listStyle = computed(function() {
             const length = props.images.length;

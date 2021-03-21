@@ -38,7 +38,7 @@ import store from "../store";
 export default defineComponent({
     name: "401",
     setup() {
-        let dialogVisible = ref(false);
+        const dialogVisible = ref(false);
         const images = store.imageInfo;
 
         function back() {

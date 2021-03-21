@@ -3,12 +3,12 @@
         <!-- vue 2.x 写法 -->
         <!-- <transition name="fadeSlideX" mode="out-in">
             <keep-alive :include="layoutState.historyViews">
-                <router-view class="page" :key="$route.path" />
+                <router-view class="app-page" :key="$route.path" />
             </keep-alive>
         </transition> -->
 
         <!-- vue 3.x 写法 -->
-        <router-view class="page" v-slot="{ Component, route }">
+        <router-view class="app-page" v-slot="{ Component, route }">
             <transition name="fadeSlideX" mode="out-in">
                 <!-- 需要保持缓存时开启 -->
                 <!-- <keep-alive> -->
@@ -46,7 +46,7 @@ $appPadding: 12px;
     padding: $appPadding; 
     position: relative;
     overflow: hidden;
-    .page {
+    .app-page {
         transition: $time all;
     }
 }
@@ -56,7 +56,7 @@ $appPadding: 12px;
     height: 100vh;
     overflow: auto;
     background-color: #eee;
-    .page {
+    .app-page {
         width: 100%;
         min-height: 100%;
         padding: 14px;

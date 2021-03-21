@@ -84,10 +84,10 @@ export default defineComponent({
             ]
         }
 
-        let loading = ref(false);
+        const loading = ref(false);
 
         /** 密码输入框类型 */
-        let inputType = ref("password" as "text" | "password");
+        const inputType = ref("password" as "text" | "password");
 
         function switchInput() {
             inputType.value = inputType.value === "password" ? "text" : "password";

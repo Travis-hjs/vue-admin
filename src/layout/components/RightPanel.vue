@@ -34,7 +34,7 @@ export default defineComponent({
         const body = document.body;
         const layoutState = store.layoutState;
         const elRightPanel = ref<HTMLElement>(null as any);
-        let show = ref(false);
+        const show = ref(false);
 
         /**
          * 切换显示

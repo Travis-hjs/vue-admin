@@ -6,6 +6,8 @@ import {
     LayoutStateType
 } from "../utils/interfaces";
 
+import elementVariables from "../styles/element-variables.scss";
+
 const cacheName = "ModuleLayoutInfo";
 
 /**
@@ -27,8 +29,14 @@ export default class ModuleLayout {
         sidebarOpen: true,
         historyViews: [],
         device: "desktop",
-        theme: "#409EFF"
+        theme: elementVariables.theme
     });
+
+    /**
+     * 默认主题颜色
+     * @description `/styles/element-variables.scss`中的`$--color-primary`
+    */
+     readonly defaultTheme = elementVariables.theme;
 
     /**
      * `layout`路由列表对象

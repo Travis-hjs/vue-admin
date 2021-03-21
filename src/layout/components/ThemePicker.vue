@@ -1,7 +1,7 @@
 <template>
     <el-color-picker
         v-model="theme"
-        :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d']"
+        :predefine="colors"
         @change="onChange()"
         class="theme-picker"
         popper-class="theme-picker-dropdown"
@@ -11,13 +11,14 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import store from "../../store";
-const defaultColor = "#409EFF";
 
 export default defineComponent({
     name: "ThemePicker",
     setup(props, context) {
         
-        let theme = ref(store.layoutState.theme || defaultColor);
+        const theme = ref(store.layoutState.theme);
+
+        const colors = [store.defaultTheme, "#304156","#212121","#11a983", "#13c2c2", "#409EFF", "#6959CD", "#f5222d"];
 
         function onChange() {
             context.emit("change", theme.value);
@@ -25,6 +26,7 @@ export default defineComponent({
 
         return {
             theme,
+            colors,
             onChange
         }
     }

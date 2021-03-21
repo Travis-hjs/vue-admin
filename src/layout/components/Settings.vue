@@ -35,6 +35,7 @@
 import { defineComponent, onMounted } from "vue";
 import ThemePicker from "./ThemePicker.vue";
 import store from "../../store";
+import { themeChangeAsync } from "../theme";
 
 export default defineComponent({
     name: "Settings",
@@ -44,20 +45,9 @@ export default defineComponent({
     setup(props, context) {
         const layoutState = store.layoutState;
 
-        /**
-         * 更新`css`样式
-         * @description 这里我单独修改`switch`组件的样式，`vue-typescript-admin`原版是直接插入并修改整个UI库的样式，我觉得有点浪费资源，所以这里单独修改
-         * @param value
-         */
-        function updateCss(value: string) {
-            const id = "the_switch_style"
-            let label = (document.getElementById(id) as HTMLStyleElement);
-            if (!label) {
-                label = document.createElement("style");
-                label.id = id;
-                document.head.appendChild(label);
-            }
-            label.textContent = `.el-switch.is-checked .el-switch__core{border-color: ${value}; background-color: ${value};`;
+        async function updateCss(value: string) {
+            await themeChangeAsync(value);
+            layoutState.theme = value;
         }
 
         function themeChange(value: string) {
@@ -68,7 +58,7 @@ export default defineComponent({
         }
 
         onMounted(function() {
-            if (layoutState.theme) {
+            if (layoutState.theme !== store.defaultTheme) {
                 updateCss(layoutState.theme);
             }
         })

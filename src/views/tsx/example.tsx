@@ -13,7 +13,7 @@ const TsxExample = defineComponent({
 
         const inputStyle = "width: 100%; max-width: 500px; margin: 0 auto 14px; display: block;";
 
-        let inputValue = ref("");
+        const inputValue = ref("");
 
         function onChange(index: number) {
             console.log("图片索引 >>", index);

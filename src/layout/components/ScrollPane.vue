@@ -7,13 +7,13 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-const tagSpacing = 4;
+// const tagSpacing = 4;
 
 export default defineComponent({
     name: "ScrollPane",
     setup(props, context) {
         /** 滚动容器节点 */
-        const scrollContainer: any = ref(null);
+        const scrollContainer = ref();
 
         function onScroll(e: WheelEvent) {
             const eventDelta = (e as any).wheelDelta || -e.deltaY * 40;

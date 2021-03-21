@@ -42,7 +42,7 @@ export default defineComponent({
         /** 上传组件`input`节点 */
         const uploadinput = ref<HTMLInputElement>(null as any);
         /** 上传状态 */
-        let loading = ref(false);
+        const loading = ref(false);
 
         /** 上传图片 */
         async function uploadImg() {
@@ -105,11 +105,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import "@/styles/element-variables.scss";
+
 .the_upload_img {
     border: 1px dashed #d9d9d9;
     border-radius: 5px;
     overflow: hidden;
-    &:hover{ border-color: #409eff; }
+    &:hover{ border-color: $--color-primary; }
     .image_box{ 
         position: relative; width: 100%; height: 100%; overflow: hidden;
         .image{ display: block; width: 100%; }
