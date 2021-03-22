@@ -18,13 +18,17 @@ const elementCssUrl = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/i
 */
 let cssAssets = "";
 
-function getCSSString(url: string) {
-    return new Promise<void>(resolve => {
+/**
+ * 获取线上`css`资源
+ * @param url 资源路径
+ */
+function getCssAssets(url: string) {
+    return new Promise<string>(resolve => {
         const xhr = new XMLHttpRequest()
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                cssAssets = xhr.responseText.replace(/@font-face{[^}]+}/, "");
-                resolve();
+                const result = xhr.responseText.replace(/@font-face{[^}]+}/, "");
+                resolve(result);
             }
         }
         xhr.open("GET", url);
@@ -40,37 +44,52 @@ function updateStyle(style: string, oldCluster: string[], newCluster: string[]) 
     return newStyle;
 }
 
-function getThemeCluster(theme: string) {
-    function tintColor(color: string, tint: number) {
-        let red = parseInt(color.slice(0, 2), 16);
-        let green = parseInt(color.slice(2, 4), 16);
-        let blue = parseInt(color.slice(4, 6), 16);
-        if (tint === 0) {
-            return [red, green, blue].join(",");
-        } else {
-            red += Math.round(tint * (255 - red));
-            green += Math.round(tint * (255 - green));
-            blue += Math.round(tint * (255 - blue));
-            return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`;
-        }
-    }
-
-    function shadeColor(color: string, shade: number) {
-        let red = parseInt(color.slice(0, 2), 16);
-        let green = parseInt(color.slice(2, 4), 16);
-        let blue = parseInt(color.slice(4, 6), 16);
-        red = Math.round((1 - shade) * red);
-        green = Math.round((1 - shade) * green);
-        blue = Math.round((1 - shade) * blue);
+function tintColor(color: string, tint: number) {
+    let red = parseInt(color.slice(0, 2), 16);
+    let green = parseInt(color.slice(2, 4), 16);
+    let blue = parseInt(color.slice(4, 6), 16);
+    if (tint === 0) {
+        return [red, green, blue].join(",");
+    } else {
+        red += Math.round(tint * (255 - red));
+        green += Math.round(tint * (255 - green));
+        blue += Math.round(tint * (255 - blue));
         return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`;
     }
+}
 
+function shadeColor(color: string, shade: number) {
+    let red = parseInt(color.slice(0, 2), 16);
+    let green = parseInt(color.slice(2, 4), 16);
+    let blue = parseInt(color.slice(4, 6), 16);
+    red = Math.round((1 - shade) * red);
+    green = Math.round((1 - shade) * green);
+    blue = Math.round((1 - shade) * blue);
+    return `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`;
+}
+
+function getThemeCluster(theme: string) {
     const clusters = [theme];
     for (let i = 0; i <= 9; i++) {
         clusters.push(tintColor(theme, Number((i / 10).toFixed(2))));
     }
     clusters.push(shadeColor(theme, 0.1))
     return clusters;
+}
+
+/**
+ * 设置指定`<style id="id">`内容
+ * @param id 指定`id`
+ * @param context 内容
+ */
+function setStyleContext(id: string, context: string) {
+    let label = document.getElementById(id);
+    if (!label) {
+        label = document.createElement("style");
+        label.id = id;
+        document.head.appendChild(label);
+    }
+    label.innerText = context;
 }
 
 /**
@@ -90,34 +109,28 @@ export async function themeChangeAsync(theme: string) {
             duration: 0,
             iconClass: "el-icon-loading"
         })
-        await getCSSString(elementCssUrl)
+        const value = await getCssAssets(elementCssUrl)
+        cssAssets = value;
         message.close();
     }
 
-    function appendStyle(id: string) {
-        const colors = getThemeCluster(originTheme.replace("#", ""));
-        const newStyle = updateStyle(cssAssets, colors, themeCluster);
-        let styleTag = document.getElementById(id);
-        if (!styleTag) {
-            styleTag = document.createElement("style");
-            styleTag.id = id;
-            document.head.appendChild(styleTag);
-        }
-        styleTag.innerText = newStyle;
-    }
+    const colors = getThemeCluster(originTheme.replace("#", ""));
+    const newStyle = updateStyle(cssAssets, colors, themeCluster);
 
-    appendStyle("theme_style");
+    setStyleContext("theme_style", newStyle);
 
-    let styles: HTMLElement[] = [].slice.call(document.querySelectorAll("style"))
+    let styles: HTMLElement[] = [].slice.call(document.querySelectorAll("style"));
+
     styles = styles.filter(style => {
         const text = style.innerText
         return new RegExp(oldValue, "i").test(text) && !/Chalk Variables/.test(text)
-    })
+    });
+    
     styles.forEach(style => {
         const { innerText } = style;
         if (typeof innerText !== "string") return;
         style.innerText = updateStyle(innerText, originalCluster, themeCluster);
-    })
+    });
 
 }
 
@@ -542,12 +555,5 @@ export async function themeChangeAsync(theme: string) {
 //         color: ${theme};
 //     }
 //     `
-//     const id = "theme_style"
-//     let label = (document.getElementById(id) as HTMLStyleElement);
-//     if (!label) {
-//         label = document.createElement("style");
-//         label.id = id;
-//         document.head.appendChild(label);
-//     }
-//     label.textContent = css;
+//     setStyleContext("theme_style", css);
 // }
