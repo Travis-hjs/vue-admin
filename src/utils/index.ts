@@ -185,13 +185,17 @@ class ModuleUtil extends ModuleElementUI {
             const decimal = n.toString().split(".")[1];
             return decimal ? decimal.length : 0;
         }
-        /** 倍率 */
+        /**
+         * 修正小数点
+         * @description 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
+         * @param n 数字
+         */
+        const amend = (n: number, precision = 15) => parseFloat(Number(n).toPrecision(precision));
         const power = Math.pow(10, Math.max(getDecimalLength(a), getDecimalLength(b)));
         let result = 0;
 
-        // 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的暴力处理
-        a = Math.round(a * power);
-        b = Math.round(b * power);
+        a = amend(a * power);
+        b = amend(b * power);
 
         switch (type) {
             case "+":
@@ -208,6 +212,8 @@ class ModuleUtil extends ModuleElementUI {
                 break;
         }
 
+        result = amend(result);
+
         return {
             /** 计算结果 */
             result,
@@ -218,7 +224,7 @@ class ModuleUtil extends ModuleElementUI {
              */
             next(nextType: NumberSymbols, nextValue: number) {
                 return THAT.computeNumber(result, nextType, nextValue);
-            },
+            }
         };
     }
 
