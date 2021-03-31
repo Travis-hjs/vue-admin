@@ -1,20 +1,23 @@
 <template>
-    <div class="the_upload_img" v-loading="loading" :style="{'width': width + 'px'}">
-        <div v-if="imgUrl" class="image_box">
-            <img class="image" :src="imgUrl">
-            <div @click="removeImg()" class="remove flex fvertical fcenter">
-                <i class="el-icon-close" />
+    <div class="the_upload_img">
+        <div class="upload_content" :style="{'width': width + 'px'}" v-loading="loading">
+            <div v-if="imgUrl" class="image_box">
+                <img class="image" :src="imgUrl" :style="{ 'height': autoHeight ? null : height + 'px' }">
+                <div class="remove flex fvertical fcenter">
+                    <i class="el-icon-delete" @click="removeImg()" />
+                </div>
+            </div>
+            <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height + 'px' }">
+                <div class="add_icon"></div>
+                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
             </div>
         </div>
-        <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': width + 'px' }">
-            <div class="add_icon"></div>
-            <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
-        </div>
+        <p class="upload_tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Emit, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import { UploadChange } from "../utils/interfaces";
 import api from "../api/index";
 
@@ -28,6 +31,7 @@ export default class UploadImg extends Vue {
     })
     imgUrl!: string;
     
+    /** 组件`id` */
     @Prop({
         type: [String, Number],
         default: ""
@@ -37,15 +41,46 @@ export default class UploadImg extends Vue {
     /** 图片宽度 */
     @Prop({
         type: Number,
-        default: 240
+        default: 178
     })
     width!: number;
+
+    /** 图片宽度 */
+    @Prop({
+        type: Number,
+        default: 178
+    })
+    height!: number;
+
+    /** 是否自动高度（针对图片） */
+    @Prop({
+        type: Boolean,
+        default: false
+    })
+    autoHeight!: boolean; 
+
+    /** 图片上传提示 */
+    @Prop({
+        type: [String, Number],
+        default: ""
+    })
+    tip!: string;
 
     /** 加载动画 */
     loading = false;
 
     /** 发送数据到父组件中 */
-    @Emit("change") sendImgSrc(info: UploadChange) {}
+    emitChange(info: UploadChange) {
+        this.$emit("change", info);
+    }
+
+    /** 清除当前图片 */
+    removeImg() {
+        this.emitChange({
+            id: this.uploadId,
+            src: ""
+        });
+    }
 
     /** 上传图片 */
     async uploadImg() {
@@ -58,11 +93,11 @@ export default class UploadImg extends Vue {
         // console.log("上传图片文件 >>", file);
         
         /** 上传类型数组 */
-        let typeStr = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
+        const typeList = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
         // 判断文件类型
-        if (typeStr.indexOf(file.type) < 0) {
-            this.$message.warning("文件格式只支持：jpg 和 png");
+        if (typeList.indexOf(file.type) < 0) {
+            this.$message.warning("文件格式只支持：jpg、png、gif");
             input.value = null;
             return;
         }
@@ -84,7 +119,7 @@ export default class UploadImg extends Vue {
         console.log("上传图片 >>", res);
         if (res.code === 1) {
             const result: string = res.data.img;
-            this.sendImgSrc({
+            this.emitChange({
                 id: this.uploadId,
                 src: result
             });
@@ -93,39 +128,41 @@ export default class UploadImg extends Vue {
         }
     }
 
-    /** 清除当前图片 */
-    removeImg() {
-        this.sendImgSrc({
-            id: this.uploadId,
-            src: ""
-        });
-    }
-
 }
 </script>
 
 <style lang="scss">
 @import "@/styles/element-variables.scss";
+@mixin time() { transition: 0.2s all; }
+@mixin addIcon() { content: ""; position: absolute; background-color: #999; }
 
 .the_upload_img {
-    border: 1px dashed #d9d9d9;
-    border-radius: 5px;
-    overflow: hidden;
-    &:hover{ border-color: $--color-primary; }
-    .image_box{ 
-        position: relative; width: 100%; height: 100%; overflow: hidden;
-        .image{ display: block; width: 100%; }
-        .remove{ position: absolute; top: 0; right: 0; line-height: normal; border-radius: 100%; cursor: pointer; width: 30px; height: 30px; background-color: rgba(0,0,0,0.5); font-size: 28px; color: #fff; }
-    }
-    .upload_box{ 
-        width: 100%; position: relative; 
-        .upload_input{ width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; cursor: pointer; }
-        .add_icon{
-            position: relative; width: 30px; height: 30px;
-            &::after{ content: ""; position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background-color: #999; transform: translateX(-50%); }
-            &::before{ content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background-color: #999; transform: translateY(-50%); }
+    .upload_content {
+        background-color: transparent;
+        border: 1px dashed #d9d9d9;
+        border-radius: 5px;
+        overflow: hidden;
+        @include time();
+        &:hover { border-color: $--color-primary; background-color: #fbfdff; }
+        .image_box{ 
+            position: relative; width: 100%; height: 100%; overflow: hidden;
+            .image { display: block; width: 100%; }
+            .remove {
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); color: #f4f4f4; opacity: 0; @include time();
+                &:hover { opacity: 1; }
+            }
+            .el-icon-delete { font-size: 20px; line-height: 20px; cursor: pointer; }
         }
-    }  
-    .el-icon-close{ font-size: 20px; line-height: 20px; }
+        .upload_box{ 
+            width: 100%; position: relative;
+            .upload_input { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; cursor: pointer; }
+            .add_icon {
+                position: relative; width: 30px; height: 30px;
+                &::after{ @include addIcon(); top: 0; left: 50%; width: 2px; height: 100%; transform: translateX(-50%); }
+                &::before{ @include addIcon(); top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
+            }
+        }
+    }
+    .upload_tip { font-size: 12px; color: $--color-primary; line-height: 20px; padding: 6px 4px; }
 }
 </style>

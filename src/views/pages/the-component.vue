@@ -4,10 +4,10 @@
         <el-alert :title="pageData.dec" type="success" />
         <div class="flex">
             <div v-for="(item, index) in pageData.uploadList" :key="index" style="margin-right: 16px;">
-                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" />
+                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片宽度自适应" />
             </div>
             <div>
-                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" />
+                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽度固定尺寸 300px * 200px" />
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@ import UploadImg from "../../components/UploadImg.vue";
 })
 export default class Page5 extends Vue {
 
-    private pageData = {
+    pageData = {
         title: "上传图片组件",
         dec: "element-ui 自身的上传组件会有 bug，在一个组件中使用多个 el-upload 组件时，初始化设置的图片传参只会有一个生效（最后一个），所以自己整了一个上传图片组件。",
         
@@ -41,7 +41,7 @@ export default class Page5 extends Vue {
         single: ""
     }
 
-    private getPicUrl(info: UploadChange) {
+    getPicUrl(info: UploadChange) {
         const index = info.id as number;
         this.pageData.uploadList[index].image = info.src;
     }
