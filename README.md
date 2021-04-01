@@ -4,6 +4,10 @@
 
 **vue 2.x | [vue 3.x](https://github.com/Hansen-hjs/vue-admin/tree/next)**
 
+## 预览地址
+
+[vue-admin](https://huangjingsheng.gitee.io/hjs/vue2-admin/)
+
 ## 功能清单
 
 * `layout`核心布局模板
@@ -20,9 +24,6 @@
 
 为保证当前模板的轻量，像`图表`、`富文本编辑`、`Excel`等一些扩展功能根据自己项目选择喜欢的导入使用，这里只提供一个基础的框架模板，另外["hjs"](https://github.com/Hansen-hjs/vue-admin/tree/hjs)分支是我个人用的一个分支，会有额外的功能扩展模块例如：`Excel`、`wangEditor-富文本`；也是根据个人使用的频率添加的一些实用功能，后续会按需增加。
 
-## 预览地址
-
-[vue-admin](https://huangjingsheng.gitee.io/hjs/vue2-admin/)
 
 ## sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化**
 
