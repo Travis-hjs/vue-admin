@@ -104,7 +104,7 @@ export const admin: Array<RouteItem> = [
                 path: "weather",
                 name: "request/weather",
                 meta: { title: "获取天气数据", icon: "international" },
-                component: () => import("@/views/tsx/http"),
+                component: () => import("@/views/pages/http.vue"),
             }
         ]
     },

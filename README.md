@@ -4,6 +4,10 @@
 
 **vue 3.x | [vue 2.x](https://github.com/Hansen-hjs/vue-admin)**
 
+## 预览地址
+
+[vue-admin](https://huangjingsheng.gitee.io/hjs/vue3-admin/)
+
 ## 功能清单
 
 * `layout`核心布局模板
@@ -24,9 +28,6 @@
 
 关于状态管理，有人会说，都`vue 3.x`了，为什么不使用`hooks`模式去代替一个全局单例`store`模式？没错，确实是可以用`hooks`的设计模式去代替全局单例`store`。最开始我重写这个项目的时候就是用的`hooks`，后来发现代码多的时候，`hooks`的使用太过于零散了，每个方法，每个变量都要导出导入来使用，这导致我在某个组件或者页面用到的依赖过多的时候，`hooks`的导入实在太多，且太难看了，如果命名不规范，还会有重名函数或变量。有时代码过于细分会并不会带来合理的代码维护，所以还是分模块的单例形式比较合理。于是我又改回到单例模式来使用。
 
-## 预览地址
-
-[vue-admin](https://huangjingsheng.gitee.io/hjs/vue3-admin/)
 
 ## sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化**
 
