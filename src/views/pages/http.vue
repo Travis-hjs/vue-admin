@@ -70,6 +70,10 @@ export default defineComponent({
             }
         }
         
+        function openHttp() {
+            location.href = location.href.replace("https", "http");
+        }
+
         if (location.origin.includes("https")) {
             pageData.showTip = true;
         }
@@ -82,6 +86,7 @@ export default defineComponent({
             pageData,
             tableColumns,
             getData,
+            openHttp
         }
     }
 })
