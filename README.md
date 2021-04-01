@@ -6,6 +6,10 @@
 2. 增加了`wangEditor`富文本模块
 2. 增加了`echarts`图表模块
 
+## 预览地址
+
+[vue-admin](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs/)
+
 ## 相对`master`分支增加的依赖
 
 ```json
@@ -21,7 +25,3 @@
     },
 }
 ```
-
-## 预览地址
-
-[vue-admin](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs/)
