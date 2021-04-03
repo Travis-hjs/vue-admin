@@ -4,10 +4,10 @@
         <el-alert :title="pageData.dec" type="success" />
         <div class="flex">
             <div v-for="(item, index) in pageData.uploadList" :key="index" style="margin-right: 16px;">
-                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片宽度自适应" />
+                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
             </div>
             <div>
-                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽度固定尺寸 300px * 200px" />
+                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽高固定尺寸 300px * 200px" />
             </div>
         </div>
     </div>
