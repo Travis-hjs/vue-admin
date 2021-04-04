@@ -54,6 +54,11 @@ export default defineComponent({
         tip: {
             type: [String, Number],
             default: ""
+        },
+        /** 上传图片最大体积（M） */
+        maxSize: {
+            type: Number,
+            default: 2
         }
     },
     setup(props, context) {
@@ -88,7 +93,7 @@ export default defineComponent({
 
             // 判断大小
             if (file.size > 2 * 1024 * 1024) {
-                utils.showWarning("上传的文件不能大于2M");
+                utils.showWarning(`上传的文件不能大于 ${props.maxSize}M`);
                 input.value = "";
                 return;
             }
