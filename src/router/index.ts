@@ -67,7 +67,7 @@ export const admin: Array<RouteItem> = [
             {
                 path: "the-component",
                 name: "the-component",
-                meta: { title: "自定义组件", icon: "international" },
+                meta: { title: "上传图片", icon: "international" },
                 component: () => import("@/views/pages/the-component.vue")
             }
         ]
