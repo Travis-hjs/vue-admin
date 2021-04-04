@@ -66,6 +66,13 @@ export default class UploadImg extends Vue {
     })
     tip!: string;
 
+    /** 上传图片最大体积（M） */
+    @Prop({
+        type: Number,
+        default: 2
+    })
+    maxSize!: string;
+
     /** 加载动画 */
     loading = false;
 
@@ -104,7 +111,7 @@ export default class UploadImg extends Vue {
 
         // 判断大小
         if (file.size > 2 * 1024 * 1024) {
-            this.$message.warning("上传的文件不能大于2M");
+            this.$message.warning(`上传的文件不能大于 ${this.maxSize}M`);
             input.value = null;
             return;
         }
