@@ -6,8 +6,10 @@ import {
 } from "./interfaces";
 
 /**
- * `http`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
+ * `http`请求
  * @author https://github.com/Hansen-hjs
+ * - [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
+ * - [掘金](https://juejin.cn/post/6844904066418491406/#heading-1)
  */
 function ajax(params: AjaxParams) {
     /** XMLHttpRequest */
@@ -19,7 +21,7 @@ function ajax(params: AjaxParams) {
     /** 请求链接 */
     let url = params.url;
     /** 非`GET`请求传参 */
-    let payload = null;
+    let body = null;
     /** `GET`请求传参 */
     let query = "";
 
@@ -34,12 +36,10 @@ function ajax(params: AjaxParams) {
             url += query;
         }
     } else {
-        // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-        payload = JSON.stringify(params.data);
+        body = JSON.stringify(params.data); // 若后台没设置接收 JSON 则不行，需要使用`params.formData`方式传参
     }
 
-    // 监听请求变化
-    // XHR.status learn: http://tool.oschina.net/commons?type=5
+    // 监听请求变化；XHR.status learn: http://tool.oschina.net/commons?type=5
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
@@ -54,20 +54,16 @@ function ajax(params: AjaxParams) {
         XHR.addEventListener("progress", params.progress);
     }
 
-    // XHR.responseType = "json";
-    // 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
-    // XHR.withCredentials = true;	
+    // XHR.responseType = "json"; // 设置响应结果为`json`这个一般由后台返回指定格式，前端无配置
+    // XHR.withCredentials = true;	// 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
     XHR.open(method, url, true);
 
-    // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
-    if (params.file) {
-        payload = params.file;
-        // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
+    // 判断传参类型，`json`或者`form`表单
+    if (params.formData) {
+        body = params.formData;
+        XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
-        // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        // XHR.setRequestHeader("Content-Type", "application/json");
-        // 设置默认响应头
-        if (!params.headers) XHR.setRequestHeader("Content-Type", "application/json");
+        XHR.setRequestHeader("Content-Type", "application/json");
     }
 
     // 判断设置配置头信息
@@ -87,7 +83,7 @@ function ajax(params: AjaxParams) {
         }
     }
 
-    XHR.send(payload);
+    XHR.send(body);
 }
 
 function getResultInfo(result: { statusCode: number, data: any }) {
@@ -122,16 +118,15 @@ function getResultInfo(result: { statusCode: number, data: any }) {
  * 基础请求
  * @param method 请求方式
  * @param url 请求接口
- * @param data 请求数据 
- * @param success 成功回调
- * @param fail 失败回调
- * @param upload 上传图片 FormData
+ * @param data 请求数据
+ * @param formData 表单式传参
+ * @param headers 请求头信息
  */
 export default function request(
     method: AjaxParams["method"],
     url: string,
     data?: object,
-    upload?: AjaxParams["file"],
+    formData?: AjaxParams["formData"],
     headers?: AjaxParams["headers"]
 ) {
     return new Promise<ApiResult>(function(resolve, reject) {
@@ -140,7 +135,7 @@ export default function request(
             method: method,
             headers: headers,
             data: data || {},
-            file: upload,
+            formData: formData,
             overtime: config.requestOvertime,
             success(res, xhr) {
                 // console.log("请求成功", res);

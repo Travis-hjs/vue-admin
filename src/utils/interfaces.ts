@@ -24,8 +24,20 @@ export interface AjaxParams {
     data: any,
     /** 超时毫秒 */
     overtime?: number,
-    /** 是否上传文件 通常是图片 */
-    file?: FormData,
+    /** 
+     * `form`表单式传参：上传图片就是使用这种传参方式；使用`formData`时将覆盖`data`
+     * @description 
+     * ### 上传图片时使用 
+     * ```js
+     * const formdata = new FormData(); 
+     * formData.append("img", file); // `img`是跟后台约定好的`key`字段
+     * ```
+     * ### 普通表单传参使用
+     * ```js
+     * const formdata = "name=hjs&id=123";
+     * ```
+     */
+    formData?: FormData | string,
     /** `XMLHttpRequest.header`设置对象 */
     headers?: { [key: string]: string }
     /** 成功回调 */
