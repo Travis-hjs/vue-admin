@@ -2,6 +2,7 @@ import request from "../utils/request";
 import { 
     ApiResult 
 } from "../utils/interfaces";
+import utils from "../utils";
 
 class ModuleApi {
     /**
@@ -42,6 +43,14 @@ class ModuleApi {
         return request("GET", "/weather_mini", {
             city: encodeURIComponent(city)
         })
+    }
+
+    /**
+     * 提交表单数据
+     * @param params 
+     */
+    submitForm(params: { id: number, name: string, age: number }) {
+        return request("POST", "/submitForm", {}, utils.jsonToFormData(params))
     }
 }
 

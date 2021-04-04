@@ -229,21 +229,15 @@ class ModuleUtil extends ModuleElementUI {
     }
 
     /**
-     * 判断是否外部链接
-     * @param path 路径
-     */
-    isExternal(path: string) {
-        return /^(https?:|mailto:|tel:)/.test(path)
-    }
-
-    /**
      * 输入只能是数字
      * @param value 
      * @param decimal 是否要保留小数
+     * @param negative 是否可以为负数
      */
-     inputOnlyNumber(value: string | number, decimal?: boolean) {
+    inputOnlyNumber(value: string | number, decimal?: boolean, negative?: boolean) {
         let result = value.toString().trim();
-        if (result.length == 0) return "";
+        if (result.length === 0) return "";
+        const minus = (negative && result[0] == "-") ? "-" : "";
         if (decimal) {
             result = result.replace(/[^0-9.]+/ig, "");
             let array = result.split(".");
@@ -253,9 +247,37 @@ class ModuleUtil extends ModuleElementUI {
         } else {
             result = result.replace(/[^0-9]+/ig, "");
         }
-        return result;
+        return minus + result;
+    }
+
+    /**
+     * 判断是否外部链接
+     * @param path 路径
+     */
+    isExternal(path: string) {
+        return /^(https?:|mailto:|tel:)/.test(path);
     }
     
+    /**
+     * `JSON`转`FormData`
+     * @param value `JSON`对象
+     * @example 
+     * ```js
+     * const info = { name: "hjs", id: 123 };
+     * const val = jsonToFormData(info);
+     * console.log(val); // "name=hjs&id=123"
+     * ```
+     */
+    jsonToFormData<T>(value: T) {
+        let result = "";
+        for (const key in value) {
+            result += `&${key}=${value[key]}`;
+        }
+        if (result) {
+            result = result.slice(1);
+        }
+        return result;
+    }
 }
 
 /** 工具模块 */
