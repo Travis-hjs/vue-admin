@@ -37,7 +37,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import utils from "../utils";
 import apiUser from "../api/User";
 import store from "../store";
 import openNextPage from "../router/permission";
@@ -51,7 +50,7 @@ function validateUsername(rule: any, value: string, callback: Function) {
 }
 
 function validatePass(rule: any, value: string, callback: Function) {
-    if (!utils.isValidPassowrd(value)) {
+    if (!/^[\w]{6,10}$/.test(value)) {
         callback(new Error("密码不能小于6位"));
     } else {
         callback();
