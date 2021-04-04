@@ -31,7 +31,7 @@ class ModuleApi {
             reader.readAsDataURL(fromData);
         })
 
-        // return request("POST", "/uploadImg", null, fromData);
+        // return request("POST", "/uploadImg", {}, fromData);
     }
 
     /**
