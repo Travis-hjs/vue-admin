@@ -48,14 +48,14 @@ export default defineComponent({
     setup() {
         const { removeRoutes } = require("@/router/permission");
         const avatar = ref("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        const layoutState = store.layoutState;
+        const layoutState = store.layout.state;
 
         function toggleSideBar() {
             layoutState.sidebarOpen = !layoutState.sidebarOpen;
         }
 
         function logout() {
-            store.removeUserState();
+            store.user.reset();
             // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
             router.push("/login").then(() => {
                 layoutState.historyViews = [];

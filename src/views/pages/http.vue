@@ -26,7 +26,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, reactive, onMounted } from "vue";
-import api from "../../api";
+import { getWeather } from "../../api/common";
 import utils from "../../utils";
 
 export default defineComponent({
@@ -54,7 +54,7 @@ export default defineComponent({
         async function getData() {
             if (!pageData.city) return utils.showWarning("请输入城市名");
             pageData.loading = true;
-            const res = await api.getWeather(pageData.city)
+            const res = await getWeather(pageData.city)
             pageData.loading = false;
             console.log("获取天气预报数据 >>", res);
             if (res.code === 1) {

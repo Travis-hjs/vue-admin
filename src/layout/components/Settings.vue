@@ -43,7 +43,7 @@ export default defineComponent({
         ThemePicker
     },
     setup(props, context) {
-        const layoutState = store.layoutState;
+        const layoutState = store.layout.state;
 
         async function updateCss(value: string) {
             await themeChangeAsync(value);
@@ -58,7 +58,7 @@ export default defineComponent({
         }
 
         onMounted(function() {
-            if (layoutState.theme !== store.defaultTheme) {
+            if (layoutState.theme !== store.layout.defaultTheme) {
                 updateCss(layoutState.theme);
             }
         })

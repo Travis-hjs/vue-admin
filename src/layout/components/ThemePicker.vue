@@ -16,9 +16,9 @@ export default defineComponent({
     name: "ThemePicker",
     setup(props, context) {
         
-        const theme = ref(store.layoutState.theme);
+        const theme = ref(store.layout.state.theme);
 
-        const colors = [store.defaultTheme, "#304156","#212121","#11a983", "#13c2c2", "#409EFF", "#6959CD", "#f5222d"];
+        const colors = [store.layout.defaultTheme, "#304156","#212121","#11a983", "#13c2c2", "#409EFF", "#6959CD", "#f5222d"];
 
         function onChange() {
             context.emit("change", theme.value);

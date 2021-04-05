@@ -13,7 +13,7 @@
                 mode="vertical"
             >
                 <SidebarItem
-                    v-for="route in layoutRoute.complete"
+                    v-for="route in completeRouters"
                     :key="route.path"
                     :item="route"
                     :base-path="route.path"
@@ -43,7 +43,7 @@ export default defineComponent({
     setup(props, context) {
         const route = useRoute();
         
-        const layoutState = store.layoutState;
+        const layoutState = store.layout.state;
 
         const variable = reactive(variables);
 
@@ -66,7 +66,7 @@ export default defineComponent({
 
         return {
             layoutState,
-            layoutRoute: store.layoutRoute,
+            completeRouters: store.layout.completeRouters,
             variable,
             menuActiveTextColor,
             activeMenu

@@ -3,24 +3,39 @@ import utils from "../utils";
 import {
     layoutRouteType,
     LayoutStateKeys,
-    LayoutStateType
+    LayoutStateType,
+    RouteItem
 } from "../utils/interfaces";
 
 import elementVariables from "../styles/element-variables.scss";
 
-const cacheName = "ModuleLayoutInfo";
+const cacheName = "ModuleLayout";
 
 /**
  * `layout`状态管理模块
  */
 export default class ModuleLayout {
     constructor() {
-        this.initLayout();
-        watch(this.layoutState, this.saveLayout.bind(this));
+        this.init();
+        watch(this.state, this.saveLayout.bind(this));
     }
 
+    // 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
+    
+    /** 动态添加的权限路由 */
+    addRouters: Array<RouteItem> = [];
+ 
+    /** (基础路由+动态路由)列表 */
+    completeRouters: Array<RouteItem> = [];
+
+    /**
+     * 默认主题颜色
+     * @description `/styles/element-variables.scss`中的`$--color-primary`
+     */
+    readonly defaultTheme = elementVariables.theme;
+
     /** `layout`操作状态 */
-    readonly layoutState = reactive<LayoutStateType>({
+    readonly state = reactive<LayoutStateType>({
         sidebarTextTheme: false,
         showSidebarLogo: true,
         fixedHeader: false,
@@ -32,27 +47,12 @@ export default class ModuleLayout {
         theme: elementVariables.theme
     });
 
-    /**
-     * 默认主题颜色
-     * @description `/styles/element-variables.scss`中的`$--color-primary`
-    */
-     readonly defaultTheme = elementVariables.theme;
-
-    /**
-     * `layout`路由列表对象
-     * @description 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
-    */
-    readonly layoutRoute: layoutRouteType = {
-        add: [],
-        complete: []
-    }
-
     /** 初始化`layout`操作状态 */
-    private initLayout() {
+    private init() {
         const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            utils.modifyData(this.layoutState, value);
+            utils.modifyData(this.state, value);
         }
     }
 
@@ -63,10 +63,10 @@ export default class ModuleLayout {
         // console.count("saveLayout");
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
         const data: any = {};
-        for (const key in this.layoutState) {
+        for (const key in this.state) {
             const k = key as LayoutStateKeys;
             if (k === "historyViews") {
-                data[k] = this.layoutState[k].map(item => {
+                data[k] = this.state[k].map(item => {
                     return {
                         name: item.name,
                         meta: {...item.meta},
@@ -75,7 +75,7 @@ export default class ModuleLayout {
                     }
                 });
             } else {
-                data[k] = this.layoutState[k];
+                data[k] = this.state[k];
             }
         }
         // console.log(JSON.stringify(data));

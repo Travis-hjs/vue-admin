@@ -32,7 +32,7 @@ export default defineComponent({
     },
     setup(props, context) {
         const body = document.body;
-        const layoutState = store.layoutState;
+        const layoutState = store.layout.state;
         const elRightPanel = ref<HTMLElement>(null as any);
         const show = ref(false);
 

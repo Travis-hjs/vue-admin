@@ -38,7 +38,7 @@ export default defineComponent({
     },
     setup(props, context) {
         const route = useRoute();
-        const layoutState = store.layoutState;
+        const layoutState = store.layout.state;
         /** 当前组件节点 */
         const el = ref<HTMLElement>(null as any);
         /** 是否隐藏右键菜单 */
@@ -57,7 +57,7 @@ export default defineComponent({
             const hasItem = layoutState.historyViews.some(item => item.path === route.path);
             // console.log(hasItem, route.path);
             if (!hasItem && !route.meta.noCache) {
-                // 参考`store.saveLayout`需要的字段
+                // 参考`store.layout.saveLayout`需要的字段
                 layoutState.historyViews.push({
                     name: route.name,
                     meta: route.meta,

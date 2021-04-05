@@ -20,23 +20,23 @@ const redirectRouteName = "redirect404";
 router.beforeEach(function(to, from, next) {
     NProgress.start();
 
-    if (store.userInfo.token) {
-        if (store.layoutRoute.add.length > 0) {
+    if (store.user.info.token) {
+        if (store.layout.addRouters.length > 0) {
             next();
         } else {
-            switch (store.userInfo.userType) {
-                case store.testUserList[0]:
-                    store.layoutRoute.add = admin;
+            switch (store.user.info.userType) {
+                case store.user.testUserList[0]:
+                    store.layout.addRouters = admin;
                     break;
             
-                case store.testUserList[1]:
-                    store.layoutRoute.add = editor;
+                case store.user.testUserList[1]:
+                    store.layout.addRouters = editor;
                     break;
             }
 
             // 逐个添加进去
-            for (let i = 0; i < store.layoutRoute.add.length; i++) {
-                const item = store.layoutRoute.add[i];
+            for (let i = 0; i < store.layout.addRouters.length; i++) {
+                const item = store.layout.addRouters[i];
                 router.addRoute(item);
             }
 
@@ -53,7 +53,7 @@ router.beforeEach(function(to, from, next) {
                 router.addRoute({...base[1], path: "/:catchAll(.*)", name: redirectRouteName });
             }
 
-            store.layoutRoute.complete = base.concat(store.layoutRoute.add);
+            store.layout.completeRouters = base.concat(store.layout.addRouters);
 
             next({ ...to, replace: true });
         }
@@ -94,7 +94,7 @@ export function openNextPage() {
  * @description 退出登录时用
 */
 export function removeRoutes() {
-    const list = store.layoutRoute.add;
+    const list = store.layout.addRouters;
     for (let i = list.length - 1; i > -1; i--) {
         const item = list[i];
         if (item.name && router.hasRoute(item.name)) {
@@ -104,5 +104,5 @@ export function removeRoutes() {
     // 和上面对应的 404
     router.removeRoute(redirectRouteName);
     // 清空路由缓存对象
-    store.layoutRoute.add = store.layoutRoute.complete = [];
+    store.layout.addRouters = store.layout.completeRouters = [];
 }

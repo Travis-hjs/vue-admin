@@ -16,13 +16,13 @@
                 <span class="svg_container">
                     <svg-icon name="password"/>
                 </span>
-                <el-input :type="inputType" v-model="loginForm.password" placeholder="密码" @keyup.enter="handleLogin(false)" />
+                <el-input :type="inputType" v-model="loginForm.password" placeholder="密码" @keyup.enter="onLogin(false)" />
                 <span class="password_icon" @click="switchInput()">
                     <svg-icon :name="inputType === 'password' ? 'eye-off' : 'eye-on'"/>
                 </span>
             </el-form-item>
             <el-form-item>
-                <el-button :loading="loading" class="btn" type="primary" @click="handleLogin(false)">登录</el-button>
+                <el-button :loading="loading" class="btn" type="primary" @click="onLogin(false)">登录</el-button>
             </el-form-item>
             <div class="tips flex fvertical" v-for="(item, index) in testUserList" :key="index">
                 <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
@@ -38,7 +38,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import store from "../store";
-import apiUser from "../api/User";
+import { login } from "../api/common";
 import utils from "../utils";
 import { openNextPage } from "../router/permission";
 
@@ -100,7 +100,7 @@ export default defineComponent({
         function setLoginInfo(account: string) {
             loginForm.username = account;
             loginForm.password = Math.random().toString(36).substr(2);
-            handleLogin(true);
+            onLogin(true);
         }
 
         /** 登录表单 */
@@ -110,11 +110,11 @@ export default defineComponent({
          * 点击登录 
          * @param adopt 是否不校验直接通过
         */
-        function handleLogin(adopt: boolean) {
+        function onLogin(adopt: boolean) {
             async function start() {
                 loading.value = true;
                 // console.log("用户登录信息：", loginForm);
-                const res = await apiUser.login(loginForm)
+                const res = await login(loginForm)
                 loading.value = false;
                 if (res.code === 1) {
                     openNextPage();
@@ -134,7 +134,7 @@ export default defineComponent({
 
         return {
             loginFormEl,
-            testUserList: store.testUserList,
+            testUserList: store.user.testUserList,
             title,
             tipLink,
             background,
@@ -144,7 +144,7 @@ export default defineComponent({
             inputType,
             switchInput,
             setLoginInfo,
-            handleLogin
+            onLogin
         }
     }
 })

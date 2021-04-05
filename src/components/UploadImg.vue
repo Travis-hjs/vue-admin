@@ -9,7 +9,7 @@
             </div>
             <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height + 'px' }">
                 <div class="add_icon"></div>
-                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change.stop="uploadImg()">
+                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change.stop="onUpload()">
             </div>
         </div>
         <p class="upload_tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
 import { UploadChange } from "../utils/interfaces";
-import api from "../api/index";
+import { uploadImg } from "../api/common";
 import utils from "../utils";
 
 export default defineComponent({
@@ -76,7 +76,7 @@ export default defineComponent({
         }
 
         /** 上传图片 */
-        async function uploadImg() {
+        async function onUpload() {
             const input = uploadinput.value;
             const file = (input.files as FileList)[0];
             // console.log("上传图片文件 >>", file);
@@ -103,7 +103,7 @@ export default defineComponent({
             // formData.append("file", file);
 
             loading.value = true;
-            const res = await api.uploadImg(file)
+            const res = await uploadImg(file)
             loading.value = false;
             console.log("上传图片 >>", res);
             if (res.code === 1) {
@@ -128,7 +128,7 @@ export default defineComponent({
         return {
             uploadinput,
             loading,
-            uploadImg,
+            onUpload,
             removeImg
         }
     }

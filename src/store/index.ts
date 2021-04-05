@@ -1,25 +1,9 @@
-import { reactive } from "vue";
 import ModuleLayout from "./Layout";
-import utils from "../utils";
-import { DeepReadonly, UserInfoType } from "../utils/interfaces";
+import ModuleUser from "./User";
 
-/** 用户信息缓存字段 */
-const cacheName = "store-user-info";
-
-/** 创建用户信息 */
-function createUserInfo(): DeepReadonly<UserInfoType> {
-    return {
-        id: "",
-        name: "",
-        token: "",
-        userType: "",
-    }
-}
-
-class ModuleStore extends ModuleLayout {
+class ModuleStore {
     constructor() {
-        super();
-        this.initUserInfo();
+        console.log("%c ModuleStore init", "color: #409EFF");
     }
 
     /** 页面图片资源 */
@@ -36,43 +20,19 @@ class ModuleStore extends ModuleLayout {
         }
     }
 
-    /** 用户信息（包含登录状态） */
-    readonly userInfo = reactive(createUserInfo());
+    /** `layout`状态管理模块 */
+    readonly layout = new ModuleLayout();
 
-    /** 初始化缓存信息 */
-    private initUserInfo() {
-        const cacheInfo = sessionStorage.getItem(cacheName);
-        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
-        if (value) {
-            utils.modifyData(this.userInfo, value);
-        }
-    }
-
-    /**
-     * 更新当前的`userInfo`值并缓存到本地
-     * @param value 更新内容
-     */
-    updateUserInfo(value: Partial<UserInfoType>) {
-        utils.modifyData(this.userInfo, value);
-        sessionStorage.setItem(cacheName, JSON.stringify(this.userInfo));
-    }
-
-    /** 清空缓存信息 */
-    removeUserState() {
-        utils.modifyData(this.userInfo, createUserInfo());
-        sessionStorage.removeItem(cacheName);
-    }
-
-    /** 测试用户类型 */
-    readonly testUserList = ["admin", "editor"];
+    /** 用户状态管理模块 */
+    readonly user = new ModuleUser();
     
 }
 
 /**
- * 状态管理模块实例对象
- * 
- * 参考[你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
-*/
+ * 状态管理模块
+ * - `OOP`单例设计模式
+ * - 参考 [你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
+ */
 const store = new ModuleStore();
 
 export default store;

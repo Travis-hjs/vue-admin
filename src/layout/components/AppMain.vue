@@ -28,7 +28,7 @@ export default defineComponent({
     setup() {
 
         return {
-            // layoutState: store.layoutState
+            // layoutState: store.layout.state
         }
     }
 })

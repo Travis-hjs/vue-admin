@@ -36,7 +36,7 @@ export default defineComponent({
         TagsView
     },
     setup() {
-        const layoutState = store.layoutState;
+        const layoutState = store.layout.state;
         const classInfo = computed(function() {
             return {
                 hideSidebar: !layoutState.sidebarOpen,
