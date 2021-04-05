@@ -32,7 +32,7 @@ import { ChartBarData, ChartLineData, ChartRingData } from "../../utils/interfac
     }
 })
 export default class ChrtHome extends Vue {
-    readonly layoutState = store.layoutState;
+    readonly layoutState = store.layout.state;
 
     private timer!: NodeJS.Timeout;
 
