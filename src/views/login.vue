@@ -16,13 +16,13 @@
                 <span class="svg_container">
                     <svg-icon name="password"/>
                 </span>
-                <el-input :type="pwdType" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="handleLogin(false)" />
+                <el-input :type="pwdType" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="onLogin(false)" />
                 <span class="password_icon" @click="switchInput()">
                     <svg-icon :name="pwdType === 'password' ? 'eye-off' : 'eye-on'"/>
                 </span>
             </el-form-item>
             <el-form-item>
-                <el-button :loading="loading" class="btn" type="primary" @click="handleLogin(false)">登录</el-button>
+                <el-button :loading="loading" class="btn" type="primary" @click="onLogin(false)">登录</el-button>
             </el-form-item>
             <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
                 <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import apiUser from "../api/User";
+import { login } from "../api/common";
 import store from "../store";
 import openNextPage from "../router/permission";
 
@@ -61,7 +61,7 @@ function validatePass(rule: any, value: string, callback: Function) {
 export default class Login extends Vue {
     title = "vue2-element-ts";
     tipLink = "https://github.com/Hansen-hjs";
-    tipList = store.testUserList;
+    tipList = store.user.testUserList;
 
     /** 背景信息 */
     background = {
@@ -96,19 +96,19 @@ export default class Login extends Vue {
     setLoginInfo(account: string) {
         this.loginForm.username = account;
         this.loginForm.password = Math.random().toString(36).substr(2);
-        this.handleLogin(true);
+        this.onLogin(true);
     }
 
     /** 
      * 点击登录 
      * @param adopt 是否不校验直接通过
     */
-    handleLogin(adopt: boolean) {
+    onLogin(adopt: boolean) {
         const elementForm: any = this.$refs["loginFormEl"];
         const start = async () => {
             this.loading = true;
             // console.log("用户登录信息：", this.loginForm);
-            const res = await apiUser.login(this.loginForm);
+            const res = await login(this.loginForm);
             this.loading = false;
             if (res.code === 1) {
                 openNextPage();

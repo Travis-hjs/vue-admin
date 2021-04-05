@@ -15,34 +15,34 @@ const routerTo = {
 router.beforeEach((to, from, next) => {
     NProgress.start();
 
-    if (store.userInfo.token) {
-        if (store.addRouters.length > 0) {
+    if (store.user.info.token) {
+        if (store.layout.addRouters.length > 0) {
             next();
         } else {
-            switch (store.userInfo.userType) {
+            switch (store.user.info.userType) {
                 case "admin":
-                    store.addRouters = admin;
+                    store.layout.addRouters = admin;
                     break;
             
                 case "editor":
-                    store.addRouters = editor;
+                    store.layout.addRouters = editor;
                     break;
             }
-            router.addRoutes(store.addRouters);
+            router.addRoutes(store.layout.addRouters);
             // 在最后加一个404重定向的路由进去
             // router.addRoutes([{ path: "*", redirect: "/404" }]);
             // 不重定向到`/404`
             router.addRoutes([{...base[1], name: "page404", path: "*"}]);
-            store.completeRouters = base.concat(store.addRouters);
+            store.layout.completeRouters = base.concat(store.layout.addRouters);
             next({ ...to, replace: true });
         }
     } else {
-        if (to.path === store.loginPath) {
+        if (to.path === store.user.loginPath) {
             next();
         } else {
             routerTo.path = to.path;
             routerTo.query = to.query;
-            next({ path: store.loginPath });
+            next({ path: store.user.loginPath });
             NProgress.done();
         }
     }

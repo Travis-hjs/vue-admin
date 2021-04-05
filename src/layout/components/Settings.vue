@@ -10,22 +10,22 @@
 
             <div class="drawer-item">
                 <span>显示历史记录列表</span>
-                <el-switch v-model="pageState.showHistoryView" class="drawer-switch" />
+                <el-switch v-model="layoutState.showHistoryView" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">
                 <span>显示侧边栏 Logo</span>
-                <el-switch v-model="pageState.showSidebarLogo" class="drawer-switch" />
+                <el-switch v-model="layoutState.showSidebarLogo" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">
                 <span>固定 Header</span>
-                <el-switch v-model="pageState.fixedHeader" class="drawer-switch" />
+                <el-switch v-model="layoutState.fixedHeader" class="drawer-switch" />
             </div>
 
             <div class="drawer-item">
                 <span>侧边栏文字主题色</span>
-                <el-switch v-model="pageState.sidebarTextTheme" class="drawer-switch" />
+                <el-switch v-model="layoutState.sidebarTextTheme" class="drawer-switch" />
             </div>
         </div>
     </div>
@@ -44,22 +44,22 @@ import { themeChangeAsync } from "../theme";
 })
 export default class Settings extends Vue {
 
-    readonly pageState = store.layoutState;
+    readonly layoutState = store.layout.state;
 
     async updateCss(value: string) {
         await themeChangeAsync(value);
-        this.pageState.theme = value;
+        this.layoutState.theme = value;
     }
 
     themeChange(value: string) {
-        if (this.pageState.theme != value) {
+        if (this.layoutState.theme != value) {
             this.updateCss(value);
         }
     }
 
     mounted() {
-        if (this.pageState.theme !== store.defaultTheme) {
-            this.updateCss(this.pageState.theme);
+        if (this.layoutState.theme !== store.layout.defaultTheme) {
+            this.updateCss(this.layoutState.theme);
         }
     }
 }

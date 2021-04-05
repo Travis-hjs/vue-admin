@@ -98,7 +98,7 @@ function setStyleContext(id: string, context: string) {
  * @param theme 主题色
  */
 export async function themeChangeAsync(theme: string) {
-    const oldValue = cssAssets ? store.layoutState.theme : originTheme;
+    const oldValue = cssAssets ? store.layout.state.theme : originTheme;
     const themeCluster = getThemeCluster(theme.replace("#", ""));
     const originalCluster = getThemeCluster(oldValue.replace("#", ""));
     if (!cssAssets) {

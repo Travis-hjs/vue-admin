@@ -26,7 +26,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import api from "../../api";
+import { getWeather } from "../../api/common";
 
 @Component({})
 export default class HttpRequest extends Vue {
@@ -52,7 +52,7 @@ export default class HttpRequest extends Vue {
     async getData() {
         if (!this.pageData.city) return this.$message.warning("请输入城市名");
         this.pageData.loading = true;
-        const res = await api.getWeather(this.pageData.city)
+        const res = await getWeather(this.pageData.city)
         this.pageData.loading = false;
         console.log("获取天气预报数据 >>", res);
         if (res.code === 1) {

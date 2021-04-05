@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        <Hamburger :is-active="pageState.sidebarOpen" class="hamburger-container" @toggleClick="toggleSideBar()" />
+        <Hamburger :is-active="layoutState.sidebarOpen" class="hamburger-container" @toggleClick="toggleSideBar()" />
         <Breadcrumb class="breadcrumb-container" />
         <div class="right-menu">
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -41,18 +41,18 @@ import store from "../../store";
 })
 export default class Navbar extends Vue {
 
-    readonly pageState = store.layoutState;
+    readonly layoutState = store.layout.state;
 
     avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
     toggleSideBar() {
-        this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
+        this.layoutState.sidebarOpen = !this.layoutState.sidebarOpen;
     }
 
     logout() {
-        store.removeUserState();
+        store.user.reset();
         // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
-        store.layoutState.historyViews = [];
+        this.layoutState.historyViews = [];
         // 退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
         // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
         // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现

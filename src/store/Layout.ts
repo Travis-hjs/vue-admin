@@ -1,23 +1,35 @@
 import utils from "../utils";
 import {
-    LayoutStateType,
+    LayoutState,
     RouteItem
 } from "../utils/interfaces";
 
 import elementVariables from "../styles/element-variables.scss";
 
-const cacheName = "ModuleLayoutInfo";
+const cacheName = "ModuleLayout";
 
 /**
  * `layout`状态管理模块
  */
 export default class ModuleLayout {
     constructor() {
-        this.initLayout();
+        this.init();
     }
 
+    /** 动态添加的权限路由 */
+    addRouters: Array<RouteItem> = [];
+ 
+    /** (基础路由+动态路由)列表 */
+    completeRouters: Array<RouteItem> = [];
+
+    /**
+     * 默认主题颜色
+     * @description `/styles/element-variables.scss`中的`$--color-primary`
+     */
+    readonly defaultTheme = elementVariables.theme;
+
     /** `layout`操作状态 */
-    public readonly layoutState: LayoutStateType = {
+    readonly state: LayoutState = {
         sidebarTextTheme: false,
         showSidebarLogo: true,
         fixedHeader: false,
@@ -29,34 +41,22 @@ export default class ModuleLayout {
         theme: elementVariables.theme
     }
 
-    /**
-     * 默认主题颜色
-     * @description `/styles/element-variables.scss`中的`$--color-primary`
-    */
-     readonly defaultTheme = elementVariables.theme;
-
-    /** 动态添加的权限路由 */
-    public addRouters: Array<RouteItem> = [];
-
-    /** (基础路由+动态路由)列表 */
-    public completeRouters: Array<RouteItem> = [];
-
     /** 初始化`layout`操作状态 */
-    private initLayout() {
+    private init() {
         const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            utils.modifyData(this.layoutState, value);
+            utils.modifyData(this.state, value);
         }
     }
 
     /**
      * 保存`layout`操作状态
      * @description 这个方法我用在了`src/layout/index.vue`组件中用`watch`监听了数据的变动然后执行
-    */
-    public saveLayout() {
+     */
+    saveLayout() {
         // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
-        const value = this.layoutState;
+        const value = this.state;
         const data: any = {};
         for (const key in value) {
             if (key === "historyViews") {
@@ -69,7 +69,7 @@ export default class ModuleLayout {
                     }
                 });
             } else {
-                data[key] = value[key as keyof LayoutStateType];
+                data[key] = value[key as keyof LayoutState];
             }
         }
         // console.log(JSON.stringify(data));

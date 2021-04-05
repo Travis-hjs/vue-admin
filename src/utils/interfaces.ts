@@ -88,7 +88,7 @@ export interface RouteItem extends RouteConfig {
 }
 
 /** `layout`状态类型 */
-export interface LayoutStateType {
+export interface LayoutState {
     /** 显示设置 */
     showSettings: boolean
     /** 显示历史记录列表 */

@@ -1,24 +1,9 @@
 import ModuleLayout from "./Layout";
-import utils from "../utils";
-import { DeepReadonly, UserInfoType } from "../utils/interfaces";
+import ModuleUser from "./User";
 
-/** 用户信息缓存字段 */
-const userInfoCacheName = "StoreUserInfo";
-
-/** 创建用户信息 */
-function createUserInfo(): DeepReadonly<UserInfoType> {
-    return {
-        id: "",
-        name: "",
-        token: "",
-        userType: "",
-    }
-}
-
-class ModuleStore extends ModuleLayout {
+class ModuleStore {
     constructor() {
-        super();
-        this.init();
+        console.log("%c ModuleStore init", "color: #409EFF");
     }
 
     /** 页面图片资源 */
@@ -34,46 +19,19 @@ class ModuleStore extends ModuleLayout {
             image401ewizardClap: "https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646"
         }
     }
-    
-    /** 登录路由路径 */
-    readonly loginPath = "/login";
 
-    /** 测试用户类型 */
-    readonly testUserList = ["admin", "editor"];
+    /** `layout`状态管理模块 */
+    readonly layout = new ModuleLayout();
 
-    /** 用户信息（包含登录状态） */
-    readonly userInfo = createUserInfo();
-
-    /** 初始化缓存信息 */
-    private init() {
-        const cacheInfo = sessionStorage.getItem(userInfoCacheName);
-        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
-        if (value) {
-            utils.modifyData(this.userInfo, value);
-        }
-    }
-
-    /**
-     * 更新当前的`userInfo`值并缓存到本地
-     * @param value 缓存的对象
-     */
-    updateUserInfo(value: Partial<UserInfoType>) {
-        utils.modifyData(this.userInfo, value);
-        sessionStorage.setItem(userInfoCacheName, JSON.stringify(this.userInfo));
-    }
-
-    /** 清空缓存信息 */
-    removeUserState() {
-        utils.modifyData(this.userInfo, createUserInfo());
-        sessionStorage.removeItem(userInfoCacheName);
-    }
+    /** 用户状态管理模块 */
+    readonly user = new ModuleUser();
 
 }
 
 /**
  * 状态管理模块
- * 
- * [你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
+ * - `OOP`单例设计模式
+ * - 参考 [你不需要`Vuex`](https://juejin.cn/post/6844903904023429128)
 */
 const store = new ModuleStore();
 
