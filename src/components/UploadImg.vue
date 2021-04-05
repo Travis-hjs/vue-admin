@@ -9,7 +9,7 @@
             </div>
             <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height + 'px' }">
                 <div class="add_icon"></div>
-                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="uploadImg()">
+                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="onUpload()">
             </div>
         </div>
         <p class="upload_tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { UploadChange } from "../utils/interfaces";
-import api from "../api/index";
+import { uploadImg } from "../api/common";
 
 @Component({})
 export default class UploadImg extends Vue {
@@ -90,7 +90,7 @@ export default class UploadImg extends Vue {
     }
 
     /** 上传图片 */
-    async uploadImg() {
+    async onUpload() {
         // 这样写也可以，但是命令台会报错，浏览器不会
         // const input = (this.$refs.uploadinput as HTMLInputElement);
 
@@ -121,7 +121,7 @@ export default class UploadImg extends Vue {
         // formData.append("file", file);
 
         this.loading = true;
-        const res = await api.uploadImg(file)
+        const res = await uploadImg(file)
         this.loading = false;
         console.log("上传图片 >>", res);
         if (res.code === 1) {

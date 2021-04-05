@@ -1,7 +1,7 @@
 <template>
     <section class="app-main">
         <transition name="fade-transform" mode="out-in">
-            <keep-alive :include="pageState.historyViews">
+            <keep-alive :include="layoutState.historyViews">
                 <router-view class="app-page" :key="$route.path" />
             </keep-alive>
         </transition>
@@ -14,7 +14,7 @@ import store from "../../store";
 
 @Component({})
 export default class AppMain extends Vue {
-    readonly pageState = store.layoutState;
+    readonly layoutState = store.layout.state;
 }
 </script>
 

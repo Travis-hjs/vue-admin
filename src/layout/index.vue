@@ -1,14 +1,14 @@
 <template>
     <div :class="classInfo" class="app-wrapper clearfix">
-        <div v-if="classInfo.mobile && pageState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
+        <div v-if="classInfo.mobile && layoutState.sidebarOpen" class="drawer-bg" @click="switchSidebar()" />
         <Sidebar class="sidebar-container" />
-        <div :class="{'hasTagsView': pageState.showHistoryView}" class="main-container">
-            <div :class="['app-header', {'fixed-header': pageState.fixedHeader}]">
+        <div :class="{'hasTagsView': layoutState.showHistoryView}" class="main-container">
+            <div :class="['app-header', {'fixed-header': layoutState.fixedHeader}]">
                 <Navbar />
-                <TagsView v-if="pageState.showHistoryView" />
+                <TagsView v-if="layoutState.showHistoryView" />
             </div>
             <AppMain />
-            <RightPanel v-if="pageState.showSettings">
+            <RightPanel v-if="layoutState.showSettings">
                 <Settings />
             </RightPanel>
         </div>
@@ -36,26 +36,26 @@ import store from "../store";
     }
 })
 export default class Layout extends Vue {
-    /** 页面状态 */
-    readonly pageState = store.layoutState;
 
-    @Watch("pageState", { deep: true })
+    readonly layoutState = store.layout.state;
+
+    @Watch("layoutState", { deep: true })
     onLayoutChange() {
         // console.count("store.saveLayout");
-        store.saveLayout();
+        store.layout.saveLayout();
     }
 
     get classInfo() {
         return {
-            hideSidebar: !this.pageState.sidebarOpen,
-            openSidebar: this.pageState.sidebarOpen,
-            mobile: this.pageState.device === "mobile"
+            hideSidebar: !this.layoutState.sidebarOpen,
+            openSidebar: this.layoutState.sidebarOpen,
+            mobile: this.layoutState.device === "mobile"
         }
     }
 
     /** 切换侧边栏 */
     switchSidebar() {
-        this.pageState.sidebarOpen = !this.pageState.sidebarOpen;
+        this.layoutState.sidebarOpen = !this.layoutState.sidebarOpen;
     }
 
     isMobile() {
@@ -67,9 +67,9 @@ export default class Layout extends Vue {
     checkResize() {
         if (!document.hidden) {
             const isMobile = this.isMobile();
-            this.pageState.device = isMobile ? "mobile" : "desktop";
+            this.layoutState.device = isMobile ? "mobile" : "desktop";
             if (isMobile) {
-                this.pageState.sidebarOpen = false;
+                this.layoutState.sidebarOpen = false;
             }
         }
     }

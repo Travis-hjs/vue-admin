@@ -15,9 +15,9 @@ import store from "../../store";
 @Component({})
 export default class ThemePicker extends Vue {
 
-    theme = store.layoutState.theme;
+    theme = store.layout.state.theme;
 
-    colors = [store.defaultTheme, "#304156","#212121","#11a983", "#13c2c2", "#409EFF", "#6959CD", "#f5222d"];
+    colors = [store.layout.defaultTheme, "#304156","#212121","#11a983", "#13c2c2", "#409EFF", "#6959CD", "#f5222d"];
 
     onChange() {
         this.$emit("change", this.theme);

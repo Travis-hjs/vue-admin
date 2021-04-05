@@ -1,10 +1,10 @@
 <template>
-    <div :class="{'has-logo': pageState.showSidebarLogo}">
-        <SidebarLogo v-if="pageState.showSidebarLogo" :collapse="!pageState.sidebarOpen" />
+    <div :class="{'has-logo': layoutState.showSidebarLogo}">
+        <SidebarLogo v-if="layoutState.showSidebarLogo" :collapse="!layoutState.sidebarOpen" />
         <el-scrollbar wrap-class="sidebar-scrollbar" :style="{'background-color' : variables.menuBg}">
             <el-menu
                 :default-active="activeMenu"
-                :collapse="!pageState.sidebarOpen"
+                :collapse="!layoutState.sidebarOpen"
                 :background-color="variables.menuBg"
                 :text-color="variables.menuText"
                 :active-text-color="menuActiveTextColor"
@@ -17,7 +17,7 @@
                     :key="route.path"
                     :item="route"
                     :base-path="route.path"
-                    :is-collapse="!pageState.sidebarOpen"
+                    :is-collapse="!layoutState.sidebarOpen"
                 />
             </el-menu>
             <!-- 不知是不是`el-scrollbar`组件的原因，滚动高度会小于实际高度，所以这里要增加一个导航高度去补回来 -->
@@ -43,13 +43,13 @@ export default class SideBar extends Vue {
 
     readonly variables = variables;
 
-    readonly pageState = store.layoutState;
+    readonly layoutState = store.layout.state;
 
-    readonly routes = store.completeRouters;
+    readonly routes = store.layout.completeRouters;
 
     get menuActiveTextColor() {
-        if (store.layoutState.sidebarTextTheme) {
-            return store.layoutState.theme;
+        if (this.layoutState.sidebarTextTheme) {
+            return this.layoutState.theme;
         } else {
             return this.variables.menuActiveText;
         }

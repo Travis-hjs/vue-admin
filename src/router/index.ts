@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from "../store/";
+import store from "../store";
 import Layout from "../layout/index.vue";
 import { RouteItem } from "../utils/interfaces";
 
@@ -13,7 +13,7 @@ Vue.use(VueRouter);
  */
 export const base: Array<RouteItem> = [
     {
-        path: store.loginPath,
+        path: store.user.loginPath,
         name: "/login",
         component: () => import("@/views/login.vue"),
         meta: { hidden: true, title: "请登陆" },

@@ -4,7 +4,7 @@
             <div class="rightPanel-background" v-show="show" @click="switchShow(true)"></div>
         </transition>
         <div :class="['rightPanel', show ? 'rightPanel-show' : null]">
-            <div class="handle-button" :style="{'top': buttonTop + 'px','background-color': pageState.theme}" @click="switchShow(false)">
+            <div class="handle-button" :style="{'top': buttonTop + 'px','background-color': layoutState.theme}" @click="switchShow(false)">
                 <i :class="[show ? 'el-icon-close' : 'el-icon-setting']" />
             </div>
             <div class="rightPanel-items">
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "../../store";
 
 const body = document.body;
@@ -25,7 +25,7 @@ export default class RightPanel extends Vue {
     @Prop({ default: false }) clickNotClose!: boolean;
     @Prop({ default: 250 }) buttonTop!: number;
 
-    readonly pageState = store.layoutState;
+    readonly layoutState = store.layout.state;
 
     show = false;
 

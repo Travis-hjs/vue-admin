@@ -2,7 +2,7 @@
     <div id="tags-view-container" class="tags-view-container">
         <ScrollPane class="tags-view-wrapper">
             <router-link
-                v-for="tag in pageState.historyViews"
+                v-for="tag in layoutState.historyViews"
                 ref="tag"
                 :key="tag.path"
                 :class="isActive(tag) ? 'active' : ''"
@@ -12,7 +12,7 @@
                 @contextmenu.prevent.native="openMenu(tag, $event)"
             >
                 {{ tag.meta.title }}
-                <span v-show="pageState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
+                <span v-show="layoutState.historyViews.length > 1" class="el-icon-close" @click.prevent.stop="closeSelectedTag(tag)" />
             </router-link>
         </ScrollPane>
         <ul v-show="visible" :style="{left: left + 'px', top: top+'px'}" class="contextmenu">
@@ -36,6 +36,7 @@ import { RouteItem } from "../../utils/interfaces";
     }
 })
 export default class TagsView extends Vue {
+    readonly layoutState = store.layout.state;
     /** 是否隐藏右键菜单 */
     visible: boolean = false;
     /** 鼠标位置`Y` */
@@ -46,8 +47,6 @@ export default class TagsView extends Vue {
     selectedTag: RouteItem = {
         path: ""
     };
-    
-    pageState = store.layoutState;
 
     @Watch("$route")
     onRouteChange() {
@@ -75,10 +74,10 @@ export default class TagsView extends Vue {
 
     /** 添加记录 */
     addhistoryViews() {
-        const hasItem = this.pageState.historyViews.some(item => item.path === this.$route.path);
+        const hasItem = this.layoutState.historyViews.some(item => item.path === this.$route.path);
         // console.log(hasItem, this.$route.path);
         if (!hasItem && !this.$route.meta.noCache) {
-            this.pageState.historyViews.push(this.$route);
+            this.layoutState.historyViews.push(this.$route);
         }
     }
 
@@ -88,7 +87,7 @@ export default class TagsView extends Vue {
      */
     findItemIndex(item: RouteItem) {
         let index = 0;
-        const list = this.pageState.historyViews;
+        const list = this.layoutState.historyViews;
         for (let i = 0; i < list.length; i++) {
             const obj = list[i];
             if (obj.path === item.path) {
@@ -104,12 +103,12 @@ export default class TagsView extends Vue {
      * @param item item路由对象
      */
     closeSelectedTag(item: RouteItem) {
-        if (this.pageState.historyViews.length == 0) return;
+        if (this.layoutState.historyViews.length == 0) return;
         const index = this.findItemIndex(item);
-        this.pageState.historyViews.splice(index, 1);
+        this.layoutState.historyViews.splice(index, 1);
         if (this.isActive(item)) {
-            if (this.pageState.historyViews.length) {
-                this.$router.push({ path: this.pageState.historyViews[this.pageState.historyViews.length - 1].path });
+            if (this.layoutState.historyViews.length) {
+                this.$router.push({ path: this.layoutState.historyViews[this.layoutState.historyViews.length - 1].path });
             }
         }
     }
@@ -119,14 +118,14 @@ export default class TagsView extends Vue {
         if (this.selectedTag.path !== this.$route.path) {
             this.$router.push(this.selectedTag.path);
         }
-        this.pageState.historyViews = [this.selectedTag];
+        this.layoutState.historyViews = [this.selectedTag];
     }
 
     /** 关闭所有 */
     closeAllTags() {
-        if (this.pageState.historyViews.length > 1) {
-            this.pageState.historyViews = [];
-            this.$router.push('/');
+        if (this.layoutState.historyViews.length > 1) {
+            this.layoutState.historyViews = [];
+            this.$router.push("/");
         }
     }
 
