@@ -260,7 +260,7 @@ class ModuleUtil extends ModuleElementUI {
     
     /**
      * `JSON`转`FormData`
-     * @param value `JSON`对象
+     * @param params `JSON`对象
      * @example 
      * ```js
      * const info = { name: "hjs", id: 123 };
@@ -268,15 +268,12 @@ class ModuleUtil extends ModuleElementUI {
      * console.log(val); // "name=hjs&id=123"
      * ```
      */
-    jsonToFormData<T>(value: T) {
+    jsonToFormData(params: { [key: string]: number | string | boolean }) {
         let result = "";
-        for (const key in value) {
-            result += `&${key}=${value[key]}`;
+        for (const key in params) {
+            result += `&${key}=${params[key]}`;
         }
-        if (result) {
-            result = result.slice(1);
-        }
-        return result;
+        return result.slice(1);
     }
 }
 
