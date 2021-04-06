@@ -264,15 +264,12 @@ class ModuleUtil {
      * console.log(val); // "name=hjs&id=123"
      * ```
      */
-    jsonToFormData<T>(value: T) {
+    jsonToFormData(params: { [key: string]: number | string | boolean }) {
         let result = "";
-        for (const key in value) {
-            result += `&${key}=${value[key]}`;
+        for (const key in params) {
+            result += `&${key}=${params[key]}`;
         }
-        if (result) {
-            result = result.slice(1);
-        }
-        return result;
+        return result.slice(1);
     }
     
     /**
