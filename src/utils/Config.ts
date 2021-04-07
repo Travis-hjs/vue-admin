@@ -4,7 +4,7 @@ export class ModuleConfig {
     }
 
     /** 当前开发环境 */
-    protected readonly env!: "dev" | "prod"
+    readonly env!: "dev" | "prod"
 
     /** 请求超时毫秒 */
     readonly requestOvertime = 8000;
