@@ -1,58 +1,81 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-typescript" target="_blank" rel="noopener">typescript</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+    <div class="hello_world">
+        <h1 class="title">{{ msg }}</h1>
+        <el-divider content-position="left">vue 2.x</el-divider>
+        <p class="text"><el-link type="primary" :href="typeScript" target="_blank">typescript</el-link>+<el-link type="primary" :href="elementUi" target="_blank">element-ui</el-link>后台管理模板。</p>
+        <p class="text">考虑到兼容、使用数量、稳定等问题，当前项目搭建还是使用<el-link type="success" :href="vueCli" target="_blank">vue-cli</el-link>而没有使用<el-link type="success" :href="vite" target="_blank">vite</el-link>，等之后<el-link type="success" :href="vite" target="_blank">vite</el-link>稳定了再迁移过去。</p>
+        <p class="text">项目地址：<el-link type="primary" :href="project" target="_blank">github</el-link></p>
+        <el-divider content-position="left">打赏一下</el-divider>
+        <div class="code_box">
+            <img class="hovercode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode1.jpg">
+            <img class="qrcode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode2.jpg">
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from "vue-property-decorator";
 
-@Component
+@Component({})
 export default class HelloWorld extends Vue {
-  @Prop() private msg!: string;
+    @Prop({
+        type: [String, Number],
+        default: ""
+    })
+    msg!: string;
+
+    vite = "https://www.pipipi.net/vite/guide/";
+
+    vueCli = "https://cli.vuejs.org/zh/guide/";
+
+    elementUi = "https://element.eleme.cn/#/zh-CN/component/installation";
+
+    typeScript = "https://www.tslang.cn/";
+
+    project = "https://github.com/Hansen-hjs/vue-admin"
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+<style lang="scss">
+.hello_world {
+    width: 100%;
+    .title {
+        font-size: 24px;
+        color: #444;
+        margin-bottom: 20px;
+        font-weight: normal;
+    }
+    .text {
+        font-size: 16px;
+        color: #555;
+        line-height: 28px;
+        .el-link {
+            padding: 0 4px;
+        }
+    }
+    .code_box {
+        width: 100%;
+        img {
+            display: inline-block;
+            vertical-align: top;
+            width: 280px;
+            margin-right: 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 4px rgba(0,0,0,0.1);
+            transition: 0.3s all;
+        }
+        .hovercode {
+            cursor: pointer;
+            &:hover + .qrcode {
+                opacity: 1;
+                transform: translateX(0px);
+            }
+        }
+        .qrcode {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+    }
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
