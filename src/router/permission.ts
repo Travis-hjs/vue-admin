@@ -61,7 +61,7 @@ router.afterEach(to => {
  * 跳转路由初始化页面 
  * @description 登录成功之后用
 */
-export default function openNextPage() {
+export function openNextPage() {
     router.replace({
         path: routerTo.path,
         query: routerTo.query

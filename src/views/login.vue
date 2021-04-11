@@ -39,7 +39,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { login } from "../api/common";
 import store from "../store";
-import openNextPage from "../router/permission";
+import { openNextPage } from "../router/permission";
 
 function validateUsername(rule: any, value: string, callback: Function) {
     if (value.trim().length <= 2) {
