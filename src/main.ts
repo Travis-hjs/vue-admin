@@ -8,7 +8,6 @@ import ElementUI from "element-plus";
 // import "element-ui/lib/theme-chalk/index.css";
 import "./styles/element-variables.scss";
 import "./styles/index.scss";
-import "./router/permission";
 
 const app = createApp(App);
 

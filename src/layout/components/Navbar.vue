@@ -35,9 +35,7 @@ import Hamburger from "./Hamburger.vue";
 import Breadcrumb from "./Breadcrumb.vue";
 import store from "../../store";
 import router from "../../router";
-// import { removeRoutes } from "../../router/permission";
-// 不知道为什么使用`import { removeRoutes } from "../../router/permission"`;
-// 会导致`permission.ts`里面`router`为`undefined`，所以暂时不使用导出方式使用，改用下面`require`调用，之后找到解决方法再改回来
+import { removeRoutes } from "../../router/permission";
 
 export default defineComponent({
     name: "Navbar",
@@ -46,7 +44,6 @@ export default defineComponent({
         Breadcrumb,
     },
     setup() {
-        const { removeRoutes } = require("@/router/permission");
         const avatar = ref("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         const layoutState = store.layout.state;
 

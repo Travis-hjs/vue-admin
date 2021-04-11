@@ -89,6 +89,14 @@ export type RouteItem = {
     name: string
 } & RouteRecordRaw
 
+/** 权限路由配置项 */
+export interface PermissionOptions {
+    /** 基础路由 */
+    base: Array<RouteItem>
+    admin: Array<RouteItem>
+    editor: Array<RouteItem>
+}
+
 export interface LayoutStateType {
     /** 显示设置 */
     showSettings: boolean

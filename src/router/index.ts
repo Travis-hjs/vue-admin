@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import Layout from "../layout/index.vue";
 import { RouteItem } from "../utils/interfaces";
+import { initPermission } from "./permission";
 
 /**
  * 基础路由
@@ -157,6 +158,12 @@ export const editor = [admin[0]];
 const router = createRouter({
     history: createWebHashHistory(),
     routes: base
+})
+
+initPermission(router, {
+    base,
+    admin,
+    editor
 })
 
 export default router;
