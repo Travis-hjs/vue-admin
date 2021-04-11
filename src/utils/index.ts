@@ -256,7 +256,7 @@ class ModuleUtil {
     
     /**
      * `JSON`转`FormData`
-     * @param value `JSON`对象
+     * @param params `JSON`对象
      * @example 
      * ```js
      * const info = { name: "hjs", id: 123 };
@@ -297,7 +297,7 @@ class ModuleUtil {
             const lower = Math.floor(Math.random() * range);
             result += String.fromCharCode(base + lower);
         }
-        return result;
+        return result.slice(1);
     }
     
 }

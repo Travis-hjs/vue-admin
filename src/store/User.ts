@@ -41,7 +41,7 @@ export default class ModuleUser {
 
     /**
      * 更新（设置）当前的用户信息并缓存到本地
-     * @param value 缓存的对象
+     * @param value 更新的值
      */
     update(value: DeepPartial<UserInfoType>) {
         utils.modifyData(this.info, value);
