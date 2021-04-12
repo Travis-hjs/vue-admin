@@ -8,7 +8,7 @@ import { initPermission } from "./permission";
  * @description vue 3.x之后，路由第一层要加"/"，之后的不用加，路由重定向也是
  * 重定向`redirect`也要加"/"
  */
-export const base: Array<RouteItem> = [
+const base: Array<RouteItem> = [
     {
         path: "/login",
         name: "login",
@@ -28,7 +28,7 @@ export const base: Array<RouteItem> = [
 ];
 
 /** 用户类型一路由 */
-export const admin: Array<RouteItem> = [
+const admin: Array<RouteItem> = [
     {
         path: "/",
         name: "index",
@@ -126,16 +126,17 @@ export const admin: Array<RouteItem> = [
             }
         ]
     },
-    // order
+    // {
+    //     name: "other",
+    //     path: "https://github.com/Hansen-hjs/vue-admin",
+    //     component: null as any,
+    //     meta: {
+    //         icon: "star",
+    //         title: "跳转外部链接"
+    //     }
+    // }
 ]
-// var order: any = {
-//     path: "https://github.com/Hansen-hjs/vue-admin",
-//     component: null,
-//     meta: {
-//         icon: "star",
-//         title: "跳转外部链接"
-//     }
-// }
+
 // ========================== 测试 ==========================
 // for (let i = 3; i < 18; i++) {
 //     const first = admin[0].children as Array<RouteItem>
@@ -149,7 +150,7 @@ export const admin: Array<RouteItem> = [
 // }
 
 /** 用户类型二路由（懒得整多一份了，直接用上面的） */
-export const editor = [admin[0]];
+const editor = [admin[0]];
 
 /**
  * 路由实例 
