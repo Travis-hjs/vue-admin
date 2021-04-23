@@ -32,7 +32,7 @@ export default class ModuleLayout {
     readonly state: LayoutState = {
         sidebarTextTheme: false,
         showSidebarLogo: true,
-        fixedHeader: false,
+        fixedHeader: true,
         showSettings: true,
         showHistoryView: true,
         sidebarOpen: true,

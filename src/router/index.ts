@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import store from "../store";
 import Layout from "../layout/index.vue";
 import { RouteItem } from "../utils/interfaces";
+import { initPermission } from "./permission";
 
 Vue.use(VueRouter);
 
@@ -208,5 +209,11 @@ export const editor = [admin[0]];
 const router = new VueRouter({
     routes: base
 });
+
+initPermission(router, {
+    base,
+    admin,
+    editor
+})
 
 export default router;

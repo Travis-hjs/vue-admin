@@ -87,6 +87,14 @@ export interface RouteItem extends RouteConfig {
     fullPath?: string
 }
 
+/** 权限路由配置项 */
+export interface PermissionOptions {
+    /** 基础路由 */
+    base: Array<RouteItem>
+    admin: Array<RouteItem>
+    editor: Array<RouteItem>
+}
+
 /** `layout`状态类型 */
 export interface LayoutState {
     /** 显示设置 */
@@ -99,7 +107,7 @@ export interface LayoutState {
     sidebarOpen: boolean
     /** 显示侧边栏logo */
     showSidebarLogo: boolean
-    /** 显示侧边栏文字主题色 */
+    /** 显示侧边栏文字应用主题色 */
     sidebarTextTheme: boolean
     /** 历史记录列表 */
     historyViews: Array<RouteItem>
