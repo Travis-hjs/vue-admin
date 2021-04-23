@@ -1,14 +1,20 @@
 import Vue from "vue";
 import App from "./App.vue";
+import SvgIcon from "./icons/index.vue"; 
 import router from "./router";
 import ElementUI from "element-ui";
 import utils from "./utils";
 // element-variables.scss里面已经引入了，所以这里可以不用
 // import "element-ui/lib/theme-chalk/index.css";
-import "./icons";
-import "./router/permission";
 import "./styles/element-variables.scss";
 import "./styles/index.scss";
+
+const { version } = require("../package.json");
+
+window.version = version;
+
+// 注册全局组件: `svg-icon`
+Vue.component("svg-icon", SvgIcon);
 
 Vue.use(ElementUI);
 

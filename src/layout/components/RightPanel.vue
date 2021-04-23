@@ -1,15 +1,17 @@
 <template>
-    <div ref="elRightPanel" class="rightPanel-container">
+    <div ref="elRightPanel" class="right_panel_content">
         <transition name="el-fade-in-linear">
-            <div class="rightPanel-background" v-show="show" @click="switchShow(true)"></div>
+            <div class="right_panel_background" v-show="show" @click="switchShow(true)"></div>
         </transition>
-        <div :class="['rightPanel', show ? 'rightPanel-show' : null]">
-            <div class="handle-button" :style="{'top': buttonTop + 'px','background-color': layoutState.theme}" @click="switchShow(false)">
-                <i :class="[show ? 'el-icon-close' : 'el-icon-setting']" />
+        <div :class="['right_panel', show ? 'right_panel_show' : null]">
+            <div
+                :class="['right_button', { 'right_button_hide': !show }]"
+                :style="{'top': buttonTop, 'background-color': layoutState.theme}"
+                @click="switchShow(false)"
+            >
+                <i :class="[show ? 'el-icon-close' : 'el-icon-arrow-left']" />
             </div>
-            <div class="rightPanel-items">
-                <slot />
-            </div>
+            <slot />
         </div>
     </div>
 </template>
@@ -22,8 +24,17 @@ const body = document.body;
 
 @Component({})
 export default class RightPanel extends Vue {
-    @Prop({ default: false }) clickNotClose!: boolean;
-    @Prop({ default: 250 }) buttonTop!: number;
+    @Prop({
+        type: Boolean,
+        default: false
+    })
+    clickNotClose!: boolean;
+
+    @Prop({ 
+        type: String,
+        default: "250px",
+    })
+    buttonTop!: number;
 
     readonly layoutState = store.layout.state;
 
@@ -43,9 +54,9 @@ export default class RightPanel extends Vue {
         if (isMask && this.clickNotClose) return; 
         this.show = !this.show;
         if (this.show) {
-            body.classList.add("showRightPanel");
+            body.classList.add("show_right_panel");
         } else {
-            body.classList.remove("showRightPanel");
+            body.classList.remove("show_right_panel");
         }
     }
 
@@ -63,15 +74,13 @@ export default class RightPanel extends Vue {
 
 <style lang="scss">
 // 添加到body节点上面去的class
-.showRightPanel {
+.show_right_panel {
     overflow: hidden;
     position: relative;
     width: calc(100% - 15px);
 }
-
-.rightPanel-container{
-    
-    .rightPanel-background {
+.right_panel_content{
+    .right_panel_background {
         position: fixed;
         top: 0;
         left: 0;
@@ -80,8 +89,7 @@ export default class RightPanel extends Vue {
         z-index: 1010;
         background: rgba(0, 0, 0, 0.45);
     }
-
-    .rightPanel {
+    .right_panel {
         width: 100%;
         max-width: 260px;
         height: 100vh;
@@ -94,12 +102,10 @@ export default class RightPanel extends Vue {
         background: #fff;
         z-index: 1011;
     }
-
-    .rightPanel-show {
+    .right_panel_show {
         transform: translate(0);
     }
-
-    .handle-button {
+    .right_button {
         width: 48px;
         height: 48px;
         position: absolute;
@@ -112,12 +118,15 @@ export default class RightPanel extends Vue {
         pointer-events: auto;
         color: #fff;
         line-height: 48px;
-
+        transition: 0.24s all;
         i {
             font-size: 24px;
             line-height: 48px;
         }
     }
+    .right_button_hide {
+        width: 30px;
+        left: -30px;
+    }
 }
-
 </style>

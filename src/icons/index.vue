@@ -6,6 +6,10 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
+// <svg>加载处理
+const requireAll = (requireContext: any) => requireContext.keys().map(requireContext);
+const req = require.context("./svg", false, /\.svg$/);
+requireAll(req);
 
 @Component({
     name: "SvgIcon"
