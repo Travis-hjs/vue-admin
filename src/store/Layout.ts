@@ -38,7 +38,7 @@ export default class ModuleLayout {
     readonly state = reactive<LayoutStateType>({
         sidebarTextTheme: false,
         showSidebarLogo: true,
-        fixedHeader: false,
+        fixedHeader: true,
         showSettings: true,
         showHistoryView: true,
         sidebarOpen: true,

@@ -1,15 +1,17 @@
 <template>
-    <div ref="elRightPanel" class="rightPanel-container">
+    <div ref="elRightPanel" class="right_panel_content">
         <transition name="el-fade-in-linear">
-            <div class="rightPanel-background" v-show="show" @click="switchShow(true)"></div>
+            <div class="right_panel_background" v-show="show" @click="switchShow(true)"></div>
         </transition>
-        <div :class="['rightPanel', show ? 'rightPanel-show' : null]">
-            <div class="handle-button" :style="{'top': buttonTop + 'px','background-color': layoutState.theme}" @click="switchShow(false)">
-                <i :class="[show ? 'el-icon-close' : 'el-icon-setting']" />
+        <div :class="['right_panel', show ? 'right_panel_show' : null]">
+            <div
+                :class="['right_button', { 'right_button_hide': !show }]"
+                :style="{'top': buttonTop, 'background-color': layoutState.theme}"
+                @click="switchShow(false)"
+            >
+                <i :class="[show ? 'el-icon-close' : 'el-icon-arrow-left']" />
             </div>
-            <div class="rightPanel-items">
-                <slot />
-            </div>
+            <slot />
         </div>
     </div>
 </template>
@@ -26,8 +28,8 @@ export default defineComponent({
             default: false
         },
         buttonTop: {
-            type: Number,
-            default: 250
+            type: String,
+            default: "250px",
         }
     },
     setup(props, context) {
@@ -79,9 +81,8 @@ export default defineComponent({
     width: calc(100% - 15px);
 }
 
-.rightPanel-container{
-    
-    .rightPanel-background {
+.right_panel_content{
+    .right_panel_background {
         position: fixed;
         top: 0;
         left: 0;
@@ -90,8 +91,7 @@ export default defineComponent({
         z-index: 1010;
         background: rgba(0, 0, 0, 0.45);
     }
-
-    .rightPanel {
+    .right_panel {
         width: 100%;
         max-width: 260px;
         height: 100vh;
@@ -104,12 +104,10 @@ export default defineComponent({
         background: #fff;
         z-index: 1011;
     }
-
-    .rightPanel-show {
+    .right_panel_show {
         transform: translate(0);
     }
-
-    .handle-button {
+    .right_button {
         width: 48px;
         height: 48px;
         position: absolute;
@@ -122,11 +120,15 @@ export default defineComponent({
         pointer-events: auto;
         color: #fff;
         line-height: 48px;
-
+        transition: 0.24s all;
         i {
             font-size: 24px;
             line-height: 48px;
         }
+    }
+    .right_button_hide {
+        width: 30px;
+        left: -30px;
     }
 }
 

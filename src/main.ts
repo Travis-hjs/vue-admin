@@ -9,6 +9,10 @@ import ElementUI from "element-plus";
 import "./styles/element-variables.scss";
 import "./styles/index.scss";
 
+const { version } = require("../package.json");
+
+window.version = version;
+
 const app = createApp(App);
 
 // 注册全局组件: `svg-icon`
