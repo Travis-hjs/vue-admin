@@ -1,10 +1,11 @@
-import { reactive } from "vue";
+import { reactive, readonly } from "vue";
 import utils from "@/utils";
 
 interface ColumnInfoType {
     title: string
     content: string
     input: string
+    readonly link: string
 }
 
 /** 栏目信息 */
@@ -35,7 +36,8 @@ export const columnInfo = reactive<ColumnInfoType>({
         utils.modifyData(columnInfo, value);
     }
     `,
-    input: ""
+    input: "",
+    link: "https://juejin.cn/post/6844903904023429128"
 });
 
 /**
