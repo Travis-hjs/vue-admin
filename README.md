@@ -24,27 +24,39 @@
 
 为保证当前模板的轻量，像`图表`、`富文本编辑`、`Excel`等一些扩展功能根据自己项目选择喜欢的导入使用，这里只提供一个基础的框架模板，另外["hjs"](https://github.com/Hansen-hjs/vue-admin/tree/hjs)分支是我个人用的一个分支，会有额外的功能扩展模块例如：`Excel`、`wangEditor-富文本`；也是根据个人使用的频率添加的一些实用功能，后续会按需增加。
 
-
-## sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化**
-
-```
-set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-```
-
-## Project setup
+## 项目初始化
 
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+### 开发运行
 
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 打包构建
 
 ```
 npm run build
+```
+
+## npm 镜像设置
+
+**sass 安装失败时先执行以下命令再初始化**
+
+```
+set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+```
+
+**设置 npm 为淘宝镜像，注意不是设置为 cnpm 使用，依然是使用 npm**
+
+```
+npm config set registry http://registry.npm.taobao.org/
+```
+
+**还原 npm 镜像，要发布自己的 npm 包用**
+
+```
+npm config set registry http://registry.npmjs.org/
 ```
