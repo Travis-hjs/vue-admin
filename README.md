@@ -28,27 +28,39 @@
 
 关于状态管理，有人会说，都`vue 3.x`了，为什么不使用`hooks`模式去代替一个全局单例`store`模式？没错，确实是可以用`hooks`的设计模式去代替全局单例`store`。最开始我重写这个项目的时候就是用的`hooks`，后来发现代码多的时候，`hooks`的使用太过于零散了，每个方法，每个变量都要导出导入来使用，这导致我在某个组件或者页面用到的依赖过多的时候，`hooks`的导入实在太多，且太难看了，如果命名不规范，还会有重名函数或变量。有时代码过于细分会并不会带来合理的代码维护，所以还是分模块的单例形式比较合理。于是我又改回到单例模式来使用。
 
-
-## sass安装失败时配置（window系统）cmd 窗口首先执行命令再初始化**
-
-```
-set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-```
-
-## Project setup
+## 项目初始化
 
 ```
 npm install
 ```
-
-### Compiles and hot-reloads for development
+### 开发运行
 
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 打包构建
 
 ```
 npm run build
+```
+
+## npm 镜像设置
+
+**sass 安装失败时先执行以下命令再初始化**
+
+```
+set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+```
+
+**设置 npm 为淘宝镜像，注意不是设置为 cnpm 使用，依然是使用 npm**
+
+```
+npm config set registry http://registry.npm.taobao.org/
+```
+
+**还原 npm 镜像，要发布自己的 npm 包用**
+
+```
+npm config set registry http://registry.npmjs.org/
 ```
