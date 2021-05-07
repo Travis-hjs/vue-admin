@@ -9,7 +9,7 @@ import utils from "./utils";
 import "./styles/element-variables.scss";
 import "./styles/index.scss";
 
-const { version } = require("../package.json");
+import { version } from "../package.json";
 
 window.version = version;
 
