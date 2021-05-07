@@ -9,7 +9,7 @@ import ElementUI from "element-plus";
 import "./styles/element-variables.scss";
 import "./styles/index.scss";
 
-const { version } = require("../package.json");
+import { version } from "../package.json";
 
 window.version = version;
 
