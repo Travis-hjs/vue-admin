@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import utils from "../../../utils";
+import utils from "@/utils";
 
 export default defineComponent({
     name: "SidebarItemLink",

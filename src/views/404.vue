@@ -2,10 +2,10 @@
     <div id="no-find">
         <div class="wscn-http404">
             <div class="pic-404">
-                <img class="pic-404__parent" :src="images.image404" alt="404" />
-                <img class="pic-404__child left" :src="images.image404cloud" alt="404" />
-                <img class="pic-404__child mid" :src="images.image404cloud" alt="404" />
-                <img class="pic-404__child right" :src="images.image404cloud" alt="404" />
+                <img class="pic-404__parent" :src="imgInfo.img404" alt="404" />
+                <img class="pic-404__child left" :src="imgInfo.img404cloud" alt="404" />
+                <img class="pic-404__child mid" :src="imgInfo.img404cloud" alt="404" />
+                <img class="pic-404__child right" :src="imgInfo.img404cloud" alt="404" />
             </div>
             <div class="text-404">
                 <div class="text-404__oops">OOPS!</div>
@@ -28,11 +28,8 @@ import store from "../store";
 export default defineComponent({
     name: "404",
     setup() {
-        const images = store.imageInfo;
-        let message = "404 Page Not Found";
         return {
-            images,
-            message
+            imgInfo: store.imgInfo
         }
     }
 })

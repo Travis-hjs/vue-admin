@@ -131,5 +131,4 @@ export default defineComponent({
         left: -30px;
     }
 }
-
 </style>

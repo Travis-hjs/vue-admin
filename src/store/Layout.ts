@@ -7,7 +7,7 @@ import {
     RouteItem
 } from "../utils/interfaces";
 
-import elementVariables from "../styles/element-variables.scss";
+// import elementVariables from "../styles/element-variables.scss"; vue-cli 中可以，vite 不行了
 
 const cacheName = "ModuleLayout";
 
@@ -32,7 +32,7 @@ export default class ModuleLayout {
      * 默认主题颜色
      * @description `/styles/element-variables.scss`中的`$--color-primary`
      */
-    readonly defaultTheme = elementVariables.theme;
+    readonly defaultTheme = "#1890FF";// elementVariables.theme;
 
     /** `layout`操作状态 */
     readonly state = reactive<LayoutStateType>({
@@ -44,7 +44,7 @@ export default class ModuleLayout {
         sidebarOpen: true,
         historyViews: [],
         device: "desktop",
-        theme: elementVariables.theme
+        theme: "#1890FF"
     });
 
     /** 初始化`layout`操作状态 */

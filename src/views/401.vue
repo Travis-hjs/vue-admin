@@ -1,6 +1,6 @@
 <template>
     <div class="no-power">
-        <el-button icon="el-icon-arrow-left" class="back-btn" @click="back">返回</el-button>
+        <el-button icon="el-icon-arrow-left" type="primary" plain @click="back">返回</el-button>
         <el-row>
             <el-col :span="12">
                 <h1 class="text-jumbo text-ginormous">Oops!</h1>gif来源
@@ -16,16 +16,16 @@
                         <a href="https://github.com/armour">随便看看</a>
                     </li>
                     <li>
-                        <a href="#" @click.prevent="dialogVisible = true">点我看图</a>
+                        <a @click="dialogVisible = true">点我看图</a>
                     </li>
                 </ul>
             </el-col>
             <el-col :span="12">
-                <img :src="images.image401" class="some-gif" width="313" height="428" alt="Girl has dropped her ice cream." />
+                <img :src="imgInfo.img401" class="some-gif" width="313" height="428" alt="Girl has dropped her ice cream." />
             </el-col>
         </el-row>
-        <el-dialog :visible="dialogVisible" title="随便看">
-            <img :src="images.image401ewizardClap" class="some-img" />
+        <el-dialog v-model="dialogVisible" title="随便看">
+            <img :src="imgInfo.dance" class="some-img" />
         </el-dialog>
     </div>
 </template>
@@ -39,11 +39,10 @@ export default defineComponent({
     name: "401",
     setup() {
         const dialogVisible = ref(false);
-        const images = store.imageInfo;
+        const route = useRoute();
+        const router = useRouter();
 
         function back() {
-            const route = useRoute();
-            const router = useRouter();
             if (route.query.noGoBack) {
                 router.push({ path: "/" });
             } else {
@@ -52,9 +51,9 @@ export default defineComponent({
         }
 
         return {
+            imgInfo: store.imgInfo,
             dialogVisible,
-            back,
-            images
+            back
         }
     }
 })
@@ -65,12 +64,6 @@ export default defineComponent({
     width: 800px;
     max-width: 100%;
     margin: 100px auto;
-
-    .back-btn {
-        background: #008489;
-        color: #fff;
-        border: none !important;
-    }
 
     .some-gif {
         margin: 0 auto;

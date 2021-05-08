@@ -36,13 +36,13 @@
 </template>
 
 <script lang="ts">
-import path from "path";
+// import path from "path";
 import { defineComponent, PropType, computed } from "vue";
 import SidebarItemLink from "./SidebarItemLink.vue";
-import utils from "../../../utils";
+import utils from "@/utils";
 import { 
     RouteItem 
-} from "../../../utils/interfaces";
+} from "@/utils/interfaces";
 
 export default defineComponent({
     name: "SidebarItem", // 必须要有 name 值才上面才可以引用自身组件
@@ -106,13 +106,16 @@ export default defineComponent({
         })
 
         function resolvePath(routePath: string) {
-            if (utils.isExternal(routePath)) {
-                return routePath;
+            const value = routePath || props.basePath;
+            if (utils.isExternal(value.slice(1))) {
+                return value.slice(1);
             }
-            if (utils.isExternal(props.basePath)) {
-                return props.basePath;
-            }
-            return path.resolve(props.basePath, routePath);
+            // console.log("routePath >>", routePath);
+            // console.log("props.basePath >>", props.basePath);
+            // console.log("-----------------------------------");
+            // const value = path.resolve(props.basePath, routePath);
+            // console.log("value >>", value);
+            return value;
         }
 
         return {
@@ -125,7 +128,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
+@import "../../../styles/variables.scss";
 
 .el-submenu.is-active > .el-submenu__title {
     color: $subMenuActiveText !important;

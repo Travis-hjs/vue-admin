@@ -1,21 +1,28 @@
-const path = require("path");
-　　
-const resolve = dir => path.join(__dirname, dir);
+import { defineConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import { svgBuilder } from "./src/icons/loader";
+import path from "path";
 
-/**
- * 项目webpack配置
- * @learn https://cli.vuejs.org/zh/config/#vue-config-js 
- */
-module.exports = {
-    /** 打包构建后的资源路径 */
-    publicPath: "./",
-
-    /**
-     * @learn https://blog.csdn.net/Liu_yunzhao/article/details/90520028
-     * @learn https://blog.csdn.net/qq_38910842/article/details/102972197
-     */
-    devServer: {
-        port: 2020,
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [vue(), vueJsx(), svgBuilder("./src/icons/svg/")],
+    base: "./",
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "./src")
+        }
+    },
+    // css: {
+    //     preprocessorOptions: { 
+    //         scss: {
+    //             // 全局的scss ，跨域放多个，例如：主题的变量，和一些混合等
+    //             additionalData: `@import "./src/style/variables.scss";`,
+    //         }
+    //     }
+    // },
+    server: {
+        port: 3030,
         /**
          * 这边设置代理域名的时候，`request.ts`里面的`webUrl`请求域名要换成本机地址 => `location.origin`
          * 打包到线上的时候则要把`request.ts`里面的`webUrl`请求域名换成正式环境域名
@@ -38,27 +45,5 @@ module.exports = {
         //         }
         //     }
         // }
-    },
-
-    chainWebpack(config) {
-        // set svg-sprite-loader
-        config.module
-            .rule("svg")
-            .exclude.add(resolve("src/icons"))
-            .end()
-        config.module
-            .rule("icons")
-            .test(/\.svg$/)
-            .include.add(resolve("src/icons"))
-            .end()
-            .use("svg-sprite-loader")
-            .loader("svg-sprite-loader")
-            .options({
-                symbolId: "icon-[name]"
-            })
-            .end()
-    },
-
-    /** 剔除.map文件构建 */
-    productionSourceMap: false
-}
+    }
+})

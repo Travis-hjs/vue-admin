@@ -1,7 +1,6 @@
 import store from "../store";
 import utils from "../utils";
-
-const version = require("element-plus/package.json").version;
+import { version } from "element-plus/package.json";
 
 /**
  * `element-ui`原来的主题颜色

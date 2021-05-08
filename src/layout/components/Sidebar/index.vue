@@ -31,8 +31,8 @@ import { defineComponent, reactive, computed } from "vue";
 import { useRoute } from "vue-router";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarLogo from "./SidebarLogo.vue";
-import store from "../../../store";
-import variables from "../../../styles/variables.scss";
+import store from "@/store";
+// import variables from "@/styles/variables.scss"; 之前 vue-cli 的时候可以，现在不行了，还没找到原因
 
 export default defineComponent({
     name: "SideBar",
@@ -45,7 +45,14 @@ export default defineComponent({
         
         const layoutState = store.layout.state;
 
-        const variable = reactive(variables);
+        // const variable = reactive(variables);
+
+        // 这里手动设置 variable.scss 对应的样式值
+        const variable = reactive({
+            menuBg: "#304156",
+            menuText: "#bfcbd9",
+            menuActiveText: "#409EFF"
+        });
 
         const menuActiveTextColor = computed(function() {
             if (layoutState.sidebarTextTheme) {

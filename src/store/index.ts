@@ -1,22 +1,21 @@
 import ModuleLayout from "./Layout";
 import ModuleUser from "./User";
+import img401 from "../assets/401-images/401.gif";
+import img404 from "../assets/404-images/404.png";
+import img404cloud from "../assets/404-images/404-cloud.png";
 
 class ModuleStore {
     constructor() {
         console.log("%c ModuleStore init", "color: #409EFF");
     }
-
+    
     /** 页面图片资源 */
-    get imageInfo() {
+    get imgInfo() {
         return {
-            /** 404图片 */
-            image404: require("@/assets/404-images/404.png"),
-            /** 404（云朵）图片 */
-            image404cloud: require("@/assets/404-images/404-cloud.png"),
-            /** 401gif */
-            image401: require("@/assets/401-images/401.gif"),
-            /** 跳舞gif */
-            image401ewizardClap: "https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646"
+            img401,
+            img404,
+            img404cloud,
+            dance: "https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646"
         }
     }
 

@@ -7,9 +7,9 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 // <svg>加载处理
-const requireAll = (requireContext: any) => requireContext.keys().map(requireContext);
-const req = require.context("./svg", false, /\.svg$/);
-requireAll(req);
+// const requireAll = (requireContext: any) => requireContext.keys().map(requireContext);
+// const req = require.context("./svg", false, /\.svg$/);
+// requireAll(req);
 
 export default defineComponent({
     name: "SvgIcon",

@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router"
+import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "../layout/index.vue";
 import { RouteItem } from "../utils/interfaces";
 import { initPermission } from "./permission";
@@ -12,17 +12,17 @@ const base: Array<RouteItem> = [
     {
         path: "/login",
         name: "login",
-        component: () => import("@/views/login.vue"),
+        component: () => import("../views/login.vue"),
         meta: { hidden: true, title: "请登陆" },
     }, {
         path: "/404",
         name: "page-404",
-        component: () => import("@/views/404.vue"),
+        component: () => import("../views/404.vue"),
         meta: { hidden: true, title: "不存在该页面" },
     }, {
         path: "/401",
         name: "page-401",
-        component: () => import("@/views/401.vue"),
+        component: () => import("../views/401.vue"),
         meta: { hidden: true, title: "暂无权限访问" },
     }
 ];
@@ -37,35 +37,35 @@ const admin: Array<RouteItem> = [
         meta: { title: "首页", icon: "excel" }, 
         children: [
             {
-                path: "home",
+                path: "/home",
                 meta: { title: "首页展示", icon: "guide" },
-                component: () => import("@/views/pages/home.vue")
+                component: () => import("../views/pages/home.vue")
             },
             {
-                path: "nested",
+                path: "/nested",
                 name: "nested",
                 redirect: "/nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
-                component: () => import("@/views/pages/nested.vue"),
+                component: () => import("../views/pages/nested.vue"),
                 children: [
                     {
-                        path: "menu-1",
+                        path: "/nested/menu-1",
                         name: "nested/menu-1",
                         meta: { title: "菜单 2-1", icon: "tree" },
-                        component: () => import("@/views/pages/menu-1.vue")
+                        component: () => import("../views/pages/menu-1.vue")
                     }, {
-                        path: "menu-2",
+                        path: "/nested/menu-2",
                         name: "nested/menu-2",
                         meta: { title: "菜单 2-2", icon: "tree" },
-                        component: () => import("@/views/pages/menu-2.vue")
+                        component: () => import("../views/pages/menu-2.vue")
                     }
                 ]
             },
             {
-                path: "the-component",
+                path: "/the-component",
                 name: "the-component",
                 meta: { title: "上传图片", icon: "international" },
-                component: () => import("@/views/pages/the-component.vue")
+                component: () => import("../views/pages/the-component.vue")
             }
         ]
     },
@@ -77,20 +77,20 @@ const admin: Array<RouteItem> = [
         component: Layout,
         children: [
             {
-                path: "column-1",
+                path: "/column/column-1",
                 name: "column/column-1",
                 meta: { title: "栏目一", icon: "theme" },
-                component: () => import("@/views/pages/column-1.vue"),
+                component: () => import("../views/pages/column-1.vue"),
             }, {
-                path: "column-2",
+                path: "/column/column-2",
                 name: "column/column-2",
                 meta: { title: "栏目二", icon: "table" },
-                component: () => import("@/views/pages/column-2.vue")
+                component: () => import("../views/pages/column-2.vue")
             }, {
-                path: "tsx",
+                path: "/column/tsx",
                 name: "tsx-example",
                 meta: { title: "tsx-示例", icon: "skill" },
-                component: () => import("@/views/tsx/example")
+                component: () => import("../views/tsx/example")
             }
         ]
     },
@@ -102,10 +102,10 @@ const admin: Array<RouteItem> = [
         component: Layout,
         children: [
             {
-                path: "weather",
+                path: "/request/weather",
                 name: "request/weather",
                 meta: { title: "获取天气数据", icon: "international" },
-                component: () => import("@/views/pages/http.vue"),
+                component: () => import("../views/pages/http.vue"),
             }
         ]
     },
@@ -115,8 +115,8 @@ const admin: Array<RouteItem> = [
         name: "icon",
         children: [
             {
-                path: "index",
-                component: () => import(/* webpackChunkName: "icons" */ "@/views/pages/icons.vue"),
+                path: "/icon/index",
+                component: () => import(/* webpackChunkName: "icons" */ "../views/pages/icons.vue"),
                 name: "Icons",
                 meta: {
                     title: "icons",
@@ -126,17 +126,16 @@ const admin: Array<RouteItem> = [
             }
         ]
     },
-    // {
-    //     name: "other",
-    //     path: "https://github.com/Hansen-hjs/vue-admin",
-    //     component: null as any,
-    //     meta: {
-    //         icon: "star",
-    //         title: "跳转外部链接"
-    //     }
-    // }
+    {
+        path: "/https://github.com/Hansen-hjs/vue-admin",
+        name: "baidu",
+        component: () => import("../views/404.vue"),
+        meta: {
+            icon: "star",
+            title: "跳转外部链接"
+        }
+    }
 ]
-
 // ========================== 测试 ==========================
 // for (let i = 3; i < 18; i++) {
 //     const first = admin[0].children as Array<RouteItem>
@@ -145,7 +144,7 @@ const admin: Array<RouteItem> = [
 //         path: "menu-" + i,
 //         name: "nested/menu-" + i,
 //         meta: { title: "菜单 2-" + i, icon: "tree" },
-//         component: () => import("@/views/pages/menu-1.vue")
+//         component: () => import("../views/pages/menu-1.vue")
 //     })
 // }
 
