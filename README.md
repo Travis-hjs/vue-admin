@@ -1,6 +1,8 @@
-# vue 后台管理模板
+# Vue 后台管理模板
 
-**项目描述**：基于`vue.js`+`typescript`+`element-ui`写的一套超轻量、可根据实际情况自由地扩展的前端中后台管理基础模板。
+**项目描述**：基于`vue.js`+`typescript`+`element-ui`+`vue-cli`写的一套超轻量、可根据实际情况自由地扩展的前端中后台管理基础模板。
+
+当前模板有两套路线：要稳定、兼容性较高就使用`vue 2.x`（后面`vue 2.7`发布后会同步更新使用`Composition API`），最求激进技术就选`vue 3.x`
 
 **vue 2.x | [vue 3.x](https://github.com/Hansen-hjs/vue-admin/tree/next)**
 
