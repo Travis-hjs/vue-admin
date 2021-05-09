@@ -6,6 +6,9 @@ class ModuleStore {
         console.log("%c ModuleStore init", "color: #409EFF");
     }
 
+    /** 当前项目地址 */
+    readonly projectLink = "https://github.com/Hansen-hjs/vue-admin";
+
     /** 页面图片资源 */
     get imageInfo () {
         return {
