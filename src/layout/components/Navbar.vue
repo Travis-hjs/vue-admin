@@ -16,7 +16,7 @@
                         <router-link to="/">
                             <el-dropdown-item>首页</el-dropdown-item>
                         </router-link>
-                        <a target="_blank" href="https://github.com/Hansen-hjs/vue-admin">
+                        <a target="_blank" :href="link">
                             <el-dropdown-item>项目地址</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided>
@@ -46,6 +46,7 @@ export default defineComponent({
     setup() {
         const avatar = ref("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         const layoutState = store.layout.state;
+        const link = store.projectLink;
 
         function toggleSideBar() {
             layoutState.sidebarOpen = !layoutState.sidebarOpen;
@@ -71,7 +72,8 @@ export default defineComponent({
             layoutState,
             avatar,
             toggleSideBar,
-            logout
+            logout,
+            link
         }
     }
 })
@@ -95,7 +97,7 @@ export default defineComponent({
         float: left;
         padding: 0 15px;
         cursor: pointer;
-        transition: background 0.3s;
+        transition: $time all;
         -webkit-tap-highlight-color: transparent;
 
         &:hover {
@@ -131,7 +133,7 @@ export default defineComponent({
 
             &.hover-effect {
                 cursor: pointer;
-                transition: background 0.3s;
+                transition: $time all;
 
                 &:hover {
                     background: rgba(0, 0, 0, 0.025);

@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "../layout/index.vue";
 import { RouteItem } from "../utils/interfaces";
 import { initPermission } from "./permission";
+import store from "@/store";
 
 /**
  * 基础路由
@@ -129,7 +130,7 @@ const admin: Array<RouteItem> = [
         ]
     },
     {
-        path: "/https://github.com/Hansen-hjs/vue-admin/tree/next",
+        path: "/" + store.projectLink,
         name: "baidu",
         component: () => import("../views/404.vue"),
         meta: {

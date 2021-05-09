@@ -2,7 +2,7 @@
     <div class="hello_world">
         <h1 class="title">{{ msg }}</h1>
         <el-divider content-position="left">vue 3.x</el-divider>
-        <p class="text"><el-link type="primary" :href="typeScript" target="_blank">typescript</el-link>+<el-link type="primary" :href="elementUi" target="_blank">element-ui</el-link>后台管理模板。</p>
+        <p class="text"><el-link type="primary" :href="typeScript" target="_blank">typescript</el-link>+<el-link type="primary" :href="elementUi" target="_blank">element-ui</el-link>+<el-link type="primary" :href="vite" target="_blank">vite</el-link>后台管理模板。</p>
         <p class="text">当前项目使用的技术均为最新</p>
         <p class="text">项目地址：<el-link type="primary" :href="project" target="_blank">github</el-link></p>
         <el-divider content-position="left">打赏一下</el-divider>
@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import store from "@/store";
 
 export default defineComponent({
     name: "HelloWorld",
@@ -33,7 +34,7 @@ export default defineComponent({
 
         const typeScript = "https://www.tslang.cn/";
 
-        const project = "https://github.com/Hansen-hjs/vue-admin/tree/next";
+        const project = store.projectLink;
 
         return {
             vite,
