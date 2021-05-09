@@ -5,8 +5,10 @@ import { initPermission } from "./permission";
 
 /**
  * 基础路由
- * @description vue 3.x之后，路由第一层要加"/"，之后的不用加，路由重定向也是
- * 重定向`redirect`也要加"/"
+ * @description 
+ * - `vue-router 4.x`之后路由路径匹配规则改了，不再是只能匹配，所以在定义路由的时候必须要在前面加上`/`
+ * - 重定向`redirect`也要加"/"
+ * - 子路由`children`里面的路由也是需要基于父级来定义，从下面代码观察一下就会发现规律了
  */
 const base: Array<RouteItem> = [
     {
@@ -127,7 +129,7 @@ const admin: Array<RouteItem> = [
         ]
     },
     {
-        path: "/https://github.com/Hansen-hjs/vue-admin",
+        path: "/https://github.com/Hansen-hjs/vue-admin/tree/next",
         name: "baidu",
         component: () => import("../views/404.vue"),
         meta: {
