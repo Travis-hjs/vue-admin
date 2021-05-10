@@ -54,8 +54,8 @@ export default defineComponent({
 
         function logout() {
             store.user.reset();
-            // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
             router.push("/login").then(() => {
+                // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
                 layoutState.historyViews = [];
 
                 // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
