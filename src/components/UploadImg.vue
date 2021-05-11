@@ -82,24 +82,24 @@ export default defineComponent({
             // console.log("上传图片文件 >>", file);
             
             /** 上传类型数组 */
-            let typeList = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
+            const typeList = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
+
+            // 用完就清空
+            input.value = "";
 
             // 判断文件类型
             if (typeList.indexOf(file.type) < 0) {
                 utils.showWarning("文件格式只支持：jpg、png、gif");
-                input.value = "";
                 return;
             }
 
             // 判断大小
             if (file.size > 2 * 1024 * 1024) {
                 utils.showWarning(`上传的文件不能大于 ${props.maxSize}M`);
-                input.value = "";
                 return;
             }
 
             // const formData = new FormData();
-
             // formData.append("file", file);
 
             loading.value = true;
