@@ -102,22 +102,22 @@ export default class UploadImg extends Vue {
         /** 上传类型数组 */
         const typeList = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
+        // 用完就清空
+        input.value = null;
+
         // 判断文件类型
         if (typeList.indexOf(file.type) < 0) {
             this.$message.warning("文件格式只支持：jpg、png、gif");
-            input.value = null;
             return;
         }
 
         // 判断大小
         if (file.size > 2 * 1024 * 1024) {
             this.$message.warning(`上传的文件不能大于 ${this.maxSize}M`);
-            input.value = null;
             return;
         }
 
         // const formData = new FormData();
-
         // formData.append("file", file);
 
         this.loading = true;
