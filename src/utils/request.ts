@@ -61,8 +61,8 @@ function ajax(params: AjaxParams) {
     // 判断传参类型，`json`或者`form`表单
     if (params.formData) {
         body = params.formData;
-        XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
+        // 设置一个默认 json 传参的头配置
         XHR.setRequestHeader("Content-Type", "application/json");
     }
 
