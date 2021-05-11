@@ -9,8 +9,6 @@ Vue.use(VueRouter);
 
 /**
  * 基础路由
- * 路由第一层要加"/"，之后的不用加，路由重定向也是
- * learn: https://panjiachen.github.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
  */
 export const base: Array<RouteItem> = [
     {
@@ -41,24 +39,24 @@ export const admin: Array<RouteItem> = [
         meta: { title: "首页", icon: "excel" }, 
         children: [
             {
-                path: "home",
+                path: "/home",
                 meta: { title: "首页展示", icon: "guide" },
                 component: () => import("@/views/pages/home.vue")
             },
             {
-                path: "nested",
+                path: "/nested",
                 name: "nested",
                 redirect: "/nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
                 component: () => import("@/views/pages/nested.vue"),
                 children: [
                     {
-                        path: "menu-1",
+                        path: "/nested/menu-1",
                         name: "nested/menu-1",
                         meta: { title: "菜单 2-1", icon: "tree" },
                         component: () => import("@/views/pages/menu-1.vue")
                     }, {
-                        path: "menu-2",
+                        path: "/nested/menu-2",
                         name: "nested/menu-2",
                         meta: { title: "菜单 2-2", icon: "tree" },
                         component: () => import("@/views/pages/menu-2.vue")
@@ -66,7 +64,7 @@ export const admin: Array<RouteItem> = [
                 ]
             },
             {
-                path: "the-component",
+                path: "/the-component",
                 name: "the-component",
                 meta: { title: "上传图片", icon: "international" },
                 component: () => import("@/views/pages/the-component.vue")
@@ -81,12 +79,12 @@ export const admin: Array<RouteItem> = [
         component: Layout,
         children: [
             {
-                path: "column-1",
+                path: "/column/column-1",
                 name: "column/column-1",
                 meta: { title: "栏目一", icon: "theme" },
                 component: () => import("@/views/pages/column-1.vue"),
             }, {
-                path: "column-2",
+                path: "/column/column-2",
                 name: "column/column-2",
                 meta: { title: "栏目二", icon: "table" },
                 component: () => import("@/views/pages/column-2.vue")
@@ -101,7 +99,7 @@ export const admin: Array<RouteItem> = [
         component: Layout,
         children: [
             {
-                path: "weather",
+                path: "/request/weather",
                 name: "request/weather",
                 meta: { title: "获取天气数据", icon: "international" },
                 component: () => import("@/views/pages/http.vue"),
@@ -113,7 +111,7 @@ export const admin: Array<RouteItem> = [
         component: Layout,
         children: [
             {
-                path: "index",
+                path: "/icon/index",
                 component: () => import(/* webpackChunkName: "icons" */ "@/views/pages/icons.vue"),
                 name: "Icons",
                 meta: {
@@ -124,13 +122,13 @@ export const admin: Array<RouteItem> = [
             }
         ]
     },
-    // {
-    //     path: "https://github.com/Hansen-hjs/vue-admin",
-    //     meta: {
-    //         icon: "star",
-    //         title: "跳转外部链接"
-    //     }
-    // }
+    {
+        path: store.projectLink,
+        meta: {
+            icon: "star",
+            title: "跳转外部链接"
+        }
+    }
 ]
 
 // ========================== 测试 ==========================
