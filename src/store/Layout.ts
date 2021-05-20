@@ -4,7 +4,7 @@ import {
     RouteItem
 } from "../utils/interfaces";
 
-import elementVariables from "../styles/element-variables.scss";
+import variables from "../styles/variables.scss";
 
 const cacheName = "ModuleLayout";
 
@@ -24,9 +24,9 @@ export default class ModuleLayout {
 
     /**
      * 默认主题颜色
-     * @description `/styles/element-variables.scss`中的`$--color-primary`
+     * @description `src/styles/variables.scss`导出的主题色
      */
-    readonly defaultTheme = elementVariables.theme;
+    readonly defaultTheme = variables.theme;
 
     /** `layout`操作状态 */
     readonly state: LayoutState = {
@@ -38,7 +38,7 @@ export default class ModuleLayout {
         sidebarOpen: true,
         historyViews: [],
         device: "desktop",
-        theme: elementVariables.theme
+        theme: variables.theme
     }
 
     /** 初始化`layout`操作状态 */

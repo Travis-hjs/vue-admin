@@ -102,22 +102,22 @@ export default class UploadImg extends Vue {
         /** 上传类型数组 */
         const typeList = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
 
+        // 用完就清空
+        input.value = null;
+
         // 判断文件类型
         if (typeList.indexOf(file.type) < 0) {
             this.$message.warning("文件格式只支持：jpg、png、gif");
-            input.value = null;
             return;
         }
 
         // 判断大小
         if (file.size > this.maxSize * 1024 * 1024) {
             this.$message.warning(`上传的文件不能大于 ${this.maxSize}M`);
-            input.value = null;
             return;
         }
 
         // const formData = new FormData();
-
         // formData.append("file", file);
 
         this.loading = true;
@@ -139,7 +139,7 @@ export default class UploadImg extends Vue {
 </script>
 
 <style lang="scss">
-@import "@/styles/element-variables.scss";
+@import "@/styles/variables.scss";
 @mixin time() { transition: 0.2s all; }
 @mixin addIcon() { content: ""; position: absolute; background-color: #999; }
 
@@ -150,7 +150,7 @@ export default class UploadImg extends Vue {
         border-radius: 5px;
         overflow: hidden;
         @include time();
-        &:hover { border-color: $--color-primary; background-color: #fbfdff; }
+        &:hover { border-color: $theme; background-color: #fbfdff; }
         .image_box{ 
             position: relative; width: 100%; height: 100%; overflow: hidden;
             .image { display: block; width: 100%; }
@@ -170,6 +170,6 @@ export default class UploadImg extends Vue {
             }
         }
     }
-    .upload_tip { font-size: 12px; color: $--color-primary; line-height: 20px; padding: 6px 4px; }
+    .upload_tip { font-size: 12px; color: $theme; line-height: 20px; padding: 6px 4px; }
 }
 </style>

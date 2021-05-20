@@ -8,7 +8,7 @@
 
 ## 预览地址
 
-[vue-admin](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs/)
+[vue-admin](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs)
 
 ## 相对`master`分支增加的依赖
 

@@ -15,7 +15,7 @@
                     <router-link to="/">
                         <el-dropdown-item>首页</el-dropdown-item>
                     </router-link>
-                    <a target="_blank" href="https://github.com/Hansen-hjs/vue-admin">
+                    <a target="_blank" :href="link">
                         <el-dropdown-item>项目地址</el-dropdown-item>
                     </a>
                     <el-dropdown-item divided>
@@ -42,6 +42,8 @@ import store from "../../store";
 export default class Navbar extends Vue {
 
     readonly layoutState = store.layout.state;
+
+    readonly link = store.projectLink;
 
     avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 

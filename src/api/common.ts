@@ -9,9 +9,9 @@ import {
 
 /**
  * 上传图片
- * @param fromData 图片`FromData` 这里我模拟上传，所以类型是`File`，接口上传时才是`FromData`
+ * @param formData 图片`FormData` 这里我模拟上传，所以类型是`File`，接口上传时才是`FormData`
  */
-export function uploadImg(fromData: File) {
+export function uploadImg(formData: File) {
     // 模拟上传
     return new Promise<ApiResult>(function(resolve) {
         const reader = new FileReader();
@@ -31,10 +31,10 @@ export function uploadImg(fromData: File) {
                 msg: "上传失败"
             })
         }
-        reader.readAsDataURL(fromData);
+        reader.readAsDataURL(formData);
     })
     
-    // return request("POST", "/uploadImg", {}, fromData);
+    // return request("POST", "/uploadImg", {}, formData);
 }
 
 /**
