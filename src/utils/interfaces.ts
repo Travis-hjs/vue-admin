@@ -139,3 +139,11 @@ export interface UploadChange {
     /** 图片路径 */
     src: string
 }
+
+/** `variables.scss`变量导出类型 */
+export interface ScssVariables {
+    menuBg: string
+    menuText: string
+    menuActiveText: string
+    theme: string
+}

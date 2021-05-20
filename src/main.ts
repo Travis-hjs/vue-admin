@@ -4,9 +4,7 @@ import SvgIcon from "./icons/index.vue";
 import router from "./router";
 import utils from "./utils";
 import ElementUI from "element-plus";
-// element-variables.scss里面已经引入了，所以这里可以不用
-// import "element-ui/lib/theme-chalk/index.css";
-import "./styles/element-variables.scss";
+// import "element-ui/lib/theme-chalk/index.css"; // index.scss里面已经引入了，所以这里可以不用
 import "./styles/index.scss";
 
 import { version } from "../package.json";

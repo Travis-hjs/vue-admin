@@ -1,4 +1,6 @@
-/* Global scss */
+@import "./element-variables.scss";
+
+/* 一些全局样式 */
 
 *, *:before, *:after {
     box-sizing: border-box;

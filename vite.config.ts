@@ -13,14 +13,6 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src")
         }
     },
-    // css: {
-    //     preprocessorOptions: { 
-    //         scss: {
-    //             // 全局的scss ，跨域放多个，例如：主题的变量，和一些混合等
-    //             additionalData: `@import "./src/style/variables.scss";`,
-    //         }
-    //     }
-    // },
     server: {
         port: 3030,
         /**

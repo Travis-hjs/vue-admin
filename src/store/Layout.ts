@@ -1,13 +1,15 @@
 import { reactive, watch } from "vue";
 import utils from "../utils";
 import {
-    layoutRouteType,
     LayoutStateKeys,
     LayoutStateType,
-    RouteItem
+    RouteItem,
+    ScssVariables
 } from "../utils/interfaces";
 
-// import elementVariables from "../styles/element-variables.scss"; vue-cli 中可以，vite 不行了
+import style from "../styles/variables.scss";
+
+const variables: ScssVariables = utils.formatStyleModule(style);
 
 const cacheName = "ModuleLayout";
 
@@ -27,12 +29,17 @@ export default class ModuleLayout {
  
     /** (基础路由+动态路由)列表 */
     completeRouters: Array<RouteItem> = [];
+    
+    /** `src/styles/variables.scss`导出变量 */
+    getVariables() {
+        return variables;
+    }
 
     /**
      * 默认主题颜色
-     * @description `/styles/element-variables.scss`中的`$--color-primary`
+     * @description `src/styles/variables.scss`导出的主题色
      */
-    readonly defaultTheme = "#1890FF";// elementVariables.theme;
+    readonly defaultTheme = variables.theme;
 
     /** `layout`操作状态 */
     readonly state = reactive<LayoutStateType>({

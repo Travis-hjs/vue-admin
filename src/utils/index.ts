@@ -275,6 +275,24 @@ class ModuleUtil extends ModuleElementUI {
         }
         return result.slice(1);
     }
+
+    /**
+     * 格式化`.scss`文件中导出的变量
+     * @param val 
+     */
+    formatStyleModule(val: string) {
+        val = val.replace(/:export {/, ":export{").replace(/(\n|\t|\s)*/g, "");
+        const matchInfo = val.match(/:export{(\S*)}/);
+        if (matchInfo && matchInfo[1]) {
+            let match = matchInfo[1];
+            if (match[match.length - 1] == ";") {
+                match = match.slice(0, match.length - 1);
+            }
+            val = match.replace(/;/g, `","`).replace(/:/g, `":"`);
+        }
+        // console.log(`{"${val}"}`);
+        return JSON.parse(`{"${val}"}`);
+    }
 }
 
 /** 工具模块 */
