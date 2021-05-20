@@ -43,7 +43,7 @@ export default class Navbar extends Vue {
 
     readonly layoutState = store.layout.state;
 
-    readonly link = store.projectLink;
+    readonly link = store.projectLink + "/tree/hjs";
 
     avatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
