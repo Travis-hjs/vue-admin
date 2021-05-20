@@ -139,7 +139,7 @@ export default class UploadImg extends Vue {
 </script>
 
 <style lang="scss">
-@import "@/styles/element-variables.scss";
+@import "@/styles/variables.scss";
 @mixin time() { transition: 0.2s all; }
 @mixin addIcon() { content: ""; position: absolute; background-color: #999; }
 
@@ -150,7 +150,7 @@ export default class UploadImg extends Vue {
         border-radius: 5px;
         overflow: hidden;
         @include time();
-        &:hover { border-color: $--color-primary; background-color: #fbfdff; }
+        &:hover { border-color: $theme; background-color: #fbfdff; }
         .image_box{ 
             position: relative; width: 100%; height: 100%; overflow: hidden;
             .image { display: block; width: 100%; }
@@ -170,6 +170,6 @@ export default class UploadImg extends Vue {
             }
         }
     }
-    .upload_tip { font-size: 12px; color: $--color-primary; line-height: 20px; padding: 6px 4px; }
+    .upload_tip { font-size: 12px; color: $theme; line-height: 20px; padding: 6px 4px; }
 }
 </style>

@@ -5,6 +5,8 @@ export interface IScssVariables {
     menuText: string
     /** 侧边栏按钮文字高亮颜色 */
     menuActiveText: string
+    /** 主题色 */
+    theme: string
 }
 
 export const variables: IScssVariables

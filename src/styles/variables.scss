@@ -1,4 +1,8 @@
-/* 全局变量文件 */
+/* 
+全局变量文件，注意这里最好和 element-variables.scss 分开，
+因为 element-variables.scss 引入了 UI 样式，如果写在一起的话会导致
+每次热更新都加载很慢
+*/
 
 // ================ 基础颜色 ================
 $blue:#324157;
@@ -31,6 +35,8 @@ $menuBg:#304156;
 $menuText:#bfcbd9;
 // sidebarTextTheme 默认颜色
 $menuActiveText:#409EFF;
+// 主题色
+$theme: #1890FF;
 
 // The :export directive is the magic sauce for webpack
 // https://mattferderer.com/use-sass-variables-in-typescript-and-javascript
@@ -38,4 +44,5 @@ $menuActiveText:#409EFF;
     menuBg: $menuBg;
     menuText: $menuText;
     menuActiveText: $menuActiveText;
+    theme: $theme;
 }

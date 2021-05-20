@@ -30,8 +30,8 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarLogo from "./SidebarLogo.vue";
-import store from "../../../store";
-import variables from "../../../styles/variables.scss";
+import store from "@/store";
+import variables from "@/styles/variables.scss";
 
 @Component({
     components: {
