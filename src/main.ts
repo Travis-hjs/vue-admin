@@ -4,6 +4,7 @@ import SvgIcon from "./icons/index.vue";
 import router from "./router";
 import utils from "./utils";
 import ElementUI from "element-plus";
+import locale from "element-plus/lib/locale/lang/zh-cn"; // element-plus 默认是使用英文的，所以这里手动改成中文
 // import "element-ui/lib/theme-chalk/index.css"; // index.scss里面已经引入了，所以这里可以不用
 import "./styles/index.scss";
 
@@ -25,7 +26,7 @@ app.directive("copy", {
     }
 })
 
-app.use(ElementUI);
+app.use(ElementUI, { locale });
 
 app.use(router);
 
