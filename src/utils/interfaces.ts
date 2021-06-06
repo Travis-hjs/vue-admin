@@ -130,6 +130,17 @@ export interface UploadChange {
     src: string
 }
 
+export interface PageInfoType {
+    pageSize: number
+    total: number
+    currentPage: number
+}
+
+export interface PaginationChange {
+    type: "pageSize"|"currentPage",
+    value: number
+}
+
 export interface RichTextChange {
     /** 组件`id`，一个页面多个富文本时需要用到`id` */
     id: string | number
@@ -168,3 +179,4 @@ export type ChartRingData = Array<{
     /** 对应的名称 */
     name: string | number
 }>
+
