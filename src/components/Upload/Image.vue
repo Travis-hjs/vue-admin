@@ -18,12 +18,13 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import { UploadChange } from "../utils/interfaces";
-import { uploadImg } from "../api/common";
-import utils from "../utils";
+import { UploadChange } from "@/utils/interfaces";
+import { uploadImg } from "@/api/common";
+import utils from "@/utils";
 
+/** 上传图片组件 */
 export default defineComponent({
-    name: "UploadImg",
+    name: "UploadImage",
     props: {
         /** 组件上传图片路径 */
         imgUrl: {

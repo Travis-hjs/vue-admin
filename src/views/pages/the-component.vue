@@ -4,10 +4,10 @@
         <el-alert :title="pageData.dec" type="success" />
         <div class="flex">
             <div v-for="(item, index) in pageData.uploadList" :key="index" style="margin-right: 16px;">
-                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
+                <UploadImage :imgUrl="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
             </div>
             <div>
-                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
+                <UploadImage :imgUrl="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
             </div>
         </div>
     </div>
@@ -15,12 +15,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-import UploadImg from "../../components/UploadImg.vue";
-import { UploadChange } from "../../utils/interfaces";
+import UploadImage from "@/components/Upload/Image.vue";
+import { UploadChange } from "@/utils/interfaces";
 
 export default defineComponent({
     components: {
-        UploadImg
+        UploadImage
     },
     setup() {
         const pageData = reactive({
