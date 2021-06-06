@@ -129,3 +129,14 @@ export interface UploadChange {
     /** 图片路径 */
     src: string
 }
+
+export interface PageInfoType {
+    pageSize: number
+    total: number
+    currentPage: number
+}
+
+export interface PaginationChange {
+    type: "pageSize"|"currentPage",
+    value: number
+}

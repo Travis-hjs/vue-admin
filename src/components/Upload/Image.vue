@@ -1,8 +1,8 @@
 <template>
     <div class="the_upload_img">
         <div class="upload_content" :style="{'width': width + 'px'}" v-loading="loading">
-            <div v-if="imgUrl" class="image_box">
-                <img class="image" :src="imgUrl" :style="{ 'height': autoHeight ? null : height + 'px' }">
+            <div v-if="src" class="image_box">
+                <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height + 'px' }">
                 <div class="remove flex fvertical fcenter">
                     <i class="el-icon-delete" @click="removeImg()" />
                 </div>
@@ -18,18 +18,19 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { UploadChange } from "../utils/interfaces";
-import { uploadImg } from "../api/common";
+import { UploadChange } from "@/utils/interfaces";
+import { uploadImg } from "@/api/common";
 
+/** 上传图片组件 */
 @Component({})
-export default class UploadImg extends Vue {
+export default class UploadImage extends Vue {
 
     /** 组件上传图片路径 */
     @Prop({
         type: String,
         default: ""
     })
-    imgUrl!: string;
+    src!: string;
     
     /** 组件`id` */
     @Prop({

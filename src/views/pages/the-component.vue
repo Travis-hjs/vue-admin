@@ -4,10 +4,10 @@
         <el-alert :title="pageData.dec" type="success" />
         <div class="flex">
             <div v-for="(item, index) in pageData.uploadList" :key="index" style="margin-right: 16px;">
-                <UploadImg :imgUrl="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
+                <UploadImage :src="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
             </div>
             <div>
-                <UploadImg :imgUrl="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
+                <UploadImage :src="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
             </div>
         </div>
     </div>
@@ -15,12 +15,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { UploadChange } from "../../utils/interfaces";
-import UploadImg from "../../components/UploadImg.vue";
+import UploadImage from "@/components/Upload/Image.vue";
+import { UploadChange } from "@/utils/interfaces";
 
 @Component({
     components: {
-        UploadImg
+        UploadImage
     }
 })
 export default class Page5 extends Vue {
@@ -32,7 +32,8 @@ export default class Page5 extends Vue {
         uploadList: [
             {
                 image: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
-            }, {
+            },
+            {
                 // image: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
                 image: "https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fcb3645c82654a4b9d7feab62dc6e332~tplv-k3u1fbpfcp-watermark.image"
             }
