@@ -10,6 +10,8 @@
 
 [vue-admin](https://huangjingsheng.gitee.io/hjs/vue2-admin/)
 
+码云平台最近在网络整顿导，所以导致当前预览地址失效，请本地运行预览
+
 ## 功能清单
 
 * `layout`核心布局模板
