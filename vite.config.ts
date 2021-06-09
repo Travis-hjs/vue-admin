@@ -15,6 +15,7 @@ export default defineConfig({
     },
     server: {
         port: 3030,
+        host: "0.0.0.0",
         // proxy: {
         //     "/api": {
         //         //要访问的跨域的域名
