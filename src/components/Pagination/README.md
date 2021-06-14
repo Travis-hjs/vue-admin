@@ -14,6 +14,7 @@
 import { defineComponent, reactive } from "vue";
 import Pagination from "@/components/Pagination/index.vue";
 import { PaginationChange } from "@/utils/interfaces";
+
 export default defineComponent({
     components: {
         Pagination

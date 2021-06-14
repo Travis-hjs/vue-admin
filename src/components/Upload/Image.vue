@@ -1,8 +1,8 @@
 <template>
     <div class="the_upload_img">
         <div class="upload_content" :style="{'width': width + 'px'}" v-loading="loading">
-            <div v-if="imgUrl" class="image_box">
-                <img class="image" :src="imgUrl" :style="{ 'height': autoHeight ? null : height + 'px' }">
+            <div v-if="src" class="image_box">
+                <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height + 'px' }">
                 <div class="remove flex fvertical fcenter">
                     <i class="el-icon-delete" @click="removeImg()" />
                 </div>
@@ -27,7 +27,7 @@ export default defineComponent({
     name: "UploadImage",
     props: {
         /** 组件上传图片路径 */
-        imgUrl: {
+        src: {
             type: String,
             default: ""
         },
