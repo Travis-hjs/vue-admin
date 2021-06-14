@@ -5,48 +5,59 @@
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import * as echarts from "echarts/core";
 import { GridComponent } from "echarts/components";
-import { LineChart } from "echarts/charts";
+import { BarChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import { ChartLineData } from "../utils/interfaces";
+import { ChartBarData } from "@/utils/interfaces";
 
-echarts.use([GridComponent, LineChart, CanvasRenderer]);
+echarts.use([GridComponent, BarChart, CanvasRenderer]);
 
 /**
- * [折线图表](https://echarts.apache.org/examples/zh/editor.html?c=line-smooth)
+ * 柱状图图表
+ * [echart文档](https://echarts.apache.org/examples/zh/editor.html?c=mix-line-bar)
  */
 @Component({})
-export default class ChartLine extends Vue {
-    @Prop({ default: "chart_line" }) className!: string;
-    @Prop({ type: Object, required: true }) chartData!: ChartLineData;
+export default class ChartBar extends Vue {
+    @Prop({ default: "chart_bar" }) className!: string;
+    @Prop({ type: Object, required: true }) chartData!: ChartBarData;
     
     /** 当前图表实例 */
     chart!: echarts.ECharts;
 
     @Watch("chartData", { deep: true })
-    onChartDataChange(value: ChartLineData) {
+    onChartDataChange(value: ChartBarData) {
         this.setData(value);
     }
 
-    setData(value: ChartLineData) {
+    setData(value: ChartBarData) {
         const series = value.data.map(item => {
             return {
+                color: item.color,
                 name: item.title,
-                itemStyle: {
-                    color: item.color,
-                    lineStyle: {
-                        color: item.color,
-                        width: 2
-                    }
-                },
                 data: item.value,
-                type: "line",
-                smooth: true
+                type: "bar"
             }
         })
         this.chart.setOption({
+            legend: {
+                data: value.data.map(item => item.title),
+                top: "0%",
+                right: "10%"
+            },
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "cross",
+                    // crossStyle: {
+                    //     color: "#999"
+                    // }
+                }
+            },
             xAxis: {
                 type: "category",
-                data: value.bottom
+                data: value.bottom,
+                axisPointer: {
+                    type: "shadow"
+                }
             },
             yAxis: {
                 type: "value",
@@ -54,21 +65,6 @@ export default class ChartLine extends Vue {
                 axisLabel: {
                     formatter: value.yAxisUnit ? `{value} ${value.yAxisUnit}` : undefined
                 }
-            },
-            legend: {
-                data: value.data.map(item => item.title),
-                top: "0%",
-                right: "10%"
-            },
-            tooltip : {
-                trigger: "axis",
-                axisPointer: {
-                    type: "cross",
-                    // label: {
-                    //     backgroundColor: "#6a7985"
-                    // }
-                },
-                // padding: 8
             },
             series
         });
@@ -98,7 +94,7 @@ export default class ChartLine extends Vue {
 }
 </script>
 <style lang="scss">
-.chart_line {
+.chart_bar {
     width: 100%;
 }
 </style>

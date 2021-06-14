@@ -9,7 +9,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import UploadExcel from "../../components/UploadExcel.vue";
+import UploadExcel from "@/components/Upload/Excel.vue";
 
 interface UploadResult {
     results: Array<any>
@@ -23,9 +23,10 @@ interface UploadResult {
 })
 export default class ImportExcel extends Vue {
     tableData: Array<any> = [];
+    
     tableHeader: Array<string> = [];
 
-    private beforeUpload(file: File) {
+    beforeUpload(file: File) {
         const isLt1M = file.size / 1024 / 1024 < 1;
         if (isLt1M) {
             return true;
@@ -37,7 +38,7 @@ export default class ImportExcel extends Vue {
         return false;
     }
 
-    private handleSuccess(res: UploadResult) {
+    handleSuccess(res: UploadResult) {
         this.tableData = res.results;
         this.tableHeader = res.header;
     }

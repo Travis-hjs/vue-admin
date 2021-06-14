@@ -7,12 +7,13 @@ import * as echarts from "echarts/core";
 import { TooltipComponent, LegendComponent } from "echarts/components";
 import { PieChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import { ChartRingData } from "../utils/interfaces";
+import { ChartRingData } from "@/utils/interfaces";
 
 echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
 
 /**
- * [圆环图表](https://echarts.apache.org/examples/zh/editor.html?c=pie-doughnut)
+ * 圆环图表
+ * [echart文档](https://echarts.apache.org/examples/zh/editor.html?c=pie-doughnut)
  */
 @Component({})
 export default class ChartRing extends Vue {

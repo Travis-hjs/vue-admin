@@ -44,3 +44,53 @@ export default class Demo extends Vue {
 }
 </script>
 ```
+
+## 上传Excel组件并读取对应数据
+
+使用示例
+
+```html
+<template>
+    <div>
+        <UploadExcel :onSuccess="handleSuccess" :beforeUpload="beforeUpload" />
+    </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import UploadExcel from "@/components/Upload/Excel.vue";
+
+interface UploadResult {
+    results: Array<any>
+    header: Array<string>
+}
+
+@Component({
+    components: {
+        UploadExcel
+    }
+})
+export default class Demo extends Vue {
+    tableData: Array<any> = [];
+    
+    tableHeader: Array<string> = [];
+
+    beforeUpload(file: File) {
+        const isLt1M = file.size / 1024 / 1024 < 1;
+        if (isLt1M) {
+            return true;
+        }
+        this.$message({
+            message: "请不要上传大于 1M 的文件。",
+            type: "warning",
+        });
+        return false;
+    }
+
+    handleSuccess(res: UploadResult) {
+        this.tableData = res.results;
+        this.tableHeader = res.header;
+    }
+}
+</script>
+```

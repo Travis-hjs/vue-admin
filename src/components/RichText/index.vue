@@ -7,9 +7,10 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 // http://www.wangeditor.com/doc/
 import wangEditor from "wangeditor";
-import { uploadImg } from "../api/common";
-import { RichTextChange } from "../utils/interfaces";
+import { uploadImg } from "@/api/common";
+import { RichTextChange } from "@/utils/interfaces";
 
+/** 富文本组件 */
 @Component({})
 export default class RichText extends Vue {
     /** 富文本高度 */
@@ -53,7 +54,10 @@ export default class RichText extends Vue {
     /** 富文本实例 */
     private editor!: wangEditor
 
-    /** 设置富文本内容-给父组件用 */
+    /**
+     * 设置富文本内容
+     * @description 给父组件使用
+    */
     public setContent(value: string) {
         this.editor.txt.html(value);
     }

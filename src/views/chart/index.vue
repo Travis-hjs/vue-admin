@@ -18,11 +18,11 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import ChartLine from "../../components/ChartLine.vue";
-import ChartBar from "../../components/ChartBar.vue";
-import ChartRing from "../../components/ChartRing.vue";
-import store from "../../store";
-import { ChartBarData, ChartLineData, ChartRingData } from "../../utils/interfaces";
+import ChartLine from "@/components/Chart/Line.vue";
+import ChartBar from "@/components/Chart/Bar.vue";
+import ChartRing from "@/components/Chart/Ring.vue";
+import store from "@/store";
+import { ChartBarData, ChartLineData, ChartRingData } from "@/utils/interfaces";
 
 @Component({
     components: {

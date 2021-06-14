@@ -12,10 +12,12 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import XLSX from "xlsx";
 
-@Component({
-    name: "UploadExcel",
-})
-export default class extends Vue {
+/**
+ * 上传`Excel`组件
+ * @description 准确来说应该是导入`Excel`读取对应数据
+*/
+@Component({})
+export default class UploadExcel extends Vue {
     @Prop({ required: true }) beforeUpload!: Function;
     @Prop({ required: true }) onSuccess!: Function;
 

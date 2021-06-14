@@ -1,20 +1,17 @@
+# 富文本组件
+
+使用示例
+
+```html
 <template>
-    <div class="richtext_home">
-        <h2 class="title">wangEditor-富文本编辑器</h2>
+    <div>
         <RichText ref="richText" @change="setEditorValue" />
-        <h2 class="title">内容预览</h2>
-        <div class="flex">
-            <textarea class="f1" rows="14" name="" readonly v-model="editorValue"></textarea>
-            <div style="margin-left: 20px">
-                <el-button type="success" @click="setRichTextContent">清空富文本</el-button>
-            </div>
-        </div>
     </div>
 </template>
 <script lang="ts">
-import { RichTextChange } from "@/utils/interfaces";
 import { Component, Vue } from "vue-property-decorator";
 import RichText from "@/components/RichText/index.vue";
+import { RichTextChange } from "@/utils/interfaces";
 
 @Component({
     components: {
@@ -38,18 +35,7 @@ export default class RichTextHome extends Vue {
         (this.$refs["richText"] as RichText).setContent("");
         this.editorValue = "";
     }
-    
-    mounted() {
 
-    }
 }
 </script>
-<style lang="scss">
-.richtext_home{
-    .title{
-        font-size: 24px;
-        color: #444;
-        margin-bottom: 22px;
-    }
-}
-</style>
+```
