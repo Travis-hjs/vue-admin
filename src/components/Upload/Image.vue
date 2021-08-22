@@ -100,7 +100,7 @@ export default defineComponent({
             }
 
             // 判断大小
-            if (file.size > 2 * 1024 * 1024) {
+            if (file.size > props.maxSize * 1024 * 1024) {
                 utils.showWarning(`上传的文件不能大于 ${props.maxSize}M`);
                 return;
             }
