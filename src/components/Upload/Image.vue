@@ -1,15 +1,15 @@
 <template>
     <div class="the_upload_img">
-        <div class="upload_content" :style="{'width': width + 'px'}" v-loading="loading">
+        <div class="upload_content" :style="{ 'width': width }" v-loading="loading">
             <div v-if="src" class="image_box">
-                <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height + 'px' }">
+                <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height }">
                 <div class="remove flex fvertical fcenter">
-                    <i class="el-icon-delete" @click="removeImg()" />
+                    <i v-if="!disabled" class="el-icon-delete" @click="removeImg()" />
                 </div>
             </div>
-            <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height + 'px' }">
+            <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height }">
                 <div class="add_icon"></div>
-                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change.stop="onUpload()">
+                <input v-if="!disabled" class="upload_input" type="file" name="picture" ref="uploadinput" @change.stop="onUpload()">
             </div>
         </div>
         <p class="upload_tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
@@ -38,13 +38,13 @@ export default defineComponent({
         },
         /** 图片宽度 */
         width: {
-            type: Number,
-            default: 178
+            type: String,
+            default: "178px"
         },
         /** 图片高度 */
         height: {
-            type: Number,
-            default: 178
+            type: String,
+            default: "178px"
         },
         /** 是否自动高度（针对图片） */
         autoHeight: {
@@ -60,6 +60,11 @@ export default defineComponent({
         maxSize: {
             type: Number,
             default: 2
+        },
+        /** 是否禁用状态 */
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     setup(props, context) {
