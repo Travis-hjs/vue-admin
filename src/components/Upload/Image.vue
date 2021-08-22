@@ -72,7 +72,7 @@ export default class UploadImage extends Vue {
         type: Number,
         default: 2
     })
-    maxSize!: string;
+    maxSize!: number;
 
     /** 是否禁用状态 */
     @Prop({
@@ -120,7 +120,7 @@ export default class UploadImage extends Vue {
         }
 
         // 判断大小
-        if (file.size > 2 * 1024 * 1024) {
+        if (file.size > this.maxSize * 1024 * 1024) {
             this.$message.warning(`上传的文件不能大于 ${this.maxSize}M`);
             return;
         }
