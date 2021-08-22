@@ -1,15 +1,15 @@
 <template>
     <div class="the_upload_img">
-        <div class="upload_content" :style="{'width': width + 'px'}" v-loading="loading">
+        <div class="upload_content" :style="{'width': width}" v-loading="loading">
             <div v-if="src" class="image_box">
-                <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height + 'px' }">
+                <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height }">
                 <div class="remove flex fvertical fcenter">
-                    <i class="el-icon-delete" @click="removeImg()" />
+                    <i v-if="!disabled" class="el-icon-delete" @click="removeImg()" />
                 </div>
             </div>
-            <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height + 'px' }">
+            <div v-else class="upload_box flex fvertical fcenter" :style="{ 'height': height }">
                 <div class="add_icon"></div>
-                <input class="upload_input" type="file" name="picture" ref="uploadinput" @change="onUpload()">
+                <input v-if="!disabled" class="upload_input" type="file" name="picture" ref="uploadinput" @change="onUpload()">
             </div>
         </div>
         <p class="upload_tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
@@ -41,17 +41,17 @@ export default class UploadImage extends Vue {
 
     /** 图片宽度 */
     @Prop({
-        type: Number,
-        default: 178
+        type: String,
+        default: "178px"
     })
-    width!: number;
+    width!: string;
 
     /** 图片宽度 */
     @Prop({
-        type: Number,
-        default: 178
+        type: String,
+        default: "178px"
     })
-    height!: number;
+    height!: string;
 
     /** 是否自动高度（针对图片） */
     @Prop({
@@ -73,6 +73,13 @@ export default class UploadImage extends Vue {
         default: 2
     })
     maxSize!: number;
+
+    /** 是否禁用状态 */
+    @Prop({
+        type: Boolean,
+        default: false
+    })
+    disabled!: boolean;
 
     /** 加载动画 */
     loading = false;
