@@ -6,8 +6,13 @@ class ModuleStore {
         console.log("%c ModuleStore init", "color: #409EFF");
     }
 
-    /** 当前项目地址 */
-    readonly projectLink = "https://github.com/Hansen-hjs/vue-admin";
+    /** 项目信息 */
+    readonly projectInfo = {
+        title: "Vue Typescript Admin",
+        name: "XXX后台管理平台",
+        logo: require("@/assets/logo.png"),
+        link: "https://github.com/Hansen-hjs/vue-admin"
+    }
 
     /** 页面图片资源 */
     get imageInfo () {
