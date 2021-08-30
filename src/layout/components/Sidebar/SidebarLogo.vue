@@ -2,18 +2,20 @@
     <div class="sidebar-logo-container" :class="{'collapse': collapse}">
         <transition name="el-fade-in-linear" mode="out-in">
             <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-                <img src="/favicon.ico" class="sidebar-logo" />
+                <img :src="info.logo" class="sidebar-logo" />
             </router-link>
             <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-                <img src="/favicon.ico" class="sidebar-logo" />
-                <h1 class="sidebar-title">{{ title }}</h1>
+                <img :src="info.logo" class="sidebar-logo" />
+                <h1 class="sidebar-title">{{ info.title }}</h1>
             </router-link>
         </transition>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import store from "@/store";
+import { defineComponent } from "vue";
+
 export default defineComponent({
     name: "SidebarLogo",
     props: {
@@ -23,9 +25,9 @@ export default defineComponent({
         }
     },
     setup() {
-        const title = ref("Vue Typescript Admin");
+        const info = store.projectInfo;
         return {
-            title
+            info
         }
     }
 })

@@ -3,14 +3,20 @@ import ModuleUser from "./User";
 import img401 from "../assets/401-images/401.gif";
 import img404 from "../assets/404-images/404.png";
 import img404cloud from "../assets/404-images/404-cloud.png";
+import imgLogo from "../assets/logo.png";
 
 class ModuleStore {
     constructor() {
         console.log("%c ModuleStore init", "color: #409EFF");
     }
     
-    /** 当前项目地址 */
-    readonly projectLink = "https://github.com/Hansen-hjs/vue-admin/tree/next";
+    /** 项目信息 */
+    readonly projectInfo = {
+        title: "Vue Typescript Admin",
+        name: "XXX后台管理平台",
+        logo: imgLogo,
+        link: "https://github.com/Hansen-hjs/vue-admin/tree/next"
+    }
 
     /** 页面图片资源 */
     get imgInfo() {

@@ -34,7 +34,7 @@ export default defineComponent({
 
         const typeScript = "https://www.tslang.cn/";
 
-        const project = store.projectLink;
+        const project = store.projectInfo.link;
 
         return {
             vite,

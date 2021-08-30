@@ -130,7 +130,7 @@ const admin: Array<RouteItem> = [
         ]
     },
     {
-        path: "/" + store.projectLink,
+        path: "/" + store.projectInfo.link,
         name: "baidu",
         component: () => import("../views/404.vue"),
         meta: {

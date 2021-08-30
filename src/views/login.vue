@@ -1,37 +1,36 @@
 <template>
-    <div class="login">
-        <video autoplay="autoplay" muted="muted" volume="0" :poster="background.poster" loop="loop" class="section-background-video">
-            <source type="video/mp4" :src="background.video">   
-        </video>
-        <div class="mask"></div>
-        <el-form class="login_form" label-position="left" ref="loginFormEl" :model="loginForm" :rules="loginRules">
-            <h3 class="title">{{ title }}</h3>
-            <el-form-item prop="username">
-                <span class="svg_container">
-                    <svg-icon name="user"/>
-                </span>
-                <el-input v-model="loginForm.username" type="text" placeholder="用户名或者账号" />
-            </el-form-item>
-            <el-form-item prop="password">
-                <span class="svg_container">
-                    <svg-icon name="password"/>
-                </span>
-                <el-input :type="inputType" v-model="loginForm.password" placeholder="密码" @keyup.enter="onLogin(false)" />
-                <span class="password_icon" @click="switchInput()">
-                    <svg-icon :name="inputType === 'password' ? 'eye-off' : 'eye-on'"/>
-                </span>
-            </el-form-item>
-            <el-form-item>
-                <el-button :loading="loading" class="btn" type="primary" @click="onLogin(false)">登录</el-button>
-            </el-form-item>
-            <div class="tips flex fvertical" v-for="(item, index) in testUserList" :key="index">
-                <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
-                <div class="tips_text f1">账号：{{ item }} 密码 : 随便填</div>
-                <el-button size="mini" type="primary" @click="setLoginInfo(item)">一键登录</el-button>
+    <div class="login_page">
+        <div class="content">
+            <div class="title">
+                <!-- <img class="logo" :src="info.logo" :alt="info.title"> -->
+                <span>{{ info.name }}</span>
             </div>
-        </el-form>
-
-        <a class="copyright" :href="tipLink">{{ tipLink }}</a>
+            <div class="form_box">
+                <div class="login_form">
+                    <div class="login_title">平台登录</div>
+                    <el-form label-position="left" ref="loginFormEl" :model="formData" :rules="formRules">
+                        <el-form-item prop="username">
+                            <el-input v-model="formData.username" :placeholder="formRules.username[0].message" />
+                        </el-form-item>
+                        <el-form-item prop="password">
+                            <el-input show-password v-model="formData.password" :placeholder="formRules.password[0].message" @keyup.enter="onLogin(false)" />
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="mgb_10">
+                                <el-button :loading="loading" type="primary" @click="onLogin(false)" style="width: 100%">登录</el-button>
+                            </div>
+                            <el-checkbox v-model="remember">记住账号/密码</el-checkbox>
+                        </el-form-item>
+                    </el-form>
+                    <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
+                        <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
+                        <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>
+                        <el-button size="mini" type="primary" @click="setLoginInfo(item)">一键登录</el-button>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-text">{{ copyRight }}</div>
+        </div>
     </div>
 </template>
 
@@ -42,69 +41,60 @@ import { login } from "../api/common";
 import utils from "../utils";
 import { openNextPage } from "../router/permission";
 
-function validateUsername(rule: any, value: string, callback: Function) {
-    if (value.trim().length <= 2) {
-        callback(new Error("请输入正确的用户名"));
-    } else {
-        callback();
-    }
-}
-
-function validatePass(rule: any, value: string, callback: Function) {
-    if (value.trim().length < 6) {
-        callback(new Error("密码不能小于6位"));
-    } else {
-        callback();
-    }
-}
+const cacheName = "login-info";
 
 export default defineComponent({
     setup() {
-        const title = "vue3-element-ts";
-        const tipLink = "https://github.com/Hansen-hjs";
+        const tipList = store.user.testUserList;
 
-        /** 背景信息 */
-        const background = {
-            poster: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YXByZXZpZXdfaW1hZ2UucG5n.png",
-            video: "https://ccdn.goodq.top/caches/927a729d326a897a6e2f27a03c31ee07/aHR0cDovLzU3ZThlY2Y0MTE1NWQudDczLnFpZmVpeWUuY29tL3FmeS1jb250ZW50L3VwbG9hZHMvMjAxNy8wNi85OGIyZTYyYzgwOGRkNTdkMDA0MTUxNWVkNjk0NDg5YS5tcDQ_p_p100_p_3D.mp4"
-        }
-        /** 登录信息 */
-        const loginForm = reactive({
+        const info = store.projectInfo;
+
+        const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、IE9 及以上版本等浏览器"
+
+        /** 表单数据 */
+        const formData = reactive({
             username: "",
             password: ""
         })
-
-        /** 登录验证对象 */
-        const loginRules = {
+        
+        const formRules = {
             username: [
-                { required: true, trigger: "blur", validator: validateUsername }
+                { required: true, message: "请输入账号", trigger: "blur" },
+                { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" },
+                {
+                    validator: function(rule: any, value: string, callback: Function) {
+                        if (value) {
+                            if (/[\u4E00-\u9FA5]/g.test(value)) {
+                                callback(new Error("账号不能有中文！"));
+                            } else {
+                                callback();
+                            }
+                        }
+                        callback();
+                    },
+                    trigger: "blur" 
+                }
             ],
             password: [
-                { required: true, trigger: "blur", validator: validatePass }
-            ]
+                { required: true, message: "请输入密码", trigger: "blur" },
+                { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
+            ],
         }
 
         const loading = ref(false);
 
-        /** 密码输入框类型 */
-        const inputType = ref("password" as "text" | "password");
-
-        function switchInput() {
-            inputType.value = inputType.value === "password" ? "text" : "password";
-        }
+        /** 登录表单 */
+        const loginFormEl = ref<any>(null);
 
         /**
          * 一键登录
          * @param account 账号
          */
         function setLoginInfo(account: string) {
-            loginForm.username = account;
-            loginForm.password = Math.random().toString(36).substr(2);
+            formData.username = account;
+            formData.password = Math.random().toString(36).substr(2);
             onLogin(true);
         }
-
-        /** 登录表单 */
-        const loginFormEl = ref<any>(null);
 
         /** 
          * 点击登录 
@@ -113,13 +103,13 @@ export default defineComponent({
         function onLogin(adopt: boolean) {
             async function start() {
                 loading.value = true;
-                // console.log("用户登录信息：", loginForm);
-                const res = await login(loginForm)
+                const res = await login(formData)
                 loading.value = false;
                 if (res.code === 1) {
+                    saveLoginInfo();
                     openNextPage();
                 } else {
-                    utils.showMessage.error(res.msg);   
+                    utils.showError(res.msg);   
                 }
             }
             if (adopt) {
@@ -132,19 +122,43 @@ export default defineComponent({
             })
         }
 
+        /** 是否记住密码 */
+        const remember = ref(false);
+
+        function saveLoginInfo() {
+            if (remember.value) {
+                localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...formData }));
+            } else {
+                localStorage.removeItem(cacheName);
+            }
+        }
+
+        function getLoginInfo() {
+            const value = localStorage.getItem(cacheName);
+            if (value) {
+                try {
+                    const info = JSON.parse(value);
+                    remember.value = !!info.remember;
+                    utils.modifyData(formData, info);
+                } catch (error) {
+                    console.warn(error);
+                }
+            }
+        }
+
+        getLoginInfo();
+
         return {
+            tipList,
+            info,
+            copyRight,
+            formData,
+            formRules,
             loginFormEl,
-            testUserList: store.user.testUserList,
-            title,
-            tipLink,
-            background,
-            loginForm,
-            loginRules,
             loading,
-            inputType,
-            switchInput,
             setLoginInfo,
-            onLogin
+            onLogin,
+            remember,
         }
     }
 })
@@ -152,88 +166,103 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-$bg: rgba(0,0,0,0);
-$light_gray: #eee;
-$dark_gray: #889aa4;
-.login {
-    box-sizing: border-box;
+@import "@/styles/variables.scss";
+
+.login_page {
     width: 100%;
     height: 100%;
+    background-color: #2253dc;
+    background-image: linear-gradient(45deg, #2253dc 0%, #4fb8f9 99%);
     position: relative;
-    .section-background-video{
+    z-index: 1;
+    &::after {
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%; 
+        width: 100%;
         height: 100%;
-        object-fit: cover;
-        object-position:center center;
+        background-image: url("../assets/admin-login-bg.jpg");
+        // background-size: 100% auto;
+        background-size: cover;
+        background-position: center center;
+        z-index: 2;
     }
-    .mask{ width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); position: absolute; left: 0; top: 0; }
-    .el-input {
-        display: inline-block;
-        height: 47px;
-        width: 85%;
-        background-color: $bg;
-        input {
-            background-color: $bg;
-            border: 0px;
-            -webkit-appearance: none;
-            border-radius: 0px;
-            padding: 12px 5px 12px 15px;
-            color: $light_gray;
-            height: 47px;
-            &:-webkit-autofill {
-                box-shadow: 0 0 0px 1000px rgba(0,0,0,0.6) inset !important;
-                -webkit-text-fill-color: #fff !important;
+    .content {
+        position: absolute;
+        z-index: 3;
+        top: 50%;
+        // margin-top: -245px;
+        margin-top: -302px;
+        right: 10%;
+        width: 100%;
+        max-width: 480px;
+        .form_box {
+            background-color: #81c7fa;
+            border: solid 2px #3b9be5;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 40px;
+            .login_form {
+                background-color: #fff;
+                padding: 40px 50px 30px;
+            }
+            .login_title {
+                font-size: 22px;
+                line-height: 22px;
+                color: $theme;
+                margin-bottom: 30px;
+                text-align: center;
+            }
+            .el-checkbox {
+                color: #999;
             }
         }
-    }
-    .el-form-item {
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-        color: #454545;
-    }
-    .btn{ width: 100%; }
-    .copyright{ position: fixed; bottom:20px; z-index: 10; left: 50%; color:#ccc;transform: translate(-50%,-50%); font-size: 14px; }
-    .login_form {
-        position: absolute;
-        left: 50%;
-        top: 30%;
-        width: 500px;
-        margin-left: -250px;
+        .title {
+            text-align: center;
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 24px;
+            text-shadow: 4px 4px 4px #333;
+            // letter-spacing: 2px;
+            font-family: "宋体";
+            span {
+                line-height: 1;
+            }
+        }
+        // .logo {
+        //     display: inline-block;
+        //     vertical-align: text-bottom;
+        //     width: 24px;
+        //     vertical-align: text-bottom;
+        //     padding-right: 10px;
+        //     box-sizing: content-box;
+        // }
+        .bottom-text {
+            width: 100%;
+            max-width: 500px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            font-weight: 400;
+            line-height: 22px;
+            margin: 0 auto;
+            text-align: center;
+        }
     }
     .tips {
         font-size: 14px;
-        color: #fff;
-        margin-bottom: 10px;
+        color: #555;
+        margin-bottom: 8px;
         .tips_text {
             margin: 0 16px;
         }
     }
-    .svg_container {
-        color: $dark_gray;
-        padding: 6px 5px 6px 15px;
-        vertical-align: middle;
-        display: inline-block;
-    }
-    .title {
-        font-size: 26px;
-        font-weight: 400;
-        color: $light_gray;
-        margin: 0px auto 40px auto;
-        text-align: center;
-        font-weight: bold;
-    }
-    .password_icon {
-        position: absolute;
-        right: 10px;
-        top: 7px;
-        font-size: 16px;
-        color: $dark_gray;
-        cursor: pointer;
-        user-select: none;
+}
+@media screen and (max-width: 500px) {
+    .login_page {
+        .content {
+            right: 0;
+        }
     }
 }
 </style>

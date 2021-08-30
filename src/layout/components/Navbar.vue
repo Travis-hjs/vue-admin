@@ -46,7 +46,7 @@ export default defineComponent({
     setup() {
         const avatar = ref("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         const layoutState = store.layout.state;
-        const link = store.projectLink;
+        const link = store.projectInfo.link;
 
         function toggleSideBar() {
             layoutState.sidebarOpen = !layoutState.sidebarOpen;
