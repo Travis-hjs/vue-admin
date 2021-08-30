@@ -101,3 +101,36 @@ label {
 .ellipsis-1{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
 .ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+
+/* 上下左右边距 */
+@for $index from 1 through 5 {
+    .mgl_#{$index}0 {
+        margin-left: 10px * $index;
+    }
+    .mgr_#{$index}0 {
+        margin-right: 10px * $index;
+    }
+    .mgt_#{$index}0 {
+        margin-top: 10px * $index;
+    }
+    .mgb_#{$index}0 {
+        margin-bottom: 10px * $index;
+    }
+    .pdl_#{$index}0 {
+        padding-left: 10px * $index;
+    }
+    .pdr_#{$index}0 {
+        padding-right: 10px * $index;
+    }
+    .pdt_#{$index}0 {
+        padding-top: 10px * $index;
+    }
+    .pdb_#{$index}0 {
+        padding-bottom: 10px * $index;
+    }
+}
+
+// 日期选择样式有问题，不会自适应中间文字宽度，这里给一个合适的最小宽度
+.el-date-editor .el-range-separator {
+    min-width: 9%;
+}

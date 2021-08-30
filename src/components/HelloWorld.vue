@@ -34,7 +34,7 @@ export default class HelloWorld extends Vue {
 
     typeScript = "https://www.tslang.cn";
 
-    project = store.projectLink;
+    project = store.projectInfo.link;
 
     projectHjs = "https://github.com/Hansen-hjs/vue-admin/tree/hjs"
 }

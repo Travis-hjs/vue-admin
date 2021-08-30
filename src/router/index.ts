@@ -180,7 +180,7 @@ export const admin: Array<RouteItem> = [
         ]
     },
     {
-        path: store.projectLink,
+        path: store.projectInfo.link,
         meta: {
             icon: "star",
             title: "跳转外部链接"
