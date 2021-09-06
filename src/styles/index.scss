@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 *, *:before, *:after {
     box-sizing: border-box;
     margin: 0;
@@ -66,5 +68,64 @@ div:focus {
     }
     .pdb_#{$index}0 {
         padding-bottom: 10px * $index;
+    }
+}
+
+.the_input {
+    width: 100%;
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
+    color: #1f2d3d;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    padding: 0 15px;
+    outline: none;
+    transition: 0.2s all;
+    &:focus {
+        border-color: $theme;
+    }
+}
+
+.the_btn {
+    padding: 0px 20px;
+    height: 40px;
+    outline: none;
+    line-height: 1;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    background-color: $theme;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s all;
+    &:active {
+        opacity: 0.85;
+    }
+}
+
+.the_btn.mini {
+    padding: 0px 15px;
+    font-size: 12px;
+    height: 28px;
+    border-radius: 3px;
+}
+
+.the_btn.green {
+    background-color: #13ce66;
+}
+
+.check-box {
+    font-size: 14px;
+    color: $theme;
+    input {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        line-height: 1;
+        &:checked {
+            background-color: $theme;
+        }
     }
 }
