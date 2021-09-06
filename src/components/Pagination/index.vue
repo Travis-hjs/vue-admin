@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { PageInfoType } from "@/utils/interfaces";
+import { PageInfoType } from "@/types";
 
 export default defineComponent({
     props: {

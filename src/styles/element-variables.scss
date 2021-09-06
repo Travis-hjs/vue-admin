@@ -13,8 +13,10 @@ $--border-color-lighter: #e6ebf5;
 $--table-border: 1px solid#dfe6ec;
 
 // Icon font path, required
-$--font-path: "element-plus/lib/theme-chalk/fonts";
+$--font-path: "element-plus/theme-chalk/fonts";
 
 // Apply overrided variables in Element UI
+// @import "element-plus/packages/theme-chalk/src/index";
 @import "element-plus/packages/theme-chalk/src/index";
+// @import "element-plus/dist/index.css";
 

@@ -7,7 +7,7 @@
                 <UploadImage :src="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
             </div>
             <div>
-                <UploadImage :src="pageData.single" @change="getSingleUrl" :width="300" :height="200" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
+                <UploadImage :src="pageData.single" @change="getSingleUrl" width="300px" height="200px" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import UploadImage from "@/components/Upload/Image.vue";
-import { UploadChange } from "@/utils/interfaces";
+import { UploadChange } from "@/types";
 
 export default defineComponent({
     components: {
@@ -39,8 +39,8 @@ export default defineComponent({
             single: ""
         })
 
-        function getPicUrl(info: UploadChange) {
-            const index = info.id as number;
+        function getPicUrl(info: UploadChange<number>) {
+            const index = info.id;
             pageData.uploadList[index].image = info.src;
         }
 

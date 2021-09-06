@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref } from "vue";
-import { UploadChange } from "@/utils/interfaces";
+import { UploadChange } from "@/types";
 import { uploadImg } from "@/api/common";
 import utils from "@/utils";
 

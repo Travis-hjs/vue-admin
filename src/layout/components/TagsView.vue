@@ -26,10 +26,10 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import router from "../../router";
+import router from "@/router";
 import ScrollPane from "./ScrollPane.vue";
-import store from "../../store";
-import { RouteItem } from "../../utils/interfaces";
+import store from "@/store";
+import { RouteItem } from "@/types";
 
 export default defineComponent({
     name: "TagsView",

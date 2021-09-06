@@ -1,8 +1,8 @@
 import { Router } from "vue-router";
-import { PermissionOptions } from "../utils/interfaces";
-import store from "../store";
+import store from "@/store";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import { RouteItem } from "@/types";
 
 // NProgress.configure({ showSpinner: false });
 
@@ -27,11 +27,31 @@ const redirectRouteName = "redirect404";
 let router: Router;
 
 /**
- * 初始化权限管理
- * @param vueRouter 
- * @param options 路由配置项
+ * 处理权限路由列表
+ * @param routes 
  */
-export function initPermission(vueRouter: Router, options: PermissionOptions) {
+function handleAuth(routes: Array<RouteItem>) {
+    const list: Array<RouteItem> = [];
+    const userType = store.user.info.type as number;
+    for (let i = 0; i < routes.length; i++) {
+        const item = routes[i];
+        if (!item.auth || (item.auth && item.auth.includes(userType))) {
+            if (item.children && item.children.length > 0) {
+                item.children = handleAuth(item.children);
+            }
+            list.push(item);
+        }
+    }
+    return list;
+}
+
+/**
+ * 初始化权限管理
+ * @param vueRouter 路由实例
+ * @param baseRoutes 基础路由
+ * @param addRoutes 动态路由
+ */
+export function initPermission(vueRouter: Router, baseRoutes: Array<RouteItem>, addRoutes: Array<RouteItem>) {
     // 设置路由实例
     router = vueRouter;
 
@@ -42,15 +62,7 @@ export function initPermission(vueRouter: Router, options: PermissionOptions) {
             if (store.layout.addRouters.length > 0) {
                 next();
             } else {
-                switch (store.user.info.userType) {
-                    case store.user.testUserList[0]:
-                        store.layout.addRouters = options.admin;
-                        break;
-                
-                    case store.user.testUserList[1]:
-                        store.layout.addRouters = options.editor;
-                        break;
-                }
+                store.layout.addRouters = handleAuth(addRoutes);
     
                 // 逐个添加进去
                 for (let i = 0; i < store.layout.addRouters.length; i++) {
@@ -68,10 +80,10 @@ export function initPermission(vueRouter: Router, options: PermissionOptions) {
                 if (!router.hasRoute(redirectRouteName)) {
                     // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
                     // 不重定向到`/404`
-                    router.addRoute({...options.base[1], path: "/:catchAll(.*)", name: redirectRouteName });
+                    router.addRoute({...baseRoutes[1], path: "/:catchAll(.*)", name: redirectRouteName });
                 }
     
-                store.layout.completeRouters = options.base.concat(store.layout.addRouters);
+                store.layout.completeRouters = baseRoutes.concat(store.layout.addRouters);
     
                 next({ ...to, replace: true });
             }

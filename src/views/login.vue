@@ -9,8 +9,8 @@
                 <div class="login_form">
                     <div class="login_title">平台登录</div>
                     <el-form label-position="left" ref="loginFormEl" :model="formData" :rules="formRules">
-                        <el-form-item prop="username">
-                            <el-input v-model="formData.username" :placeholder="formRules.username[0].message" />
+                        <el-form-item prop="account">
+                            <el-input v-model="formData.account" :placeholder="formRules.account[0].message" />
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input show-password v-model="formData.password" :placeholder="formRules.password[0].message" @keyup.enter="onLogin(false)" />
@@ -36,29 +36,30 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import store from "../store";
-import { login } from "../api/common";
-import utils from "../utils";
-import { openNextPage } from "../router/permission";
+import store from "@/store";
+import { login } from "@/api/common";
+import utils from "@/utils";
+import { openNextPage } from "@/router/permission";
+import { LoginParams } from "@/types/user";
 
 const cacheName = "login-info";
 
 export default defineComponent({
     setup() {
-        const tipList = store.user.testUserList;
+        const tipList = ["admin", "normal"];
 
         const info = store.projectInfo;
 
         const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、IE9 及以上版本等浏览器"
 
         /** 表单数据 */
-        const formData = reactive({
-            username: "",
+        const formData: LoginParams = reactive({
+            account: "",
             password: ""
         })
         
         const formRules = {
-            username: [
+            account: [
                 { required: true, message: "请输入账号", trigger: "blur" },
                 { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" },
                 {
@@ -91,7 +92,7 @@ export default defineComponent({
          * @param account 账号
          */
         function setLoginInfo(account: string) {
-            formData.username = account;
+            formData.account = account;
             formData.password = Math.random().toString(36).substr(2);
             onLogin(true);
         }

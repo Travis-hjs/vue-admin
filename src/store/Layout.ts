@@ -1,13 +1,10 @@
 import { reactive, watch } from "vue";
 import utils from "../utils";
-import {
-    LayoutStateKeys,
-    LayoutStateType,
-    RouteItem,
-    ScssVariables
-} from "../utils/interfaces";
+import { LayoutState, RouteItem, ScssVariables } from "../types";
 
 import style from "../styles/variables.scss";
+
+type LayoutStateKeys = keyof LayoutState;
 
 const variables: ScssVariables = utils.formatStyleModule(style);
 
@@ -42,7 +39,7 @@ export default class ModuleLayout {
     readonly defaultTheme = variables.theme;
 
     /** `layout`操作状态 */
-    readonly state = reactive<LayoutStateType>({
+    readonly state = reactive<LayoutState>({
         sidebarTextTheme: false,
         showSidebarLogo: true,
         fixedHeader: true,

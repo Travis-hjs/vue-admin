@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "../layout/index.vue";
-import { RouteItem } from "../utils/interfaces";
+import { RouteItem } from "../types";
 import { initPermission } from "./permission";
 import store from "@/store";
 
@@ -30,8 +30,10 @@ const base: Array<RouteItem> = [
     }
 ];
 
-/** 用户类型一路由 */
-const admin: Array<RouteItem> = [
+/**
+ * 动态路由
+ */
+const add: Array<RouteItem> = [
     {
         path: "/",
         name: "index",
@@ -42,25 +44,25 @@ const admin: Array<RouteItem> = [
             {
                 path: "/home",
                 meta: { title: "首页展示", icon: "guide" },
-                component: () => import("../views/pages/home.vue")
+                component: () => import("../views/example/home.vue")
             },
             {
                 path: "/nested",
                 name: "nested",
                 redirect: "/nested/menu-1",
                 meta: { title: "多级菜单嵌套", icon: "tree-table" },
-                component: () => import("../views/pages/nested.vue"),
+                component: () => import("../views/example/nested.vue"),
                 children: [
                     {
                         path: "/nested/menu-1",
                         name: "nested/menu-1",
                         meta: { title: "菜单 2-1", icon: "tree" },
-                        component: () => import("../views/pages/menu-1.vue")
+                        component: () => import("../views/example/menu-1.vue")
                     }, {
                         path: "/nested/menu-2",
                         name: "nested/menu-2",
                         meta: { title: "菜单 2-2", icon: "tree" },
-                        component: () => import("../views/pages/menu-2.vue")
+                        component: () => import("../views/example/menu-2.vue")
                     }
                 ]
             },
@@ -68,7 +70,7 @@ const admin: Array<RouteItem> = [
                 path: "/the-component",
                 name: "the-component",
                 meta: { title: "上传图片", icon: "international" },
-                component: () => import("../views/pages/the-component.vue")
+                component: () => import("../views/example/the-component.vue")
             }
         ]
     },
@@ -83,12 +85,13 @@ const admin: Array<RouteItem> = [
                 path: "/column/column-1",
                 name: "column/column-1",
                 meta: { title: "栏目一", icon: "theme" },
-                component: () => import("../views/pages/column-1.vue"),
+                auth: [0],
+                component: () => import("../views/example/column-1.vue"),
             }, {
                 path: "/column/column-2",
                 name: "column/column-2",
                 meta: { title: "栏目二", icon: "table" },
-                component: () => import("../views/pages/column-2.vue")
+                component: () => import("../views/example/column-2.vue")
             }, {
                 path: "/column/tsx",
                 name: "tsx-example",
@@ -102,24 +105,26 @@ const admin: Array<RouteItem> = [
         name: "request",
         redirect: "/request/weather",
         meta: { title: "http请求", icon: "guide" },
+        auth: [0],
         component: Layout,
         children: [
             {
                 path: "/request/weather",
                 name: "request/weather",
                 meta: { title: "获取天气数据", icon: "international" },
-                component: () => import("../views/pages/http.vue"),
+                component: () => import("../views/example/http.vue"),
             }
         ]
     },
     {
         path: "/icon",
-        component: Layout,
         name: "icon",
+        auth: [0],
+        component: Layout,
         children: [
             {
                 path: "/icon/index",
-                component: () => import(/* webpackChunkName: "icons" */ "../views/pages/icons.vue"),
+                component: () => import(/* webpackChunkName: "icons" */ "../views/example/icons.vue"),
                 name: "Icons",
                 meta: {
                     title: "icons",
@@ -131,7 +136,8 @@ const admin: Array<RouteItem> = [
     },
     {
         path: "/" + store.projectInfo.link,
-        name: "baidu",
+        name: "hjs-github",
+        auth: [0],
         component: () => import("../views/404.vue"),
         meta: {
             icon: "star",
@@ -141,18 +147,15 @@ const admin: Array<RouteItem> = [
 ]
 // ========================== 测试 ==========================
 // for (let i = 3; i < 18; i++) {
-//     const first = admin[0].children as Array<RouteItem>
+//     const first = add[0].children as Array<RouteItem>
 //     const second = first[1].children as Array<RouteItem>
 //     second.push({
 //         path: "menu-" + i,
 //         name: "nested/menu-" + i,
 //         meta: { title: "菜单 2-" + i, icon: "tree" },
-//         component: () => import("../views/pages/menu-1.vue")
+//         component: () => import("../views/example/menu-1.vue")
 //     })
 // }
-
-/** 用户类型二路由（懒得整多一份了，直接用上面的） */
-const editor = [admin[0]];
 
 /**
  * 路由实例 
@@ -163,10 +166,6 @@ const router = createRouter({
     routes: base
 })
 
-initPermission(router, {
-    base,
-    admin,
-    editor
-})
+initPermission(router, base, add);
 
 export default router;

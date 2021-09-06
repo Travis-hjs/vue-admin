@@ -1,9 +1,6 @@
 import config from "./Config";
 import utils from "./index";
-import { 
-    AjaxParams, 
-    ApiResult
-} from "./interfaces";
+import { AjaxParams, ApiResult } from "@/types";
 
 /**
  * `http`请求

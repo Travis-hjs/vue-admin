@@ -40,9 +40,7 @@
 import { defineComponent, PropType, computed } from "vue";
 import SidebarItemLink from "./SidebarItemLink.vue";
 import utils from "@/utils";
-import { 
-    RouteItem 
-} from "@/utils/interfaces";
+import { RouteItem } from "@/types";
 
 export default defineComponent({
     name: "SidebarItem", // 必须要有 name 值才上面才可以引用自身组件

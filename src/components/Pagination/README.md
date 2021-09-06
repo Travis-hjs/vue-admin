@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import Pagination from "@/components/Pagination/index.vue";
-import { PaginationChange } from "@/utils/interfaces";
+import { PaginationChange } from "@/types";
 
 export default defineComponent({
     components: {

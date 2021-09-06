@@ -18,7 +18,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import UploadImage from "@/components/Upload/Image.vue";
-import { UploadChange } from "@/utils/interfaces";
+import { UploadChange } from "@/types";
 
 export default defineComponent({
     components: {

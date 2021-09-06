@@ -1,8 +1,5 @@
 import ModuleElementUI from "./ElementUI";
-import { 
-    JavaScriptTypes, 
-    NumberSymbols 
-} from "./interfaces";
+import { JavaScriptTypes, NumberSymbols } from "@/types";
 
 /**
  * 工具类
