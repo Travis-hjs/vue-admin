@@ -1,4 +1,4 @@
-import config from "./theConfig";
+import config from "./config";
 import { Message } from "element-ui";
 import { AjaxParams, ApiResult } from "@/types";
 
