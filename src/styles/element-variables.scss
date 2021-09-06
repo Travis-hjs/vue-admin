@@ -1,6 +1,5 @@
 @import "./variables.scss";
-// 2021/09/06 更新 element-plus 版本之后修改不了默认变量颜色了
-// 升级其他 element-plus 版本会编译报错，十分无语
+
 /* Element UI 公共变量 */
 $--color-primary: $theme;
 $--color-success: #13ce66;
