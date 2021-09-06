@@ -1,5 +1,6 @@
 import ModuleUser from "./User";
 import imgLogo from "../assets/logo.png";
+import ModuleLayout from "./Layout";
 
 class ModuleStore {
     constructor() {
@@ -14,7 +15,10 @@ class ModuleStore {
         link: "https://github.com/Hansen-hjs/vue-admin/tree/pure"
     }
 
-    /** 用户状态管理模块 */
+    /** `layout`状态模块 */
+    readonly layout = new ModuleLayout();
+
+    /** 用户状态模块 */
     readonly user = new ModuleUser();
 
 }

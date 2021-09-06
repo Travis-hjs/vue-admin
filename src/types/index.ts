@@ -1,3 +1,5 @@
+import { RouteRecordRaw } from "vue-router";
+
 /** 深层递归所有属性为可选 */
 export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
@@ -68,6 +70,26 @@ export interface ApiResult {
     /** 接口响应信息 */
     msg: string
 }
+
+/** 自定义的路由类型-继承`RouteRecordRaw` */
+export type RouteItem = {
+    /**
+     * 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+     */
+    name?: string
+    /**
+     * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
+     * 传空数组或者不写该字段代表可以全部用户访问
+     * 
+     * | number | 用户类型 |
+     * | --- | --- |
+     * | 0 | 超级管理员 |
+     * | 1 | 普通用户 |
+     */
+    auth?: Array<number>
+    /** 子级路由 */
+    children?: Array<RouteItem>
+} & RouteRecordRaw
 
 /**
  * 上传图片`change`回调类型

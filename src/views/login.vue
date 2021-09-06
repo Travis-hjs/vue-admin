@@ -35,10 +35,10 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import store from "../store";
-import { login } from "../api/common";
-// import { openNextPage } from "../router/permission";
-import { modifyData } from "../utils";
+import store from "@/store";
+import { login } from "@/api/common";
+import { openNextPage } from "@/router/permission";
+import { modifyData } from "@/utils";
 
 const cacheName = "login-info";
 
@@ -106,7 +106,7 @@ export default defineComponent({
                 loading.value = false;
                 if (res.code === 1) {
                     saveLoginInfo();
-                    // openNextPage();
+                    openNextPage();
                 }
             }
             if (adopt) {

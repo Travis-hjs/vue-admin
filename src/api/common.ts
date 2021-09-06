@@ -59,23 +59,26 @@ export function submitForm(params: { id: number, name: string, age: number }) {
 export async function login(params: LoginParams) {
     // 模拟登录
     return new Promise<ApiResult>(function(resolve) {
-        /** 缓存信息  */
         const info: UserInfo = {
+            id: Math.random().toString(36).substr(10),
+            type: "",
             name: "",
             token: Math.random().toString(36).substr(2),
-            type: "",
-            id: Math.random().toString(36).substr(10)
+            account: params.account,
+            password: params.password
         }
         setTimeout(() => {
             switch (params.account) {
                 case "admin":
                     info.type = 0;
+                    info.name = "超级管理员";
                     store.user.update(info);
                     resolve({ code: 1, msg: "ok", data: info });
                     break;
 
                 case "normal":
                     info.type = 1;
+                    info.name = "普通成员";
                     store.user.update(info);
                     resolve({ code: 1, msg: "ok", data: info });
                     break;
@@ -90,7 +93,6 @@ export async function login(params: LoginParams) {
     // const res = await request("POST", "/login", params)
     // if (res.code === 1) {
     //     // 录成功后缓存用户信息
-    //     res.data.name = params.username;
     //     store.user.update(res.data);
     // }
     // return res;
