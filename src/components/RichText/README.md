@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import RichText from "@/components/RichText/index.vue";
-import { RichTextChange } from "@/utils/interfaces";
+import { RichTextChange } from "@/types";
 
 @Component({
     components: {

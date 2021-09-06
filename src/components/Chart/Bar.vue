@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import { GridComponent } from "echarts/components";
 import { BarChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import { ChartBarData } from "@/utils/interfaces";
+import { ChartBarData } from "@/types";
 
 echarts.use([GridComponent, BarChart, CanvasRenderer]);
 

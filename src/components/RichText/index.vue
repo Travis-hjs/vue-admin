@@ -8,7 +8,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 // http://www.wangeditor.com/doc/
 import wangEditor from "wangeditor";
 import { uploadImg } from "@/api/common";
-import { RichTextChange } from "@/utils/interfaces";
+import { RichTextChange } from "@/types";
 
 /** 富文本组件 */
 @Component({})

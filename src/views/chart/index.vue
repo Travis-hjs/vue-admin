@@ -22,7 +22,7 @@ import ChartLine from "@/components/Chart/Line.vue";
 import ChartBar from "@/components/Chart/Bar.vue";
 import ChartRing from "@/components/Chart/Ring.vue";
 import store from "@/store";
-import { ChartBarData, ChartLineData, ChartRingData } from "@/utils/interfaces";
+import { ChartBarData, ChartLineData, ChartRingData } from "@/types";
 
 @Component({
     components: {
