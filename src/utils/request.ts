@@ -1,4 +1,4 @@
-import config from "./Config";
+import config from "./theConfig";
 import utils from "./index";
 import { AjaxParams, ApiResult } from "@/types";
 
