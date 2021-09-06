@@ -26,8 +26,8 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import ScrollPane from "./ScrollPane.vue";
-import store from "../../store";
-import { RouteItem } from "../../utils/interfaces";
+import store from "@/store";
+import { RouteItem } from "@/types";
 
 @Component({
     name: "TagsView",

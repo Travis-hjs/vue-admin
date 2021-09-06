@@ -1,9 +1,6 @@
-import config from "./Config";
+import config from "./theConfig";
 import { Message } from "element-ui";
-import { 
-    AjaxParams, 
-    ApiResult
-} from "./interfaces";
+import { AjaxParams, ApiResult } from "@/types";
 
 /**
  * `http`请求

@@ -15,6 +15,12 @@ export type DeepRequired<T> = {
     [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P]
 }
 
+/** 运算符号 */
+export type NumberSymbols = "+" | "-"| "*" | "/";
+
+/** JavaScript类型 */
+export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined" | "regexp";
+
 export interface AjaxParams {
     /** 请求路径 */
     url: string,
@@ -55,46 +61,6 @@ export interface AjaxParams {
     progress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
 }
 
-/** 接口请求基础响应数据 */
-export interface ApiResult {
-    /** 接口状态（1为成功） */
-    code: number
-    /** 接口响应数据 */
-    data: any
-    /** 接口响应信息 */
-    msg: string
-}
-
-export interface LoginParam {
-    username: string,
-    password: string
-}
-
-export interface UserInfoType {
-    /** 用户`id` */
-    id: number | string
-    /** 用户名 */
-    name: string
-    /** 登录接口中返回的`token`字段 */
-    token: string
-    /** 用户类型 */
-    userType: "admin" | "editor" | ""
-}
-
-/** 自定义的路由类型-继承`RouteConfig` */
-export interface RouteItem extends RouteConfig {
-    /** 完整地址 */
-    fullPath?: string
-}
-
-/** 权限路由配置项 */
-export interface PermissionOptions {
-    /** 基础路由 */
-    base: Array<RouteItem>
-    admin: Array<RouteItem>
-    editor: Array<RouteItem>
-}
-
 /** `layout`状态类型 */
 export interface LayoutState {
     /** 显示设置 */
@@ -117,26 +83,56 @@ export interface LayoutState {
     theme: string
 }
 
-/** 运算符号 */
-export type NumberSymbols = "+" | "-"| "*" | "/";
+/** 接口请求基础响应数据 */
+export interface ApiResult {
+    /** 接口状态`code === 1`为成功 */
+    code: number
+    /** 接口响应数据 */
+    data: any
+    /** 接口响应信息 */
+    msg: string
+}
 
-/** JavaScript类型 */
-export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined";
+/** 自定义的路由类型-继承`RouteConfig` */
+export interface RouteItem extends RouteConfig {
+    /** 完整地址 */
+    fullPath?: string
+    /**
+     * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
+     * 传空数组或者不写该字段代表可以全部用户访问
+     * 
+     * | number | 用户类型 |
+     * | --- | --- |
+     * | 0 | 超级管理员 |
+     * | 1 | 普通用户 |
+     */
+    auth?: Array<number>
+    /** 子级路由 */
+    children?: Array<RouteItem>
+}
 
-export interface UploadChange {
+/**
+ * 上传图片`change`回调类型
+ */
+export interface UploadChange<T = string | number> {
     /** 和当前上传组件绑定的`id` */
-    id: string | number
+    id: T
     /** 图片路径 */
     src: string
 }
 
+/** 分页器组件数据类型 */
 export interface PageInfoType {
+    /** 一页多少条 */
     pageSize: number
-    total: number
+    /** 当前页 */
     currentPage: number
+    /** 后端返回的总数 */
+    total: number
 }
 
+/** 分页器组件`change`回调类型 */
 export interface PaginationChange {
-    type: "pageSize"|"currentPage",
+    type: "pageSize" | "currentPage",
     value: number
 }

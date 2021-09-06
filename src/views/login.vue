@@ -10,8 +10,8 @@
                 <div class="login_form">
                     <div class="login_title">平台登录</div>
                     <el-form label-position="left" ref="the-form" :model="formData" :rules="formRules">
-                        <el-form-item prop="username">
-                            <el-input v-model="formData.username" :placeholder="formRules.username[0].message" />
+                        <el-form-item prop="account">
+                            <el-input v-model="formData.account" :placeholder="formRules.account[0].message" />
                         </el-form-item>
                         <el-form-item prop="password">
                             <el-input show-password v-model="formData.password" :placeholder="formRules.password[0].message" @keyup.enter.native="onLogin(false)" />
@@ -42,26 +42,27 @@ import { openNextPage } from "../router/permission";
 import { Form } from "element-ui";
 import store from "@/store";
 import utils from "@/utils";
+import { LoginParams } from "@/types/user";
 
 const cacheName = "login-info";
 
 @Component({})
 export default class Login extends Vue {
     
-    readonly tipList = store.user.testUserList;
+    readonly tipList = ["admin", "normal"];
 
     readonly info = store.projectInfo;
 
     readonly copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、IE9 及以上版本等浏览器"
 
     /** 登录信息 */
-    readonly formData = {
-        username: "",
+    readonly formData: LoginParams = {
+        account: "",
         password: ""
     }
     
     readonly formRules = {
-        username: [
+        account: [
             { required: true, message: "请输入账号", trigger: "blur" },
             { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" },
             {
@@ -95,7 +96,7 @@ export default class Login extends Vue {
      * @param account 账号
      */
     setLoginInfo(account: string) {
-        this.formData.username = account;
+        this.formData.account = account;
         this.formData.password = Math.random().toString(36).substr(2);
         this.onLogin(true);
     }

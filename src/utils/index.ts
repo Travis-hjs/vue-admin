@@ -1,7 +1,7 @@
 import { 
     JavaScriptTypes, 
     NumberSymbols 
-} from "./interfaces";
+} from "@/types";
 
 /**
  * @author https://github.com/Hansen-hjs

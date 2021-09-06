@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { PageInfoType } from "@/utils/interfaces";
+import { PageInfoType } from "@/types";
 
 /** 分页组件 */
 @Component({})

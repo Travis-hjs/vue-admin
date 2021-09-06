@@ -1,15 +1,18 @@
-import utils from "../utils";
-import { DeepPartial, DeepReadonly, UserInfoType } from "../utils/interfaces";
+import utils from "@/utils";
+import { DeepPartial, DeepReadonly } from "@/types";
+import { UserInfo } from "@/types/user";
 
 const cacheName = "ModuleUser";
 
 /** 创建用户信息 */
-function createUserInfo(): DeepReadonly<UserInfoType> {
+function createUserInfo(): DeepReadonly<UserInfo> {
     return {
         id: "",
         name: "",
+        type: "",
         token: "",
-        userType: "",
+        account: "",
+        password: ""
     }
 }
 
@@ -20,12 +23,6 @@ export default class ModuleUser {
     constructor() {
         this.init();
     }
-
-    /** 登录路由路径 */
-    readonly loginPath = "/login";
-
-    /** 测试用户类型 */
-    readonly testUserList = ["admin", "editor"];
 
     /** 用户信息（包含登录状态） */
     readonly info = createUserInfo();
@@ -43,7 +40,7 @@ export default class ModuleUser {
      * 更新（设置）当前的用户信息并缓存到本地
      * @param value 更新的值
      */
-    update(value: DeepPartial<UserInfoType>) {
+    update(value: DeepPartial<UserInfo>) {
         utils.modifyData(this.info, value);
         sessionStorage.setItem(cacheName, JSON.stringify(this.info));
     }

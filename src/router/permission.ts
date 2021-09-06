@@ -1,8 +1,8 @@
 import VueRouter from "vue-router";
-import { PermissionOptions } from "../utils/interfaces";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import store from "../store";
+import { RouteItem } from "@/types";
 // NProgress.configure({ showSpinner: false });
 
 /** 路由初始化时信息对象 */
@@ -21,11 +21,31 @@ const routerTo = {
 let router: VueRouter;
 
 /**
- * 初始化权限管理
- * @param vueRouter 
- * @param options 路由配置项
+ * 处理权限路由列表
+ * @param routes 
  */
-export function initPermission(vueRouter: VueRouter, options: PermissionOptions) {
+function handleAuth(routes: Array<RouteItem>) {
+    const list: Array<RouteItem> = [];
+    const userType = store.user.info.type as number;
+    for (let i = 0; i < routes.length; i++) {
+        const item = routes[i];
+        if (!item.auth || (item.auth && item.auth.includes(userType))) {
+            if (item.children && item.children.length > 0) {
+                item.children = handleAuth(item.children);
+            }
+            list.push(item);
+        }
+    }
+    return list;
+}
+
+/**
+ * 初始化权限管理
+ * @param vueRouter 路由实例
+ * @param baseRoutes 基础路由
+ * @param addRoutes 动态路由
+ */
+export function initPermission(vueRouter: VueRouter, baseRoutes: Array<RouteItem>, addRoutes: Array<RouteItem>) {
     // 设置路由实例
     router = vueRouter;
 
@@ -36,30 +56,22 @@ export function initPermission(vueRouter: VueRouter, options: PermissionOptions)
             if (store.layout.addRouters.length > 0) {
                 next();
             } else {
-                switch (store.user.info.userType) {
-                    case "admin":
-                        store.layout.addRouters = options.admin;
-                        break;
-                
-                    case "editor":
-                        store.layout.addRouters = options.editor;
-                        break;
-                }
+                store.layout.addRouters = handleAuth(addRoutes);
                 router.addRoutes(store.layout.addRouters);
                 // 在最后加一个404重定向的路由进去
                 // router.addRoutes([{ path: "*", redirect: "/404" }]);
                 // 不重定向到`/404`
-                router.addRoutes([{...options.base[1], name: "page404", path: "*"}]);
-                store.layout.completeRouters = options.base.concat(store.layout.addRouters);
+                router.addRoutes([{...baseRoutes[1], name: "page404", path: "*"}]);
+                store.layout.completeRouters = baseRoutes.concat(store.layout.addRouters);
                 next({ ...to, replace: true });
             }
         } else {
-            if (to.path === store.user.loginPath) {
+            if (to.path === "/login") {
                 next();
             } else {
                 routerTo.path = to.path;
                 routerTo.query = to.query;
-                next({ path: store.user.loginPath });
+                next({ path: "/login" });
                 NProgress.done();
             }
         }
