@@ -153,7 +153,6 @@ class ModuleUtil extends ModuleElementUI {
         clipboard.value = text;
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
-        document.execCommand("copy");
         const state = document.execCommand("copy");
         if (state) {
             success && success();
