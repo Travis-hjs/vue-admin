@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { UploadChange } from "@/utils/interfaces";
+import { UploadChange } from "@/types";
 import { uploadImg } from "@/api/common";
 
 /** 上传图片组件 */

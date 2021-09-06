@@ -1,10 +1,6 @@
-import utils from "../utils";
-import {
-    LayoutState,
-    RouteItem
-} from "../utils/interfaces";
-
-import variables from "../styles/variables.scss";
+import utils from "@/utils";
+import { LayoutState, RouteItem } from "@/types";
+import variables from "@/styles/variables.scss";
 
 const cacheName = "ModuleLayout";
 

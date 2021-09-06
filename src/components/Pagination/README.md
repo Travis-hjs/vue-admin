@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Pagination from "@/components/Pagination/index.vue";
-import { PaginationChange } from "@/utils/interfaces";
+import { PaginationChange } from "@/types";
 
 @Component({
     components: {

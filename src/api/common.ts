@@ -1,11 +1,8 @@
 import request from "../utils/request";
 import utils from "../utils";
 import store from "../store";
-import { 
-    ApiResult,
-    LoginParam,
-    UserInfoType
-} from "../utils/interfaces";
+import { ApiResult } from "../types";
+import { LoginParams, UserInfo } from "@/types/user";
 
 /**
  * 上传图片
@@ -59,26 +56,29 @@ export function submitForm(params: { id: number, name: string, age: number }) {
  * 登录
  * @param params 登录信息
  */
-export async function login(params: LoginParam) {
+export async function login(params: LoginParams) {
     // 模拟登录
     return new Promise<ApiResult>(function(resolve) {
-        /** 缓存信息  */
-        const info: UserInfoType = {
-            name: params.username,
+        const info: UserInfo = {
+            id: Math.random().toString(36).substr(10),
+            type: "",
+            name: "",
             token: Math.random().toString(36).substr(2),
-            userType: "",
-            id: Math.random().toString(36).substr(10)
+            account: params.account,
+            password: params.password
         }
         setTimeout(() => {
-            switch (info.name) {
-                case store.user.testUserList[0]:
-                    info.userType = "admin";
+            switch (params.account) {
+                case "admin":
+                    info.type = 0;
+                    info.name = "超级管理员";
                     store.user.update(info);
                     resolve({ code: 1, msg: "ok", data: info });
                     break;
 
-                case store.user.testUserList[1]:
-                    info.userType = "editor";
+                case "normal":
+                    info.type = 1;
+                    info.name = "普通成员";
                     store.user.update(info);
                     resolve({ code: 1, msg: "ok", data: info });
                     break;

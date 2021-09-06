@@ -1,7 +1,7 @@
 import { 
     JavaScriptTypes, 
     NumberSymbols 
-} from "./interfaces";
+} from "@/types";
 
 /**
  * @author https://github.com/Hansen-hjs
@@ -149,7 +149,6 @@ class ModuleUtil {
         clipboard.value = text;
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
-        document.execCommand("copy");
         const state = document.execCommand("copy");
         if (state) {
             success && success();
