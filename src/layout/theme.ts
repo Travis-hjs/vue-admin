@@ -10,7 +10,7 @@ const originTheme = "#409EFF";
 /**
  * `element-ui`线上`css`资源路径
  */
-const elementCssUrl = `https://unpkg.com/element-plus@${version}/lib/theme-chalk/index.css`;
+const elementCssUrl = `https://unpkg.com/element-plus@${version}/theme-chalk/index.css`;
 
 /**
  * 请求版本线上`css`资源

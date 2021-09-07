@@ -1,7 +1,8 @@
+@use "sass:math";
+@use "sass:map";
+
 @import "./variables.scss";
 
-// 2021/09/06 更新 element-plus 版本之后修改不了默认变量颜色了
-// 升级其他 element-plus 版本会编译报错，十分无语
 // $--font-path: "element-plus/theme-chalk/fonts";
 // @import "../../node_modules/element-plus/packages/theme-chalk/src/index.scss";
 
@@ -17,11 +18,40 @@ $--border-color-light: #dfe4ed;
 $--border-color-lighter: #e6ebf5;
 $--table-border: 1px solid#dfe6ec;
 
+// 2021/09/06 更新 element-plus 版本之后原先 element-ui 的方式修改不了默认变量颜色了，需要用下面这种
+// element-plus 特殊修改主题方式
+$--colors: () !default;
+$--colors: map.deep-merge(
+    (
+        'white': #ffffff,
+        'black': #000000,
+        'primary': (
+            'base': $theme,
+        ),
+        'success': (
+            'base': $--color-success,
+        ),
+        'warning': (
+            'base': $--color-warning,
+        ),
+        'danger': (
+            'base': $--color-danger,
+        ),
+        'error': (
+            'base': $--color-danger,
+        ),
+        'info': (
+            'base': $--color-info,
+        ),
+    ),
+    $--colors
+);
+
 // 文档：https://element-plus.gitee.io/#/zh-CN/component/custom-theme
 $--font-path: "element-plus/theme-chalk/fonts";
 
 // 应用重写的变量
-@import "element-plus/packages/theme-chalk/src/index";
+@import "element-plus/theme-chalk/src/index.scss";
 
 // 打包之后的完整 css
 // @import "element-plus/dist/index.css";
