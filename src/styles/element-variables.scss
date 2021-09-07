@@ -2,6 +2,8 @@
 
 // 2021/09/06 更新 element-plus 版本之后修改不了默认变量颜色了
 // 升级其他 element-plus 版本会编译报错，十分无语
+// $--font-path: "element-plus/theme-chalk/fonts";
+// @import "../../node_modules/element-plus/packages/theme-chalk/src/index.scss";
 
 /* Element UI 公共变量 */
 $--color-primary: $theme;
@@ -18,8 +20,9 @@ $--table-border: 1px solid#dfe6ec;
 // 文档：https://element-plus.gitee.io/#/zh-CN/component/custom-theme
 $--font-path: "element-plus/theme-chalk/fonts";
 
-// Apply overrided variables in Element UI
-// @import "element-plus/packages/theme-chalk/src/index";
+// 应用重写的变量
 @import "element-plus/packages/theme-chalk/src/index";
+
+// 打包之后的完整 css
 // @import "element-plus/dist/index.css";
 
