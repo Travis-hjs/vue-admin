@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
+import SvgIcon from "./icons/index.vue"; 
 import router from "./router";
 import { copyText } from "./utils";
 import { version } from "../package.json";
@@ -16,6 +17,9 @@ app.directive("copy", {
         });
     }
 })
+
+// 注册全局组件: `svg-icon`
+app.component("svg-icon", SvgIcon);
 
 app.use(router);
 
