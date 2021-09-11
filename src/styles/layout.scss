@@ -1,0 +1,129 @@
+// 侧边菜单栏宽度
+$sidebarWidth: 210px;
+// 侧边菜单栏关闭宽度
+$sidebarCollapsedWidth: 60px;
+// 侧边菜单栏背景色
+$sidebarBgColor: #001529;
+// 顶部导航栏高度
+$navbarHeight: 50px;
+// 页面标签栏高度
+$tagsHeight: 34px;
+
+@mixin moveTime {
+    transition: 0.3s all;
+}
+
+.the-layout {
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-color: #fff;
+    position: relative;
+    overflow: hidden;
+    padding-left: $sidebarWidth;
+    @include moveTime();
+}
+.the-layout.collapsed-sidebar {
+    padding-left: $sidebarCollapsedWidth;
+    .the-layout-sidebar {
+        width: $sidebarCollapsedWidth;
+    }
+    .the-layout-header {
+        padding-left: $sidebarCollapsedWidth;
+    }
+}
+
+.the-layout-header {
+    width: 100%;
+    background-color: #fff;
+    padding-left: $sidebarWidth;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    @include moveTime();
+}
+
+.the-layout-navbar {
+    width: 100%;
+    height: $navbarHeight;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    overflow: hidden;
+    .hamburger {
+        width: $navbarHeight;
+        height: 100%;
+        cursor: pointer;
+        @include moveTime();
+        &:hover {
+            background: rgba(0, 0, 0, 0.08);
+        }
+        .svg-icon {
+            width: 24px;
+            height: 24px;
+            @include moveTime();
+        }
+    }
+    .hamburger-active {
+        .svg-icon {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.the-layout-tags {
+    background-color: #fff;
+    height: $tagsHeight;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+}
+
+.the-layout-sidebar {
+    width: $sidebarWidth;
+    height: 100vh;
+    overflow: hidden;
+    background-color: $sidebarBgColor;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    @include moveTime();
+}
+
+.the-layout-content {
+    background-color: #eee;
+    padding: 12px;
+    height: 100vh;
+    padding-top: $navbarHeight;
+    overflow: auto;
+}
+
+.the-layout.has-tags-view .the-layout-content {
+    padding-top: $navbarHeight + $tagsHeight + 12px;
+}
+
+.the-layout-page {
+    width: 100%;
+    background-color: #fff;
+    padding: 14px;
+}
+
+// ===================== 动画 =====================
+.fadeSlideX-leave-active, .fadeSlideX-enter-active {
+    transition: .5s all !important;
+}
+
+.fadeSlideX-enter-active, .fadeSlideX-leave-active {
+    opacity: 1;
+    transform: translate3d(0px, 0, 0);
+}
+
+.fadeSlideX-enter-from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+}
+.fadeSlideX-leave-to {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+}

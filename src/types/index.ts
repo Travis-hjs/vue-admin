@@ -100,3 +100,21 @@ export interface UploadChange<T = string | number> {
     /** 图片路径 */
     src: string
 }
+
+/** `layout`状态类型 */
+export interface LayoutInfo {
+    /** 显示设置 */
+    showSettings: boolean
+    /** 显示历史记录列表 */
+    showTagsView: boolean
+    /** 侧边栏展开 */
+    sidebarOpen: boolean
+    /** 显示侧边栏`logo` */
+    showSidebarLogo: boolean
+    /** 历史记录列表 */
+    historyViews: Array<RouteItem>
+    /** 系统信息 */
+    device?: "desktop" | "mobile"
+    /** 主题颜色 */
+    theme?: string
+}

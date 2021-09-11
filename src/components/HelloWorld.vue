@@ -23,6 +23,7 @@
         Edit
         <code>components/HelloWorld.vue</code> to test hot module replacement.
     </p>
+    <p class="mgb_50" style="font-size: 20px;" v-for="(item, index) in list" :key="index">的接口垃圾得抗裂砂浆付款时间付款时间来得及</p>
 </template>
 
 <script lang="ts">
@@ -37,9 +38,10 @@ export default defineComponent({
     },
     setup() {
         const count = ref(0);
-
+        const list = new Array(20).fill(0);
         return {
             count,
+            list
         };
     },
 });
