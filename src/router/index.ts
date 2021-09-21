@@ -58,12 +58,34 @@ const add: Array<RouteItem> = [
                         name: "nested/menu-1",
                         meta: { title: "菜单 2-1", icon: "tree" },
                         component: () => import("../views/example/menu-1.vue")
-                    }, {
+                    },
+                    {
                         path: "/nested/menu-2",
                         name: "nested/menu-2",
                         meta: { title: "菜单 2-2", icon: "tree" },
                         component: () => import("../views/example/menu-2.vue")
-                    }
+                    },
+                    {
+                        path: "/nested/three-level",
+                        name: "nested/three-level",
+                        meta: { title: "三级菜单", icon: "tree" },
+                        redirect: "/nested/three-level/menu-1",
+                        component: () => import("../views/example/nested.vue"),
+                        children: [
+                            {
+                                path: "/nested/three-level/menu-1",
+                                name: "/nested/three-level/menu-1",
+                                meta: { title: "菜单 3-1", icon: "tree" },
+                                component: () => import("../views/example/menu-1.vue")
+                            },
+                            {
+                                path: "/nested/three-level/menu-2",
+                                name: "/nested/three-level/menu-2",
+                                meta: { title: "菜单 3-2", icon: "tree" },
+                                component: () => import("../views/example/menu-2.vue")
+                            },
+                        ]
+                    },
                 ]
             },
             {
@@ -76,6 +98,7 @@ const add: Array<RouteItem> = [
     },
     {
         path: "/" + store.projectInfo.link,
+        link: store.projectInfo.link,
         name: "baidu",
         component: () => import("../views/example/home.vue"), // 这里必需给一个组件
         auth: [0],
@@ -84,7 +107,25 @@ const add: Array<RouteItem> = [
             title: "跳转外部链接"
         }
     }
-]
+];
+
+/**
+ * 过滤掉侧边导航栏不显示的路由
+ * @param array 路由列表
+ */
+export function filterHidden(array: Array<RouteItem>) {
+    const result: Array<RouteItem> = [];
+    for (let i = 0; i < array.length; i++) {
+        const item = array[i];
+        if (!item.meta || (item.meta && !item.meta.hidden)) {
+            result.push(item);
+            if (item.children && item.children.length > 0) {
+                item.children = filterHidden(item.children);
+            }
+        }
+    }
+    return result;
+}
 
 /**
  * 路由实例 

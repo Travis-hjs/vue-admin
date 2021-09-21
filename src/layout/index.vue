@@ -18,7 +18,7 @@
         </div>
     </div>
 </template>
-<script>
+<script lang="ts">
 import store from "@/store";
 import { defineComponent, reactive } from "vue";
 import HeaderBar from "./components/HeaderBar.vue";

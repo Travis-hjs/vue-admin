@@ -71,12 +71,51 @@ export interface ApiResult {
     msg: string
 }
 
+// /** 自定义的路由类型 */
+// export interface RouteItem<T = any> {
+//     /** 路由路径 */
+//     path: string
+//     /**  重定向的路径 */
+//     redirect?: string
+//     /** 外链地址，优先级会比`path`高 */
+//     link?: string
+//     /**
+//      * 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+//      */
+//     name?: string
+//     /**
+//      * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
+//      * 传空数组或者不写该字段代表可以全部用户访问
+//      * 
+//      * | number | 用户类型 |
+//      * | --- | --- |
+//      * | 0 | 超级管理员 |
+//      * | 1 | 普通用户 |
+//      */
+//     auth?: Array<number>
+//     /** 子级路由 */
+//     children?: Array<RouteItem>
+//     /** 标头 */
+//     meta: {
+//         /** document.title */
+//         title: string,
+//         /** `svg`名 */
+//         icon: string
+//         /** 是否在侧边菜单栏不显示该路由 */
+//         hidden: boolean
+//     }
+//     /** 组件 */
+//     component: T
+// }
+
 /** 自定义的路由类型-继承`RouteRecordRaw` */
 export type RouteItem = {
     /**
      * 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
      */
     name?: string
+    /** 外链地址，优先级会比`path`高 */
+    link?: string
     /**
      * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
      * 传空数组或者不写该字段代表可以全部用户访问
@@ -89,6 +128,15 @@ export type RouteItem = {
     auth?: Array<number>
     /** 子级路由 */
     children?: Array<RouteItem>
+    /** 标头 */
+    meta: {
+        /** 侧边栏菜单名、document.title */
+        title: string,
+        /** `svg`名 */
+        icon?: string
+        /** 是否在侧边菜单栏不显示该路由 */
+        hidden?: boolean
+    }
 } & RouteRecordRaw
 
 /**
