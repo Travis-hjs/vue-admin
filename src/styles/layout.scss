@@ -1,13 +1,27 @@
+@import "./variables.scss";
+
 // 侧边菜单栏宽度
 $sidebarWidth: 210px;
 // 侧边菜单栏关闭宽度
 $sidebarCollapsedWidth: 60px;
 // 侧边菜单栏背景色
-$sidebarBgColor: #001529;
+$menuBgColor: #001529;
+// 菜单选项背景色
+$menuItemBgColor: #000c17;
+// 菜单左右间距
+$menuPadding: 20px;
+// 菜单字体大小
+$menuFontSize: 14px;
+// 菜单标题高度
+$menuTitleHeight: 50px;
+// 菜单栏目高度
+$menuItemHeight: 44px;
 // 顶部导航栏高度
 $navbarHeight: 50px;
 // 页面标签栏高度
 $tagsHeight: 34px;
+// 侧边菜单栏文件默认颜色
+$menuTextColor: #ffffffa6;
 
 @mixin moveTime {
     transition: 0.3s all;
@@ -83,7 +97,7 @@ $tagsHeight: 34px;
     width: $sidebarWidth;
     height: 100vh;
     overflow: hidden;
-    background-color: $sidebarBgColor;
+    background-color: $menuBgColor;
     position: fixed;
     left: 0;
     top: 0;
@@ -108,6 +122,109 @@ $tagsHeight: 34px;
     background-color: #fff;
     padding: 14px;
 }
+
+.the-layout-menu {
+    width: 100%;
+    background-color: $menuBgColor;
+    // a {
+        // text-decoration: none;
+        // &:link { text-decoration: none; color: $menuTextColor; /* 指正常的未被访问过的链接 */ }
+        // &:visited { text-decoration: none; color: $menuTextColor;  /* 指已经访问过的链接 */ }
+        // &:hover { text-decoration: none; color: $menuTextColor; /* 指鼠标在链接 */  }
+        // &:active { text-decoration: none; color: $menuTextColor; /* 指正在点的链接 */ }
+        // &:hover {
+        //     color: #fff;
+        // }
+    // }
+    .the-layout-menu-title {
+        width: 100%;
+        height: $menuTitleHeight;
+        padding: 0 $menuPadding;
+        text-align: left;
+        font-size: $menuFontSize;
+        color: $menuTextColor;
+        line-height: 1;
+        outline: none;
+        border: none;
+        background-color: transparent;
+        @include moveTime();
+        &:hover {
+            color: #fff;
+        }
+        &:hover .the-layout-menu-arrow::before {
+            background-color: #fff;
+        }
+        &:hover .the-layout-menu-arrow::after {
+            background-color: #fff;
+        }
+    }
+
+    .the-layout-menu-list {
+        width: 100%;
+        background-color: $menuItemBgColor;
+        overflow: hidden;
+        @include moveTime();
+        .the-layout-menu-title {
+            background-color: $menuItemBgColor;
+        }
+        .the-layout-menu-item {
+            padding: 0 $menuPadding;
+            height: $menuItemHeight;
+            font-size: $menuFontSize;
+            color: $menuTextColor;
+            @include moveTime();
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+
+    .the-layout-menu-on {
+        background-color: $theme !important;
+        color: #fff !important;
+    }
+
+    .the-layout-menu-list-close {
+        height: 0px !important;
+    }
+
+    .the-layout-menu-hasopen {
+        color: #fff;
+        .the-layout-menu-arrow {
+            &::before {
+                transform: rotate(45deg) translate(2.5px);
+            }
+            &::after {
+                transform: rotate(-45deg) translate(-2.5px);
+            }
+        }
+    }
+
+    .the-layout-menu-arrow {
+        position: relative;
+        &::before {
+            background-color: $menuTextColor;;
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 1.5px;
+            border-radius: 2px;
+            transform: rotate(-45deg) translate(2.5px);
+            @include moveTime();
+        }
+        &::after {
+            background-color: $menuTextColor;;
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 1.5px;
+            border-radius: 2px;
+            transform: rotate(45deg) translate(-2.5px);
+            @include moveTime();
+        }
+    }
+}
+
 
 // ===================== 动画 =====================
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {

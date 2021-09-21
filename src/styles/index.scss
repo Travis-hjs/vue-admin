@@ -21,6 +21,15 @@ a, a:focus, a:hover {
     color: inherit;
     outline: none;
     text-decoration: none;
+    cursor: pointer;
+}
+
+ul, li {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
 }
 
 div:focus {
