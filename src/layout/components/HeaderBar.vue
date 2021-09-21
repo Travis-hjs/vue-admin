@@ -2,7 +2,7 @@
     <div class="the-layout-header">
         <div class="the-layout-navbar">
             <div :class="['flex fcenter fvertical hamburger', { 'hamburger-active': layoutInfo.sidebarOpen }]" @click="onSwitch()">
-                <svg-icon name="hamburger" />
+                <svg-icon name="menu" />
             </div>
         </div>
         <div class="the-layout-tags">
@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-import { defineComponent, onMounted, reactive, ref } from "vue";
+import { defineComponent } from "vue";
 import store from "@/store";
 
 export default defineComponent({
