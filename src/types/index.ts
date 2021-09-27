@@ -166,3 +166,13 @@ export interface LayoutInfo {
     /** 主题颜色 */
     theme?: string
 }
+
+/** `layout`菜单列表数据 */
+export type LayoutMenuItem = {
+    /** 当前是否处于激活状态 */
+    isActive: boolean
+    /** 是否展开 */
+    isOpen: boolean
+    /** 菜单子路由 */
+    children: Array<LayoutMenuItem>
+} & RouteItem;

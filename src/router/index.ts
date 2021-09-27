@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "@/layout/index.vue";
 import store from "@/store";
-import { RouteItem } from "@/types";
+import { LayoutMenuItem, RouteItem } from "@/types";
 import { initPermission } from "./permission";
 
 /**
@@ -114,9 +114,11 @@ const add: Array<RouteItem> = [
  * @param array 路由列表
  */
 export function filterHidden(array: Array<RouteItem>) {
-    const result: Array<RouteItem> = [];
+    array = JSON.parse(JSON.stringify(array));
+    const result: Array<LayoutMenuItem> = [];
     for (let i = 0; i < array.length; i++) {
-        const item = array[i];
+        const item = array[i] as LayoutMenuItem;
+        item.isOpen = false;
         if (!item.meta || (item.meta && !item.meta.hidden)) {
             result.push(item);
             if (item.children && item.children.length > 0) {
