@@ -36,7 +36,7 @@ export default defineComponent({
         }
     }
     .nested {
-        padding: 10px 20px;
+        padding: 10px 20px 20px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 }
