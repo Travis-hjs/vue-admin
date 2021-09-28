@@ -38,7 +38,6 @@
                     v-if="hasChidren(item)"
                     :info="item"
                     :level="level + 1"
-                    ref="menuChildren"
                 />
                 <template v-else>
                     <a
@@ -66,20 +65,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, reactive, ref } from "vue";
 import { LayoutMenuItem } from "@/types";
-
-/** 当前组件`class`名 */
-const menuClassName = "the-layout-menu";
-/** 菜单列表`class`名 */
-const listClassName = "the-layout-menu-list";
-/** 菜单列表关闭`class`名 */
-const listColseClassName = "the-layout-menu-list-close";
-
-interface ChildMenu {
-    /** 下级菜单列表展开高度 */
-    maxListHeight: number
-    /** 下级菜单对象 */
-    menuChildren: ChildMenu
-}
+import store from "@/store";
 
 /**
  * 菜单`item`组件
@@ -108,6 +94,24 @@ const MenuItem = defineComponent({
             return item.children && item.children.length > 0;
         }
 
+        /**
+         * 获取列表高度
+         * @param item 列表单个对象
+         */
+        function getListHeight(item: LayoutMenuItem) {
+            let result = 0;
+            const child = item.children;
+            const size = store.layout.menuSizeInfo;
+            if (item.isOpen && child && child.length > 0) {
+                // result += store.layout.menuSizeInfo.titleHeight;
+                result += (child.length - 1) * size.itemHeight + size.titleHeight;
+                child.forEach(el => {
+                    result += getListHeight(el);
+                })
+            }
+            return result;
+        }
+
         const titleStyle = reactive({
             paddingLeft: ""
         })
@@ -115,63 +119,20 @@ const MenuItem = defineComponent({
         const itemStyle = reactive({
             paddingLeft: ""
         })
-        
-        /**
-         * 获取菜单列表高度
-         * @param item
-         * @param child
-         */
-        function getMenuHeight(item: LayoutMenuItem, child?: ChildMenu) {
-            let result = 0;
-            if (item.isOpen && child) {
-                result += child.maxListHeight;
-                item.children && item.children.forEach(el => {
-                    result += getMenuHeight(el, child.menuChildren);
-                })
-            }
-            return result;
-        }
 
+        /**
+         * 菜单列表样式
+         */
         const listStyle = computed(function() {
-            let result = 0;
-            if (props.info.isOpen) {
-                result += maxListHeight.value;
-            }
-            result += getMenuHeight(props.info, menuChildren.value);
-            // console.clear();
-            // console.log("props.info >>", props.info);
-            // console.log("listStyle >>", result);
+            let height = getListHeight(props.info);
+            // console.log("height >>", height);
             return {
-                height: result + "px"
+                height: height + "px"
             }
         })
-        
-        /** 当前菜单列表展开高度 */
-        const maxListHeight = ref(0);
-
-        /**
-         * 获取列表展开宽度
-         * @param el 
-         */
-        function getListHeight(el: HTMLElement) {
-            const listBox = el.querySelector(`.${listClassName}`);
-            // console.log("菜单列表节点 >>", listBox);
-            let height = 0;
-            if (listBox && listBox.children) {
-                const child = listBox.children;
-                for (let i = 0; i < child.length; i++) {
-                    const item = child[i];
-                    height += item.clientHeight;
-                }
-            }
-            return height;
-        }
 
         /** 当前整体节点 */
         const menuBox = ref<HTMLElement>();
-
-        /** 下级菜单 */
-        const menuChildren = ref<ChildMenu>();
 
         function switchClose() {
             props.info.isOpen = !props.info.isOpen;
@@ -179,8 +140,6 @@ const MenuItem = defineComponent({
 
         onMounted(function() {
             const el = menuBox.value!;
-            maxListHeight.value = getListHeight(el);
-            // console.log("maxListHeight >>", maxListHeight.value);
             
             // 设置左边距
             if (props.level >= 1) {
@@ -190,17 +149,14 @@ const MenuItem = defineComponent({
                 titleStyle.paddingLeft = value * props.level + "px";
                 itemStyle.paddingLeft = value * (props.level + 1) + "px";
             }
-            // console.log(menuChildren.value);
         })
 
         return {
-            hasChidren,
             itemStyle,
             titleStyle,
             menuBox,
             listStyle,
-            maxListHeight,
-            menuChildren,
+            hasChidren,
             switchClose,
         }
     }

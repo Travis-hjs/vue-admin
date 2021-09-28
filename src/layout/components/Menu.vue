@@ -97,6 +97,9 @@ const Menu = defineComponent({
 
         onMounted(function() {
             update();
+            const $ = (name: string) => document.querySelector(name) as HTMLElement;
+            store.layout.menuSizeInfo.titleHeight = $(".the-layout-menu .the-layout-menu-title").clientHeight;
+            store.layout.menuSizeInfo.itemHeight = $(".the-layout-menu .the-layout-menu-item").clientHeight;
         })
         
         return {
