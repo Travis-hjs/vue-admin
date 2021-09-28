@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "@/layout/index.vue";
 import store from "@/store";
-import { LayoutMenuItem, RouteItem } from "@/types";
+import { RouteItem } from "@/types";
 import { initPermission } from "./permission";
 
 /**
@@ -97,6 +97,21 @@ const add: Array<RouteItem> = [
         ]
     },
     {
+        path: "/test",
+        name: "test-home",
+        component: Layout,
+        meta: { title: "测试栏目" },
+        redirect: "/test/page",
+        children: [
+            {
+                path: "/test/page",
+                name: "test-page",
+                component: () => import("../views/page-404.vue"),
+                meta: { title: "测试页面" },
+            }
+        ]
+    },
+    {
         path: "/" + store.projectInfo.link,
         link: store.projectInfo.link,
         name: "baidu",
@@ -115,10 +130,9 @@ const add: Array<RouteItem> = [
  */
 export function filterHidden(array: Array<RouteItem>) {
     array = JSON.parse(JSON.stringify(array));
-    const result: Array<LayoutMenuItem> = [];
+    const result: Array<RouteItem> = [];
     for (let i = 0; i < array.length; i++) {
-        const item = array[i] as LayoutMenuItem;
-        item.isOpen = false;
+        const item = array[i];
         if (!item.meta || (item.meta && !item.meta.hidden)) {
             result.push(item);
             if (item.children && item.children.length > 0) {

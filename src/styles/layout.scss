@@ -192,9 +192,11 @@ $menuTextColor: #ffffffa6;
         color: #fff;
         .the-layout-menu-arrow {
             &::before {
+                background-color: #fff;
                 transform: rotate(45deg) translate(2.5px);
             }
             &::after {
+                background-color: #fff;
                 transform: rotate(-45deg) translate(-2.5px);
             }
         }

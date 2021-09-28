@@ -108,6 +108,15 @@ export interface ApiResult {
 //     component: T
 // }
 
+interface RouteMeta {
+    /** 侧边栏菜单名、document.title */
+    title: string,
+    /** `svg`名 */
+    icon?: string
+    /** 是否在侧边菜单栏不显示该路由 */
+    hidden?: boolean
+}
+
 /** 自定义的路由类型-继承`RouteRecordRaw` */
 export type RouteItem = {
     /**
@@ -129,14 +138,7 @@ export type RouteItem = {
     /** 子级路由 */
     children?: Array<RouteItem>
     /** 标头 */
-    meta: {
-        /** 侧边栏菜单名、document.title */
-        title: string,
-        /** `svg`名 */
-        icon?: string
-        /** 是否在侧边菜单栏不显示该路由 */
-        hidden?: boolean
-    }
+    meta: RouteMeta
 } & RouteRecordRaw
 
 /**
@@ -168,11 +170,15 @@ export interface LayoutInfo {
 }
 
 /** `layout`菜单列表数据 */
-export type LayoutMenuItem = {
+export interface LayoutMenuItem extends RouteMeta {
     /** 当前是否处于激活状态 */
     isActive: boolean
     /** 是否展开 */
     isOpen: boolean
     /** 菜单子路由 */
-    children: Array<LayoutMenuItem>
-} & RouteItem;
+    children?: Array<LayoutMenuItem>
+    /** 路由路径 */
+    path: string
+    /** 外链地址，优先级会比`path`高 */
+    link?: string
+}

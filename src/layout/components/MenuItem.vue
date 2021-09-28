@@ -6,7 +6,7 @@
             @click="switchClose()"
             v-if="hasChidren(info)"
         >
-            <span class="f1 ellipsis">{{ info.meta.title }}</span>
+            <span class="f1 ellipsis">{{ info.title }}</span>
             <i class="the-layout-menu-arrow"></i>
         </button>
         <template v-else>
@@ -17,7 +17,7 @@
                 :style="titleStyle"
                 v-if="info.link"
             >
-                <span class="f1 ellipsis">{{ info.meta.title }}</span>
+                <span class="f1 ellipsis">{{ info.title }}</span>
             </a>
             <router-link
                 :class="['the-layout-menu-title flex fvertical', {'the-layout-menu-on' : info.isActive}]"
@@ -25,7 +25,7 @@
                 :style="titleStyle"
                 v-else
             >
-                <span class="f1 ellipsis">{{ info.meta.title }}</span>
+                <span class="f1 ellipsis">{{ info.title }}</span>
             </router-link>
         </template>
         <div
@@ -48,7 +48,7 @@
                         :style="itemStyle"
                         v-if="item.link"
                     >
-                        <span class="ellipsis">{{ item.meta.title }}</span>
+                        <span class="ellipsis">{{ item.title }}</span>
                     </a>
                     <router-link
                         :class="['the-layout-menu-item flex fvertical', {'the-layout-menu-on' : item.isActive}]"
@@ -56,7 +56,7 @@
                         :style="itemStyle"
                         v-else
                     >
-                        <span class="ellipsis">{{ item.meta.title }}</span>
+                        <span class="ellipsis">{{ item.title }}</span>
                     </router-link>
                 </template>
             </div>
@@ -64,8 +64,7 @@
     </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, reactive, Ref, ref } from "vue";
-import { useRoute } from "vue-router";
+import { computed, defineComponent, onMounted, PropType, reactive, ref } from "vue";
 import { LayoutMenuItem } from "@/types";
 
 /** 当前组件`class`名 */
@@ -76,10 +75,15 @@ const listClassName = "the-layout-menu-list";
 const listColseClassName = "the-layout-menu-list-close";
 
 interface ChildMenu {
+    /** 下级菜单列表展开高度 */
     maxListHeight: number
+    /** 下级菜单对象 */
     menuChildren: ChildMenu
 }
 
+/**
+ * 菜单`item`组件
+ */
 const MenuItem = defineComponent({
     name: "MenuItem",
     props: {
@@ -90,14 +94,11 @@ const MenuItem = defineComponent({
         info: {
             type: Object as PropType<LayoutMenuItem>,
             default: () => ({
-                meta: {
-                    title: '-'
-                }
+                title: "-"
             })
         },
     },
     setup(props, context) {
-        const route = useRoute();
 
         /**
          * 是否有下级菜单
@@ -115,22 +116,31 @@ const MenuItem = defineComponent({
             paddingLeft: ""
         })
         
-        function getMenuHeight(item: LayoutMenuItem, com?: ChildMenu) {
+        /**
+         * 获取菜单列表高度
+         * @param item
+         * @param child
+         */
+        function getMenuHeight(item: LayoutMenuItem, child?: ChildMenu) {
             let result = 0;
-            if (item.isOpen && com) {
-                result += com.maxListHeight;
+            if (item.isOpen && child) {
+                result += child.maxListHeight;
                 item.children && item.children.forEach(el => {
-                    result += getMenuHeight(el, com.menuChildren);
+                    result += getMenuHeight(el, child.menuChildren);
                 })
             }
             return result;
         }
 
         const listStyle = computed(function() {
-            let result = maxListHeight.value;
-            result = getMenuHeight(props.info, menuChildren.value);
-            console.log("listStyle >>", result);
-            
+            let result = 0;
+            if (props.info.isOpen) {
+                result += maxListHeight.value;
+            }
+            result += getMenuHeight(props.info, menuChildren.value);
+            // console.clear();
+            // console.log("props.info >>", props.info);
+            // console.log("listStyle >>", result);
             return {
                 height: result + "px"
             }
@@ -145,14 +155,13 @@ const MenuItem = defineComponent({
          */
         function getListHeight(el: HTMLElement) {
             const listBox = el.querySelector(`.${listClassName}`);
+            // console.log("菜单列表节点 >>", listBox);
             let height = 0;
-            if (listBox) {
+            if (listBox && listBox.children) {
                 const child = listBox.children;
-                if (child) {
-                    for (let i = 0; i < child.length; i++) {
-                        const item = child[i];
-                        height += item.clientHeight;
-                    }
+                for (let i = 0; i < child.length; i++) {
+                    const item = child[i];
+                    height += item.clientHeight;
                 }
             }
             return height;
@@ -171,12 +180,11 @@ const MenuItem = defineComponent({
         onMounted(function() {
             const el = menuBox.value!;
             maxListHeight.value = getListHeight(el);
-            // updateListHeight(0);
-            // hasChildrenOpen();
-
+            // console.log("maxListHeight >>", maxListHeight.value);
+            
             // 设置左边距
             if (props.level >= 1) {
-                const style = getComputedStyle(el!.children[0] as HTMLElement);
+                const style = getComputedStyle(el.children[0] as HTMLElement);
                 const value = parseFloat(style.paddingLeft);
                 if (isNaN(value)) return;
                 titleStyle.paddingLeft = value * props.level + "px";
