@@ -104,7 +104,11 @@ const MenuItem = defineComponent({
             const size = store.layout.menuSizeInfo;
             if (item.isOpen && child && child.length > 0) {
                 // result += store.layout.menuSizeInfo.titleHeight;
-                result += (child.length - 1) * size.itemHeight + size.titleHeight;
+                if (child.length > 1) {
+                    result += (child.length - 1) * size.itemHeight + size.titleHeight;
+                } else {
+                    result += child.length * size.itemHeight;
+                }
                 child.forEach(el => {
                     result += getListHeight(el);
                 })
