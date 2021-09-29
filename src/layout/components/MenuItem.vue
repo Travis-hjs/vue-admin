@@ -1,30 +1,16 @@
 <template>
     <div class="the-layout-menu" ref="menuBox">
-        <button
-            :class="['the-layout-menu-title flex fvertical', {'the-layout-menu-on' : info.isActive}, {'the-layout-menu-hasopen': info.isOpen }]"
-            :style="titleStyle"
-            @click="switchClose()"
-            v-if="hasChidren(info)"
-        >
+        <button :class="titleClass" :style="titleStyle" @click="switchClose()" v-if="hasChidren(info)">
             <span class="f1 ellipsis">{{ info.title }}</span>
             <i class="the-layout-menu-arrow"></i>
         </button>
         <template v-else>
-            <a
-                :class="['the-layout-menu-title flex fvertical', {'the-layout-menu-on' : info.isActive}]"
-                :href="info.link"
-                target="_blank"
-                :style="titleStyle"
-                v-if="info.link"
-            >
+            <!-- 外链 -->
+            <a :class="titleClass" :style="titleStyle" :href="info.link" target="_blank" v-if="info.link">
                 <span class="f1 ellipsis">{{ info.title }}</span>
             </a>
-            <router-link
-                :class="['the-layout-menu-title flex fvertical', {'the-layout-menu-on' : info.isActive}]"
-                :to="info.path"
-                :style="titleStyle"
-                v-else
-            >
+            <!-- 单个菜单 -->
+            <router-link :class="titleClass" :style="titleStyle" :to="info.path" v-else>
                 <span class="f1 ellipsis">{{ info.title }}</span>
             </router-link>
         </template>
@@ -34,27 +20,14 @@
             v-if="info.children && info.children.length > 0"
         >
             <div v-for="(item) in info.children" :key="item.path">
-                <MenuItem
-                    v-if="hasChidren(item)"
-                    :info="item"
-                    :level="level + 1"
-                />
+                <MenuItem v-if="hasChidren(item)" :info="item" :level="level + 1" />
                 <template v-else>
-                    <a
-                        :class="['the-layout-menu-item flex fvertical', {'the-layout-menu-on' : item.isActive}]"
-                        :href="item.link"
-                        target="_blank"
-                        :style="itemStyle"
-                        v-if="item.link"
-                    >
+                    <!-- 外链 -->
+                    <a :class="getItemClass(item)" :style="itemStyle" :href="item.link" target="_blank" v-if="item.link">
                         <span class="ellipsis">{{ item.title }}</span>
                     </a>
-                    <router-link
-                        :class="['the-layout-menu-item flex fvertical', {'the-layout-menu-on' : item.isActive}]"
-                        :to="item.path"
-                        :style="itemStyle"
-                        v-else
-                    >
+                    <!-- 单个菜单 -->
+                    <router-link :class="getItemClass(item)" :style="itemStyle" :to="item.path" v-else>
                         <span class="ellipsis">{{ item.title }}</span>
                     </router-link>
                 </template>
@@ -83,6 +56,11 @@ const MenuItem = defineComponent({
                 title: "-"
             })
         },
+        /** 是否合并只有一条下级菜单的到当前标题中去 */
+        mergeFirst: {
+            type: Boolean,
+            default: false
+        }
     },
     setup(props, context) {
 
@@ -103,17 +81,28 @@ const MenuItem = defineComponent({
             const child = item.children;
             const size = store.layout.menuSizeInfo;
             if (item.isOpen && child && child.length > 0) {
-                // result += store.layout.menuSizeInfo.titleHeight;
-                if (child.length > 1) {
-                    result += (child.length - 1) * size.itemHeight + size.titleHeight;
-                } else {
-                    result += child.length * size.itemHeight;
-                }
-                child.forEach(el => {
-                    result += getListHeight(el);
+                child.forEach(menuItem => {
+                    const height = menuItem.children && menuItem.children.length > 0 ? size.titleHeight : size.itemHeight;
+                    result += height;
+                    result += getListHeight(menuItem);
                 })
             }
             return result;
+        }
+
+        const titleClass = computed(function () {
+            return {
+                "the-layout-menu-title flex fvertical": true,
+                "the-layout-menu-on": props.info.isActive,
+                "the-layout-menu-hasopen": props.info.isOpen
+            }
+        })
+
+        function getItemClass(item: LayoutMenuItem) {
+            return {
+                "the-layout-menu-item flex fvertical": true,
+                "the-layout-menu-on": item.isActive 
+            }
         }
 
         const titleStyle = reactive({
@@ -158,6 +147,8 @@ const MenuItem = defineComponent({
         return {
             itemStyle,
             titleStyle,
+            titleClass,
+            getItemClass,
             menuBox,
             listStyle,
             hasChidren,

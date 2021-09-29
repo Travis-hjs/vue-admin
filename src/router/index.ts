@@ -86,6 +86,27 @@ const add: Array<RouteItem> = [
                             },
                         ]
                     },
+                    {
+                        path: "/nested/four-level",
+                        name: "nested/four-level",
+                        meta: { title: "三级菜单-2", icon: "tree" },
+                        redirect: "/nested/four-level/menu-1",
+                        component: () => import("../views/example/nested.vue"),
+                        children: [
+                            {
+                                path: "/nested/four-level/menu-1",
+                                name: "/nested/four-level/menu-1",
+                                meta: { title: "菜单 3-2-1", icon: "tree" },
+                                component: () => import("../views/example/menu-1.vue")
+                            },
+                            {
+                                path: "/nested/four-level/menu-2",
+                                name: "/nested/four-level/menu-2",
+                                meta: { title: "菜单 3-2-2", icon: "tree" },
+                                component: () => import("../views/example/menu-2.vue")
+                            },
+                        ]
+                    },
                 ]
             },
             {

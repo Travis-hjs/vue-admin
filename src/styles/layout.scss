@@ -2,8 +2,8 @@
 
 // 侧边菜单栏宽度
 $sidebarWidth: 210px;
-// 侧边菜单栏关闭宽度
-$sidebarCollapsedWidth: 60px;
+// // 侧边菜单栏关闭宽度
+// $sidebarCollapsedWidth: 60px;
 // 侧边菜单栏背景色
 $menuBgColor: #001529;
 // 菜单选项背景色
@@ -38,12 +38,15 @@ $menuTextColor: #ffffffa6;
     @include moveTime();
 }
 .the-layout.collapsed-sidebar {
-    padding-left: $sidebarCollapsedWidth;
+    // padding-left: $sidebarCollapsedWidth;
+    padding-left: 0;
     .the-layout-sidebar {
-        width: $sidebarCollapsedWidth;
+        // width: $sidebarCollapsedWidth;
+        transform: translate3d(-100%, 0, 0);
     }
     .the-layout-header {
-        padding-left: $sidebarCollapsedWidth;
+        // padding-left: $sidebarCollapsedWidth;
+        padding-left: 0;
     }
 }
 
