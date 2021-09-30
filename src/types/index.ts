@@ -171,10 +171,14 @@ export interface LayoutInfo {
 
 /** `layout`菜单列表数据 */
 export interface LayoutMenuItem extends RouteMeta {
-    /** 当前是否处于激活状态 */
-    isActive: boolean
-    /** 是否展开 */
+    /** 当前下级菜单是否展开 */
     isOpen: boolean
+    /** 当前菜单是否处于激活状态 */
+    isActive: boolean
+    /** 当前有子菜单路由的同时，是否有子菜单的某个处于激活状态 */
+    hasActive: boolean
+    /** 唯一索引`key`，层数用`-`隔开 */
+    key: string
     /** 菜单子路由 */
     children?: Array<LayoutMenuItem>
     /** 路由路径 */

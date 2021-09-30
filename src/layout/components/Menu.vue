@@ -1,5 +1,5 @@
 <template>
-    <MenuItem v-for="item in menuList" :key="item.path" :info="item" />
+    <MenuItem v-for="item in menuList" :key="item.key" :info="item" />
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue";
@@ -25,15 +25,18 @@ const Menu = defineComponent({
         /**
          * 格式化菜单列表
          * @param array 
+         * @param parentKey 上层`key`
          */
-        function formatMenuList(array: Array<RouteItem>) {
+        function formatMenuList(array: Array<RouteItem>, parentKey?: string) {
             array = JSON.parse(JSON.stringify(array));
             const result: Array<LayoutMenuItem> = [];
             for (let i = 0; i < array.length; i++) {
                 const routeItem = array[i];
                 const item: LayoutMenuItem = {
-                    isActive: false,
+                    key: parentKey ? `${parentKey}-${i}` : i.toString(),
                     isOpen: false,
+                    isActive: false,
+                    hasActive: false,
                     children: [],
                     path: routeItem.path,
                     link: routeItem.link,
@@ -42,7 +45,7 @@ const Menu = defineComponent({
                 if (!item.hidden) {
                     result.push(item);
                     if (routeItem.children && routeItem.children.length > 0) {
-                        item.children = formatMenuList(routeItem.children);
+                        item.children = formatMenuList(routeItem.children, item.key);
                     }
                 }
             }
@@ -55,13 +58,22 @@ const Menu = defineComponent({
         const menuList = ref(formatMenuList(filterHidden(store.layout.completeRouters)));
 
         /**
+         * 激活的索引列表
+         */
+        let activeList: Array<number> = [];
+
+        /**
          * 更新菜单列表激活状态
          * @param list
          */
         function updateActive(list: Array<LayoutMenuItem>) {
-            for (let i = 0; i < list.length; i++) {
-                const item = list[i];
+            for (let index = 0; index < list.length; index++) {
+                const item = list[index];
+                item.hasActive = false; // 这里要先重置一下
                 item.isActive = item.path === route.path;
+                if (item.isActive) {
+                    activeList = item.key.split("-").map(val => Number(val));
+                }
                 if (item.children && item.children.length > 0) {
                     updateActive(item.children);
                 }
@@ -69,25 +81,25 @@ const Menu = defineComponent({
         }
 
         /**
-         * 更新展开状态
+         * 设置激活`item`状态
          * @param list
+         * @param setp 层级
          */
-        function updateOpen(list: Array<LayoutMenuItem>) {
-            for (let i = 0; i < list.length; i++) {
-                const item = list[i];
-                if (item.children && item.children.length > 0) {
-                    updateOpen(item.children);
-                    const isOpen = item.children.some(el => el.isActive || el.isOpen);
-                    if (isOpen) {
-                        item.isOpen = isOpen;
-                    }
-                }
+        function setItem(list: Array<LayoutMenuItem>, setp = 0) {
+            const index = activeList[setp];
+            const item = list[index];
+            item.hasActive = item.isOpen = true;
+            if (setp < activeList.length - 1) {
+                setItem(item.children!, setp + 1);
             }
         }
 
         function update() {
+            activeList = [];
             updateActive(menuList.value);
-            updateOpen(menuList.value);
+            if (activeList.length > 0) {
+                setItem(menuList.value);
+            }
             // console.log("menuList >>", menuList.value);
         }
 

@@ -19,7 +19,7 @@
         </template>
         <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
         <div class="the-layout-menu-list" :style="listStyle" v-if="info.children && info.children.length > 0">
-            <div v-for="(item) in info.children" :key="item.path">
+            <div v-for="(item) in info.children" :key="item.key">
                 <MenuItem v-if="hasChidren(item)" :info="item" :level="level + 1" />
                 <template v-else>
                     <!-- 外链 -->
@@ -57,11 +57,6 @@ const MenuItem = defineComponent({
             default: () => ({
                 title: "-"
             })
-        },
-        /** 是否合并只有一条下级菜单的到当前标题中去 */
-        mergeFirst: {
-            type: Boolean,
-            default: false
         }
     },
     setup(props, context) {
@@ -84,39 +79,21 @@ const MenuItem = defineComponent({
             const size = store.layout.menuSizeInfo;
             if (item.isOpen && child && child.length > 0) {
                 child.forEach(menuItem => {
-                    const height = menuItem.children && menuItem.children.length > 0 ? size.titleHeight : size.itemHeight;
+                    const height = hasChidren(menuItem) ? size.titleHeight : size.itemHeight;
                     result += height;
                     result += getListHeight(menuItem);
                 })
             }
             return result;
         }
-        
-        /** 
-         * 检测当前菜单栏下是否有激活状态的菜单
-         * @param item 列表单个对象
-         */
-        function hasActiveItem(item: LayoutMenuItem) {
-            if (hasChidren(item)) {
-                for (let i = 0; i < item.children!.length; i++) {
-                    const child = item.children![i];
-                    if (child.isActive) {
-                        return true;
-                    }
-                    if (hasChidren(child) && hasActiveItem(child)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
 
         const titleClass = computed(function () {
+            const item = props.info;
             return {
                 "the-layout-menu-title flex fvertical": true,
-                "the-layout-menu-on": props.info.isActive,
-                "the-layout-menu-hasopen": props.info.isOpen,
-                "the-layout-menu-hasactive": hasActiveItem(props.info)
+                "the-layout-menu-on": item.isActive,
+                "the-layout-menu-hasopen": item.isOpen,
+                "the-layout-menu-hasactive": item.hasActive
             }
         })
 
@@ -167,12 +144,12 @@ const MenuItem = defineComponent({
         })
 
         return {
-            itemStyle,
-            titleStyle,
-            titleClass,
-            getItemClass,
             menuBox,
+            titleStyle,
+            itemStyle,
+            titleClass,
             listStyle,
+            getItemClass,
             hasChidren,
             switchClose,
         }
