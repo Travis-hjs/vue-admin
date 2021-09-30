@@ -3,6 +3,7 @@ import Layout from "@/layout/index.vue";
 import store from "@/store";
 import { RouteItem } from "@/types";
 import { initPermission } from "./permission";
+import Page404 from "@/views/page-404.vue";
 
 /**
  * 基础路由
@@ -20,7 +21,7 @@ import { initPermission } from "./permission";
     }, {
         path: "/404",
         name: "page-404",
-        component: () => import("../views/page-404.vue"),
+        component: Page404,
         meta: { hidden: true, title: "不存在该页面" },
     }, {
         path: "/401",
@@ -116,6 +117,13 @@ const add: Array<RouteItem> = [
                 ]
             },
             {
+                path: "/link-baidu",
+                name: "link-baidu",
+                link: "https://www.baidu.com",
+                component: Page404, // 这里必需给一个组件
+                meta: { title: "百度一下" },
+            },
+            {
                 path: "/menu-4",
                 name: "menu-4",
                 meta: { title: "菜单-4", icon: "international" },
@@ -127,13 +135,13 @@ const add: Array<RouteItem> = [
         path: "/test",
         name: "test-home",
         component: Layout,
-        meta: { title: "测试栏目" },
+        meta: { title: "示例页栏目" },
         redirect: "/test/page",
         children: [
             {
                 path: "/test/page",
                 name: "test-page",
-                component: () => import("../views/page-404.vue"),
+                component: Page404,
                 meta: { title: "测试页面" },
             },
             {
@@ -147,8 +155,8 @@ const add: Array<RouteItem> = [
     {
         path: "/" + store.projectInfo.link,
         link: store.projectInfo.link,
-        name: "baidu",
-        component: () => import("../views/example/home.vue"), // 这里必需给一个组件
+        name: "GitHub-Hansen",
+        component: Page404, // 这里必需给一个组件
         auth: [0],
         meta: {
             icon: "star",
