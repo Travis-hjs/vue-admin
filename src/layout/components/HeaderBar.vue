@@ -2,7 +2,7 @@
     <div class="the-layout-header">
         <div class="the-layout-navbar">
             <div :class="['flex fcenter fvertical hamburger', { 'hamburger-active': layoutInfo.sidebarOpen }]" @click="onSwitch()">
-                <svg-icon name="menu" />
+                <svg-icon name="hamburger" />
             </div>
         </div>
         <div class="the-layout-tags">

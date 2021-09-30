@@ -150,6 +150,11 @@ $menuTextColor: #ffffffa6;
 .the-layout-menu {
     width: 100%;
     background-color: $menuBgColor;
+    .svg-icon {
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+    }
     .the-layout-menu-title {
         width: 100%;
         height: $menuTitleHeight;
@@ -188,6 +193,7 @@ $menuTextColor: #ffffffa6;
             height: $menuItemHeight;
             font-size: $menuFontSize;
             color: $menuTextColor;
+            line-height: 1;
             overflow: hidden;
             @include moveTime();
             @include menuHover();

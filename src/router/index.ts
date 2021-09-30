@@ -40,7 +40,7 @@ const add: Array<RouteItem> = [
         name: "index",
         redirect: "/home",
         component: Layout,
-        meta: { title: "首页", icon: "excel" }, 
+        meta: { title: "首页", icon: "home" }, 
         children: [
             {
                 path: "/home",
@@ -51,38 +51,38 @@ const add: Array<RouteItem> = [
                 path: "/nested",
                 name: "nested",
                 redirect: "/nested/menu-1",
-                meta: { title: "多级菜单嵌套", icon: "tree-table" },
+                meta: { title: "多级菜单嵌套", icon: "tree" },
                 component: () => import("../views/example/nested.vue"),
                 children: [
                     {
                         path: "/nested/menu-1",
                         name: "nested/menu-1",
-                        meta: { title: "菜单 2-1", icon: "tree" },
+                        meta: { title: "菜单 2-1" },
                         component: () => import("../views/example/menu-1.vue")
                     },
                     {
                         path: "/nested/menu-2",
                         name: "nested/menu-2",
-                        meta: { title: "菜单 2-2", icon: "tree" },
+                        meta: { title: "菜单 2-2" },
                         component: () => import("../views/example/menu-2.vue")
                     },
                     {
                         path: "/nested/three-level",
                         name: "nested/three-level",
-                        meta: { title: "三级菜单", icon: "tree" },
+                        meta: { title: "三级菜单" },
                         redirect: "/nested/three-level/menu-1",
                         component: () => import("../views/example/nested.vue"),
                         children: [
                             {
                                 path: "/nested/three-level/menu-1",
                                 name: "/nested/three-level/menu-1",
-                                meta: { title: "菜单 3-1", icon: "tree" },
+                                meta: { title: "菜单 3-1" },
                                 component: () => import("../views/example/menu-1.vue")
                             },
                             {
                                 path: "/nested/three-level/menu-2",
                                 name: "/nested/three-level/menu-2",
-                                meta: { title: "菜单 3-2", icon: "tree" },
+                                meta: { title: "菜单 3-2" },
                                 component: () => import("../views/example/menu-2.vue")
                             },
                         ]
@@ -90,20 +90,20 @@ const add: Array<RouteItem> = [
                     {
                         path: "/nested/four-level",
                         name: "nested/four-level",
-                        meta: { title: "三级菜单-2", icon: "tree" },
+                        meta: { title: "三级菜单-2" },
                         redirect: "/nested/four-level/menu-1",
                         component: () => import("../views/example/nested.vue"),
                         children: [
                             {
                                 path: "/nested/four-level/menu-1",
                                 name: "/nested/four-level/menu-1",
-                                meta: { title: "菜单 3-2-1", icon: "tree" },
+                                meta: { title: "菜单 3-2-1" },
                                 component: () => import("../views/example/menu-1.vue")
                             },
                             {
                                 path: "/nested/four-level/menu-2",
                                 name: "/nested/four-level/menu-2",
-                                meta: { title: "菜单 3-2-2", icon: "tree" },
+                                meta: { title: "菜单 3-2-2" },
                                 component: () => import("../views/example/menu-2.vue")
                             },
                         ]
@@ -111,7 +111,7 @@ const add: Array<RouteItem> = [
                     {
                         path: "/nested/menu-3",
                         name: "nested/menu-3",
-                        meta: { title: "菜单 2-3", icon: "tree" },
+                        meta: { title: "菜单 2-3" },
                         component: () => import("../views/example/menu-3.vue")
                     }
                 ]
@@ -121,12 +121,12 @@ const add: Array<RouteItem> = [
                 name: "link-baidu",
                 link: "https://www.baidu.com",
                 component: Page404, // 这里必需给一个组件
-                meta: { title: "百度一下" },
+                meta: { title: "百度一下", icon: "baidu" },
             },
             {
                 path: "/menu-4",
                 name: "menu-4",
-                meta: { title: "菜单-4", icon: "international" },
+                meta: { title: "超出隐藏超出隐藏超出隐藏", icon: "nested" },
                 component: () => import("../views/example/menu-4.vue")
             }
         ]
@@ -135,7 +135,7 @@ const add: Array<RouteItem> = [
         path: "/test",
         name: "test-home",
         component: Layout,
-        meta: { title: "示例页栏目" },
+        meta: { title: "示例页栏目", icon: "menu" },
         redirect: "/test/page",
         children: [
             {
@@ -147,7 +147,7 @@ const add: Array<RouteItem> = [
             {
                 path: "/upload",
                 name: "upload",
-                meta: { title: "上传图片", icon: "international" },
+                meta: { title: "上传图片" },
                 component: () => import("../views/example/upload.vue")
             }
         ]
@@ -158,10 +158,7 @@ const add: Array<RouteItem> = [
         name: "GitHub-Hansen",
         component: Page404, // 这里必需给一个组件
         auth: [0],
-        meta: {
-            icon: "star",
-            title: "跳转外部链接"
-        }
+        meta: { title: "项目地址", icon: "github" }
     }
 ];
 
