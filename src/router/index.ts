@@ -107,13 +107,19 @@ const add: Array<RouteItem> = [
                             },
                         ]
                     },
+                    {
+                        path: "/nested/menu-3",
+                        name: "nested/menu-3",
+                        meta: { title: "菜单 2-3", icon: "tree" },
+                        component: () => import("../views/example/menu-3.vue")
+                    }
                 ]
             },
             {
-                path: "/upload",
-                name: "upload",
-                meta: { title: "上传图片", icon: "international" },
-                component: () => import("../views/example/upload.vue")
+                path: "/menu-4",
+                name: "menu-4",
+                meta: { title: "菜单-4", icon: "international" },
+                component: () => import("../views/example/menu-4.vue")
             }
         ]
     },
@@ -129,6 +135,12 @@ const add: Array<RouteItem> = [
                 name: "test-page",
                 component: () => import("../views/page-404.vue"),
                 meta: { title: "测试页面" },
+            },
+            {
+                path: "/upload",
+                name: "upload",
+                meta: { title: "上传图片", icon: "international" },
+                component: () => import("../views/example/upload.vue")
             }
         ]
     },

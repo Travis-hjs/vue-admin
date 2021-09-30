@@ -14,11 +14,8 @@
                 <span class="f1 ellipsis">{{ info.title }}</span>
             </router-link>
         </template>
-        <div
-            :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]"
-            :style="listStyle"
-            v-if="info.children && info.children.length > 0"
-        >
+        <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
+        <div class="the-layout-menu-list" :style="listStyle" v-if="info.children && info.children.length > 0">
             <div v-for="(item) in info.children" :key="item.path">
                 <MenuItem v-if="hasChidren(item)" :info="item" :level="level + 1" />
                 <template v-else>
@@ -69,7 +66,7 @@ const MenuItem = defineComponent({
          * @param item
          */
         function hasChidren(item: LayoutMenuItem) {
-            return item.children && item.children.length > 0;
+            return item.children && item.children.length > 0 ? true : false;
         }
 
         /**
@@ -89,12 +86,32 @@ const MenuItem = defineComponent({
             }
             return result;
         }
+        
+        /** 
+         * 检测当前菜单栏下是否有激活状态的菜单
+         * @param item 列表单个对象
+         */
+        function hasActiveItem(item: LayoutMenuItem) {
+            if (hasChidren(item)) {
+                for (let i = 0; i < item.children!.length; i++) {
+                    const child = item.children![i];
+                    if (child.isActive) {
+                        return true;
+                    }
+                    if (hasChidren(child) && hasActiveItem(child)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         const titleClass = computed(function () {
             return {
                 "the-layout-menu-title flex fvertical": true,
                 "the-layout-menu-on": props.info.isActive,
-                "the-layout-menu-hasopen": props.info.isOpen
+                "the-layout-menu-hasopen": props.info.isOpen,
+                "the-layout-menu-hasactive": hasActiveItem(props.info)
             }
         })
 
