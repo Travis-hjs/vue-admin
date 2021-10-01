@@ -93,7 +93,8 @@ const MenuItem = defineComponent({
                 "the-layout-menu-title flex fvertical": true,
                 "the-layout-menu-on": item.isActive,
                 "the-layout-menu-hasopen": item.isOpen,
-                "the-layout-menu-hasactive": item.hasActive
+                "the-layout-menu-hasactive": item.hasActive,
+                "the-layout-menu-active-title": item.hasActive && props.level === 1
             }
         })
 

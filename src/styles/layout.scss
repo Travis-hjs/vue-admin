@@ -261,6 +261,18 @@ $menuTextColor: #ffffffa6;
             }
         }
     }
+    // 首个激活的菜单栏
+    .the-layout-menu-active-title {
+        &::before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            height: $menuTitleHeight / 2;
+            background-color: $theme;
+            top: $menuTitleHeight / 4;
+            left: 0;
+        }
+    }
 }
 
 
