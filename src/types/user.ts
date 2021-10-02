@@ -21,6 +21,8 @@ export interface UserInfo {
     account?: string | number
     /** 用户密码 */
     password?: string
+    /** 用户头像 */
+    avatar: string
 }
 
 /** 登陆接口传参 */

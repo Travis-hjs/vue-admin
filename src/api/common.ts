@@ -63,6 +63,7 @@ export async function login(params: LoginParams) {
             id: Math.random().toString(36).substr(10),
             type: "",
             name: "",
+            avatar: "",
             token: Math.random().toString(36).substr(2),
             account: params.account,
             password: params.password

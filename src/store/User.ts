@@ -10,6 +10,7 @@ function createUserInfo(): Readonly<UserInfo> {
         name: "",
         type: "",
         token: "",
+        avatar: "",
         account: "",
         password: ""
     }

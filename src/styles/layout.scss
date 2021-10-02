@@ -24,10 +24,6 @@ $tagsHeight: 34px;
 // 侧边菜单栏文件默认颜色
 $menuTextColor: #ffffffa6;
 
-@mixin moveTime {
-    transition: 0.3s all;
-}
-
 @mixin menuHover {
     position: relative;
     &::after {
