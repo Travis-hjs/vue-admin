@@ -7,7 +7,7 @@
             <Breadcrumb class="f1" />
             <div class="user-info-box flex fvertical">
                 <img class="avatar" :src="userInfo.avatar || defaultAvatar" >
-                <span class="username mgr_10">{{ userInfo.name || userInfo.account }}</span>
+                <span class="username mgr_10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
                 <button class="logout flex fvertical" @click="onLogout()">
                     <svg-icon name="exit" />
                     <span>退出登录</span>
