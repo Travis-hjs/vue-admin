@@ -32,8 +32,6 @@ const Menu = defineComponent({
     setup(props, context) {
         const route = useRoute();
 
-        const layoutInfo = store.layout.info;
-
         /**
          * 格式化菜单列表
          * @param list 
@@ -165,7 +163,6 @@ const Menu = defineComponent({
         })
         
         return {
-            layoutInfo,
             menuList
         }
     }
