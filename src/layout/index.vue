@@ -20,7 +20,7 @@
 </template>
 <script lang="ts">
 import store from "@/store";
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import Sidebar from "./components/Sidebar.vue";
 

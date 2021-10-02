@@ -100,12 +100,12 @@ const add: Array<RouteItem> = [
                                 meta: { title: "菜单 3-2-1" },
                                 component: () => import("../views/example/menu-1.vue")
                             },
-                            {
-                                path: "/nested/four-level/menu-2",
-                                name: "/nested/four-level/menu-2",
-                                meta: { title: "菜单 3-2-2" },
-                                component: () => import("../views/example/menu-2.vue")
-                            },
+                            // {
+                            //     path: "/nested/four-level/menu-2",
+                            //     name: "/nested/four-level/menu-2",
+                            //     meta: { title: "菜单 3-2-2" },
+                            //     component: () => import("../views/example/menu-2.vue")
+                            // },
                         ]
                     },
                     {
@@ -126,29 +126,45 @@ const add: Array<RouteItem> = [
             {
                 path: "/menu-4",
                 name: "menu-4",
-                meta: { title: "超出隐藏超出隐藏超出隐藏", icon: "nested" },
+                meta: { title: "换行菜单标题换行菜单标题", icon: "nested" },
                 component: () => import("../views/example/menu-4.vue")
             }
         ]
     },
     {
-        path: "/test",
-        name: "test-home",
+        path: "/example",
+        name: "example-example",
         component: Layout,
         meta: { title: "示例页栏目", icon: "menu" },
-        redirect: "/test/page",
+        redirect: "/example/svg-icons",
         children: [
             {
                 path: "/test/page",
                 name: "test-page",
-                component: Page404,
                 meta: { title: "测试页面" },
+                component: Page404,
             },
             {
                 path: "/upload",
                 name: "upload",
                 meta: { title: "上传图片" },
                 component: () => import("../views/example/upload.vue")
+            }
+        ]
+    },
+    {
+        path: "/icon",
+        name: "icon",
+        auth: [0],
+        meta: { title: "icon-page" },
+        component: Layout,
+        redirect: "/icon/svg-icons",
+        children: [
+            {
+                path: "/icon/svg-icons",
+                name: "svg-icons",
+                component: () => import(/* webpackChunkName: "icons" */ "../views/icons.vue"),
+                meta: { title: "svg-图标", icon: "svg-icon" }
             }
         ]
     },
