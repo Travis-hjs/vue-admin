@@ -133,13 +133,13 @@ const add: Array<RouteItem> = [
     },
     {
         path: "/example",
-        name: "example-example",
+        name: "example",
         component: Layout,
         meta: { title: "示例页栏目", icon: "menu" },
-        redirect: "/example/svg-icons",
+        redirect: "/example/page",
         children: [
             {
-                path: "/test/page",
+                path: "/example/page",
                 name: "test-page",
                 meta: { title: "测试页面" },
                 component: Page404,
@@ -156,7 +156,7 @@ const add: Array<RouteItem> = [
         path: "/icon",
         name: "icon",
         auth: [0],
-        meta: { title: "icon-page" },
+        meta: { title: "图标栏目" },
         component: Layout,
         redirect: "/icon/svg-icons",
         children: [

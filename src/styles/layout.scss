@@ -284,6 +284,41 @@ $menuTextColor: #ffffffa6;
 }
 
 
+.layout-breadcrumb {
+    padding: 0 16px;
+    position: relative;
+}
+
+.layout-breadcrumb-item {
+    padding: 4px 0;
+    font-size: 15px;
+    color: #555;
+    line-height: 1;
+    a {
+        @include moveTime();
+    }
+    &:hover {
+        a {
+            color: $theme; 
+        }
+    }
+    .separator {
+        padding: 0 8px;
+    }
+}
+
+.layout-breadcrumb-item.last {
+    color: #afaeae;
+    a {
+        cursor: default;
+    }
+    &:hover {
+        a {
+            color: #afaeae; 
+        }
+    }
+}
+
 // ===================== 动画 =====================
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
     transition: .5s all !important;
@@ -298,7 +333,22 @@ $menuTextColor: #ffffffa6;
     opacity: 0;
     transform: translate3d(-30px, 0, 0);
 }
+
 .fadeSlideX-leave-to {
     opacity: 0;
     transform: translate3d(30px, 0, 0);
+}
+
+// 面包屑
+.breadcrumb-enter-active, .breadcrumb-leave-active {
+    transition: .5s all
+}
+
+.breadcrumb-enter-from, .breadcrumb-leave-to {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+}
+
+.breadcrumb-leave-to {
+    position: absolute;
 }
