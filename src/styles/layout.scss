@@ -1,3 +1,4 @@
+@use "sass:math";
 @import "./variables.scss";
 
 // 侧边菜单栏宽度
@@ -178,6 +179,19 @@ $menuTextColor: #ffffffa6;
                 background-color: #fff;
             }
         }
+        &::before {
+            content: "";
+            position: absolute;
+            width: 4px;
+            left: 0;
+            background-color: $theme;
+            // height: $menuTitleHeight / 2;    // 控制台警告
+            // top: $menuTitleHeight / 4;       // 控制台警告
+            height: math.div($menuTitleHeight, 2);
+            top: math.div($menuTitleHeight, 4);
+            transform: scaleY(0); 
+            @include moveTime();
+        }
     }
 
     .the-layout-menu-list {
@@ -229,7 +243,7 @@ $menuTextColor: #ffffffa6;
     .the-layout-menu-arrow {
         position: relative;
         &::before {
-            background-color: $menuTextColor;;
+            background-color: $menuTextColor;
             content: "";
             position: absolute;
             width: 6px;
@@ -264,13 +278,7 @@ $menuTextColor: #ffffffa6;
     // 首个激活的菜单栏
     .the-layout-menu-active-title {
         &::before {
-            content: "";
-            position: absolute;
-            width: 4px;
-            height: $menuTitleHeight / 2;
-            background-color: $theme;
-            top: $menuTitleHeight / 4;
-            left: 0;
+            transform: scaleY(1);
         }
     }
 }

@@ -17,6 +17,18 @@ const Menu = defineComponent({
     components: {
         MenuItem
     },
+    props: {
+        /** 是否合并只有一个子项 */
+        mergeOnlyOneChild: {
+            type: Boolean,
+            default: false
+        },
+        /** 是否只合并第一层路由列表 */
+        onlyMergeFirst: {
+            type: Boolean,
+            default: false
+        }
+    },
     setup(props, context) {
         const route = useRoute();
 
@@ -24,14 +36,14 @@ const Menu = defineComponent({
 
         /**
          * 格式化菜单列表
-         * @param array 
+         * @param list 
          * @param parentKey 上层`key`
          */
-        function formatMenuList(array: Array<RouteItem>, parentKey?: string) {
-            array = JSON.parse(JSON.stringify(array));
+        function formatMenuList(list: Array<RouteItem>, parentKey?: string) {
+            list = JSON.parse(JSON.stringify(list));
             const result: Array<LayoutMenuItem> = [];
-            for (let i = 0; i < array.length; i++) {
-                const routeItem = array[i];
+            for (let i = 0; i < list.length; i++) {
+                const routeItem = list[i];
                 const item: LayoutMenuItem = {
                     key: parentKey ? `${parentKey}-${i}` : i.toString(),
                     isOpen: false,
@@ -44,8 +56,9 @@ const Menu = defineComponent({
                 }
                 if (!item.hidden) {
                     result.push(item);
-                    if (routeItem.children && routeItem.children.length > 0) {
-                        item.children = formatMenuList(routeItem.children, item.key);
+                    const child = routeItem.children;
+                    if (child && child.length > 0) {
+                        item.children = formatMenuList(child, item.key);
                     }
                 }
             }
@@ -53,9 +66,46 @@ const Menu = defineComponent({
         }
 
         /**
+         * 处理合并只有一条子菜单的列表数据
+         * @param list
+         */
+        function handleMerge(list: Array<LayoutMenuItem>) {
+            list = JSON.parse(JSON.stringify(list));
+            const result: Array<LayoutMenuItem> = [];
+            for (let i = 0; i < list.length; i++) {
+                const item = list[i];
+                const child = item.children;
+                if (child && child.length > 0) {
+                    if (child.length === 1) {
+                        child[0].key = item.key;
+                        result.push(child[0]);
+                        if (child[0].children && child[0].children.length > 0 && !props.onlyMergeFirst) {
+                            child[0].children = handleMerge(child[0].children);
+                        }
+                    } else {
+                        result.push(item);
+                        if (!props.onlyMergeFirst) {
+                            item.children = handleMerge(child);
+                        }
+                    }
+                } else {
+                    result.push(item);
+                }
+            }
+            return result;
+        }
+
+        let list = formatMenuList(filterHidden(store.layout.completeRouters));
+
+        if (props.mergeOnlyOneChild) {
+            list = handleMerge(list);
+            // console.log("处理合并只有一条子菜单的列表数据 >>", list);
+        }
+
+        /**
          * 菜单数据列表
          */
-        const menuList = ref(formatMenuList(filterHidden(store.layout.completeRouters)));
+        const menuList = ref(list);
 
         /**
          * 激活的索引列表

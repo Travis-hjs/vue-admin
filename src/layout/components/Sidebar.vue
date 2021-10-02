@@ -1,6 +1,6 @@
 <template>
     <div class="the-layout-sidebar">
-        <Menu />
+        <Menu :mergeOnlyOneChild="true" :onlyMergeFirst="true" />
     </div>
 </template>
 <script lang="ts">

@@ -2,19 +2,19 @@
     <div class="the-layout-menu" ref="menuBox">
         <button :class="titleClass" :style="titleStyle" @click="switchClose()" v-if="hasChidren(info)">
             <svg-icon v-if="info.icon" :name="info.icon" />
-            <span class="f1 ellipsis">{{ info.title }}</span>
+            <span class="f1">{{ info.title }}</span>
             <i class="the-layout-menu-arrow"></i>
         </button>
         <template v-else>
             <!-- 外链 -->
             <a :class="titleClass" :style="titleStyle" :href="info.link" target="_blank" v-if="info.link">
                 <svg-icon v-if="info.icon" :name="info.icon" />
-                <span class="f1 ellipsis">{{ info.title }}</span>
+                <span class="f1">{{ info.title }}</span>
             </a>
             <!-- 单个菜单 -->
             <router-link :class="titleClass" :style="titleStyle" :to="info.path" v-else>
                 <svg-icon v-if="info.icon" :name="info.icon" />
-                <span class="f1 ellipsis">{{ info.title }}</span>
+                <span class="f1">{{ info.title }}</span>
             </router-link>
         </template>
         <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
@@ -25,12 +25,12 @@
                     <!-- 外链 -->
                     <a :class="getItemClass(item)" :style="itemStyle" :href="item.link" target="_blank" v-if="item.link">
                         <svg-icon v-if="item.icon" :name="item.icon" />
-                        <span class="ellipsis">{{ item.title }}</span>
+                        <span>{{ item.title }}</span>
                     </a>
                     <!-- 单个菜单 -->
                     <router-link :class="getItemClass(item)" :style="itemStyle" :to="item.path" v-else>
                         <svg-icon v-if="item.icon" :name="item.icon" />
-                        <span class="ellipsis">{{ item.title }}</span>
+                        <span>{{ item.title }}</span>
                     </router-link>
                 </template>
             </div>
