@@ -1,6 +1,6 @@
 <template>
     <div class="the-layout-menu" ref="menuBox">
-        <button :class="titleClass" :style="titleStyle" @click="switchClose()" v-if="hasChidren(info)">
+        <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChidren(info)">
             <svg-icon v-if="info.icon" :name="info.icon" />
             <span class="f1">{{ info.title }}</span>
             <i class="the-layout-menu-arrow"></i>
@@ -127,7 +127,7 @@ const MenuItem = defineComponent({
         /** 当前整体节点 */
         const menuBox = ref<HTMLElement>();
 
-        function switchClose() {
+        function switchOpen() {
             props.info.isOpen = !props.info.isOpen;
         }
 
@@ -152,7 +152,7 @@ const MenuItem = defineComponent({
             listStyle,
             getItemClass,
             hasChidren,
-            switchClose,
+            switchOpen,
         }
     }
 })

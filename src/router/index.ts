@@ -164,7 +164,7 @@ const add: Array<RouteItem> = [
                 path: "/icon/svg-icons",
                 name: "svg-icons",
                 component: () => import(/* webpackChunkName: "icons" */ "../views/icons.vue"),
-                meta: { title: "svg-图标", icon: "svg-icon" }
+                meta: { title: "svg-图标", icon: "svg-icon", keepAlive: true }
             }
         ]
     },

@@ -3,10 +3,10 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import MenuItem from "./MenuItem.vue";
 import store from "@/store";
 import { filterHidden } from "@/router";
-import { useRoute } from "vue-router";
 import { LayoutMenuItem, RouteItem } from "@/types";
 
 /**
@@ -117,7 +117,12 @@ const Menu = defineComponent({
         function updateActive(list: Array<LayoutMenuItem>) {
             for (let index = 0; index < list.length; index++) {
                 const item = list[index];
-                item.hasActive = false; // 这里要先重置一下
+                // 这里要先重置一下
+                item.hasActive = false;
+                // 设置 mergeOnlyOneChild 时的判断，并初始化值
+                if (item.isOpen && (!item.children || (item.children && item.children.length === 0))) {
+                    item.isOpen = false;
+                }
                 item.isActive = item.path === route.path;
                 if (item.isActive) {
                     activeList = item.key.split("-").map(val => Number(val));
