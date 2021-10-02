@@ -93,8 +93,7 @@ export default defineComponent({
         border: none;
         outline: none;
         background-color: transparent;
-        padding: 0 10px 0 4px;
-        height: 100%;
+        padding: 6px 10px 6px 4px;
         line-height: 1;
         @include font();
         @include moveTime();
