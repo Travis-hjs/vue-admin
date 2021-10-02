@@ -15,16 +15,25 @@
             </div>
         </div>
         <div class="the-layout-tags">
-
+            <router-link
+                :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
+                v-for="(item, index) in layoutInfo.historyViews"
+                :key="index + item.path"
+                :to="{ path: item.path, query: item.query, params: item.params }"
+            >
+                <span>{{ item.meta.title }}</span>
+                <i class="close" @click.prevent.stop="onRemove(index)">-</i>
+            </router-link>
         </div>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { useRouter } from "vue-router";
+import { defineComponent, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import Breadcrumb from "./Breadcrumb.vue";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
+import { HistoryViewsItem } from "@/types";
 
 export default defineComponent({
     name: "HeaderBar",
@@ -32,6 +41,7 @@ export default defineComponent({
         Breadcrumb
     },
     setup(props, context) {
+        const route = useRoute();
         const router = useRouter();
         const layoutInfo = store.layout.info;
         const userInfo = store.user.info;
@@ -58,12 +68,39 @@ export default defineComponent({
             })
         }
 
+        function isActive(item: HistoryViewsItem) {
+            return item.path === route.path && JSON.stringify(item.query) === JSON.stringify(route.query) && JSON.stringify(item.params) === JSON.stringify(route.params);
+        }
+
+        function onRemove(index: number) {
+            layoutInfo.historyViews.splice(index, 1);
+        }
+
+        // layoutInfo.historyViews = [];
+        watch(() => route.path, function () {
+            // console.log("route >>", route);
+            const hasItem = layoutInfo.historyViews.some(item => isActive(item))
+            if (!hasItem) {
+                layoutInfo.historyViews.push({
+                    name: route.name as string,
+                    path: route.path,
+                    query: route.query,
+                    params: route.params,
+                    meta: route.meta as any
+                })
+            }
+        }, {
+            immediate: true
+        })
+    
         return {
             defaultAvatar,
             layoutInfo,
             userInfo,
             onSwitch,
+            isActive,
             onLogout,
+            onRemove
         }
     }
 })

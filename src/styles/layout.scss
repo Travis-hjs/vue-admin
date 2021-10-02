@@ -107,12 +107,6 @@ $menuTextColor: #ffffffa6;
     }
 }
 
-.the-layout-tags {
-    background-color: #fff;
-    height: $tagsHeight;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
-}
-
 .the-layout-sidebar {
     width: $sidebarWidth;
     height: 100vh;
@@ -311,6 +305,70 @@ $menuTextColor: #ffffffa6;
     &:hover {
         a {
             color: #afaeae; 
+        }
+    }
+}
+
+.the-layout-tags {
+    padding: 4px 12px 0;
+    background-color: #fff;
+    height: $tagsHeight;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+}
+
+.the-layout-tag {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 24px;
+    height: 26px;
+    padding: 0 6px 0 8px;
+    border: 1px solid #d8dce5;
+    color: #495060;
+    @include moveTime();
+    &:visited {
+        color: #495060;
+    }
+    .close {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 10px;
+        border-radius: 50%;
+        color: transparent;
+        margin-left: 4px;
+        @include moveTime();
+        @include closeIcon(#495060, 8px);
+        &:hover {
+            background-color: #b4bccc;
+            &::after {
+                background-color: #fff;
+            }
+            &::before {
+                background-color: #fff;
+            }
+        }
+    }
+}
+
+.the-layout-tag + .the-layout-tag {
+    margin-left: 8px;
+}
+
+.the-layout-tag-on {
+    background-color: #42b983;
+    border-color: #42b983;
+    color: #fff;
+    &:visited {
+        color: #fff;
+    }
+    .close {
+        &::after {
+            background-color: #fff;
+        }
+        &::before {
+            background-color: #fff;
         }
     }
 }
