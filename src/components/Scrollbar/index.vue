@@ -3,7 +3,7 @@
         <div :class="[vertical ? 'the-scroll-y' : 'the-scroll-x']" :style="wrapStyle" ref="wrap">
             <slot></slot>
         </div>
-        <button class="the-scroll-thumb" ref="thumb" :style="thumbStyle"></button>
+        <button class="the-scroll-thumb" ref="thumb" :style="thumbStyle" title="滚动条"></button>
     </div>
 </template>
 <script lang="ts">
@@ -37,6 +37,11 @@ export default defineComponent({
             type: Number,
             default: 8
         },
+        /** 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒 */
+        clickUpdateDelay: {
+            type: Number,
+            default: 0
+        }
     },
     setup(props, context) {
         const el = ref<HTMLElement>();
@@ -106,6 +111,7 @@ export default defineComponent({
         let isDrag = false;
         let distance = 0;
         let startPosition = 0;
+        let timer: NodeJS.Timeout;
 
         function onDragStart(event: MouseEvent) {
             if (event.target !== thumb.value) return;
@@ -131,6 +137,10 @@ export default defineComponent({
             isDrag = false;
             if (!el.value!.contains(event.target as HTMLElement)) {
                 thumbStyle.display = "none";
+            } else if (props.clickUpdateDelay > 0) {
+                // console.log("执行");
+                timer && clearTimeout(timer);
+                timer = setTimeout(updateThumbStyle, props.clickUpdateDelay);
             }
         }
 
@@ -161,6 +171,7 @@ export default defineComponent({
             document.removeEventListener("mousedown", onDragStart);
             document.removeEventListener("mousemove", onDragMove);
             document.removeEventListener("mouseup", onDragEnd);
+            timer && props.clickUpdateDelay > 0 && clearTimeout(timer);
         })
 
         return {
@@ -187,6 +198,7 @@ export default defineComponent({
         overflow-x: scroll;
     }
     .the-scroll-y {
+        height: 100%;
         overflow-y: scroll;
     }
     .the-scroll-thumb {
@@ -194,7 +206,7 @@ export default defineComponent({
         border: none;
         position: absolute;
         background-color: rgba(147, 147, 153, 0.4);
-        z-index: 10px;
+        z-index: 10;
     }
 }
 </style>
