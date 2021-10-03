@@ -3,7 +3,7 @@
         <div :class="[vertical ? 'the-scroll-y' : 'the-scroll-x']" :style="wrapStyle" ref="wrap">
             <slot></slot>
         </div>
-        <button class="the-scroll-thumb" ref="thumb" :style="thumbStyle" title="滚动条"></button>
+        <button class="the-scroll-thumb" ref="thumb" :style="thumbStyle" title="滚动条-摁住拖拽"></button>
     </div>
 </template>
 <script lang="ts">
