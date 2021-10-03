@@ -15,15 +15,17 @@
             </div>
         </div>
         <div class="the-layout-tags">
-            <router-link
-                :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
-                v-for="(item, index) in layoutInfo.historyViews"
-                :key="index + item.path"
-                :to="{ path: item.path, query: item.query, params: item.params }"
-            >
-                <span>{{ item.meta.title }}</span>
-                <i class="close" @click.prevent.stop="onRemove(index)">-</i>
-            </router-link>
+            <Scrollbar>
+                <router-link
+                    :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
+                    v-for="(item, index) in layoutInfo.historyViews"
+                    :key="index + item.path"
+                    :to="{ path: item.path, query: item.query, params: item.params }"
+                >
+                    <span>{{ item.meta.title }}</span>
+                    <i class="close" @click.prevent.stop="onRemove(index)">-</i>
+                </router-link>
+            </Scrollbar>
         </div>
     </div>
 </template>
@@ -31,6 +33,7 @@
 import { defineComponent, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Breadcrumb from "./Breadcrumb.vue";
+import Scrollbar from "@/components/Scrollbar/index.vue";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
 import { HistoryViewsItem } from "@/types";
@@ -38,7 +41,8 @@ import { HistoryViewsItem } from "@/types";
 export default defineComponent({
     name: "HeaderBar",
     components: {
-        Breadcrumb
+        Breadcrumb,
+        Scrollbar
     },
     setup(props, context) {
         const route = useRoute();

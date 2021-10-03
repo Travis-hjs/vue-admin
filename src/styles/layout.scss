@@ -310,6 +310,7 @@ $menuTextColor: #ffffffa6;
 }
 
 .the-layout-tags {
+    width: 100%;
     padding: 4px 12px 0;
     background-color: #fff;
     height: $tagsHeight;
@@ -323,6 +324,7 @@ $menuTextColor: #ffffffa6;
     line-height: 24px;
     height: 26px;
     padding: 0 6px 0 8px;
+    background-color: #fff;
     border: 1px solid #d8dce5;
     color: #495060;
     @include moveTime();
