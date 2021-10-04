@@ -41,16 +41,26 @@ export default defineComponent({
         clickUpdateDelay: {
             type: Number,
             default: 0
+        },
+        /** 滚动条颜色 */
+        thumbColor: {
+            type: String,
+            default: "rgba(147, 147, 153, 0.4)"
         }
     },
     setup(props, context) {
+        /** 组件整体节点 */
         const el = ref<HTMLElement>();
+        /** 包围器节点 */
         const wrap = ref<HTMLElement>();
+        /** 滚动条节点 */
         const thumb = ref<HTMLElement>();
+        /** 包围器节点样式 */
         const wrapStyle = reactive({
             height: "",
             width: ""
-        });
+        })
+        /** 滚动条节点样式 */
         const thumbStyle = reactive({
             width: "",
             height: "",
@@ -60,7 +70,8 @@ export default defineComponent({
             bottom: "",
             transform: "",
             borderRadius: "",
-            display: "none"
+            display: "none",
+            backgroundColor: props.thumbColor
         })
 
         function updateWrapStyle() {
@@ -108,27 +119,39 @@ export default defineComponent({
             thumbStyle.display = "";
         }
 
+        /** 是否摁下开始拖拽 */
         let isDrag = false;
-        let distance = 0;
-        let startPosition = 0;
+        /** 摁下滚动条时的偏移量 */
+        let deviation = 0;
+        /** 更新延时器 */
         let timer: NodeJS.Timeout;
 
         function onDragStart(event: MouseEvent) {
             if (event.target !== thumb.value) return;
-            // console.log("摁下");
-            const wrapEl = wrap.value!;
+            // console.log("摁下 >>", event);
+            const thumbEl = thumb.value!;
             isDrag = true;
-            distance = props.vertical ? event.clientY : event.clientX;
-            startPosition = props.vertical ? wrapEl.scrollTop : wrapEl.scrollLeft;
+            if (props.vertical) {
+                deviation = event.clientY - thumbEl.getBoundingClientRect().top;
+            } else {
+                deviation = event.clientX - thumbEl.getBoundingClientRect().left;
+            }
         }
 
         function onDragMove(event: MouseEvent) {
             if (!isDrag) return;
+            // console.log("拖拽移动 >>", event.offsetY, event.clientY, event);
             const wrapEl = wrap.value!;
             if (props.vertical) {
-                wrapEl.scrollTop = event.clientY - distance + startPosition;
+                const wrapTop = wrapEl.getBoundingClientRect().top;
+                const wrapHeight = wrapEl.clientHeight;
+                let value = event.clientY - wrapTop;
+                wrapEl.scrollTop = (value - deviation) / wrapHeight * wrapEl.scrollHeight;
             } else {
-                wrapEl.scrollLeft = event.clientX - distance + startPosition;
+                const wrapLeft = wrapEl.getBoundingClientRect().left;
+                const wrapWidth = wrapEl.clientWidth;
+                let value = event.clientX - wrapLeft;
+                wrapEl.scrollLeft = (value - deviation) / wrapWidth * wrapEl.scrollWidth;
             }
         }
 
@@ -196,16 +219,17 @@ export default defineComponent({
         flex-wrap: nowrap;
         white-space: nowrap;
         overflow-x: scroll;
+        overflow-y: hidden;
     }
     .the-scroll-y {
         height: 100%;
         overflow-y: scroll;
+        overflow-x: hidden;
     }
     .the-scroll-thumb {
         outline: none;
         border: none;
         position: absolute;
-        background-color: rgba(147, 147, 153, 0.4);
         z-index: 10;
     }
 }

@@ -22,10 +22,10 @@
     },
     // npm run build 时，要在下面所有路径前加上 /
     "include": [
-        "/src/**/*.ts",
-        "/src/**/*.d.ts",
-        "/src/**/*.tsx",
-        "/src/**/*.vue"
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.vue"
     ],
     "exclude": [
         "node_modules"
