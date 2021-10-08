@@ -135,8 +135,6 @@ export interface HistoryViewsItem {
 
 /** `layout`状态类型 */
 export interface LayoutInfo {
-    /** 显示设置 */
-    showSettings: boolean
     /** 显示历史记录列表 */
     showTagsView: boolean
     /** 侧边栏展开 */

@@ -14,7 +14,7 @@
                 </button>
             </div>
         </div>
-        <div class="the-layout-tags">
+        <div class="the-layout-tags" v-if="layoutInfo.showTagsView">
             <Scrollbar>
                 <router-link
                     :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"

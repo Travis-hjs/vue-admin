@@ -172,6 +172,7 @@ div:focus {
 }
 
 .check-box {
+    cursor: pointer;
     font-size: 14px;
     color: $theme;
     input {

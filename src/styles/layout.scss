@@ -23,6 +23,8 @@ $navbarHeight: 50px;
 $tagsHeight: 34px;
 // 侧边菜单栏文件默认颜色
 $menuTextColor: #ffffffa6;
+// 主容器内边距值
+$contentPadding: 12px;
 
 @mixin menuHover {
     position: relative;
@@ -121,14 +123,14 @@ $menuTextColor: #ffffffa6;
 
 .the-layout-content {
     background-color: #eee;
-    padding: 12px;
+    padding: $contentPadding;
     height: 100vh;
-    padding-top: $navbarHeight;
+    padding-top: $navbarHeight + $contentPadding;
     overflow: auto;
 }
 
 .the-layout.has-tags-view .the-layout-content {
-    padding-top: $navbarHeight + $tagsHeight + 12px;
+    padding-top: $navbarHeight + $tagsHeight + $contentPadding;
 }
 
 .the-layout-page {
@@ -373,4 +375,29 @@ $menuTextColor: #ffffffa6;
             background-color: #fff;
         }
     }
+}
+
+.the-logo-box {
+    width: 100%;
+    height: 50px;
+    background-color: $menuItemBgColor;
+    padding: 0 10px;
+}
+
+.the-logo-link {
+    width: 100%;
+    height: 100%;
+    .the-logo {
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+        line-height: 1;
+    }
+}
+
+.the-logo-title {
+    color: #fff;
+    font-weight: 600;
+    line-height: 1;
+    font-size: 14px;
 }

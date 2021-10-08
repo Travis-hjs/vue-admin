@@ -29,7 +29,6 @@ export default class ModuleLayout {
      * `layout`布局信息
      */
     readonly info = reactive<LayoutInfo>({
-        showSettings: false,
         showTagsView: true,
         sidebarOpen: true,
         showSidebarLogo: true,
