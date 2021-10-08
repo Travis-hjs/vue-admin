@@ -1,0 +1,41 @@
+.tsx-center {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 14px;
+    display: block;
+}
+
+.tsx-card {
+    width: 100%;
+    .card {
+        width: 100%; 
+        max-width: 500px; 
+        margin: 0 auto 24px;
+        border-radius: 2px; 
+        box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
+        background-color: #fff;
+        height: 240px;
+        padding: 8px;
+        .card-box {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            .card-list {
+                width: 100%;
+                height: 100%;
+                transition: 0.3s all;
+                transform: translate3d(0px, 0px, 0px);
+                .image {
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+    .btn-box {
+        text-align: center;
+        .the-btn + .the-btn {
+            margin-left: 10px;
+        }
+    }
+}

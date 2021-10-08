@@ -136,19 +136,25 @@ const add: Array<RouteItem> = [
         name: "example",
         component: Layout,
         meta: { title: "示例页栏目", icon: "menu" },
-        redirect: "/example/page",
+        redirect: "/example/request",
         children: [
             {
-                path: "/example/page",
-                name: "test-page",
-                meta: { title: "测试页面" },
-                component: Page404,
+                path: "/example/request",
+                name: "example-request",
+                meta: { title: "http-请求示例", keepAlive: true },
+                component: () => import("../views/example/request.vue"),
             },
             {
-                path: "/upload",
-                name: "upload",
-                meta: { title: "上传图片" },
-                component: () => import("../views/example/upload.vue")
+                path: "/example/components",
+                name: "example-components",
+                meta: { title: "自定义组件" },
+                component: () => import("../views/example/the-components.vue")
+            },
+            {
+                path: "/example/tsx",
+                name: "example-tsx",
+                meta: { title: "tsx-示例" },
+                component: () => import("../views/tsx/example")
             }
         ]
     },

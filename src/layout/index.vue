@@ -39,7 +39,7 @@ export default defineComponent({
                 const item = list[i];
                 const child = item.children;
                 if (child && child.length > 0) {
-                    result = getCachList(child);
+                    result = result.concat(getCachList(child));
                 }
                 if (item.meta.keepAlive && item.name) {
                     result.push(item.name);
@@ -50,7 +50,7 @@ export default defineComponent({
 
         // 这里不是动态的，所以可以不用响应式
         const cacheList = getCachList(store.layout.completeRouters);
-        // console.log("cacheList >>", cacheList);
+        // console.log("路由缓存列表 >>", cacheList);
 
         return {
             layoutInfo,

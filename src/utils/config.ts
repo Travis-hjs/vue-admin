@@ -2,11 +2,11 @@
  * 项目配置模块
  */
 const config = (function() {
-    const _env = process.env.NODE_ENV === "development" ? "dev" : "prod";
+    const env = process.env.NODE_ENV === "development" ? "dev" : "prod";
 
     const url = {
-        dev: `http://${location.host}`,
-        prod: "https://abc.com"
+        dev: "http://wthrcdn.etouch.cn", // `http://${location.host}`,
+        prod: "http://wthrcdn.etouch.cn"
     }
 
     return {
@@ -16,11 +16,11 @@ const config = (function() {
         },
         /** `api`请求域名 */
         get apiUrl() {
-            return url[_env];
+            return url[env];
         },
-        /** 当前环境模式 */
-        get env() {
-            return _env;
+        /** 是否开发环境 */
+        get isDev() {
+            return env === "dev";
         }
     }
 })();

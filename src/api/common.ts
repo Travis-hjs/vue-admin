@@ -45,14 +45,6 @@ export function getWeather(city: string) {
 }
 
 /**
- * 提交表单数据
- * @param params 
- */
-export function submitForm(params: { id: number, name: string, age: number }) {
-    return request("POST", "/submitForm", {}, jsonToFormData(params))
-}
-
-/**
  * 登录
  * @param params 登录信息
  */

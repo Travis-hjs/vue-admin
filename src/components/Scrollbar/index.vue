@@ -3,7 +3,9 @@
         <div :class="[vertical ? 'the-scroll-y' : 'the-scroll-x']" :style="wrapStyle" ref="wrap">
             <slot></slot>
         </div>
-        <button class="the-scroll-thumb" ref="thumb" :style="thumbStyle" title="滚动条-摁住拖拽"></button>
+        <transition name="fade">
+            <button class="the-scroll-thumb" title="滚动条-摁住拖拽" ref="thumb" v-show="showThumb" :style="thumbStyle"></button>
+        </transition>
     </div>
 </template>
 <script lang="ts">
@@ -70,9 +72,9 @@ export default defineComponent({
             bottom: "",
             transform: "",
             borderRadius: "",
-            display: "none",
             backgroundColor: props.thumbColor
         })
+        const showThumb = ref(false);
 
         function updateWrapStyle() {
             const parent = el.value!;
@@ -95,28 +97,30 @@ export default defineComponent({
         }
 
         function updateThumbStyle() {
-            const wrapEl = wrap.value!;
-            if (props.vertical) {
-                let height = wrapEl.clientHeight / wrapEl.scrollHeight * 100;
-                if (height >= 100) {
-                    height = 0;
+            const wrapEl = wrap.value;
+            if (wrapEl) {
+                if (props.vertical) {
+                    let height = wrapEl.clientHeight / wrapEl.scrollHeight * 100;
+                    if (height >= 100) {
+                        height = 0;
+                    }
+                    thumbStyle.height = height + "%";
+                    thumbStyle.transform = `translate3d(0, ${wrapEl.scrollTop / wrapEl.scrollHeight * wrapEl.clientHeight}px, 0)`;
+                } else {
+                    // console.log("scrollWidth >>", wrapEl.scrollWidth);
+                    // console.log("scrollLeft >>", wrapEl.scrollLeft);
+                    // console.log("clientWidth >>", wrapEl.clientWidth);
+                    // console.log("offsetWidth >>", wrapEl.offsetWidth);
+                    let width = (wrapEl.clientWidth / wrapEl.scrollWidth) * 100;
+                    if (width >= 100) {
+                        width = 0;
+                    }
+                    thumbStyle.width = width + "%";
+                    thumbStyle.transform = `translate3d(${wrapEl.scrollLeft / wrapEl.scrollWidth * wrapEl.clientWidth}px, 0, 0)`;
+                    // console.log("------------------------------------");
                 }
-                thumbStyle.height = height + "%";
-                thumbStyle.transform = `translate3d(0, ${wrapEl.scrollTop / wrapEl.scrollHeight * wrapEl.clientHeight}px, 0)`;
-            } else {
-                // console.log("scrollWidth >>", wrapEl.scrollWidth);
-                // console.log("scrollLeft >>", wrapEl.scrollLeft);
-                // console.log("clientWidth >>", wrapEl.clientWidth);
-                // console.log("offsetWidth >>", wrapEl.offsetWidth);
-                let width = (wrapEl.clientWidth / wrapEl.scrollWidth) * 100;
-                if (width >= 100) {
-                    width = 0;
-                }
-                thumbStyle.width = width + "%";
-                thumbStyle.transform = `translate3d(${wrapEl.scrollLeft / wrapEl.scrollWidth * wrapEl.clientWidth}px, 0, 0)`;
-                // console.log("------------------------------------");
-            }
-            thumbStyle.display = "";
+            } 
+            showThumb.value = true;
         }
 
         /** 是否摁下开始拖拽 */
@@ -159,7 +163,7 @@ export default defineComponent({
             // console.log("抬起");
             isDrag = false;
             if (!el.value!.contains(event.target as HTMLElement)) {
-                thumbStyle.display = "none";
+                showThumb.value = false;
             } else if (props.clickUpdateDelay > 0) {
                 // console.log("执行");
                 timer && clearTimeout(timer);
@@ -169,7 +173,7 @@ export default defineComponent({
 
         function onLeave() {
             if (!isDrag) {
-                thumbStyle.display = "none";
+                showThumb.value = false;
             }
         }
 
@@ -203,6 +207,7 @@ export default defineComponent({
             thumb,
             wrapStyle,
             thumbStyle,
+            showThumb,
             updateThumbStyle,
             onLeave
         }

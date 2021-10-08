@@ -1,73 +1,61 @@
 <template>
-    <div class="home">
-        <HelloWorld :msg="content" />
-        <p class="tips">横向滚动</p>
-        <div class="list-x">
-            <Scrollbar thumbColor="#87d068">
-                <div class="item" v-for="(item) in list" :key="item"></div>
-            </Scrollbar>
+    <div class="page-home">
+        <h2 class="the-title mgb_10">Vue3 + Vite + TypeScript 后台管理模板</h2>
+        <div class="mgb_20">
+            <span class="the-tag link">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
+            <a class="the-tag success link" :href="project" target="_blank">项目地址</a>
+            <a class="the-tag success link" :href="project" target="_blank">掘金描述说明</a>
         </div>
-        <p class="tips">垂直滚动</p>
-        <div class="list-y">
-            <Scrollbar :vertical="true" thumbColor="#87d068">
-                <div class="item" v-for="(item) in list" :key="item"></div>
-            </Scrollbar>
+        <h2 class="the-title mgb_10">打赏一下</h2>
+        <div class="code-box">
+            <img class="hovercode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode1.jpg">
+            <img class="qrcode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode2.jpg">
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue";
-import Scrollbar from "@/components/Scrollbar/index.vue";
+import store from "@/store";
 
 export default defineComponent({
-    components: {
-        HelloWorld,
-        Scrollbar
-    },
     setup() {
-        const content = "首页";
+
+        const project = store.projectInfo.link;
 
         return {
-            content,
-            list: new Array(10).fill(0).map((_, index) => index)
+            project
         }
     }
 })
 </script>
 <style lang="scss">
-.home {
+.page-home {
     width: 100%;
-    .tips {
-        font-size: 16px;
-        color: #555;
-        padding: 8px 0;
+    .link + .link {
+        margin-left: 10px;
     }
-    .list-x {
-        width: 300px;
-        height: 88px;
-        .item {
+    .code-box {
+        width: 100%;
+        img {
             display: inline-block;
-            width: 120px;
-            height: 100%;
-            background-color: tomato;
+            vertical-align: top;
+            width: 280px;
+            margin-right: 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 4px rgba(0,0,0,0.1);
+            transition: 0.3s all;
         }
-        .item + .item {
-            margin-left: 14px;
-        }
-    }
-    .list-y {
-        width: 120px;
-        height: 400px;
-        .item {
-            width: 100%;
-            height: 88px;
-            margin-bottom: 14px;
-            background-color: tomato;
-            &:last-child {
-                margin-bottom: 0px;
+        .hovercode {
+            cursor: pointer;
+            &:hover + .qrcode {
+                opacity: 1;
+                transform: translateX(0px);
             }
+        }
+        .qrcode {
+            opacity: 0;
+            transform: translateX(100px);
         }
     }
 }

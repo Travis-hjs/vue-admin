@@ -1,4 +1,5 @@
 import config from "./config";
+import { checkType } from "./index";
 import { 
     AjaxParams, ApiResult,
 } from "../types";
@@ -91,7 +92,7 @@ function getResultInfo(result: { statusCode: number, data: any }) {
             info.msg = "网络超时了";
             break;
         case 200:
-            info.code = result.data.code;
+            info.code = checkType(result.data.code) === "number" ? result.data.code : 1;
             info.msg = result.data.message || "ok";
             info.data = result.data;
             break;

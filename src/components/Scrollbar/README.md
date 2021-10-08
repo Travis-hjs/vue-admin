@@ -7,13 +7,13 @@
     <div class="example-page">
         <p class="tips">横向滚动</p>
         <div class="list-x">
-            <Scrollbar thumbColor="#87d068">
+            <Scrollbar thumbColor="#42b983">
                 <div class="item" v-for="(item) in list" :key="item"></div>
             </Scrollbar>
         </div>
         <p class="tips">垂直滚动</p>
         <div class="list-y">
-            <Scrollbar :vertical="true" thumbColor="#87d068">
+            <Scrollbar :vertical="true" thumbColor="#42b983">
                 <div class="item" v-for="(item) in list" :key="item"></div>
             </Scrollbar>
         </div>

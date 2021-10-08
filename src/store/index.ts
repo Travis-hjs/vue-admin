@@ -12,7 +12,7 @@ class ModuleStore {
         title: "Vue Typescript Admin",
         name: "XXX后台管理平台",
         logo: imgLogo,
-        link: "https://github.com/Hansen-hjs/vue-admin/tree/pure"
+        link: "https://github.com/Hansen-hjs/vue-admin/tree/next"
     }
 
     /** `layout`状态模块 */

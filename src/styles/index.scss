@@ -80,7 +80,7 @@ div:focus {
     }
 }
 
-// ===================== 动画 =====================
+// ===================== 全局动画 =====================
 // 渐变+平移
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
     transition: .5s all !important;
@@ -124,7 +124,9 @@ div:focus {
   opacity: 0;
 }
 
-.the_input {
+// ================= 示例全局样式 =================
+
+.the-input {
     width: 100%;
     border: 1px solid #DCDFE6;
     border-radius: 4px;
@@ -140,7 +142,7 @@ div:focus {
     }
 }
 
-.the_btn {
+.the-btn {
     padding: 0px 20px;
     height: 40px;
     outline: none;
@@ -158,14 +160,14 @@ div:focus {
     }
 }
 
-.the_btn.mini {
+.the-btn.mini {
     padding: 0px 15px;
     font-size: 12px;
     height: 28px;
     border-radius: 3px;
 }
 
-.the_btn.green {
+.the-btn.green {
     background-color: #13ce66;
 }
 
@@ -181,4 +183,33 @@ div:focus {
             background-color: $theme;
         }
     }
+}
+
+.the-tag {
+    background-color: #ecf5ff;
+    display: inline-block;
+    padding: 4px 10px 6px;
+    line-height: 14px;
+    font-size: 12px;
+    color: $theme;
+    border: solid 1px #d9ecff;
+    border-radius: 4px;
+}
+
+.the-tag.success {
+    border-color: #ddf8ea;
+    background-color: #e7faf0;
+    color: #13ce66;
+}
+
+.the-tag.danger {
+    border-color: #ffdbdb;
+    background-color: #ffeded;
+    color: #ff4949;
+}
+
+.the-title {
+    font-weight: normal;
+    font-size: 24px;
+    color: #444;
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="menu-3 nested-item">
-        <p class="nested-text">menu-3</p>
+    <div class="menu-3">
+        <span class="the-tag">menu-3</span>
     </div>
 </template>
 <script>

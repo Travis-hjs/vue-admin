@@ -1,6 +1,6 @@
 <template>
     <div class="page-401">
-        <div></div>
+        <div>暂无权限访问</div>
     </div>
 </template>
 <script>
