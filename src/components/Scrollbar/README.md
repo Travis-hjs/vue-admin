@@ -20,16 +20,17 @@
     </div>
 </template>
 <script>
-import { defineComponent } from "vue";
+import { Component, Vue } from "vue-property-decorator";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 
-export default defineComponent({
-    setup() {
-        return {
-            list: new Array(10).fill(0).map((_, index) => index)
-        }
+@Component({
+    components: {
+        Scrollbar
     }
 })
+export default class Example extends Vue {
+    list = new Array(10).fill(0).map((_, index) => index)
+}
 </script>
 <style lang="scss">
 .example-page {

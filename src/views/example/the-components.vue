@@ -10,17 +10,31 @@
                 <UploadImage :src="pageData.single" @change="getSingleUrl" width="300px" height="200px" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
             </div>
         </div>
+        <p class="tips">横向滚动</p>
+        <div class="list-x">
+            <Scrollbar thumbColor="#42b983">
+                <div class="item" v-for="(item) in list" :key="item"></div>
+            </Scrollbar>
+        </div>
+        <p class="tips">垂直滚动</p>
+        <div class="list-y">
+            <Scrollbar :vertical="true" thumbColor="#42b983">
+                <div class="item" v-for="(item) in list" :key="item"></div>
+            </Scrollbar>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import UploadImage from "@/components/Upload/Image.vue";
+import Scrollbar from "@/components/Scrollbar/index.vue";
 import { UploadChange } from "@/types";
 
 @Component({
     components: {
-        UploadImage
+        UploadImage,
+        Scrollbar
     }
 })
 export default class Page5 extends Vue {
@@ -51,16 +65,45 @@ export default class Page5 extends Vue {
         this.pageData.single = info.src;
     }
 
-    mounted() {
-
-    }
+    list = new Array(10).fill(0).map((_, index) => index)
 
 }
 </script>
 
 <style lang="scss">
 .the-component{
-    .title{ font-size: 24px; font-weight: normal; margin-bottom: 20px; line-height: 32px; }
-    .el-alert{ margin-bottom: 16px; }
+    .title { font-size: 24px; font-weight: normal; margin-bottom: 20px; line-height: 32px; }
+    .el-alert { margin-bottom: 16px; }
+    .tips {
+        font-size: 16px;
+        color: #555;
+        padding: 8px 0;
+    }
+    .list-x {
+        width: 300px;
+        height: 88px;
+        .item {
+            display: inline-block;
+            width: 120px;
+            height: 100%;
+            background-color: tomato;
+        }
+        .item + .item {
+            margin-left: 14px;
+        }
+    }
+    .list-y {
+        width: 120px;
+        height: 400px;
+        .item {
+            width: 100%;
+            height: 88px;
+            margin-bottom: 14px;
+            background-color: tomato;
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
 }
 </style>

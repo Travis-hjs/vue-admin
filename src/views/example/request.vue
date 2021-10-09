@@ -1,5 +1,6 @@
 <template>
     <div class="http_request">
+        <el-tag class="mgb_10">当前页面设置了路由缓存</el-tag>
         <el-card>
             <div class="mrb_20" v-if="pageData.showTip">
                 <el-tag type="danger" style="margin-right: 14px;">请求接口为http，与当前域名https不匹配，可能无法正常请求到数据，需要在http环境下进行</el-tag>
