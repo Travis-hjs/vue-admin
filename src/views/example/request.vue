@@ -54,6 +54,8 @@ export default defineComponent({
                     pageData.tableData = res.data.data.forecast;
                     pageData.desc = res.data.data.ganmao;
                 } else {
+                    pageData.content = "";
+                    pageData.tableData = [];
                     pageData.desc = res.data.desc;
                 }
             } else {
