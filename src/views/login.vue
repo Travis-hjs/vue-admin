@@ -37,12 +37,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { login } from "../api/common";
+import { login } from "@/api/common";
 import { openNextPage } from "../router/permission";
 import { Form } from "element-ui";
 import store from "@/store";
-import utils from "@/utils";
 import { LoginParams } from "@/types/user";
+import { modifyData } from "@/utils";
 
 const cacheName = "login-info";
 
@@ -146,7 +146,7 @@ export default class Login extends Vue {
             try {
                 const info = JSON.parse(value);
                 this.remember = !!info.remember;
-                utils.modifyData(this.formData, info);
+                modifyData(this.formData, info);
             } catch (error) {
                 console.warn(error);
             }

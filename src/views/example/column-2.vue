@@ -11,7 +11,3 @@ export default class Column2 extends Vue {
     content = "栏目-2"
 }
 </script>
-
-<style>
-
-</style>

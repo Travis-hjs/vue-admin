@@ -13,7 +13,3 @@ export default class Nested extends Vue {
     content = "nested"
 }
 </script>
-
-<style>
-
-</style>

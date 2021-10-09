@@ -1,56 +1,43 @@
 <template>
-    <el-breadcrumb class="app-breadcrumb" separator="/">
+    <div class="layout-breadcrumb flex fvertical">
         <transition-group name="breadcrumb">
-            <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
-                <span v-if="item.redirect === 'noredirect' || index === breadcrumbs.length - 1" class="no-redirect">{{ item.meta.title }}</span>
+            <span :class="['layout-breadcrumb-item', {'last': index === list.length - 1}]" v-for="(item, index) in list" :key="item.path">
+                <i class="separator" v-if="index > 0">/</i>
+                <a href="javascript:void(0)" v-if="index === list.length - 1">{{ item.meta.title }}</a>
                 <router-link v-else :to="item.path">{{ item.meta.title }}</router-link>
-            </el-breadcrumb-item>
+            </span>
         </transition-group>
-    </el-breadcrumb>
+    </div>
 </template>
-
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { RouteRecord, Route } from "vue-router";
+import { Route } from "vue-router";
 
-@Component({})
+@Component({
+    name: "Breadcrumb",
+})
 export default class Breadcrumb extends Vue {
-    breadcrumbs: Array<RouteRecord> = [];
+    list: Array<{ path: string, meta: any }> = [];
 
     @Watch("$route")
-    onRouteChange(route: Route) {
+    onRoute(route: Route) {
         // 如果转到重定向页面，就不更新面包屑
         if (route.path.startsWith("/redirect/")) return;
-        this.getBreadcrumb();
+        this.updateList();
     }
 
-    getBreadcrumb() {
-        const matched = this.$route.matched.filter(item => item.meta && item.meta.title);
-        this.breadcrumbs = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false);
+    updateList() {
+        const matched = this.$route.matched.filter(item => item.meta && item.meta.title).map(item => {
+            return {
+                path: item.path,
+                meta: {...item.meta}
+            }
+        });
+        this.list = matched;
     }
-    
+
     created() {
-        this.getBreadcrumb();
+        this.updateList();
     }
-
 }
 </script>
-
-<style lang="scss">
-.el-breadcrumb__inner,
-.el-breadcrumb__inner a {
-    font-weight: 400 !important;
-}
-
-.app-breadcrumb.el-breadcrumb {
-    display: inline-block;
-    font-size: 14px;
-    line-height: 50px;
-    margin-left: 8px;
-
-    .no-redirect {
-        color: #97a8be;
-        cursor: text;
-    }
-}
-</style>

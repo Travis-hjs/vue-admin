@@ -17,7 +17,3 @@ export default class Home extends Vue {
     content = "首页";
 }
 </script>
-
-<style>
-
-</style>

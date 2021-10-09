@@ -26,9 +26,11 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { getWeather } from "../../api/common";
+import { getWeather } from "@/api/common";
 
-@Component({})
+@Component({
+    name: "example-request",
+})
 export default class HttpRequest extends Vue {
     readonly pageData = {
         city: "广州",
