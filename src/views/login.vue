@@ -2,30 +2,22 @@
     <div class="login_page">
         <div class="content">
             <div class="title">
-                <!-- <img class="logo" :src="info.logo" :alt="info.title"> -->
                 <span>{{ info.name }}</span>
             </div>
             <div class="form_box">
                 <div class="login_form">
                     <div class="login_title">平台登录</div>
-                    <el-form label-position="left" ref="loginFormEl" :model="formData" :rules="formRules">
-                        <el-form-item prop="account">
-                            <el-input v-model="formData.account" :placeholder="formRules.account[0].message" />
-                        </el-form-item>
-                        <el-form-item prop="password">
-                            <el-input show-password v-model="formData.password" :placeholder="formRules.password[0].message" @keyup.enter="onLogin(false)" />
-                        </el-form-item>
-                        <el-form-item>
-                            <div class="mgb_10">
-                                <el-button :loading="loading" type="primary" @click="onLogin(false)" style="width: 100%">登录</el-button>
-                            </div>
-                            <el-checkbox v-model="remember">记住账号/密码</el-checkbox>
-                        </el-form-item>
-                    </el-form>
+                    <input class="the-input mgb_20" type="text" v-model="formData.account" placeholder="请输入账号">
+                    <input class="the-input mgb_20" type="password" v-model="formData.password" placeholder="请输入密码">
+                    <button class="the-btn mgb_20" style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
+                    <label class="check-box flex fvertical mgb_20" for="check-input" @change="remember =! remember">
+                        <input type="checkbox" id="check-input" :checked="remember" />
+                        记住账号/密码
+                    </label>
                     <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
-                        <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
+                        <button class="the-btn mini success" v-copy="item" :disabled="loading">点击复制</button>
                         <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>
-                        <el-button size="mini" type="primary" @click="setLoginInfo(item)">一键登录</el-button>
+                        <button class="the-btn mini" :disabled="loading" @click="setLoginInfo(item)">一键登录</button>
                     </div>
                 </div>
             </div>
@@ -38,9 +30,8 @@
 import { defineComponent, reactive, ref } from "vue";
 import store from "@/store";
 import { login } from "@/api/common";
-import utils from "@/utils";
 import { openNextPage } from "@/router/permission";
-import { LoginParams } from "@/types/user";
+import { modifyData } from "@/utils";
 
 const cacheName = "login-info";
 
@@ -53,39 +44,12 @@ export default defineComponent({
         const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、IE9 及以上版本等浏览器"
 
         /** 表单数据 */
-        const formData: LoginParams = reactive({
+        const formData = reactive({
             account: "",
             password: ""
         })
-        
-        const formRules = {
-            account: [
-                { required: true, message: "请输入账号", trigger: "blur" },
-                { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" },
-                {
-                    validator: function(rule: any, value: string, callback: Function) {
-                        if (value) {
-                            if (/[\u4E00-\u9FA5]/g.test(value)) {
-                                callback(new Error("账号不能有中文！"));
-                            } else {
-                                callback();
-                            }
-                        }
-                        callback();
-                    },
-                    trigger: "blur" 
-                }
-            ],
-            password: [
-                { required: true, message: "请输入密码", trigger: "blur" },
-                { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
-            ],
-        }
 
         const loading = ref(false);
-
-        /** 登录表单 */
-        const loginFormEl = ref<any>(null);
 
         /**
          * 一键登录
@@ -110,17 +74,19 @@ export default defineComponent({
                     saveLoginInfo();
                     openNextPage();
                 } else {
-                    utils.showError(res.msg);   
+                    alert(res.msg);
                 }
             }
             if (adopt) {
                 return start();
             }
-            loginFormEl.value.validate((valid: boolean) => {
-                if (valid) {
-                    start();
-                }
-            })
+            if (!formData.account) {
+                return alert("请输入账号");
+            }
+            if (!formData.password) {
+                return alert("请输入密码");
+            }
+            start();
         }
 
         /** 是否记住密码 */
@@ -140,7 +106,7 @@ export default defineComponent({
                 try {
                     const info = JSON.parse(value);
                     remember.value = !!info.remember;
-                    utils.modifyData(formData, info);
+                    modifyData(formData, info);
                 } catch (error) {
                     console.warn(error);
                 }
@@ -154,12 +120,10 @@ export default defineComponent({
             info,
             copyRight,
             formData,
-            formRules,
-            loginFormEl,
             loading,
             setLoginInfo,
             onLogin,
-            remember,
+            remember
         }
     }
 })
@@ -231,14 +195,6 @@ export default defineComponent({
                 line-height: 1;
             }
         }
-        // .logo {
-        //     display: inline-block;
-        //     vertical-align: text-bottom;
-        //     width: 24px;
-        //     vertical-align: text-bottom;
-        //     padding-right: 10px;
-        //     box-sizing: content-box;
-        // }
         .bottom-text {
             width: 100%;
             max-width: 500px;

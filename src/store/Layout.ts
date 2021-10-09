@@ -1,88 +1,65 @@
 import { reactive, watch } from "vue";
-import utils from "../utils";
-import { LayoutState, RouteItem, ScssVariables } from "../types";
-
-import style from "../styles/variables.scss";
-
-type LayoutStateKeys = keyof LayoutState;
-
-const variables: ScssVariables = utils.formatStyleModule(style);
+import { LayoutInfo, RouteItem } from "@/types";
+import { modifyData } from "@/utils";
 
 const cacheName = "ModuleLayout";
 
 /**
- * `layout`状态管理模块
- */
+ * `layout`状态模块
+*/
 export default class ModuleLayout {
     constructor() {
         this.init();
-        watch(this.state, this.saveLayout.bind(this));
-    }
-
-    // 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
-    
-    /** 动态添加的权限路由 */
-    addRouters: Array<RouteItem> = [];
- 
-    /** (基础路由+动态路由)列表 */
-    completeRouters: Array<RouteItem> = [];
-    
-    /** `src/styles/variables.scss`导出变量 */
-    getVariables() {
-        return variables;
+        watch(this.info, this.saveInfo.bind(this));
     }
 
     /**
-     * 默认主题颜色
-     * @description `src/styles/variables.scss`导出的主题色
+     * 动态添加的权限路由
+     * @description 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
      */
-    readonly defaultTheme = variables.theme;
+    addRouters: Array<RouteItem> = [];
+ 
+    /**
+     * (基础路由+动态路由)列表
+     * @description 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
+     */
+    completeRouters: Array<RouteItem> = [];
 
-    /** `layout`操作状态 */
-    readonly state = reactive<LayoutState>({
-        sidebarTextTheme: false,
-        showSidebarLogo: true,
-        fixedHeader: true,
-        showSettings: true,
-        showHistoryView: true,
+    /** 
+     * `layout`布局信息
+     */
+    readonly info = reactive<LayoutInfo>({
+        showTagsView: true,
         sidebarOpen: true,
-        historyViews: [],
-        device: "desktop",
-        theme: "#1890FF"
-    });
+        showSidebarLogo: true,
+        historyViews: []
+    })
 
-    /** 初始化`layout`操作状态 */
     private init() {
-        const cacheInfo = sessionStorage.getItem(cacheName);
-        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
-        if (value) {
-            utils.modifyData(this.state, value);
+        const value = sessionStorage.getItem(cacheName);
+        try {
+            if (value) {
+                modifyData(this.info, JSON.parse(value));
+            }
+        } catch (error) {
+            console.log("ModuleLayout init fail >>", error);
         }
     }
 
     /**
      * 保存`layout`操作状
-    */
-    private saveLayout() {
-        // console.count("saveLayout");
-        // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
-        const data: any = {};
-        for (const key in this.state) {
-            const k = key as LayoutStateKeys;
-            if (k === "historyViews") {
-                data[k] = this.state[k].map(item => {
-                    return {
-                        name: item.name,
-                        meta: {...item.meta},
-                        path: item.path,
-                        // fullPath: item.fullPath || ""
-                    }
-                });
-            } else {
-                data[k] = this.state[k];
-            }
-        }
-        // console.log(JSON.stringify(data));
-        sessionStorage.setItem(cacheName, JSON.stringify(data));
+     */
+    private saveInfo() {
+        sessionStorage.setItem(cacheName, JSON.stringify(this.info));
     }
+
+    /** 
+     * 菜单组件尺寸对象
+     */
+    menuSizeInfo = reactive({
+        /** `the-layout-menu-title`实际高度 */
+        titleHeight: 0,
+        /** `the-layout-menu-item`实际高度 */
+        itemHeight: 0
+    })
 }

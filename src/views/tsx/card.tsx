@@ -42,13 +42,13 @@ const TsxCard = defineComponent({
         }
 
         return () => (
-            <div class="tsx_card">
+            <div class="tsx-card">
                 {
-                    props.title ? (<div class="title">标题：{ props.title }</div>) : null
+                    props.title ? (<div class="tsx-center"><span class="the-tag">双向绑定值：{ props.title }</span></div>) : null
                 }
                 <div class="card">
-                    <div class="card_box">
-                        <div class="card_list flex" style={ listStyle.value }>
+                    <div class="card-box">
+                        <div class="card-list flex" style={ listStyle.value }>
                             {
                                 props.images.map((item, index) => (
                                     <img class="image f1" src={ item.img } key={ index } />
@@ -57,9 +57,9 @@ const TsxCard = defineComponent({
                         </div>
                     </div>
                 </div>
-                <div class="btn_box">
-                    <el-button type="primary" icon="el-icon-arrow-left" onClick={ () => switchImage(false) } disabled= { index.value == 0 }>上一张图片</el-button>
-                    <el-button type="primary" onClick={ () => switchImage(true) } disabled= { index.value == (props.images.length - 1) }>下一张图片<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+                <div class="btn-box">
+                    <button class="the-btn" onClick={ () => switchImage(false) } disabled= { index.value == 0 }>上一张图片</button>
+                    <button class="the-btn" onClick={ () => switchImage(true) } disabled= { index.value == (props.images.length - 1) }>下一张图片</button>
                 </div>
             </div>
         );

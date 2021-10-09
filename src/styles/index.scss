@@ -1,6 +1,4 @@
-@import "./element-variables.scss";
-
-/* 一些全局样式 */
+@import "./variables.scss";
 
 *, *:before, *:after {
     box-sizing: border-box;
@@ -19,76 +17,40 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
 
-a, a:focus, a:hover {
+a, a:focus, a:hover, a:link, a:active {
     color: inherit;
     outline: none;
     text-decoration: none;
+    cursor: pointer;
+}
+
+ul, li {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
 }
 
 div:focus {
     outline: none;
 }
 
-.clearfix {
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-}
-
-// ================== 定义过渡动画 ==================
-.fadeSlideX-leave-active, .fadeSlideX-enter-active {
-    transition: .5s all !important;
-}
-
-.fadeSlideX-enter-active, .fadeSlideX-leave-active {
-    opacity: 1;
-    transform: translate3d(0px, 0, 0);
-}
-
-.fadeSlideX-enter-from {
-    opacity: 0;
-    transform: translate3d(-30px, 0, 0);
-}
-.fadeSlideX-leave-to {
-    opacity: 0;
-    transform: translate3d(30px, 0, 0);
-}
-
-// breadcrumb
-.breadcrumb-enter-active, .breadcrumb-leave-active {
-    transition: .5s all ;
-}
-
-.breadcrumb-enter-from, .breadcrumb-leave-to {
-    opacity: 0;
-    transform: translate3d(30px, 0, 0);
-}
-
-.breadcrumb-leave-to {
-    position: absolute;
-}
-
 /* flex布局 */
-.flex{ display: flex; flex-wrap: wrap; }
-.f1{ flex: 1; }
-.f2{ flex: 2; }
-.f3{ flex: 3; }
-
+.flex { display: flex; }
+.f1 { flex: 1; }
+.f2 { flex: 2; }
+.f3 { flex: 3; }
 /* 垂直居中 */
-.fvertical{ align-items: center; }
-
+.fvertical { align-items: center; }
 /* 水平居中 */
-.fcenter{ justify-content: center; }
-
+.fcenter { justify-content: center; }
 /* 溢出...显示 当前节点生效 */
-.ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* 溢出...显示 子节点生效 */
-.ellipsis-1{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
-.ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-.ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.ellipsis-1 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
+.ellipsis-2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ellipsis-3 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 
 /* 上下左右边距 */
 @for $index from 1 through 5 {
@@ -118,7 +80,137 @@ div:focus {
     }
 }
 
-// 日期选择样式有问题，不会自适应中间文字宽度，这里给一个合适的最小宽度
-.el-date-editor .el-range-separator {
-    min-width: 9%;
+// ===================== 全局动画 =====================
+// 渐变+平移
+.fadeSlideX-leave-active, .fadeSlideX-enter-active {
+    transition: .5s all !important;
+}
+
+.fadeSlideX-enter-active, .fadeSlideX-leave-active {
+    opacity: 1;
+    transform: translate3d(0px, 0, 0);
+}
+
+.fadeSlideX-enter-from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+}
+
+.fadeSlideX-leave-to {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+}
+
+// 面包屑
+.breadcrumb-enter-active, .breadcrumb-leave-active {
+    transition: .5s all
+}
+
+.breadcrumb-enter-from, .breadcrumb-leave-to {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+}
+
+.breadcrumb-leave-to {
+    position: absolute;
+}
+
+// 渐变
+.fade-enter-active, .fade-leave-active {
+  transition: 0.3s all;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+// ================= 示例全局样式 =================
+
+.the-input {
+    width: 100%;
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
+    color: #1f2d3d;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    padding: 0 15px;
+    outline: none;
+    transition: 0.2s all;
+    &:focus {
+        border-color: $theme;
+    }
+}
+
+.the-btn {
+    padding: 0px 20px;
+    height: 40px;
+    outline: none;
+    line-height: 1;
+    font-size: 14px;
+    border-radius: 4px;
+    color: #fff;
+    text-align: center;
+    background-color: $theme;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s all;
+    &:active {
+        opacity: 0.85;
+    }
+}
+
+.the-btn.mini {
+    padding: 0px 15px;
+    font-size: 12px;
+    height: 28px;
+    border-radius: 3px;
+}
+
+.the-btn.green {
+    background-color: #13ce66;
+}
+
+.check-box {
+    cursor: pointer;
+    font-size: 14px;
+    color: $theme;
+    input {
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+        line-height: 1;
+        &:checked {
+            background-color: $theme;
+        }
+    }
+}
+
+.the-tag {
+    background-color: #ecf5ff;
+    display: inline-block;
+    padding: 4px 10px 6px;
+    line-height: 14px;
+    font-size: 12px;
+    color: $theme;
+    border: solid 1px #d9ecff;
+    border-radius: 4px;
+}
+
+.the-tag.success {
+    border-color: #ddf8ea;
+    background-color: #e7faf0;
+    color: #13ce66;
+}
+
+.the-tag.danger {
+    border-color: #ffdbdb;
+    background-color: #ffeded;
+    color: #ff4949;
+}
+
+.the-title {
+    font-weight: normal;
+    font-size: 24px;
+    color: #444;
 }

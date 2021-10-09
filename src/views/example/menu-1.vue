@@ -1,22 +1,19 @@
 <template>
     <div class="menu-1">
-        <el-alert :closable="false" :title="content" type="success" effect="dark" />
+        <span class="the-tag">menu-1</span>
     </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from "vue";
+<script>
+import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
-    setup() {
-        const content = "菜单 2-1";
-        return {
-            content
-        }
+    setup(props, context) {
+        
     }
 })
 </script>
-
-<style>
-
+<style lang="scss">
+.menu-1 {
+    width: 100%;
+}
 </style>

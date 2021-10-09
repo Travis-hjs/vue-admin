@@ -21,9 +21,11 @@ export interface UserInfo {
     account?: string | number
     /** 用户密码 */
     password?: string
+    /** 用户头像 */
+    avatar: string
 }
 
-/** 登录接口传参 */
+/** 登陆接口传参 */
 export interface LoginParams {
     account: string
     password: string

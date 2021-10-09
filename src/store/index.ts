@@ -1,9 +1,6 @@
-import ModuleLayout from "./Layout";
 import ModuleUser from "./User";
-import img401 from "../assets/401-images/401.gif";
-import img404 from "../assets/404-images/404.png";
-import img404cloud from "../assets/404-images/404-cloud.png";
 import imgLogo from "../assets/logo.png";
+import ModuleLayout from "./Layout";
 
 class ModuleStore {
     constructor() {
@@ -18,20 +15,10 @@ class ModuleStore {
         link: "https://github.com/Hansen-hjs/vue-admin/tree/next"
     }
 
-    /** 页面图片资源 */
-    get imgInfo() {
-        return {
-            img401,
-            img404,
-            img404cloud,
-            dance: "https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646"
-        }
-    }
-
-    /** `layout`状态管理模块 */
+    /** `layout`状态模块 */
     readonly layout = new ModuleLayout();
 
-    /** 用户状态管理模块 */
+    /** 用户状态模块 */
     readonly user = new ModuleUser();
     
 }

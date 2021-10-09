@@ -1,6 +1,8 @@
 import config from "./config";
-import utils from "./index";
-import { AjaxParams, ApiResult } from "@/types";
+import { checkType } from "./index";
+import { 
+    AjaxParams, ApiResult,
+} from "../types";
 
 /**
  * `http`请求
@@ -90,8 +92,8 @@ function getResultInfo(result: { statusCode: number, data: any }) {
             info.msg = "网络超时了";
             break;
         case 200:
-            info.code = 1;
-            info.msg = "ok";
+            info.code = checkType(result.data.code) === "number" ? result.data.code : 1;
+            info.msg = result.data.message || "ok";
             info.data = result.data;
             break;
         case 400:
@@ -148,15 +150,15 @@ export default function request(
                 if (err.response.charAt(0) == "{") {
                     info.data = JSON.parse(err.response);
                 }
-                // 全局的请求错误提示，不需要可以去掉
-                utils.showError(info.msg);
+                // 全局的请求错误提示可以写在这里
+                // do some ...
                 resolve(info);
             },
             timeout() {
                 console.warn("XMLHttpRequest 请求超时 !!!");
                 const info = getResultInfo({ statusCode: config.requestOvertime, data: null });
-                // 全局的请求超时提示，不需要可以去掉
-                utils.showWarning(info.msg);
+                // 全局的请求超时提示可以写在这里
+                // do some ...
                 resolve(info);
             }
         });

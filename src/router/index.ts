@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Layout from "../layout/index.vue";
-import { RouteItem } from "../types";
-import { initPermission } from "./permission";
+import Layout from "@/layout/index.vue";
 import store from "@/store";
+import { RouteItem } from "@/types";
+import { initPermission } from "./permission";
+import Page404 from "@/views/page-404.vue";
 
 /**
  * 基础路由
@@ -11,7 +12,7 @@ import store from "@/store";
  * - 重定向`redirect`也要加"/"
  * - 子路由`children`里面的路由也是需要基于父级来定义，从下面代码观察一下就会发现规律了
  */
-const base: Array<RouteItem> = [
+ const base: Array<RouteItem> = [
     {
         path: "/login",
         name: "login",
@@ -20,12 +21,12 @@ const base: Array<RouteItem> = [
     }, {
         path: "/404",
         name: "page-404",
-        component: () => import("../views/404.vue"),
+        component: Page404,
         meta: { hidden: true, title: "不存在该页面" },
     }, {
         path: "/401",
         name: "page-401",
-        component: () => import("../views/401.vue"),
+        component: () => import("../views/page-401.vue"),
         meta: { hidden: true, title: "暂无权限访问" },
     }
 ];
@@ -39,7 +40,7 @@ const add: Array<RouteItem> = [
         name: "index",
         redirect: "/home",
         component: Layout,
-        meta: { title: "首页", icon: "excel" }, 
+        meta: { title: "首页", icon: "home" }, 
         children: [
             {
                 path: "/home",
@@ -50,69 +51,110 @@ const add: Array<RouteItem> = [
                 path: "/nested",
                 name: "nested",
                 redirect: "/nested/menu-1",
-                meta: { title: "多级菜单嵌套", icon: "tree-table" },
+                meta: { title: "多级菜单嵌套", icon: "tree" },
                 component: () => import("../views/example/nested.vue"),
                 children: [
                     {
                         path: "/nested/menu-1",
                         name: "nested/menu-1",
-                        meta: { title: "菜单 2-1", icon: "tree" },
+                        meta: { title: "菜单 2-1" },
                         component: () => import("../views/example/menu-1.vue")
-                    }, {
+                    },
+                    {
                         path: "/nested/menu-2",
                         name: "nested/menu-2",
-                        meta: { title: "菜单 2-2", icon: "tree" },
+                        meta: { title: "菜单 2-2" },
                         component: () => import("../views/example/menu-2.vue")
+                    },
+                    {
+                        path: "/nested/three-level",
+                        name: "nested/three-level",
+                        meta: { title: "三级菜单" },
+                        redirect: "/nested/three-level/menu-1",
+                        component: () => import("../views/example/nested.vue"),
+                        children: [
+                            {
+                                path: "/nested/three-level/menu-1",
+                                name: "/nested/three-level/menu-1",
+                                meta: { title: "菜单 3-1" },
+                                component: () => import("../views/example/menu-1.vue")
+                            },
+                            {
+                                path: "/nested/three-level/menu-2",
+                                name: "/nested/three-level/menu-2",
+                                meta: { title: "菜单 3-2" },
+                                component: () => import("../views/example/menu-2.vue")
+                            },
+                        ]
+                    },
+                    {
+                        path: "/nested/four-level",
+                        name: "nested/four-level",
+                        meta: { title: "三级菜单-2" },
+                        redirect: "/nested/four-level/menu-1",
+                        component: () => import("../views/example/nested.vue"),
+                        children: [
+                            {
+                                path: "/nested/four-level/menu-1",
+                                name: "/nested/four-level/menu-1",
+                                meta: { title: "菜单 3-2-1" },
+                                component: () => import("../views/example/menu-1.vue")
+                            },
+                            // {
+                            //     path: "/nested/four-level/menu-2",
+                            //     name: "/nested/four-level/menu-2",
+                            //     meta: { title: "菜单 3-2-2" },
+                            //     component: () => import("../views/example/menu-2.vue")
+                            // },
+                        ]
+                    },
+                    {
+                        path: "/nested/menu-3",
+                        name: "nested/menu-3",
+                        meta: { title: "菜单 2-3" },
+                        component: () => import("../views/example/menu-3.vue")
                     }
                 ]
             },
             {
-                path: "/the-component",
-                name: "the-component",
-                meta: { title: "上传图片", icon: "international" },
-                component: () => import("../views/example/the-component.vue")
+                path: "/link-baidu",
+                name: "link-baidu",
+                link: "https://www.baidu.com",
+                component: Page404, // 这里必需给一个组件
+                meta: { title: "百度一下", icon: "baidu" },
+            },
+            {
+                path: "/menu-4",
+                name: "menu-4",
+                meta: { title: "换行菜单标题换行菜单标题", icon: "nested" },
+                component: () => import("../views/example/menu-4.vue")
             }
         ]
     },
     {
-        path: "/column",
-        name: "column",
-        redirect: "/column/column-1",
-        meta: { title: "栏目", icon: "dashboard" }, 
+        path: "/example",
+        name: "example",
         component: Layout,
+        meta: { title: "示例页栏目", icon: "menu" },
+        redirect: "/example/request",
         children: [
             {
-                path: "/column/column-1",
-                name: "column/column-1",
-                meta: { title: "栏目一", icon: "theme" },
-                auth: [0],
-                component: () => import("../views/example/column-1.vue"),
-            }, {
-                path: "/column/column-2",
-                name: "column/column-2",
-                meta: { title: "栏目二", icon: "table" },
-                component: () => import("../views/example/column-2.vue")
-            }, {
-                path: "/column/tsx",
-                name: "tsx-example",
-                meta: { title: "tsx-示例", icon: "skill" },
+                path: "/example/request",
+                name: "example-request",
+                meta: { title: "http-请求示例", keepAlive: true },
+                component: () => import("../views/example/request.vue"),
+            },
+            {
+                path: "/example/components",
+                name: "example-components",
+                meta: { title: "自定义组件" },
+                component: () => import("../views/example/the-components.vue")
+            },
+            {
+                path: "/example/tsx",
+                name: "example-tsx",
+                meta: { title: "tsx-示例" },
                 component: () => import("../views/tsx/example")
-            }
-        ]
-    },
-    {
-        path: "/request",
-        name: "request",
-        redirect: "/request/weather",
-        meta: { title: "http请求", icon: "guide" },
-        auth: [0],
-        component: Layout,
-        children: [
-            {
-                path: "/request/weather",
-                name: "request/weather",
-                meta: { title: "获取天气数据", icon: "international" },
-                component: () => import("../views/example/http.vue"),
             }
         ]
     },
@@ -120,42 +162,46 @@ const add: Array<RouteItem> = [
         path: "/icon",
         name: "icon",
         auth: [0],
+        meta: { title: "图标栏目" },
         component: Layout,
+        redirect: "/icon/svg-icons",
         children: [
             {
-                path: "/icon/index",
-                component: () => import(/* webpackChunkName: "icons" */ "../views/example/icons.vue"),
-                name: "Icons",
-                meta: {
-                    title: "icons",
-                    icon: "icon",
-                    noCache: true
-                }
+                path: "/icon/svg-icons",
+                name: "svg-icons",
+                component: () => import(/* webpackChunkName: "icons" */ "../views/icons.vue"),
+                meta: { title: "svg-图标", icon: "svg-icon", keepAlive: true }
             }
         ]
     },
     {
         path: "/" + store.projectInfo.link,
-        name: "hjs-github",
+        link: store.projectInfo.link,
+        name: "GitHub-Hansen",
+        component: Page404, // 这里必需给一个组件
         auth: [0],
-        component: () => import("../views/404.vue"),
-        meta: {
-            icon: "star",
-            title: "跳转外部链接"
+        meta: { title: "项目地址", icon: "github" }
+    }
+];
+
+/**
+ * 过滤掉侧边导航栏不显示的路由
+ * @param array 路由列表
+ */
+export function filterHidden(array: Array<RouteItem>) {
+    array = JSON.parse(JSON.stringify(array));
+    const result: Array<RouteItem> = [];
+    for (let i = 0; i < array.length; i++) {
+        const item = array[i];
+        if (!item.meta || (item.meta && !item.meta.hidden)) {
+            result.push(item);
+            if (item.children && item.children.length > 0) {
+                item.children = filterHidden(item.children);
+            }
         }
     }
-]
-// ========================== 测试 ==========================
-// for (let i = 3; i < 18; i++) {
-//     const first = add[0].children as Array<RouteItem>
-//     const second = first[1].children as Array<RouteItem>
-//     second.push({
-//         path: "menu-" + i,
-//         name: "nested/menu-" + i,
-//         meta: { title: "菜单 2-" + i, icon: "tree" },
-//         component: () => import("../views/example/menu-1.vue")
-//     })
-// }
+    return result;
+}
 
 /**
  * 路由实例 

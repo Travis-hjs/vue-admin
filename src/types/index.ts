@@ -61,36 +61,6 @@ export interface AjaxParams {
     progress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
 }
 
-/** `layout`状态类型 */
-export interface LayoutState {
-    /** 显示设置 */
-    showSettings: boolean
-    /** 显示历史记录列表 */
-    showHistoryView: boolean
-    /** 固定头部 */
-    fixedHeader: boolean
-    /** 侧边栏展开 */
-    sidebarOpen: boolean
-    /** 显示侧边栏logo */
-    showSidebarLogo: boolean
-    /** 显示侧边栏文字应用主题色 */
-    sidebarTextTheme: boolean
-    /** 历史记录列表 */
-    historyViews: Array<RouteItem>
-    /** 系统信息 */
-    device: "desktop" | "mobile"
-    /** 主题颜色 */
-    theme: string
-}
-
-/** `variables.scss`变量导出类型 */
-export interface ScssVariables {
-    menuBg: string
-    menuText: string
-    menuActiveText: string
-    theme: string
-}
-
 /** 接口请求基础响应数据 */
 export interface ApiResult {
     /** 接口状态`code === 1`为成功 */
@@ -101,12 +71,30 @@ export interface ApiResult {
     msg: string
 }
 
+export interface RouteMeta {
+    /** 侧边栏菜单名、document.title */
+    title: string,
+    /** `svg`名 */
+    icon?: string
+    /** 是否在侧边菜单栏不显示该路由 */
+    hidden?: boolean
+    /**
+     * 路由是否需要缓存
+     * - 当设置该值为`true`时，路由必须要设置`name`，页面组件中的`name`也是，不然路由缓存不生效
+     */
+    keepAlive?: boolean
+}
+
 /** 自定义的路由类型-继承`RouteRecordRaw` */
 export type RouteItem = {
     /**
-     * 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+     * 路由名，类似唯一`key`
+     * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+     * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
      */
     name?: string
+    /** 外链地址，优先级会比`path`高 */
+    link?: string
     /**
      * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
      * 传空数组或者不写该字段代表可以全部用户访问
@@ -119,6 +107,8 @@ export type RouteItem = {
     auth?: Array<number>
     /** 子级路由 */
     children?: Array<RouteItem>
+    /** 标头 */
+    meta: RouteMeta
 } & RouteRecordRaw
 
 /**
@@ -131,18 +121,48 @@ export interface UploadChange<T = string | number> {
     src: string
 }
 
-/** 分页器组件数据类型 */
-export interface PageInfoType {
-    /** 一页多少条 */
-    pageSize: number
-    /** 当前页 */
-    currentPage: number
-    /** 后端返回的总数 */
-    total: number
+export interface HistoryViewsItem {
+    path: string
+    query: object
+    params: object
+    /** 路由名 */
+    name?: string
+    /** 标头 */
+    meta: RouteMeta
+    /** 子级路由 */
+    children?: Array<HistoryViewsItem>
 }
 
-/** 分页器组件`change`回调类型 */
-export interface PaginationChange {
-    type: "pageSize" | "currentPage",
-    value: number
+/** `layout`状态类型 */
+export interface LayoutInfo {
+    /** 显示历史记录列表 */
+    showTagsView: boolean
+    /** 侧边栏展开 */
+    sidebarOpen: boolean
+    /** 显示侧边栏`logo` */
+    showSidebarLogo: boolean
+    /** 历史记录列表 */
+    historyViews: Array<HistoryViewsItem>
+    /** 系统信息 */
+    device?: "desktop" | "mobile"
+    /** 主题颜色 */
+    theme?: string
+}
+
+/** `layout`菜单列表数据 */
+export interface LayoutMenuItem extends RouteMeta {
+    /** 当前下级菜单是否展开 */
+    isOpen: boolean
+    /** 当前菜单是否处于激活状态 */
+    isActive: boolean
+    /** 当前有子菜单路由的同时，是否有子菜单的某个处于激活状态 */
+    hasActive: boolean
+    /** 唯一索引`key`，层数用`-`隔开 */
+    key: string
+    /** 菜单子路由 */
+    children?: Array<LayoutMenuItem>
+    /** 路由路径 */
+    path: string
+    /** 外链地址，优先级会比`path`高 */
+    link?: string
 }

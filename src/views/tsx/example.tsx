@@ -1,5 +1,6 @@
 import { defineComponent, onMounted, ref } from "vue";
 import TsxCard from "./card";
+import "./card.scss";
 
 const TsxExample = defineComponent({
     setup() {
@@ -11,15 +12,13 @@ const TsxExample = defineComponent({
             { img: "https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg" }
         ]
 
-        const inputStyle = "width: 100%; max-width: 500px; margin: 0 auto 14px; display: block;";
-
         const inputValue = ref("");
 
         function onChange(index: number) {
             console.log("图片索引 >>", index);
         }
         
-        console.clear();
+        // console.clear();
 
         onMounted(function() {
             console.log("on mounted");
@@ -28,8 +27,10 @@ const TsxExample = defineComponent({
 
         return () => (
             <div class="tsx-example">
-                <el-alert closable={ false } title={ content } style="margin-bottom: 14px;" />
-                <el-input vModel={ inputValue.value } style={ inputStyle } placeholder="请输入卡片标题" maxlength="17" show-word-limit clearable />
+                <h2 class="the-title mgb_20">{ content }</h2>
+                <div class="tsx-center">
+                    <input class="the-input" type="text" v-model={ inputValue.value } placeholder="请输入卡片标题" maxlength="17" />
+                </div>
                 <TsxCard images={ list } title={ inputValue.value } change={ onChange } />
             </div>
         )
