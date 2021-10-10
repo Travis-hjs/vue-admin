@@ -9,7 +9,7 @@
 <template>
     <div>
         <!-- 默认使用方式 -->
-        <UploadImage :src="formData.pageAdImg" @change="onUpload" />
+        <UploadImage :src="formData.logo" @change="onUpload" />
         <!-- 自定义提示、尺寸等参数，更多配置请看组件代码 -->
         <UploadImage uploadId="banner" :src="formData.banner" @change="onUpload" tip="尺寸规格：750px * 391px" width="375px" height="195px" :maxSize="5" :autoHeight="true" />
     </div>
@@ -30,6 +30,7 @@ export default class Demo extends Vue {
         logo: "",
         banner: ""
     }
+    
     /**
      * 监听上传图片
      */
