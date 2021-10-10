@@ -168,6 +168,14 @@ export const add: Array<RouteItem> = [
         ]
     },
     {
+        path: "/" + store.projectInfo.link,
+        link: store.projectInfo.link,
+        name: "GitHub-Hansen",
+        component: Page404, // 这里必需给一个组件
+        auth: [0],
+        meta: { title: "项目地址", icon: "github" }
+    },
+    {
         path: "/excel",
         name: "excel",
         redirect: "/excel/export",
@@ -204,18 +212,25 @@ export const add: Array<RouteItem> = [
             {
                 path: "/richtext/index",
                 name: "richtext-home",
-                meta: { title: "富文本" },
+                meta: { title: "富文本", icon: "richtext" },
                 component: () => import("@/views/richtext/index.vue"),
             }
         ]
     },
     {
-        path: "/" + store.projectInfo.link,
-        link: store.projectInfo.link,
-        name: "GitHub-Hansen",
-        component: Page404, // 这里必需给一个组件
-        auth: [0],
-        meta: { title: "项目地址", icon: "github" }
+        path: "/echarts",
+        name: "echarts",
+        redirect: "/echarts/index",
+        meta: { title: "echarts-图表", icon: "chart" },
+        component: Layout,
+        children: [
+            {
+                path: "/echarts/index",
+                name: "echarts-home",
+                meta: { title: "echarts-图表", icon: "chart" },
+                component: () => import("@/views/echarts/index.vue"),
+            }
+        ]
     }
 ]
 
