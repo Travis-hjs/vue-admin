@@ -12,8 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Pagination, { usePageInfo } from "@/components/Pagination/index.vue";
-import { PaginationChange } from "@/types";
+import Pagination, { usePageInfo, PaginationChange } from "@/components/Pagination/index.vue";
 
 @Component({
     components: {

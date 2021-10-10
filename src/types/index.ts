@@ -165,18 +165,3 @@ export interface UploadChange<T = string | number> {
     src: string
 }
 
-/** 分页器组件数据类型 */
-export interface PageInfoType {
-    /** 一页多少条 */
-    pageSize: number
-    /** 当前页 */
-    currentPage: number
-    /** 后端返回的总数 */
-    total: number
-}
-
-/** 分页器组件`change`回调类型 */
-export interface PaginationChange {
-    type: "pageSize" | "currentPage",
-    value: number
-}
