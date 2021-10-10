@@ -10,8 +10,8 @@
 | 分支名 | 预览地址 | 脚手架 | 技术依赖 | 补充/说明 |
 | --- | --- | --- | --- | --- |
 | [master](https://github.com/Hansen-hjs/vue-admin) | [在线预览](https://huangjingsheng.gitee.io/hjs/vue2-admin) | vue-cli 4.x | typescript、vue 2.x、vue-router 3.x、element-ui | element-ui在这里默认作为常规功能展示引用，模板核心功能并没有使用该框作为依赖  |
-| [hjs](./tree/hjs)| [在线预览](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs) | vue-cli 4.x | typescript、vue 2.x、vue-router 3.x、element-ui、echarts、xlsx、wangeditor | 自用分支，基于master增加了一些：图表、Excel、富文本插件 |
-| [next](./tree/next) | [在线预览](https://huangjingsheng.gitee.io/hjs/vue3-admin) | vite 2.x | typescript、vue 3.x、vue-router 4.x | vue3 版本，没有引用任何 UI 框架 |
+| [hjs](https://github.com/Hansen-hjs/vue-admin/tree/hjs)| [在线预览](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs) | vue-cli 4.x | typescript、vue 2.x、vue-router 3.x、element-ui、echarts、xlsx、wangeditor | 自用分支，基于master增加了一些：图表、Excel、富文本插件 |
+| [next](https://github.com/Hansen-hjs/vue-admin/tree/next) | [在线预览](https://huangjingsheng.gitee.io/hjs/vue3-admin) | vite 2.x | typescript、vue 3.x、vue-router 4.x | vue3 版本，没有引用任何 UI 框架 |
 
 
 ## layout 核心布局整体
