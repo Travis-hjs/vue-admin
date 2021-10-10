@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import { GridComponent } from "echarts/components";
 import { LineChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import { ChartLineData } from "@/types";
+import { ChartLineData } from "./types";
 
 echarts.use([GridComponent, LineChart, CanvasRenderer]);
 
@@ -15,10 +15,17 @@ echarts.use([GridComponent, LineChart, CanvasRenderer]);
  * 折线图表
  * [echart文档](https://echarts.apache.org/examples/zh/editor.html?c=line-smooth)
  */
-@Component({})
+@Component({
+    name: "ChartLine"
+})
 export default class ChartLine extends Vue {
-    @Prop({ default: "chart_line" }) className!: string;
-    @Prop({ type: Object, required: true }) chartData!: ChartLineData;
+    /** 类名 */
+    @Prop({ default: "chart-line" })
+    className!: string;
+
+    /** 图表数据 */
+    @Prop({ type: Object, required: true })
+    chartData!: ChartLineData;
     
     /** 当前图表实例 */
     chart!: echarts.ECharts;
@@ -99,7 +106,7 @@ export default class ChartLine extends Vue {
 }
 </script>
 <style lang="scss">
-.chart_line {
+.chart-line {
     width: 100%;
 }
 </style>

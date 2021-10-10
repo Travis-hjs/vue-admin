@@ -1,5 +1,5 @@
 <template>
-    <div :class="className" :style="{'height': width, 'width': width}"></div>
+    <div :class="className" :style="{'height': size, 'width': size}"></div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import { TooltipComponent, LegendComponent } from "echarts/components";
 import { PieChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import { ChartRingData } from "@/types";
+import { ChartRingData } from "./types";
 
 echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
 
@@ -15,11 +15,21 @@ echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
  * 圆环图表
  * [echart文档](https://echarts.apache.org/examples/zh/editor.html?c=pie-doughnut)
  */
-@Component({})
+@Component({
+    name: "ChartRing"
+})
 export default class ChartRing extends Vue {
-    @Prop({ default: "chart_ring" }) className!: string;
-    @Prop({ default: "100%" }) width!: string;
-    @Prop({ type: Array, required: true }) chartData!: ChartRingData;
+    /** 类名 */
+    @Prop({ default: "" })
+    className!: string;
+
+    /** 尺寸：正方形 */
+    @Prop({ default: "100%" })
+    size!: string;
+
+    /** 图表数据 */
+    @Prop({ type: Array, required: true })
+    chartData!: ChartRingData;
 
     /** 当前图表实例 */
     chart!: echarts.ECharts;
@@ -77,8 +87,3 @@ export default class ChartRing extends Vue {
     
 }
 </script>
-<style lang="scss">
-.chart_ring {
-    width: 100%;
-}
-</style>

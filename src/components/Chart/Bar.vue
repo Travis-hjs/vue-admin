@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import { GridComponent } from "echarts/components";
 import { BarChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
-import { ChartBarData } from "@/types";
+import { ChartBarData } from "./types";
 
 echarts.use([GridComponent, BarChart, CanvasRenderer]);
 
@@ -15,10 +15,17 @@ echarts.use([GridComponent, BarChart, CanvasRenderer]);
  * 柱状图图表
  * [echart文档](https://echarts.apache.org/examples/zh/editor.html?c=mix-line-bar)
  */
-@Component({})
+@Component({
+    name: "ChartBar"
+})
 export default class ChartBar extends Vue {
-    @Prop({ default: "chart_bar" }) className!: string;
-    @Prop({ type: Object, required: true }) chartData!: ChartBarData;
+    /** 类名 */
+    @Prop({ default: "chart-bar" })
+    className!: string;
+
+    /** 图表数据 */
+    @Prop({ type: Object, required: true })
+    chartData!: ChartBarData;
     
     /** 当前图表实例 */
     chart!: echarts.ECharts;
@@ -94,7 +101,7 @@ export default class ChartBar extends Vue {
 }
 </script>
 <style lang="scss">
-.chart_bar {
+.chart-bar {
     width: 100%;
 }
 </style>
