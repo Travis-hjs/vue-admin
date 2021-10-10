@@ -195,6 +195,21 @@ export const add: Array<RouteItem> = [
         ]
     },
     {
+        path: "/richtext",
+        name: "richtext",
+        redirect: "/richtext/index",
+        meta: { title: "富文本", icon: "richtext" },
+        component: Layout,
+        children: [
+            {
+                path: "/richtext/index",
+                name: "richtext-home",
+                meta: { title: "富文本" },
+                component: () => import("@/views/richtext/index.vue"),
+            }
+        ]
+    },
+    {
         path: "/" + store.projectInfo.link,
         link: store.projectInfo.link,
         name: "GitHub-Hansen",
