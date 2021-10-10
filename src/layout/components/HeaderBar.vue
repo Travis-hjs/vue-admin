@@ -56,15 +56,24 @@ export default class HeaderBar extends Vue {
     }
 
     onLogout() {
-        history.replaceState({}, "", "/");
-        store.user.reset();
-        // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
-        this.layoutInfo.historyViews = [];
+        const exit = () => {
+            store.user.reset();
+            // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
+            this.layoutInfo.historyViews = [];
 
-        // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
-        // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
-        // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
-        location.reload();
+            // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
+            // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
+            // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
+            location.reload();
+        }
+        // 是否为首页
+        if (["/", "/home"].includes(this.$route.path)) {
+            exit()
+        } else {
+            this.$router.push("/")
+            exit()
+        }
+        
     }
 
     isActive(item: HistoryViewsItem) {
