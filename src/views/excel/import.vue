@@ -1,6 +1,6 @@
 <template>
     <div class="excel-import">
-        <UploadExcel :onSuccess="handleSuccess" :beforeUpload="beforeUpload" />
+        <UploadExcel :onSuccess="onSuccess" :beforeUpload="onBeforeUpload" />
         <div style="height: 20px"></div>
         <el-table :data="tableData" border highlight-current-row style="width: 100%;">
             <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
@@ -26,7 +26,7 @@ export default class ImportExcel extends Vue {
     
     tableHeader: Array<string> = [];
 
-    beforeUpload(file: File) {
+    onBeforeUpload(file: File) {
         const maxSize = file.size / 1024 / 1024 < 2;
         if (maxSize) {
             return true;
@@ -35,7 +35,7 @@ export default class ImportExcel extends Vue {
         return false;
     }
 
-    handleSuccess(res: UploadResult) {
+    onSuccess(res: UploadResult) {
         this.tableData = res.results;
         this.tableHeader = res.header;
     }
