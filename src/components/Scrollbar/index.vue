@@ -173,7 +173,7 @@ export default class Scrollbar extends Vue {
     private onDragEnd(event: MouseEvent) {
         // console.log("抬起");
         this.isDrag = false;
-        if (this.$refs.el.contains(event.target as HTMLElement)) {
+        if (!this.$refs.el.contains(event.target as HTMLElement)) {
             this.showThumb = false;
         } else if (this.clickUpdateDelay > 0) {
             // console.log("执行");
