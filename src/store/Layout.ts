@@ -1,6 +1,5 @@
-import utils from "@/utils";
-import { LayoutState, RouteItem } from "@/types";
-import variables from "@/styles/variables.scss";
+import { modifyData } from "@/utils";
+import { LayoutInfo, RouteItem } from "@/types";
 
 const cacheName = "ModuleLayout";
 
@@ -12,37 +11,34 @@ export default class ModuleLayout {
         this.init();
     }
 
-    /** 动态添加的权限路由 */
+    /**
+     * 动态添加的权限路由
+     * @description 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
+     */
     addRouters: Array<RouteItem> = [];
  
-    /** (基础路由+动态路由)列表 */
+    /**
+     * (基础路由+动态路由)列表
+     * @description 这里可以不是响应式的，因为在登录之后才会渲染，登录的时候就已经拼接好了
+     */
     completeRouters: Array<RouteItem> = [];
 
-    /**
-     * 默认主题颜色
-     * @description `src/styles/variables.scss`导出的主题色
-     */
-    readonly defaultTheme = variables.theme;
-
     /** `layout`操作状态 */
-    readonly state: LayoutState = {
-        sidebarTextTheme: false,
-        showSidebarLogo: true,
-        fixedHeader: true,
-        showSettings: true,
-        showHistoryView: true,
+    readonly info: LayoutInfo = {
+        showTagsView: true,
         sidebarOpen: true,
-        historyViews: [],
-        device: "desktop",
-        theme: variables.theme
+        showSidebarLogo: true,
+        historyViews: []
     }
 
-    /** 初始化`layout`操作状态 */
     private init() {
-        const cacheInfo = sessionStorage.getItem(cacheName);
-        const value = cacheInfo ? JSON.parse(cacheInfo) : null;
-        if (value) {
-            utils.modifyData(this.state, value);
+        const value = sessionStorage.getItem(cacheName);
+        try {
+            if (value) {
+                modifyData(this.info, JSON.parse(value));
+            }
+        } catch (error) {
+            console.log("ModuleLayout init fail >>", error);
         }
     }
 
@@ -50,26 +46,18 @@ export default class ModuleLayout {
      * 保存`layout`操作状态
      * @description 这个方法我用在了`src/layout/index.vue`组件中用`watch`监听了数据的变动然后执行
      */
-    saveLayout() {
-        // 这里我只是简单做了两层拷贝，只保存要用到的信息就够了
-        const value = this.state;
-        const data: any = {};
-        for (const key in value) {
-            if (key === "historyViews") {
-                data[key] = value["historyViews"].map(item => {
-                    return {
-                        name: item.name,
-                        meta: {...item.meta},
-                        path: item.path,
-                        // fullPath: item.fullPath || ""
-                    }
-                });
-            } else {
-                data[key] = value[key as keyof LayoutState];
-            }
-        }
-        // console.log(JSON.stringify(data));
-        sessionStorage.setItem(cacheName, JSON.stringify(data));
+    saveInfo() {
+        sessionStorage.setItem(cacheName, JSON.stringify(this.info));
+    }
+
+    /** 
+     * 菜单组件尺寸对象
+     */
+    readonly menuSizeInfo = {
+        /** `the-layout-menu-title`实际高度 */
+        titleHeight: 0,
+        /** `the-layout-menu-item`实际高度 */
+        itemHeight: 0
     }
 
 }

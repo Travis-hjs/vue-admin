@@ -12,9 +12,9 @@ $--border-color-light: #dfe4ed;
 $--border-color-lighter: #e6ebf5;
 $--table-border: 1px solid#dfe6ec;
 
-// Icon font path, required
-$--font-path: '~element-ui/lib/theme-chalk/fonts';
+// 图标库
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
 
-// Apply overrided variables in Element UI
-@import '~element-ui/packages/theme-chalk/src/index';
+// UI样式
+@import "~element-ui/packages/theme-chalk/src/index";
 

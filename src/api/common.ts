@@ -1,5 +1,4 @@
 import request from "../utils/request";
-import utils from "../utils";
 import store from "../store";
 import { ApiResult } from "../types";
 import { LoginParams, UserInfo } from "@/types/user";
@@ -45,14 +44,6 @@ export function getWeather(city: string) {
 }
 
 /**
- * 提交表单数据
- * @param params 
- */
-export function submitForm(params: { id: number, name: string, age: number }) {
-    return request("POST", "/submitForm", {}, utils.jsonToFormData(params))
-}
-
-/**
  * 登录
  * @param params 登录信息
  */
@@ -63,6 +54,7 @@ export async function login(params: LoginParams) {
             id: Math.random().toString(36).substr(10),
             type: "",
             name: "",
+            avatar: "",
             token: Math.random().toString(36).substr(2),
             account: params.account,
             password: params.password

@@ -11,7 +11,3 @@ export default class Menu2 extends Vue {
     content = "菜单 2-2"
 }
 </script>
-
-<style>
-
-</style>

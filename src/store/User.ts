@@ -1,4 +1,4 @@
-import utils from "@/utils";
+import { modifyData } from "@/utils";
 import { DeepPartial, DeepReadonly } from "@/types";
 import { UserInfo } from "@/types/user";
 
@@ -11,6 +11,7 @@ function createUserInfo(): DeepReadonly<UserInfo> {
         name: "",
         type: "",
         token: "",
+        avatar: "",
         account: "",
         password: ""
     }
@@ -32,7 +33,7 @@ export default class ModuleUser {
         const cacheInfo = sessionStorage.getItem(cacheName);
         const value = cacheInfo ? JSON.parse(cacheInfo) : null;
         if (value) {
-            utils.modifyData(this.info, value);
+            modifyData(this.info, value);
         }
     }
 
@@ -41,13 +42,13 @@ export default class ModuleUser {
      * @param value 更新的值
      */
     update(value: DeepPartial<UserInfo>) {
-        utils.modifyData(this.info, value);
+        modifyData(this.info, value);
         sessionStorage.setItem(cacheName, JSON.stringify(this.info));
     }
 
     /** 清空用户信息缓存信息 */
     reset() {
-        utils.modifyData(this.info, createUserInfo());
+        modifyData(this.info, createUserInfo());
         sessionStorage.removeItem(cacheName);
     }
 

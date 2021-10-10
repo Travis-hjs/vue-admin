@@ -15,18 +15,20 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { PageInfoType } from "@/types";
 
+export function usePageInfo(size = 10): PageInfoType {
+    return {
+        currentPage: 1,
+        pageSize: size,
+        total: 0,
+    }
+}
+
 /** 分页组件 */
 @Component({})
 export default class Pagination extends Vue {
     @Prop({
         type: Object,
-        default() {
-            return {
-                pageSize: 10,
-                total: 0,
-                currentPage: 1,
-            }
-        }
+        default: () => usePageInfo()
     })
     pageInfo!: PageInfoType;
 

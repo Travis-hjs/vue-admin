@@ -1,6 +1,6 @@
 <template>
     <div class="nested">
-        <transition name="fade-transform" mode="out-in">
+        <transition name="fadeSlideX" mode="out-in">
             <router-view />
         </transition>
     </div>
@@ -13,7 +13,3 @@ export default class Nested extends Vue {
     content = "nested"
 }
 </script>
-
-<style>
-
-</style>

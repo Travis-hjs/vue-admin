@@ -1,4 +1,4 @@
-# 分页组件
+# Element-UI 分页组件
 
 使用示例
 
@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Pagination from "@/components/Pagination/index.vue";
+import Pagination, { usePageInfo } from "@/components/Pagination/index.vue";
 import { PaginationChange } from "@/types";
 
 @Component({
@@ -21,11 +21,7 @@ import { PaginationChange } from "@/types";
     }
 })
 export default class Demo extends Vue {
-    pageInfo = {
-        pageSize: 10,
-        currentPage: 1,
-        total: 0,
-    }
+    pageInfo = usePageInfo();
 
     /**
      * 分页变动

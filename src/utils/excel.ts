@@ -1,5 +1,5 @@
-import { saveAs } from "file-saver"
-import XLSX, { WorkBook, WorkSheet, WritingOptions } from "xlsx"
+import { saveAs } from "file-saver";
+import XLSX, { WorkBook, WorkSheet, WritingOptions } from "xlsx";
 
 interface ICell {
     v: Date | number | boolean | string

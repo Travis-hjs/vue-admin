@@ -4,45 +4,35 @@
 每次热更新都加载很慢
 */
 
-// ================ 基础颜色 ================
-$blue:#324157;
-$light-blue:#3A71A8;
-$red:#C03639;
-$pink: #E65D6E;
-$green: #30B08F;
-$tiffany: #4AB7BD;
-$yellow:#FEC171;
-$panGreen: #30B08F;
-
-// ================ layout相关 ================
-// Sidebar 默认宽度
-$sideBarWidth: 210px;
-// Sidebar 最小宽度
-$minSideBarWidth: 54px;
-// .tags-view-container 高度
-$tagsViewHeight: 34px;
-// .tags-view-container 阴影高度
-$tagsViewShadowHeight: 3px;
-// .navbar 高度
-$navbarHeight: 50px;
-// 动画持续时间
-$time: 0.28s;
-
-$subMenuBg:#1f2d3d;
-$subMenuHover:#001528;
-$subMenuActiveText:#f4f4f5;
-$menuBg:#304156;
-$menuText:#bfcbd9;
-// sidebarTextTheme 默认颜色
-$menuActiveText:#409EFF;
 // 主题色
 $theme: #1890FF;
 
-// The :export directive is the magic sauce for webpack
-// https://mattferderer.com/use-sass-variables-in-typescript-and-javascript
-:export {
-    menuBg: $menuBg;
-    menuText: $menuText;
-    menuActiveText: $menuActiveText;
-    theme: $theme;
+@mixin moveTime {
+    transition: 0.3s all;
+}
+
+@mixin closeIcon($color, $size, $land: 1px) {
+    position: relative;
+    &::before {
+        @include moveTime();
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: $size;
+        height: $land;
+        background-color: $color;
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+    &::after {
+        @include moveTime();
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: $size;
+        height: $land;
+        background-color: $color;
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
 }

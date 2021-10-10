@@ -1,6 +1,4 @@
-@import "./element-variables.scss";
-
-/* 一些全局样式 */
+@import "./variables.scss";
 
 *, *:before, *:after {
     box-sizing: border-box;
@@ -19,75 +17,30 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
 
-a, a:focus, a:hover {
+a, a:focus, a:hover, a:link, a:active {
     color: inherit;
     outline: none;
     text-decoration: none;
+    cursor: pointer;
+}
+
+ul, li {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
 }
 
 div:focus {
     outline: none;
 }
 
-label {
-    font-weight: bold;
-}
-
-.clearfix {
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-}
-
-// ================== 定义过渡动画 ==================
-
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.28s;
-}
-
-.fade-enter, .fade-leave-active {
-    opacity: 0;
-}
-
-.fade-transform-leave-active, .fade-transform-enter-active {
-    transition: all .5s !important;
-}
-
-.fade-transform-enter {
-    opacity: 0;
-    transform: translateX(-30px);
-}
-
-.fade-transform-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-}
-
-.breadcrumb-enter-active, .breadcrumb-leave-active {
-    transition: all .5s;
-}
-
-.breadcrumb-enter, .breadcrumb-leave-active {
-    opacity: 0;
-    transform: translateX(20px);
-}
-
-.breadcrumb-move {
-    transition: all .5s;
-}
-
-.breadcrumb-leave-active {
-    position: absolute;
-}
-
 /* flex布局 */
-.flex { display: flex; flex-wrap: wrap; }
+.flex { display: flex; }
 .f1 { flex: 1; }
 .f2 { flex: 2; }
 .f3 { flex: 3; }
-
 /* 垂直居中 */
 .fvertical { align-items: center; }
 /* 水平居中 */
@@ -125,6 +78,47 @@ label {
     .pdb_#{$index}0 {
         padding-bottom: 10px * $index;
     }
+}
+
+// ================== 定义过渡动画 ==================
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.28s;
+}
+
+.fade-enter, .fade-leave-active {
+    opacity: 0;
+}
+
+.fadeSlideX-leave-active, .fadeSlideX-enter-active {
+    transition: all .5s !important;
+}
+
+.fadeSlideX-enter {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+}
+
+.fadeSlideX-leave-to {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+}
+
+.breadcrumb-enter-active, .breadcrumb-leave-active {
+    transition: all .5s;
+}
+
+.breadcrumb-enter, .breadcrumb-leave-active {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+}
+
+.breadcrumb-move {
+    transition: all .5s;
+}
+
+.breadcrumb-leave-active {
+    position: absolute;
 }
 
 // 日期选择样式有问题，不会自适应中间文字宽度，这里给一个合适的最小宽度
