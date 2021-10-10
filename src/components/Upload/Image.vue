@@ -107,6 +107,7 @@ export default defineComponent({
                     src: result
                 })
             } else {
+                input.value = "";
                 alert(res.msg);
             }
         }
