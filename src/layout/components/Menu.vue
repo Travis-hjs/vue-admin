@@ -162,6 +162,8 @@ export default class Menu extends Vue {
         this.menuList = list;
     }
 
+    sizeInfo = store.layout.menuSizeInfo;
+
     mounted() {
         this.update();
         function getElementHeight(name: string, defaultHeight = 0) {
@@ -173,8 +175,9 @@ export default class Menu extends Vue {
                 return defaultHeight;
             }
         }
-        store.layout.menuSizeInfo.titleHeight = getElementHeight(".the-layout-menu .the-layout-menu-title", 50);
-        store.layout.menuSizeInfo.itemHeight = getElementHeight(".the-layout-menu .the-layout-menu-item", 44);
+        this.sizeInfo.titleHeight = getElementHeight(".the-layout-menu .the-layout-menu-title", 50);
+        this.sizeInfo.itemHeight = getElementHeight(".the-layout-menu .the-layout-menu-item", 44);
+        // console.log("Menu >>", this.sizeInfo);
     }
 
 }

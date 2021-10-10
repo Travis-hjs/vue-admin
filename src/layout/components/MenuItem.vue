@@ -70,6 +70,8 @@ export default class MenuItem extends Vue {
         return item.children && item.children.length > 0 ? true : false;
     }
 
+    sizeInfo = store.layout.menuSizeInfo;
+
     /**
      * 获取列表高度
      * @param item 列表单个对象
@@ -77,10 +79,9 @@ export default class MenuItem extends Vue {
     getListHeight(item: LayoutMenuItem) {
         let result = 0;
         const child = item.children;
-        const size = store.layout.menuSizeInfo;
         if (item.isOpen && child && child.length > 0) {
             child.forEach(menuItem => {
-                const height = this.hasChidren(menuItem) ? size.titleHeight : size.itemHeight;
+                const height = this.hasChidren(menuItem) ? this.sizeInfo.titleHeight : this.sizeInfo.itemHeight;
                 result += height;
                 result += this.getListHeight(menuItem);
             })
@@ -141,6 +142,7 @@ export default class MenuItem extends Vue {
             this.titleStyle.paddingLeft = value * this.level + "px";
             this.itemStyle.paddingLeft = value * (this.level + 1) + "px";
         }
+        // console.log("MenuItem >>", this.sizeInfo);
     }
 }
 </script>

@@ -90,16 +90,16 @@ div:focus {
     opacity: 0;
 }
 
-.fade-transform-leave-active, .fade-transform-enter-active {
+.fadeSlideX-leave-active, .fadeSlideX-enter-active {
     transition: all .5s !important;
 }
 
-.fade-transform-enter {
+.fadeSlideX-enter {
     opacity: 0;
     transform: translate3d(-30px, 0, 0);
 }
 
-.fade-transform-leave-to {
+.fadeSlideX-leave-to {
     opacity: 0;
     transform: translate3d(30px, 0, 0);
 }

@@ -7,7 +7,7 @@
         <HeaderBar />
         <Sidebar />
         <div class="the-layout-content">
-            <transition name="fade-transform" mode="out-in">
+            <transition name="fadeSlideX" mode="out-in">
                 <keep-alive :include="cacheList">
                     <router-view class="the-layout-page" :key="$route.path" />
                 </keep-alive>
@@ -23,6 +23,7 @@ import Sidebar from "./components/Sidebar.vue";
 import store from "../store";
 import { RouteItem } from "@/types";
 
+/** 主体布局组件 */
 @Component({
     components: {
         HeaderBar,
@@ -31,7 +32,7 @@ import { RouteItem } from "@/types";
 })
 export default class Layout extends Vue {
 
-    readonly layoutInfo = store.layout.info;
+    layoutInfo = store.layout.info;
 
     @Watch("layoutInfo", { deep: true })
     onLayoutChange() {
@@ -58,7 +59,7 @@ export default class Layout extends Vue {
         }
 
         this.cacheList = getCachList(store.layout.completeRouters);
-        console.log("缓存列表 >>", this.cacheList);
+        // console.log("缓存列表 >>", this.cacheList);
     }
 }
 </script>

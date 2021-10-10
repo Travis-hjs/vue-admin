@@ -1,13 +1,11 @@
 <template>
-    <div class="layout-breadcrumb flex fvertical">
-        <transition-group name="breadcrumb">
-            <span :class="['layout-breadcrumb-item', {'last': index === list.length - 1}]" v-for="(item, index) in list" :key="item.path">
-                <i class="separator" v-if="index > 0">/</i>
-                <a href="javascript:void(0)" v-if="index === list.length - 1">{{ item.meta.title }}</a>
-                <router-link v-else :to="item.path">{{ item.meta.title }}</router-link>
-            </span>
-        </transition-group>
-    </div>
+    <transition-group name="breadcrumb" tag="div" class="layout-breadcrumb flex fvertical">
+        <span :class="['layout-breadcrumb-item', {'last': index === list.length - 1}]" v-for="(item, index) in list" :key="item.path">
+            <i class="separator" v-if="index > 0">/</i>
+            <a href="javascript:void(0)" v-if="index === list.length - 1">{{ item.meta.title }}</a>
+            <router-link v-else :to="item.path">{{ item.meta.title }}</router-link>
+        </span>
+    </transition-group>
 </template>
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
