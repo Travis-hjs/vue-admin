@@ -64,6 +64,7 @@ export async function login(params: LoginParams) {
                 case "admin":
                     info.type = 0;
                     info.name = "超级管理员";
+                    info.avatar = "https://p3-passport.byteacctimg.com/img/user-avatar/6332ece850859ade07f7e6a1394f7c34~300x300.image";
                     store.user.update(info);
                     resolve({ code: 1, msg: "ok", data: info });
                     break;
