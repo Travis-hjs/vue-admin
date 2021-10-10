@@ -17,8 +17,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import UploadImage from "@/components/Upload/Image.vue";
-import { UploadChange } from "@/types";
+import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
 
 @Component({
     components: {

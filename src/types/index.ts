@@ -154,29 +154,3 @@ export interface RouteItem extends RouteConfig {
     /** 子级路由 */
     children?: Array<RouteItem>
 }
-
-/**
- * 上传图片`change`回调类型
- */
-export interface UploadChange<T = string | number> {
-    /** 和当前上传组件绑定的`id` */
-    id: T
-    /** 图片路径 */
-    src: string
-}
-
-/** 分页器组件数据类型 */
-export interface PageInfoType {
-    /** 一页多少条 */
-    pageSize: number
-    /** 当前页 */
-    currentPage: number
-    /** 后端返回的总数 */
-    total: number
-}
-
-/** 分页器组件`change`回调类型 */
-export interface PaginationChange {
-    type: "pageSize" | "currentPage",
-    value: number
-}
