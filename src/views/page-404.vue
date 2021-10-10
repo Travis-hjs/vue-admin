@@ -25,7 +25,9 @@
 import { Component, Vue } from "vue-property-decorator";
 import store from "../store";
 
-@Component({})
+@Component({
+    name: "page-404"
+})
 export default class NoFind extends Vue {
     message = "404 Page Not Found";
     images = store.imageInfo;
