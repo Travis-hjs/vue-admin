@@ -4,7 +4,7 @@
         <div class="mgb_20">
             <span class="the-tag link">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
             <a class="the-tag success link" :href="project" target="_blank">项目地址</a>
-            <a class="the-tag success link" :href="project" target="_blank">掘金描述说明</a>
+            <a class="the-tag success link" :href="juejin" target="_blank">掘金描述说明</a>
         </div>
         <h2 class="the-title mgb_20">布局操作开关</h2>
         <div class="options-box">
@@ -37,10 +37,12 @@ export default defineComponent({
     setup() {
         const layoutInfo = store.layout.info;
         const project = store.projectInfo.link;
+        const juejin = "https://juejin.cn/post/7017278822068273166";
 
         return {
             project,
-            layoutInfo
+            layoutInfo,
+            juejin
         }
     }
 })
