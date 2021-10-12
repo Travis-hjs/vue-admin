@@ -20,7 +20,7 @@ const config = (function() {
         },
         /** 是否开发环境 */
         get isDev() {
-            return env;
+            return env === "dev";
         }
     }
 })();
