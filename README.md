@@ -217,3 +217,5 @@ npm run dev
 ```
 npm run build
 ```
+
+run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的路径前面加个`/`，不然会报错，run dev 时却没有这种情况，目前还没找到原因，只能在构建时，手动添加`/`
