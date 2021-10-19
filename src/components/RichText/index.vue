@@ -103,10 +103,10 @@ export default class RichText extends Vue {
             // const formData = new FormData();
             // formData.append("file", resultFiles[0]);
             uploadImg(resultFiles[0]).then((res) => {
-                    // console.log(res);
-                if (res.data.code == 1) {
-                    // console.log('上传图片路径 >>', res.data.data[0].url);
-                    insertImage(res.data.data[0].url);
+                console.log(res);
+                if (res.code == 1) {
+                    // console.log('上传图片路径 >>', res.data);
+                    insertImage(res.data.img);
                 } else {
                     this.$message.error("上传图片失败");
                 }
