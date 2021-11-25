@@ -188,9 +188,9 @@ export default class Scrollbar extends Vue {
         }
     }
 
-    updated() {
-        this.updateWrapStyle();
-    }
+    // updated() {
+    //     this.updateWrapStyle();
+    // }
 
     created() {
         this.thumbStyle.backgroundColor = this.thumbColor;
