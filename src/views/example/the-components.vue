@@ -10,16 +10,17 @@
                 <UploadImage :src="pageData.single" @change="getSingleUrl" width="300px" height="200px" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
             </div>
         </div>
+        <el-button icon="el-icon-plus" size="medium" type="primary" @click="() => list.push(list.length + 1)">添加一个列表item</el-button>
         <p class="tips">横向滚动</p>
         <div class="list-x">
             <Scrollbar thumbColor="#42b983">
-                <div class="item" v-for="(item) in list" :key="item"></div>
+                <div class="item" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
         </div>
         <p class="tips">垂直滚动</p>
         <div class="list-y">
             <Scrollbar :vertical="true" thumbColor="#42b983">
-                <div class="item" v-for="(item) in list" :key="item"></div>
+                <div class="item flex fvertical fcenter" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
         </div>
     </div>
@@ -77,13 +78,17 @@ export default class Page5 extends Vue {
         padding: 8px 0;
     }
     .list-x {
-        width: 300px;
+        width: 30vw;
+        max-width: 500px;
         height: 88px;
         .item {
             display: inline-block;
             width: 120px;
             height: 100%;
+            text-align: center;
+            line-height: 88px;
             background-color: tomato;
+            color: #fff;
         }
         .item + .item {
             margin-left: 14px;
@@ -93,6 +98,7 @@ export default class Page5 extends Vue {
         width: 120px;
         height: 400px;
         .item {
+            color: #fff;
             width: 100%;
             height: 88px;
             margin-bottom: 14px;
