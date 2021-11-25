@@ -188,10 +188,10 @@ export default defineComponent({
             document.addEventListener("mouseup", onDragEnd);
         })
 
-        onUpdated(function() {
-            // console.log("onUpdated >>", el.value!.clientHeight);
-            updateWrapStyle();
-        })
+        // onUpdated(function() {
+        //     // console.log("onUpdated >>", el.value!.clientHeight);
+        //     updateWrapStyle();
+        // })
 
         onUnmounted(function() {
             wrap.value && wrap.value.removeEventListener("scroll", updateThumbStyle);
