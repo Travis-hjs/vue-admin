@@ -218,4 +218,26 @@ npm run dev
 npm run build
 ```
 
-run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的路径前面加个`/`，不然会报错，run dev 时却没有这种情况，目前还没找到原因，只能在构建时，手动添加`/`
+run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的路径前面加个`/`，不然会报错，run dev 时却没有这种情况，只能在构建时，手动添加`/`
+
+**目前已经找到原因**
+
+以`src/components/Upload/Image.vue`为例，构建编译时会执行`dom.d.ts`的类型校验，然后组件中的自定义类型和组件调用时，也运行了`dom.d.ts`的校验，导致编译不通过，像这样：
+
+```html
+<template>
+    <div :style="{ 'height': autoHeight ? null : height }"></div>
+</template>
+```
+
+编译时，会校验标签中的`style`类型，只能是`StyleValue | undefined`，所以不通过。
+
+```html
+<template>
+    <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
+</template>
+```
+
+编译时，会校验标签中的`change`事件，这时候和组件里面定义的`PropType<T = string | number>`类型不吻合，所以也不通过。
+
+估计是`vite`依赖的`rollup`编译构建，和`tsconfig.json`那边的配置不吻合导致，编译时并没有排除`tsconfig.json`里面的`include`值，所以产生额外类型校验；目前解决办法只能是在构建时，手动添加`/`，这样就不会对模板里面的标签进行校验，但`jsx`不会。
