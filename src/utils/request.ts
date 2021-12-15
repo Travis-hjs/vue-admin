@@ -1,8 +1,7 @@
 import config from "./config";
+import store from "@/store";
 import { checkType } from "./index";
-import { 
-    AjaxParams, ApiResult,
-} from "../types";
+import { AjaxParams, ApiResult } from "../types";
 
 /**
  * `http`请求
@@ -20,22 +19,28 @@ function ajax(params: AjaxParams) {
     /** 请求链接 */
     let url = params.url;
     /** 非`GET`请求传参 */
-    let body = null;
+    let body: string | FormData | null = null;
     /** `GET`请求传参 */
     let query = "";
+    /** 传参数据类型 */
+    const dataType = checkType(params.data);
 
     // 传参处理
     if (method === "GET") {
         // 解析对象传参
-        for (const key in params.data) {
-            query += "&" + key + "=" + params.data[key];
+        if (dataType === "object") {
+            for (const key in (params.data as any)) {
+                query += "&" + key + "=" + (params.data as any)[key];
+            }
+        } else {
+            console.warn("ajax 传参处理 GET 传参有误，需要的请求参数应为 object 类型");
         }
         if (query) {
             query = "?" + query.slice(1);
             url += query;
         }
     } else {
-        body = JSON.stringify(params.data); // 若后台没设置接收 JSON 则不行，需要使用`params.formData`方式传参
+        body = dataType === "object" ? JSON.stringify(params.data) : params.data as FormData;
     }
 
     // 监听请求变化；XHR.status learn: http://tool.oschina.net/commons?type=5
@@ -57,12 +62,20 @@ function ajax(params: AjaxParams) {
     // XHR.withCredentials = true;	// 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
     XHR.open(method, url, true);
 
-    // 判断传参类型，`json`或者`form`表单
-    if (params.formData) {
-        body = params.formData;
-    } else {
-        // 设置一个默认 json 传参的头配置
-        XHR.setRequestHeader("Content-Type", "application/json");
+    // 设置对应的传参请求头，GET 方法不需要
+    if (params.method !== "GET") {
+        switch (dataType) {
+            case "object":
+                XHR.setRequestHeader("Content-Type", "application/json"); // `json`请求
+                break;
+            
+            case "string":
+                XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 表单请求，非`new FormData`
+                break;
+    
+            default:
+                break;
+        }
     }
 
     // 判断设置配置头信息
@@ -122,23 +135,23 @@ function getResultInfo(result: { statusCode: number, data: any }) {
  * @param method 请求方式
  * @param url 请求接口
  * @param data 请求数据
- * @param formData 表单式传参
  * @param headers 请求头信息
  */
 export default function request(
     method: AjaxParams["method"],
     url: string,
-    data?: object,
-    formData?: AjaxParams["formData"],
+    data?: AjaxParams["data"],
     headers?: AjaxParams["headers"]
 ) {
     return new Promise<ApiResult>(function(resolve, reject) {
         ajax({
             url: config.apiUrl + url,
             method: method,
-            headers: headers,
+            headers: {
+                "authorization": store.user.info.token, // 每次请求时带上 token
+                ...headers
+            },
             data: data || {},
-            formData: formData,
             overtime: config.requestOvertime,
             success(res, xhr) {
                 // console.log("请求成功", res);
@@ -146,17 +159,15 @@ export default function request(
                 resolve(info);
             },
             fail(err) {
-                const info = getResultInfo({ statusCode: err.status, data: null });
-                if (err.response.charAt(0) == "{") {
-                    info.data = JSON.parse(err.response);
-                }
+                const res = err.response.charAt(0) == "{" ? JSON.parse(err.response) : {};
+                const info = getResultInfo({ statusCode: err.status, data: res });
                 // 全局的请求错误提示可以写在这里
                 // do some ...
                 resolve(info);
             },
             timeout() {
                 console.warn("XMLHttpRequest 请求超时 !!!");
-                const info = getResultInfo({ statusCode: config.requestOvertime, data: null });
+                const info = getResultInfo({ statusCode: config.requestOvertime, data: {} });
                 // 全局的请求超时提示可以写在这里
                 // do some ...
                 resolve(info);

@@ -30,7 +30,7 @@ export function uploadImg(formData: File) {
         reader.readAsDataURL(formData);
     })
 
-    // return request("POST", "/uploadImg", {}, formData);
+    // return request("POST", "/uploadImg", formData);
 }
 
 /**
