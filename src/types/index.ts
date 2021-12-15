@@ -26,24 +26,28 @@ export interface AjaxParams {
     url: string,
     /** 请求方法 */
     method: "GET" | "POST" | "PUT" | "DELETE",
-    /** 传参对象 */
-    data: any,
-    /** 超时毫秒 */
-    overtime?: number,
-    /** 
-     * `form`表单式传参：上传图片就是使用这种传参方式；使用`formData`时将覆盖`data`
-     * @description 
-     * ### 上传图片时使用 
+    /**
+     * 传参对象
+     * 
+     * ### `json`传参则为`object`
      * ```js
-     * const formdata = new FormData(); 
-     * formData.append("img", file); // `img`是跟后台约定好的`key`字段
+     * const data = { price: 999, shopName: "商品名称" }
      * ```
+     * 
+     * ### 上传图片时为`FormData`
+     * ```js
+     * const data = new FormData(); 
+     * data.append("img", file); // `img`是跟后台约定好的`key`字段
+     * ```
+     * 
      * ### 普通表单传参使用
      * ```js
-     * const formdata = "name=hjs&id=123";
+     * const data = "name=hjs&id=123";
      * ```
      */
-    formData?: FormData | string,
+    data: object | string | FormData,
+    /** 超时毫秒 */
+    overtime?: number,
     /** `XMLHttpRequest.header`设置对象 */
     headers?: { [key: string]: string }
     /** 成功回调 */
