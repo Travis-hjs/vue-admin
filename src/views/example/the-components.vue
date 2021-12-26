@@ -5,23 +5,26 @@
             <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
             <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
         </div>
-        <div class="mgb_30"><h2 class="the-title">滚动条组件</h2></div>
+        <div class="mgb_30">
+            <h2 class="the-title mgr_40">滚动条组件</h2>
+            <button class="the-btn green" @click="() => list.push(list.length + 1)">添加一个列表 item</button>
+        </div>
         <div class="mgb_20"><span class="the-tag green">横向滚动</span></div>
         <div class="list-x mgb_40">
             <Scrollbar thumbColor="#42b983">
-                <div class="item" v-for="(item) in list" :key="item"></div>
+                <div class="item item-text" v-for="(item) in list" :key="item">item-{{ item }}</div>
             </Scrollbar>
         </div>
         <div class="mgb_20"><span class="the-tag blue">垂直滚动</span></div>
         <div class="list-y">
             <Scrollbar :vertical="true" thumbColor="#42b983">
-                <div class="item" v-for="(item) in list" :key="item"></div>
+                <div class="item item-text" v-for="(item) in list" :key="item">item-{{ item }}</div>
             </Scrollbar>
         </div>
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
 
@@ -35,6 +38,8 @@ export default defineComponent({
             banner: "",
             logo: ""
         })
+        
+        const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
 
         /**
          * 监听上传图片
@@ -46,7 +51,7 @@ export default defineComponent({
         }
 
         return {
-            list: new Array(10).fill(0).map((_, index) => index),
+            list,
             formData,
             onUpload
         }
@@ -56,6 +61,11 @@ export default defineComponent({
 <style lang="scss">
 .the-components {
     width: 100%;
+    .item-text {
+        color: #fff;
+        line-height: 88px;
+        text-align: center;
+    }
     .list-x {
         width: 300px;
         height: 88px;
