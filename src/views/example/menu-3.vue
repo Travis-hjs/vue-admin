@@ -1,6 +1,6 @@
 <template>
     <div class="menu-3">
-        <span class="the-tag">menu-3</span>
+        <span class="the-tag purple">menu-3</span>
     </div>
 </template>
 <script>

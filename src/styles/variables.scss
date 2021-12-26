@@ -30,3 +30,14 @@ $theme: #1890FF;
         transform: translate(-50%, -50%) rotate(-45deg);
     }
 }
+
+@mixin tagColor ($bg, $color) {
+    background-color: $bg;
+    color: $color;
+    &:hover {
+        color: $color;
+    }
+    & + & {
+        margin-left: 10px;
+    }
+}

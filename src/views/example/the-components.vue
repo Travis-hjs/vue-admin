@@ -1,19 +1,19 @@
 <template>
     <div class="the-components">
-        <h2 class="the-title mgb_20">上传图片组件</h2>
-        <div class="flex mgb_20">
+        <div class="mgb_30"><h2 class="the-title">上传图片组件</h2></div>
+        <div class="flex mgb_40">
             <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
             <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
         </div>
-        <h2 class="the-title mgb_20">滚动条组件</h2>
-        <span class="the-tag success mgb_10">横向滚动</span>
-        <div class="list-x mgb_20">
+        <div class="mgb_30"><h2 class="the-title">滚动条组件</h2></div>
+        <div class="mgb_20"><span class="the-tag green">横向滚动</span></div>
+        <div class="list-x mgb_40">
             <Scrollbar thumbColor="#42b983">
                 <div class="item" v-for="(item) in list" :key="item"></div>
             </Scrollbar>
         </div>
-        <span class="the-tag success mgb_10">垂直滚动</span>
-        <div class="list-y mgb_20">
+        <div class="mgb_20"><span class="the-tag blue">垂直滚动</span></div>
+        <div class="list-y">
             <Scrollbar :vertical="true" thumbColor="#42b983">
                 <div class="item" v-for="(item) in list" :key="item"></div>
             </Scrollbar>

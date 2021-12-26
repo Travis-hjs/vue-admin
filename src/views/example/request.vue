@@ -1,8 +1,8 @@
 <template>
     <div class="page-request">
-        <h2 class="the-title mgb_20">http 请求示例，当前页面配置路由缓存</h2>
+        <h2 class="the-title mgb_30">Http 请求示例，当前页面配置路由缓存</h2>
         <div class="mgb_20" v-if="pageData.showTip">
-            <span class="the-tag danger mgr_10">请求接口为http，与当前域名https不匹配，可能无法正常请求到数据，需要在http环境下进行</span>
+            <span class="the-tag red mgr_10">请求接口为http，与当前域名https不匹配，可能无法正常请求到数据，需要在http环境下进行</span>
             <button class="the-btn mini" @click="openHttp()">切换至http</button>
         </div>
         <div class="flex">
@@ -10,7 +10,7 @@
             <button class="the-btn" @click="getData()">获取天气数据</button>
         </div>
         <div class="mgb_20" v-if="pageData.desc">
-            <span class="the-tag success">{{ pageData.desc }}</span>
+            <span class="the-tag green">{{ pageData.desc }}</span>
         </div>
         <textarea cols="60" rows="30" :value="pageData.content"></textarea>
     </div>

@@ -7,7 +7,7 @@
             <Breadcrumb class="f1" />
             <div class="user-info-box flex fvertical">
                 <img class="avatar" :src="userInfo.avatar || defaultAvatar" >
-                <span class="username mgr_10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
+                <span class="the-tag green mgr_10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
                 <button class="logout flex fvertical" @click="onLogout()">
                     <svg-icon name="exit" />
                     <span>退出登录</span>
@@ -122,13 +122,6 @@ export default defineComponent({
         height: 36px;
         border-radius: 50%;
         margin-right: 10px;
-    }
-    .username {
-        padding: 6px 8px;
-        color: #13ce66;
-        background-color: #e7faf0;
-        line-height: 1;
-        // border-radius: 2px;
     }
     .logout {
         border: none;

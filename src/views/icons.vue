@@ -1,6 +1,9 @@
 <template>
     <div class="page-icons">
-        <div class="title mgb_20">点击复制代码</div>
+        <div class="mgb_30">
+            <h2 class="the-title mgr_20">Svg Icons</h2>
+            <span class="the-tag blue">点击复制代码</span>
+        </div>
         <div class="icon-item" v-for="(item) in list" :key="item" v-copy="getSvgIconCode(item)" :title="getSvgIconCode(item)">
             <svg-icon :name="item" />
             <p>{{ item }}</p>
@@ -43,10 +46,6 @@ export default defineComponent({
 <style lang="scss">
 .page-icons {
     width: 100%;
-    .title {
-        font-size: 22px;
-        color: #333;
-    }
     .icon-item {
         display: inline-block;
         text-align: center;

@@ -1,13 +1,13 @@
 <template>
     <div class="page-home">
-        <h2 class="the-title mgb_10">Vue3 + Vite + TypeScript 后台管理模板</h2>
-        <div class="mgb_20">
-            <span class="the-tag link">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
-            <a class="the-tag success link" :href="project" target="_blank">项目地址</a>
-            <a class="the-tag success link" :href="juejin" target="_blank">掘金描述说明</a>
+        <h2 class="the-title mgb_30">Vue3 + Vite + TypeScript 后台管理模板</h2>
+        <div class="mgb_40">
+            <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
+            <a class="the-tag green" :href="project" target="_blank">项目地址</a>
+            <a class="the-tag green" :href="juejin" target="_blank">掘金描述说明</a>
         </div>
-        <h2 class="the-title mgb_20">布局操作开关</h2>
-        <div class="options-box">
+        <h2 class="the-title mgb_30">布局操作开关</h2>
+        <div class="options-box mgb_40">
             <label class="check-box flex fvertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
                 <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
                 显示侧边栏logo
@@ -21,7 +21,7 @@
                 侧边栏展开
             </label>
         </div>
-        <h2 class="the-title mgb_10">打赏一下</h2>
+        <h2 class="the-title mgb_30">打赏一下</h2>
         <div class="code-box">
             <img class="hovercode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode1.jpg">
             <img class="qrcode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode2.jpg">
@@ -50,9 +50,6 @@ export default defineComponent({
 <style lang="scss">
 .page-home {
     width: 100%;
-    .link + .link {
-        margin-left: 10px;
-    }
     .code-box {
         width: 100%;
         img {
@@ -78,7 +75,6 @@ export default defineComponent({
     }
     .options-box {
         width: 220px;
-        margin-bottom: 24px;
     }
 }
 </style>
