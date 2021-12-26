@@ -37,7 +37,4 @@ $theme: #1890FF;
     &:hover {
         color: $color;
     }
-    & + & {
-        margin-left: 10px;
-    }
 }
