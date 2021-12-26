@@ -234,10 +234,45 @@ run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的�
 
 ```html
 <template>
-    <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
+    <div>
+        <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
+        <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
+    </div>
 </template>
+<script lang="ts">
+import { defineComponent, reactive } from "vue";
+import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
+
+export default defineComponent({
+    components: {
+        UploadImage
+    },
+    setup() {
+        const formData = reactive({
+            banner: "",
+            logo: ""
+        })
+
+        /**
+         * 监听上传图片
+         * @param info 回调数据
+         */
+        function onUpload(info: UploadChange<"banner"|"logo">) {
+            // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
+            formData[info.id] = info.src;
+        }
+
+        return {
+            formData,
+            onUpload
+        }
+    }
+})
+</script>
 ```
 
-编译时，会校验标签中的`change`事件，这时候和组件里面定义的`PropType<T = string | number>`类型不吻合，所以也不通过。
+编译时，会校验标签中的`change`事件，这时候和组件里面定义的`UploadChange<T = string | number>`类型不吻合，所以也不通过。
 
 估计是`vite`依赖的`rollup`编译构建，和`tsconfig.json`那边的配置不吻合导致，编译时并没有排除`tsconfig.json`里面的`include`值，所以产生额外类型校验；目前解决办法只能是在构建时，手动添加`/`，这样就不会对模板里面的标签进行校验，但`jsx`不会。
+
+详情见[Vite 踩坑指南](https://juejin.cn/post/6959851018469244965)
