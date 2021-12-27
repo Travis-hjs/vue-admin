@@ -1,12 +1,12 @@
 <template>
     <div class="http_request">
-        <el-tag class="mgb_10">当前页面设置了路由缓存</el-tag>
+        <p class="mgb_10"><span class="the-tag blue"><i class="el-icon-info"></i> 当前页面设置了路由缓存</span></p>
         <el-card>
-            <div class="mrb_20" v-if="pageData.showTip">
+            <div class="mgb_20" v-if="pageData.showTip">
                 <el-tag type="danger" style="margin-right: 14px;">请求接口为http，与当前域名https不匹配，可能无法正常请求到数据，需要在http环境下进行</el-tag>
                 <el-button type="warning" size="small" @click="openHttp()">切换至http</el-button>
             </div>
-            <div class="flex fvertical mrb_20">
+            <div class="flex fvertical mgb_20">
                 <el-input v-model="pageData.city" clearable placeholder="请输入城市名" style="width: 300px; margin-right: 16px;"></el-input>
                 <el-button type="primary" @click="getData()" :loading="pageData.loading" >
                     <svg-icon v-show="pageData.loading" name="international" />
@@ -16,7 +16,7 @@
                 <el-switch v-model="pageData.showTable" active-text="表单展示" inactive-text="响应数据展示" style="margin-left: 16px;"></el-switch>
             </div>
             <template v-if="pageData.showTable">
-                <el-tag class="mrb_20" type="warning" v-show="pageData.desc">{{ pageData.desc }}</el-tag>
+                <el-tag class="mgb_20" type="warning" v-show="pageData.desc">{{ pageData.desc }}</el-tag>
                 <el-table :data="pageData.tableData" border stripe>
                     <el-table-column v-for="item in tableColumns" :key="item.prop" :prop="item.prop" :label="item.label" :width="item.width" :min-width="item.minWidth" align="center"></el-table-column>
                 </el-table>
@@ -86,6 +86,5 @@ export default class HttpRequest extends Vue {
 <style lang="scss">
 .http_request {
     width: 100%;
-    .mrb_20 { margin-bottom: 20px; }
 }
 </style>

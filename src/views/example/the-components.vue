@@ -1,8 +1,10 @@
 <template>
     <div class="the-component">
-        <h2 class="title">{{ pageData.title }}</h2>
-        <el-alert :title="pageData.dec" type="success" />
-        <div class="flex">
+        <div class="mgb_30 flex">
+            <h2 class="the-title">{{ pageData.title }}</h2>
+        </div>
+        <el-alert style="margin-bottom: 16px" :title="pageData.dec" type="success" />
+        <div class="flex mgb_40">
             <div v-for="(item, index) in pageData.uploadList" :key="index" style="margin-right: 16px;">
                 <UploadImage :src="item.image" :uploadId="index" @change="getPicUrl" :autoHeight="true" tip="提示：图片高度自适应" />
             </div>
@@ -10,16 +12,19 @@
                 <UploadImage :src="pageData.single" @change="getSingleUrl" width="300px" height="200px" tip="提示：图片宽高固定尺寸 300px * 200px；限制 5M 内" :maxSize="5" />
             </div>
         </div>
-        <el-button icon="el-icon-plus" size="medium" type="primary" @click="() => list.push(list.length + 1)">添加一个列表item</el-button>
-        <p class="tips">横向滚动</p>
-        <div class="list-x">
+        <div class="mgb_30">
+            <h2 class="the-title mgr_40">滚动条组件</h2>
+            <el-button icon="el-icon-plus" size="medium" type="primary" @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
+        </div>
+        <div class="mgb_10"><span class="the-tag green">横向滚动</span></div>
+        <div class="list-x mgb_40">
             <Scrollbar thumbColor="#42b983">
                 <div class="item" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
         </div>
-        <p class="tips">垂直滚动</p>
+        <div class="mgb_10"><span class="the-tag blue">垂直滚动</span></div>
         <div class="list-y">
-            <Scrollbar :vertical="true" thumbColor="#42b983">
+            <Scrollbar :vertical="true" thumbColor="#ffd000">
                 <div class="item flex fvertical fcenter" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
         </div>
@@ -41,7 +46,7 @@ export default class Page5 extends Vue {
 
     pageData = {
         title: "上传图片组件",
-        dec: "element-ui 自身的上传组件会有 bug，在一个组件中使用多个 el-upload 组件时，初始化设置的图片传参只会有一个生效（最后一个），所以自己整了一个上传图片组件。",
+        dec: "自定义上传图片组件，配合自定义请求方法上传图片",
         uploadList: [
             {
                 image: "https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png",
@@ -63,20 +68,13 @@ export default class Page5 extends Vue {
         this.pageData.single = info.src;
     }
 
-    list = new Array(10).fill(0).map((_, index) => index)
+    list = new Array(10).fill(0).map((_, index) => index + 1)
 
 }
 </script>
 
 <style lang="scss">
-.the-component{
-    .title { font-size: 24px; font-weight: normal; margin-bottom: 20px; line-height: 32px; }
-    .el-alert { margin-bottom: 16px; }
-    .tips {
-        font-size: 16px;
-        color: #555;
-        padding: 8px 0;
-    }
+.the-component {
     .list-x {
         width: 30vw;
         max-width: 500px;
@@ -102,7 +100,7 @@ export default class Page5 extends Vue {
             width: 100%;
             height: 88px;
             margin-bottom: 14px;
-            background-color: tomato;
+            background-color: #1a9df5;
             &:last-child {
                 margin-bottom: 0px;
             }

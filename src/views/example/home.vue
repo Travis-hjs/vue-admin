@@ -1,18 +1,18 @@
 <template>
     <div class="page-home">
-        <h2 class="the-title mgb_10">Vue2 + Vue-cli + TypeScript 后台管理模板</h2>
-        <div class="mgb_20">
-            <el-tag>无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</el-tag>
+        <h2 class="the-title mgb_30">Vue2 + Vue-cli + TypeScript 后台管理模板</h2>
+        <div class="mgb_40">
+            <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
             <el-link :href="project" target="_blank" type="primary">项目地址</el-link>
             <el-link :href="juejin" target="_blank" type="primary">掘金描述说明</el-link>
         </div>
-        <h2 class="the-title mgb_20">布局操作开关</h2>
-        <div class="options-box">
+        <h2 class="the-title mgb_30">布局操作开关</h2>
+        <div class="options-box mgb_40">
             <el-checkbox class="mgb_10" v-model="layoutInfo.showSidebarLogo">显示侧边栏logo</el-checkbox>
             <el-checkbox class="mgb_10" v-model="layoutInfo.showTagsView">显示历史记录标签</el-checkbox>
             <el-checkbox v-model="layoutInfo.sidebarOpen">侧边栏展开</el-checkbox>
         </div>
-        <h2 class="the-title mgb_10">打赏一下</h2>
+        <h2 class="the-title mgb_30">打赏一下</h2>
         <div class="code-box">
             <img class="hovercode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode1.jpg">
             <img class="qrcode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode2.jpg">
@@ -36,11 +36,6 @@ export default class Home extends Vue {
 </script>
 <style lang="scss">
 .page-home {
-    .the-title {
-        font-weight: normal;
-        font-size: 24px;
-        color: #444;
-    }
     width: 100%;
     .el-link {
         margin-left: 10px;
