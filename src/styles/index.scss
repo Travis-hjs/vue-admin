@@ -187,9 +187,10 @@ div:focus {
 }
 
 .the-tag {
+    display: inline-block;
     padding: 6px 8px;
     border-radius: 2px;
-    line-height: 14px;
+    line-height: 1;
     font-size: 14px;
 }
 
