@@ -23,10 +23,19 @@
             </Scrollbar>
         </div>
         <div class="mgb_10"><span class="the-tag blue">垂直滚动</span></div>
-        <div class="list-y">
+        <div class="list-y mgb_40">
             <Scrollbar :vertical="true" thumbColor="#ffd000">
                 <div class="item flex fvertical fcenter" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
+        </div>
+        <div class="mgb_30">
+            <h2 class="the-title mgr_40">折叠盒子组件</h2>
+            <el-button type="success" size="medium" icon="el-icon-plus" @click="addOptionItems()">添加选项数据</el-button>
+        </div>
+        <div class="option-box">
+            <FoldBox closeHeight="40px" ref="the-fold-box">
+                <button class="option-item" v-for="item in opotionList" :key="item">选项-{{ item }}</button>
+            </FoldBox>
         </div>
     </div>
 </template>
@@ -35,11 +44,13 @@
 import { Component, Vue } from "vue-property-decorator";
 import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
+import FoldBox from "@/components/FoldBox/index.vue";
 
 @Component({
     components: {
         UploadImage,
-        Scrollbar
+        Scrollbar,
+        FoldBox
     }
 })
 export default class Page5 extends Vue {
@@ -70,6 +81,21 @@ export default class Page5 extends Vue {
 
     list = new Array(10).fill(0).map((_, index) => index + 1)
 
+    opotionList = new Array(9).fill(0).map((_, index) => index + 1)
+    
+    $refs!: {
+        ["the-fold-box"]: FoldBox
+    }
+
+    addOptionItems() {
+        const total = this.opotionList.length;
+        const list = [];
+        for (let i = total + 1; i < total + 8; i++) {
+            list.push(i);
+        }
+        this.opotionList = this.opotionList.concat(list);
+        this.$refs["the-fold-box"].updateSize();
+    }
 }
 </script>
 
@@ -104,6 +130,23 @@ export default class Page5 extends Vue {
             &:last-child {
                 margin-bottom: 0px;
             }
+        }
+    }
+    .option-box {
+        width: 624px;
+        padding: 10px 10px 1px;
+        border: dashed 1px #eee;
+        .option-item {
+            background-color: #1a9df5;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #fff;
+            height: 30px;
+            margin-bottom: 10px;
+            margin-right: 10px;
+            border-radius: 4px;
+            padding: 0 8px;
         }
     }
 }
