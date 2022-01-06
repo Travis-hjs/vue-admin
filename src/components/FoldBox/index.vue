@@ -53,6 +53,8 @@ export default class FoldBox extends Vue {
 
     /** 更新当前容器尺寸 */
     updateSize() {
+        // 先隐藏按钮，再判断
+        this.showBtn = false;
         // 当存在外部设置的展开高度时，就不获取自适应高度了
         if (this.openHeight) {
             this.showBtn = this.closeHeight != this.openHeight;
