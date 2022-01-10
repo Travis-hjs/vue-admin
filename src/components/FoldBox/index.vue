@@ -53,11 +53,12 @@ export default class FoldBox extends Vue {
 
     /** 更新当前容器尺寸 */
     updateSize() {
+        const needShow = (height: string) => parseFloat(height) > parseFloat(this.closeHeight);
         // 先隐藏按钮，再判断
         this.showBtn = false;
         // 当存在外部设置的展开高度时，就不获取自适应高度了
         if (this.openHeight) {
-            this.showBtn = this.closeHeight != this.openHeight;
+            this.showBtn = needShow(this.openHeight);
             return;
         }
         this.isOnUpdate = true;
@@ -68,7 +69,7 @@ export default class FoldBox extends Vue {
             // console.log("使用的高度 >>", this.useHeight);
             this.boxHeight = box.clientHeight + "px";
             // console.log("节点高度 >>", this.boxHeight);
-            this.showBtn = this.closeHeight != this.boxHeight;
+            this.showBtn = needShow(this.boxHeight);
             this.isOnUpdate = false;
         })
     }
