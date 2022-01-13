@@ -27,6 +27,8 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
+const isFirefox = navigator.userAgent.toLocaleLowerCase().indexOf("firefox") > 0;
+
 /** 全局定位层级，每使用一个组件累加一次 */
 let zIndex = 1000;
 
@@ -98,20 +100,21 @@ export default class BaseDialog extends Vue {
 
     @Watch("value")
     onValue(val: boolean) {
+        this.timer && clearTimeout(this.timer);
         if (!val) {
             this.contentShow = false;
         }
     }
+
+    private timer!: NodeJS.Timeout;
 
     /**  
      * 设置内容区域位置
      * @param e 鼠标事件
      */
     private setContentPosition(e: MouseEvent) {
-        // console.log("x: ", e.pageX, "y: ", e.pageY);
-        // console.log(this.value, this.$el.contains(e.target as HTMLElement));
-        // 只有在外部点击，且关闭的情况下才会记录左边
-        if (!this.value || this.$el.contains(e.target as HTMLElement)) return;
+        // 只有在外部点击，且关闭的情况下才会记录坐标
+        if (!this.value || this.contentShow || this.$el.contains(e.target as HTMLElement)) return;
         this.contentMove = false;
         const { clientWidth, clientHeight } = this.$el;
         const centerX = clientWidth / 2;
@@ -122,11 +125,11 @@ export default class BaseDialog extends Vue {
         // this.contentY = `${pageY}px`;
         this.contentX = `${pageX / clientWidth * 100}vw`;
         this.contentY = `${pageY / clientHeight * 100}vh`;
-        // this.contentShow = true;
-        setTimeout(() => {
+        // css3动画生命周期结束后再设置过渡动画
+        this.timer = setTimeout(() => {
             this.contentMove = true;
             this.contentShow = true;
-        })
+        }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒
     }
 
     created() {
@@ -143,8 +146,8 @@ export default class BaseDialog extends Vue {
     }
 
     beforeDestroy() {
-        // console.log("beforeDestroy >> BaseDialog");
         document.removeEventListener("click", this.setContentPosition);
+        this.timer && clearTimeout(this.timer);
         this.appendToBody && this.$el.remove(); // 插入至body处的节点要单独移除
     }
 }
