@@ -15,6 +15,7 @@
         <div class="mgb_30">
             <h2 class="the-title mgr_40">滚动条组件</h2>
             <el-button icon="el-icon-plus" size="medium" type="primary" @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
+            <el-button size="medium" @click="openDialog('first')">打开弹出层-1</el-button>
         </div>
         <div class="mgb_10"><span class="the-tag green">横向滚动</span></div>
         <div class="list-x mgb_40">
@@ -32,11 +33,56 @@
             <h2 class="the-title mgr_40">折叠盒子组件</h2>
             <el-button type="success" size="medium" icon="el-icon-plus" @click="addOptionItems()">添加选项数据</el-button>
         </div>
-        <div class="option-box">
+        <div class="option-box mgb_30">
             <FoldBox closeHeight="40px" ref="the-fold-box">
                 <button class="option-item" v-for="item in opotionList" :key="item">选项-{{ item }}</button>
             </FoldBox>
         </div>
+
+        <div class="mgb_30">
+            <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
+        </div>
+
+        <div class="flex">
+            <el-button type="primary" size="medium" @click="openDialog('first')">打开弹出层-1</el-button>
+            <div class="f1"></div>
+            <el-button type="primary" size="medium" @click="openDialog('second')">打开弹出层-2</el-button>
+        </div>
+
+        <base-dialog title="第一个 dialog" v-model="dialogInfo.first.show" @close="clearTimer()">
+            <div>
+                <p class="mgb_10">出现次数：{{ dialogInfo.first.count }}</p>
+                <div v-if="delayShow">延迟出现</div>
+            </div>
+            <template slot="footer">
+                <el-button @click="closeDialog('first')">关闭</el-button>
+            </template>
+        </base-dialog>
+
+        <base-dialog title="第二个 dialog" v-model="dialogInfo.second.show" :closeByMask="false">
+            <div>
+                <p><span class="the-tag orange">当前不可点击遮罩层关闭</span></p>
+                <p class="mgb_10">出现次数：{{ dialogInfo.second.count }}</p>
+                <div v-if="delayShow">延迟出现</div>
+
+                <base-dialog title="第三个 dialog" v-model="dialogInfo.third.show" :appendToBody="true">
+                    <div>
+                        <p class="mgb_10">出现次数：{{ dialogInfo.third.count }}</p>
+                        <ul class="dialog-list">
+                            <li class="dialog-item flex fvertical" v-for="(item) in list" :key="item">{{ item }}</li>
+                        </ul>
+                    </div>
+                    <template slot="footer">
+                        <el-button @click="closeDialog('third')">关闭嵌套 Dialog</el-button>
+                    </template>
+                </base-dialog>
+            </div>
+            <template slot="footer">
+                <el-button @click="closeDialog('second')">关闭</el-button>
+                <el-button type="primary" @click="openDialog('third')">打开嵌套 Dialog</el-button>
+            </template>
+        </base-dialog>
+
     </div>
 </template>
 
@@ -96,6 +142,44 @@ export default class Page5 extends Vue {
         this.opotionList = this.opotionList.concat(list);
         this.$refs["the-fold-box"].updateSize();
     }
+
+    dialogInfo = {
+        first: {
+            show: false,
+            count: 0,
+        },
+        second: {
+            show: false,
+            count: 0
+        },
+        third: {
+            show: false,
+            count: 0
+        }
+    }
+
+    delayShow = false;
+
+    delayTimer!: NodeJS.Timeout;
+
+    openDialog(type: "first" | "second" | "third") {
+        this.dialogInfo[type].count ++;
+        this.dialogInfo[type].show = true;
+        this.delayTimer = setTimeout(() => {
+            this.delayShow = true;
+        }, 2000);
+    }
+
+    closeDialog(type: "first" | "second" | "third") {
+        this.dialogInfo[type].show = false;
+        this.clearTimer();
+    }
+
+    clearTimer() {
+        this.delayShow = false;
+        clearTimeout(this.delayTimer);
+    }
+
 }
 </script>
 
@@ -148,6 +232,20 @@ export default class Page5 extends Vue {
             border-radius: 4px;
             padding: 0 8px;
         }
+    }
+}
+// 第三个弹出层插入至body处，所以样式要单独拎出来写在外部
+.dialog-list {
+    width: 100%;
+    .dialog-item {
+        height: 100px;
+        width: 100%;
+        background-color: #eee;
+        font-size: 18px;
+        padding: 0 14px;
+    }
+    .dialog-item:nth-child(even) {
+        background-color: #fff;
     }
 }
 </style>

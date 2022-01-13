@@ -1,6 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
-import SvgIcon from "./icons/index.vue"; 
+import SvgIcon from "./icons/index.vue";
+import BaseDialog from "./components/base-dialog/index.vue";
 import router from "./router";
 import ElementUI from "element-ui";
 import { copyText } from "./utils";
@@ -9,13 +10,13 @@ import "./styles/index.scss";
 import "./styles/layout.scss";
 import "./styles/element-variables.scss";
 
-
 import { version } from "../package.json";
 
 window.version = version;
 
 // 注册全局组件: `svg-icon`
 Vue.component("svg-icon", SvgIcon);
+Vue.component("base-dialog", BaseDialog);
 
 Vue.use(ElementUI);
 
