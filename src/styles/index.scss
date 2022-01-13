@@ -45,6 +45,10 @@ div:focus {
 .fvertical { align-items: center; }
 /* 水平居中 */
 .fcenter { justify-content: center; }
+/* 右对齐 */
+.fright { flex-direction: row; justify-content: flex-end; }
+/* 两端对齐 */
+.fbetween { justify-content: space-between; }
 /* 溢出...显示 当前节点生效 */
 .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* 溢出...显示 子节点生效 */
@@ -158,6 +162,10 @@ div:focus {
     &:active {
         opacity: 0.85;
     }
+}
+
+.the-btn.the-btn {
+    margin-left: 10px;
 }
 
 .the-btn.mini {

@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import SvgIcon from "./icons/index.vue"; 
+import SvgIcon from "./icons/index.vue";
+import BaseDialog from "./components/base-dialog/index.vue";
 import router from "./router";
 import { copyText } from "./utils";
 import { version } from "../package.json";
@@ -20,6 +21,8 @@ app.directive("copy", {
 
 // 注册全局组件: `svg-icon`
 app.component("svg-icon", SvgIcon);
+// 基础弹框
+app.component("base-dialog", BaseDialog);
 
 app.use(router);
 
