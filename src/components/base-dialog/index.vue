@@ -2,19 +2,17 @@
     <transition name="fade">
         <div
             class="base-dialog flex fvertical fcenter"
-            ref="mask"
-            v-show="value"
-            @click.stop="onClose(!closeByMask)"
             :style="{ 'z-index': zIndex }"
+            v-show="value"
+            @click="onClose"
         >
             <div
-                :class="['base-dialog-content', { 'move': contentMove }, { 'opened': contentShow }]"
+                :class="['base-dialog-content', { 'moving': contentMove }, { 'opened': contentShow }]"
                 :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
-                @click.stop="() => {}"
             >   
                 <div class="base-dialog-title flex fbetween fvertical">
                     <h2>{{ title }}</h2>
-                    <i class="close-btn" @click="onClose()"></i>
+                    <i ref="close-btn" @click="onClose"></i>
                 </div>
                 <div class="base-dialog-body">
                     <slot></slot>
@@ -29,9 +27,10 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
+/** 全局定位层级，每使用一个组件累加一次 */
 let zIndex = 1000;
 
-/** 基础弹出对话框组件 */
+/** 基础弹出框组件 */
 @Component({
     name: "base-dialog"
 })
@@ -46,13 +45,6 @@ export default class BaseDialog extends Vue {
     })
     value!: boolean;
 
-    /** 是否可以通过点击遮罩层关闭`Dialog` */
-    @Prop({
-        type: Boolean,
-        default: true
-    })
-    closeByMask!: boolean
-
     /** 弹出层内容区域宽度 */
     @Prop({
         type: String,
@@ -66,14 +58,30 @@ export default class BaseDialog extends Vue {
     })
     title!: string;
 
+    /** 是否可以通过点击遮罩层关闭`Dialog` */
+    @Prop({
+        type: Boolean,
+        default: true
+    })
+    closeByMask!: boolean
+
+    /** `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true` */
+    @Prop({
+        type: Boolean,
+        default: false
+    })
+    appendToBody!: boolean;
+
     $refs!: {
-        "mask": HTMLElement
+        "close-btn": HTMLElement
     }
 
-    onClose(stop: boolean) {
-        if (stop) return;
-        this.$emit("input", false);
-        this.$emit("close");
+    onClose(e: MouseEvent) {
+        // console.log("onClose >>", e.target);
+        if ((e && e.target === this.$el && this.closeByMask) || (e && e.target === this.$refs["close-btn"])) {
+            this.$emit("input", false);
+            this.$emit("close");
+        }
     }
 
     /** 内容盒子`x`轴偏移位置 */
@@ -101,10 +109,11 @@ export default class BaseDialog extends Vue {
      */
     private setContentPosition(e: MouseEvent) {
         // console.log("x: ", e.pageX, "y: ", e.pageY);
-        // console.log(this.value);
-        if (!this.value) return;
+        // console.log(this.value, this.$el.contains(e.target as HTMLElement));
+        // 只有在外部点击，且关闭的情况下才会记录左边
+        if (!this.value || this.$el.contains(e.target as HTMLElement)) return;
         this.contentMove = false;
-        const { clientWidth, clientHeight } = this.$refs["mask"];
+        const { clientWidth, clientHeight } = this.$el;
         const centerX = clientWidth / 2;
         const centerY = clientHeight / 2;
         const pageY = e.pageY - centerY;
@@ -125,16 +134,18 @@ export default class BaseDialog extends Vue {
     }
 
     mounted() {
-        // 节点初始化之后移动至<body>处
-        this.$el.remove();
-        document.body.appendChild(this.$el);
+        if (this.appendToBody) {
+            // 节点初始化之后移动至<body>处
+            this.$el.remove();
+            document.body.appendChild(this.$el);
+        }
         document.addEventListener("click", this.setContentPosition);
     }
 
     beforeDestroy() {
         // console.log("beforeDestroy >> BaseDialog");
         document.removeEventListener("click", this.setContentPosition);
-        this.$el.remove();
+        this.appendToBody && this.$el.remove(); // 插入至body处的节点要单独移除
     }
 }
 </script>
@@ -158,7 +169,7 @@ export default class BaseDialog extends Vue {
 .base-dialog-content.opened {
     transform: translate3d(0,0,0) scale(1) !important;
 }
-.base-dialog-content.move {
+.base-dialog-content.moving {
     transition: 0.28s all;
 }
 .base-dialog-title {
@@ -181,7 +192,7 @@ export default class BaseDialog extends Vue {
     padding: 12px 14px;
     overflow: auto;
     min-height: 0px;
-    max-height: 90vh;
+    max-height: 80vh;
     overflow: auto;
 }
 .base-dialog-footer {
