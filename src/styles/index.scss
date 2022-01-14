@@ -121,11 +121,11 @@ div:focus {
 
 // 渐变
 .fade-enter-active, .fade-leave-active {
-  transition: 0.3s all;
+    @include moveTime();
 }
 
 .fade-enter-from, .fade-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 
 // ================= 示例全局样式 =================
@@ -164,7 +164,7 @@ div:focus {
     }
 }
 
-.the-btn.the-btn {
+.the-btn + .the-btn {
     margin-left: 10px;
 }
 

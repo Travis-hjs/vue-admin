@@ -170,7 +170,7 @@ export default defineComponent({
             margin-bottom: 40px;
             .login_form {
                 background-color: #fff;
-                padding: 40px 50px 30px;
+                padding: 40px 40px 30px;
             }
             .login_title {
                 font-size: 22px;
