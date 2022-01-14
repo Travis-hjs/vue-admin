@@ -16,6 +16,7 @@ window.version = version;
 
 // 注册全局组件: `svg-icon`
 Vue.component("svg-icon", SvgIcon);
+// 基础弹框
 Vue.component("base-dialog", BaseDialog);
 
 Vue.use(ElementUI);
