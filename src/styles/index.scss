@@ -87,7 +87,7 @@ div:focus {
 // ================== 定义过渡动画 ==================
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity 0.28s;
+    @include moveTime();
 }
 
 .fade-enter, .fade-leave-active {

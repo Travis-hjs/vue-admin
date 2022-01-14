@@ -175,7 +175,7 @@ export default class BaseDialog extends Vue {
     transform: translate3d(0,0,0) scale(1) !important;
 }
 .base-dialog-content.moving {
-    transition: 0.28s all;
+    @include moveTime();
 }
 .base-dialog-title {
     padding: 12px 14px;
