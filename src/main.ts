@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import SvgIcon from "./icons/index.vue";
 import BaseDialog from "./components/base-dialog/index.vue";
+// import BaseDialog from "./components/base-dialog/dialog"; // jsx 方式，有问题，具体看组件代码注释
 import router from "./router";
 import { copyText } from "./utils";
 import { version } from "../package.json";

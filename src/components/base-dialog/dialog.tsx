@@ -6,7 +6,14 @@ const isFirefox = navigator.userAgent.toLocaleLowerCase().indexOf("firefox") > 0
 /** 全局定位层级，每使用一个组件累加一次 */
 let zIndex = 1000;
 
-/** 基础弹出框组件 */
+/**
+ * # 基础弹出框组件
+ * **当前`jsx`组件有个两个问题：**
+ * 1. `<Transition>`组件在隐藏节点时，没有过渡动画
+ * 2. 当`<base-dialog>`组件有嵌套的情况，且外层有`v-if`判断的时候，内层会出现闪烁的问题。具体看示例组件打开第二个dialog里面的嵌套组件时可以出现
+ * 
+ * *以上问题具体原因还不清楚，所以暂时没有使用该组件；sfc单文件组件没有这类问题*
+ */
 export default defineComponent({
     name: "base-dialog",
     props: {
@@ -114,16 +121,7 @@ export default defineComponent({
 
         return function() {
             const Dialog = () => (
-                <Transition
-                    name="fade"
-                    appear={ true }
-                    // enterToClass="fade-enter-from"
-                    // enterActiveClass="fade-enter-active"
-                    // enterFromClass="fade-enter-active fade-enter-from"
-                    // leaveFromClass="fade-leave-active fade-leave-to"
-                    // leaveToClass="fade-leave-to"
-                    // leaveActiveClass="fade-leave-active"
-                >
+                <Transition name="fade" appear={ true }>
                     <div
                         ref={ dialog }
                         class="base-dialog flex fvertical fcenter"
@@ -140,7 +138,7 @@ export default defineComponent({
                                 <i ref={ closeBtn } onClick={ e => onClose(e) }></i>
                             </div>
                             <div class="base-dialog-body">{ context.slots.default?.() }</div>
-                            <div class="base-dialog-footer">{ context.slots.footer?.() }</div>
+                            { context.slots.footer ? (<div class="base-dialog-footer">{ context.slots.footer() }</div>) : undefined }
                         </div>
                     </div>
                 </Transition>
