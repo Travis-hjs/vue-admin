@@ -7,14 +7,14 @@
             @click="onClose"
         >
             <div
-                :class="['base-dialog-content', { 'moving': contentMove }, { 'opened': contentShow }]"
+                :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
                 :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
             >   
                 <div class="base-dialog-title flex fbetween fvertical">
                     <h2>{{ title }}</h2>
                     <i ref="close-btn" @click="onClose"></i>
                 </div>
-                <div class="base-dialog-body">
+                <div class="base-dialog-body f1">
                     <slot></slot>
                 </div>
                 <div class="base-dialog-footer">
@@ -168,6 +168,8 @@ export default class BaseDialog extends Vue {
     box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
     background-color: #fff;
     overflow: hidden;
+    flex-direction: column;
+    max-height: 90vh;
 }
 .base-dialog-content.opened {
     transform: translate3d(0,0,0) scale(1) !important;
@@ -195,7 +197,6 @@ export default class BaseDialog extends Vue {
     padding: 12px 14px;
     overflow: auto;
     min-height: 0px;
-    max-height: 80vh;
     overflow: auto;
 }
 .base-dialog-footer {
