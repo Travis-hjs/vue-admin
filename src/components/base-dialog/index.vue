@@ -9,7 +9,7 @@
                 @click="onClose"
             >
                 <div
-                    :class="['base-dialog-content', { 'moving': contentMove }, { 'opened': contentShow }]"
+                    :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
                     :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
                 >   
                     <div class="base-dialog-title flex fbetween fvertical">
@@ -35,7 +35,7 @@
             @click="onClose"
         >
             <div
-                :class="['base-dialog-content', { 'moving': contentMove }, { 'opened': contentShow }]"
+                :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
                 :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
             >   
                 <div class="base-dialog-title flex fbetween fvertical">
@@ -176,54 +176,5 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
-
-.base-dialog {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0,0,0,0.5);
-}
-.base-dialog-content {
-    border-radius: 2px; 
-    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
-    background-color: #fff;
-    overflow: hidden;
-}
-.base-dialog-content.opened {
-    transform: translate3d(0,0,0) scale(1) !important;
-}
-.base-dialog-content.moving {
-    transition: 0.28s all;
-}
-.base-dialog-title {
-    padding: 12px 14px;
-    border-bottom: solid 1px #eee;
-    h2 {
-        font-size: 22px;
-        color: #303133;
-        font-weight: normal;
-    }
-    i {
-        display: inline-block;
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-        @include closeIcon(#666, 16px);
-    }
-}
-.base-dialog-body {
-    padding: 12px 14px;
-    overflow: auto;
-    min-height: 0px;
-    max-height: 80vh;
-    overflow: auto;
-}
-.base-dialog-footer {
-    text-align: right;
-    border-top: solid 1px #eee;
-    padding: 10px 14px;
-}
+@import "./dialog.scss";
 </style>

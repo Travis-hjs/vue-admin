@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, onUnmounted, ref, watch, Transition, Teleport } from "vue";
 import "./dialog.scss";
 
 const isFirefox = navigator.userAgent.toLocaleLowerCase().indexOf("firefox") > 0;
@@ -36,6 +36,9 @@ export default defineComponent({
         }
     },
     setup(props, context) {
+        /** 当前使用的层级 */
+        const _zIndex = zIndex;
+        // 累加
         zIndex++;
         /** 当前组件节点 */
         const dialog = ref<HTMLElement>();
@@ -94,6 +97,7 @@ export default defineComponent({
         }
 
         onMounted(function() {
+            // 该操作只能用在 vue 2.x 里面，3.x 会报错
             // if (props.appendToBody) {
             //     // 节点初始化之后移动至<body>处
             //     dialog.value!.remove();
@@ -108,29 +112,27 @@ export default defineComponent({
             // props.appendToBody && dialog.value!.remove(); // 插入至body处的节点要单独移除
         });
 
-        // {
-        //     zIndex,
-        //     dialog,
-        //     closeBtn,
-        //     onClose,
-        //     contentX,
-        //     contentY,
-        //     contentShow,
-        //     contentMove
-        // }
-
         return function() {
             const Dialog = () => (
-                <transition name="fade">
+                <Transition
+                    name="fade"
+                    appear={ true }
+                    // enterToClass="fade-enter-from"
+                    // enterActiveClass="fade-enter-active"
+                    // enterFromClass="fade-enter-active fade-enter-from"
+                    // leaveFromClass="fade-leave-active fade-leave-to"
+                    // leaveToClass="fade-leave-to"
+                    // leaveActiveClass="fade-leave-active"
+                >
                     <div
                         ref={ dialog }
                         class="base-dialog flex fvertical fcenter"
-                        style={{ zIndex }}
+                        style={{ zIndex: _zIndex }}
                         v-show={ props.modelValue }
                         onClick={ e => onClose(e) }
                     >
                         <div
-                            class={ `base-dialog-content${contentMove.value ? " moving" : ""}${contentShow.value ? " opened" : ""}` }
+                            class={ `base-dialog-content flex${contentMove.value ? " moving" : ""}${contentShow.value ? " opened" : ""}` }
                             style={{ 'width': props.width, 'transform': `translate3d(${contentX.value}, ${contentY.value}, 0) scale(0)` }}
                         >   
                             <div class="base-dialog-title flex fbetween fvertical">
@@ -141,14 +143,9 @@ export default defineComponent({
                             <div class="base-dialog-footer">{ context.slots.footer?.() }</div>
                         </div>
                     </div>
-                </transition>
+                </Transition>
             );
-            const ToBody = () => (
-                <teleport to="body">
-                    <Dialog />
-                </teleport>
-            );
-            return props.appendToBody ? <ToBody /> : <Dialog />;
+            return props.appendToBody ? (<Teleport to="body"><Dialog /></Teleport>) : <Dialog />;
         } 
     }
 })
