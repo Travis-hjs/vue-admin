@@ -190,7 +190,12 @@ export default class BaseDialog extends Vue {
         width: 28px;
         height: 28px;
         cursor: pointer;
+        transform: rotate(0);
         @include closeIcon(#666, 16px);
+        @include moveTime();
+        &:hover {
+            transform: rotate(180deg);
+        }
     }
 }
 .base-dialog-body {
