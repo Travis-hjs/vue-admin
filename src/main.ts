@@ -4,8 +4,9 @@ import SvgIcon from "./icons/index.vue";
 import BaseDialog from "./components/base-dialog/index.vue";
 // import BaseDialog from "./components/base-dialog/dialog"; // jsx 方式，有问题，具体看组件代码注释
 import router from "./router";
-import { copyText } from "./utils";
+import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
+import ripple from "./utils/ripple";
 
 window.version = version;
 
@@ -19,6 +20,18 @@ app.directive("copy", {
         });
     }
 })
+
+app.directive("ripple", {
+    mounted(el: HTMLElement) {
+        /** 添加事件类型 */
+        const eventType = isMobile() ? "touchstart" : "mousedown";
+        el.setAttribute("ripple", "");
+        el.addEventListener(eventType, function (e) {
+            ripple(e, el);
+        });
+    }
+})
+
 
 // 注册全局组件: `svg-icon`
 app.component("svg-icon", SvgIcon);

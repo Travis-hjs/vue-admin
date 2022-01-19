@@ -7,8 +7,8 @@
         </div>
         <div class="mgb_30">
             <h2 class="the-title mgr_40">滚动条组件</h2>
-            <button class="the-btn green" @click="() => list.push(list.length + 1)">添加一个列表 item</button>
-            <button class="the-btn" size="medium" @click="openDialog('first')">打开弹出层-1</button>
+            <button class="the-btn green" v-ripple @click="() => list.push(list.length + 1)">添加一个列表 item</button>
+            <button class="the-btn yellow" v-ripple @click="openDialog('first')">打开弹出层-1</button>
         </div>
         <div class="mgb_20"><span class="the-tag green">横向滚动</span></div>
         <div class="list-x mgb_40">
@@ -27,9 +27,9 @@
         </div>
 
         <div class="flex">
-            <button class="the-btn" size="medium" @click="openDialog('first')">打开弹出层-1</button>
+            <button class="the-btn blue" v-ripple @click="openDialog('first')">打开弹出层-1</button>
             <div class="f1"></div>
-            <button class="the-btn green" size="medium" @click="openDialog('second')">打开弹出层-2</button>
+            <button class="the-btn green" v-ripple @click="openDialog('second')">打开弹出层-2</button>
         </div>
 
         <base-dialog title="第一个 dialog" v-model="dialogInfo.first.show" @close="clearTimer()">
@@ -38,7 +38,7 @@
                 <div v-if="delayShow">延迟出现</div>
             </div>
             <template #footer>
-                <button class="the-btn" @click="closeDialog('first')">关闭</button>
+                <button class="the-btn red" v-ripple @click="closeDialog('first')">关闭</button>
             </template>
         </base-dialog>
 
@@ -56,13 +56,13 @@
                         </ul>
                     </div>
                     <template #footer>
-                        <button class="the-btn" @click="closeDialog('third')">关闭嵌套 Dialog</button>
+                        <button class="the-btn red" v-ripple @click="closeDialog('third')">关闭嵌套 Dialog</button>
                     </template>
                 </base-dialog>
             </div>
             <template #footer>
-                <button class="the-btn" @click="closeDialog('second')">关闭</button>
-                <button class="the-btn green" @click="openDialog('third')">打开嵌套 Dialog</button>
+                <button class="the-btn red" v-ripple @click="closeDialog('second')">关闭</button>
+                <button class="the-btn blue" v-ripple @click="openDialog('third')">打开嵌套 Dialog</button>
             </template>
         </base-dialog>
     </div>

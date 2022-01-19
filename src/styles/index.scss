@@ -1,4 +1,5 @@
 @import "./variables.scss";
+@import "./ripple.scss";
 
 *, *:before, *:after {
     box-sizing: border-box;
@@ -135,8 +136,8 @@ div:focus {
     border: 1px solid #DCDFE6;
     border-radius: 4px;
     color: #1f2d3d;
-    height: 40px;
-    line-height: 40px;
+    height: 38px;
+    line-height: 38px;
     font-size: 14px;
     padding: 0 15px;
     outline: none;
@@ -147,20 +148,22 @@ div:focus {
 }
 
 .the-btn {
-    padding: 0px 20px;
-    height: 40px;
-    outline: none;
-    line-height: 1;
     font-size: 14px;
-    border-radius: 4px;
-    color: #fff;
+    padding: 0px 15px;
+    min-width: 88px;
+    height: 36px;
+    line-height: 1;
+    border-radius: 2px;
+    background-color: #fff;
+    color: rgba(0,0,0,.87);
+    box-shadow: 0 3px 1px -2px rgb(0,0,0,0.2), 0 2px 2px 0 rgb(0,0,0,0.14), 0 1px 5px 0 rgb(0,0,0,0.12);
+    @include moveTime();
+    outline: none;
     text-align: center;
-    background-color: $theme;
     border: none;
     cursor: pointer;
-    transition: 0.2s all;
     &:active {
-        opacity: 0.85;
+        box-shadow: 0 5px 5px -3px rgb(0,0,0,0.2), 0 8px 10px 1px rgb(0,0,0,0.14), 0 3px 14px 2px rgb(0,0,0,0.12);
     }
 }
 
@@ -169,14 +172,29 @@ div:focus {
 }
 
 .the-btn.mini {
-    padding: 0px 15px;
     font-size: 12px;
     height: 28px;
     border-radius: 3px;
 }
 
+.the-btn.blue {
+    background-color: $theme;
+    color: #fff;
+}
+
 .the-btn.green {
-    background-color: #13ce66;
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.the-btn.yellow {
+    background-color: #fdd835;
+    color: #fff;
+}
+
+.the-btn.red {
+    background-color: #f44336;
+    color: #fff;
 }
 
 .check-box {

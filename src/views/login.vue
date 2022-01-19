@@ -9,15 +9,15 @@
                     <div class="login_title">平台登录</div>
                     <input class="the-input mgb_20" type="text" v-model="formData.account" placeholder="请输入账号">
                     <input class="the-input mgb_20" type="password" v-model="formData.password" placeholder="请输入密码">
-                    <button class="the-btn mgb_20" style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
+                    <button class="the-btn blue mgb_20" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
                     <label class="check-box flex fvertical mgb_20" for="check-input" @change="remember =! remember">
                         <input type="checkbox" id="check-input" :checked="remember" />
                         记住账号/密码
                     </label>
                     <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
-                        <button class="the-btn mini success" v-copy="item" :disabled="loading">点击复制</button>
+                        <button class="the-btn mini green" v-ripple v-copy="item" :disabled="loading">点击复制</button>
                         <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>
-                        <button class="the-btn mini" :disabled="loading" @click="setLoginInfo(item)">一键登录</button>
+                        <button class="the-btn mini blue" v-ripple :disabled="loading" @click="setLoginInfo(item)">一键登录</button>
                     </div>
                 </div>
             </div>

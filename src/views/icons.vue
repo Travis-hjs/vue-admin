@@ -4,7 +4,7 @@
             <h2 class="the-title mgr_20">Svg Icons</h2>
             <span class="the-tag blue">点击复制代码</span>
         </div>
-        <div class="icon-item" v-for="(item) in list" :key="item" v-copy="getSvgIconCode(item)" :title="getSvgIconCode(item)">
+        <div class="icon-item" v-ripple color="rgba(0,0,0,0.14)" v-for="(item) in list" :key="item" v-copy="getSvgIconCode(item)" :title="getSvgIconCode(item)">
             <svg-icon :name="item" />
             <p>{{ item }}</p>
         </div>
@@ -15,7 +15,7 @@ import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
     name: "svg-icons", // 设置路由缓存 keepAlive 时，这里必须要设置对应的 name 值
-    setup(props, context) {
+    setup() {
         const svgFileReg = /(?<=(svg\/)).*?(?=(.svg))/;
 
         function getSvgNames() {

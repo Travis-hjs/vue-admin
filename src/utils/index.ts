@@ -148,3 +148,9 @@ export function jsonToFormData(params: { [key: string]: number | string | boolea
     }
     return result.slice(1);
 }
+
+/** 检查是否移动端 */
+export function isMobile() {
+    const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
+    return pattern.test(navigator.userAgent);
+}
