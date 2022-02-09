@@ -100,8 +100,16 @@ export default class BaseDialog extends Vue {
 
     @Watch("value")
     onValue(val: boolean) {
-        this.timer && clearTimeout(this.timer);
-        if (!val) {
+        this.timer && clearTimeout(this.timer)
+        if (val) {
+            // 该代码片段不写在`setContentPosition`是因为打开弹框时，可能是异步的
+            this.contentMove = false;
+            // css3 动画生命周期结束后再设置过渡动画
+            this.timer = setTimeout(() => {
+                this.contentMove = true;
+                this.contentShow = true;
+            }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒
+        } else {
             this.contentShow = false;
         }
     }
@@ -115,7 +123,6 @@ export default class BaseDialog extends Vue {
     private setContentPosition(e: MouseEvent) {
         // 只有在外部点击，且关闭的情况下才会记录坐标
         if (!this.value || this.contentShow || this.$el.contains(e.target as HTMLElement)) return;
-        this.contentMove = false;
         const { clientWidth, clientHeight } = this.$el;
         const centerX = clientWidth / 2;
         const centerY = clientHeight / 2;
@@ -125,11 +132,6 @@ export default class BaseDialog extends Vue {
         // this.contentY = `${pageY}px`;
         this.contentX = `${pageX / clientWidth * 100}vw`;
         this.contentY = `${pageY / clientHeight * 100}vh`;
-        // css3动画生命周期结束后再设置过渡动画
-        this.timer = setTimeout(() => {
-            this.contentMove = true;
-            this.contentShow = true;
-        }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒
     }
 
     created() {
