@@ -68,7 +68,15 @@ export default defineComponent({
 
         watch(() => props.modelValue, function(val) {
             timer && clearTimeout(timer);
-            if (!val) {
+            if (val) {
+                // 该代码片段不写在`setContentPosition`是因为打开弹框时，可能是异步的
+                contentMove.value = false;
+                // css3动画生命周期结束后再设置过渡动画
+                timer = setTimeout(() => {
+                    contentMove.value = true;
+                    contentShow.value = true;
+                }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒
+            } else {
                 contentShow.value = false;
             }
         })
@@ -80,7 +88,6 @@ export default defineComponent({
         function setContentPosition(e: MouseEvent) {
             // 只有在外部点击，且关闭的情况下才会记录坐标
             if (!props.modelValue || contentShow.value || dialog.value!.contains(e.target as HTMLElement)) return;
-            contentMove.value = false;
             const { clientWidth, clientHeight } = dialog.value!;
             const centerX = clientWidth / 2;
             const centerY = clientHeight / 2;
@@ -88,11 +95,6 @@ export default defineComponent({
             const pageX = e.pageX - centerX;
             contentX.value = `${pageX / clientWidth * 100}vw`;
             contentY.value = `${pageY / clientHeight * 100}vh`;
-            // css3动画生命周期结束后再设置过渡动画
-            timer = setTimeout(() => {
-                contentMove.value = true;
-                contentShow.value = true;
-            }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒
         }
 
         function onClose(e: MouseEvent) {
