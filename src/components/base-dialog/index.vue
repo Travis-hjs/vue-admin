@@ -108,7 +108,7 @@ export default class BaseDialog extends Vue {
             this.timer = setTimeout(() => {
                 this.contentMove = true;
                 this.contentShow = true;
-            }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒
+            }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒，貌似 60 也可以
         } else {
             this.contentShow = false;
         }
