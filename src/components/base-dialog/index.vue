@@ -53,7 +53,7 @@
     </transition>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
 
 const isFirefox = navigator.userAgent.toLocaleLowerCase().indexOf("firefox") > 0;
 

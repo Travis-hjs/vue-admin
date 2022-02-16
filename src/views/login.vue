@@ -41,7 +41,7 @@ export default defineComponent({
 
         const info = store.projectInfo;
 
-        const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、IE9 及以上版本等浏览器"
+        const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、非 IE 等浏览器"
 
         /** 表单数据 */
         const formData = reactive({
