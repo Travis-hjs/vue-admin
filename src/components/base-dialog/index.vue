@@ -19,7 +19,7 @@
                     <div class="base-dialog-body">
                         <slot></slot>
                     </div>
-                    <div class="base-dialog-footer">
+                    <div class="base-dialog-footer" v-if="$slots.footer">
                         <slot name="footer"></slot>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 <div class="base-dialog-body">
                     <slot></slot>
                 </div>
-                <div class="base-dialog-footer">
+                <div class="base-dialog-footer" v-if="$slots.footer">
                     <slot name="footer"></slot>
                 </div>
             </div>
