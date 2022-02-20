@@ -1,14 +1,26 @@
 <template>
-    <div class="base-scrollbar">
+    <div class="base-scrollbar" @mouseenter="onEnter()" @mouseleave="onLeave()">
         <div ref="wrap" class="base-scrollbar-wrap" :style="wrapStyle">
             <slot></slot>
         </div>
-        <div class="base-scrollbar-thumb" ref="thumb-x" :style="thumbStyle.x">
-            <button title="滚动条-摁住拖拽" :style="{'background-color': thumbColor}"></button>
-        </div>
-        <div class="base-scrollbar-thumb" ref="thumb-y" :style="thumbStyle.y">
-            <button title="滚动条-摁住拖拽" :style="{'background-color': thumbColor}"></button>
-        </div>
+        <transition name="fade">
+            <button
+                class="base-scrollbar-thumb"
+                ref="thumb-y"
+                title="滚动条-摁住拖拽Y轴"
+                :style="{ ...thumbStyle.y, 'background-color': thumbColor}"
+                v-show="showThumb"
+            ></button>
+        </transition>
+        <transition name="fade">
+            <button
+                class="base-scrollbar-thumb"
+                ref="thumb-x"
+                title="滚动条-摁住拖拽X轴"
+                :style="{ ...thumbStyle.x, 'background-color': thumbColor}"
+                v-show="showThumb"
+            ></button>
+        </transition>
     </div>
 </template>
 <script lang="ts">
@@ -80,15 +92,19 @@ export default class BaseScrollbar extends Vue {
             borderRadius: "",
         }
     }
-    
+
+    /** 是否显示滚动条 */
+    showThumb = false;
+
     /** 节点尺寸监听器 */
     private resize!: ResizeObserver;
 
     /** 节点属性监听器 */
     private mutation!: MutationObserver;
 
-    /** 
-     * ！！！注意：如果是动态设置组件父容器的边框时，需要将该方法写在`ResizeObserver`监听回调里面，
+    /**
+     * 更新包裹容器样式
+     * - ！！！注意：如果是动态设置组件父容器的边框时，需要将该方法写在`ResizeObserver`监听回调里面，
      * 原因是父容器的边框会影响当前设置的包围盒宽度，导致滚动条的高度有所变化，也就是跟`css`中设置
      * `box-sizing: border-box;`的原理一样；这个时候就可以把`mounted`的首次调用给注释掉，交给监听回调来处理。
      */
@@ -97,7 +113,7 @@ export default class BaseScrollbar extends Vue {
         parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
         const css = getComputedStyle(parent);
         // console.log("父元素边框尺寸 >>", css.borderLeftWidth, css.borderRightWidth, css.borderTopWidth, css.borderBottomWidth);
-        this.wrapStyle.width = `calc(100% + ${scrollbarSize}px + ${css.borderLeftWidth} + ${css.borderRightWidth})`
+        this.wrapStyle.width = `calc(100% + ${scrollbarSize}px + ${css.borderLeftWidth} + ${css.borderRightWidth})`;
         this.wrapStyle.height = `calc(100% + ${scrollbarSize}px + ${css.borderTopWidth} + ${css.borderBottomWidth})`;
     }
 
@@ -177,12 +193,26 @@ export default class BaseScrollbar extends Vue {
     private onDragEnd(event: MouseEvent) {
         // console.log("抬起");
         this.isDrag = false;
+        if (!this.$el.contains(event.target as HTMLElement)) {
+            this.showThumb = false;
+        }
+    }
+
+    onEnter() {
+        this.showThumb = true;
+    }
+
+    onLeave() {
+        if (!this.isDrag) {
+            this.showThumb = false;
+        }
     }
 
     mounted() {
         this.updateWrapStyle();
         this.initThumbStyle();
-        this.$refs.wrap && this.$refs.wrap.addEventListener("scroll", this.updateThumbStyle);
+        const box = this.$refs.wrap;
+        box && box.addEventListener("scroll", this.updateThumbStyle);
         document.addEventListener("mousedown", this.onDragStart);
         document.addEventListener("mousemove", this.onDragMove);
         document.addEventListener("mouseup", this.onDragEnd);
@@ -193,11 +223,10 @@ export default class BaseScrollbar extends Vue {
         });
         this.mutation = new MutationObserver(entries => {
             // console.log("节点属性变动 >>", entries);
-            // this.updateWrapStyle();
             this.updateThumbStyle();
         });
-        this.resize.observe(this.$refs.wrap);
-        this.mutation.observe(this.$refs.wrap, {
+        this.resize.observe(box);
+        this.mutation.observe(box, {
             childList: true,
         });
     }
@@ -220,30 +249,14 @@ export default class BaseScrollbar extends Vue {
     height: 100%;
     overflow: hidden;
     position: relative;
-    &:hover {
-        .base-scrollbar-thumb {
-            button {
-                opacity: 1;
-            }
-        }
-    }
     .base-scrollbar-wrap {
         overflow: scroll;
     }
     .base-scrollbar-thumb {
         position: absolute;
         z-index: 10;
-        font-size: 0;
-        background-color: transparent;
-        overflow: hidden;
-        button {
-            @include moveTime();
-            outline: none;
-            border: none;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
+        outline: none;
+        border: none;
     }
 }
 </style>
