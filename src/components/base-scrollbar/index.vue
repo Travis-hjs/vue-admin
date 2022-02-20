@@ -242,8 +242,6 @@ export default class BaseScrollbar extends Vue {
 }
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
-
 .base-scrollbar {
     width: 100%;
     height: 100%;
