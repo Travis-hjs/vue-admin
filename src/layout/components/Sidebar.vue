@@ -1,6 +1,6 @@
 <template>
     <div class="the-layout-sidebar">
-        <Scrollbar :vertical="true" :clickUpdateDelay="300" :thumbSize="10">
+        <Scrollbar :clickUpdateDelay="300" :thumbSize="10">
             <transition name="fade">
                 <div class="the-logo-box" v-if="layoutInfo.showSidebarLogo">
                     <router-link class="the-logo-link flex fvertical fcenter" to="/">

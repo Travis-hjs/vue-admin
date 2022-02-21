@@ -13,8 +13,18 @@
         </div>
         <p class="tips">垂直滚动</p>
         <div class="list-y">
-            <Scrollbar :vertical="true" thumbColor="#42b983">
+            <Scrollbar thumbColor="#42b983">
                 <div class="item" v-for="(item) in list" :key="item"></div>
+            </Scrollbar>
+        </div>
+        <p class="tips">宽高超出滚动</p>
+        <div style="width: 300px; height: 140px;" class="mgb_30">
+            <Scrollbar>
+                <div style="width: 500px; height: 300px; background-color: yellow; color: #555; line-height: 28px">
+                    <p>内容内容内容内容内容内容内容</p>
+                    <p>内容内容内容内容内容内容内容内容内容</p>
+                    <p>内容内容内容内容内容内容内容</p>
+                </div>
             </Scrollbar>
         </div>
     </div>
@@ -24,6 +34,9 @@ import { defineComponent } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 
 export default defineComponent({
+    components: {
+        Scrollbar
+    },
     setup() {
         return {
             list: new Array(10).fill(0).map((_, index) => index)
