@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import SvgIcon from "./icons/index.vue";
 import BaseDialog from "./components/base-dialog/index.vue";
-import BaseScrollbar from "./components/base-scrollbar/index.vue";
 import router from "./router";
 import ElementUI from "element-ui";
 import { copyText } from "./utils";
@@ -19,8 +18,6 @@ window.version = version;
 Vue.component("svg-icon", SvgIcon);
 // 基础弹框
 Vue.component("base-dialog", BaseDialog);
-// 基础滚动条组件
-Vue.component("base-scrollbar", BaseScrollbar);
 
 Vue.use(ElementUI);
 
