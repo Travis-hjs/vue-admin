@@ -43,13 +43,14 @@
         <div class="mgb_30">
             <h2 class="the-title mgr_40">折叠盒子组件</h2>
             <el-button type="success" size="medium" icon="el-icon-plus" @click="addOptionItems()">添加选项数据</el-button>
+            <el-button size="medium" icon="el-icon-refresh" @click="resetOptionItems()">重置选项数据</el-button>
         </div>
         <div class="option-box mgb_30">
             <FoldBox closeHeight="40px" ref="the-fold-box">
                 <button class="option-item" v-for="item in opotionList" :key="item">选项-{{ item }}</button>
             </FoldBox>
         </div>
-        
+
         <div class="mgb_30">
             <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
         </div>
@@ -151,6 +152,11 @@ export default class Page5 extends Vue {
             list.push(i);
         }
         this.opotionList = this.opotionList.concat(list);
+        this.$refs["the-fold-box"].updateSize();
+    }
+
+    resetOptionItems() {
+        this.opotionList = new Array(9).fill(0).map((_, index) => index + 1);
         this.$refs["the-fold-box"].updateSize();
     }
 
