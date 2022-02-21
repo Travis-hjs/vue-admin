@@ -1,3 +1,7 @@
+
+# 备份文件，另外一种实现方式
+
+```html
 <template>
     <div class="the-scrollbar" @mouseenter="onEnter()" @mouseleave="onLeave()">
         <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
@@ -44,13 +48,6 @@ const scrollbarSize = (function() {
 })
 export default class Scrollbar extends Vue {
 
-    /** 滚动条颜色 */
-    @Prop({
-        type: String,
-        default: "rgba(147, 147, 153, 0.45)"
-    })
-    thumbColor!: string;
-
     /** 滚动条厚度 */
     @Prop({
         type: Number,
@@ -58,16 +55,23 @@ export default class Scrollbar extends Vue {
     })
     thumbSize!: number;
 
+    /** 滚动条颜色 */
+    @Prop({
+        type: String,
+        default: "rgba(147, 147, 153, 0.45)"
+    })
+    thumbColor!: string;
+    
     /**
      * 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒
-     * - 使用场景：内部有子节点尺寸变动撑开包裹器的滚动尺寸时，并且带有动画的情况，这时设置的延迟就为动画持续时间
+     * - 使用场景：内部有子节点尺寸变动撑开
      */
     @Prop({
         type: Number,
         default: 0
     })
     clickUpdateDelay!: number;
-
+    
     $refs!: {
         /** 包围器节点 */
         wrap: HTMLElement,
@@ -106,24 +110,19 @@ export default class Scrollbar extends Vue {
     /** 是否显示滚动条 */
     showThumb = false;
 
-    /**
-     * 初始化滚动指示器样式
-     */
-    private initThumbStyle() {
-        this.thumbStyle.y.right = this.thumbStyle.y.top = "0px";
-        this.thumbStyle.y.width = this.thumbSize + "px";
-        this.thumbStyle.x.bottom = this.thumbStyle.x.left = "0px";
-        this.thumbStyle.x.height = this.thumbSize + "px";
-        this.thumbStyle.x.borderRadius = this.thumbStyle.y.borderRadius = `${this.thumbSize / 2}px`;
-    }
+    /** 节点尺寸监听器 */
+    private resize!: ResizeObserver;
+
+    /** 节点属性监听器 */
+    private mutation!: MutationObserver;
 
     /**
      * 更新包裹容器样式
-     * - ！！！注意：如果是动态设置组件父容器的边框时，需要手动执行该方法，
+     * - ！！！注意：如果是动态设置组件父容器的边框时，需要将该方法写在`ResizeObserver`监听回调里面，
      * 原因是父容器的边框会影响当前设置的包围盒宽度，导致滚动条的高度有所变化，也就是跟`css`中设置
-     * `box-sizing: border-box;`的原理一样
+     * `box-sizing: border-box;`的原理一样；这个时候就可以把`mounted`的首次调用给注释掉，交给监听回调来处理。
      */
-    updateWrapStyle() {
+    private updateWrapStyle() {
         const parent = this.$el.parentNode as HTMLElement;
         parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
         const css = getComputedStyle(parent);
@@ -132,6 +131,14 @@ export default class Scrollbar extends Vue {
         this.wrapStyle.height = `calc(100% + ${scrollbarSize}px + ${css.borderTopWidth} + ${css.borderBottomWidth})`;
     }
 
+    private initThumbStyle() {
+        this.thumbStyle.y.right = this.thumbStyle.y.top = "0px";
+        this.thumbStyle.y.width = this.thumbSize + "px";
+        this.thumbStyle.x.bottom = this.thumbStyle.x.left = "0px";
+        this.thumbStyle.x.height = this.thumbSize + "px";
+        this.thumbStyle.x.borderRadius = this.thumbStyle.y.borderRadius = `${this.thumbSize / 2}px`;
+    }
+    
     /**
      * 更新滚动指示器样式
      * - 可以外部主动调用
@@ -166,8 +173,6 @@ export default class Scrollbar extends Vue {
     private vertical = false;
     /** 摁下滚动条时的偏移量 */
     private deviation = 0;
-    /** 更新延时器 */
-    private timer!: NodeJS.Timeout;
 
     private onDragStart(event: MouseEvent) {
         // console.log("摁下 >>", event);
@@ -206,20 +211,13 @@ export default class Scrollbar extends Vue {
     private onDragEnd(event: MouseEvent) {
         // console.log("抬起");
         this.isDrag = false;
-        if (this.$el.contains(event.target as HTMLElement)) {
-            if (this.clickUpdateDelay > 0) {
-                // console.log("执行");
-                this.timer && clearTimeout(this.timer);
-                this.timer = setTimeout(this.updateThumbStyle, this.clickUpdateDelay);
-            }
-        } else {
+        if (!this.$el.contains(event.target as HTMLElement)) {
             this.showThumb = false;
         }
     }
 
     onEnter() {
         this.showThumb = true;
-        this.updateThumbStyle();
     }
 
     onLeave() {
@@ -231,10 +229,24 @@ export default class Scrollbar extends Vue {
     mounted() {
         this.updateWrapStyle();
         this.initThumbStyle();
-        this.$refs.wrap && this.$refs.wrap.addEventListener("scroll", this.updateThumbStyle);
+        const box = this.$refs.wrap;
+        box && box.addEventListener("scroll", this.updateThumbStyle);
         document.addEventListener("mousedown", this.onDragStart);
         document.addEventListener("mousemove", this.onDragMove);
         document.addEventListener("mouseup", this.onDragEnd);
+        this.resize = new ResizeObserver(entries => {
+            console.log("尺寸变动 >>", entries);
+            // this.updateWrapStyle();
+            this.updateThumbStyle();
+        });
+        this.mutation = new MutationObserver(entries => {
+            // console.log("节点属性变动 >>", entries);
+            this.updateThumbStyle();
+        });
+        this.resize.observe(box);
+        this.mutation.observe(box, {
+            childList: true,
+        });
     }
 
     beforeDestroy() {
@@ -242,9 +254,9 @@ export default class Scrollbar extends Vue {
         document.removeEventListener("mousedown", this.onDragStart);
         document.removeEventListener("mousemove", this.onDragMove);
         document.removeEventListener("mouseup", this.onDragEnd);
-        this.timer && clearTimeout(this.timer);
+        this.resize.disconnect();
+        this.mutation.disconnect();
     }
-
 }
 </script>
 <style lang="scss">
@@ -264,3 +276,4 @@ export default class Scrollbar extends Vue {
     }
 }
 </style>
+```
