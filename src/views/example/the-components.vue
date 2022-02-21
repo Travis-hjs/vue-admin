@@ -24,12 +24,21 @@
             </Scrollbar>
         </div>
         <div class="mgb_10"><span class="the-tag blue">垂直滚动</span></div>
-        <div class="list-y mgb_30">
-            <Scrollbar :vertical="true" thumbColor="#ffd000">
+        <div class="list-y mgb_40">
+            <Scrollbar thumbColor="#ffd000">
                 <div class="item flex fvertical fcenter" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
         </div>
-
+        <div class="mgb_10"><span class="the-tag cyan">宽高超出滚动</span></div>
+        <div style="width: 300px; height: 140px;" class="mgb_30">
+            <Scrollbar>
+                <div style="width: 500px; height: 300px; background-color: yellow; color: #555; line-height: 28px">
+                    <p>内容内容内容内容内容内容内容</p>
+                    <p>内容内容内容内容内容内容内容内容内容</p>
+                    <p>内容内容内容内容内容内容内容</p>
+                </div>
+            </Scrollbar>
+        </div>
         <div class="mgb_30">
             <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
         </div>
@@ -162,6 +171,7 @@ export default class Page5 extends Vue {
         width: 30vw;
         max-width: 500px;
         height: 88px;
+        white-space: nowrap;
         .item {
             display: inline-block;
             width: 120px;

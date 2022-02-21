@@ -1,3 +1,7 @@
+
+# 备份文件，另外一种实现方式
+
+```html
 <template>
     <div class="the-scrollbar" @mouseenter="onEnter()" @mouseleave="onLeave()">
         <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
@@ -272,3 +276,4 @@ export default class Scrollbar extends Vue {
     }
 }
 </style>
+```
