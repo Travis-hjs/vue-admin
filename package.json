@@ -1,7 +1,12 @@
 {
-    "name": "vue2-element-ts",
+    "name": "vue2-admin-template",
     "version": "1.0.0",
-    "private": true,
+    "private": false,
+    "author": {
+        "name": "Hjs",
+        "email": "1141752341@qq.com",
+        "url": "https://github.com/Hansen-hjs/vue-admin"
+    },
     "scripts": {
         "dev": "vue-cli-service serve --open",
         "build": "vue-cli-service build"
