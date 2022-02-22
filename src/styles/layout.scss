@@ -76,7 +76,7 @@ $contentPadding: 12px;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 100;
     @include moveTime();
 }
 
@@ -117,7 +117,7 @@ $contentPadding: 12px;
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 11;
+    z-index: 110;
     @include moveTime();
 }
 
