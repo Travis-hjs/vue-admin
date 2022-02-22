@@ -2,27 +2,39 @@
     <div class="echarts-home">
         <div class="chart flex">
             <div class="item chart-left f1">
-                <div class="title">折线图</div>
+                <div class="mgb_20">
+                    <span class="the-tag green mgr_10">折线图</span>
+                    <el-button class="mgl_20" type="primary" size="mini" @click="lineChange()">修改折线图数据</el-button>
+                </div>
                 <ChartLine ref="ChartLine" className="line" :chartData="chartLineData" />
-                <div class="title">柱状图</div>
+                <div class="mgb_20">
+                    <span class="the-tag green mgr_10">柱状图</span>
+                    <el-button class="mgl_20" type="primary" size="mini" @click="barChange()">修改柱状图数据</el-button>
+                </div>
                 <ChartBar ref="ChartBar" className="bar" :chartData="chartBarData" />
             </div>
             <div class="item chart-right">
-                <div class="title">本日已收/未收</div>
+                <div class="mgb_20">
+                    <span class="the-tag green mgr_10">本日已收/未收</span>
+                    <el-button class="mgl_20" type="primary" size="mini" @click="ringChange('shou')">修改数据</el-button>
+                </div>
                 <ChartRing className="ring" :chartData="chartRingInfo.shou" />
-                <div class="title">本日已付/未付</div>
+                <div class="mgb_20">
+                    <span class="the-tag green mgr_10">本日已付/未付</span>
+                    <el-button class="mgl_20" type="primary" size="mini" @click="ringChange('fu')">修改数据</el-button>
+                </div>
                 <ChartRing className="ring" :chartData="chartRingInfo.fu" />
             </div>
         </div>
     </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import ChartLine from "@/components/Chart/Line.vue";
 import ChartBar from "@/components/Chart/Bar.vue";
 import ChartRing from "@/components/Chart/Ring.vue";
-import store from "@/store";
 import { ChartBarData, ChartLineData, ChartRingData } from "@/components/Chart/types";
+import { ranInt } from "@/utils";
 
 @Component({
     components: {
@@ -32,20 +44,6 @@ import { ChartBarData, ChartLineData, ChartRingData } from "@/components/Chart/t
     }
 })
 export default class ChrtHome extends Vue {
-    readonly layoutInfo = store.layout.info;
-
-    private timer!: NodeJS.Timeout;
-
-    @Watch("layoutInfo.sidebarOpen")
-    onSidebarOpenChange() {
-        const line = this.$refs.ChartLine as ChartLine;
-        const bar = this.$refs.ChartBar as ChartBar;
-        this.timer && clearTimeout(this.timer);
-        this.timer = setTimeout(() => {
-            line.updateSize();
-            bar.updateSize();
-        }, 280); // 这里动画时长为 280 ms
-    }
 
     chartLineData: ChartLineData = {
         bottom: ["05-01", "06-01", "07-01", "08-01", "09-01", "10-01", "11-01"],
@@ -68,6 +66,13 @@ export default class ChrtHome extends Vue {
         ]
     }
 
+    lineChange() {
+        const total = this.chartLineData.bottom.length;
+        this.chartLineData.data.forEach(item => {
+            item.value = new Array(total).fill(0).map(_ => ranInt(300, 3000));
+        });
+    }
+
     chartBarData: ChartBarData = {
         bottom: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
         data: [
@@ -86,6 +91,13 @@ export default class ChrtHome extends Vue {
         yAxisUnit: "ml"
     }
 
+    barChange() {
+        const total = this.chartBarData.bottom.length;
+        this.chartBarData.data.forEach(item => {
+            item.value = new Array(total).fill(0).map(_ => ranInt(10, 6000) / 10);
+        });
+    }
+
     chartRingInfo: { shou: ChartRingData, fu: ChartRingData } = {
         shou: [
             { value: 1048, name: "已收", color: "#9609d8" },
@@ -96,6 +108,12 @@ export default class ChrtHome extends Vue {
             { value: 765, name: "未付", color: "orange" }
         ]
     }
+
+    ringChange(type: "shou" | "fu") {
+        this.chartRingInfo[type].forEach(item => {
+            item.value = ranInt(10, 1000);
+        })
+    }
 }
 </script>
 <style lang="scss">
@@ -104,7 +122,6 @@ $shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px 0px;
 @mixin shadowBox { box-shadow: $shadow; background-color: #fff; border-radius: 10px; }
 
 .echarts-home {
-    .title { font-size: 18px; color: #999; margin-bottom: 20px; }
     .chart {
         width: 100%; padding-top: 20px;
         .item {
@@ -116,8 +133,8 @@ $shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px 0px;
             .bar { width: 100% !important; height: 380px !important; }
         }
         .chart-right {
-            width: 300px; margin-bottom: $spacing;
-            .ring { width: 300px !important; height: 300px !important; }
+            margin-bottom: $spacing;
+            .ring { width: 22vw !important; height: 22vw !important; }
         }
     }
 }

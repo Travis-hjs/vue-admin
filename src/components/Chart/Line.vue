@@ -8,6 +8,7 @@ import { GridComponent } from "echarts/components";
 import { LineChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 import { ChartLineData } from "./types";
+import { onElementResize } from "./hooks";
 
 echarts.use([GridComponent, LineChart, CanvasRenderer]);
 
@@ -96,13 +97,15 @@ export default class ChartLine extends Vue {
         if (this.chartData) {
             this.setData(this.chartData);
         }
-        window.addEventListener("resize", this.updateSize);
+        
+        onElementResize({
+            el: el,
+            vue: this,
+            callback: this.updateSize,
+            destroy: () => this.chart.dispose()
+        });
     }
 
-    beforeDestroy() {
-        window.removeEventListener("resize", this.updateSize);
-        this.chart.dispose();
-    }
 }
 </script>
 <style lang="scss">

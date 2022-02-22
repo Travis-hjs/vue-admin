@@ -8,6 +8,7 @@ import { TooltipComponent, LegendComponent } from "echarts/components";
 import { PieChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 import { ChartRingData } from "./types";
+import { onElementResize } from "./hooks";
 
 echarts.use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
 
@@ -74,15 +75,27 @@ export default class ChartRing extends Vue {
         });
     }
 
+    /** 
+     * 更新尺寸
+     * @description 也可以暴露给父组件调用
+     */
+    updateSize() {
+        this.chart.resize();
+    }
+
     mounted() {
-        this.chart = echarts.init(this.$el as HTMLElement);
+        const el = this.$el as HTMLElement;
+        this.chart = echarts.init(el);
         if (this.chartData) {
             this.setData(this.chartData);
         }
-    }
 
-    beforeDestroy() {
-        this.chart.dispose();
+        onElementResize({
+            el: el,
+            vue: this,
+            callback: this.updateSize,
+            destroy: () => this.chart.dispose()
+        });
     }
     
 }
