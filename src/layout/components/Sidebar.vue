@@ -5,7 +5,7 @@
                 <div class="the-logo-box" v-if="layoutInfo.showSidebarLogo">
                     <router-link class="the-logo-link flex fvertical fcenter" to="/">
                         <img class="the-logo" :src="info.logo" />
-                        <h1 class="the-logo-title ellipsis">{{ info.title }}</h1>
+                        <h1 class="the-logo-title ellipsis" :title="info.title">{{ info.title }}</h1>
                     </router-link>
                 </div>
             </transition>
