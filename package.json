@@ -1,6 +1,12 @@
 {
-    "name": "vue-admin-vite-typescript",
+    "name": "vue3-admin-template",
     "version": "1.0.0",
+    "private": false,
+    "author": {
+        "name": "Hjs",
+        "email": "1141752341@qq.com",
+        "url": "https://github.com/Hansen-hjs/vue-admin"
+    },
     "scripts": {
         "dev": "vite",
         "build": "vue-tsc --noEmit && vite build",
