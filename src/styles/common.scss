@@ -64,9 +64,11 @@ div:focus {
 /* 水平 + 垂直居中 */
 .fvc { display: flex; align-items: center; justify-content: center; }
 /* 右对齐 */
-.fright { display: flex; flex-direction: row; justify-content: flex-end; }
+.fright { display: flex; justify-content: flex-end; }
 /* 两端对齐 */
 .fbetween { display: flex; justify-content: space-between; }
+/* 靠底部对齐 */
+.fbottom { display: flex; align-items: flex-end; }
 
 
 /* 溢出...显示 当前节点生效 */
