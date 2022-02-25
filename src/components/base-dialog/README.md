@@ -1,4 +1,8 @@
-使用方式
+# 基础 Dialog 弹出框
+
+[详细介绍](https://juejin.cn/post/7054088327376404488)
+
+使用方式，已注册为全局组件
 
 ```html
 <template>
