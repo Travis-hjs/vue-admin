@@ -3,11 +3,11 @@
         <div class="the-upload-content" :style="{ 'width': width }">
             <div v-if="src" class="the-upload-image-box">
                 <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height }">
-                <div class="remove flex fvertical fcenter">
+                <div class="remove fvc">
                     <svg-icon v-if="!disabled" name="delete" @click="removeImg()" />
                 </div>
             </div>
-            <div v-else class="the-upload-box flex fvertical fcenter" :style="{ 'height': height }">
+            <div v-else class="the-upload-box fvc" :style="{ 'height': height }">
                 <div class="the-upload-add-icon"></div>
                 <input v-if="!disabled" class="the-upload-input" type="file" accept="image/*" name="picture" ref="uploadinput" @change.stop="onUpload()">
             </div>
@@ -155,7 +155,7 @@ export default defineComponent({
         &:hover { border-color: $theme; background-color: #fbfdff; }
         .the-upload-image-box { 
             position: relative; width: 100%; height: 100%; overflow: hidden;
-            .image { display: block; width: 100%; }
+            .image { display: block; width: 100%; object-fit: fill; }
             .remove {
                 position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); color: #f4f4f4; opacity: 0; @include time();
                 &:hover { opacity: 1; }

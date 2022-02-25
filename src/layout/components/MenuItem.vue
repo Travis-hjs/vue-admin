@@ -90,7 +90,7 @@ const MenuItem = defineComponent({
         const titleClass = computed(function () {
             const item = props.info;
             return {
-                "the-layout-menu-title flex fvertical": true,
+                "the-layout-menu-title fvertical": true,
                 "the-layout-menu-on": item.isActive,
                 "the-layout-menu-hasopen": item.isOpen,
                 "the-layout-menu-hasactive": item.hasActive,
@@ -100,7 +100,7 @@ const MenuItem = defineComponent({
 
         function getItemClass(item: LayoutMenuItem) {
             return {
-                "the-layout-menu-item flex fvertical": true,
+                "the-layout-menu-item fvertical": true,
                 "the-layout-menu-on": item.isActive 
             }
         }

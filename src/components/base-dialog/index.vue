@@ -3,7 +3,7 @@
         <transition name="fade">
             <div
                 ref="dialog"
-                class="base-dialog flex fvertical fcenter"
+                class="base-dialog fvc"
                 :style="{ 'z-index': zIndex }"
                 v-show="modelValue"
                 @click="onClose"
@@ -12,7 +12,7 @@
                     :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
                     :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
                 >   
-                    <div class="base-dialog-title flex fbetween fvertical">
+                    <div class="base-dialog-title fbetween fvertical">
                         <h2>{{ title }}</h2>
                         <i ref="closeBtn" @click="onClose"></i>
                     </div>
@@ -29,7 +29,7 @@
     <transition name="fade" v-else>
         <div
             ref="dialog"
-            class="base-dialog flex fvertical fcenter"
+            class="base-dialog fvc"
             :style="{ 'z-index': zIndex }"
             v-show="modelValue"
             @click="onClose"
@@ -38,7 +38,7 @@
                 :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
                 :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
             >   
-                <div class="base-dialog-title flex fbetween fvertical">
+                <div class="base-dialog-title fbetween fvertical">
                     <h2>{{ title }}</h2>
                     <i ref="closeBtn" @click="onClose"></i>
                 </div>

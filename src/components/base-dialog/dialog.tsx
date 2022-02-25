@@ -126,7 +126,7 @@ export default defineComponent({
                 <Transition name="fade" appear={ true }>
                     <div
                         ref={ dialog }
-                        class="base-dialog flex fvertical fcenter"
+                        class="base-dialog fvc"
                         style={{ zIndex: _zIndex }}
                         v-show={ props.modelValue }
                         onClick={ e => onClose(e) }
@@ -135,7 +135,7 @@ export default defineComponent({
                             class={ `base-dialog-content flex${contentMove.value ? " moving" : ""}${contentShow.value ? " opened" : ""}` }
                             style={{ 'width': props.width, 'transform': `translate3d(${contentX.value}, ${contentY.value}, 0) scale(0)` }}
                         >   
-                            <div class="base-dialog-title flex fbetween fvertical">
+                            <div class="base-dialog-title fbetween fvertical">
                                 <h2>{ props.title }</h2>
                                 <i ref={ closeBtn } onClick={ e => onClose(e) }></i>
                             </div>

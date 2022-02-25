@@ -1,5 +1,5 @@
 <template>
-    <div class="page-404 flex fvertical fcenter">
+    <div class="page-404 fvc">
         <div>
             <h4 class="title">当前页面不存在</h4>
             <router-link class="goback" to="/">返回首页</router-link>

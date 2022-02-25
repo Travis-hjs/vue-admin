@@ -63,7 +63,7 @@
                     <div>
                         <p class="mgb_10">出现次数：{{ dialogInfo.third.count }}</p>
                         <ul class="dialog-list">
-                            <li class="dialog-item flex fvertical" v-for="(item) in list" :key="item">{{ item }}</li>
+                            <li class="dialog-item fvertical" v-for="(item) in list" :key="item">{{ item }}</li>
                         </ul>
                     </div>
                     <template #footer>

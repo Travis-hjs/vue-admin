@@ -8,15 +8,15 @@
         </div>
         <h2 class="the-title mgb_30">布局操作开关</h2>
         <div class="options-box mgb_40">
-            <label class="check-box flex fvertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
+            <label class="check-box fvertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
                 <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
                 显示侧边栏logo
             </label>
-            <label class="check-box flex fvertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
+            <label class="check-box fvertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
                 <input type="checkbox" id="layout-tags" :checked="layoutInfo.showTagsView" />
                 显示历史记录标签
             </label>
-            <label class="check-box flex fvertical" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
+            <label class="check-box fvertical" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
                 <input type="checkbox" id="layout-open" :checked="layoutInfo.sidebarOpen" />
                 侧边栏展开
             </label>
