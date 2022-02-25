@@ -1,14 +1,14 @@
 <template>
     <div class="the-layout-header">
         <div class="the-layout-navbar flex">
-            <div :class="['flex fcenter fvertical hamburger', { 'hamburger-active': layoutInfo.sidebarOpen }]" @click="onSwitch()">
+            <div :class="['fvc hamburger', { 'hamburger-active': layoutInfo.sidebarOpen }]" @click="onSwitch()">
                 <svg-icon name="hamburger" />
             </div>
             <Breadcrumb class="f1" />
-            <div class="user-info-box flex fvertical">
+            <div class="user-info-box fvertical">
                 <img class="avatar" :src="userInfo.avatar || defaultAvatar" >
                 <span class="the-tag green mgr_10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
-                <button class="logout flex fvertical" @click="onLogout()">
+                <button class="logout fvertical" @click="onLogout()">
                     <svg-icon name="exit" />
                     <span>退出登录</span>
                 </button>

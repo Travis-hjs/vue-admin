@@ -92,7 +92,7 @@ export default class MenuItem extends Vue {
     get titleClass() {
         const item = this.info;
         return {
-            "the-layout-menu-title flex fvertical": true,
+            "the-layout-menu-title fvertical": true,
             "the-layout-menu-on": item.isActive,
             "the-layout-menu-hasopen": item.isOpen,
             "the-layout-menu-hasactive": item.hasActive,
@@ -102,7 +102,7 @@ export default class MenuItem extends Vue {
 
     getItemClass(item: LayoutMenuItem) {
         return {
-            "the-layout-menu-item flex fvertical": true,
+            "the-layout-menu-item fvertical": true,
             "the-layout-menu-on": item.isActive 
         }
     }

@@ -155,7 +155,6 @@ $contentPadding: 12px;
         text-align: left;
         font-size: $menuFontSize;
         color: $menuTextColor;
-        line-height: 1;
         outline: none;
         border: none;
         background-color: transparent;
@@ -199,7 +198,6 @@ $contentPadding: 12px;
             height: $menuItemHeight;
             font-size: $menuFontSize;
             color: $menuTextColor;
-            line-height: 1;
             overflow: hidden;
             @include moveTime();
             @include menuHover();
@@ -285,7 +283,6 @@ $contentPadding: 12px;
     padding: 4px 0;
     font-size: 15px;
     color: #555;
-    line-height: 1;
     a {
         @include moveTime();
     }
@@ -302,7 +299,7 @@ $contentPadding: 12px;
 .layout-breadcrumb-item.last {
     color: #afaeae;
     a {
-        cursor: default;
+        cursor: no-drop;
     }
     &:hover {
         a {
@@ -392,13 +389,11 @@ $contentPadding: 12px;
         width: 32px;
         height: 32px;
         margin-right: 12px;
-        line-height: 1;
     }
 }
 
 .the-logo-title {
     color: #fff;
     font-weight: 600;
-    line-height: 1;
     font-size: 14px;
 }

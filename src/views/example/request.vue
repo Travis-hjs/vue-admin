@@ -6,7 +6,7 @@
                 <el-tag type="danger" style="margin-right: 14px;">请求接口为http，与当前域名https不匹配，可能无法正常请求到数据，需要在http环境下进行</el-tag>
                 <el-button type="warning" size="small" @click="openHttp()">切换至http</el-button>
             </div>
-            <div class="flex fvertical mgb_20">
+            <div class="fvertical mgb_20">
                 <el-input v-model="pageData.city" clearable placeholder="请输入城市名" style="width: 300px; margin-right: 16px;"></el-input>
                 <el-button type="primary" @click="getData()" :loading="pageData.loading" >
                     <svg-icon v-show="pageData.loading" name="international" />
