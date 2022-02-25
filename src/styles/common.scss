@@ -1,0 +1,83 @@
+
+// --------------------------------------------------------------
+// ----------------------常用基本全局样式文------------------------
+// --------------------------------------------------------------
+
+// ======================= 元素重置全局样式 =======================
+
+*, *:before, *:after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+  
+body {
+    font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+}
+
+a, a:visited, a:focus, a:hover, a:link, a:active {
+    color: inherit;
+    outline: none;
+    text-decoration: none;
+}
+
+button, input {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+a, button {
+    cursor: pointer;
+}
+
+ul, li, ol {
+    list-style: none;
+}
+
+img {
+    width: 100%;
+    // height: 100%; // 自动适配高度
+    border: none;
+    display: block;
+    object-fit: cover;
+}
+
+div:focus {
+    outline: none;
+}
+
+// ======================= flex全局样式 =======================
+
+/* flex布局 */
+.flex { display: flex; flex-wrap: nowrap; }
+.fwrap { display: flex; flex-wrap: wrap; }
+.f1 { flex: 1; }
+.f2 { flex: 2; }
+.f3 { flex: 3; }
+/* 垂直居中 */
+.fvertical { display: flex; align-items: center; }
+/* 水平居中 */
+.fcenter { display: flex; justify-content: center; }
+/* 水平 + 垂直居中 */
+.fvc { display: flex; align-items: center; justify-content: center; }
+/* 右对齐 */
+.fright { display: flex; flex-direction: row; justify-content: flex-end; }
+/* 两端对齐 */
+.fbetween { display: flex; justify-content: space-between; }
+
+
+/* 溢出...显示 当前节点生效 */
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ellipsis_1, .ellipsis_2, .ellipsis_3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* 溢出...显示 子节点生效 */
+.ellipsis_1 { -webkit-line-clamp: 1; }
+.ellipsis_2 { -webkit-line-clamp: 2; }
+.ellipsis_3 { -webkit-line-clamp: 3; }

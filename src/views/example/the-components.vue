@@ -26,7 +26,7 @@
         <div class="mgb_10"><span class="the-tag blue">垂直滚动</span></div>
         <div class="list-y mgb_40">
             <Scrollbar thumbColor="#ffd000">
-                <div class="item flex fvertical fcenter" v-for="(item) in list" :key="item">{{ item }}</div>
+                <div class="item fvc" v-for="(item) in list" :key="item">{{ item }}</div>
             </Scrollbar>
         </div>
         <div class="mgb_10"><span class="the-tag cyan">宽高超出滚动</span></div>
@@ -40,7 +40,7 @@
             </Scrollbar>
         </div>
         <div class="mgb_30">
-            <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
+            <h2 class="the-title">自定义全局 Dialog 组件</h2>
         </div>
 
         <div class="flex">
@@ -69,7 +69,7 @@
                     <div>
                         <p class="mgb_10">出现次数：{{ dialogInfo.third.count }}</p>
                         <ul class="dialog-list">
-                            <li class="dialog-item flex fvertical" v-for="(item) in list" :key="item">{{ item }}</li>
+                            <li class="dialog-item fvertical" v-for="(item) in list" :key="item">{{ item }}</li>
                         </ul>
                     </div>
                     <template slot="footer">

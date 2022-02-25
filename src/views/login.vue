@@ -23,7 +23,7 @@
                             <el-checkbox v-model="remember">记住账号/密码</el-checkbox>
                         </el-form-item>
                     </el-form>
-                    <div class="tips flex fvertical" v-for="(item, index) in tipList" :key="index">
+                    <div class="tips fvertical" v-for="(item, index) in tipList" :key="index">
                         <el-button size="mini" type="success" v-copy="item">点击复制</el-button>
                         <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>
                         <el-button size="mini" type="primary" @click="setLoginInfo(item)">一键登录</el-button>
@@ -164,7 +164,7 @@ export default class Login extends Vue {
 
 .login_page {
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     background-color: #2253dc;
     background-image: linear-gradient(45deg, #2253dc 0%, #4fb8f9 99%);
     position: relative;
