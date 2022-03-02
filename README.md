@@ -273,6 +273,18 @@ export default defineComponent({
 
 编译时，会校验标签中的`change`事件，这时候和组件里面定义的`UploadChange<T = string | number>`类型不吻合，所以也不通过。
 
-估计是`vite`依赖的`rollup`编译构建，和`tsconfig.json`那边的配置不吻合导致，编译时并没有排除`tsconfig.json`里面的`include`值，所以产生额外类型校验；目前解决办法只能是在构建时，手动添加`/`，这样就不会对模板里面的标签进行校验，但`jsx`不会。
+一开始我猜测是`vite`依赖的 [rollup](https://www.rollupjs.com) 编译构建，和`tsconfig.json`那边的配置不吻合导致，编译时并没有排除`tsconfig.json`里面的`include`值，所以产生额外类型校验；解决办法只能是在构建时，手动添加`/`，这样就不会对模板里面的标签进行校验，后面又排查了一遍`package.json`，终于定位到是`vue-tsc`的问题，然后把对应的命令给删掉，想这样：
+
+```json
+{
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build", // 剔除了 vue-tsc --noEmit && ，只保留 vite build
+        "serve": "vite preview"
+    },
+}
+```
+
+于是就正常了；后面又查阅了`vue-tsc`的作用（[npm vue-tsc](https://www.npmjs.com/package/vue-tsc)），才了解到这是一个非必要的依赖，主要是用来约束`<script setup lang="ts">`这种写法，并且应用在`vscode-Volar`的插件中使用，像当前项目就不用`Volar`插件和激进的写法，所以就剔除了这个依赖；主要是没有办法解决，即使升级版本也是报其他错。
 
 详情见[Vite 踩坑指南](https://juejin.cn/post/6959851018469244965)
