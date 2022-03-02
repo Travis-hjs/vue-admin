@@ -9,7 +9,7 @@
             </div>
             <div v-else class="the-upload-box fvc" :style="{ 'height': height }">
                 <div class="the-upload-add-icon"></div>
-                <input v-if="!disabled" class="the-upload-input" type="file" accept="image/*" name="picture" ref="uploadinput" @change.stop="onUpload()">
+                <input v-if="!disabled" class="the-upload-input" type="file" accept="image/*" name="picture" ref="uploadInput" @change.stop="onUpload()">
             </div>
         </div>
         <p class="the-upload-tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
@@ -77,7 +77,7 @@ export default defineComponent({
     },
     setup(props, context) {
         /** 上传组件`input`节点 */
-        const uploadinput = ref<HTMLInputElement>(null as any);
+        const uploadInput = ref<HTMLInputElement>();
         /** 上传状态 */
         const loading = ref(false);
 
@@ -91,7 +91,7 @@ export default defineComponent({
 
         /** 上传图片 */
         async function onUpload() {
-            const input = uploadinput.value;
+            const input = uploadInput.value!;
             const file = (input.files as FileList)[0];
             // console.log("上传图片文件 >>", file);
 
@@ -108,6 +108,7 @@ export default defineComponent({
             loading.value = true;
             const res = await uploadImg(file)
             loading.value = false;
+            input.value = ""; // 用完然后清空
             console.log("上传图片 >>", res);
             if (res.code === 1) {
                 const result: string = res.data.img;
@@ -116,7 +117,6 @@ export default defineComponent({
                     src: result
                 })
             } else {
-                input.value = "";
                 alert(res.msg);
             }
         }
@@ -130,7 +130,7 @@ export default defineComponent({
         }
 
         return {
-            uploadinput,
+            uploadInput,
             loading,
             onUpload,
             removeImg
