@@ -9,7 +9,7 @@
             </div>
             <div v-else class="the-upload-box fvc" :style="{ 'height': height }">
                 <div class="the-upload-add-icon"></div>
-                <input v-if="!disabled" class="the-upload-input" type="file" accept="image/*" name="picture" ref="uploadinput" @change.stop="onUpload()">
+                <input v-if="!disabled" class="the-upload-input" type="file" accept="image/*" name="picture" ref="uploadInput" @change.stop="onUpload()">
             </div>
         </div>
         <p class="the-upload-tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
@@ -110,15 +110,15 @@ export default class UploadImage extends Vue {
 
     $refs!: {
         /** 上传`input`标签 */
-        uploadinput: HTMLInputElement
+        uploadInput: HTMLInputElement
     }
 
     /** 上传图片 */
     async onUpload() {
         // 这样写也可以，但是命令台会报错，浏览器不会
-        // const input = (this.$refs.uploadinput as HTMLInputElement);
+        // const input = (this.$refs.uploadInput as HTMLInputElement);
 
-        const input = this.$refs.uploadinput;
+        const input = this.$refs.uploadInput;
 
         const file: File = input.files![0];
         // console.log("上传图片文件 >>", file);
