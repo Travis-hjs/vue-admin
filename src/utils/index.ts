@@ -56,6 +56,11 @@ export function setData<T>(target: T, value: T) {
  * ```
  */
 export function formatDate(value: string | number | Date = Date.now(), format = "Y-M-D h:m:s") {
+    if (["null", null, "undefined", undefined, ""].includes(value as any)) return "";
+    // ios 和 mac 系统中，带横杆的字符串日期是格式不了的，这里做一下判断处理
+    if (typeof value === "string" && new Date(value).toString() === "Invalid Date") {
+        value = value.replace(/-/g, "/");
+    }
     const formatNumber = (n: number) => `0${n}`.slice(-2);
     const date = new Date(value);
     const formatList = ["Y", "M", "D", "h", "m", "s"];
@@ -205,6 +210,20 @@ export function computeNumber(a: number, type: NumberSymbols, b: number) {
          */
         next(nextType: NumberSymbols, nextValue: number) {
             return computeNumber(result, nextType, nextValue);
+        },
+        /**
+         * 小数点进位
+         * @param n 小数点后的位数
+        */
+        toHex(n: number) {
+            const strings = result.toString().split(".");
+            if (n > 0 && strings[1] && strings[1].length > n) {
+                const decimal = strings[1].slice(0, n);
+                const value = Number(`${strings[0]}.${decimal}`);
+                const difference = 1 / Math.pow(10, decimal.length);
+                result = computeNumber(value, "+", difference).result;
+            }
+            return result;
         }
     }
 }
@@ -215,4 +234,37 @@ export function computeNumber(a: number, type: NumberSymbols, b: number) {
  */
 export function isExternal(path: string) {
     return /^(https?:|mailto:|tel:)/.test(path);
+}
+
+/**
+ * ES5 兼容 ES6 `Array.findIndex`
+ * @param array
+ * @param compare 对比函数
+ */
+export function findIndex<T>(array: Array<T>, compare: (value: T, index: number) => boolean) {
+    var result = -1;
+    for (var i = 0; i < array.length; i++) {
+        if (compare(array[i], i)) {
+            result = i;
+            break;
+        }
+    }
+    return result;
+}
+
+
+/**
+ * 自定义对象数组去重
+ * @param array
+ * @param compare 对比函数
+ * @example
+ * ```js
+ * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
+ * filterRepeat(list, (a, b) => a.id == b.id)
+ * ```
+ */
+export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
+    return array.filter((element, index, self) => {
+        return findIndex(self, (el: T) => compare(el, element)) === index;
+    })
 }

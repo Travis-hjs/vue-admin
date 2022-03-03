@@ -12,14 +12,17 @@ export type DeepReadonly<T> = {
 
 /** 深层递归所有属性为必选选（貌似不生效） */
 export type DeepRequired<T> = {
-    [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P]
+    [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P];
 }
 
 /** 运算符号 */
 export type NumberSymbols = "+" | "-"| "*" | "/";
 
-/** JavaScript类型 */
-export type JavaScriptTypes = "string" | "number" | "array" | "object" | "function" | "null" | "undefined" | "regexp";
+/**
+ * `JavaScript`类型
+ * - 这里只枚举一些常见类型，后续根据使用场景自行添加即可
+ */
+export type JavaScriptTypes = "string" | "number" | "array" | "object" | "boolean" | "function" | "null" | "undefined" | "regexp" | "promise" | "formdata";
 
 export interface AjaxParams {
     /** 请求路径 */
