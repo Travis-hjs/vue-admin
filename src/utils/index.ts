@@ -53,6 +53,11 @@ export function setData<T>(target: T, value: T) {
  * ```
  */
 export function formatDate(value: string | number | Date = Date.now(), format = "Y-M-D h:m:s") {
+    if (["null", null, "undefined", undefined, ""].includes(value as any)) return "";
+    // ios 和 mac 系统中，带横杆的字符串日期是格式不了的，这里做一下判断处理
+    if (typeof value === "string" && new Date(value).toString() === "Invalid Date") {
+        value = value.replace(/-/g, "/");
+    }
     const formatNumber = (n: number) => `0${n}`.slice(-2);
     const date = new Date(value);
     const formatList = ["Y", "M", "D", "h", "m", "s"];
@@ -121,6 +126,39 @@ export function inputOnlyNumber(value: string | number, decimal?: boolean, negat
         result = result.replace(/[^0-9]+/ig, "");
     }
     return minus + result;
+}
+
+/**
+ * ES5 兼容 ES6 `Array.findIndex`
+ * @param array
+ * @param compare 对比函数
+ */
+export function findIndex<T>(array: Array<T>, compare: (value: T, index: number) => boolean) {
+    var result = -1;
+    for (var i = 0; i < array.length; i++) {
+        if (compare(array[i], i)) {
+            result = i;
+            break;
+        }
+    }
+    return result;
+}
+
+
+/**
+ * 自定义对象数组去重
+ * @param array
+ * @param compare 对比函数
+ * @example
+ * ```js
+ * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
+ * filterRepeat(list, (a, b) => a.id == b.id)
+ * ```
+ */
+export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
+    return array.filter((element, index, self) => {
+        return findIndex(self, (el: T) => compare(el, element)) === index;
+    })
 }
 
 /**
