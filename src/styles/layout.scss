@@ -397,3 +397,40 @@ $contentPadding: 12px;
     font-weight: 600;
     font-size: 14px;
 }
+
+.the-layout-totop {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: $theme;
+    position: fixed;
+    bottom: 10%;
+    right: 30px;
+    z-index: 100;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
+    @include moveTime();
+    &::before, &::after {
+        position: absolute;
+        content: "";
+        top: 46%;
+        width: 14px;
+        height: 2px;
+        border-radius: 2px;
+        background-color: #fff;
+    }
+    &::before {
+        left: calc(50% - 3px);
+        transform: rotate(50deg);
+    }
+    &::after {
+        right: calc(50% - 3px);
+        transform: rotate(130deg);
+    }
+}
+
+.the-layout-totop-hide {
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0);
+}
+
