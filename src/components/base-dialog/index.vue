@@ -202,7 +202,6 @@ export default class BaseDialog extends Vue {
 }
 .base-dialog-body {
     padding: 12px 14px;
-    overflow: auto;
     min-height: 0px;
     overflow: auto;
 }
