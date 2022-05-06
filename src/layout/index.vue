@@ -19,7 +19,7 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import Sidebar from "./components/Sidebar.vue";
 import store from "@/store";
@@ -31,7 +31,7 @@ export default defineComponent({
         HeaderBar,
         Sidebar
     },
-    setup(props, context) {
+    setup() {
         const layoutInfo = store.layout.info;
         
         function getCachList(list: Array<RouteItem>) {
@@ -56,9 +56,11 @@ export default defineComponent({
         const contentBox = ref<HTMLElement>();
         
         const showToTop = ref(false);
+        
+        let contentEl: HTMLElement;
 
         function toTop() {
-            contentBox.value!.scrollTo({
+            contentEl.scrollTo({
                 top: 0,
                 left: 0,
                 behavior: "smooth"
@@ -67,17 +69,14 @@ export default defineComponent({
         
         function onScroll() {
             // 判断超过一屏高度则显示返回顶部按钮
-            showToTop.value = contentBox.value!.scrollTop > document.documentElement.clientHeight;
+            showToTop.value = contentEl.scrollTop > document.documentElement.clientHeight;
         }
 
         onMounted(function() {
+            contentEl = contentBox.value!;
+            contentEl.addEventListener("scroll", onScroll);
             onScroll(); // 一开始要先执行，因为有可能一开始就处于页面非顶部
-            contentBox.value!.addEventListener("scroll", onScroll);
-        })
-
-        onUnmounted(function() {
-            contentBox.value!.removeEventListener("scroll", onScroll);
-        })
+        });
 
         return {
             layoutInfo,
