@@ -97,5 +97,5 @@ export default class Demo extends Vue {
 | 方法名 | 说明 |
 | --- | --- |
 | filter(val: string) | 搜索用，配合`:filterNodeMethod="过滤函数"` |
-| setCheckedValues(vals: Array<string|number>) | 设置选中值 |
-| getCheckedValues() | 获取选中的值 |
+| setCheckedValues(vals: Array<string/number>) | 设置选中值 |
+| getCheckedValues(): Array<string/number> | 获取选中的值 |
