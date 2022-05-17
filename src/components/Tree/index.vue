@@ -113,11 +113,11 @@ export default class Tree extends Vue {
         /**
          * 格式化选项数据
          * @param arr
-         * @param parentKey
+         * @param parentIndex
          */
-        function format(arr: Array<any>, parentKey = ""): Array<TreeItem> {
+        function format(arr: Array<any>, parentIndex = ""): Array<TreeItem> {
             return arr.map(function (item, index) {
-                const indexs = parentKey ? `${parentKey}-${index}` : index.toString();
+                const indexs = parentIndex ? `${parentIndex}-${index}` : index.toString();
                 const key = setting.key && item[setting.key] ? item[setting.key] : indexs;
                 const children = item[setting.children] || undefined;
                 return {
