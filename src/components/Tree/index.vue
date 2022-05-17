@@ -123,7 +123,7 @@ export default class Tree extends Vue {
                 return {
                     label: item[setting.label],
                     value: item[setting.value],
-                    children: children ? format(children, key) : [],
+                    children: children ? format(children, indexs) : [],
                     key,
                     indexs,
                     open: false,
@@ -173,14 +173,14 @@ export default class Tree extends Vue {
             let res = 30;
 
             // 没有子节点或节点没有打开时，更新当前节点高度并返回
-            if (node.children && !node.children.length || !node.open) {
-                return node.height = res
+            if (node.children && (!node.children.length || !node.open)) {
+                return node.height = res;
             }
             
             if (node.children && node.children.length) {
                 // 设置所有子节点的高度
                 node.children.forEach(sub => {
-                    res += setHeight(sub)
+                    res += setHeight(sub);
                 })
             }
             // 更新父节点高度并返回

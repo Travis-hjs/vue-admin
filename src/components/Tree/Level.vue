@@ -62,9 +62,10 @@ export default class Level extends Vue {
         }
         if (this.checkChild) {
             each(item.children, item.checked);
-        } else {
-            !item.checked && each(item.children, false);
-        }
+        } 
+        // else {
+        //     !item.checked && each(item.children, false);
+        // }
         this.dispatch("Tree", "levelItemChange", [item]);
     }
 
