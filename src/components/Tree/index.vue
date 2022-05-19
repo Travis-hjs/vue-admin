@@ -8,18 +8,18 @@
     </div>
 </template>
 <script lang="ts">
-import { checkType } from "@/utils";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Level from "./Level.vue";
+import { checkType } from "@/utils";
 
 /** 多级树节点对象 */
 export interface TreeItem<T = object> {
   /** 字段名 */
   label: string
   /** 对应的值 */
-  value: string
+  value: string | number
   /** 下级数据 */
-  children: Array<TreeItem>
+  children: Array<TreeItem<T>>
   /** 唯一`key` */
   key: string
   /** 索引，多层用`-`串联 */
@@ -312,20 +312,54 @@ export default class Tree extends Vue {
         &:hover {
             background-color: #edf6ff;
         }
-        .the-tree-icon {
-            padding: 4px;
-            margin-right: 2px;
-            color: #c0c4cc;
-            @include moveTime();
+    }
+    .the-tree-icon {
+        padding: 4px;
+        margin-right: 2px;
+        color: #c0c4cc;
+        @include moveTime();
+    }
+    .the-tree-icon.hidden-icon {
+        opacity: 0;
+    }
+    .the-tree-icon.expanded {
+        transform: rotate(90deg);
+    }
+    .the-tree-checkbox {
+        display: inline-block;
+        position: relative;
+        background-color: #fff;
+        border: 1px solid #dcdfe6;
+        border-radius: 2px;
+        margin-right: 8px;
+        width: 14px;
+        height: 14px;
+        font-size: 0px;
+        @include moveTime();
+        &:hover {
+            border-color: $theme;
         }
-        .the-tree-icon.hidden-icon {
-            opacity: 0;
+        &::after {
+            box-sizing: content-box;
+            content: "";
+            border: 1px solid #fff;
+            border-left: 0;
+            border-top: 0;
+            height: 7px;
+            left: 4px;
+            position: absolute;
+            top: 1px;
+            transform: rotate(45deg) scaleY(0);
+            width: 3px;
+            transition: .15s;
+            transform-origin: center;
         }
-        .the-tree-icon.expanded {
-            transform: rotate(90deg);
-        }
-        .el-checkbox {
-            margin-right: 8px;
+    }
+    .the-tree-checkbox.checked {
+        background-color: $theme;
+        border-color: $theme;
+        &::after {
+            transform: rotate(45deg) scaleY(1);
         }
     }
 }

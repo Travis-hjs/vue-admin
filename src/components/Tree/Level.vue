@@ -3,7 +3,7 @@
         <div class="the-tree-level" v-for="item in options" :style="{ 'height': item.height + 'px' }" :key="item.key" :data-key="item.key" :data-level="level">
             <div class="the-tree-item fvertical" @click="onOpen(item)">
                 <i :class="['the-tree-icon el-icon-caret-right', { 'hidden-icon': !item.children.length }, { 'expanded': item.open }]"></i>
-                <el-checkbox v-if="checkbox" :value="item.checked" @change="onChecked(item)"></el-checkbox>
+                <span :class="['the-tree-checkbox', { 'checked': item.checked }]" v-if="checkbox" @click.stop="onChecked(item)"></span>
                 <slot name="treeitem" v-bind="item">{{ item.label }}</slot>
             </div>
             <Level v-if="item.children.length" :options="item.children" :level="level + 1" :checkChild="checkChild" :checkbox="checkbox">
