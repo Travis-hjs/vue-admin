@@ -148,7 +148,13 @@ export const add: Array<RouteItem> = [
                 name: "example-components",
                 meta: { title: "自定义组件" },
                 component: () => import("../views/example/the-components.vue")
-            }
+            },
+            {
+                path: "/example/language",
+                name: "example-components",
+                meta: { title: "", lang: "languageSetting" },
+                component: () => import("../views/example/language.vue")
+            },
         ]
     },
     {

@@ -127,6 +127,8 @@ export interface ApiResult {
 export interface RouteMeta {
     /** 侧边栏菜单名、document.title */
     title: string,
+    /** 自定义的语言国际化键值，`Vue.$language.xxx`，优先级比`title`高 */
+    lang?: string
     /** `svg`名 */
     icon?: string
     /** 是否在侧边菜单栏不显示该路由 */

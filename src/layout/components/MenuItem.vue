@@ -2,19 +2,19 @@
     <div class="the-layout-menu" ref="menuBox">
         <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChidren(info)">
             <svg-icon v-if="info.icon" :name="info.icon" />
-            <span class="f1">{{ info.title }}</span>
+            <span class="f1">{{ getTitle(info) }}</span>
             <i class="the-layout-menu-arrow"></i>
         </button>
         <template v-else>
             <!-- 外链 -->
             <a :class="titleClass" :style="titleStyle" :href="info.link" target="_blank" v-if="info.link">
                 <svg-icon v-if="info.icon" :name="info.icon" />
-                <span class="f1">{{ info.title }}</span>
+                <span class="f1">{{ getTitle(info) }}</span>
             </a>
             <!-- 单个菜单 -->
             <router-link :class="titleClass" :style="titleStyle" :to="info.path" v-else>
                 <svg-icon v-if="info.icon" :name="info.icon" />
-                <span class="f1">{{ info.title }}</span>
+                <span class="f1">{{ getTitle(info) }}</span>
             </router-link>
         </template>
         <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
@@ -25,12 +25,12 @@
                     <!-- 外链 -->
                     <a :class="getItemClass(item)" :style="itemStyle" :href="item.link" target="_blank" v-if="item.link">
                         <svg-icon v-if="item.icon" :name="item.icon" />
-                        <span>{{ item.title }}</span>
+                        <span>{{ getTitle(item) }}</span>
                     </a>
                     <!-- 单个菜单 -->
                     <router-link :class="getItemClass(item)" :style="itemStyle" :to="item.path" v-else>
                         <svg-icon v-if="item.icon" :name="item.icon" />
-                        <span>{{ item.title }}</span>
+                        <span>{{ getTitle(item) }}</span>
                     </router-link>
                 </template>
             </div>
@@ -41,6 +41,7 @@
 import { LayoutMenuItem } from "@/types";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import store from "@/store";
+import { LanguageInfo } from "@/language/types";
 
 /** 菜单`item`组件 */
 @Component({
@@ -143,6 +144,10 @@ export default class MenuItem extends Vue {
             this.itemStyle.paddingLeft = value * (this.level + 1) + "px";
         }
         // console.log("MenuItem >>", this.sizeInfo);
+    }
+
+    getTitle(item: LayoutMenuItem) {
+        return item.lang ? this.$language[item.lang as keyof LanguageInfo] : item.title;
     }
 }
 </script>

@@ -4,6 +4,7 @@ import SvgIcon from "./icons/index.vue";
 import BaseDialog from "./components/base-dialog/index.vue";
 import router from "./router";
 import ElementUI from "element-ui";
+import Language from "@/language";
 import { copyText } from "./utils";
 // import "element-ui/lib/theme-chalk/index.css"; // index.scss里面已经引入了，所以这里可以不用
 import "./styles/index.scss";
@@ -20,6 +21,10 @@ Vue.component("svg-icon", SvgIcon);
 Vue.component("base-dialog", BaseDialog);
 
 Vue.use(ElementUI);
+
+Vue.use(Language, {
+    cache: true
+});
 
 Vue.config.productionTip = false;
 
