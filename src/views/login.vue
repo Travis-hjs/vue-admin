@@ -190,7 +190,7 @@ export default class Login extends Vue {
         margin-top: -302px;
         right: 10%;
         width: 100%;
-        max-width: 480px;
+        max-width: 520px;
         .form_box {
             background-color: #81c7fa;
             border: solid 2px #3b9be5;
