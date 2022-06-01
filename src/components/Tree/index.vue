@@ -214,9 +214,10 @@ export default class Tree extends Vue {
 
     /**
      * 设置选中值
-     * @param values
+     * @param values 设置的选中值
+     * @param open 是否展开选中项
      */
-    setCheckedValues(values: Array<string | number>) {
+    setCheckedValues(values: Array<string | number>, open: boolean) {
         /**
          * 递归处理
          * @param list
@@ -224,11 +225,15 @@ export default class Tree extends Vue {
         function each(list: Array<TreeItem>) {
             list.forEach(function (item) {
                 item.checked = values.includes(item.value);
+                if (open) {
+                    item.open = item.checked;
+                }
                 item.children.length && each(item.children);
             });
         }
 
         each(this.options);
+        open && this.updateHeight(this.options[0]);
     }
 
     /**
