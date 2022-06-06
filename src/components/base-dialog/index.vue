@@ -126,10 +126,10 @@ export default class BaseDialog extends Vue {
         const { clientWidth, clientHeight } = this.$el;
         const centerX = clientWidth / 2;
         const centerY = clientHeight / 2;
-        const pageY = e.pageY - centerY;
-        const pageX = e.pageX - centerX;
-        // this.contentX = `${pageX}px`;
-        // this.contentY = `${pageY}px`;
+        const pageY = e.clientY - centerY;
+        const pageX = e.clientX - centerX;
+        // console.log("x >>", e.clientX, e.pageX);
+        // console.log("y >>", e.clientY, e.pageY);
         this.contentX = `${pageX / clientWidth * 100}vw`;
         this.contentY = `${pageY / clientHeight * 100}vh`;
     }
