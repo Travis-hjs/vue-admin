@@ -135,8 +135,8 @@ export default defineComponent({
             const { clientWidth, clientHeight } = dialog.value!;
             const centerX = clientWidth / 2;
             const centerY = clientHeight / 2;
-            const pageY = e.pageY - centerY;
-            const pageX = e.pageX - centerX;
+            const pageY = e.clientY - centerY;
+            const pageX = e.clientX - centerX;
             contentX.value = `${pageX / clientWidth * 100}vw`;
             contentY.value = `${pageY / clientHeight * 100}vh`;
         }
