@@ -1,73 +1,5 @@
 import { RouteConfig } from "vue-router";
 
-/** 深层递归所有属性为可选 */
-export type DeepPartial<T> = {
-    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-}
-
-/** 深层递归所有属性为只读 */
-export type DeepReadonly<T> = {
-    readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
-}
-
-/** 深层递归所有属性为必选选（貌似不生效） */
-export type DeepRequired<T> = {
-    [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P];
-}
-
-/** 运算符号 */
-export type NumberSymbols = "+" | "-"| "*" | "/";
-
-/**
- * `JavaScript`类型
- * - 这里只枚举一些常见类型，后续根据使用场景自行添加即可
- */
-export type JavaScriptTypes = "string" | "number" | "array" | "object" | "boolean" | "function" | "null" | "undefined" | "regexp" | "promise" | "formdata";
-
-export interface AjaxParams {
-    /** 请求路径 */
-    url: string,
-    /** 请求方法 */
-    method: "GET" | "POST" | "PUT" | "DELETE",
-    /**
-     * 传参对象
-     * 
-     * ### `json`传参则为`object`
-     * ```js
-     * const data = { price: 999, shopName: "商品名称" }
-     * ```
-     * 
-     * ### 上传图片时为`FormData`
-     * ```js
-     * const data = new FormData(); 
-     * data.append("img", file); // `img`是跟后台约定好的`key`字段
-     * ```
-     * 
-     * ### 普通表单传参使用
-     * ```js
-     * const data = "name=hjs&id=123";
-     * ```
-     */
-    data: object | string | FormData,
-    /** 超时毫秒 */
-    overtime?: number,
-    /** `XMLHttpRequest.header`设置对象 */
-    headers?: { [key: string]: string }
-    /** 成功回调 */
-    success?(
-        /** 响应结果 */
-        res: any,
-        /** 响应原数据结果 */ 
-        response: XMLHttpRequest
-    ): void,
-    /** 失败回调 */
-    fail?(value: XMLHttpRequest): void,
-    /** 超时回调 */
-    timeout?(value: XMLHttpRequest): void,
-    /** 请求进度 */
-    progress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
-}
-
 export interface HistoryViewsItem {
     path: string
     query: object
@@ -112,16 +44,6 @@ export interface LayoutMenuItem extends RouteMeta {
     path: string
     /** 外链地址，优先级会比`path`高 */
     link?: string
-}
-
-/** 接口请求基础响应数据 */
-export interface ApiResult {
-    /** 接口状态`code === 1`为成功 */
-    code: number
-    /** 接口响应数据 */
-    data: any
-    /** 接口响应信息 */
-    msg: string
 }
 
 export interface RouteMeta {

@@ -1,8 +1,3 @@
-import { 
-    JavaScriptTypes, 
-    NumberSymbols 
-} from "@/types";
-
 /**
  * 检测类型
  * @param target 检测的目标

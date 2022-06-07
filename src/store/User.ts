@@ -1,5 +1,4 @@
 import { modifyData } from "@/utils";
-import { DeepPartial, DeepReadonly } from "@/types";
 import { UserInfo } from "@/types/user";
 
 const cacheName = "ModuleUser";
