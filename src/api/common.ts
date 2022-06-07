@@ -1,6 +1,5 @@
 import request from "../utils/request";
 import store from "../store";
-import { ApiResult } from "../types";
 import { LoginParams, UserInfo } from "@/types/user";
 
 /**
@@ -9,13 +8,13 @@ import { LoginParams, UserInfo } from "@/types/user";
  */
 export function uploadImg(formData: File) {
     // 模拟上传
-    return new Promise<ApiResult>(function(resolve) {
+    return new Promise<ApiResult<{ img?: string }>>(function(resolve) {
         const reader = new FileReader();
         reader.onload = function() {
             setTimeout(function() {
                 resolve({
                     code: 1,
-                    data: { img: reader.result },
+                    data: { img: reader.result as string },
                     msg: "上传成功"
                 })
             }, 500);
@@ -23,7 +22,7 @@ export function uploadImg(formData: File) {
         reader.onerror = function() {
             resolve({
                 code: -1,
-                data: null,
+                data: {},
                 msg: "上传失败"
             })
         }
