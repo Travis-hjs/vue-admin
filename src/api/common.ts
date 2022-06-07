@@ -1,6 +1,5 @@
 import request from "../utils/request";
 import store from "../store";
-import { ApiResult } from "../types";
 import { LoginParams, UserInfo } from "../types/user";
 
 /**

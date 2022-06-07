@@ -1,7 +1,6 @@
 import config from "./config";
 import store from "@/store";
 import { checkType } from "./index";
-import { AjaxParams, ApiResult } from "../types";
 
 /**
  * `http`请求
