@@ -82,10 +82,10 @@ interface ApiResult<T = any> {
 }
 
 /** 接口请求列表响应数据 */
-type ApiResultList<T = any> = ApiResult<{
+interface ApiResultList<T = any> extends PageInfo {
     /** 列表数据 */
     list: Array<T>
-} & PageInfo>
+}
 
 /** 页码信息 */
 interface PageInfo {

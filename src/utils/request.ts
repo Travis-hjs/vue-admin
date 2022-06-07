@@ -136,13 +136,13 @@ function getResultInfo(result: { statusCode: number, data: any }) {
  * @param data 请求数据
  * @param headers 请求头信息
  */
-export default function request(
+export default function request<T = any>(
     method: AjaxParams["method"],
     url: string,
     data?: AjaxParams["data"],
     headers?: AjaxParams["headers"]
 ) {
-    return new Promise<ApiResult>(function(resolve, reject) {
+    return new Promise<ApiResult<T>>(function(resolve, reject) {
         ajax({
             url: config.apiUrl + url,
             method: method,
