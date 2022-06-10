@@ -13,6 +13,15 @@
 | [hjs](https://github.com/Hansen-hjs/vue-admin/tree/hjs)| [在线预览](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs) | vue-cli 4.x | typescript、vue 2.x、vue-router 3.x、element-ui、echarts、xlsx、wangeditor | 自用分支，基于master增加了一些：图表、Excel、富文本插件 |
 | [next](https://github.com/Hansen-hjs/vue-admin/tree/next) | [在线预览](https://huangjingsheng.gitee.io/hjs/vue3-admin) | vite 2.x | typescript、vue 3.x、vue-router 4.x | vue3 版本，没有引用任何 UI 框架 |
 
+## 关于`<script setup></script>`写法说明
+
+当前项目不使用该语法糖，目前出现理由如下：
+
+1. 变量和函数在编辑器中无法识别到哪些为**已用**、无法直观地知道哪些变量和函数是绑定至`<template>`；在做项目`review`时，只能手动一个个去搜索，不利于做代码优化。
+
+2. 写法不能统一：`jsx`写法和`<script setup></script>`写法不一致，如果项目中出现`jsx`则会产生两种风格的代码，统一性松散。
+
+3. 依赖到组件`{ name: "xxx" }`时，该写法无法解决，例如：递归组件需要递归自身组件时、路由缓存需要用到组件`name`来作为缓存唯一值时、等等...
 
 ## layout 核心布局整体
 
