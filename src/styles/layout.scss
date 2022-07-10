@@ -1,4 +1,4 @@
-// @use "sass:math";
+// @use "sass:math"; // 高版本 nodejs 或 sass 写法
 @import "./variables.scss";
 
 // 侧边菜单栏宽度
@@ -176,10 +176,10 @@ $contentPadding: 12px;
             width: 4px;
             left: 0;
             background-color: $theme;
-            height: $menuTitleHeight / 2;    // 控制台警告
-            top: $menuTitleHeight / 4;       // 控制台警告
-            // height: math.div($menuTitleHeight, 2);
-            // top: math.div($menuTitleHeight, 4);
+            height: $menuTitleHeight / 2;
+            top: $menuTitleHeight / 4;
+            // height: math.div($menuTitleHeight, 2);  // 高版本 nodejs 或 sass 写法
+            // top: math.div($menuTitleHeight, 4);     // 高版本 nodejs 或 sass 写法
             transform: scaleY(0); 
             @include moveTime();
         }
