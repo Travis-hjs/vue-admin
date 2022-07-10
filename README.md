@@ -138,6 +138,8 @@ npm run build
 
 **sass 安装失败时先执行以下命令再初始化**
 
+**当前代码需要在`nodejs v12.x.x`或`nodejs v14.x.x`环境中运行**
+
 ```
 set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
 ```
