@@ -19,7 +19,7 @@ function ajax(params: AjaxParams) {
   /** 请求链接 */
   let url = params.url;
   /** 非`GET`请求传参 */
-  let body: string | FormData | null = null;
+  let body: string | FormData = "";
   /** `GET`请求传参 */
   let query = "";
   /** 传参数据类型 */
