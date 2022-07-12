@@ -23,7 +23,7 @@ Vue.component("base-dialog", BaseDialog);
 Vue.use(ElementUI);
 
 Vue.use(Language, {
-    cache: true
+  cache: true
 });
 
 Vue.config.productionTip = false;

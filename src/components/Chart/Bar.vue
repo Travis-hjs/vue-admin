@@ -1,5 +1,5 @@
 <template>
-    <div :class="className"></div>
+  <div :class="className"></div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
@@ -17,94 +17,93 @@ echarts.use([GridComponent, BarChart, CanvasRenderer]);
  * [echart文档](https://echarts.apache.org/examples/zh/editor.html?c=mix-line-bar)
  */
 @Component({
-    name: "ChartBar"
+  name: "ChartBar",
 })
 export default class ChartBar extends Vue {
-    /** 类名 */
-    @Prop({ default: "chart-bar" })
-    className!: string;
+  /** 类名 */
+  @Prop({ default: "chart-bar" })
+  className!: string;
 
-    /** 图表数据 */
-    @Prop({ type: Object, required: true })
-    chartData!: ChartBarData;
-    
-    /** 当前图表实例 */
-    chart!: echarts.ECharts;
+  /** 图表数据 */
+  @Prop({ type: Object, required: true })
+  chartData!: ChartBarData;
 
-    @Watch("chartData", { deep: true })
-    onChartDataChange(value: ChartBarData) {
-        this.setData(value);
+  /** 当前图表实例 */
+  chart!: echarts.ECharts;
+
+  @Watch("chartData", { deep: true })
+  onChartDataChange(value: ChartBarData) {
+    this.setData(value);
+  }
+
+  setData(value: ChartBarData) {
+    const series = value.data.map((item) => {
+      return {
+        color: item.color,
+        name: item.title,
+        data: item.value,
+        type: "bar",
+      };
+    });
+    this.chart.setOption({
+      legend: {
+        data: value.data.map((item) => item.title),
+        top: "0%",
+        right: "10%",
+      },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "cross",
+          // crossStyle: {
+          //     color: "#999"
+          // }
+        },
+      },
+      xAxis: {
+        type: "category",
+        data: value.bottom,
+        axisPointer: {
+          type: "shadow",
+        },
+      },
+      yAxis: {
+        type: "value",
+        name: value.yAxisName,
+        axisLabel: {
+          formatter: value.yAxisUnit ? `{value} ${value.yAxisUnit}` : undefined,
+        },
+      },
+      series,
+    });
+  }
+
+  /**
+   * 更新尺寸
+   * @description 也可以暴露给父组件调用
+   */
+  updateSize() {
+    this.chart.resize();
+  }
+
+  mounted() {
+    const el = this.$el as HTMLElement;
+    this.chart = echarts.init(el);
+    if (this.chartData) {
+      this.setData(this.chartData);
     }
 
-    setData(value: ChartBarData) {
-        const series = value.data.map(item => {
-            return {
-                color: item.color,
-                name: item.title,
-                data: item.value,
-                type: "bar"
-            }
-        })
-        this.chart.setOption({
-            legend: {
-                data: value.data.map(item => item.title),
-                top: "0%",
-                right: "10%"
-            },
-            tooltip: {
-                trigger: "axis",
-                axisPointer: {
-                    type: "cross",
-                    // crossStyle: {
-                    //     color: "#999"
-                    // }
-                }
-            },
-            xAxis: {
-                type: "category",
-                data: value.bottom,
-                axisPointer: {
-                    type: "shadow"
-                }
-            },
-            yAxis: {
-                type: "value",
-                name: value.yAxisName,
-                axisLabel: {
-                    formatter: value.yAxisUnit ? `{value} ${value.yAxisUnit}` : undefined
-                }
-            },
-            series
-        });
-    }
-
-    /** 
-     * 更新尺寸
-     * @description 也可以暴露给父组件调用
-     */
-    updateSize() {
-        this.chart.resize();
-    }
-
-    mounted() {
-        const el = this.$el as HTMLElement;
-        this.chart = echarts.init(el);
-        if (this.chartData) {
-            this.setData(this.chartData);
-        }
-
-        onElementResize({
-            el: el,
-            vue: this,
-            callback: this.updateSize,
-            destroy: () => this.chart.dispose()
-        });
-    }
-
+    onElementResize({
+      el: el,
+      vue: this,
+      callback: this.updateSize,
+      destroy: () => this.chart.dispose(),
+    });
+  }
 }
 </script>
 <style lang="scss">
 .chart-bar {
-    width: 100%;
+  width: 100%;
 }
 </style>
