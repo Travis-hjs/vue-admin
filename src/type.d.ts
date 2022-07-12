@@ -54,8 +54,24 @@ interface AjaxParams {
   data: object | string | FormData,
   /** 超时毫秒 */
   overtime?: number,
+  /** `request`方法请求配置 */
+  options?: {
+    /** `XMLHttpRequest.header`设置对象 */
+    headers?: { [key: string]: string }
+    /**
+     * 接口数据响应类型
+     * - 默认`json`
+     */
+    responseType?: XMLHttpRequestResponseType
+  }
   /** `XMLHttpRequest.header`设置对象 */
   headers?: { [key: string]: string }
+  /**
+   * 接口数据响应类型
+   * - 默认`json`
+   */
+  responseType: XMLHttpRequestResponseType
+
   /** 成功回调 */
   success?(
     /** 响应结果 */

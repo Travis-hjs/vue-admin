@@ -60,6 +60,7 @@ function ajax(params: AjaxParams) {
 
   // XHR.responseType = "json"; // 设置响应结果为`json`这个一般由后台返回指定格式，前端无配置
   // XHR.withCredentials = true;	// 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
+  XHR.responseType = params.responseType;
   XHR.open(method, url, true);
 
   // 设置对应的传参请求头，GET 方法不需要
@@ -132,22 +133,24 @@ function getResultInfo(result: { statusCode: number, data: any }) {
  * @param method 请求方式
  * @param url 请求接口
  * @param data 请求数据
- * @param headers 请求头信息
+ * @param options 请求配置
  */
 export default function request<T = any>(
   method: AjaxParams["method"],
   url: string,
   data?: AjaxParams["data"],
-  headers?: AjaxParams["headers"]
+  options: AjaxParams["options"] = {}
 ) {
+  const { headers = {}, responseType = "json" } = options;
   return new Promise<ApiResult<T>>(function (resolve) {
     ajax({
       url: config.apiUrl + url,
       method: method,
       headers: {
-        "authorization": store.user.info.token, // 每次请求时带上 token
+        "authorization": store.user.info.token, // // TODO: 每次请求时带上 token
         ...headers
       },
+      responseType: responseType,
       data: data || {},
       overtime: config.requestOvertime,
       success(res, xhr) {
