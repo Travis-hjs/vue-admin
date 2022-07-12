@@ -9,7 +9,7 @@
  * @param {number} params.currentPage
  */
 function getData(params) {
-    return request("GET", "/getList", params)
+  return request("GET", "/getList", params)
 }
 ```
 
@@ -42,9 +42,9 @@ import { jsonToFormData } from "@/utils";
  * @param {string} params.password 密码
  */
 export function saveUserInfo(params) {
-    return request("POST", "/saveUserInfo", {}, jsonToFormData(params), {
-        "Content-Type": "application/x-www-form-urlencoded"
-    })
+  return request("POST", "/saveUserInfo", {}, jsonToFormData(params), {
+    "Content-Type": "application/x-www-form-urlencoded"
+  })
 }
 ```
 
@@ -63,6 +63,6 @@ export function saveUserInfo(params) {
  * ```
  */
 export function uploadImg(formData) {
-    return request("POST", "/uploadImg", {}, formData);
+  return request("POST", "/uploadImg", {}, formData);
 }
 ```

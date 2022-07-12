@@ -6,47 +6,47 @@
 // ======================= 元素重置全局样式 =======================
 
 *, *:before, *:after {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
   
 body {
-    font-family: "微软雅黑";
+  font-family: "微软雅黑";
 }
 
 a, a:visited, a:focus, a:hover, a:link, a:active {
-    color: inherit;
-    outline: none;
-    text-decoration: none;
+  color: inherit;
+  outline: none;
+  text-decoration: none;
 }
 
 button, input {
-    border: none;
-    background-color: transparent;
-    outline: none;
-    border-radius: 0;
-    font-size: inherit;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  border-radius: 0;
+  font-size: inherit;
 }
 
 a, button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 ul, li, ol {
-    list-style: none;
+  list-style: none;
 }
 
 img {
-    width: 100%;
-    // height: 100%; // 自动适配高度
-    border: none;
-    display: inline-block;
-    object-fit: cover;
+  width: 100%;
+  // height: 100%; // 自动适配高度
+  border: none;
+  display: inline-block;
+  object-fit: cover;
 }
 
 div:focus {
-    outline: none;
+  outline: none;
 }
 
 // ======================= flex全局样式 =======================
@@ -75,9 +75,9 @@ div:focus {
 .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .ellipsis_1, .ellipsis_2, .ellipsis_3 {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 /* 溢出...显示 子节点生效 */
 .ellipsis_1 { -webkit-line-clamp: 1; }
