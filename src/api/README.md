@@ -2,13 +2,11 @@
 
 ## GET 请求
 
-```js
+```ts
 /**
- * @param {object} params
- * @param {number} params.pageSize
- * @param {number} params.currentPage
+ * @param params
  */
-function getData(params) {
+export function getData(params: PageInfo) {
   return request("GET", "/getList", params)
 }
 ```
@@ -17,15 +15,12 @@ function getData(params) {
 
 正常`POST`json
 
-```js
+```ts
 /**
  * 普通`post`json请求
- * @param {object} params 
- * @param {string} params.img banner图片
- * @param {string} params.date 日期
- * @param {number} params.sort 排序
+ * @param params 
  */
-function saveBannerInfo(params) {
+export function saveBannerInfo(params: { img: string, date: string, sort: number }) {
   return request("POST", "/saveBannerInfo", params)
 }
 ```
@@ -37,20 +32,20 @@ import { jsonToFormData } from "@/utils";
 
 /**
  * `post`表单请求
- * @param {object} params
- * @param {string|number} params.account 账号
- * @param {string} params.password 密码
+ * @param params
  */
-export function saveUserInfo(params) {
-  return request("POST", "/saveUserInfo", {}, jsonToFormData(params), {
-    "Content-Type": "application/x-www-form-urlencoded"
+export function saveUserInfo(params: { account: string | number, password: string }) {
+  return request("POST", "/saveUserInfo", jsonToFormData(params), {
+    // headers: {
+    //   "Content-Type": "application/x-www-form-urlencoded" // 可以不用传，`ajax()`函数内部做了类型判断处理
+    // }
   })
 }
 ```
 
 `POST`图片
 
-```js
+```ts
 /**
  * 上传图片
  * [参考](https://juejin.cn/post/6844904066418491406#heading-4)
@@ -62,7 +57,7 @@ export function saveUserInfo(params) {
  * uploadImg(formData).then(res => console.log(res))
  * ```
  */
-export function uploadImg(formData) {
-  return request("POST", "/uploadImg", {}, formData);
+export function uploadImg(formData: FormData) {
+  return request("POST", "/uploadImg", formData);
 }
 ```

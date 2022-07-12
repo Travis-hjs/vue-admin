@@ -147,7 +147,7 @@ export default function request<T = any>(
       url: config.apiUrl + url,
       method: method,
       headers: {
-        "authorization": store.user.info.token, // // TODO: 每次请求时带上 token
+        "authorization": store.user.info.token, // TODO: 每次请求时带上 token
         ...headers
       },
       responseType: responseType,
