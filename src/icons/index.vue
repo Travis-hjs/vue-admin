@@ -1,7 +1,7 @@
 <template>
-    <svg :class="svgClass" aria-hidden="true">
-        <use :xlink:href="iconName"></use>
-    </svg>
+  <svg :class="svgClass" aria-hidden="true">
+    <use :xlink:href="iconName"></use>
+  </svg>
 </template>
 
 <script lang="ts">
@@ -12,49 +12,49 @@ import { defineComponent, computed } from "vue";
 // requireAll(req);
 
 export default defineComponent({
-    name: "SvgIcon",
-    props: {
-        name: {
-            type: String,
-            required: true,
-            default: ""
-        },
-        className: {
-            type: String,
-            default: ""
-        }
+  name: "SvgIcon",
+  props: {
+    name: {
+      type: String,
+      required: true,
+      default: "",
     },
-    setup(props, context) {
-        const iconName = computed(() => `#icon-${props.name}`);
-        const svgClass = computed(function() {
-            if (props.className) {
-                return "svg-icon " + props.className;
-            } else {
-                return "svg-icon";
-            }
-        })
-        return {
-            iconName,
-            svgClass
-        }
-    }
-})
+    className: {
+      type: String,
+      default: "",
+    },
+  },
+  setup(props, context) {
+    const iconName = computed(() => `#icon-${props.name}`);
+    const svgClass = computed(function () {
+      if (props.className) {
+        return "svg-icon " + props.className;
+      } else {
+        return "svg-icon";
+      }
+    });
+    return {
+      iconName,
+      svgClass,
+    };
+  },
+});
 </script>
 
 <style lang="scss">
 .svg-icon {
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    color: inherit;
-    overflow: hidden;
-    vertical-align: middle;
-    fill: currentColor;
-    stroke: currentColor;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  color: inherit;
+  overflow: hidden;
+  vertical-align: middle;
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 .svg-fill {
-    fill: currentColor;
-    stroke: none;
+  fill: currentColor;
+  stroke: none;
 }
 </style>

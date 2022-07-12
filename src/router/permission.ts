@@ -8,8 +8,8 @@ import { RouteItem } from "@/types";
 
 /** 路由初始化时信息对象 */
 const routerTo = {
-    path: "/",
-    query: {}
+  path: "/",
+  query: {}
 }
 
 /**
@@ -31,18 +31,18 @@ let router: Router;
  * @param routes 
  */
 function handleAuth(routes: Array<RouteItem>) {
-    const list: Array<RouteItem> = [];
-    const userType = store.user.info.type as number;
-    for (let i = 0; i < routes.length; i++) {
-        const item = routes[i];
-        if (!item.auth || (item.auth && item.auth.includes(userType))) {
-            if (item.children && item.children.length > 0) {
-                item.children = handleAuth(item.children);
-            }
-            list.push(item);
-        }
+  const list: Array<RouteItem> = [];
+  const userType = store.user.info.type as number;
+  for (let i = 0; i < routes.length; i++) {
+    const item = routes[i];
+    if (!item.auth || (item.auth && item.auth.includes(userType))) {
+      if (item.children && item.children.length > 0) {
+        item.children = handleAuth(item.children);
+      }
+      list.push(item);
     }
-    return list;
+  }
+  return list;
 }
 
 /**
@@ -52,61 +52,61 @@ function handleAuth(routes: Array<RouteItem>) {
  * @param addRoutes 动态路由
  */
 export function initPermission(vueRouter: Router, baseRoutes: Array<RouteItem>, addRoutes: Array<RouteItem>) {
-    // 设置路由实例
-    router = vueRouter;
+  // 设置路由实例
+  router = vueRouter;
 
-    router.beforeEach(function(to, from, next) {
-        NProgress.start();
-    
-        if (store.user.info.token) {
-            if (store.layout.addRouters.length > 0) {
-                next();
-            } else {
-                store.layout.addRouters = handleAuth(addRoutes);
-    
-                // 逐个添加进去
-                for (let i = 0; i < store.layout.addRouters.length; i++) {
-                    const item = store.layout.addRouters[i];
-                    router.addRoute(item);
-                }
-    
-                // 在最后加一个404重定向的路由进去
-    
-                // vue 2.x 写法
-                // router.addRoute({ path: "*", redirect: "/404" });
-    
-                // vue 3.x 之后路由取消了自动匹配，要手动设置匹配方式
-                // learn https://my.oschina.net/qinghuo111/blog/4832051
-                if (!router.hasRoute(redirectRouteName)) {
-                    // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
-                    // 不重定向到`/404`
-                    router.addRoute({...baseRoutes[1], path: "/:catchAll(.*)", name: redirectRouteName });
-                }
-    
-                store.layout.completeRouters = baseRoutes.concat(store.layout.addRouters);
-    
-                next({ ...to, replace: true });
-            }
-        } else {
-            if (to.path === "/login") {
-                next();
-            } else {
-                routerTo.path = to.path;
-                routerTo.query = to.query;
-                next({ path: "/login" });
-                NProgress.done();
-            }
+  router.beforeEach(function (to, from, next) {
+    NProgress.start();
+
+    if (store.user.info.token) {
+      if (store.layout.addRouters.length > 0) {
+        next();
+      } else {
+        store.layout.addRouters = handleAuth(addRoutes);
+
+        // 逐个添加进去
+        for (let i = 0; i < store.layout.addRouters.length; i++) {
+          const item = store.layout.addRouters[i];
+          router.addRoute(item);
         }
-        
-    });
-    
-    router.afterEach(to => {
+
+        // 在最后加一个404重定向的路由进去
+
+        // vue 2.x 写法
+        // router.addRoute({ path: "*", redirect: "/404" });
+
+        // vue 3.x 之后路由取消了自动匹配，要手动设置匹配方式
+        // learn https://my.oschina.net/qinghuo111/blog/4832051
+        if (!router.hasRoute(redirectRouteName)) {
+          // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
+          // 不重定向到`/404`
+          router.addRoute({ ...baseRoutes[1], path: "/:catchAll(.*)", name: redirectRouteName });
+        }
+
+        store.layout.completeRouters = baseRoutes.concat(store.layout.addRouters);
+
+        next({ ...to, replace: true });
+      }
+    } else {
+      if (to.path === "/login") {
+        next();
+      } else {
+        routerTo.path = to.path;
+        routerTo.query = to.query;
+        next({ path: "/login" });
         NProgress.done();
-        // 根据路由名动态设置文档的标题
-        if (to.meta && to.meta.title) {
-            document.title = to.meta.title as string;
-        }
-    })
+      }
+    }
+
+  });
+
+  router.afterEach(to => {
+    NProgress.done();
+    // 根据路由名动态设置文档的标题
+    if (to.meta && to.meta.title) {
+      document.title = to.meta.title as string;
+    }
+  })
 }
 
 /**
@@ -114,10 +114,10 @@ export function initPermission(vueRouter: Router, baseRoutes: Array<RouteItem>, 
  * @description 登录成功之后用
 */
 export function openNextPage() {
-    router.replace({
-        path: routerTo.path,
-        query: routerTo.query
-    })
+  router.replace({
+    path: routerTo.path,
+    query: routerTo.query
+  })
 }
 
 /** 
@@ -125,17 +125,17 @@ export function openNextPage() {
  * @description 退出登录时用
 */
 export function removeRoutes() {
-    const list = store.layout.addRouters;
-    for (let i = list.length - 1; i > -1; i--) {
-        const item = list[i];
-        if (item.name && router.hasRoute(item.name)) {
-            router.removeRoute(item.name);
-        }
+  const list = store.layout.addRouters;
+  for (let i = list.length - 1; i > -1; i--) {
+    const item = list[i];
+    if (item.name && router.hasRoute(item.name)) {
+      router.removeRoute(item.name);
     }
-    routerTo.path = "/";
-    routerTo.query = {};
-    // 和上面对应的 404
-    router.removeRoute(redirectRouteName);
-    // 清空路由缓存对象
-    store.layout.addRouters = store.layout.completeRouters = [];
+  }
+  routerTo.path = "/";
+  routerTo.query = {};
+  // 和上面对应的 404
+  router.removeRoute(redirectRouteName);
+  // 清空路由缓存对象
+  store.layout.addRouters = store.layout.completeRouters = [];
 }

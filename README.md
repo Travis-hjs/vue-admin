@@ -43,43 +43,43 @@
 import { RouteRecordRaw } from "vue-router";
 
 export interface RouteMeta {
-    /** 侧边栏菜单名、document.title */
-    title: string,
-    /** `svg`名 */
-    icon?: string
-    /** 是否在侧边菜单栏不显示该路由 */
-    hidden?: boolean
-    /**
-     * 路由是否需要缓存
-     * - 当设置该值为`true`时，路由必须要设置`name`，页面组件中的`name`也是，不然路由缓存不生效
-     */
-    keepAlive?: boolean
+  /** 侧边栏菜单名、document.title */
+  title: string,
+  /** `svg`名 */
+  icon?: string
+  /** 是否在侧边菜单栏不显示该路由 */
+  hidden?: boolean
+  /**
+   * 路由是否需要缓存
+   * - 当设置该值为`true`时，路由必须要设置`name`，页面组件中的`name`也是，不然路由缓存不生效
+   */
+  keepAlive?: boolean
 }
 
 /** 自定义的路由类型-继承`RouteRecordRaw` */
 export type RouteItem = {
-    /**
-     * 路由名，类似唯一`key`
-     * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
-     * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
-     */
-    name?: string
-    /** 外链地址，优先级会比`path`高 */
-    link?: string
-    /**
-     * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
-     * 传空数组或者不写该字段代表可以全部用户访问
-     * 
-     * | number | 用户类型 |
-     * | --- | --- |
-     * | 0 | 超级管理员 |
-     * | 1 | 普通用户 |
-     */
-    auth?: Array<number>
-    /** 子级路由 */
-    children?: Array<RouteItem>
-    /** 标头 */
-    meta: RouteMeta
+  /**
+   * 路由名，类似唯一`key`
+   * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+   * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
+   */
+  name?: string
+  /** 外链地址，优先级会比`path`高 */
+  link?: string
+  /**
+   * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
+   * 传空数组或者不写该字段代表可以全部用户访问
+   * 
+   * | number | 用户类型 |
+   * | --- | --- |
+   * | 0 | 超级管理员 |
+   * | 1 | 普通用户 |
+   */
+  auth?: Array<number>
+  /** 子级路由 */
+  children?: Array<RouteItem>
+  /** 标头 */
+  meta: RouteMeta
 } & RouteRecordRaw
 ```
 
@@ -87,22 +87,22 @@ export type RouteItem = {
 
 ```js
 const example = [
-    {
-        path: "/example",
-        name: "example",
-        component: Layout,
-        meta: { title: "示例页栏目", icon: "menu" },
-        redirect: "/example/request",
-        children: [
-            {
-                path: "/example/request", // 这里要补全，
-                // path: "/request",      // 这样写就是跳出了 /example 的下级
-                name: "example-request",
-                meta: { title: "http-请求示例", keepAlive: true },
-                component: () => import("../views/example/xxx.vue"),
-            }
-        ]
-    }
+  {
+    path: "/example",
+    name: "example",
+    component: Layout,
+    meta: { title: "示例页栏目", icon: "menu" },
+    redirect: "/example/request",
+    children: [
+      {
+        path: "/example/request", // 这里要补全，
+        // path: "/request",      // 这样写就是跳出了 /example 的下级
+        name: "example-request",
+        meta: { title: "http-请求示例", keepAlive: true },
+        component: () => import("../views/example/xxx.vue"),
+      }
+    ]
+  }
 ]
 ```
 
@@ -141,37 +141,37 @@ const clearReturn = /(\r)|(\n)/g;
  * @param dir 文件目录
  */
 function findSvgFile(dir: string): Array<string> {
-    const svgRes = []
-    const dirents = readdirSync(dir, {
-        withFileTypes: true
-    })
-    for (const dirent of dirents) {
-        if (dirent.isDirectory()) {
-            svgRes.push(...findSvgFile(dir + dirent.name + "/"));
-        } else {
-            const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, (value, group) => {
-                // console.log(++i)
-                // console.log(dirent.name)
-                let width = 0;
-                let height = 0;
-                let content = group.replace(clearHeightWidth, (val1: string, val2: string, val3: number) => {
-                        if (val2 === "width") {
-                            width = val3;
-                        } else if (val2 === "height") {
-                            height = val3;
-                        }
-                        return "";
-                    }
-                )
-                if (!hasViewBox.test(group)) {
-                    content += `viewBox="0 0 ${width} ${height}"`;
-                }
-                return `<symbol id="${idPerfix}-${dirent.name.replace(".svg", "")}" ${content}>`;
-            }).replace("</svg>", "</symbol>");
-            svgRes.push(svg);
+  const svgRes = []
+  const dirents = readdirSync(dir, {
+    withFileTypes: true
+  })
+  for (const dirent of dirents) {
+    if (dirent.isDirectory()) {
+      svgRes.push(...findSvgFile(dir + dirent.name + "/"));
+    } else {
+      const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, (value, group) => {
+        // console.log(++i)
+        // console.log(dirent.name)
+        let width = 0;
+        let height = 0;
+        let content = group.replace(clearHeightWidth, (val1: string, val2: string, val3: number) => {
+          if (val2 === "width") {
+            width = val3;
+          } else if (val2 === "height") {
+            height = val3;
+          }
+          return "";
         }
+        )
+        if (!hasViewBox.test(group)) {
+          content += `viewBox="0 0 ${width} ${height}"`;
+        }
+        return `<symbol id="${idPerfix}-${dirent.name.replace(".svg", "")}" ${content}>`;
+      }).replace("</svg>", "</symbol>");
+      svgRes.push(svg);
     }
-    return svgRes;
+  }
+  return svgRes;
 }
 
 /**
@@ -180,20 +180,20 @@ function findSvgFile(dir: string): Array<string> {
  * @param perfix 后缀名（标签`id`前缀）
  */
 export function svgBuilder(path: string, perfix = "icon") {
-    if (path.trim() === "") return;
-    idPerfix = perfix;
-    const res = findSvgFile(path);
-    // console.log(res.length)
-    return {
-        name: "svg-transform",
-        transformIndexHtml(html: string) {
-            return html.replace("<body>",
-                `<body>
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
-                ${res.join("")}
-                </svg>`)
-        }
+  if (path.trim() === "") return;
+  idPerfix = perfix;
+  const res = findSvgFile(path);
+  // console.log(res.length)
+  return {
+    name: "svg-transform",
+    transformIndexHtml(html: string) {
+      return html.replace("<body>",
+        `<body>
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
+          ${res.join("")}
+          </svg>`)
     }
+  }
 }
 
 ```
@@ -229,7 +229,7 @@ run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的�
 
 ```html
 <template>
-    <div :style="{ 'height': autoHeight ? null : height }"></div>
+  <div :style="{ 'height': autoHeight ? null : height }"></div>
 </template>
 ```
 
@@ -237,39 +237,39 @@ run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的�
 
 ```html
 <template>
-    <div>
-        <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
-        <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
-    </div>
+  <div>
+    <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
+    <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
+  </div>
 </template>
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
 
 export default defineComponent({
-    components: {
-        UploadImage
-    },
-    setup() {
-        const formData = reactive({
-            banner: "",
-            logo: ""
-        })
+  components: {
+    UploadImage
+  },
+  setup() {
+    const formData = reactive({
+      banner: "",
+      logo: ""
+    })
 
-        /**
-         * 监听上传图片
-         * @param info 回调数据
-         */
-        function onUpload(info: UploadChange<"banner"|"logo">) {
-            // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
-            formData[info.id] = info.src;
-        }
-
-        return {
-            formData,
-            onUpload
-        }
+    /**
+     * 监听上传图片
+     * @param info 回调数据
+     */
+    function onUpload(info: UploadChange<"banner"|"logo">) {
+      // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
+      formData[info.id] = info.src;
     }
+
+    return {
+      formData,
+      onUpload
+    }
+  }
 })
 </script>
 ```
@@ -280,14 +280,14 @@ export default defineComponent({
 
 ```json
 {
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build", // 剔除了 vue-tsc --noEmit && ，只保留 vite build
-        "serve": "vite preview"
-    },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build", // 剔除了 vue-tsc --noEmit && ，只保留 vite build
+    "serve": "vite preview"
+  },
 }
 ```
 
-于是就正常了；后面又查阅了`vue-tsc`的作用（[npm vue-tsc](https://www.npmjs.com/package/vue-tsc)），才了解到这是一个非必要的依赖，主要是用来约束`<script setup lang="ts">`这种写法，并且应用在`vscode-Volar`的插件中使用，像当前项目就不用`Volar`插件和激进的写法，所以就剔除了这个依赖；主要是没有办法解决，即使升级版本也是报其他错。
+于是就正常了；后面又查阅了`vue-tsc`的作用（[npm vue-tsc](https://www.npmjs.com/package/vue-tsc)），才了解到这是`vue3`里面用来校验提交事件的匹配插件，如果不声明`emits: ["change"]`，则默认会触发`dom`的事件类型检测导致报错；所以最好在写组件提交事件的时候，声明`emits`的配置，因为在`vue3`所有事件都扁平化了，不再是`vue2`那样拥有上下级关系。
 
 详情见[Vite 踩坑指南](https://juejin.cn/post/6959851018469244965)

@@ -2,39 +2,42 @@
 $theme: #1890FF;
 
 @mixin moveTime {
-    transition: 0.3s all;
+  transition: 0.3s all;
 }
 
 @mixin closeIcon($color, $size, $land: 1px) {
-    position: relative;
-    &::before {
-        @include moveTime();
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: $size;
-        height: $land;
-        background-color: $color;
-        transform: translate(-50%, -50%) rotate(45deg);
-    }
-    &::after {
-        @include moveTime();
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: $size;
-        height: $land;
-        background-color: $color;
-        transform: translate(-50%, -50%) rotate(-45deg);
-    }
+  position: relative;
+
+  &::before {
+    @include moveTime();
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $size;
+    height: $land;
+    background-color: $color;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    @include moveTime();
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $size;
+    height: $land;
+    background-color: $color;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
 }
 
 @mixin tagColor ($bg, $color) {
-    background-color: $bg;
+  background-color: $bg;
+  color: $color;
+
+  &:hover {
     color: $color;
-    &:hover {
-        color: $color;
-    }
+  }
 }

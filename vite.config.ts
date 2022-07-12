@@ -6,15 +6,15 @@ import { svgBuilder } from "./src/icons/loader";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue(), vueJsx(), svgBuilder("./src/icons/svg/")],
-    base: "./",
-    resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "src")
-        }
-    },
-    server: {
-        port: 1088,
-        host: "0.0.0.0"
+  plugins: [vue(), vueJsx(), svgBuilder("./src/icons/svg/")],
+  base: "./",
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src")
     }
+  },
+  server: {
+    port: 1088,
+    host: "0.0.0.0"
+  }
 })

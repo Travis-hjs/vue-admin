@@ -4,169 +4,169 @@
 
 /* 上下左右边距 */
 @for $index from 1 through 5 {
-    .mgl_#{$index}0 {
-        margin-left: 10px * $index;
-    }
-    .mgr_#{$index}0 {
-        margin-right: 10px * $index;
-    }
-    .mgt_#{$index}0 {
-        margin-top: 10px * $index;
-    }
-    .mgb_#{$index}0 {
-        margin-bottom: 10px * $index;
-    }
-    .pdl_#{$index}0 {
-        padding-left: 10px * $index;
-    }
-    .pdr_#{$index}0 {
-        padding-right: 10px * $index;
-    }
-    .pdt_#{$index}0 {
-        padding-top: 10px * $index;
-    }
-    .pdb_#{$index}0 {
-        padding-bottom: 10px * $index;
-    }
+  .mgl_#{$index}0 {
+    margin-left: 10px * $index;
+  }
+  .mgr_#{$index}0 {
+    margin-right: 10px * $index;
+  }
+  .mgt_#{$index}0 {
+    margin-top: 10px * $index;
+  }
+  .mgb_#{$index}0 {
+    margin-bottom: 10px * $index;
+  }
+  .pdl_#{$index}0 {
+    padding-left: 10px * $index;
+  }
+  .pdr_#{$index}0 {
+    padding-right: 10px * $index;
+  }
+  .pdt_#{$index}0 {
+    padding-top: 10px * $index;
+  }
+  .pdb_#{$index}0 {
+    padding-bottom: 10px * $index;
+  }
 }
 
 // ===================== 全局动画 =====================
 // 渐变+平移
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
-    transition: .5s all !important;
+  transition: .5s all !important;
 }
 
 .fadeSlideX-enter-active, .fadeSlideX-leave-active {
-    opacity: 1;
-    transform: translate3d(0px, 0, 0);
+  opacity: 1;
+  transform: translate3d(0px, 0, 0);
 }
 
 .fadeSlideX-enter-from {
-    opacity: 0;
-    transform: translate3d(-30px, 0, 0);
+  opacity: 0;
+  transform: translate3d(-30px, 0, 0);
 }
 
 .fadeSlideX-leave-to {
-    opacity: 0;
-    transform: translate3d(30px, 0, 0);
+  opacity: 0;
+  transform: translate3d(30px, 0, 0);
 }
 
 // 面包屑
 .breadcrumb-enter-active, .breadcrumb-leave-active {
-    transition: .5s all
+  transition: .5s all
 }
 
 .breadcrumb-enter-from, .breadcrumb-leave-to {
-    opacity: 0;
-    transform: translate3d(20px, 0, 0);
+  opacity: 0;
+  transform: translate3d(20px, 0, 0);
 }
 
 .breadcrumb-leave-to {
-    position: absolute;
+  position: absolute;
 }
 
 // 渐变
 .fade-enter-active, .fade-leave-active {
-    @include moveTime();
+  @include moveTime();
 }
 
 .fade-enter-from, .fade-leave-to {
-    opacity: 0;
+  opacity: 0;
 }
 
 // ================= 示例全局样式 =================
 
 .the-input {
-    width: 100%;
-    border: 1px solid #DCDFE6;
-    border-radius: 4px;
-    color: #1f2d3d;
-    height: 38px;
-    line-height: 38px;
-    font-size: 14px;
-    padding: 0 15px;
-    outline: none;
-    transition: 0.2s all;
-    &:focus {
-        border-color: $theme;
-    }
+  width: 100%;
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
+  color: #1f2d3d;
+  height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+  padding: 0 15px;
+  outline: none;
+  transition: 0.2s all;
+  &:focus {
+    border-color: $theme;
+  }
 }
 
 .the-btn {
-    font-size: 14px;
-    padding: 0px 15px;
-    min-width: 88px;
-    height: 36px;
-    line-height: 1;
-    border-radius: 2px;
-    background-color: #fff;
-    color: rgba(0,0,0,.87);
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
-    @include moveTime();
-    outline: none;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    &:active {
-        box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12);
-    }
+  font-size: 14px;
+  padding: 0px 15px;
+  min-width: 88px;
+  height: 36px;
+  line-height: 1;
+  border-radius: 2px;
+  background-color: #fff;
+  color: rgba(0,0,0,.87);
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
+  @include moveTime();
+  outline: none;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  &:active {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12);
+  }
 }
 
 .the-btn + .the-btn {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .the-btn.mini {
-    font-size: 12px;
-    height: 28px;
-    border-radius: 3px;
+  font-size: 12px;
+  height: 28px;
+  border-radius: 3px;
 }
 
 .the-btn.blue {
-    background-color: $theme;
-    color: #fff;
+  background-color: $theme;
+  color: #fff;
 }
 
 .the-btn.green {
-    background-color: #4caf50;
-    color: #fff;
+  background-color: #4caf50;
+  color: #fff;
 }
 
 .the-btn.yellow {
-    background-color: #fdd835;
-    color: #fff;
+  background-color: #fdd835;
+  color: #fff;
 }
 
 .the-btn.red {
-    background-color: #f44336;
-    color: #fff;
+  background-color: #f44336;
+  color: #fff;
 }
 
 .check-box {
-    cursor: pointer;
-    font-size: 14px;
-    color: $theme;
-    input {
-        width: 16px;
-        height: 16px;
-        margin-right: 4px;
-        line-height: 1;
-        &:checked {
-            background-color: $theme;
-        }
+  cursor: pointer;
+  font-size: 14px;
+  color: $theme;
+  input {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    line-height: 1;
+    &:checked {
+      background-color: $theme;
     }
+  }
 }
 
 .the-tag {
-    display: inline-block;
-    padding: 6px 8px;
-    border-radius: 2px;
-    line-height: 1;
-    font-size: 14px;
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 2px;
+  line-height: 1;
+  font-size: 14px;
 }
 
 .the-tag + .the-tag {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .the-tag.green { @include tagColor(#e7faf0, #13ce66); }
@@ -178,24 +178,24 @@
 .the-tag.cyan { @include tagColor(#e6fffb, #08979c); }
 
 .the-title {
-    position: relative;
-    font-size: 24px;
-    color: #303133;
-    font-weight: normal;
-    display: inline-block;
-    padding-right: 8px;
-    &::after {
-        content: "";
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 100%;
-        height: 4px;
-        border-radius: 2px;
-        background-color: $theme;
-        opacity: 0.8;
-    }
-    &::before {
-        content: "Title ";
-    }
+  position: relative;
+  font-size: 24px;
+  color: #303133;
+  font-weight: normal;
+  display: inline-block;
+  padding-right: 8px;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: $theme;
+    opacity: 0.8;
+  }
+  &::before {
+    content: "Title ";
+  }
 }

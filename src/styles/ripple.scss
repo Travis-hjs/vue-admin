@@ -1,17 +1,19 @@
 [ripple] {
-    position: relative;
-    overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
+
 [ripple] .ripple {
-    position: absolute;
-    border-radius: 100%;
-    transform: scale(0);
-    pointer-events: none;
-    animation: ripple .4s ease-out;
+  position: absolute;
+  border-radius: 100%;
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple .4s ease-out;
 }
+
 @keyframes ripple {
-    to {
-        transform: scale(2);
-        opacity: 0;
-    }
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
 }

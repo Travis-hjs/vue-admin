@@ -3,24 +3,24 @@ import imgLogo from "../assets/logo.png";
 import ModuleLayout from "./Layout";
 
 class ModuleStore {
-    constructor() {
-        console.log("%c ModuleStore init", "color: #409EFF");
-    }
-    
-    /** 项目信息 */
-    readonly projectInfo = {
-        title: "Vue Typescript Admin",
-        name: "XXX后台管理平台",
-        logo: imgLogo,
-        link: "https://github.com/Hansen-hjs/vue-admin/tree/next"
-    }
+  constructor() {
+    console.log("%c ModuleStore init", "color: #409EFF");
+  }
 
-    /** `layout`状态模块 */
-    readonly layout = new ModuleLayout();
+  /** 项目信息 */
+  readonly projectInfo = {
+    title: "Vue Typescript Admin",
+    name: "XXX后台管理平台",
+    logo: imgLogo,
+    link: "https://github.com/Hansen-hjs/vue-admin/tree/next"
+  }
 
-    /** 用户状态模块 */
-    readonly user = new ModuleUser();
-    
+  /** `layout`状态模块 */
+  readonly layout = new ModuleLayout();
+
+  /** 用户状态模块 */
+  readonly user = new ModuleUser();
+
 }
 
 /**
