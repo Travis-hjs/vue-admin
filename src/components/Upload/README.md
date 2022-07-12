@@ -44,3 +44,43 @@ export default class Demo extends Vue {
 }
 </script>
 ```
+
+# 上传文件包裹组件
+
+使用示例
+
+```html
+<template>
+  <div>
+    <!-- 默认使用方式 -->
+    <UploadWrap @change="onUpload" @load="onLoad">
+      <el-button :loading="loading">点击上传</el-button>
+    </UploadWrap>
+  </div>
+</template>
+
+<script>
+import { Component, Vue } from "vue-property-decorator";
+import UploadWrap, { UploadChange } from '@/components/Upload/Wrap.vue';
+
+@Component({
+  components: {
+    UploadWrap
+  }
+})
+export default class Demo extends Vue {
+  loading = false;
+
+  onLoad(val: boolean) {
+    this.loading = val;
+  }
+
+  /**
+   * 监听文件上传
+   */
+  onUpload(info: UploadChange) {
+    console.log(info.result);
+  }
+}
+</script>
+```
