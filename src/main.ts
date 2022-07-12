@@ -30,15 +30,15 @@ Vue.config.productionTip = false;
 
 // 添加一个自定义指令`v-copy`点击复制内容
 Vue.directive("copy", {
-    inserted(el, binding) {
-        el.addEventListener("click", function() {
-            copyText(binding.value, () => ElementUI.Message.success("复制成功"), tip => ElementUI.Message.warning(tip));
-        })
-    }
+  inserted(el, binding) {
+    el.addEventListener("click", function () {
+      copyText(binding.value, () => ElementUI.Message.success("复制成功"), tip => ElementUI.Message.warning(tip));
+    })
+  }
 })
 
 new Vue({
-    router,
-    render: h => h(App)
+  router,
+  render: h => h(App)
 }).$mount("#app")
 

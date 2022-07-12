@@ -6,25 +6,25 @@
 
 ```html
 <template>
-    <div>
-        <button @click="show = true">打开弹出层</button>
+  <div>
+    <button @click="show = true">打开弹出层</button>
 
-        <base-dialog title="第一个 dialog" v-model="show">
-            <div>
-                ...your code
-            </div>
-            <template slot="footer">
-                <button @click="show = false">关 闭</button>
-            </template>
-        </base-dialog>
-    </div>
+    <base-dialog title="第一个 dialog" v-model="show">
+      <div>
+        ...your code
+      </div>
+      <template slot="footer">
+        <button @click="show = false">关 闭</button>
+      </template>
+    </base-dialog>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 @Component()
 export default class Demo extends Vue {
-    show = false;
+  show = false;
 }
 </script>
 ```

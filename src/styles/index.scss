@@ -3,88 +3,88 @@
 
 /* 上下左右边距 */
 @for $index from 1 through 5 {
-    .mgl_#{$index}0 {
-        margin-left: 10px * $index;
-    }
-    .mgr_#{$index}0 {
-        margin-right: 10px * $index;
-    }
-    .mgt_#{$index}0 {
-        margin-top: 10px * $index;
-    }
-    .mgb_#{$index}0 {
-        margin-bottom: 10px * $index;
-    }
-    .pdl_#{$index}0 {
-        padding-left: 10px * $index;
-    }
-    .pdr_#{$index}0 {
-        padding-right: 10px * $index;
-    }
-    .pdt_#{$index}0 {
-        padding-top: 10px * $index;
-    }
-    .pdb_#{$index}0 {
-        padding-bottom: 10px * $index;
-    }
+  .mgl_#{$index}0 {
+    margin-left: 10px * $index;
+  }
+  .mgr_#{$index}0 {
+    margin-right: 10px * $index;
+  }
+  .mgt_#{$index}0 {
+    margin-top: 10px * $index;
+  }
+  .mgb_#{$index}0 {
+    margin-bottom: 10px * $index;
+  }
+  .pdl_#{$index}0 {
+    padding-left: 10px * $index;
+  }
+  .pdr_#{$index}0 {
+    padding-right: 10px * $index;
+  }
+  .pdt_#{$index}0 {
+    padding-top: 10px * $index;
+  }
+  .pdb_#{$index}0 {
+    padding-bottom: 10px * $index;
+  }
 }
 
 // ================== 定义过渡动画 ==================
 
 .fade-enter-active, .fade-leave-active {
-    @include moveTime();
+  @include moveTime();
 }
 
 .fade-enter, .fade-leave-active {
-    opacity: 0;
+  opacity: 0;
 }
 
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
-    transition: all .5s !important;
+  transition: all .5s !important;
 }
 
 .fadeSlideX-enter {
-    opacity: 0;
-    transform: translate3d(-30px, 0, 0);
+  opacity: 0;
+  transform: translate3d(-30px, 0, 0);
 }
 
 .fadeSlideX-leave-to {
-    opacity: 0;
-    transform: translate3d(30px, 0, 0);
+  opacity: 0;
+  transform: translate3d(30px, 0, 0);
 }
 
 .breadcrumb-enter-active, .breadcrumb-leave-active {
-    transition: all .5s;
+  transition: all .5s;
 }
 
 .breadcrumb-enter, .breadcrumb-leave-active {
-    opacity: 0;
-    transform: translate3d(20px, 0, 0);
+  opacity: 0;
+  transform: translate3d(20px, 0, 0);
 }
 
 .breadcrumb-move {
-    transition: all .5s;
+  transition: all .5s;
 }
 
 .breadcrumb-leave-active {
-    position: absolute;
+  position: absolute;
 }
 
 // 日期选择样式有问题，不会自适应中间文字宽度，这里给一个合适的最小宽度
 .el-date-editor .el-range-separator {
-    min-width: 9%;
+  min-width: 9%;
 }
 
 .the-tag {
-    display: inline-block;
-    padding: 6px 8px;
-    border-radius: 2px;
-    line-height: 1;
-    font-size: 14px;
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: 2px;
+  line-height: 1;
+  font-size: 14px;
 }
 
 .the-tag + .the-tag {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .the-tag.green { @include tagColor(#e7faf0, #13ce66); }
@@ -96,25 +96,25 @@
 .the-tag.cyan { @include tagColor(#e6fffb, #08979c); }
 
 .the-title {
-    position: relative;
-    font-size: 24px;
-    color: #303133;
-    font-weight: normal;
-    display: inline-block;
-    padding-right: 8px;
-    &::after {
-        content: "";
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 100%;
-        // width: 100%;
-        height: 4px;
-        border-radius: 2px;
-        background-color: $theme;
-        opacity: 0.8;
-    }
-    &::before {
-        content: "Title ";
-    }
+  position: relative;
+  font-size: 24px;
+  color: #303133;
+  font-weight: normal;
+  display: inline-block;
+  padding-right: 8px;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    // width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: $theme;
+    opacity: 0.8;
+  }
+  &::before {
+    content: "Title ";
+  }
 }

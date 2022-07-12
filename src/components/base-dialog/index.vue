@@ -1,28 +1,23 @@
 <template>
-    <transition name="fade">
-        <div
-            class="base-dialog fvc"
-            :style="{ 'z-index': zIndex }"
-            v-show="value"
-            @click="onClose"
-        >
-            <div
-                :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
-                :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
-            >   
-                <div class="base-dialog-title fbetween fvertical">
-                    <h2>{{ title }}</h2>
-                    <i ref="close-btn" @click="onClose"></i>
-                </div>
-                <div class="base-dialog-body f1">
-                    <slot></slot>
-                </div>
-                <div class="base-dialog-footer" v-if="$slots.footer">
-                    <slot name="footer"></slot>
-                </div>
-            </div>
+  <transition name="fade">
+    <div class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="value" @click="onClose">
+      <div
+        :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
+        :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
+      >
+        <div class="base-dialog-title fbetween fvertical">
+          <h2>{{ title }}</h2>
+          <i ref="close-btn" @click="onClose"></i>
         </div>
-    </transition>
+        <div class="base-dialog-body f1">
+          <slot></slot>
+        </div>
+        <div class="base-dialog-footer" v-if="$slots.footer">
+          <slot name="footer"></slot>
+        </div>
+      </div>
+    </div>
+  </transition>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
@@ -34,180 +29,181 @@ let zIndex = 1000;
 
 /** 基础弹出框组件 */
 @Component({
-    name: "base-dialog"
+  name: "base-dialog"
 })
 export default class BaseDialog extends Vue {
 
-    zIndex = zIndex;
+  zIndex = zIndex;
 
-    /** 双向绑定显示隐藏值 */
-    @Prop({
-        type: Boolean,
-        default: false
-    })
-    value!: boolean;
+  /** 双向绑定显示隐藏值 */
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  value!: boolean;
 
-    /** 弹出层内容区域宽度 */
-    @Prop({
-        type: String,
-        default: "50%"
-    })
-    width!: string;
+  /** 弹出层内容区域宽度 */
+  @Prop({
+    type: String,
+    default: "50%"
+  })
+  width!: string;
 
-    @Prop({
-        type: String,
-        default: "提示"
-    })
-    title!: string;
+  @Prop({
+    type: String,
+    default: "提示"
+  })
+  title!: string;
 
-    /** 是否可以通过点击遮罩层关闭`Dialog` */
-    @Prop({
-        type: Boolean,
-        default: true
-    })
-    closeByMask!: boolean
+  /** 是否可以通过点击遮罩层关闭`Dialog` */
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  closeByMask!: boolean
 
-    /** `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true` */
-    @Prop({
-        type: Boolean,
-        default: false
-    })
-    appendToBody!: boolean;
+  /** `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true` */
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  appendToBody!: boolean;
 
-    $refs!: {
-        "close-btn": HTMLElement
+  $refs!: {
+    "close-btn": HTMLElement
+  }
+
+  onClose(e: MouseEvent) {
+    // console.log("onClose >>", e.target);
+    if ((e && e.target === this.$el && this.closeByMask) || (e && e.target === this.$refs["close-btn"])) {
+      this.$emit("input", false);
+      this.$emit("close");
     }
+  }
 
-    onClose(e: MouseEvent) {
-        // console.log("onClose >>", e.target);
-        if ((e && e.target === this.$el && this.closeByMask) || (e && e.target === this.$refs["close-btn"])) {
-            this.$emit("input", false);
-            this.$emit("close");
-        }
+  /** 内容盒子`x`轴偏移位置 */
+  private contentX = "0";
+
+  /** 内容盒子`y`轴偏移位置 */
+  private contentY = "0";
+
+  /** 因为需要动态设置偏移位置，所以设置完位置之后单独控制该节点切换动画 */
+  private contentShow = false;
+
+  /** 内容盒子过渡动画 */
+  private contentMove = false;
+
+  @Watch("value")
+  onValue(val: boolean) {
+    this.timer && clearTimeout(this.timer)
+    if (val) {
+      // 该代码片段不写在`setContentPosition`是因为打开弹框时，可能是异步的
+      this.contentMove = false;
+      // css3 动画生命周期结束后再设置过渡动画
+      this.timer = setTimeout(() => {
+        this.contentMove = true;
+        this.contentShow = true;
+      }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒，貌似 60 也可以
+    } else {
+      this.contentShow = false;
     }
+  }
 
-    /** 内容盒子`x`轴偏移位置 */
-    private contentX = "0";
+  private timer!: NodeJS.Timeout;
 
-    /** 内容盒子`y`轴偏移位置 */
-    private contentY = "0";
-    
-    /** 因为需要动态设置偏移位置，所以设置完位置之后单独控制该节点切换动画 */
-    private contentShow = false;
+  /**  
+   * 设置内容区域位置
+   * @param e 鼠标事件
+   */
+  private setContentPosition(e: MouseEvent) {
+    // 只有在外部点击，且关闭的情况下才会记录坐标
+    if (!this.value || this.contentShow || this.$el.contains(e.target as HTMLElement)) return;
+    const { clientWidth, clientHeight } = this.$el;
+    const centerX = clientWidth / 2;
+    const centerY = clientHeight / 2;
+    const pageY = e.clientY - centerY;
+    const pageX = e.clientX - centerX;
+    // console.log("x >>", e.clientX, e.pageX);
+    // console.log("y >>", e.clientY, e.pageY);
+    this.contentX = `${pageX / clientWidth * 100}vw`;
+    this.contentY = `${pageY / clientHeight * 100}vh`;
+  }
 
-    /** 内容盒子过渡动画 */
-    private contentMove = false;
+  created() {
+    zIndex++;
+  }
 
-    @Watch("value")
-    onValue(val: boolean) {
-        this.timer && clearTimeout(this.timer)
-        if (val) {
-            // 该代码片段不写在`setContentPosition`是因为打开弹框时，可能是异步的
-            this.contentMove = false;
-            // css3 动画生命周期结束后再设置过渡动画
-            this.timer = setTimeout(() => {
-                this.contentMove = true;
-                this.contentShow = true;
-            }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒，貌似 60 也可以
-        } else {
-            this.contentShow = false;
-        }
+  mounted() {
+    if (this.appendToBody) {
+      // 节点初始化之后移动至<body>处
+      this.$el.remove();
+      document.body.appendChild(this.$el);
     }
+    document.addEventListener("click", this.setContentPosition);
+  }
 
-    private timer!: NodeJS.Timeout;
-
-    /**  
-     * 设置内容区域位置
-     * @param e 鼠标事件
-     */
-    private setContentPosition(e: MouseEvent) {
-        // 只有在外部点击，且关闭的情况下才会记录坐标
-        if (!this.value || this.contentShow || this.$el.contains(e.target as HTMLElement)) return;
-        const { clientWidth, clientHeight } = this.$el;
-        const centerX = clientWidth / 2;
-        const centerY = clientHeight / 2;
-        const pageY = e.clientY - centerY;
-        const pageX = e.clientX - centerX;
-        // console.log("x >>", e.clientX, e.pageX);
-        // console.log("y >>", e.clientY, e.pageY);
-        this.contentX = `${pageX / clientWidth * 100}vw`;
-        this.contentY = `${pageY / clientHeight * 100}vh`;
-    }
-
-    created() {
-        zIndex++;
-    }
-
-    mounted() {
-        if (this.appendToBody) {
-            // 节点初始化之后移动至<body>处
-            this.$el.remove();
-            document.body.appendChild(this.$el);
-        }
-        document.addEventListener("click", this.setContentPosition);
-    }
-
-    beforeDestroy() {
-        document.removeEventListener("click", this.setContentPosition);
-        this.timer && clearTimeout(this.timer);
-        this.appendToBody && this.$el.remove(); // 插入至body处的节点要单独移除
-    }
+  beforeDestroy() {
+    document.removeEventListener("click", this.setContentPosition);
+    this.timer && clearTimeout(this.timer);
+    this.appendToBody && this.$el.remove(); // 插入至body处的节点要单独移除
+  }
 }
 </script>
 <style lang="scss">
 @import "@/styles/variables.scss";
 
 .base-dialog {
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0,0,0,0.5);
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .base-dialog-content {
-    border-radius: 2px; 
-    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
-    background-color: #fff;
-    overflow: hidden;
-    flex-direction: column;
-    max-height: 90vh;
+  border-radius: 2px;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  overflow: hidden;
+  flex-direction: column;
+  max-height: 90vh;
 }
 .base-dialog-content.opened {
-    transform: translate3d(0,0,0) scale(1) !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
 }
 .base-dialog-content.moving {
-    @include moveTime();
+  @include moveTime();
 }
 .base-dialog-title {
-    padding: 12px 14px;
-    border-bottom: solid 1px #eee;
-    h2 {
-        font-size: 22px;
-        color: #303133;
-        font-weight: normal;
+  padding: 12px 14px;
+  border-bottom: solid 1px #eee;
+  h2 {
+    font-size: 22px;
+    color: #303133;
+    font-weight: normal;
+  }
+  i {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    transform: rotate(0);
+    @include closeIcon(#666, 16px);
+    @include moveTime();
+    &:hover {
+      transform: rotate(180deg);
     }
-    i {
-        display: inline-block;
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-        transform: rotate(0);
-        @include closeIcon(#666, 16px);
-        @include moveTime();
-        &:hover {
-            transform: rotate(180deg);
-        }
-    }
+  }
 }
 .base-dialog-body {
-    padding: 12px 14px;
-    min-height: 0px;
-    overflow: auto;
+  padding: 12px 14px;
+  min-height: 0px;
+  overflow: auto;
 }
 .base-dialog-footer {
-    text-align: right;
-    border-top: solid 1px #eee;
-    padding: 10px 14px;
+  text-align: right;
+  border-top: solid 1px #eee;
+  padding: 10px 14px;
 }
 </style>

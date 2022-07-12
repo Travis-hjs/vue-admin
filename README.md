@@ -40,41 +40,41 @@
 import { RouteConfig } from "vue-router";
 
 export interface RouteMeta {
-    /** 侧边栏菜单名、document.title */
-    title: string,
-    /** `svg`名 */
-    icon?: string
-    /** 是否在侧边菜单栏不显示该路由 */
-    hidden?: boolean
-    /**
-     * 路由是否需要缓存
-     * - 当设置该值为`true`时，路由必须要设置`name`，页面组件中的`name`也是，不然路由缓存不生效
-     */
-    keepAlive?: boolean
+  /** 侧边栏菜单名、document.title */
+  title: string,
+  /** `svg`名 */
+  icon?: string
+  /** 是否在侧边菜单栏不显示该路由 */
+  hidden?: boolean
+  /**
+   * 路由是否需要缓存
+   * - 当设置该值为`true`时，路由必须要设置`name`，页面组件中的`name`也是，不然路由缓存不生效
+   */
+  keepAlive?: boolean
 }
 
 /** 自定义的路由类型-继承`RouteConfig` */
 export interface RouteItem extends RouteConfig {
-    /**
-     * 路由名，类似唯一`key`
-     */
-    name?: string
-    /** 外链地址，优先级会比`path`高 */
-    link?: string
-    /**
-     * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
-     * 传空数组或者不写该字段代表可以全部用户访问
-     * 
-     * | number | 用户类型 |
-     * | --- | --- |
-     * | 0 | 超级管理员 |
-     * | 1 | 普通用户 |
-     */
-    auth?: Array<number>
-    /** 标头 */
-    meta: RouteMeta
-    /** 子级路由 */
-    children?: Array<RouteItem>
+  /**
+   * 路由名，类似唯一`key`
+   */
+  name?: string
+  /** 外链地址，优先级会比`path`高 */
+  link?: string
+  /**
+   * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
+   * 传空数组或者不写该字段代表可以全部用户访问
+   * 
+   * | number | 用户类型 |
+   * | --- | --- |
+   * | 0 | 超级管理员 |
+   * | 1 | 普通用户 |
+   */
+  auth?: Array<number>
+  /** 标头 */
+  meta: RouteMeta
+  /** 子级路由 */
+  children?: Array<RouteItem>
 }
 ```
 
@@ -82,22 +82,22 @@ export interface RouteItem extends RouteConfig {
 
 ```js
 const example = [
-    {
-        path: "/example",
-        name: "example",
-        component: Layout,
-        meta: { title: "示例页栏目", icon: "menu" },
-        redirect: "/example/request",
-        children: [
-            {
-                path: "/example/request", // 这里要补全，
-                // path: "/request",      // 这样写就是跳出了 /example 的下级
-                name: "example-request",
-                meta: { title: "http-请求示例", keepAlive: true },
-                component: () => import("../views/example/xxx.vue"),
-            }
-        ]
-    }
+  {
+    path: "/example",
+    name: "example",
+    component: Layout,
+    meta: { title: "示例页栏目", icon: "menu" },
+    redirect: "/example/request",
+    children: [
+      {
+        path: "/example/request", // 这里要补全，
+        // path: "/request",      // 这样写就是跳出了 /example 的下级
+        name: "example-request",
+        meta: { title: "http-请求示例", keepAlive: true },
+        component: () => import("../views/example/xxx.vue"),
+      }
+    ]
+  }
 ]
 ```
 
