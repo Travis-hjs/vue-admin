@@ -22,7 +22,7 @@
           :key="index + item.path"
           :to="{ path: item.path, query: item.query, params: item.params }"
         >
-          <span>{{ item.meta.title }}</span>
+          <span>{{ item.meta.lang ? $language[item.meta.lang] : item.meta.title }}</span>
           <i class="close" @click.prevent.stop="onRemove(index)">-</i>
         </router-link>
       </Scrollbar>
