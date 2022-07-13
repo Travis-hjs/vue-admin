@@ -145,6 +145,24 @@ export function jsonToFormData(params: { [key: string]: number | string | boolea
 }
 
 /**
+ * `JSON`格式化对象，内置错误捕捉处理，错误时返回默认值
+ * - 默认返回空对象: `{}`
+ * @param target 要格式化的目标对象
+ * @param defaultValue 默认返回值
+ */
+export function jsonParse(target: any, defaultValue: any = {}) {
+  let result = defaultValue;
+  if (target && checkType(target) === "string") {
+    try {
+      result = JSON.parse(target);
+    } catch (error) {
+      console.warn("JSON格式化对象错误 >>", error);
+    }
+  }
+  return result;
+}
+
+/**
  * 数字运算（主要用于小数点精度问题）
  * [see](https://juejin.im/post/6844904066418491406#heading-12)
  * @param a 前面的值
