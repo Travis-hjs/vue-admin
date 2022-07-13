@@ -1,6 +1,6 @@
 import config from "./config";
 import { Message } from "element-ui";
-import { checkType } from "./index";
+import { checkType, jsonParse } from "./index";
 import store from "@/store";
 
 /**
@@ -47,7 +47,7 @@ function ajax(params: AjaxParams) {
   XHR.onreadystatechange = function () {
     if (XHR.readyState !== 4) return;
     if (XHR.status === 200 || XHR.status === 304) {
-      params.success && params.success(JSON.parse(XHR.response), XHR);
+      params.success && params.success(XHR.response, XHR);
     } else {
       params.fail && params.fail(XHR);
     }
@@ -99,8 +99,13 @@ function ajax(params: AjaxParams) {
   XHR.send(body);
 }
 
-function getResultInfo(result: { statusCode: number, data: any }) {
-  const info: ApiResult = { code: -1, msg: "网络出错了", data: null }
+/**
+ * 获取响应结果并处理对应状态
+ * @param result 
+ * @param responseType 接口请求成功时，响应类型
+ */
+function getResultInfo(result: { statusCode: number, data: any }, responseType?: XMLHttpRequestResponseType) {
+  const info: ApiResult = { code: -1, msg: "网络出错了", data: {} }
   switch (result.statusCode) {
     case config.requestOvertime:
       info.msg = "网络超时了";
@@ -109,6 +114,8 @@ function getResultInfo(result: { statusCode: number, data: any }) {
       info.code = checkType(result.data.code) === "number" ? result.data.code : 1;;
       info.msg = result.data.message || "ok";
       info.data = result.data;
+      // do some ... 这里可以做一些类型响应数据结构组装处理，有些时候后端返回的接口不一样
+      // if (responseType === "blob") {}
       break;
     case 400:
       info.msg = "接口传参不正确";
@@ -155,11 +162,11 @@ export default function request<T = any>(
       overtime: config.requestOvertime,
       success(res, xhr) {
         // console.log("请求成功", res);
-        const info = getResultInfo({ statusCode: xhr.status, data: res });
+        const info = getResultInfo({ statusCode: xhr.status, data: res }, responseType);
         resolve(info);
       },
       fail(err) {
-        const res = err.response.charAt(0) == "{" ? JSON.parse(err.response) : {};
+        const res = checkType(err.response) === "string" ? jsonParse(err.response) : err.response;
         const info = getResultInfo({ statusCode: err.status, data: res });
         // 全局的请求错误提示，不需要可以去掉
         Message.error(info.msg);
