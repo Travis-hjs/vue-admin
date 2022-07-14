@@ -288,6 +288,6 @@ export default defineComponent({
 }
 ```
 
-于是就正常了；后面又查阅了`vue-tsc`的作用（[npm vue-tsc](https://www.npmjs.com/package/vue-tsc)），才了解到这是`vue3`里面用来校验提交事件的匹配插件，如果不声明`emits: ["change"]`，则默认会触发`dom`的事件类型检测导致报错；所以最好在写组件提交事件的时候，声明`emits`的配置，因为在`vue3`所有事件都扁平化了，不再是`vue2`那样拥有上下级关系。
+于是就正常了；后面又查阅了`vue-tsc`的作用（[npm vue-tsc](https://www.npmjs.com/package/vue-tsc)），才了解到这是一个非必要的依赖，主要是用来约束`<script setup lang="ts">`这种写法，并且应用在`vscode-Volar`的插件中使用；同时也是`vue3`里面用来校验提交事件的匹配插件，如果不声明`emits: ["change"]`，则默认会触发`dom`的事件类型检测导致报错；所以最好在写组件提交事件的时候，声明`emits`的配置，因为在`vue3`所有事件都扁平化了，不再是`vue2`那样拥有上下级关系，假设当前组件有个`change`事件，子组件也有个`change`抛出，那么就会同时触发两个。
 
 详情见[Vite 踩坑指南](https://juejin.cn/post/6959851018469244965)
