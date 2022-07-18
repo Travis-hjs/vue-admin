@@ -80,7 +80,9 @@ export default class Scrollbar extends Vue {
   /** 包围器节点样式 */
   private wrapStyle = {
     height: "",
-    width: ""
+    // maxHeight: "",
+    width: "",
+    // maxWidth: "",
   }
 
   /** 滚动条节点样式 */
@@ -124,12 +126,18 @@ export default class Scrollbar extends Vue {
    * `box-sizing: border-box;`的原理一样
    */
   updateWrapStyle() {
-    const parent = this.$el.parentNode as HTMLElement;
+    const parent = this.$el.parentElement!;
     parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
     const css = getComputedStyle(parent);
     // console.log("父元素边框尺寸 >>", css.borderLeftWidth, css.borderRightWidth, css.borderTopWidth, css.borderBottomWidth);
     this.wrapStyle.width = `calc(100% + ${scrollbarSize}px + ${css.borderLeftWidth} + ${css.borderRightWidth})`;
     this.wrapStyle.height = `calc(100% + ${scrollbarSize}px + ${css.borderTopWidth} + ${css.borderBottomWidth})`;
+    // if (css.maxWidth !== "none") {
+    //   this.wrapStyle.maxWidth = css.maxWidth;
+    // }
+    // if (css.maxHeight !== "none") {
+    //   this.wrapStyle.maxHeight = `calc(${css.maxHeight} + ${scrollbarSize}px)`;
+    // }
   }
 
   /**
