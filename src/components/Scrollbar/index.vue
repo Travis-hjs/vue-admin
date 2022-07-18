@@ -95,7 +95,7 @@ export default defineComponent({
      * `box-sizing: border-box;`的原理一样
      */
     function updateWrapStyle() {
-      const parent = el.value!.parentNode as HTMLElement;
+      const parent = el.value!.parentElement!;
       parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
       const css = getComputedStyle(parent);
       // console.log("父元素边框尺寸 >>", css.borderLeftWidth, css.borderRightWidth, css.borderTopWidth, css.borderBottomWidth);
@@ -237,7 +237,8 @@ export default defineComponent({
       showThumb,
       updateThumbStyle,
       onEnter,
-      onLeave
+      onLeave,
+      updateWrapStyle
     }
   }
 })
