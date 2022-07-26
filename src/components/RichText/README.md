@@ -5,7 +5,7 @@
 ```html
 <template>
   <div>
-    <RichText ref="richText" :height="400" v-model="content" />
+    <RichText ref="rich-text" :height="400" v-model="content" />
   </div>
 </template>
 <script lang="ts">
@@ -17,17 +17,17 @@ import RichText from "@/components/RichText/index.vue";
     RichText
   }
 })
-export default class RichTextHome extends Vue {
+export default class RichTextDemo extends Vue {
 
   content = "";
 
   $refs!: {
-    richText: RichText
+    "rich-text": RichText
   }
 
   /** 设置组件富文本内容 */
   setRichText(val: string) {
-    this.$refs["richText"].setContent("");
+    this.$refs["rich-text"].setContent(val);
   }
 
 }
