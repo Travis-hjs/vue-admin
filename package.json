@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "core-js": "^3.4.4",
-    "echarts": "^5.0.2",
+    "echarts": "^5.2.0",
     "element-ui": "2.15.6",
     "file-saver": "^2.0.2",
     "nprogress": "^0.2.0",
