@@ -215,6 +215,21 @@ export const add: Array<RouteItem> = [
     ]
   },
   {
+    path: "/autograph",
+    name: "autograph",
+    redirect: "/autograph/index",
+    meta: { title: "签名工具", icon: "autograph" },
+    component: Layout,
+    children: [
+      {
+        path: "/autograph/index",
+        name: "autograph-home",
+        meta: { title: "签名工具", icon: "autograph" },
+        component: () => import("@/views/autograph/index.vue"),
+      }
+    ]
+  },
+  {
     path: "/icon",
     name: "icon",
     auth: [0],
