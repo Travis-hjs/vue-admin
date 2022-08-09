@@ -1,4 +1,4 @@
-import Vue, { VueConstructor } from "vue";
+import Vue, { PluginObject, VueConstructor } from "vue";
 import { LanguageInfo, LanguageState, LanguageType } from "./types";
 import en from "./en";
 import ja from "./ja";
@@ -33,13 +33,13 @@ const state: LanguageState = {
 const cacheName = "language-current-type";
 
 /** 语言切换全局配置 */
-const Language = {
-  install(ctx: VueConstructor<Vue>, options: Partial<LanguageState> = {}) {
+const Language: PluginObject<LanguageState> = {
+  install(ctx, options) {
     // console.log("options >>", options);
-    if (options.type) {
+    if (options && options.type) {
       state.type = options.type;
     }
-    if (options.cache) {
+    if (options && options.cache) {
       state.cache = options.cache;
       const val = sessionStorage.getItem(cacheName) as LanguageType;
       if (val) {
