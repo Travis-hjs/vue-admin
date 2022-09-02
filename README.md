@@ -5,6 +5,8 @@
 
 ## 版本分支说明
 
+> 当前模板有两套路线：要稳定、兼容性较高就使用`vue 2.x`，最求激进技术就选`vue 3.x`
+
 | 分支名 | 预览地址 | 脚手架 | 技术依赖 | 补充/说明 |
 | --- | --- | --- | --- | --- |
 | [master](https://github.com/Hansen-hjs/vue-admin) | [在线预览](https://huangjingsheng.gitee.io/hjs/vue3-admin) | vite 2.x | typescript、vue 3.x、vue-router 4.x | vue3 版本，没有引用任何 UI 框架 |
