@@ -1,49 +1,35 @@
 <template>
-  <div :class="[
-    'the-layout',
-    { 'has-tags-view': layoutInfo.showTagsView },
-    { 'collapsed-sidebar': !layoutInfo.sidebarOpen }
-  ]">
+  <div :class="['the-layout', { 'has-tags-view': layoutInfo.showTagsView }, { 'collapsed-sidebar': !layoutInfo.sidebarOpen }]">
     <HeaderBar />
     <Sidebar />
-    <div class="the-layout-content" ref="content-box">
-      <transition name="fadeSlideX" mode="out-in">
-        <keep-alive :include="cacheList">
-          <router-view class="the-layout-page" :key="$route.path" />
-        </keep-alive>
-      </transition>
+    <div class="the-layout-content" ref="contentBox">
+      <router-view class="the-layout-page" v-slot="{ Component, route }">
+        <transition name="fadeSlideX" mode="out-in">
+          <keep-alive :include="cacheList">
+            <component :is="Component" :key="route.path" />
+          </keep-alive>
+        </transition>
+      </router-view>
     </div>
     <button :class="['the-layout-totop', {'the-layout-totop-hide' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
   </div>
 </template>
-
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { defineComponent, onMounted, ref } from "vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import Sidebar from "./components/Sidebar.vue";
-import store from "../store";
+import store from "@/store";
 import { RouteItem } from "@/types";
 
-/** 主体布局组件 */
-@Component({
+export default defineComponent({
+  name: "Layout",
   components: {
     HeaderBar,
     Sidebar
-  }
-})
-export default class Layout extends Vue {
+  },
+  setup() {
+    const layoutInfo = store.layout.info;
 
-  layoutInfo = store.layout.info;
-
-  @Watch("layoutInfo", { deep: true })
-  onLayoutChange() {
-    // console.count("store.saveLayout");
-    store.layout.saveInfo();
-  }
-
-  cacheList: Array<string> = [];
-
-  created() {
     function getCachList(list: Array<RouteItem>) {
       let result: Array<string> = [];
       for (let i = 0; i < list.length; i++) {
@@ -59,37 +45,42 @@ export default class Layout extends Vue {
       return result.filter(item => item);
     }
 
-    this.cacheList = getCachList(store.layout.completeRouters);
-    // console.log("缓存列表 >>", this.cacheList);
-  }
+    // 这里不是动态的，所以可以不用响应式
+    const cacheList = getCachList(store.layout.completeRouters);
+    // console.log("路由缓存列表 >>", cacheList);
 
-  showToTop = false;
+    const contentBox = ref<HTMLElement>();
 
-  toTop() {
-    this.$refs["content-box"].scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
-  }
+    const showToTop = ref(false);
 
-  $refs!: {
-    "content-box": HTMLElement
-  }
+    let contentEl: HTMLElement;
 
-  mounted() {
-    const box = this.$refs["content-box"];
-    const onScroll = () => {
-      // console.log(box.scrollTop, document.documentElement.clientHeight);
-      // 判断超过一屏高度则显示返回顶部按钮
-      this.showToTop = box.scrollTop > document.documentElement.clientHeight;
+    function toTop() {
+      contentEl.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+      })
     }
-    onScroll(); // 一开始要先执行，因为有可能一开始就处于页面非顶部
-    box.addEventListener("scroll", onScroll);
-    this.$once("hook:beforeDestroy", function () {
-      box.removeEventListener("scroll", onScroll);
-    })
-  }
-}
-</script>
 
+    function onScroll() {
+      // 判断超过一屏高度则显示返回顶部按钮
+      showToTop.value = contentEl.scrollTop > document.documentElement.clientHeight;
+    }
+
+    onMounted(function () {
+      contentEl = contentBox.value!;
+      contentEl.addEventListener("scroll", onScroll);
+      onScroll(); // 一开始要先执行，因为有可能一开始就处于页面非顶部
+    });
+
+    return {
+      layoutInfo,
+      cacheList,
+      contentBox,
+      showToTop,
+      toTop
+    }
+  }
+})
+</script>

@@ -2,33 +2,47 @@
   <div class="page-icons">
     <div class="mgb_30">
       <h2 class="the-title mgr_20">Svg Icons</h2>
-      <span class="the-tag blue"><i class="el-icon-info"></i> 点击复制代码</span>
+      <span class="the-tag blue">点击复制代码</span>
     </div>
-    <div class="icon-item" v-for="(item) in list" :key="item" v-copy="getSvgIconCode(item)" :title="getSvgIconCode(item)">
+    <div class="icon-item" v-ripple color="rgba(0,0,0,0.14)" v-for="(item) in list" :key="item" v-copy="getSvgIconCode(item)" :title="getSvgIconCode(item)">
       <svg-icon :name="item" />
       <p>{{ item }}</p>
     </div>
   </div>
 </template>
-
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-const req = require.context("../icons/svg", false, /\.svg$/);
-const requireAll = (requireContext: any) => requireContext.keys();
-const svgIcons = requireAll(req).map((str: string) => str.match(/\.\/(.*)\.svg/)![1]);
+import { defineComponent, reactive } from "vue";
 
-@Component({
-  name: "svg-icons",
-})
-export default class Icons extends Vue {
-  list = svgIcons;
+export default defineComponent({
+  name: "svg-icons", // 设置路由缓存 keepAlive 时，这里必须要设置对应的 name 值
+  setup() {
+    const svgFileReg = /(?<=(svg\/)).*?(?=(.svg))/;
 
-  getSvgIconCode(symbol: string) {
-    return `<svg-icon name="${symbol}" />`;
-  }
-}
+    function getSvgNames() {
+      const svgInfo = import.meta.globEager("/src/icons/svg/*.svg");
+      const svgs = Object.keys(svgInfo);
+      const names = svgs.map((value) => {
+        const res = value.match(svgFileReg)![0];
+        return res;
+      });
+      return names;
+    }
+
+    function getSvgIconCode(symbol: string) {
+      return `<svg-icon name="${symbol}" />`;
+    }
+
+    const list = getSvgNames();
+
+    console.log("svg-list >>", list);
+
+    return {
+      list,
+      getSvgIconCode,
+    };
+  },
+});
 </script>
-
 <style lang="scss">
 .page-icons {
   width: 100%;

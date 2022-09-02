@@ -1,17 +1,18 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "../store";
-import Layout from "../layout/index.vue";
-import { RouteItem } from "../types";
+import { createRouter, createWebHashHistory } from "vue-router";
+import Layout from "@/layout/index.vue";
+import store from "@/store";
+import { RouteItem } from "@/types";
 import { initPermission } from "./permission";
-import Page404 from "../views/page-404.vue";
-
-Vue.use(VueRouter);
+import Page404 from "@/views/page-404.vue";
 
 /**
  * 基础路由
+ * @description 
+ * - `vue-router 4.x`之后路由路径匹配规则改了，不再是智能匹配，所以在定义路由的时候必须要在前面加上`/`
+ * - 重定向`redirect`也要加"/"
+ * - 子路由`children`里面的路由也是需要基于父级来定义，从下面代码观察一下就会发现规律了
  */
-export const base: Array<RouteItem> = [
+const base: Array<RouteItem> = [
   {
     path: "/login",
     name: "login",
@@ -33,7 +34,7 @@ export const base: Array<RouteItem> = [
 /**
  * 动态路由
  */
-export const add: Array<RouteItem> = [
+const add: Array<RouteItem> = [
   {
     path: "/",
     name: "index",
@@ -111,7 +112,7 @@ export const add: Array<RouteItem> = [
             path: "/nested/menu-3",
             name: "nested/menu-3",
             meta: { title: "菜单 2-3" },
-            component: () => import("../views/example/column-1.vue")
+            component: () => import("../views/example/menu-3.vue")
           }
         ]
       },
@@ -126,7 +127,7 @@ export const add: Array<RouteItem> = [
         path: "/menu-4",
         name: "menu-4",
         meta: { title: "换行菜单标题换行菜单标题", icon: "nested" },
-        component: () => import("../views/example/column-2.vue")
+        component: () => import("../views/example/menu-4.vue")
       }
     ]
   },
@@ -148,6 +149,12 @@ export const add: Array<RouteItem> = [
         name: "example-components",
         meta: { title: "自定义组件" },
         component: () => import("../views/example/the-components.vue")
+      },
+      {
+        path: "/example/tsx",
+        name: "example-tsx",
+        meta: { title: "tsx-示例" },
+        component: () => import("../views/tsx/example")
       }
     ]
   },
@@ -175,7 +182,7 @@ export const add: Array<RouteItem> = [
     auth: [0],
     meta: { title: "项目地址", icon: "github" }
   }
-]
+];
 
 /**
  * 过滤掉侧边导航栏不显示的路由
@@ -196,11 +203,15 @@ export function filterHidden(array: Array<RouteItem>) {
   return result;
 }
 
-/** `VueRouter`路由实例化对象 */
-const router = new VueRouter({
+/**
+ * 路由实例 
+ * [文档地址](https://next.router.vuejs.org/introduction.html)
+*/
+const router = createRouter({
+  history: createWebHashHistory(),
   routes: base
-});
+})
 
-initPermission(router, base, add)
+initPermission(router, base, add);
 
 export default router;

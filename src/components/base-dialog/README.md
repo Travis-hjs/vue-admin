@@ -19,14 +19,6 @@
     </base-dialog>
   </div>
 </template>
-
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-@Component()
-export default class Demo extends Vue {
-  show = false;
-}
-</script>
 ```
 
 参数说明：

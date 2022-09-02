@@ -1,13 +1,19 @@
 <template>
   <div class="menu-2">
-    <el-alert :closable="false" :title="content" type="info" effect="dark" />
+    <span class="the-tag green">menu-2</span>
   </div>
 </template>
+<script>
+import { defineComponent, reactive } from "vue";
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-@Component({})
-export default class Menu2 extends Vue {
-  content = "菜单 2-2";
-}
+export default defineComponent({
+  setup(props, context) {
+
+  }
+})
 </script>
+<style lang="scss">
+.menu-2 {
+  width: 100%;
+}
+</style>

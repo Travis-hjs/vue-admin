@@ -1,5 +1,5 @@
 /**
- * 用户信息类型
+ * 用户信息
  */
 export interface UserInfo {
   /** 用户`id` */
@@ -25,7 +25,7 @@ export interface UserInfo {
   avatar: string
 }
 
-/** 登陆接口传参 */
+/** 登录接口传参 */
 export interface LoginParams {
   account: string
   password: string

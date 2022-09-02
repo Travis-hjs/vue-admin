@@ -1,5 +1,6 @@
 @import "./variables.scss";
 @import "./common.scss";
+@import "./ripple.scss";
 
 /* 上下左右边距 */
 @for $index from 1 through 5 {
@@ -29,21 +30,18 @@
   }
 }
 
-// ================== 定义过渡动画 ==================
-
-.fade-enter-active, .fade-leave-active {
-  @include moveTime();
-}
-
-.fade-enter, .fade-leave-active {
-  opacity: 0;
-}
-
+// ===================== 全局动画 =====================
+// 渐变+平移
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
-  transition: all .5s !important;
+  transition: .5s all !important;
 }
 
-.fadeSlideX-enter {
+.fadeSlideX-enter-active, .fadeSlideX-leave-active {
+  opacity: 1;
+  transform: translate3d(0px, 0, 0);
+}
+
+.fadeSlideX-enter-from {
   opacity: 0;
   transform: translate3d(-30px, 0, 0);
 }
@@ -53,26 +51,110 @@
   transform: translate3d(30px, 0, 0);
 }
 
+// 面包屑
 .breadcrumb-enter-active, .breadcrumb-leave-active {
-  transition: all .5s;
+  transition: .5s all
 }
 
-.breadcrumb-enter, .breadcrumb-leave-active {
+.breadcrumb-enter-from, .breadcrumb-leave-to {
   opacity: 0;
   transform: translate3d(20px, 0, 0);
 }
 
-.breadcrumb-move {
-  transition: all .5s;
-}
-
-.breadcrumb-leave-active {
+.breadcrumb-leave-to {
   position: absolute;
 }
 
-// 日期选择样式有问题，不会自适应中间文字宽度，这里给一个合适的最小宽度
-.el-date-editor .el-range-separator {
-  min-width: 9%;
+// 渐变
+.fade-enter-active, .fade-leave-active {
+  @include moveTime();
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+// ================= 示例全局样式 =================
+
+.the-input {
+  width: 100%;
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
+  color: #1f2d3d;
+  height: 38px;
+  line-height: 38px;
+  font-size: 14px;
+  padding: 0 15px;
+  outline: none;
+  transition: 0.2s all;
+  &:focus {
+    border-color: $theme;
+  }
+}
+
+.the-btn {
+  font-size: 14px;
+  padding: 0px 15px;
+  min-width: 88px;
+  height: 36px;
+  line-height: 1;
+  border-radius: 2px;
+  background-color: #fff;
+  color: rgba(0,0,0,.87);
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
+  @include moveTime();
+  outline: none;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  &:active {
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12);
+  }
+}
+
+.the-btn + .the-btn {
+  margin-left: 10px;
+}
+
+.the-btn.mini {
+  font-size: 12px;
+  height: 28px;
+  border-radius: 3px;
+}
+
+.the-btn.blue {
+  background-color: $theme;
+  color: #fff;
+}
+
+.the-btn.green {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.the-btn.yellow {
+  background-color: #fdd835;
+  color: #fff;
+}
+
+.the-btn.red {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.check-box {
+  cursor: pointer;
+  font-size: 14px;
+  color: $theme;
+  input {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    line-height: 1;
+    &:checked {
+      background-color: $theme;
+    }
+  }
 }
 
 .the-tag {
@@ -108,7 +190,6 @@
     bottom: -4px;
     left: 0;
     width: 100%;
-    // width: 100%;
     height: 4px;
     border-radius: 2px;
     background-color: $theme;

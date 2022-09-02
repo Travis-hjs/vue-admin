@@ -14,21 +14,25 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import Scrollbar from "@/components/Scrollbar/index.vue";
+import { defineComponent } from "vue";
 import Menu from "./Menu.vue";
+import Scrollbar from "@/components/Scrollbar/index.vue";
 import store from "@/store";
 
-@Component({
+export default defineComponent({
   name: "Sidebar",
   components: {
-    Scrollbar,
     Menu,
+    Scrollbar,
   },
-})
-export default class Sidebar extends Vue {
-  layoutInfo = store.layout.info;
+  setup() {
+    const layoutInfo = store.layout.info;
+    const info = store.projectInfo;
 
-  info = store.projectInfo;
-}
+    return {
+      layoutInfo,
+      info,
+    }
+  }
+})
 </script>

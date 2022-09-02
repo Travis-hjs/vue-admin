@@ -1,30 +1,18 @@
 <template>
-  <div class="the-scrollbar" @mouseenter="onEnter()" @mouseleave="onLeave()">
+  <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
     <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
       <slot></slot>
     </div>
     <transition name="fade">
-      <button
-        class="the-scrollbar-thumb"
-        ref="thumb-y"
-        title="滚动条-摁住拖拽Y轴"
-        :style="{ ...thumbStyle.y, 'background-color': thumbColor}"
-        v-show="showThumb"
-      ></button>
+      <button class="the-scrollbar-thumb" ref="thumbY" title="滚动条-摁住拖拽Y轴" :style="thumbStyle.y" v-show="showThumb"></button>
     </transition>
     <transition name="fade">
-      <button
-        class="the-scrollbar-thumb"
-        ref="thumb-x"
-        title="滚动条-摁住拖拽X轴"
-        :style="{ ...thumbStyle.x, 'background-color': thumbColor}"
-        v-show="showThumb"
-      ></button>
+      <button class="the-scrollbar-thumb" ref="thumbX" title="滚动条-摁住拖拽X轴" :style="thumbStyle.x" v-show="showThumb"></button>
     </transition>
   </div>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { defineComponent, onMounted, ref, reactive, onUnmounted } from "vue";
 
 /** 滚动条的厚度 */
 const scrollbarSize = (function () {
@@ -38,222 +26,222 @@ const scrollbarSize = (function () {
   return width;
 })();
 
-/** 滚动条组件 */
-@Component({
-  name: "Scrollbar"
-})
-export default class Scrollbar extends Vue {
-
-  /** 滚动条颜色 */
-  @Prop({
-    type: String,
-    default: "rgba(147, 147, 153, 0.45)"
-  })
-  thumbColor!: string;
-
-  /** 滚动条厚度 */
-  @Prop({
-    type: Number,
-    default: 8
-  })
-  thumbSize!: number;
-
-  /**
-   * 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒
-   * - 使用场景：内部有子节点尺寸变动撑开包裹器的滚动尺寸时，并且带有动画的情况，这时设置的延迟就为动画持续时间
-   */
-  @Prop({
-    type: Number,
-    default: 0
-  })
-  clickUpdateDelay!: number;
-
-  $refs!: {
-    /** 包围器节点 */
-    wrap: HTMLElement,
-    /** 滚动条`X`节点 */
-    "thumb-x": HTMLElement
-    /** 滚动条`Y`节点 */
-    "thumb-y": HTMLElement
-  }
-
-  /** 包围器节点样式 */
-  private wrapStyle = {
-    height: "",
-    // maxHeight: "",
-    width: "",
-    // maxWidth: "",
-  }
-
-  /** 滚动条节点样式 */
-  private thumbStyle = {
-    x: {
-      width: "",
-      height: "",
-      left: "",
-      bottom: "",
-      transform: "",
-      borderRadius: "",
+/**
+ * 滚动条组件
+ */
+export default defineComponent({
+  name: "Scrollbar",
+  props: {
+    /** 滚动条颜色 */
+    thumbColor: {
+      type: String,
+      default: "rgba(147, 147, 153, 0.45)"
     },
-    y: {
-      width: "",
+    /** 滚动条厚度 */
+    thumbSize: {
+      type: Number,
+      default: 8
+    },
+    /**
+     * 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒
+     * - 使用场景：内部有子节点尺寸变动撑开包裹器的滚动尺寸时，并且带有动画的情况，这时设置的延迟就为动画持续时间
+     */
+    clickUpdateDelay: {
+      type: Number,
+      default: 0
+    },
+  },
+  setup(props) {
+    /** 组件整体节点 */
+    const el = ref<HTMLElement>();
+    /** 包围器节点 */
+    const wrap = ref<HTMLElement>();
+    /** 滚动条节点X */
+    const thumbX = ref<HTMLElement>();
+    /** 滚动条节点Y */
+    const thumbY = ref<HTMLElement>();
+    /** 包围器节点样式 */
+    const wrapStyle = reactive({
       height: "",
-      top: "",
-      right: "",
-      transform: "",
-      borderRadius: "",
-    }
-  }
-
-  /** 是否显示滚动条 */
-  showThumb = false;
-
-  /**
-   * 初始化滚动指示器样式
-   */
-  private initThumbStyle() {
-    this.thumbStyle.y.right = this.thumbStyle.y.top = "0px";
-    this.thumbStyle.y.width = this.thumbSize + "px";
-    this.thumbStyle.x.bottom = this.thumbStyle.x.left = "0px";
-    this.thumbStyle.x.height = this.thumbSize + "px";
-    this.thumbStyle.x.borderRadius = this.thumbStyle.y.borderRadius = `${this.thumbSize / 2}px`;
-  }
-
-  /**
-   * 更新包裹容器样式
-   * - ！！！注意：如果是动态设置组件父容器的边框时，需要手动执行该方法，
-   * 原因是父容器的边框会影响当前设置的包围盒宽度，导致滚动条的高度有所变化，也就是跟`css`中设置
-   * `box-sizing: border-box;`的原理一样
-   */
-  updateWrapStyle() {
-    const parent = this.$el.parentElement!;
-    parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
-    const css = getComputedStyle(parent);
-    // console.log("父元素边框尺寸 >>", css.borderLeftWidth, css.borderRightWidth, css.borderTopWidth, css.borderBottomWidth);
-    this.wrapStyle.width = `calc(100% + ${scrollbarSize}px + ${css.borderLeftWidth} + ${css.borderRightWidth})`;
-    this.wrapStyle.height = `calc(100% + ${scrollbarSize}px + ${css.borderTopWidth} + ${css.borderBottomWidth})`;
-    // if (css.maxWidth !== "none") {
-    //   this.wrapStyle.maxWidth = css.maxWidth;
-    // }
-    // if (css.maxHeight !== "none") {
-    //   this.wrapStyle.maxHeight = `calc(${css.maxHeight} + ${scrollbarSize}px)`;
-    // }
-  }
-
-  /**
-   * 更新滚动指示器样式
-   * - 可以外部主动调用
-   */
-  updateThumbStyle() {
-    const wrapEl = this.$refs.wrap;
-    if (wrapEl) {
-      let height = wrapEl.clientHeight / wrapEl.scrollHeight * 100;
-      if (height >= 100) {
-        height = 0;
+      width: ""
+    })
+    /** 滚动条节点样式 */
+    const thumbStyle = reactive({
+      x: {
+        width: "",
+        height: "",
+        left: "",
+        bottom: "",
+        transform: "",
+        borderRadius: "",
+        backgroundColor: props.thumbColor
+      },
+      y: {
+        width: "",
+        height: "",
+        top: "",
+        right: "",
+        transform: "",
+        borderRadius: "",
+        backgroundColor: props.thumbColor
       }
-      this.thumbStyle.y.height = height + "%";
-      this.thumbStyle.y.transform = `translate3d(0, ${wrapEl.scrollTop / wrapEl.scrollHeight * wrapEl.clientHeight}px, 0)`;
+    })
+    const showThumb = ref(false);
 
-      // console.log("scrollWidth >>", wrapEl.scrollWidth);
-      // console.log("scrollLeft >>", wrapEl.scrollLeft);
-      // console.log("clientWidth >>", wrapEl.clientWidth);
-      // console.log("offsetWidth >>", wrapEl.offsetWidth);
-      let width = (wrapEl.clientWidth / wrapEl.scrollWidth) * 100;
-      if (width >= 100) {
-        width = 0;
+    /**
+     * 更新包裹容器样式
+     * - ！！！注意：如果是动态设置组件父容器的边框时，需要手动执行该方法，
+     * 原因是父容器的边框会影响当前设置的包围盒宽度，导致滚动条的高度有所变化，也就是跟`css`中设置
+     * `box-sizing: border-box;`的原理一样
+     */
+    function updateWrapStyle() {
+      const parent = el.value!.parentElement!;
+      parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
+      const css = getComputedStyle(parent);
+      // console.log("父元素边框尺寸 >>", css.borderLeftWidth, css.borderRightWidth, css.borderTopWidth, css.borderBottomWidth);
+      wrapStyle.width = `calc(100% + ${scrollbarSize}px + ${css.borderLeftWidth} + ${css.borderRightWidth})`;
+      wrapStyle.height = `calc(100% + ${scrollbarSize}px + ${css.borderTopWidth} + ${css.borderBottomWidth})`;
+    }
+
+    /** 初始化滚动指示器样式 */
+    function initThumbStyle() {
+      thumbStyle.y.right = thumbStyle.y.top = "0px";
+      thumbStyle.y.width = props.thumbSize + "px";
+      thumbStyle.x.bottom = thumbStyle.x.left = "0px";
+      thumbStyle.x.height = props.thumbSize + "px";
+      thumbStyle.x.borderRadius = thumbStyle.y.borderRadius = `${props.thumbSize / 2}px`;
+    }
+
+    /**
+     * 更新滚动指示器样式
+     * - 可以外部主动调用
+     */
+    function updateThumbStyle() {
+      const wrapEl = wrap.value;
+      if (wrapEl) {
+        let height = wrapEl.clientHeight / wrapEl.scrollHeight * 100;
+        if (height >= 100) {
+          height = 0;
+        }
+        thumbStyle.y.height = height + "%";
+        thumbStyle.y.transform = `translate3d(0, ${wrapEl.scrollTop / wrapEl.scrollHeight * wrapEl.clientHeight}px, 0)`;
+
+        // console.log("scrollWidth >>", wrapEl.scrollWidth);
+        // console.log("scrollLeft >>", wrapEl.scrollLeft);
+        // console.log("clientWidth >>", wrapEl.clientWidth);
+        // console.log("offsetWidth >>", wrapEl.offsetWidth);
+        let width = (wrapEl.clientWidth / wrapEl.scrollWidth) * 100;
+        if (width >= 100) {
+          width = 0;
+        }
+        thumbStyle.x.width = width + "%";
+        thumbStyle.x.transform = `translate3d(${wrapEl.scrollLeft / wrapEl.scrollWidth * wrapEl.clientWidth}px, 0, 0)`;
+        // console.log("------------------------------------");
       }
-      this.thumbStyle.x.width = width + "%";
-      this.thumbStyle.x.transform = `translate3d(${wrapEl.scrollLeft / wrapEl.scrollWidth * wrapEl.clientWidth}px, 0, 0)`;
-      // console.log("------------------------------------");
     }
-  }
 
-  /** 是否摁下开始拖拽 */
-  private isDrag = false;
-  /** 是否垂直模式 */
-  private vertical = false;
-  /** 摁下滚动条时的偏移量 */
-  private deviation = 0;
-  /** 更新延时器 */
-  private timer!: NodeJS.Timeout;
+    /** 是否摁下开始拖拽 */
+    let isDrag = false;
+    /** 是否垂直模式 */
+    let vertical = false;
+    /** 摁下滚动条时的偏移量 */
+    let deviation = 0;
+    /** 更新延时器 */
+    let timer: NodeJS.Timeout;
 
-  private onDragStart(event: MouseEvent) {
-    // console.log("摁下 >>", event);
-    const thumbX = this.$refs["thumb-x"];
-    const thumbY = this.$refs["thumb-y"];
-    const target = event.target as HTMLElement;
-    if (thumbX.contains(target)) {
-      this.isDrag = true;
-      this.vertical = false;
-      this.deviation = event.clientX - thumbX.getBoundingClientRect().left;
-    }
-    if (thumbY.contains(target)) {
-      this.isDrag = true;
-      this.vertical = true;
-      this.deviation = event.clientY - thumbY.getBoundingClientRect().top;
-    }
-  }
-
-  private onDragMove(event: MouseEvent) {
-    if (!this.isDrag) return;
-    // console.log("拖拽移动 >>", event.offsetY, event.clientY, event);
-    const wrapEl = this.$refs.wrap;
-    if (this.vertical) {
-      const wrapTop = wrapEl.getBoundingClientRect().top;
-      const wrapHeight = wrapEl.clientHeight;
-      let value = event.clientY - wrapTop;
-      wrapEl.scrollTop = (value - this.deviation) / wrapHeight * wrapEl.scrollHeight;
-    } else {
-      const wrapLeft = wrapEl.getBoundingClientRect().left;
-      const wrapWidth = wrapEl.clientWidth;
-      let value = event.clientX - wrapLeft;
-      wrapEl.scrollLeft = (value - this.deviation) / wrapWidth * wrapEl.scrollWidth;
-    }
-  }
-
-  private onDragEnd(event: MouseEvent) {
-    // console.log("抬起");
-    this.isDrag = false;
-    if (this.$el.contains(event.target as HTMLElement)) {
-      if (this.clickUpdateDelay > 0) {
-        // console.log("执行");
-        this.timer && clearTimeout(this.timer);
-        this.timer = setTimeout(this.updateThumbStyle, this.clickUpdateDelay);
+    function onDragStart(event: MouseEvent) {
+      // console.log("摁下 >>", event);
+      const _thumbX = thumbX.value!;
+      const _thumbY = thumbY.value!;
+      const target = event.target as HTMLElement;
+      if (_thumbX.contains(target)) {
+        isDrag = true;
+        vertical = false;
+        deviation = event.clientX - _thumbX.getBoundingClientRect().left;
       }
-    } else {
-      this.showThumb = false;
+      if (_thumbY.contains(target)) {
+        isDrag = true;
+        vertical = true;
+        deviation = event.clientY - _thumbY.getBoundingClientRect().top;
+      }
+    }
+
+    function onDragMove(event: MouseEvent) {
+      if (!isDrag) return;
+      // console.log("拖拽移动 >>", event.offsetY, event.clientY, event);
+      const wrapEl = wrap.value!;
+      if (vertical) {
+        const wrapTop = wrapEl.getBoundingClientRect().top;
+        const wrapHeight = wrapEl.clientHeight;
+        let value = event.clientY - wrapTop;
+        wrapEl.scrollTop = (value - deviation) / wrapHeight * wrapEl.scrollHeight;
+      } else {
+        const wrapLeft = wrapEl.getBoundingClientRect().left;
+        const wrapWidth = wrapEl.clientWidth;
+        let value = event.clientX - wrapLeft;
+        wrapEl.scrollLeft = (value - deviation) / wrapWidth * wrapEl.scrollWidth;
+      }
+    }
+
+    function onDragEnd(event: MouseEvent) {
+      // console.log("抬起");
+      isDrag = false;
+      if (el.value!.contains(event.target as HTMLElement)) {
+        if (props.clickUpdateDelay > 0) {
+          // console.log("执行");
+          timer && clearTimeout(timer);
+          timer = setTimeout(updateThumbStyle, props.clickUpdateDelay);
+        }
+      } else {
+        showThumb.value = false;
+      }
+    }
+
+    function onEnter() {
+      showThumb.value = true;
+      updateThumbStyle();
+    }
+
+    function onLeave() {
+      if (!isDrag) {
+        showThumb.value = false;
+      }
+    }
+
+    onMounted(function () {
+      // console.log("onMounted >>", el.value!.clientHeight);
+      // console.log("scrollbarSize >>", scrollbarSize);
+      updateWrapStyle();
+      initThumbStyle();
+      wrap.value && wrap.value.addEventListener("scroll", updateThumbStyle);
+      document.addEventListener("mousedown", onDragStart);
+      document.addEventListener("mousemove", onDragMove);
+      document.addEventListener("mouseup", onDragEnd);
+    });
+
+    onUnmounted(function () {
+      wrap.value && wrap.value.removeEventListener("scroll", updateThumbStyle);
+      document.removeEventListener("mousedown", onDragStart);
+      document.removeEventListener("mousemove", onDragMove);
+      document.removeEventListener("mouseup", onDragEnd);
+      timer && clearTimeout(timer);
+    });
+
+    return {
+      el,
+      wrap,
+      thumbX,
+      thumbY,
+      wrapStyle,
+      thumbStyle,
+      showThumb,
+      updateThumbStyle,
+      onEnter,
+      onLeave,
+      updateWrapStyle
     }
   }
-
-  onEnter() {
-    this.showThumb = true;
-    this.updateThumbStyle();
-  }
-
-  onLeave() {
-    if (!this.isDrag) {
-      this.showThumb = false;
-    }
-  }
-
-  mounted() {
-    this.updateWrapStyle();
-    this.initThumbStyle();
-    this.$refs.wrap && this.$refs.wrap.addEventListener("scroll", this.updateThumbStyle);
-    document.addEventListener("mousedown", this.onDragStart);
-    document.addEventListener("mousemove", this.onDragMove);
-    document.addEventListener("mouseup", this.onDragEnd);
-  }
-
-  beforeDestroy() {
-    this.$refs.wrap && this.$refs.wrap.removeEventListener("scroll", this.updateThumbStyle);
-    document.removeEventListener("mousedown", this.onDragStart);
-    document.removeEventListener("mousemove", this.onDragMove);
-    document.removeEventListener("mouseup", this.onDragEnd);
-    this.timer && clearTimeout(this.timer);
-  }
-
-}
+})
 </script>
 <style lang="scss">
 .the-scrollbar {

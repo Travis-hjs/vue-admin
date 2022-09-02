@@ -8,34 +8,37 @@
   </transition-group>
 </template>
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
-import { Route } from "vue-router";
+import { defineComponent, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
-@Component({
+/** 面包屑组件 */
+export default defineComponent({
   name: "Breadcrumb",
-})
-export default class Breadcrumb extends Vue {
-  list: Array<{ path: string; meta: any }> = [];
+  setup() {
+    const route = useRoute();
 
-  @Watch("$route")
-  onRoute(route: Route) {
-    // 如果转到重定向页面，就不更新面包屑
-    if (route.path.startsWith("/redirect/")) return;
-    this.updateList();
-  }
+    const list = ref<Array<{ path: string; meta: any }>>([]);
 
-  updateList() {
-    const matched = this.$route.matched.filter((item) => item.meta && item.meta.title).map((item) => {
-      return {
-        path: item.path,
-        meta: { ...item.meta },
-      }
-    })
-    this.list = matched;
-  }
+    function updateList() {
+      const matched = route.matched.filter((item) => item.meta && item.meta.title).map((item) => {
+        return {
+          path: item.path,
+          meta: { ...item.meta },
+        }
+      })
+      list.value = matched;
+    }
 
-  created() {
-    this.updateList();
-  }
-}
+    watch(() => route.path, function () {
+      if (route.path.startsWith("/redirect/")) return;
+      updateList();
+    });
+
+    updateList();
+
+    return {
+      list,
+    };
+  },
+});
 </script>

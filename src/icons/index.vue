@@ -1,46 +1,44 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true" v-on="$listeners">
+  <svg :class="svgClass" aria-hidden="true">
     <use :xlink:href="iconName"></use>
   </svg>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent, computed } from "vue";
 // <svg>加载处理
-const requireAll = (requireContext: any) => requireContext.keys().map(requireContext);
-const req = require.context("./svg", false, /\.svg$/);
-requireAll(req);
+// const requireAll = (requireContext: any) => requireContext.keys().map(requireContext);
+// const req = require.context("./svg", false, /\.svg$/);
+// requireAll(req);
 
-@Component({
+export default defineComponent({
   name: "SvgIcon",
-})
-export default class SvgIcon extends Vue {
-  @Prop({
-    type: String,
-    required: true,
-    default: "",
-  })
-  name!: string;
-
-  @Prop({
-    type: String,
-    default: "",
-  })
-  className!: string;
-
-  get iconName() {
-    return `#icon-${this.name}`;
-  }
-
-  get svgClass() {
-    if (this.className) {
-      return "svg-icon " + this.className;
-    } else {
-      return "svg-icon";
-    }
-  }
-
-}
+  props: {
+    name: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    className: {
+      type: String,
+      default: "",
+    },
+  },
+  setup(props, context) {
+    const iconName = computed(() => `#icon-${props.name}`);
+    const svgClass = computed(function () {
+      if (props.className) {
+        return "svg-icon " + props.className;
+      } else {
+        return "svg-icon";
+      }
+    });
+    return {
+      iconName,
+      svgClass,
+    };
+  },
+});
 </script>
 
 <style lang="scss">

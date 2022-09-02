@@ -13,6 +13,9 @@
 | [hjs](https://github.com/Hansen-hjs/vue-admin/tree/hjs)| [在线预览](https://huangjingsheng.gitee.io/hjs/vue-admin-hjs) | vue-cli 4.x | typescript、vue 2.x、vue-router 3.x、element-ui、echarts、xlsx、wangeditor | 自用分支，基于master增加了一些：图表、Excel、富文本插件 |
 | [next](https://github.com/Hansen-hjs/vue-admin/tree/next) | [在线预览](https://huangjingsheng.gitee.io/hjs/vue3-admin) | vite 2.x | typescript、vue 3.x、vue-router 4.x | vue3 版本，没有引用任何 UI 框架 |
 
+## 关于`<script setup></script>`写法说明
+
+当前项目不使用该语法糖，详情看[我为什么在 vue3 中不使用 setup 语法糖](https://juejin.cn/post/7114511843229433863)
 
 ## layout 核心布局整体
 
@@ -37,7 +40,7 @@
 先来看一下数据结构，基本和以往使用的路由配置相同，只是多加一两个字段作为功能权限标记
 
 ```ts
-import { RouteConfig } from "vue-router";
+import { RouteRecordRaw } from "vue-router";
 
 export interface RouteMeta {
   /** 侧边栏菜单名、document.title */
@@ -53,10 +56,12 @@ export interface RouteMeta {
   keepAlive?: boolean
 }
 
-/** 自定义的路由类型-继承`RouteConfig` */
-export interface RouteItem extends RouteConfig {
+/** 自定义的路由类型-继承`RouteRecordRaw` */
+export type RouteItem = {
   /**
    * 路由名，类似唯一`key`
+   * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+   * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
    */
   name?: string
   /** 外链地址，优先级会比`path`高 */
@@ -71,11 +76,11 @@ export interface RouteItem extends RouteConfig {
    * | 1 | 普通用户 |
    */
   auth?: Array<number>
-  /** 标头 */
-  meta: RouteMeta
   /** 子级路由 */
   children?: Array<RouteItem>
-}
+  /** 标头 */
+  meta: RouteMeta
+} & RouteRecordRaw
 ```
 
 需要说明一下的是：`path`这个字段在路由子菜单，也就是下级的时候需要补全路径，像这样：
@@ -109,13 +114,95 @@ const example = [
 
 ## SVG图标组件
 
-使用方式：到 [阿里云图标库](https://www.iconfont.cn) 中下载想要的图标，然后下载`svg`文件，最后放到`src/icons/svg`目录下即可
+使用方式：到[阿里云图标库](https://www.iconfont.cn)中下载想要的图标，然后下载`svg`文件，最后放到`src/icons/svg`目录下即可
 
-svg加载器使用`svg-sprite-loader`
+也是自己写的一个加载器，代码也十分简单：
+
+```ts
+import { readFileSync, readdirSync } from "fs";
+
+// svg-sprite-loader 这个貌似在 vite 中用不了
+// 该文件只能作为`vite.config.ts`导入使用
+// 其他地方导入会报错，因为浏览器环境不支持`fs`模块
+
+/** `id`前缀 */
+let idPerfix = "";
+
+const svgTitle = /<svg([^>+].*?)>/;
+
+const clearHeightWidth = /(width|height)="([^>+].*?)"/g;
+
+const hasViewBox = /(viewBox="[^>+].*?")/g;
+
+const clearReturn = /(\r)|(\n)/g;
+
+/**
+ * 查找`svg`文件
+ * @param dir 文件目录
+ */
+function findSvgFile(dir: string): Array<string> {
+  const svgRes = []
+  const dirents = readdirSync(dir, {
+    withFileTypes: true
+  })
+  for (const dirent of dirents) {
+    if (dirent.isDirectory()) {
+      svgRes.push(...findSvgFile(dir + dirent.name + "/"));
+    } else {
+      const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, (value, group) => {
+        // console.log(++i)
+        // console.log(dirent.name)
+        let width = 0;
+        let height = 0;
+        let content = group.replace(clearHeightWidth, (val1: string, val2: string, val3: number) => {
+          if (val2 === "width") {
+            width = val3;
+          } else if (val2 === "height") {
+            height = val3;
+          }
+          return "";
+        }
+        )
+        if (!hasViewBox.test(group)) {
+          content += `viewBox="0 0 ${width} ${height}"`;
+        }
+        return `<symbol id="${idPerfix}-${dirent.name.replace(".svg", "")}" ${content}>`;
+      }).replace("</svg>", "</symbol>");
+      svgRes.push(svg);
+    }
+  }
+  return svgRes;
+}
+
+/**
+ * `svg`打包器
+ * @param path 资源路径
+ * @param perfix 后缀名（标签`id`前缀）
+ */
+export function svgBuilder(path: string, perfix = "icon") {
+  if (path.trim() === "") return;
+  idPerfix = perfix;
+  const res = findSvgFile(path);
+  // console.log(res.length)
+  return {
+    name: "svg-transform",
+    transformIndexHtml(html: string) {
+      return html.replace("<body>",
+        `<body>
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
+          ${res.join("")}
+          </svg>`)
+    }
+  }
+}
+
+```
 
 ## 状态管理
 
-这里我没有使用`vuex`，而是采用了代码更少、代码片段更直观、且更适合`typescript`的设计模式去使用：参考 [你不需要vuex](https://juejin.im/post/5d425a83f265da03d8719cb8)
+`Vue3`之后不需要`Vuex`了（虽然我Vue2也不用），而是采用了代码更少、代码片段更直观、且更适合`typescript`的设计模式去使用，简单来理解就是：把共享的数据提取到独立的模块文件中，通过`reactive`来声明，然后导出到各个组件去使用，参考 [你不需要vuex](https://juejin.im/post/5d425a83f265da03d8719cb8)。
+
+关于状态管理，有人会说，都`Vue 3.x`了，为什么不使用`hooks`模式去代替一个全局单例`store`模式？没错，确实是可以用`hooks`的设计模式去代替全局单例`store`。最开始我重写这个项目的时候就是用的`hooks`，后来发现代码多的时候，`hooks`的使用太过于零散了，每个方法，每个变量都要导出导入来使用，这导致我在某个组件或者页面用到的依赖过多的时候，`hooks`的导入实在太多，且太难看了，如果命名不规范，还会有重名函数或变量。有时代码过于细分会并不会带来合理的代码维护，所以还是分模块的单例形式比较合理。于是我又改回到单例模式来使用。
 
 ## 项目初始化
 
@@ -134,24 +221,73 @@ npm run dev
 npm run build
 ```
 
-## npm 镜像设置
+run build 时，需要在`tsconfig.json`中的`include`配置项里面所有的路径前面加个`/`，不然会报错，run dev 时却没有这种情况，只能在构建时，手动添加`/`
 
-**sass 安装失败时先执行以下命令再初始化**
+**目前已经找到原因**
 
-**当前代码需要在`nodejs v12.x.x`或`nodejs v14.x.x`环境中运行**
+以`src/components/Upload/Image.vue`为例，构建编译时会执行`dom.d.ts`的类型校验，然后组件中的自定义类型和组件调用时，也运行了`dom.d.ts`的校验，导致编译不通过，像这样：
 
-```
-set sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-```
-
-**设置 npm 为淘宝镜像，注意不是设置为 cnpm 使用，依然是使用 npm**
-
-```
-npm config set registry http://registry.npm.taobao.org/
+```html
+<template>
+  <div :style="{ 'height': autoHeight ? null : height }"></div>
+</template>
 ```
 
-**还原 npm 镜像，要发布自己的 npm 包用**
+编译时，会校验标签中的`style`类型，只能是`StyleValue | undefined`，所以不通过。
 
+```html
+<template>
+  <div>
+    <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
+    <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
+  </div>
+</template>
+<script lang="ts">
+import { defineComponent, reactive } from "vue";
+import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
+
+export default defineComponent({
+  components: {
+    UploadImage
+  },
+  setup() {
+    const formData = reactive({
+      banner: "",
+      logo: ""
+    })
+
+    /**
+     * 监听上传图片
+     * @param info 回调数据
+     */
+    function onUpload(info: UploadChange<"banner"|"logo">) {
+      // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
+      formData[info.id] = info.src;
+    }
+
+    return {
+      formData,
+      onUpload
+    }
+  }
+})
+</script>
 ```
-npm config set registry http://registry.npmjs.org/
+
+编译时，会校验标签中的`change`事件，这时候和组件里面定义的`UploadChange<T = string | number>`类型不吻合，所以也不通过。
+
+一开始我猜测是`vite`依赖的 [rollup](https://www.rollupjs.com) 编译构建，和`tsconfig.json`那边的配置不吻合导致，编译时并没有排除`tsconfig.json`里面的`include`值，所以产生额外类型校验；解决办法只能是在构建时，手动添加`/`，这样就不会对模板里面的标签进行校验，后面又排查了一遍`package.json`，终于定位到是`vue-tsc`的问题，然后把对应的命令给删掉，想这样：
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build", // 剔除了 vue-tsc --noEmit && ，只保留 vite build
+    "serve": "vite preview"
+  },
+}
 ```
+
+于是就正常了；后面又查阅了`vue-tsc`的作用（[npm vue-tsc](https://www.npmjs.com/package/vue-tsc)），才了解到这是一个非必要的依赖，主要是用来约束`<script setup lang="ts">`这种写法，并且应用在`vscode-Volar`的插件中使用；同时也是`vue3`里面用来校验提交事件的匹配插件，如果不声明`emits: ["change"]`，则默认会触发`dom`的事件类型检测导致报错；所以最好在写组件提交事件的时候，声明`emits`的配置，因为在`vue3`所有事件都扁平化了，不再是`vue2`那样拥有上下级关系，假设当前组件有个`change`事件，子组件也有个`change`抛出，那么就会同时触发两个。
+
+详情见[Vite 踩坑指南](https://juejin.cn/post/6959851018469244965)

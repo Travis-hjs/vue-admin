@@ -127,6 +127,47 @@ export function inputOnlyNumber(value: string | number, decimal?: boolean, negat
 }
 
 /**
+ * ES5 兼容 ES6 `Array.findIndex`
+ * @param array
+ * @param compare 对比函数
+ */
+export function findIndex<T>(array: Array<T>, compare: (value: T, index: number) => boolean) {
+  var result = -1;
+  for (var i = 0; i < array.length; i++) {
+    if (compare(array[i], i)) {
+      result = i;
+      break;
+    }
+  }
+  return result;
+}
+
+
+/**
+ * 自定义对象数组去重
+ * @param array
+ * @param compare 对比函数
+ * @example
+ * ```js
+ * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
+ * filterRepeat(list, (a, b) => a.id == b.id)
+ * ```
+ */
+export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
+  return array.filter((element, index, self) => {
+    return findIndex(self, (el: T) => compare(el, element)) === index;
+  })
+}
+
+/**
+ * 判断是否外部链接
+ * @param path 路径
+ */
+export function isExternal(path: string) {
+  return /^(https?:|mailto:|tel:)/.test(path);
+}
+
+/**
  * `JSON`转`FormData`
  * @param params `JSON`对象
  * @example 
@@ -162,122 +203,8 @@ export function jsonParse(target: any, defaultValue: any = {}) {
   return result;
 }
 
-/**
- * 数字运算（主要用于小数点精度问题）
- * [see](https://juejin.im/post/6844904066418491406#heading-12)
- * @param a 前面的值
- * @param type 计算方式
- * @param b 后面的值
- * @example 
- * ```js
- * // 可链式调用
- * const res = computeNumber(1.3, "-", 1.2).next("+", 1.5).next("*", 2.3).next("/", 0.2).result;
- * console.log(res);
- * ```
- */
-export function computeNumber(a: number, type: NumberSymbols, b: number) {
-  /**
-   * 获取数字小数点的长度
-   * @param n 数字
-   */
-  function getDecimalLength(n: number) {
-    const decimal = n.toString().split(".")[1];
-    return decimal ? decimal.length : 0;
-  }
-  /**
-   * 修正小数点
-   * @description 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
-   * @param n 数字
-   */
-  const amend = (n: number, precision = 15) => parseFloat(Number(n).toPrecision(precision));
-  const power = Math.pow(10, Math.max(getDecimalLength(a), getDecimalLength(b)));
-  let result = 0;
-
-  a = amend(a * power);
-  b = amend(b * power);
-
-  switch (type) {
-    case "+":
-      result = (a + b) / power;
-      break;
-    case "-":
-      result = (a - b) / power;
-      break;
-    case "*":
-      result = (a * b) / (power * power);
-      break;
-    case "/":
-      result = a / b;
-      break;
-  }
-
-  result = amend(result);
-
-  return {
-    /** 计算结果 */
-    result,
-    /**
-     * 继续计算
-     * @param nextType 继续计算方式
-     * @param nextValue 继续计算的值
-     */
-    next(nextType: NumberSymbols, nextValue: number) {
-      return computeNumber(result, nextType, nextValue);
-    },
-    /**
-     * 小数点进位
-     * @param n 小数点后的位数
-    */
-    toHex(n: number) {
-      const strings = result.toString().split(".");
-      if (n > 0 && strings[1] && strings[1].length > n) {
-        const decimal = strings[1].slice(0, n);
-        const value = Number(`${strings[0]}.${decimal}`);
-        const difference = 1 / Math.pow(10, decimal.length);
-        result = computeNumber(value, "+", difference).result;
-      }
-      return result;
-    }
-  }
-}
-
-/**
- * 判断是否外部链接
- * @param path 路径
- */
-export function isExternal(path: string) {
-  return /^(https?:|mailto:|tel:)/.test(path);
-}
-
-/**
- * ES5 兼容 ES6 `Array.findIndex`
- * @param array
- * @param compare 对比函数
- */
-export function findIndex<T>(array: Array<T>, compare: (value: T, index: number) => boolean) {
-  var result = -1;
-  for (var i = 0; i < array.length; i++) {
-    if (compare(array[i], i)) {
-      result = i;
-      break;
-    }
-  }
-  return result;
-}
-
-
-/**
- * 自定义对象数组去重
- * @param array
- * @param compare 对比函数
- * @example
- * ```js
- * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
- * filterRepeat(list, (a, b) => a.id == b.id)
- * ```
- */
-export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
-  return array.filter((element, index, self) => {
-    return findIndex(self, (el: T) => compare(el, element)) === index;
-  })
+/** 检查是否移动端 */
+export function isMobile() {
+  const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
+  return pattern.test(navigator.userAgent);
 }

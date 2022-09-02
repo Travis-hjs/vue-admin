@@ -1,6 +1,6 @@
 import request from "../utils/request";
 import store from "../store";
-import { LoginParams, UserInfo } from "@/types/user";
+import { LoginParams, UserInfo } from "../types/user";
 
 /**
  * 上传图片
@@ -8,13 +8,13 @@ import { LoginParams, UserInfo } from "@/types/user";
  */
 export function uploadImg(formData: File) {
   // 模拟上传
-  return new Promise<ApiResult<{ img?: string }>>(function (resolve) {
+  return new Promise<ApiResult>(function (resolve) {
     const reader = new FileReader();
     reader.onload = function () {
       setTimeout(function () {
         resolve({
           code: 1,
-          data: { img: reader.result as string },
+          data: { img: reader.result },
           msg: "上传成功"
         })
       }, 500);
@@ -22,7 +22,7 @@ export function uploadImg(formData: File) {
     reader.onerror = function () {
       resolve({
         code: -1,
-        data: {},
+        data: null,
         msg: "上传失败"
       })
     }
@@ -85,7 +85,6 @@ export async function login(params: LoginParams) {
   // const res = await request("POST", "/login", params)
   // if (res.code === 1) {
   //   // 录成功后缓存用户信息
-  //   res.data.name = params.username;
   //   store.user.update(res.data);
   // }
   // return res;

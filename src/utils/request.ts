@@ -1,5 +1,4 @@
 import config from "./config";
-import { Message } from "element-ui";
 import { checkType, jsonParse } from "./index";
 import store from "@/store";
 
@@ -105,7 +104,7 @@ function ajax(params: AjaxParams) {
  * @param responseType 接口请求成功时，响应类型
  */
 function getResultInfo(result: { statusCode: number, data: any }, responseType?: XMLHttpRequestResponseType) {
-  const info: ApiResult = { code: -1, msg: "网络出错了", data: {} }
+  const info: ApiResult = { code: -1, msg: "网络出错了", data: null }
   switch (result.statusCode) {
     case config.requestOvertime:
       info.msg = "网络超时了";
@@ -162,21 +161,21 @@ export default function request<T = any>(
       overtime: config.requestOvertime,
       success(res, xhr) {
         // console.log("请求成功", res);
-        const info = getResultInfo({ statusCode: xhr.status, data: res }, responseType);
+        const info = getResultInfo({ statusCode: xhr.status, data: res });
         resolve(info);
       },
       fail(err) {
         const res = checkType(err.response) === "string" ? jsonParse(err.response) : err.response;
         const info = getResultInfo({ statusCode: err.status, data: res });
-        // 全局的请求错误提示，不需要可以去掉
-        Message.error(info.msg);
+        // 全局的请求错误提示可以写在这里
+        // do some ...
         resolve(info);
       },
       timeout() {
         console.warn("XMLHttpRequest 请求超时 !!!");
         const info = getResultInfo({ statusCode: config.requestOvertime, data: {} });
-        // 全局的请求超时提示，不需要可以去掉
-        Message.warning(info.msg);
+        // 全局的请求超时提示可以写在这里
+        // do some ...
         resolve(info);
       }
     });

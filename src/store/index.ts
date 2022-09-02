@@ -1,5 +1,6 @@
-import ModuleLayout from "./Layout";
 import ModuleUser from "./User";
+import imgLogo from "../assets/logo.png";
+import ModuleLayout from "./Layout";
 
 class ModuleStore {
   constructor() {
@@ -10,24 +11,14 @@ class ModuleStore {
   readonly projectInfo = {
     title: "Vue Typescript Admin",
     name: "XXX后台管理平台",
-    logo: require("@/assets/logo.png"),
-    link: "https://github.com/Hansen-hjs/vue-admin"
+    logo: imgLogo,
+    link: "https://github.com/Hansen-hjs/vue-admin/tree/next"
   }
 
-  /** 页面图片资源 */
-  get imageInfo() {
-    return {
-      /** 404图片 */
-      image404: require("@/assets/404-images/404.png"),
-      /** 404（云朵）图片 */
-      image404cloud: require("@/assets/404-images/404-cloud.png")
-    }
-  }
-
-  /** `layout`状态管理模块 */
+  /** `layout`状态模块 */
   readonly layout = new ModuleLayout();
 
-  /** 用户状态管理模块 */
+  /** 用户状态模块 */
   readonly user = new ModuleUser();
 
 }

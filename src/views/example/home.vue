@@ -1,16 +1,25 @@
 <template>
   <div class="page-home">
-    <h2 class="the-title mgb_30">Vue2 + Vue-cli + TypeScript 后台管理模板</h2>
+    <h2 class="the-title mgb_30">Vue3 + Vite + TypeScript 后台管理模板</h2>
     <div class="mgb_40">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
-      <el-link :href="project" target="_blank" type="primary">项目地址</el-link>
-      <el-link :href="juejin" target="_blank" type="primary">掘金描述说明</el-link>
+      <a class="the-tag green" :href="project" target="_blank">项目地址</a>
+      <a class="the-tag green" :href="juejin" target="_blank">掘金描述说明</a>
     </div>
     <h2 class="the-title mgb_30">布局操作开关</h2>
     <div class="options-box mgb_40">
-      <el-checkbox class="mgb_10" v-model="layoutInfo.showSidebarLogo">显示侧边栏logo</el-checkbox>
-      <el-checkbox class="mgb_10" v-model="layoutInfo.showTagsView">显示历史记录标签</el-checkbox>
-      <el-checkbox v-model="layoutInfo.sidebarOpen">侧边栏展开</el-checkbox>
+      <label class="check-box fvertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
+        <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
+        显示侧边栏logo
+      </label>
+      <label class="check-box fvertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
+        <input type="checkbox" id="layout-tags" :checked="layoutInfo.showTagsView" />
+        显示历史记录标签
+      </label>
+      <label class="check-box fvertical" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
+        <input type="checkbox" id="layout-open" :checked="layoutInfo.sidebarOpen" />
+        侧边栏展开
+      </label>
     </div>
     <h2 class="the-title mgb_30">打赏一下</h2>
     <div class="code-box">
@@ -21,24 +30,26 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 import store from "@/store";
 
-@Component({})
-export default class Home extends Vue {
-  layoutInfo = store.layout.info;
+export default defineComponent({
+  setup() {
+    const layoutInfo = store.layout.info;
+    const project = store.projectInfo.link;
+    const juejin = "https://juejin.cn/post/7017278822068273166";
 
-  project = store.projectInfo.link;
-
-  juejin = "https://juejin.cn/post/7017278822068273166";
-}
+    return {
+      project,
+      layoutInfo,
+      juejin,
+    };
+  },
+});
 </script>
 <style lang="scss">
 .page-home {
   width: 100%;
-  .el-link {
-    margin-left: 10px;
-  }
   .code-box {
     width: 100%;
     img {
@@ -64,7 +75,6 @@ export default class Home extends Vue {
   }
   .options-box {
     width: 220px;
-    margin-bottom: 24px;
   }
 }
 </style>

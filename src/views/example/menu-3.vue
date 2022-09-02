@@ -1,6 +1,6 @@
 <template>
-  <div class="page-401">
-    <div>暂无权限访问</div>
+  <div class="menu-3">
+    <span class="the-tag purple">menu-3</span>
   </div>
 </template>
 <script>
@@ -13,7 +13,7 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
-.page-401 {
+.menu-3 {
   width: 100%;
 }
 </style>

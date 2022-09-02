@@ -40,17 +40,19 @@
   </div>
 </template>
 <script>
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 
-@Component({
+export default defineComponent({
   components: {
     Scrollbar
+  },
+  setup() {
+    return {
+      list: new Array(10).fill(0).map((_, index) => index)
+    }
   }
 })
-export default class Example extends Vue {
-  list = new Array(10).fill(0).map((_, index) => index)
-}
 </script>
 <style lang="scss">
 .example-page {
@@ -63,7 +65,6 @@ export default class Example extends Vue {
   .list-x {
     width: 300px;
     height: 88px;
-    white-space: nowrap;
     .item {
       display: inline-block;
       width: 120px;

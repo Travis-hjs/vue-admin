@@ -1,10 +1,10 @@
-import { modifyData } from "@/utils";
-import { UserInfo } from "@/types/user";
+import { reactive } from "vue";
+import { UserInfo } from "../types/user";
+import { modifyData } from "../utils";
 
 const cacheName = "ModuleUser";
 
-/** 创建用户信息 */
-function createUserInfo(): DeepReadonly<UserInfo> {
+function createUserInfo(): Readonly<UserInfo> {
   return {
     id: "",
     name: "",
@@ -17,7 +17,7 @@ function createUserInfo(): DeepReadonly<UserInfo> {
 }
 
 /**
- * 用户状态管理模块
+ * 用户状态模块
  */
 export default class ModuleUser {
   constructor() {
@@ -25,27 +25,31 @@ export default class ModuleUser {
   }
 
   /** 用户信息（包含登录状态） */
-  readonly info = createUserInfo();
+  readonly info = reactive(createUserInfo());
 
   /** 初始化缓存信息 */
   private init() {
-    const cacheInfo = sessionStorage.getItem(cacheName);
-    const value = cacheInfo ? JSON.parse(cacheInfo) : null;
-    if (value) {
-      modifyData(this.info, value);
+    const value = sessionStorage.getItem(cacheName);
+    try {
+      if (value) {
+        const info = JSON.parse(value)
+        modifyData(this.info, info);
+      }
+    } catch (error) {
+      console.log("初始化缓存信息出错 >>", error);
     }
   }
 
   /**
    * 更新（设置）当前的用户信息并缓存到本地
-   * @param value 更新的值
+   * @param value 要更新的值
    */
-  update(value: DeepPartial<UserInfo>) {
+  update(value: Partial<UserInfo>) {
     modifyData(this.info, value);
     sessionStorage.setItem(cacheName, JSON.stringify(this.info));
   }
 
-  /** 清空用户信息缓存信息 */
+  /** 重置（清空）用户信息缓存信息 */
   reset() {
     modifyData(this.info, createUserInfo());
     sessionStorage.removeItem(cacheName);

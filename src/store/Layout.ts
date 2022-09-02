@@ -1,14 +1,16 @@
-import { modifyData } from "@/utils";
+import { reactive, watch } from "vue";
 import { LayoutInfo, RouteItem } from "@/types";
+import { modifyData } from "@/utils";
 
 const cacheName = "ModuleLayout";
 
 /**
- * `layout`状态管理模块
- */
+ * `layout`状态模块
+*/
 export default class ModuleLayout {
   constructor() {
     this.init();
+    watch(this.info, this.saveInfo.bind(this));
   }
 
   /**
@@ -23,13 +25,15 @@ export default class ModuleLayout {
    */
   completeRouters: Array<RouteItem> = [];
 
-  /** `layout`操作状态 */
-  readonly info: LayoutInfo = {
+  /** 
+   * `layout`布局信息
+   */
+  readonly info = reactive<LayoutInfo>({
     showTagsView: true,
     sidebarOpen: true,
     showSidebarLogo: true,
     historyViews: []
-  }
+  })
 
   private init() {
     const value = sessionStorage.getItem(cacheName);
@@ -43,21 +47,19 @@ export default class ModuleLayout {
   }
 
   /**
-   * 保存`layout`操作状态
-   * @description 这个方法我用在了`src/layout/index.vue`组件中用`watch`监听了数据的变动然后执行
+   * 保存`layout`操作状
    */
-  saveInfo() {
+  private saveInfo() {
     sessionStorage.setItem(cacheName, JSON.stringify(this.info));
   }
 
   /** 
    * 菜单组件尺寸对象
    */
-  readonly menuSizeInfo = {
+  menuSizeInfo = reactive({
     /** `the-layout-menu-title`实际高度 */
     titleHeight: 0,
     /** `the-layout-menu-item`实际高度 */
     itemHeight: 0
-  }
-
+  })
 }

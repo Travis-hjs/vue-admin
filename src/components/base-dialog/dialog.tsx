@@ -1,54 +1,19 @@
-<template>
-  <teleport to="body" v-if="appendToBody">
-    <transition name="fade">
-      <div ref="dialog" class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="modelValue" @click="onClose">
-        <div
-          :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
-          :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
-        >
-          <div class="base-dialog-title fbetween fvertical">
-            <h2>{{ title }}</h2>
-            <i ref="closeBtn" @click="onClose"></i>
-          </div>
-          <div class="base-dialog-body">
-            <slot></slot>
-          </div>
-          <div class="base-dialog-footer" v-if="$slots.footer">
-            <slot name="footer"></slot>
-          </div>
-        </div>
-      </div>
-    </transition>
-  </teleport>
-  <transition name="fade" v-else>
-    <div ref="dialog" class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="modelValue" @click="onClose">
-      <div
-        :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
-        :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
-      >
-        <div class="base-dialog-title fbetween fvertical">
-          <h2>{{ title }}</h2>
-          <i ref="closeBtn" @click="onClose"></i>
-        </div>
-        <div class="base-dialog-body">
-          <slot></slot>
-        </div>
-        <div class="base-dialog-footer" v-if="$slots.footer">
-          <slot name="footer"></slot>
-        </div>
-      </div>
-    </div>
-  </transition>
-</template>
-<script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
+import { defineComponent, onMounted, onUnmounted, ref, watch, Transition, Teleport } from "vue";
+import "./dialog.scss";
 
 const isFirefox = navigator.userAgent.toLocaleLowerCase().indexOf("firefox") > 0;
 
 /** 全局定位层级，每使用一个组件累加一次 */
 let zIndex = 1000;
 
-/** 基础弹出框组件 */
+/**
+ * # 基础弹出框组件
+ * **当前`jsx`组件有个两个问题：**
+ * 1. `<Transition>`组件在隐藏节点时，没有过渡动画
+ * 2. 当`<base-dialog>`组件有嵌套的情况，且外层有`v-if`判断的时候，内层会出现闪烁的问题。具体看示例组件打开第二个dialog里面的嵌套组件时可以出现
+ * 
+ * *以上问题具体原因还不清楚，所以暂时没有使用该组件；sfc单文件组件没有这类问题*
+ */
 export default defineComponent({
   name: "base-dialog",
   props: {
@@ -78,6 +43,9 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    /** 当前使用的层级 */
+    const _zIndex = zIndex;
+    // 累加
     zIndex++;
     /** 当前组件节点 */
     const dialog = ref<HTMLElement>();
@@ -138,33 +106,46 @@ export default defineComponent({
     }
 
     onMounted(function () {
+      // 该操作只能用在 vue 2.x 里面，3.x 会报错
       // if (props.appendToBody) {
-      //   // 节点初始化之后移动至<body>处
-      //   dialog.value!.remove();
-      //   document.body.appendChild(dialog.value!);
+      //     // 节点初始化之后移动至<body>处
+      //     dialog.value!.remove();
+      //     document.body.appendChild(dialog.value!);
       // }
       document.addEventListener("click", setContentPosition);
-    })
+    });
 
     onUnmounted(function () {
       document.removeEventListener("click", setContentPosition);
       timer && clearTimeout(timer);
       // props.appendToBody && dialog.value!.remove(); // 插入至body处的节点要单独移除
-    })
+    });
 
-    return {
-      zIndex,
-      dialog,
-      closeBtn,
-      onClose,
-      contentX,
-      contentY,
-      contentShow,
-      contentMove
+    return function () {
+      const Dialog = () => (
+        <Transition name="fade" appear={true}>
+          <div
+            ref={dialog}
+            class="base-dialog fvc"
+            style={{ zIndex: _zIndex }}
+            v-show={props.modelValue}
+            onClick={e => onClose(e)}
+          >
+            <div
+              class={`base-dialog-content flex${contentMove.value ? " moving" : ""}${contentShow.value ? " opened" : ""}`}
+              style={{ 'width': props.width, 'transform': `translate3d(${contentX.value}, ${contentY.value}, 0) scale(0)` }}
+            >
+              <div class="base-dialog-title fbetween fvertical">
+                <h2>{props.title}</h2>
+                <i ref={closeBtn} onClick={e => onClose(e)}></i>
+              </div>
+              <div class="base-dialog-body">{context.slots.default?.()}</div>
+              {context.slots.footer ? (<div class="base-dialog-footer">{context.slots.footer()}</div>) : undefined}
+            </div>
+          </div>
+        </Transition>
+      );
+      return props.appendToBody ? (<Teleport to="body"><Dialog /></Teleport>) : <Dialog />;
     }
   }
 })
-</script>
-<style lang="scss">
-@import "./dialog.scss";
-</style>
