@@ -2,6 +2,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import SvgIcon from "./icons/index.vue";
 import BaseDialog from "./components/base-dialog/index.vue";
+import BaseDesc from "./components/base-desc/index.vue";
+import BaseDescItem from "./components/base-desc/Item.vue";
+
 import router from "./router";
 import ElementUI from "element-ui";
 import Language from "@/language";
@@ -19,6 +22,9 @@ window.version = version;
 Vue.component("svg-icon", SvgIcon);
 // 基础弹框
 Vue.component("base-dialog", BaseDialog);
+// 描述表格全局组件
+Vue.component("base-desc", BaseDesc);
+Vue.component("base-desc-item", BaseDescItem);
 
 Vue.use(ElementUI);
 
