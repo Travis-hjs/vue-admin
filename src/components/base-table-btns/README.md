@@ -16,7 +16,15 @@
 interface BaseTableBtnsItem<T = BaseObj> {
   /** 按钮文字 */
   text: string | ((row: T) => string)
-  /** 按钮图标`class` */
+  /** 
+   * 按钮的操作类型，默认`primary`
+   * - [element-文档](https://element.eleme.cn/#/zh-CN/component/button)
+   */
+  type?: "primary" | "success" | "info" | "warning" | "danger" | "text"
+  /** 
+   * 按钮图标`class`
+   * - [element-文档](https://element.eleme.cn/#/zh-CN/component/icon)
+   */
   icon?: string | ((row: T) => string)
   /** 是否禁用 */
   disabled?: boolean | ((row: T) => boolean)
