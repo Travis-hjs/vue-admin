@@ -1,28 +1,30 @@
 <template>
   <transition name="fade">
     <div class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="value" @click="onClose">
-      <div
-        :class="['base-dialog-content flex', { 'moving': contentMove }, { 'opened': contentShow }]"
-        :style="{ 'width': width, 'transform': `translate3d(${contentX}, ${contentY}, 0) scale(0)` }"
-      >
-        <div class="base-dialog-title fbetween fvertical">
-          <h2>{{ title }}</h2>
-          <i ref="close-btn" @click="onClose"></i>
+      <transition name="dialog-move">
+        <div
+          ref="content"
+          class="base-dialog-content flex"
+          :style="{ 'width': width }"
+          v-show="contentShow"
+        >
+          <div class="base-dialog-title fbetween fvertical">
+            <h2>{{ title }}</h2>
+            <i ref="close-btn" @click="onClose"></i>
+          </div>
+          <div class="base-dialog-body f1">
+            <slot></slot>
+          </div>
+          <div class="base-dialog-footer" v-if="$slots.footer">
+            <slot name="footer"></slot>
+          </div>
         </div>
-        <div class="base-dialog-body f1">
-          <slot></slot>
-        </div>
-        <div class="base-dialog-footer" v-if="$slots.footer">
-          <slot name="footer"></slot>
-        </div>
-      </div>
+      </transition>
     </div>
   </transition>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-
-const isFirefox = navigator.userAgent.toLocaleLowerCase().indexOf("firefox") > 0;
 
 /** 全局定位层级，每使用一个组件累加一次 */
 let zIndex = 1000;
@@ -71,6 +73,7 @@ export default class BaseDialog extends Vue {
 
   $refs!: {
     "close-btn": HTMLElement
+    "content": HTMLElement
   }
 
   onClose(e: MouseEvent) {
@@ -81,35 +84,24 @@ export default class BaseDialog extends Vue {
     }
   }
 
-  /** 内容盒子`x`轴偏移位置 */
-  private contentX = "0";
-
-  /** 内容盒子`y`轴偏移位置 */
-  private contentY = "0";
-
-  /** 因为需要动态设置偏移位置，所以设置完位置之后单独控制该节点切换动画 */
+  /**
+   * 是否显示弹框中间内容
+   * - 因为需要动态设置偏移位置，所以设置完位置之后单独控制该节点切换动画
+   */
   private contentShow = false;
-
-  /** 内容盒子过渡动画 */
-  private contentMove = false;
 
   @Watch("value")
   onValue(val: boolean) {
-    this.timer && clearTimeout(this.timer)
     if (val) {
-      // 该代码片段不写在`setContentPosition`是因为打开弹框时，可能是异步的
-      this.contentMove = false;
-      // css3 动画生命周期结束后再设置过渡动画
-      this.timer = setTimeout(() => {
-        this.contentMove = true;
+      // TODO: 等设置完偏移变量值之后，再开始缩放动画
+      // 这里不能用 this.$nextTick 代替
+      setTimeout(() => {
         this.contentShow = true;
-      }, isFirefox ? 100 : 0); // firefox上 有 bug，需要延迟 100 毫秒，貌似 60 也可以
+      }, 0);
     } else {
       this.contentShow = false;
     }
   }
-
-  private timer!: NodeJS.Timeout;
 
   /**  
    * 设置内容区域位置
@@ -125,8 +117,22 @@ export default class BaseDialog extends Vue {
     const pageX = e.clientX - centerX;
     // console.log("x >>", e.clientX, e.pageX);
     // console.log("y >>", e.clientY, e.pageY);
-    this.contentX = `${pageX / clientWidth * 100}vw`;
-    this.contentY = `${pageY / clientHeight * 100}vh`;
+    const x = `${pageX / clientWidth * 100}vw`;
+    const y = `${pageY / clientHeight * 100}vh`;
+    this.setVariable(x, y);
+  }
+
+  /**
+   * 设置内容节点偏移位置变量
+   * @param x
+   * @param y
+   */
+  private setVariable(x: string, y: string) {
+    const el = this.$refs["content"];
+    if (el) {
+      el.style.setProperty("--contentX", x);
+      el.style.setProperty("--contentY", y);
+    }
   }
 
   created() {
@@ -144,7 +150,6 @@ export default class BaseDialog extends Vue {
 
   beforeDestroy() {
     document.removeEventListener("click", this.setContentPosition);
-    this.timer && clearTimeout(this.timer);
     this.appendToBody && this.$el.remove(); // 插入至body处的节点要单独移除
   }
 }
@@ -160,21 +165,24 @@ export default class BaseDialog extends Vue {
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .base-dialog-content {
   border-radius: 2px;
-  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
   background-color: #fff;
   overflow: hidden;
   flex-direction: column;
   max-height: 90vh;
 }
-.base-dialog-content.opened {
-  transform: translate3d(0, 0, 0) scale(1) !important;
-}
-.base-dialog-content.moving {
+
+.dialog-move-enter-active, .dialog-move-leave-active {
   @include moveTime();
 }
+
+.dialog-move-enter, .dialog-move-leave-active {
+  transform: translate3d(var(--contentX), var(--contentY), 0) scale(0);
+}
+
 .base-dialog-title {
   padding: 12px 14px;
   border-bottom: solid 1px #eee;
@@ -196,11 +204,13 @@ export default class BaseDialog extends Vue {
     }
   }
 }
+
 .base-dialog-body {
   padding: 12px 14px;
   min-height: 0px;
   overflow: auto;
 }
+
 .base-dialog-footer {
   text-align: right;
   border-top: solid 1px #eee;
