@@ -88,6 +88,16 @@ export default class Tree extends Vue {
   })
   filterNodeMethod!: (val: string | number, item: object, node: TreeItem) => boolean;
 
+  /** 
+   * 是否保留操作状态：展开，选中等操作
+   * - 保留操作一定要设置`setting.key`
+   */
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  keepState!: boolean
+
   /** 使用的选项数据 */
   options: Array<TreeItem> = [];
 
@@ -102,6 +112,9 @@ export default class Tree extends Vue {
     this.updateOptions();
   }
 
+  /** 数据对比更新计时器 */
+  private timer!: NodeJS.Timeout
+
   updateOptions() {
     const setting = Object.assign({
       label: "label",
@@ -109,26 +122,30 @@ export default class Tree extends Vue {
       children: "children",
       key: "",
     }, this.setting);
+    
+    const keep = this.keepState;
 
     /**
      * 格式化选项数据
-     * @param arr
-     * @param parentIndex
+     * @param arr 要格式化的数据
+     * @param parentIndex 父节点索引字段
+     * @param befores 原始数据
      */
-    function format(arr: Array<any>, parentIndex = ""): Array<TreeItem> {
+    function format(arr: Array<any>, parentIndex = "", befores: Array<TreeItem> = []): Array<TreeItem> {
       return arr.map(function (item, index) {
         const indexs = parentIndex ? `${parentIndex}-${index}` : index.toString();
         const key = setting.key && item[setting.key] ? item[setting.key] : indexs;
         const children = item[setting.children] || undefined;
+        const before = keep ? befores.find(b => b.key === key) : undefined;
         return {
           label: item[setting.label],
           value: item[setting.value],
           children: children ? format(children, indexs) : [],
           key,
           indexs,
-          open: false,
-          checked: false,
-          height: 30,
+          open: keep && before ? before.open : false,
+          checked: keep && before ? before.checked : false,
+          height: keep && before ? before.height : 30,
           // 原始数据
           original: {
             ...item
@@ -136,7 +153,52 @@ export default class Tree extends Vue {
         }
       })
     }
-    this.options = format(this.list);
+
+    this.options = format(this.list, "", this.options);
+    
+    /**
+     * 对比差异
+     * @param options 原始数据
+     * @param backups 备份数据
+     */
+    function getDiffList(options: Array<TreeItem>, backups: Array<TreeItem>) {
+      function getIndexsList(list: Array<TreeItem>) {
+        let res: Array<string> = [];
+        list.forEach(function(item) {
+          res.push(item.indexs);
+          res = [...res, ...getIndexsList(item?.children)];
+        })
+        return res;
+      }
+
+      const indexsList = getIndexsList(options);
+
+      function getDiff(list: Array<TreeItem>) {
+        let res: Array<TreeItem> = [];
+        list.forEach(function(item) {
+          if (!indexsList.includes(item.indexs)) {
+            res.push(item);
+          }
+          res = [...res, ...getDiff(item?.children || [])];
+        })
+        return res;
+      }
+
+      return getDiff(backups);
+    }
+
+    const diffList = getDiffList(this.options, this.backups);
+    // console.log("diffList >>", diffList);
+    clearTimeout(this.timer);
+
+    if (this.keepState && diffList.length) {
+      this.timer = setTimeout(() => {
+        diffList.forEach(item => {
+          item.children && this.updateHeight(item);
+        })
+      }, 1000 / 60);
+    }
+
     this.backups = JSON.parse(JSON.stringify(this.options));
   }
 
@@ -291,6 +353,10 @@ export default class Tree extends Vue {
     this.$on("levelItemClick", (item: TreeItem) => {
       item.children.length && this.updateHeight(item); // 没有下级的点击不用更新，减少性能开销
       this.$emit("nodeClick", item);
+    });
+
+    this.$once("hook:beforeDestroy", () => {
+      clearTimeout(this.timer);
     });
   }
 }
