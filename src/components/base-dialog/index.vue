@@ -1,7 +1,7 @@
 <template>
-  <teleport to="body" v-if="appendToBody">
+  <teleport to="body" :disabled="!appendToBody">
     <transition name="fade">
-      <div ref="dialog" class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="modelValue" @click="onClose">
+      <div ref="el" class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="modelValue" @click="onClose">
         <transition name="dialog-move">
           <div
             ref="contentBox"
@@ -24,29 +24,7 @@
       </div>
     </transition>
   </teleport>
-  <transition name="fade" v-else>
-    <div ref="dialog" class="base-dialog fvc" :style="{ 'z-index': zIndex }" v-show="modelValue" @click="onClose">
-      <transition name="dialog-move">
-        <div
-          ref="contentBox"
-          class="base-dialog-content flex"
-          :style="{ 'width': width }"
-          v-show="contentShow"
-        >
-          <div class="base-dialog-title fbetween fvertical">
-            <h2>{{ title }}</h2>
-            <i ref="closeBtn" @click="onClose"></i>
-          </div>
-          <div class="base-dialog-body">
-            <slot></slot>
-          </div>
-          <div class="base-dialog-footer" v-if="$slots.footer">
-            <slot name="footer"></slot>
-          </div>
-        </div>
-      </transition>
-    </div>
-  </transition>
+  <div v-if="appendToBody" :id="flagId" description="用来标记 teleport 开启之后插入的节点用"></div>
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, ref, watch } from "vue";
@@ -83,10 +61,11 @@ export default defineComponent({
       default: false
     }
   },
+  emits: ["close", "update:modelValue"],
   setup(props, context) {
     zIndex++;
     /** 当前组件节点 */
-    const dialog = ref<HTMLElement>();
+    const el = ref<HTMLElement>();
     /** 关闭按钮节点 */
     const closeBtn = ref<HTMLElement>();
     /** 弹出框内容节点 */
@@ -96,6 +75,11 @@ export default defineComponent({
      * - 因为需要动态设置偏移位置，所以设置完位置之后单独控制该节点切换动画
      */
     const contentShow = ref(false);
+    /** 
+     * 当前节点记录`id`
+     * - TODO: 不知道是不是`<teleport>`的bug，组件永远不会被销毁，所以这里定义一个唯一节点，用来判断并销毁当前节点
+     */
+    const flagId = "flag-dialog-" + zIndex;
 
     watch(() => props.modelValue, function (val) {
       if (val) {
@@ -114,9 +98,15 @@ export default defineComponent({
      * @param e 鼠标事件
      */
     function setContentPosition(e: MouseEvent) {
+      // 判断标记的节点是否存在页面
+      if (props.appendToBody && !document.getElementById(flagId)) {
+        el.value!.remove();
+        el.value = undefined;
+        document.removeEventListener("click", setContentPosition);
+      }
       // 只有在外部点击，且关闭的情况下才会记录坐标
-      if (!props.modelValue || contentShow.value || dialog.value!.contains(e.target as HTMLElement)) return;
-      const { clientWidth, clientHeight } = dialog.value!;
+      if (!props.modelValue || contentShow.value || el.value!.contains(e.target as HTMLElement)) return;
+      const { clientWidth, clientHeight } = el.value!;
       const centerX = clientWidth / 2;
       const centerY = clientHeight / 2;
       const pageY = e.clientY - centerY;
@@ -141,37 +131,96 @@ export default defineComponent({
 
     function onClose(e: MouseEvent) {
       // console.log("onClose >>", e.target);
-      if ((e && e.target === dialog.value && props.closeByMask) || (e && e.target === closeBtn.value)) {
+      if ((e && e.target === el.value && props.closeByMask) || (e && e.target === closeBtn.value)) {
         context.emit("update:modelValue", false);
         context.emit("close");
       }
     }
 
     onMounted(function () {
-      // if (props.appendToBody) {
-      //   // 节点初始化之后移动至<body>处
-      //   dialog.value!.remove();
-      //   document.body.appendChild(dialog.value!);
-      // }
       document.addEventListener("click", setContentPosition);
     })
-
+    
     onUnmounted(function () {
       document.removeEventListener("click", setContentPosition);
-      // props.appendToBody && dialog.value!.remove(); // 插入至body处的节点要单独移除
     })
 
     return {
       zIndex,
-      dialog,
+      el,
       closeBtn,
       contentBox,
       contentShow,
       onClose,
+      flagId
     }
   }
 })
 </script>
 <style lang="scss">
-@import "./dialog.scss";
+@import "@/styles/variables.scss";
+
+.base-dialog {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.base-dialog-content {
+  border-radius: 2px;
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  overflow: hidden;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.dialog-move-enter-active, .dialog-move-leave-active {
+  @include moveTime();
+}
+
+.dialog-move-enter-from, .dialog-move-leave-to {
+  transform: translate3d(var(--contentX), var(--contentY), 0) scale(0);
+}
+
+.base-dialog-title {
+  padding: 12px 14px;
+  border-bottom: solid 1px #eee;
+
+  h2 {
+    font-size: 22px;
+    color: #303133;
+    font-weight: normal;
+  }
+
+  i {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    transform: rotate(0);
+    @include closeIcon(#666, 16px);
+    @include moveTime();
+
+    &:hover {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.base-dialog-body {
+  padding: 12px 14px;
+  overflow: auto;
+  min-height: 0px;
+  overflow: auto;
+}
+
+.base-dialog-footer {
+  text-align: right;
+  border-top: solid 1px #eee;
+  padding: 10px 14px;
+}
 </style>
