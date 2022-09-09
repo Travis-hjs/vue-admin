@@ -7,7 +7,7 @@ let zIndex = 1000;
 /**
  * # 基础弹出框组件
  * **当前`jsx`组件有个两个问题：**
- * 1. `<Transition>`组件在隐藏节点时，没有过渡动画
+ * 1. `<Dialog>`组件在提取出来的时候，点击关闭时`dialog-move`过渡不生效
  * 2. 当`<base-dialog>`组件有嵌套的情况，且外层有`v-if`判断的时候，内层会出现闪烁的问题。具体看示例组件打开第二个dialog里面的嵌套组件时可以出现
  * 
  * *以上问题具体原因还不清楚，所以暂时没有使用该组件；sfc单文件组件没有这类问题*
@@ -123,8 +123,9 @@ export default defineComponent({
     });
 
     return function () {
+      // 嵌套的<Transition>组件不可以写在抽离组件里面
       const Dialog = () => (
-        <Transition name="fade" appear={ true }>
+        // <Transition name="fade" appear>
           <div
             ref={ dialog }
             class="base-dialog fvc"
@@ -132,7 +133,7 @@ export default defineComponent({
             v-show={ props.modelValue }
             onClick={ e => onClose(e) }
           >
-            <Transition name="dialog-move" appear={ true }>
+            <Transition name="dialog-move" appear>
               <div
                 ref={ contentBox }
                 class="base-dialog-content flex"
@@ -148,9 +149,19 @@ export default defineComponent({
               </div>
             </Transition>
           </div>
-        </Transition>
+        // </Transition>
       );
-      return props.appendToBody ? (<Teleport to="body"><Dialog /></Teleport>) : <Dialog />;
+      return props.appendToBody ? (
+      <Teleport to="body">
+        <Transition name="fade" appear>
+          <Dialog />
+        </Transition>
+      </Teleport>
+      ) : (
+      <Transition name="fade" appear>
+        <Dialog />
+      </Transition>
+      );
     }
   }
 })

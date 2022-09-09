@@ -1,4 +1,4 @@
-import { defineComponent, computed, PropType, ref } from "vue";
+import { defineComponent, computed, PropType, ref, Transition } from "vue";
 import "./card.scss";
 
 /** `tsx`卡片组件 */
@@ -43,9 +43,12 @@ const TsxCard = defineComponent({
 
     return () => (
       <div class="tsx-card">
+        <Transition name="fade" appear>
         {
-          props.title ? (<div class="tsx-center"><span class="the-tag">双向绑定值：{props.title}</span></div>) : null
+          <div class="tsx-center" v-show={props.title}><span class="the-tag">双向绑定值：{props.title}</span></div>
         }
+        </Transition>
+        
         <div class="card">
           <div class="card-box">
             <div class="card-list flex" style={listStyle.value}>
