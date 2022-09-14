@@ -11,7 +11,7 @@ class ModuleStore {
     title: "Vue Typescript Admin",
     name: "XXX后台管理平台",
     logo: require("@/assets/logo.png"),
-    link: "https://github.com/Hansen-hjs/vue-admin/tree/v2"
+    link: "https://github.com/Hansen-hjs/vue-admin/tree/hjs"
   }
 
   /** 页面图片资源 */
