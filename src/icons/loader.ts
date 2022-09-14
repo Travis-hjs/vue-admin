@@ -20,37 +20,37 @@ const clearReturn = /(\r)|(\n)/g;
  * @param dir 文件目录
  */
 function findSvgFile(dir: string): Array<string> {
-    const svgRes = []
-    const dirents = readdirSync(dir, {
-        withFileTypes: true
-    })
-    for (const dirent of dirents) {
-        if (dirent.isDirectory()) {
-            svgRes.push(...findSvgFile(dir + dirent.name + "/"));
-        } else {
-            const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, (value, group) => {
-                // console.log(++i)
-                // console.log(dirent.name)
-                let width = 0;
-                let height = 0;
-                let content = group.replace(clearHeightWidth, (val1: string, val2: string, val3: number) => {
-                        if (val2 === "width") {
-                            width = val3;
-                        } else if (val2 === "height") {
-                            height = val3;
-                        }
-                        return "";
-                    }
-                )
-                if (!hasViewBox.test(group)) {
-                    content += `viewBox="0 0 ${width} ${height}"`;
-                }
-                return `<symbol id="${idPerfix}-${dirent.name.replace(".svg", "")}" ${content}>`;
-            }).replace("</svg>", "</symbol>");
-            svgRes.push(svg);
+  const svgRes = []
+  const dirents = readdirSync(dir, {
+    withFileTypes: true
+  })
+  for (const dirent of dirents) {
+    if (dirent.isDirectory()) {
+      svgRes.push(...findSvgFile(dir + dirent.name + "/"));
+    } else {
+      const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, (value, group) => {
+        // console.log(++i)
+        // console.log(dirent.name)
+        let width = 0;
+        let height = 0;
+        let content = group.replace(clearHeightWidth, (val1: string, val2: string, val3: number) => {
+          if (val2 === "width") {
+            width = val3;
+          } else if (val2 === "height") {
+            height = val3;
+          }
+          return "";
         }
+        )
+        if (!hasViewBox.test(group)) {
+          content += `viewBox="0 0 ${width} ${height}"`;
+        }
+        return `<symbol id="${idPerfix}-${dirent.name.replace(".svg", "")}" ${content}>`;
+      }).replace("</svg>", "</symbol>");
+      svgRes.push(svg);
     }
-    return svgRes;
+  }
+  return svgRes;
 }
 
 /**
@@ -59,18 +59,18 @@ function findSvgFile(dir: string): Array<string> {
  * @param perfix 后缀名（标签`id`前缀）
  */
 export function svgBuilder(path: string, perfix = "icon") {
-    if (path.trim() === "") return;
-    idPerfix = perfix;
-    const res = findSvgFile(path);
-    // console.log(res.length)
-    return {
-        name: "svg-transform",
-        transformIndexHtml(html: string) {
-            return html.replace("<body>",
-                `<body>
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
-                ${res.join("")}
-                </svg>`)
-        }
+  if (path.trim() === "") return;
+  idPerfix = perfix;
+  const res = findSvgFile(path);
+  // console.log(res.length)
+  return {
+    name: "svg-transform",
+    transformIndexHtml(html: string) {
+      return html.replace("<body>",
+      `<body>
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
+      ${res.join("")}
+      </svg>`)
     }
+  }
 }

@@ -11,37 +11,33 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: "svg-icons", // 设置路由缓存 keepAlive 时，这里必须要设置对应的 name 值
-  setup() {
-    const svgFileReg = /(?<=(svg\/)).*?(?=(.svg))/;
+  // TODO: 设置路由缓存 keepAlive 时，这里必须要设置对应的 name 值
+  name: "svg-icons"
+})
+</script>
+<script lang="ts" setup>
 
-    function getSvgNames() {
-      const svgInfo = import.meta.globEager("/src/icons/svg/*.svg");
-      const svgs = Object.keys(svgInfo);
-      const names = svgs.map((value) => {
-        const res = value.match(svgFileReg)![0];
-        return res;
-      });
-      return names;
-    }
+const svgFileReg = /(?<=(svg\/)).*?(?=(.svg))/;
 
-    function getSvgIconCode(symbol: string) {
-      return `<svg-icon name="${symbol}" />`;
-    }
+function getSvgNames() {
+  const svgInfo = import.meta.globEager("/src/icons/svg/*.svg");
+  const svgs = Object.keys(svgInfo);
+  const names = svgs.map((value) => {
+    const res = value.match(svgFileReg)![0];
+    return res;
+  });
+  return names;
+}
 
-    const list = getSvgNames();
+function getSvgIconCode(symbol: string) {
+  return `<svg-icon name="${symbol}" />`;
+}
 
-    console.log("svg-list >>", list);
+const list = getSvgNames();
 
-    return {
-      list,
-      getSvgIconCode,
-    };
-  },
-});
+console.log("svg-list >>", list);
 </script>
 <style lang="scss">
 .page-icons {

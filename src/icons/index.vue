@@ -3,41 +3,35 @@
     <use :xlink:href="iconName"></use>
   </svg>
 </template>
-
 <script lang="ts">
-import { defineComponent, computed } from "vue";
-// <svg>加载处理
-// const requireAll = (requireContext: any) => requireContext.keys().map(requireContext);
-// const req = require.context("./svg", false, /\.svg$/);
-// requireAll(req);
-
+import { defineComponent } from "vue";
 export default defineComponent({
-  name: "SvgIcon",
-  props: {
-    name: {
-      type: String,
-      required: true,
-      default: "",
-    },
-    className: {
-      type: String,
-      default: "",
-    },
+  name: "SvgIcon"
+})
+</script>
+<script lang="ts" setup>
+import { computed } from "vue";
+
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+    default: "",
   },
-  setup(props, context) {
-    const iconName = computed(() => `#icon-${props.name}`);
-    const svgClass = computed(function () {
-      if (props.className) {
-        return "svg-icon " + props.className;
-      } else {
-        return "svg-icon";
-      }
-    });
-    return {
-      iconName,
-      svgClass,
-    };
+  className: {
+    type: String,
+    default: "",
   },
+})
+
+const iconName = computed(() => `#icon-${props.name}`);
+
+const svgClass = computed(function () {
+  if (props.className) {
+    return "svg-icon " + props.className;
+  } else {
+    return "svg-icon";
+  }
 });
 </script>
 

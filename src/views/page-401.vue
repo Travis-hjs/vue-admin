@@ -3,13 +3,11 @@
     <div>暂无权限访问</div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
-  setup(props, context) {
-
-  }
+  name: "page-401",
 })
 </script>
 <style lang="scss">

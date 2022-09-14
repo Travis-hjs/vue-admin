@@ -15,34 +15,22 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive } from "vue";
+<script lang="ts" setup>
+import { reactive } from "vue";
 import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
 
-export default defineComponent({
-  components: {
-      UploadImage
-  },
-  setup() {
-    const formData = reactive({
-      banner: "",
-      logo: ""
-    })
-
-    /**
-     * 监听上传图片
-     * @param info 回调数据
-     */
-    function onUpload(info: UploadChange<"banner"|"logo">) {
-      // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
-      formData[info.id] = info.src;
-    }
-
-    return {
-      formData,
-      onUpload
-    }
-  }
+const formData = reactive({
+  banner: "",
+  logo: ""
 })
+
+/**
+ * 监听上传图片
+ * @param info 回调数据
+ */
+function onUpload(info: UploadChange<"banner"|"logo">) {
+  // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
+  formData[info.id] = info.src;
+}
 </script>
 ```

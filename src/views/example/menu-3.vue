@@ -3,14 +3,8 @@
     <span class="the-tag purple">menu-3</span>
   </div>
 </template>
-<script>
-import { defineComponent, reactive } from "vue";
+<script lang="ts" setup>
 
-export default defineComponent({
-  setup(props, context) {
-
-  }
-})
 </script>
 <style lang="scss">
 .menu-3 {

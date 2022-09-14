@@ -80,82 +80,63 @@
     </base-dialog>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+<script lang="ts" setup>
+import { reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
 
-export default defineComponent({
-  components: {
-    Scrollbar,
-    UploadImage
+const formData = reactive({
+  banner: "",
+  logo: ""
+})
+
+const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
+
+/**
+ * 监听上传图片
+ * @param info 回调数据
+ */
+function onUpload(info: UploadChange<"banner" | "logo">) {
+  // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
+  formData[info.id] = info.src;
+}
+
+const dialogInfo = reactive({
+  first: {
+    show: false,
+    count: 0,
   },
-  setup(props, context) {
-    const formData = reactive({
-      banner: "",
-      logo: ""
-    })
-
-    const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
-
-    /**
-     * 监听上传图片
-     * @param info 回调数据
-     */
-    function onUpload(info: UploadChange<"banner" | "logo">) {
-      // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
-      formData[info.id] = info.src;
-    }
-
-    const dialogInfo = reactive({
-      first: {
-        show: false,
-        count: 0,
-      },
-      second: {
-        show: false,
-        count: 0
-      },
-      third: {
-        show: false,
-        count: 0
-      }
-    })
-
-    const delayShow = ref(false);
-
-    let delayTimer: NodeJS.Timeout;
-
-    function openDialog(type: "first" | "second" | "third") {
-      dialogInfo[type].count++;
-      dialogInfo[type].show = true;
-      delayTimer = setTimeout(() => {
-        delayShow.value = true;
-      }, 2000);
-    }
-
-    function closeDialog(type: "first" | "second" | "third") {
-      dialogInfo[type].show = false;
-      clearTimer();
-    }
-
-    function clearTimer() {
-      delayShow.value = false;
-      clearTimeout(delayTimer);
-    }
-
-    return {
-      list,
-      formData,
-      onUpload,
-      dialogInfo,
-      delayShow,
-      openDialog,
-      closeDialog,
-      clearTimer
-    }
+  second: {
+    show: false,
+    count: 0
+  },
+  third: {
+    show: false,
+    count: 0
   }
 })
+
+const delayShow = ref(false);
+
+let delayTimer: NodeJS.Timeout;
+
+function openDialog(type: "first" | "second" | "third") {
+  dialogInfo[type].count++;
+  dialogInfo[type].show = true;
+  delayTimer = setTimeout(() => {
+    delayShow.value = true;
+  }, 2000);
+}
+
+function closeDialog(type: "first" | "second" | "third") {
+  dialogInfo[type].show = false;
+  clearTimer();
+}
+
+function clearTimer() {
+  delayShow.value = false;
+  clearTimeout(delayTimer);
+}
 </script>
 <style lang="scss">
 .the-components {

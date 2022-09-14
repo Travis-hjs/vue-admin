@@ -2,7 +2,7 @@
   <div class="the-upload-image">
     <div class="the-upload-content" :style="{ 'width': width }">
       <div v-if="src" class="the-upload-image-box">
-        <img class="image" :src="src" :style="{ 'height': autoHeight ? null : height }">
+        <img class="image" :src="src" :style="{ 'height': autoHeight ? undefined : height }">
         <div class="remove fvc">
           <svg-icon v-if="!disabled" name="delete" @click="removeImg()" />
         </div>
@@ -15,9 +15,15 @@
     <p class="the-upload-tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
   </div>
 </template>
-
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent } from "vue";
+/** 上传图片组件 */
+export default defineComponent({
+  name: "UploadImage"
+})
+</script>
+<script lang="ts" setup>
+import { PropType, ref } from "vue";
 import { uploadImg } from "@/api/common";
 
 /**
@@ -30,114 +36,103 @@ export interface UploadChange<T = string | number> {
   src: string
 }
 
-/** 上传图片组件 */
-export default defineComponent({
-  name: "UploadImage",
-  props: {
-    /** 组件上传图片路径 */
-    src: {
-      type: String,
-      default: ""
-    },
-    /** 上传组件`id` */
-    uploadId: {
-      type: [String, Number] as PropType<UploadChange["id"]>,
-      default: ""
-    },
-    /** 图片宽度 */
-    width: {
-      type: String,
-      default: "178px"
-    },
-    /** 图片高度 */
-    height: {
-      type: String,
-      default: "178px"
-    },
-    /** 是否自动高度（针对图片） */
-    autoHeight: {
-      type: Boolean,
-      default: false
-    },
-    /** 图片上传提示 */
-    tip: {
-      type: [String, Number],
-      default: ""
-    },
-    /** 上传图片最大体积（M） */
-    maxSize: {
-      type: Number,
-      default: 2
-    },
-    /** 是否禁用状态 */
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+const props = defineProps({
+  /** 组件上传图片路径 */
+  src: {
+    type: String,
+    default: ""
   },
-  emits: ["change"],
-  setup(props, context) {
-    /** 上传组件`input`节点 */
-    const uploadInput = ref<HTMLInputElement>();
-    /** 上传状态 */
-    const loading = ref(false);
-
-    /**
-     * 发送数据到父组件中
-     * @param info 数据对象
-    */
-    function emitChange(info: UploadChange) {
-      context.emit("change", info);
-    }
-
-    /** 上传图片 */
-    async function onUpload() {
-      const input = uploadInput.value!;
-      const file = (input.files as FileList)[0];
-      // console.log("上传图片文件 >>", file);
-
-      // 判断大小
-      if (file.size > props.maxSize * 1024 * 1024) {
-        input.value = "";
-        alert(`上传的文件不能大于 ${props.maxSize}M`);
-        return;
-      }
-
-      // const formData = new FormData();
-      // formData.append("file", file);
-
-      loading.value = true;
-      const res = await uploadImg(file)
-      loading.value = false;
-      input.value = ""; // 用完然后清空
-      console.log("上传图片 >>", res);
-      if (res.code === 1) {
-        const result: string = res.data.img;
-        emitChange({
-          id: props.uploadId,
-          src: result
-        })
-      } else {
-        alert(res.msg);
-      }
-    }
-
-    /** 清除当前图片 */
-    function removeImg() {
-      emitChange({
-        id: props.uploadId,
-        src: ""
-      })
-    }
-
-    return {
-      uploadInput,
-      loading,
-      onUpload,
-      removeImg
-    }
+  /** 上传组件`id` */
+  uploadId: {
+    type: [String, Number] as PropType<UploadChange["id"]>,
+    default: ""
+  },
+  /** 图片宽度 */
+  width: {
+    type: String,
+    default: "178px"
+  },
+  /** 图片高度 */
+  height: {
+    type: String,
+    default: "178px"
+  },
+  /** 是否自动高度（针对图片） */
+  autoHeight: {
+    type: Boolean,
+    default: false
+  },
+  /** 图片上传提示 */
+  tip: {
+    type: [String, Number],
+    default: ""
+  },
+  /** 上传图片最大体积（M） */
+  maxSize: {
+    type: Number,
+    default: 2
+  },
+  /** 是否禁用状态 */
+  disabled: {
+    type: Boolean,
+    default: false
   }
-})
+});
+
+const emit = defineEmits(["change"]);
+
+/** 上传组件`input`节点 */
+const uploadInput = ref<HTMLInputElement>();
+/** 上传状态 */
+const loading = ref(false);
+
+/**
+ * 发送数据到父组件中
+ * @param info 数据对象
+*/
+function emitChange(info: UploadChange) {
+  emit("change", info);
+}
+
+/** 上传图片 */
+async function onUpload() {
+  const input = uploadInput.value!;
+  const file = (input.files as FileList)[0];
+  // console.log("上传图片文件 >>", file);
+
+  // 判断大小
+  if (file.size > props.maxSize * 1024 * 1024) {
+    input.value = "";
+    alert(`上传的文件不能大于 ${props.maxSize}M`);
+    return;
+  }
+
+  // const formData = new FormData();
+  // formData.append("file", file);
+
+  loading.value = true;
+  const res = await uploadImg(file)
+  loading.value = false;
+  input.value = ""; // 用完然后清空
+  console.log("上传图片 >>", res);
+  if (res.code === 1) {
+    const result: string = res.data.img;
+    emitChange({
+      id: props.uploadId,
+      src: result
+    })
+  } else {
+    alert(res.msg);
+  }
+}
+
+/** 清除当前图片 */
+function removeImg() {
+  emitChange({
+    id: props.uploadId,
+    src: ""
+  })
+}
 </script>
 
 <style lang="scss">

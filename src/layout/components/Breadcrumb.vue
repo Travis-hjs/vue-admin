@@ -7,38 +7,30 @@
     </span>
   </transition-group>
 </template>
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+<script lang="ts" setup>
+import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
-/** 面包屑组件 */
-export default defineComponent({
-  name: "Breadcrumb",
-  setup() {
-    const route = useRoute();
+// ============= 面包屑组件 =============
 
-    const list = ref<Array<{ path: string; meta: any }>>([]);
+const route = useRoute();
 
-    function updateList() {
-      const matched = route.matched.filter((item) => item.meta && item.meta.title).map((item) => {
-        return {
-          path: item.path,
-          meta: { ...item.meta },
-        }
-      })
-      list.value = matched;
-    }
+const list = ref<Array<{ path: string; meta: any }>>([]);
 
-    watch(() => route.path, function () {
-      if (route.path.startsWith("/redirect/")) return;
-      updateList();
-    });
-
-    updateList();
-
+function updateList() {
+  const matched = route.matched.filter((item) => item.meta && item.meta.title).map((item) => {
     return {
-      list,
-    };
-  },
+      path: item.path,
+      meta: { ...item.meta },
+    }
+  })
+  list.value = matched;
+}
+
+watch(() => route.path, function () {
+  if (route.path.startsWith("/redirect/")) return;
+  updateList();
 });
+
+updateList();
 </script>

@@ -26,8 +26,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+<script lang="ts" setup>
+import { reactive, ref } from "vue";
 import store from "@/store";
 import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
@@ -35,98 +35,83 @@ import { modifyData } from "@/utils";
 
 const cacheName = "login-info";
 
-export default defineComponent({
-  setup() {
-    const tipList = ["admin", "normal"];
+const tipList = ["admin", "normal"];
 
-    const info = store.projectInfo;
+const info = store.projectInfo;
 
-    const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、非 IE 等浏览器"
+const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、非 IE 等浏览器"
 
-    /** 表单数据 */
-    const formData = reactive({
-      account: "",
-      password: ""
-    })
+/** 表单数据 */
+const formData = reactive({
+  account: "",
+  password: ""
+})
 
-    const loading = ref(false);
+const loading = ref(false);
 
-    /**
-     * 一键登录
-     * @param account 账号
-     */
-    function setLoginInfo(account: string) {
-      formData.account = account;
-      formData.password = Math.random().toString(36).substr(2);
-      onLogin(true);
-    }
+/**
+ * 一键登录
+ * @param account 账号
+ */
+function setLoginInfo(account: string) {
+  formData.account = account;
+  formData.password = Math.random().toString(36).substr(2);
+  onLogin(true);
+}
 
-    /** 
-     * 点击登录 
-     * @param adopt 是否不校验直接通过
-    */
-    function onLogin(adopt: boolean) {
-      async function start() {
-        loading.value = true;
-        const res = await login(formData)
-        loading.value = false;
-        if (res.code === 1) {
-          saveLoginInfo();
-          openNextPage();
-        } else {
-          alert(res.msg);
-        }
-      }
-      if (adopt) {
-        return start();
-      }
-      if (!formData.account) {
-        return alert("请输入账号");
-      }
-      if (!formData.password) {
-        return alert("请输入密码");
-      }
-      start();
-    }
-
-    /** 是否记住密码 */
-    const remember = ref(false);
-
-    function saveLoginInfo() {
-      if (remember.value) {
-        localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...formData }));
-      } else {
-        localStorage.removeItem(cacheName);
-      }
-    }
-
-    function getLoginInfo() {
-      const value = localStorage.getItem(cacheName);
-      if (value) {
-        try {
-          const info = JSON.parse(value);
-          remember.value = !!info.remember;
-          modifyData(formData, info);
-        } catch (error) {
-          console.warn(error);
-        }
-      }
-    }
-
-    getLoginInfo();
-
-    return {
-      tipList,
-      info,
-      copyRight,
-      formData,
-      loading,
-      setLoginInfo,
-      onLogin,
-      remember
+/** 
+ * 点击登录 
+ * @param adopt 是否不校验直接通过
+ */
+function onLogin(adopt: boolean) {
+  async function start() {
+    loading.value = true;
+    const res = await login(formData)
+    loading.value = false;
+    if (res.code === 1) {
+      saveLoginInfo();
+      openNextPage();
+    } else {
+      alert(res.msg);
     }
   }
-})
+  if (adopt) {
+    return start();
+  }
+  if (!formData.account) {
+    return alert("请输入账号");
+  }
+  if (!formData.password) {
+    return alert("请输入密码");
+  }
+  start();
+}
+
+/** 是否记住密码 */
+const remember = ref(false);
+
+function saveLoginInfo() {
+  if (remember.value) {
+    localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...formData }));
+  } else {
+    localStorage.removeItem(cacheName);
+  }
+}
+
+function getLoginInfo() {
+  const value = localStorage.getItem(cacheName);
+  if (value) {
+    try {
+      const info = JSON.parse(value);
+      remember.value = !!info.remember;
+      modifyData(formData, info);
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+}
+
+getLoginInfo();
 </script>
 
 <style lang="scss">

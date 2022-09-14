@@ -37,123 +37,105 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, onMounted, PropType, reactive, ref } from "vue";
+<script lang="ts" setup>
+import { computed, onMounted, PropType, reactive, ref } from "vue";
 import { LayoutMenuItem } from "@/types";
 import store from "@/store";
 
-/**
- * 菜单`item`组件
- */
- export default defineComponent({
-  name: "MenuItem",
-  props: {
-    level: {
-      type: Number,
-      default: 1
-    },
-    info: {
-      type: Object as PropType<LayoutMenuItem>,
-      default: () => ({
-        title: "-"
-      })
-    }
+// ============= 菜单`item`组件 =============
+const props = defineProps({
+  level: {
+    type: Number,
+    default: 1
   },
-  setup(props, context) {
-
-    /**
-     * 是否有下级菜单
-     * @param item
-     */
-    function hasChidren(item: LayoutMenuItem) {
-      return item.children && item.children.length > 0 ? true : false;
-    }
-
-    /**
-     * 获取列表高度
-     * @param item 列表单个对象
-     */
-    function getListHeight(item: LayoutMenuItem) {
-      let result = 0;
-      const child = item.children;
-      const size = store.layout.menuSizeInfo;
-      if (item.isOpen && child && child.length > 0) {
-        child.forEach(menuItem => {
-          const height = hasChidren(menuItem) ? size.titleHeight : size.itemHeight;
-          result += height;
-          result += getListHeight(menuItem);
-        })
-      }
-      return result;
-    }
-
-    const titleClass = computed(function () {
-      const item = props.info;
-      return {
-        "the-layout-menu-title fvertical": true,
-        "the-layout-menu-on": item.isActive,
-        "the-layout-menu-hasopen": item.isOpen,
-        "the-layout-menu-hasactive": item.hasActive,
-        "the-layout-menu-active-title": item.hasActive && props.level === 1
-      }
+  info: {
+    type: Object as PropType<LayoutMenuItem>,
+    default: () => ({
+      title: "-"
     })
+  }
+});
 
-    function getItemClass(item: LayoutMenuItem) {
-      return {
-        "the-layout-menu-item fvertical": true,
-        "the-layout-menu-on": item.isActive
-      }
-    }
+/**
+ * 是否有下级菜单
+ * @param item
+ */
+function hasChidren(item: LayoutMenuItem) {
+  return item.children && item.children.length > 0 ? true : false;
+}
 
-    const titleStyle = reactive({
-      paddingLeft: ""
+/**
+ * 获取列表高度
+ * @param item 列表单个对象
+ */
+function getListHeight(item: LayoutMenuItem) {
+  let result = 0;
+  const child = item.children;
+  const size = store.layout.menuSizeInfo;
+  if (item.isOpen && child && child.length > 0) {
+    child.forEach(menuItem => {
+      const height = hasChidren(menuItem) ? size.titleHeight : size.itemHeight;
+      result += height;
+      result += getListHeight(menuItem);
     })
+  }
+  return result;
+}
 
-    const itemStyle = reactive({
-      paddingLeft: ""
-    })
+const titleClass = computed(function () {
+  const item = props.info;
+  return {
+    "the-layout-menu-title fvertical": true,
+    "the-layout-menu-on": item.isActive,
+    "the-layout-menu-hasopen": item.isOpen,
+    "the-layout-menu-hasactive": item.hasActive,
+    "the-layout-menu-active-title": item.hasActive && props.level === 1
+  }
+})
 
-    /**
-     * 菜单列表样式
-     */
-    const listStyle = computed(function () {
-      let height = getListHeight(props.info);
-      // console.log("height >>", height);
-      return {
-        height: height + "px"
-      }
-    })
+function getItemClass(item: LayoutMenuItem) {
+  return {
+    "the-layout-menu-item fvertical": true,
+    "the-layout-menu-on": item.isActive
+  }
+}
 
-    /** 当前整体节点 */
-    const menuBox = ref<HTMLElement>();
+const titleStyle = reactive({
+  paddingLeft: ""
+})
 
-    function switchOpen() {
-      props.info.isOpen = !props.info.isOpen;
-    }
+const itemStyle = reactive({
+  paddingLeft: ""
+})
 
-    onMounted(function () {
-      const el = menuBox.value!;
+/**
+ * 菜单列表样式
+ */
+const listStyle = computed(function () {
+  let height = getListHeight(props.info);
+  // console.log("height >>", height);
+  return {
+    height: height + "px"
+  }
+})
 
-      // 设置左边距
-      if (props.level >= 1) {
-        const style = getComputedStyle(el.children[0] as HTMLElement);
-        const value = parseFloat(style.paddingLeft);
-        if (isNaN(value)) return;
-        titleStyle.paddingLeft = value * props.level + "px";
-        itemStyle.paddingLeft = value * (props.level + 1) + "px";
-      }
-    })
+/** 当前整体节点 */
+const menuBox = ref<HTMLElement>();
 
-    return {
-      menuBox,
-      titleStyle,
-      itemStyle,
-      titleClass,
-      listStyle,
-      getItemClass,
-      hasChidren,
-      switchOpen,
-    }
+function switchOpen() {
+  props.info.isOpen = !props.info.isOpen;
+}
+
+onMounted(function () {
+  const el = menuBox.value!;
+
+  // 设置左边距
+  if (props.level >= 1) {
+    const style = getComputedStyle(el.children[0] as HTMLElement);
+    const value = parseFloat(style.paddingLeft);
+    if (isNaN(value)) return;
+    titleStyle.paddingLeft = value * props.level + "px";
+    itemStyle.paddingLeft = value * (props.level + 1) + "px";
   }
 })
 </script>

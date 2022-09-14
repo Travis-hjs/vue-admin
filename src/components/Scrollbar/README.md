@@ -39,20 +39,10 @@
     </div>
   </div>
 </template>
-<script>
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import Scrollbar from "@/components/Scrollbar/index.vue";
 
-export default defineComponent({
-  components: {
-    Scrollbar
-  },
-  setup() {
-    return {
-      list: new Array(10).fill(0).map((_, index) => index)
-    }
-  }
-})
+const list = new Array(10).fill(0).map((_, index) => index);
 </script>
 <style lang="scss">
 .example-page {

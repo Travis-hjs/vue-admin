@@ -24,8 +24,8 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, watch } from "vue";
+<script lang="ts" setup>
+import { watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Breadcrumb from "./Breadcrumb.vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
@@ -33,75 +33,56 @@ import store from "@/store";
 import { removeRoutes } from "@/router/permission";
 import { HistoryViewsItem } from "@/types";
 
-export default defineComponent({
-  name: "HeaderBar",
-  components: {
-    Breadcrumb,
-    Scrollbar
-  },
-  setup(props, context) {
-    const route = useRoute();
-    const router = useRouter();
-    const layoutInfo = store.layout.info;
-    const userInfo = store.user.info;
+const route = useRoute();
+const router = useRouter();
+const layoutInfo = store.layout.info;
+const userInfo = store.user.info;
 
-    function onSwitch() {
-      layoutInfo.sidebarOpen = !layoutInfo.sidebarOpen;
-    }
+function onSwitch() {
+  layoutInfo.sidebarOpen = !layoutInfo.sidebarOpen;
+}
 
-    const defaultAvatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
+const defaultAvatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
-    function onLogout() {
-      store.user.reset();
-      router.push("/login").then(() => {
-        // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
-        layoutInfo.historyViews = [];
+function onLogout() {
+  store.user.reset();
+  router.push("/login").then(() => {
+    // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
+    layoutInfo.historyViews = [];
 
-        // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
-        // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
-        // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
-        // location.reload();
+    // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
+    // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
+    // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
+    // location.reload();
 
-        // 现在不需要了，vue 3.x 之后路由增加了删除路由方法
-        removeRoutes();
-      })
-    }
+    // 现在不需要了，vue 3.x 之后路由增加了删除路由方法
+    removeRoutes();
+  })
+}
 
-    function isActive(item: HistoryViewsItem) {
-      return item.path === route.path && JSON.stringify(item.query) === JSON.stringify(route.query) && JSON.stringify(item.params) === JSON.stringify(route.params);
-    }
+function isActive(item: HistoryViewsItem) {
+  return item.path === route.path && JSON.stringify(item.query) === JSON.stringify(route.query) && JSON.stringify(item.params) === JSON.stringify(route.params);
+}
 
-    function onRemove(index: number) {
-      layoutInfo.historyViews.splice(index, 1);
-    }
+function onRemove(index: number) {
+  layoutInfo.historyViews.splice(index, 1);
+}
 
-    // layoutInfo.historyViews = [];
-    watch(() => route.path, function () {
-      // console.log("route >>", route);
-      const hasItem = layoutInfo.historyViews.some(item => isActive(item))
-      if (!hasItem) {
-        layoutInfo.historyViews.push({
-          name: route.name as string,
-          path: route.path,
-          query: route.query,
-          params: route.params,
-          meta: route.meta as any
-        })
-      }
-    }, {
-      immediate: true
+// layoutInfo.historyViews = [];
+watch(() => route.path, function () {
+  // console.log("route >>", route);
+  const hasItem = layoutInfo.historyViews.some(item => isActive(item))
+  if (!hasItem) {
+    layoutInfo.historyViews.push({
+      name: route.name as string,
+      path: route.path,
+      query: route.query,
+      params: route.params,
+      meta: route.meta as any
     })
-
-    return {
-      defaultAvatar,
-      layoutInfo,
-      userInfo,
-      onSwitch,
-      isActive,
-      onLogout,
-      onRemove
-    }
   }
+}, {
+  immediate: true
 })
 </script>
 <style lang="scss">

@@ -29,23 +29,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import store from "@/store";
-
-export default defineComponent({
-  setup() {
-    const layoutInfo = store.layout.info;
-    const project = store.projectInfo.link;
-    const juejin = "https://juejin.cn/post/7017278822068273166";
-
-    return {
-      project,
-      layoutInfo,
-      juejin,
-    };
-  },
-});
+const layoutInfo = store.layout.info;
+const project = store.projectInfo.link;
+const juejin = "https://juejin.cn/post/7017278822068273166";
 </script>
 <style lang="scss">
 .page-home {

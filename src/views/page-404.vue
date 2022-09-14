@@ -6,11 +6,11 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "page-404"
+  name: "page-404",
 })
 </script>
 <style lang="scss">
