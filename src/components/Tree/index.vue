@@ -166,25 +166,16 @@ export default class Tree extends Vue {
         let res: Array<string> = [];
         list.forEach(function(item) {
           res.push(item.indexs);
-          res = [...res, ...getIndexsList(item?.children)];
+          res = [...res, ...getIndexsList(item.children || [])];
         })
         return res;
       }
 
-      const indexsList = getIndexsList(options);
+      const before = getIndexsList(backups);
 
-      function getDiff(list: Array<TreeItem>) {
-        let res: Array<TreeItem> = [];
-        list.forEach(function(item) {
-          if (!indexsList.includes(item.indexs)) {
-            res.push(item);
-          }
-          res = [...res, ...getDiff(item?.children || [])];
-        })
-        return res;
-      }
+      const now = getIndexsList(options);
 
-      return getDiff(backups);
+      return now.concat(before).filter((item, _, arr) => arr.indexOf(item) === arr.lastIndexOf(item));
     }
 
     const diffList = getDiffList(this.options, this.backups);
@@ -193,8 +184,8 @@ export default class Tree extends Vue {
 
     if (this.keepState && diffList.length) {
       this.timer = setTimeout(() => {
-        diffList.forEach(item => {
-          item.children && this.updateHeight(item);
+        diffList.forEach(indexs => {
+          this.updateHeight({ indexs });
         })
       }, 1000 / 60);
     }
@@ -224,7 +215,7 @@ export default class Tree extends Vue {
    * 更新展开收起高度
    * @param item
    */
-  updateHeight(item: TreeItem) {
+  updateHeight(item: Pick<TreeItem, "indexs">) {
     const indexList = item.indexs.split("-").map(i => Number(i));
 
     /**
