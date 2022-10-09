@@ -12,6 +12,10 @@ $--border-color-light: #dfe4ed;
 $--border-color-lighter: #e6ebf5;
 $--table-border: 1px solid #dfe6ec;
 
+$--border-radius-base: $border-radius;
+$--button-small-border-radius: $border-radius;
+$--button-mini-border-radius: $border-radius;
+
 // 图标库
 $--font-path: "~element-ui/lib/theme-chalk/fonts";
 
