@@ -33,7 +33,7 @@
 // ===================== 全局动画 =====================
 // 渐变+平移
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
-  transition: .5s all !important;
+  @include moveTime(.4s);
 }
 
 .fadeSlideX-enter-active, .fadeSlideX-leave-active {
@@ -53,7 +53,7 @@
 
 // 面包屑
 .breadcrumb-enter-active, .breadcrumb-leave-active {
-  transition: .5s all
+  @include moveTime(.4s);
 }
 
 .breadcrumb-enter-from, .breadcrumb-leave-to {
@@ -79,7 +79,7 @@
 .the-input {
   width: 100%;
   border: 1px solid #DCDFE6;
-  border-radius: 4px;
+  border-radius: $border-radius;
   color: #1f2d3d;
   height: 38px;
   line-height: 38px;
@@ -98,7 +98,7 @@
   min-width: 88px;
   height: 36px;
   line-height: 1;
-  border-radius: 2px;
+  border-radius: $border-radius;
   background-color: #fff;
   color: rgba(0,0,0,.87);
   box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
@@ -163,7 +163,7 @@
 .the-tag {
   display: inline-block;
   padding: 6px 8px;
-  border-radius: 2px;
+  border-radius: $border-radius;
   line-height: 1;
   font-size: 14px;
 }
@@ -199,6 +199,6 @@
     opacity: 0.8;
   }
   &::before {
-    content: "Title ";
+    content: "★ ";
   }
 }
