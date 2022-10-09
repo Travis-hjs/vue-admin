@@ -7,8 +7,11 @@
 // 主题色
 $theme: #1890FF;
 
-@mixin moveTime {
-  transition: 0.3s all;
+// 矩阵节点统一使用圆角变量
+$border-radius: 2px;
+
+@mixin moveTime($time: .3s) {
+  transition: $time all;
 }
 
 @mixin closeIcon($color, $size, $land: 1px) {
