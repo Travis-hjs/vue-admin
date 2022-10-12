@@ -3,7 +3,7 @@
     <h2 class="the-title mgb_30">Http 请求示例，当前页面配置路由缓存</h2>
     <div class="flex">
       <input class="the-input mgb_20 short-input" type="text" v-model="pageData.city" placeholder="请输入城市名">
-      <button class="the-btn blue" v-ripple @click="getData()" :disabled="loading">获取天气数据</button>
+      <button class="the-btn blue" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</button>
     </div>
     <div class="mgb_20" v-if="pageData.desc">
       <span class="the-tag green">{{ pageData.desc }}</span>
