@@ -82,7 +82,7 @@ function ajax(params: AjaxParams) {
   if (params.headers) {
     for (const key in params.headers) {
       const value = params.headers[key];
-      XHR.setRequestHeader(key, value);
+      value && XHR.setRequestHeader(key, value);
     }
   }
 
@@ -110,7 +110,7 @@ function getResultInfo(result: { statusCode: number, data: any }, responseType?:
       info.msg = "网络超时了";
       break;
     case 200:
-      info.code = checkType(result.data.code) === "number" ? result.data.code : 1;;
+      info.code = checkType(result.data.code) === "number" ? result.data.code : 1;
       info.msg = result.data.message || "ok";
       info.data = result.data;
       // do some ... 这里可以做一些类型响应数据结构组装处理，有些时候后端返回的接口不一样
