@@ -37,7 +37,9 @@ export function uploadImg(formData: File) {
  * @param city 城市名
  */
 export function getWeather(city: string) {
-  return request("GET", "/weather_mini", {
+  return request("GET", "/free/day", {
+    appid: "56761788",
+    appsecret: "ti3hP8y9",
     city: encodeURIComponent(city)
   })
 }

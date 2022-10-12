@@ -5,8 +5,8 @@ const config = (function () {
   const env = process.env.NODE_ENV === "development" ? "dev" : "prod";
 
   const url = {
-    dev: "http://wthrcdn.etouch.cn", // `http://${location.host}`,
-    prod: "http://wthrcdn.etouch.cn"
+    dev: "", // 走代理了，所以不需要设置域名,
+    prod: "https://www.tianqiapi.com"
   }
 
   return {

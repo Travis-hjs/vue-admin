@@ -15,6 +15,13 @@ export default defineConfig({
   },
   server: {
     port: 1088,
-    host: "0.0.0.0"
+    host: "0.0.0.0",
+    proxy: {
+      "/free": {
+        target: "https://www.tianqiapi.com",
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\//, "")
+      }
+    }
   }
 })
