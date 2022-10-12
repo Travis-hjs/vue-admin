@@ -6,7 +6,7 @@
       <button class="the-btn blue" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</button>
     </div>
     <div class="mgb_20" v-if="pageData.desc">
-      <span class="the-tag green">{{ pageData.desc }}</span>
+      <span :class="['the-tag', pageData.error ? 'red' : 'green']">{{ pageData.desc }}</span>
     </div>
     <textarea cols="60" rows="30" :value="pageData.content"></textarea>
   </div>
@@ -28,7 +28,8 @@ const pageData = reactive({
   loading: false,
   showTable: true,
   content: "",
-  desc: ""
+  desc: "",
+  error: false
 });
 
 // const tableColumns = [
@@ -49,7 +50,12 @@ async function getData() {
   if (res.code === 1) {
     const result = res.data;
     pageData.content = JSON.stringify(result, undefined, 4);
-    pageData.desc = `${result.week} > ${result.wea} > ${result.win} > 最低温度 ${result.tem_night}° > 最高温度 ${result.tem_day}°`;
+    pageData.error = !!result.errcode;
+    if (pageData.error) {
+      pageData.desc = result.errmsg;
+    } else {
+      pageData.desc = `${result.week} > ${result.wea} > ${result.win} > 最低温度 ${result.tem_night}° > 最高温度 ${result.tem_day}°`;
+    }
   } else {
     message.error("网络出错了");
   }

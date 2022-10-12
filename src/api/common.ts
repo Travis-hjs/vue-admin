@@ -41,6 +41,12 @@ export function getWeather(city: string) {
     appid: "56761788",
     appsecret: "ti3hP8y9",
     city: encodeURIComponent(city)
+  },
+  {
+    headers: {
+      // TODO: 天气预报的接口不可以携带 请求头 authorization 字段，所以这里清空
+      authorization: ""
+    }
   })
 }
 

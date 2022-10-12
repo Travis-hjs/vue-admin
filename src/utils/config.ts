@@ -5,7 +5,7 @@ const config = (function () {
   const env = process.env.NODE_ENV === "development" ? "dev" : "prod";
 
   const url = {
-    dev: "", // 走代理了，所以不需要设置域名,
+    dev: "https://www.tianqiapi.com", // `http://${location.host}`,
     prod: "https://www.tianqiapi.com"
   }
 
