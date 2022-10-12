@@ -45,7 +45,7 @@ const TsxCard = defineComponent({
       <div class="tsx-card">
         <Transition name="fade" appear>
         {
-          <div class="tsx-center" v-show={props.title}><span class="the-tag">双向绑定值：{props.title}</span></div>
+          <div class="tsx-center" v-show={props.title}><span class="the-tag">输入框内容：{props.title}</span></div>
         }
         </Transition>
         
@@ -61,8 +61,8 @@ const TsxCard = defineComponent({
           </div>
         </div>
         <div class="btn-box">
-          <button class={index.value == 0 ? 'the-btn red' : 'the-btn blue'} v-ripple onClick={() => switchImage(false)} disabled={index.value == 0}>上一张图片</button>
-          <button class={index.value == (props.images.length - 1) ? 'the-btn red' : 'the-btn blue'} v-ripple onClick={() => switchImage(true)} disabled={index.value == (props.images.length - 1)}>下一张图片</button>
+          <button class="the-btn blue" v-ripple onClick={() => switchImage(false)} disabled={index.value == 0}>上一张图片</button>
+          <button class="the-btn blue" v-ripple onClick={() => switchImage(true)} disabled={index.value == (props.images.length - 1)}>下一张图片</button>
         </div>
       </div>
     );

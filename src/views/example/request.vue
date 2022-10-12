@@ -25,6 +25,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getWeather } from "@/api/common";
+import message from "@/utils/message";
 
 const pageData = reactive({
   city: "广州",
@@ -46,7 +47,7 @@ const pageData = reactive({
 // ]
 
 async function getData() {
-  if (!pageData.city) return alert("请输入城市名");
+  if (!pageData.city) return message.warning("请输入城市名");
   pageData.loading = true;
   const res = await getWeather(pageData.city);
   pageData.loading = false;
@@ -62,7 +63,7 @@ async function getData() {
       pageData.desc = res.data.desc;
     }
   } else {
-    alert("网络出错了");
+    message.error("网络出错了");
   }
 }
 

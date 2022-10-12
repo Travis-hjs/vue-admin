@@ -25,6 +25,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { PropType, ref } from "vue";
 import { uploadImg } from "@/api/common";
+import message from "@/utils/message";
 
 /**
  * 上传图片`change`回调类型
@@ -103,7 +104,7 @@ async function onUpload() {
   // 判断大小
   if (file.size > props.maxSize * 1024 * 1024) {
     input.value = "";
-    alert(`上传的文件不能大于 ${props.maxSize}M`);
+    message.warning(`上传的文件不能大于 ${props.maxSize}M`);
     return;
   }
 
@@ -122,7 +123,7 @@ async function onUpload() {
       src: result
     })
   } else {
-    alert(res.msg);
+    message.error(res.msg);
   }
 }
 

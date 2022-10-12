@@ -32,6 +32,7 @@ import store from "@/store";
 import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
 import { modifyData } from "@/utils";
+import message from "@/utils/message";
 
 const cacheName = "login-info";
 
@@ -72,17 +73,17 @@ function onLogin(adopt: boolean) {
       saveLoginInfo();
       openNextPage();
     } else {
-      alert(res.msg);
+      message.error(res.msg);
     }
   }
   if (adopt) {
     return start();
   }
   if (!formData.account) {
-    return alert("请输入账号");
+    return message.error("请输入账号");
   }
   if (!formData.password) {
-    return alert("请输入密码");
+    return message.error("请输入密码");
   }
   start();
 }

@@ -6,6 +6,7 @@ import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
 import ripple from "./utils/ripple";
+import message from "./utils/message";
 
 window.version = version;
 
@@ -15,7 +16,7 @@ const app = createApp(App);
 app.directive("copy", {
   mounted(el: HTMLElement, binding) {
     el.addEventListener("click", function () {
-      copyText(binding.value, () => alert("复制成功"), tip => alert(tip));
+      copyText(binding.value, () => message.success("复制成功"), tip => message.success(tip));
     });
   }
 })
