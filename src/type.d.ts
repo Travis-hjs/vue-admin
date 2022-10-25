@@ -144,3 +144,44 @@ interface BaseTableBtnsItem<T = BaseObj> {
   /** 点击事件 */
   click?: (row: T) => void
 }
+
+/** `<base-table :columns="columns">`组局的`columns`单个对象 */
+interface BaseTableColumn {
+  /** 表格列标题 */
+  label: string
+  /**
+   * 对应表格数据值的`key`
+   * - `"action-right"`为固定右边
+   */
+  prop: "action-right" | ""
+  /** 当需要自定义插槽去写表格模板时需要，字段和`prop`一致 */
+  slotName?: string
+  /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */
+  key?: string
+  /** 
+   * 列宽度
+   * - 推荐直接用`number`类型
+   */
+  width?: string | number
+  /**
+   * 列最新宽度
+   * - 推荐直接用`number`类型
+   */
+  minWidth?: string | number
+  /**
+   * 超出...提示
+   * - 默认`true`
+   */
+  tooltip?: boolean
+  /** 
+   * 固定位置
+   * - 当`prop: "action-right"`时，不需要设置该值，固定为靠右
+   */
+  fixed?: "right" | "left" | "true"
+  /**
+   * 表格列对齐设置
+   * - 默认为`"center"`
+   * - 当`prop: "action-right"`时，不需要设置该值，固定为居中状态
+   */
+  align?: "left" | "center" | "right"
+}

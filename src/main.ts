@@ -5,6 +5,7 @@ import BaseDialog from "./components/base-dialog/index.vue";
 import BaseDesc from "./components/base-desc/index.vue";
 import BaseDescItem from "./components/base-desc/Item.vue";
 import BaseTableBtns from "./components/base-table-btns/index.vue";
+import BaseTable from "./components/base-table/index.vue";
 
 import router from "./router";
 import ElementUI from "element-ui";
@@ -26,6 +27,8 @@ Vue.component("base-dialog", BaseDialog);
 // 描述表格全局组件
 Vue.component("base-desc", BaseDesc);
 Vue.component("base-desc-item", BaseDescItem);
+// 全局表格组件
+Vue.component("base-table", BaseTable);
 // 表格操作按钮组件
 Vue.component("base-table-btns", BaseTableBtns);
 
