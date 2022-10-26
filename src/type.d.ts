@@ -153,7 +153,7 @@ interface BaseTableColumn {
    * 对应表格数据值的`key`
    * - `"action-right"`为固定右边
    */
-  prop: "action-right" | ""
+  prop: string
   /** 当需要自定义插槽去写表格模板时需要，字段和`prop`一致 */
   slotName?: string
   /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */

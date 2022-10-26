@@ -23,7 +23,7 @@ interface BaseTableColumn {
    * 对应表格数据值的`key`
    * - `"action-right"`为固定右边
    */
-  prop: "action-right" | ""
+  prop: string
   /** 当需要自定义插槽去写表格模板时需要，字段和`prop`一致 */
   slotName?: string
   /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */
@@ -85,33 +85,27 @@ interface BaseTableColumn {
     </base-table>
   </div>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      tableData: [],
-      /**
-       * @type {Array<BaseTableColumn>}
-       */
-      tableColumns: [
-        { label: '项目名称', prop: 'projectName', minWidth: 200 },
-        { label: '项目类型', prop: 'projectTypeStr', width: 140 },
-        { label: '项目创建人', prop: 'projectLeader', width: 140 },
-        { label: '项目状态', prop: 'state', width: 140, slotName: 'state',  },
-        { label: '创建时间', prop: 'createTime', width: 180 },
-        { label: '更新时间', prop: 'updateTime', width: 180 },
-        { label: '操作', prop: 'action-right', width: 160 },
-      ],
-      /**
-       * @type {Array<KchTableOptionItem>}
-       */
-      btnList: [
-        { text: '编辑', },
-        { text: '查看', },
-        { text: '删除', color: 'red' }
-      ],
-    }
-  }
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+export default class extends Vue {
+  tableData: Array<any> = [];
+
+  tableColumns: Array<BaseTableColumn> = [
+    { label: '项目名称', prop: 'projectName', minWidth: 200 },
+    { label: '项目类型', prop: 'projectTypeStr', width: 140 },
+    { label: '项目创建人', prop: 'projectLeader', width: 140 },
+    { label: '项目状态', prop: 'state', width: 140, slotName: 'state',  },
+    { label: '创建时间', prop: 'createTime', width: 180 },
+    { label: '更新时间', prop: 'updateTime', width: 180 },
+    { label: '操作', prop: 'action-right', width: 160 },
+  ]
+
+  btnList: Array<BaseTableBtnsItem> = [
+    { text: "编辑", },
+    { text: "查看", },
+    { text: "删除", type: "danger" }
+  ]
 }
 </script>
 ```
