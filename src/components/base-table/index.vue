@@ -8,7 +8,7 @@
       @row-click="rowClick"
       @selection-change="onSelect"
     >
-      <el-table-column type="selection" width="55" align="center" v-if="checkbox"></el-table-column>
+      <el-table-column type="selection" width="55" align="center" fixed="left" v-if="checkbox"></el-table-column>
       <el-table-column
         v-for="item in columns"
         :key="item.key || item.prop"
