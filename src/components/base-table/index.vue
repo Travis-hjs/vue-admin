@@ -24,7 +24,7 @@
       >
         <template slot-scope="{row}">
           <slot :name="item.slotName" v-bind="row" v-if="item.slotName"></slot>
-          <base-table-btns v-else-if="item.prop === 'action-right'" :row="row" :list="actions" clickStop></base-table-btns>
+          <base-table-btns v-else-if="item.prop === 'action-right'" :row="row" :list="actions" :clickStop="isRowClick"></base-table-btns>
           <template v-else>{{ isEmpty(row[item.prop]) ? '-' : row[item.prop] }}</template>
         </template>
       </el-table-column>
