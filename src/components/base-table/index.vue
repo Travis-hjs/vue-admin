@@ -110,7 +110,7 @@ export default class BaseTable extends Vue {
   .el-table th.el-table__cell,
   .el-table__header-wrapper .has-gutter .el-table__cell {
     height: 50px;
-    background-color: #f6f7fb;
+    background-color: #fafafa;
   }
   // .el-table__fixed-right {
   //   height: 100% !important;
