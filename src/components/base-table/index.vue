@@ -66,13 +66,13 @@ export default class BaseTable extends Vue {
 
   @Prop({
     type: Boolean,
-    default: true
+    default: false
   })
   checkbox!: boolean
 
   @Prop({
     type: Boolean,
-    default: true
+    default: false
   })
   isRowClick!: boolean
 
