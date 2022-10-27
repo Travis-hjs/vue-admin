@@ -8,11 +8,11 @@
 | --- | --- | --- | --- |
 | data | `Array` | 是 | 表格数据 |
 | columns | `Array` | 是 | 表格列数据，结构看下面`BaseTableColumn` |
+| actions | `Array` | 否 | `<base-table-option :list="list">`组件的 list 数据 |
 | loading | `Boolean` | 否 | 表格加载状态，默认`false` |
 | checkbox | `Boolean` | 否 | 表格带选择操作，默认`false`，columns 中不需要定义 |
 | isRowClick | `Boolean` | 否 | 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和右侧按钮操作栏点击的事件阻止冒泡用 |
-| actions | `Array` | 否 | `<base-table-option :list="list">`组件的 list 数据 |
-
+| emptyText | `String` | 否 | 表格空数据文字 |
 
 ```ts
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */

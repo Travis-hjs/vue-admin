@@ -5,6 +5,7 @@
       stripe
       border
       :data="data"
+      :empty-text="emptyText"
       @row-click="rowClick"
       @selection-change="onSelect"
     >
@@ -76,6 +77,12 @@ export default class BaseTable extends Vue {
   })
   isRowClick!: boolean
 
+  @Prop({
+    type: String,
+    default: "暂无数据"
+  })
+  emptyText!: string
+  
   $refs!: {
     "the-table": Table
   }
