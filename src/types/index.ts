@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from "vue-router";
+import { LocationQueryRaw, RouteParamsRaw, RouteRecordRaw } from "vue-router";
 
 export interface RouteMeta {
   /** 侧边栏菜单名、document.title */
@@ -42,8 +42,10 @@ export type RouteItem = {
 
 export interface HistoryViewsItem {
   path: string
-  query: object
-  params: object
+  /** 路由查询对象 */
+  query: LocationQueryRaw
+  /** 路由参数对象 */
+  params: RouteParamsRaw
   /** 路由名 */
   name?: string
   /** 标头 */

@@ -16,7 +16,12 @@
     </div>
     <div class="the-layout-tags" v-if="layoutInfo.showTagsView">
       <Scrollbar>
-        <router-link :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]" v-for="(item, index) in layoutInfo.historyViews" :key="index + item.path" :to="{ path: item.path, query: item.query, params: item.params }">
+        <router-link
+          v-for="(item, index) in layoutInfo.historyViews"
+          :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
+          :key="index + item.path"
+          :to="{ path: item.path, query: item.query, params: item.params }"
+        >
           <span>{{ item.meta.title }}</span>
           <i class="close" @click.prevent.stop="onRemove(index)">-</i>
         </router-link>
