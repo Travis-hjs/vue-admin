@@ -20,28 +20,27 @@ const clearReturn = /(\r)|(\n)/g;
  * @param dir 文件目录
  */
 function findSvgFile(dir: string): Array<string> {
-  const svgRes = []
+  const svgRes: Array<string> = []
   const dirents = readdirSync(dir, {
     withFileTypes: true
-  })
-  for (const dirent of dirents) {
+  });
+  dirents.forEach(function(dirent) {
     if (dirent.isDirectory()) {
       svgRes.push(...findSvgFile(dir + dirent.name + "/"));
     } else {
-      const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, (value, group) => {
+      const svg = readFileSync(dir + dirent.name).toString().replace(clearReturn, "").replace(svgTitle, function(_, group) {
         // console.log(++i)
         // console.log(dirent.name)
         let width = 0;
         let height = 0;
-        let content = group.replace(clearHeightWidth, (val1: string, val2: string, val3: number) => {
+        let content = group.replace(clearHeightWidth, function(val1: string, val2: string, val3: number) {
           if (val2 === "width") {
             width = val3;
           } else if (val2 === "height") {
             height = val3;
           }
           return "";
-        }
-        )
+        });
         if (!hasViewBox.test(group)) {
           content += `viewBox="0 0 ${width} ${height}"`;
         }
@@ -49,7 +48,7 @@ function findSvgFile(dir: string): Array<string> {
       }).replace("</svg>", "</symbol>");
       svgRes.push(svg);
     }
-  }
+  });
   return svgRes;
 }
 
