@@ -398,7 +398,7 @@ $contentPadding: 12px;
   border-color: #42b983;
   color: #fff;
 
-  &:visited {
+  &:visited, &:focus, &:hover, &:link, &:active {
     color: #fff;
   }
 
@@ -428,6 +428,7 @@ $contentPadding: 12px;
     width: 32px;
     height: 32px;
     margin-right: 12px;
+    display: inline-block;
   }
 }
 
