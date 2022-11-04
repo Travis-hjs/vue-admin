@@ -399,7 +399,7 @@ $contentPadding: 12px;
   border-color: #42b983;
   color: #fff;
 
-  &:visited {
+  &:visited, &:focus, &:hover, &:link, &:active {
     color: #fff;
   }
 
