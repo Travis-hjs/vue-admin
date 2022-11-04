@@ -37,13 +37,14 @@ ul, li, ol {
   list-style: none;
 }
 
-img {
-  width: 100%;
-  // height: 100%; // 自动适配高度
-  border: none;
-  display: inline-block;
-  object-fit: cover;
-}
+// FIXME: html2canvas 生成图片时，会因为设置全局 img 样式而导致文字变形、偏移，所以不及建议修改全局 img 样式
+// img {
+//   width: 100%;
+//   // height: 100%; // 自动适配高度
+//   border: none;
+//   display: inline-block;
+//   object-fit: cover;
+// }
 
 div:focus {
   outline: none;

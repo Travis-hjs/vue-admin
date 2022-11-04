@@ -114,6 +114,7 @@ export default class HeaderBar extends Vue {
     height: 36px;
     border-radius: 50%;
     margin-right: 10px;
+    display: inline-block;
   }
   .logout {
     border: none;
