@@ -103,6 +103,7 @@ watch(() => route.path, function () {
     height: 36px;
     border-radius: 50%;
     margin-right: 10px;
+    display: inline-block;
   }
   .logout {
     border: none;
