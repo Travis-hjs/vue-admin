@@ -190,7 +190,7 @@ $contentPadding: 12px;
       position: absolute;
       width: 4px;
       left: 0;
-      background-color: $theme;
+      background-color: var(--blue);
       // height: $menuTitleHeight / 2;    // 控制台警告
       // top: $menuTitleHeight / 4;       // 控制台警告
       height: math.div($menuTitleHeight, 2);
@@ -226,7 +226,7 @@ $contentPadding: 12px;
   }
 
   .the-layout-menu-on {
-    background-color: $theme  !important;
+    background-color: var(--blue)  !important;
     color: #fff !important;
   }
 
@@ -316,7 +316,7 @@ $contentPadding: 12px;
 
   &:hover {
     a {
-      color: $theme;
+      color: var(--blue);
     }
   }
 
@@ -443,7 +443,7 @@ $contentPadding: 12px;
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background-color: $theme;
+  background-color: var(--blue);
   position: fixed;
   bottom: 10%;
   right: 30px;

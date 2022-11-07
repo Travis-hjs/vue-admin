@@ -160,7 +160,7 @@ getLoginInfo();
       .login_title {
         font-size: 22px;
         line-height: 22px;
-        color: $theme;
+        color: var(--blue);
         margin-bottom: 30px;
         text-align: center;
       }

@@ -79,7 +79,7 @@
 .the-input {
   width: 100%;
   border: 1px solid #DCDFE6;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   color: #1f2d3d;
   height: 38px;
   line-height: 38px;
@@ -88,7 +88,7 @@
   outline: none;
   transition: 0.2s all;
   &:focus {
-    border-color: $theme;
+    border-color: var(--blue);
   }
 }
 
@@ -98,7 +98,7 @@
   min-width: 88px;
   height: 36px;
   line-height: 1;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   background-color: #fff;
   color: rgba(0,0,0,.87);
   box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
@@ -123,40 +123,40 @@
 .the-btn.mini {
   font-size: 12px;
   height: 28px;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
 }
 
 .the-btn.blue {
-  background-color: $theme;
+  background-color: var(--blue);
   color: #fff;
 }
 
 .the-btn.green {
-  background-color: #4caf50;
+  background-color: var(--green);
   color: #fff;
 }
 
 .the-btn.yellow {
-  background-color: #fdd835;
+  background-color: var(--yellow);
   color: #fff;
 }
 
 .the-btn.red {
-  background-color: #f44336;
+  background-color: var(--red);
   color: #fff;
 }
 
 .check-box {
   cursor: pointer;
   font-size: 14px;
-  color: $theme;
+  color: var(--blue);
   input {
     width: 16px;
     height: 16px;
     margin-right: 4px;
     line-height: 1;
     &:checked {
-      background-color: $theme;
+      background-color: var(--blue);
     }
   }
 }
@@ -164,7 +164,7 @@
 .the-tag {
   display: inline-block;
   padding: 6px 8px;
-  border-radius: $border-radius;
+  border-radius: var(--border-radius);
   line-height: 1;
   font-size: 14px;
 }
@@ -174,7 +174,7 @@
 }
 
 .the-tag.green { @include tagColor(#e7faf0, #13ce66); }
-.the-tag.blue { @include tagColor(#e8f3ff, $theme); }
+.the-tag.blue { @include tagColor(#e8f3ff, var(--blue)); }
 .the-tag.gray { @include tagColor(#efefef, #5d5d5d); }
 .the-tag.red { @include tagColor(#ffeded, #ff4949); }
 .the-tag.orange { @include tagColor(#fff7e6, #d46b08); }
@@ -196,7 +196,7 @@
     width: 100%;
     height: 4px;
     border-radius: 2px;
-    background-color: $theme;
+    background-color: var(--blue);
     opacity: 0.8;
   }
   &::before {

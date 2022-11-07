@@ -1,8 +1,12 @@
-// 主题色
-$theme: #1890FF;
-
-// 矩阵节点统一使用圆角变量
-$border-radius: 2px;
+:root {
+  // 主题蓝色
+  --blue: #1890FF;
+  --green: #4caf50;
+  --yellow: #fdd835;
+  --red: #f44336;
+  // 矩阵节点统一使用圆角变量
+  --border-radius: 2px;
+}
 
 @mixin moveTime($time: .3s) {
   transition: $time all;

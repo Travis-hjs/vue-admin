@@ -63,8 +63,6 @@ async function getData() {
 
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
-
 .page-request {
   width: 100%;
   .short-input {
@@ -76,7 +74,7 @@ async function getData() {
     color: #555;
     padding: 10px;
     border: solid 1px #ccc;
-    outline-color: $theme;
+    outline-color: var(--blue);
   }
 }
 </style>

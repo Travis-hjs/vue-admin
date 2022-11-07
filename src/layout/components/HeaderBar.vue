@@ -92,10 +92,12 @@ watch(() => route.path, function () {
 </script>
 <style lang="scss">
 @import "@/styles/variables.scss";
+
 @mixin font {
   font-size: 15px;
   color: #555;
 }
+
 .user-info-box {
   @include font();
   .avatar {
@@ -114,7 +116,7 @@ watch(() => route.path, function () {
     @include font();
     @include moveTime();
     &:hover {
-      color: $theme;
+      color: var(--blue);
     }
     .svg-icon {
       margin-right: 4px;

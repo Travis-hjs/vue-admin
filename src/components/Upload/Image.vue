@@ -138,23 +138,20 @@ function removeImg() {
 
 <style lang="scss">
 @import "@/styles/variables.scss";
-@mixin time {
-  transition: 0.2s all;
-}
 
 .the-upload-image {
   .the-upload-content {
     background-color: transparent;
     border: 1px dashed #d9d9d9;
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
     overflow: hidden;
-    @include time();
-    &:hover { border-color: $theme; background-color: #fbfdff; }
+    @include moveTime();
+    &:hover { border-color: var(--blue); background-color: #fbfdff; }
     .the-upload-image-box { 
       position: relative; width: 100%; height: 100%; overflow: hidden;
       .image { display: block; width: 100%; object-fit: fill; }
       .remove {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); color: #f4f4f4; opacity: 0; @include time();
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); color: #f4f4f4; opacity: 0; @include moveTime();
         &:hover { opacity: 1; }
       }
       .svg-icon { width: 28px; height: 28px; cursor: pointer; }
@@ -169,6 +166,6 @@ function removeImg() {
       }
     }
   }
-  .the-upload-tip { font-size: 12px; color: $theme; line-height: 20px; padding: 6px 4px; }
+  .the-upload-tip { font-size: 12px; color: var(--blue); line-height: 20px; padding: 6px 4px; }
 }
 </style>
