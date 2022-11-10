@@ -1,30 +1,32 @@
 <template>
-  <teleport to="body" :disabled="!appendToBody">
-    <transition name="fade">
-      <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="modelValue" @click="onClose">
-        <transition name="dialog-move">
-          <div
-            ref="contentBox"
-            class="base-dialog-content flex"
-            :style="{ 'width': width }"
-            v-show="contentShow"
-          >
-            <div class="base-dialog-title fbetween fvertical">
-              <h2>{{ title }}</h2>
-              <i ref="closeBtn" @click="onClose"></i>
+  <section>
+    <teleport to="body" :disabled="!appendToBody">
+      <transition name="fade">
+        <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="modelValue" @click="onClose">
+          <transition name="dialog-move">
+            <div
+              ref="contentBox"
+              class="base-dialog-content flex"
+              :style="{ 'width': width }"
+              v-show="contentShow"
+            >
+              <div class="base-dialog-title fbetween fvertical">
+                <h2>{{ title }}</h2>
+                <i ref="closeBtn" @click="onClose"></i>
+              </div>
+              <div class="base-dialog-body">
+                <slot></slot>
+              </div>
+              <div class="base-dialog-footer" v-if="$slots.footer">
+                <slot name="footer"></slot>
+              </div>
             </div>
-            <div class="base-dialog-body">
-              <slot></slot>
-            </div>
-            <div class="base-dialog-footer" v-if="$slots.footer">
-              <slot name="footer"></slot>
-            </div>
-          </div>
-        </transition>
-      </div>
-    </transition>
-  </teleport>
-  <div v-if="appendToBody" :id="flagId" description="用来标记 teleport 开启之后插入的节点用"></div>
+          </transition>
+        </div>
+      </transition>
+    </teleport>
+    <div v-if="appendToBody" :id="flagId" description="用来标记 teleport 开启之后插入的节点用"></div>
+  </section>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
