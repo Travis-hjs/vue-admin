@@ -173,13 +173,13 @@
   margin-left: 10px;
 }
 
-.the-tag.green { @include tagColor(#e7faf0, #13ce66); }
+.the-tag.green { @include tagColor(#e7faf0, var(--green)); }
 .the-tag.blue { @include tagColor(#e8f3ff, var(--blue)); }
-.the-tag.gray { @include tagColor(#efefef, #5d5d5d); }
-.the-tag.red { @include tagColor(#ffeded, #ff4949); }
-.the-tag.orange { @include tagColor(#fff7e6, #d46b08); }
-.the-tag.purple { @include tagColor(#f9f0ff, #531dab); }
-.the-tag.cyan { @include tagColor(#e6fffb, #08979c); }
+.the-tag.gray { @include tagColor(#efefef, var(--gray)); }
+.the-tag.red { @include tagColor(#ffeded, var(--red)); }
+.the-tag.orange { @include tagColor(#fff7e6, var(--orange)); }
+.the-tag.purple { @include tagColor(#f9f0ff, var(--purple)); }
+.the-tag.cyan { @include tagColor(#e6fffb, var(--cyan)); }
 
 .the-title {
   position: relative;
