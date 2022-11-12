@@ -14,11 +14,13 @@
   },
   "dependencies": {
     "element-plus": "^2.2.21",
+    "js-cookie": "^3.0.1",
     "nprogress": "^0.2.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.2",
     "@types/node": "^16.7.10",
     "@types/nprogress": "^0.2.0",
     "@vitejs/plugin-vue": "^3.2.0",
