@@ -1,6 +1,7 @@
 @import "./variables.scss";
 @import "./common.scss";
 @import "./ripple.scss";
+@import "./element-icons/index.css";
 
 /* 上下左右边距 */
 @for $index from 1 through 5 {
@@ -74,93 +75,6 @@
   opacity: 0;
 }
 
-// ================= 示例全局样式 =================
-
-.the-input {
-  width: 100%;
-  border: 1px solid #DCDFE6;
-  border-radius: var(--border-radius);
-  color: #1f2d3d;
-  height: 38px;
-  line-height: 38px;
-  font-size: 14px;
-  padding: 0 15px;
-  outline: none;
-  transition: 0.2s all;
-  &:focus {
-    border-color: var(--blue);
-  }
-}
-
-.the-btn {
-  font-size: 14px;
-  padding: 0px 15px;
-  min-width: 88px;
-  height: 36px;
-  line-height: 1;
-  border-radius: var(--border-radius);
-  background-color: #fff;
-  color: rgba(0,0,0,.87);
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
-  @include moveTime();
-  outline: none;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  &:active {
-    box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12);
-  }
-  &:disabled {
-    cursor: no-drop;
-    opacity: 0.7;
-  }
-}
-
-.the-btn + .the-btn {
-  margin-left: 10px;
-}
-
-.the-btn.mini {
-  font-size: 12px;
-  height: 28px;
-  border-radius: var(--border-radius);
-}
-
-.the-btn.blue {
-  background-color: var(--blue);
-  color: #fff;
-}
-
-.the-btn.green {
-  background-color: var(--green);
-  color: #fff;
-}
-
-.the-btn.yellow {
-  background-color: var(--yellow);
-  color: #fff;
-}
-
-.the-btn.red {
-  background-color: var(--red);
-  color: #fff;
-}
-
-.check-box {
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--blue);
-  input {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
-    line-height: 1;
-    &:checked {
-      background-color: var(--blue);
-    }
-  }
-}
-
 .the-tag {
   display: inline-block;
   padding: 6px 8px;
@@ -203,3 +117,67 @@
     content: "★ ";
   }
 }
+
+// 筛选搜索头部样式
+.option-box {
+  width: 100%;
+  padding-bottom: 1px;
+  border-bottom: solid #dcdfe6 1px;
+  margin-bottom: 24px;
+  .option-row {
+    padding-top: 20px;
+    &:first-child {
+      padding-top: 0px;
+    }
+  }
+  .option-item {
+    display: flex;
+    min-height: 32px;
+    box-sizing: border-box;
+    // padding: 0;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
+  .option-label {
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 10px;
+    font-weight: bold;
+    color: #606266;
+    // width: 94px;
+    white-space: break-all;
+    line-height: 32px;
+  }
+  .short-input {
+    width: 220px;
+  }
+  .long-input {
+    width: 380px;
+  }
+}
+.option-table {
+  min-height: 500px;
+  margin-bottom: 28px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+// 抖动动画样式
+.apply-shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) 2 both;
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+}
+

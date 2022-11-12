@@ -1,0 +1,43 @@
+// 修改 element-plus 默认变量
+:root {
+  --el-color-primary: var(--blue);
+  --el-color-success: var(--green);
+  --el-color-warning: var(--yellow);
+  --el-color-danger: var(--red);
+  --el-color-info: var(--gray);
+  --el-button-font-weight: 400;
+  --el-color-text-regular: var(--black);
+  --el-border-color-light: #dfe4ed;
+  --el-border-color-lighter: #e6ebf5;
+  --el-table-border: 1px solid #dfe6ec;
+  --el-border-radius-base: var(--border-radius);
+  --el-button-small-border-radius: var(--border-radius);
+  --el-button-mini-border-radius: var(--border-radius);
+}
+
+.app {
+  input, button, form {
+    &:disabled {
+      cursor: no-drop;
+    }
+  }
+}
+
+.el-form {
+  .el-form-item__label {
+    color: var(--black);
+    font-weight: bold;
+  }
+}
+
+.el-input {
+  input {
+    &::selection {
+      color: #fff;
+      background-color: var(--blue);
+    }
+  }
+  .el-input__wrapper {
+    width: 100%;
+  }
+}

@@ -13,8 +13,9 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "element-plus": "^2.2.21",
     "nprogress": "^0.2.0",
-    "vue": "^3.2.41",
+    "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

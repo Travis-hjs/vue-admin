@@ -1,23 +1,53 @@
 <template>
-  <div class="login_page">
+  <div class="login-page">
     <div class="content">
       <div class="title">
         <span>{{ info.name }}</span>
       </div>
-      <div class="form_box">
-        <div class="login_form">
-          <div class="login_title">平台登录</div>
-          <input class="the-input mgb_20" type="text" v-model="formData.account" placeholder="请输入账号">
-          <input class="the-input mgb_20" type="password" v-model="formData.password" placeholder="请输入密码">
-          <button class="the-btn blue mgb_20" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
-          <label class="check-box fvertical mgb_20" for="check-input" @change="remember =! remember">
-            <input type="checkbox" id="check-input" :checked="remember" />
-            记住账号/密码
-          </label>
-          <div class="tips fvertical" v-for="(item, index) in tipList" :key="index">
-            <button class="the-btn mini green" v-ripple v-copy="item" :disabled="loading">点击复制</button>
-            <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>
-            <button class="the-btn mini blue" v-ripple :disabled="loading" @click="setLoginInfo(item)">一键登录</button>
+      <div class="form-box">
+        <div class="login-form">
+          <div class="login-title">平台登录</div>
+          <el-form
+            ref="theForm"
+            id="the-form"
+            size="large"
+            :model="formData"
+            :rules="formRules"
+            status-icon
+          >
+            <el-form-item prop="account">
+              <el-input
+                v-model="formData.account"
+                :placeholder="formRules.account[0].message"
+                clearable
+                type="text"
+                @keyup.enter.native="onLogin"
+              >
+                <template #prefix><i class="el-icon-user"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input
+                v-model="formData.password"
+                :placeholder="formRules.password[0].message"
+                clearable
+                type="password"
+                :show-password="true"
+                @keyup.enter.native="onLogin"
+              >
+                <template #prefix><i class="el-icon-key"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="">
+              <div class="w100">
+                <el-button type="primary" class="w100" :loading="loading" @click="onLogin">立即登录</el-button>
+              </div>
+              <el-checkbox v-model="remember" size="large">记住账号/密码</el-checkbox>
+            </el-form-item>
+          </el-form>
+          <div class="mgb_10 w100 fvertical" v-for="(item, index) in tipList" :key="index">
+            <div class="f1"><span class="the-tag gray">账号: {{ item }}; 密码: 随便填</span></div>
+            <el-button type="primary" plain :disabled="loading" @click="setLoginInfo(item)">一键登录</el-button>
           </div>
         </div>
       </div>
@@ -31,8 +61,8 @@ import { reactive, ref } from "vue";
 import store from "@/store";
 import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
-import { modifyData } from "@/utils";
-import message from "@/utils/message";
+import { jsonParse, modifyData } from "@/utils";
+import { FormInstance } from "element-plus";
 
 const cacheName = "login-info";
 
@@ -46,7 +76,16 @@ const copyRight = "Copyright © Hansen-hjs.github.io All Rights Reserved 请使�
 const formData = reactive({
   account: "",
   password: ""
-})
+});
+
+const formRules = {
+  account: [
+    { required: true, message: "请输入手机号", trigger: "blur" },
+  ],
+  password: [
+    { required: true, message: "请输入密码", trigger: "blur" },
+  ],
+}
 
 const loading = ref(false);
 
@@ -60,32 +99,23 @@ function setLoginInfo(account: string) {
   onLogin(true);
 }
 
+const theForm = ref<FormInstance>();
+
 /** 
  * 点击登录 
  * @param adopt 是否不校验直接通过
  */
 function onLogin(adopt: boolean) {
-  async function start() {
+  theForm.value!.validate(async function(state) {
+    if (!state) return;
     loading.value = true;
     const res = await login(formData)
     loading.value = false;
     if (res.code === 1) {
       saveLoginInfo();
       openNextPage();
-    } else {
-      message.error(res.msg);
     }
-  }
-  if (adopt) {
-    return start();
-  }
-  if (!formData.account) {
-    return message.error("请输入账号");
-  }
-  if (!formData.password) {
-    return message.error("请输入密码");
-  }
-  start();
+  });
 }
 
 /** 是否记住密码 */
@@ -100,16 +130,9 @@ function saveLoginInfo() {
 }
 
 function getLoginInfo() {
-  const value = localStorage.getItem(cacheName);
-  if (value) {
-    try {
-      const info = JSON.parse(value);
-      remember.value = !!info.remember;
-      modifyData(formData, info);
-    } catch (error) {
-      console.warn(error);
-    }
-  }
+  const info = jsonParse(localStorage.getItem(cacheName));
+  remember.value = !!info.remember;
+  modifyData(formData, info);
 }
 
 getLoginInfo();
@@ -118,7 +141,7 @@ getLoginInfo();
 <style lang="scss">
 @import "@/styles/variables.scss";
 
-.login_page {
+.login-page {
   width: 100%;
   min-height: 100vh;
   background-color: #2253dc;
@@ -147,25 +170,25 @@ getLoginInfo();
     right: 10%;
     width: 100%;
     max-width: 480px;
-    .form_box {
+    .form-box {
       background-color: #81c7fa;
       border: solid 2px #3b9be5;
       padding: 10px;
       width: 100%;
       margin-bottom: 40px;
-      .login_form {
+      .login-form {
         background-color: #fff;
-        padding: 40px 40px 30px;
+        padding: 40px 40px 20px;
       }
-      .login_title {
+      .login-title {
         font-size: 22px;
         line-height: 22px;
         color: var(--blue);
         margin-bottom: 30px;
         text-align: center;
       }
-      .el-checkbox {
-        color: #999;
+      .w100 {
+        width: 100%;
       }
     }
     .title {
@@ -191,17 +214,9 @@ getLoginInfo();
       text-align: center;
     }
   }
-  .tips {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 8px;
-    .tips_text {
-      margin: 0 16px;
-    }
-  }
 }
 @media screen and (max-width: 500px) {
-  .login_page {
+  .login-page {
     .content {
       right: 0;
     }

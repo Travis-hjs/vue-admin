@@ -6,17 +6,26 @@ import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
 import ripple from "./utils/ripple";
-import message from "./utils/message";
+
+import "element-plus/dist/index.css";
+import "./styles/element-plus.scss";
+import ElementPlus, { ElMessage } from "element-plus";
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 
 window.version = version;
 
 const app = createApp(App);
 
+app.use(ElementPlus, {
+  locale: zhCn
+});
+
+
 // 添加一个自定义指令`v-copy`点击复制内容
 app.directive("copy", {
   mounted(el: HTMLElement, binding) {
     el.addEventListener("click", function () {
-      copyText(binding.value, () => message.success("复制成功"), tip => message.success(tip));
+      copyText(binding.value, () => ElMessage.success("复制成功"), tip => ElMessage.success(tip));
     });
   }
 })
