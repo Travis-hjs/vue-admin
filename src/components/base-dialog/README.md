@@ -14,7 +14,7 @@
         ...your code
       </div>
       <template slot="footer">
-        <button @click="show = false">关 闭</button>
+        <el-button @click="show = false">关 闭</el-button>
       </template>
     </base-dialog>
   </div>
