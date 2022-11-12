@@ -33,6 +33,21 @@ export function uploadImg(formData: File) {
 }
 
 /**
+ * 上传文件
+ * @param formData 上传文件`FormData`值
+ * @example
+ * ```js
+ * const formData = new FormData();
+ * formData.append("img", file);
+ * uploadFile(formData).then(res => console.log(res))
+ * ```
+ * [上传图片参考](https://juejin.cn/post/6844904066418491406#heading-4)
+ */
+ export function uploadFile(formData: FormData) {
+  return request("POST", "/uploadFile", formData)
+}
+
+/**
  * 获取天气预报数据
  * @param city 城市名
  */

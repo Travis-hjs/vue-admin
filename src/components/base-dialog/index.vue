@@ -191,7 +191,7 @@ onUnmounted(function () {
   border-bottom: solid 1px #eee;
 
   h2 {
-    font-size: 22px;
+    font-size: 18px;
     color: #303133;
     font-weight: normal;
   }
