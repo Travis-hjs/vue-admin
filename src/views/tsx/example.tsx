@@ -29,7 +29,7 @@ const TsxExample = defineComponent({
       <div class="tsx-example">
         <h2 class="the-title mgb_20">{content}</h2>
         <div class="tsx-center">
-          <input class="the-input" type="text" v-model={inputValue.value} placeholder="请输入卡片标题" maxlength="17" />
+          <el-input v-model={inputValue.value} placeholder="请输入卡片标题" clearable show-word-limit maxlength="17" />
         </div>
         <TsxCard images={list} title={inputValue.value} change={onChange} />
       </div>

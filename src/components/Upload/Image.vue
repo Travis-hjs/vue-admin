@@ -3,12 +3,12 @@
     <div class="base-upload-content" :style="{ 'width': width }" v-loading="loading">
       <div v-if="src" class="image-box">
         <img class="image" :src="src" :style="{ 'height': autoHeight ? '' : height }">
-        <div class="remove fcc">
+        <div class="remove fvc">
           <i class="upload-icon el-icon-delete" @click="removeImg()"></i>
           <i class="upload-icon el-icon-document-copy" @click="onCopy()"></i>
         </div>
       </div>
-      <div v-else class="upload-box fcc" :style="{ 'height': height }">
+      <div v-else class="upload-box fvc" :style="{ 'height': height }">
         <div class="add-icon"></div>
         <input class="upload-input" type="file" name="picture" ref="uploadInput" :accept="accept.toString()" @change="onUpload()">
       </div>

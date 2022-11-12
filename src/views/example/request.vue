@@ -2,8 +2,8 @@
   <div class="page-request">
     <h2 class="the-title mgb_30">Http 请求示例，当前页面配置路由缓存</h2>
     <div class="flex">
-      <input class="the-input mgb_20 short-input" type="text" v-model="pageData.city" placeholder="请输入城市名">
-      <button class="the-btn blue" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</button>
+      <el-input class="mgb_20 short-input" v-model="pageData.city" placeholder="请输入城市名"></el-input>
+      <el-button type="primary" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</el-button>
     </div>
     <div class="mgb_20" v-if="pageData.desc">
       <span :class="['the-tag', pageData.error ? 'red' : 'green']">{{ pageData.desc }}</span>
@@ -21,7 +21,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getWeather } from "@/api/common";
-import message from "@/utils/message";
+import { ElMessage } from "element-plus";
 
 const pageData = reactive({
   city: "广州",
@@ -42,7 +42,7 @@ const pageData = reactive({
 // ]
 
 async function getData() {
-  if (!pageData.city) return message.warning("请输入城市名");
+  if (!pageData.city) return ElMessage.warning("请输入城市名");
   pageData.loading = true;
   const res = await getWeather(pageData.city);
   pageData.loading = false;
@@ -57,7 +57,7 @@ async function getData() {
       pageData.desc = `${result.week} > ${result.wea} > ${result.win} > 最低温度 ${result.tem_night}° > 最高温度 ${result.tem_day}°`;
     }
   } else {
-    message.error("网络出错了");
+    ElMessage.error("网络出错了");
   }
 }
 

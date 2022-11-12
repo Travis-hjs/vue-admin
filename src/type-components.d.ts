@@ -74,7 +74,7 @@ interface PaginationChange {
   value: number
 }
 
-/**图片上传 change事件参数 */
+/** 上传组件`change`事件参数 */
 interface UploadChange<T = number | string> {
   /** 组件绑定的 uploadId，多个上传组件的时候用来区分用 */
   id: T

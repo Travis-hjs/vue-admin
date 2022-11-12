@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { copyText } from "@/utils";
-import message from "@/utils/message";
+import { ElMessage } from "element-plus";
 
 /** 图标列表 */
 export default defineComponent({
@@ -56,7 +56,7 @@ function onClickIcon(name: string) {
     emit("iconClick", name);
   } else {
     copyText(getSvgIconCode(name), () => {
-      message.success("复制图标代码成功！");
+      ElMessage.success("复制图标代码成功！");
     })
   }
 }

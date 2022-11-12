@@ -1,5 +1,5 @@
 <template>
-  <div class="base-table-option fcc" @click="onBoxClick">
+  <div class="base-table-option fvc" @click="onBoxClick">
     <el-button
       text
       :type="btn.type || 'primary'"

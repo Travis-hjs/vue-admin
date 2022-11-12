@@ -61,8 +61,8 @@ const TsxCard = defineComponent({
           </div>
         </div>
         <div class="btn-box">
-          <button class="the-btn blue" v-ripple onClick={() => switchImage(false)} disabled={index.value == 0}>上一张图片</button>
-          <button class="the-btn blue" v-ripple onClick={() => switchImage(true)} disabled={index.value == (props.images.length - 1)}>下一张图片</button>
+          <el-button type="primary" v-ripple onClick={() => switchImage(false)} disabled={index.value == 0}>上一张图片</el-button>
+          <el-button type="primary" v-ripple onClick={() => switchImage(true)} disabled={index.value == (props.images.length - 1)}>下一张图片</el-button>
         </div>
       </div>
     );

@@ -2,6 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import SvgIcon from "./icons/index.vue";
 import BaseDialog from "./components/base-dialog/index.vue";
+import BaseTable from "./components/base-table/index.vue";
+import BaseTableOption from "./components/base-table-option/index.vue";
+import BasePagination from "./components/base-pagination/index.vue";
 import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
@@ -20,15 +23,16 @@ app.use(ElementPlus, {
   locale: zhCn
 });
 
-
 // 添加一个自定义指令`v-copy`点击复制内容
 app.directive("copy", {
   mounted(el: HTMLElement, binding) {
     el.addEventListener("click", function () {
-      copyText(binding.value, () => ElMessage.success("复制成功"), tip => ElMessage.success(tip));
+      // TODO: binding.value不是动态的，所以这里设置多一个动态绑定值作为取值使用
+      const value = el.getAttribute("copy-data") || binding.value || "";
+      copyText(value, () => ElMessage.success("复制成功"), tip => ElMessage.success(tip));
     });
   }
-})
+});
 
 app.directive("ripple", {
   mounted(el: HTMLElement) {
@@ -39,13 +43,18 @@ app.directive("ripple", {
       ripple(e, el);
     });
   }
-})
-
+});
 
 // 注册全局组件: `svg-icon`
 app.component("svg-icon", SvgIcon);
 // 基础弹框
 app.component("base-dialog", BaseDialog);
+// 全局表格
+app.component('base-table', BaseTable);
+// 全局表格选项
+app.component('base-table-option', BaseTableOption);
+// 全局分页
+app.component('base-pagination', BasePagination);
 
 app.use(router);
 
