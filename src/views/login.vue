@@ -63,6 +63,7 @@ import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
 import { jsonParse, modifyData } from "@/utils";
 import { FormInstance } from "element-plus";
+import { validateEX } from "@/hooks";
 
 const cacheName = "login-info";
 
@@ -96,17 +97,14 @@ const loading = ref(false);
 function setLoginInfo(account: string) {
   formData.account = account;
   formData.password = Math.random().toString(36).substr(2);
-  onLogin(true);
+  onLogin();
 }
 
 const theForm = ref<FormInstance>();
 
-/** 
- * 点击登录 
- * @param adopt 是否不校验直接通过
- */
-function onLogin(adopt: boolean) {
+function onLogin() {
   theForm.value!.validate(async function(state) {
+    validateEX("#the-form", state);
     if (!state) return;
     loading.value = true;
     const res = await login(formData)
