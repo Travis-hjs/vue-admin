@@ -77,8 +77,10 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   }
-})
-let loading = ref(false);
+});
+
+const loading = ref(false);
+
 const uploadInput = ref<HTMLInputElement>();
 
 const emit = defineEmits<{
@@ -101,20 +103,12 @@ function checkUpload() {
 /** 上传图片 */
 async function onUpload() {
   if (loading.value) return;
-  
-  const accept = props.accept;
 
   const file = uploadInput.value!.files![0];
   // console.log("上传图片文件 >>", file);
 
   // 用完就清空
   uploadInput.value!.value = "";
-
-  // 判断文件类型
-  if (accept.indexOf(file.type) < 0) {
-    ElMessage.warning("文件格式只支持：" + accept.toString())
-    return;
-  }
 
   // 判断大小
   if (file.size > props.maxSize * 1024 * 1024) {

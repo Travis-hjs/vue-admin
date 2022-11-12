@@ -1,8 +1,15 @@
 <template>
   <div :class="['base-pagination', position]">
-    <el-pagination v-if="pageInfo.total" background :layout="layout" :total="pageInfo.total"
-      :current-page="pageInfo.currentPage" :page-sizes="pageSizes" @size-change="onSizeChange"
-      @current-change="onCurrentChange"></el-pagination>
+    <el-pagination
+      v-if="pageInfo.total"
+      background
+      :layout="layout"
+      :total="pageInfo.total"
+      :current-page="pageInfo.currentPage"
+      :page-sizes="pageSizes"
+      @size-change="onSizeChange"
+      @current-change="onCurrentChange"
+    ></el-pagination>
   </div>
 </template>
 <script lang="ts">
@@ -33,7 +40,7 @@ const props = defineProps({
     type: String as PropType<"left" | "right" | "center">,
     default: "right",
   }
-})
+});
 
 const emit = defineEmits<{
   (event: "change", res: PaginationChange): void
