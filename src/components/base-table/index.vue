@@ -138,6 +138,7 @@ function setTableDefaultContent(row: any, prop: string, item: BaseTableColumn) {
 .base-table {
   width: 100%;
   min-height: 500px;
+  margin-bottom: 28px;
   .el-table {
     width: 100%;
   }
