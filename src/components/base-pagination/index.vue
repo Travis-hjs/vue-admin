@@ -3,6 +3,7 @@
     <el-pagination
       v-if="pageInfo.total"
       background
+      :disabled="disabled"
       :layout="layout"
       :total="pageInfo.total"
       :current-page="pageInfo.currentPage"
@@ -39,7 +40,11 @@ const props = defineProps({
   position: {
     type: String as PropType<"left" | "right" | "center">,
     default: "right",
-  }
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  },
 });
 
 const emit = defineEmits<{
