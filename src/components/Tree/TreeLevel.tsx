@@ -71,7 +71,7 @@ const TreeLevel = defineComponent({
                 {
                   props.checkbox ? (
                     <span onClick={ e => e.stopPropagation() }>
-                      <el-checkbox value={item.checked} onChange={() => onChecked(item)} disabled={item.disabled}></el-checkbox>
+                      <el-checkbox model-value={item.checked} onChange={() => onChecked(item)} disabled={item.disabled}></el-checkbox>
                     </span>
                   ) : undefined
                 }
