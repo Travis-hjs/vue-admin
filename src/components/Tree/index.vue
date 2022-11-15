@@ -209,7 +209,7 @@ function updateHeight(item: Pick<TreeItem, "indexs">) {
     return node.height = res;
   }
 
-  setHeight(options.value[indexList[0]]);
+  options.value[indexList[0]] && setHeight(options.value[indexList[0]]);
 }
 
 /**
