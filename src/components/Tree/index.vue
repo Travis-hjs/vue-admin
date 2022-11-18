@@ -255,7 +255,7 @@ function setCheckedValues(values: Array<string|number>, isOpen = false) {
   }
 
   each(options.value);
-  isOpen && updateHeight(options.value[0]);
+  isOpen && options.value.forEach(item => updateHeight(item));
 }
 
 /**
