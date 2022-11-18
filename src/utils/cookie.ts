@@ -9,11 +9,11 @@ export function getCookie(key: string) {
 }
 
 /**
-* 设置`cookie`
-* @param key 目标对象`key`值
-* @param value 对应键值
-* @param options 配置项
-*/
+ * 设置`cookie`
+ * @param key 目标对象`key`值
+ * @param value 对应键值
+ * @param options 配置项
+ */
 export function setCookie(key: string, value: string, options?: Cookies.CookieAttributes) {
   if (options) {
     Cookies.set(key, value, options);
@@ -23,10 +23,10 @@ export function setCookie(key: string, value: string, options?: Cookies.CookieAt
 }
 
 /**
-* 移除指定`cookie`
-* @param key 目标对象`key`值
-* @param options 
-*/
+ * 移除指定`cookie`
+ * @param key 目标对象`key`值
+ * @param options 
+ */
 export function removeCookie(key: string, options?: Cookies.CookieAttributes) {
   if (options) {
     Cookies.remove(key, options);
