@@ -12,7 +12,6 @@
 | checkbox | `Boolean` | 否 | 表格带选择操作，默认`false`，columns 中不需要定义 |
 | isRowClick | `Boolean` | 否 | 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<base-table-option />`组件的阻止事件冒泡作用 |
 | actions | `Array` | 否 | `<base-table-option :list="list">`组件的 list 数据 |
-| rowIndex | `Boolean` | 否 | 是否显示表格编号 |
 
 ## 组件事件
 
@@ -33,7 +32,7 @@
       :actions="btnList"
       :loading="loading"
     >
-      <template #state="row">
+      <template #state="{row}">
         <span class="the-tag blue" v-if="row.state == 0">未开始</span>
         <span class="the-tag green" v-if="row.state == 1">进行中</span>
         <span class="the-tag gray" v-if="row.state == 2">已结束</span>

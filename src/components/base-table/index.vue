@@ -9,8 +9,7 @@
       @row-click="rowClick"
       @selection-change="onSelect"
     >
-      <el-table-column type="selection" width="55" align="center" fixed="left" v-if="checkbox && columns.length" :selectable="canSelect"></el-table-column>
-      <el-table-column type="index" label="编号" width="60" align="center" v-if="rowIndex && columns.length"></el-table-column>
+      <el-table-column type="selection" width="55" align="center" fixed="left" v-if="checkbox" :selectable="canSelect"></el-table-column>
       <el-table-column
         v-for="item in columns"
         :key="item.key || item.prop"
@@ -25,7 +24,7 @@
         label-class-name="base-table-label"
       >
         <template #default="{row, $index}">
-          <slot :name="item.slotName" v-bind="row" v-if="item.slotName"></slot>
+          <slot :name="item.slotName" v-bind="{row, $index}" v-if="item.slotName"></slot>
           <base-table-option v-else-if="item.prop === 'action-right'" :row="row" :index="$index" :list="actions" :clickStop="isRowClick"></base-table-option>
           <template v-else>{{ setTableDefaultContent(row, item.prop, item) }}</template>
         </template>
@@ -62,10 +61,6 @@ const props = defineProps({
   checkbox: {
     type: Boolean,
     default: false
-  },
-  rowIndex: {
-    type: Boolean,
-    default: false,
   },
   isRowClick: {
     type: Boolean,
