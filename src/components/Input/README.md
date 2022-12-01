@@ -52,7 +52,7 @@ const apiParams = reactive({
   state: 1,
 });
 
-const optSetting: OptionItem = {
+const optSetting: ArrayItemSetting = {
   label: "name",
   value: "id",
   key: "id",

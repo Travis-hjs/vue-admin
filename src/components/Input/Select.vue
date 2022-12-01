@@ -39,7 +39,7 @@ import { useProps, useSettingComputed } from "./hooks";
 
 const props = defineProps({
   modelValue: {
-    type: [String, Number],
+    type: [String, Number, Array],
     default: ""
   },
   /** 请求数据函数 */
@@ -65,9 +65,7 @@ const props = defineProps({
   ...useProps("请选择"),
 });
 
-const emit = defineEmits<{
-  (event: "update:modelValue"|"change", val: string|number): void
-}>();
+const emit = defineEmits(["update:modelValue", "change"]);
 
 const useValue = computed({
   get() {
