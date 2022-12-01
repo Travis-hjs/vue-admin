@@ -3,6 +3,7 @@
     v-model="useValue"
     :placeholder="placeholder"
     :disabled="disabled || requesting"
+    :multiple="multiple"
     clearable
     @change="onSelect"
     popper-class="base-input-select-popper"
@@ -25,7 +26,7 @@
 import { defineComponent } from "vue";
 import { jsonParse, modifyData } from "@/utils";
 
-/** 选择输入框 */
+/** 分页加载选择框 */
 export default defineComponent({
   name: "InputSelect"
 });
@@ -55,6 +56,11 @@ const props = defineProps({
   cacheName: {
     type: String,
     default: ""
+  },
+  /** 是否多选 */
+  multiple: {
+    type: Boolean,
+    default: false
   },
   ...useProps("请选择"),
 });
