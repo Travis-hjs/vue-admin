@@ -1,6 +1,7 @@
 import config from "./config";
 import { checkType, jsonParse } from "./index";
 import store from "@/store";
+import message from "@/utils/message";
 
 /**
  * `http`请求
@@ -168,6 +169,7 @@ export default function request<T = any>(
         const res = checkType(err.response) === "string" ? jsonParse(err.response) : err.response;
         const info = getResultInfo({ statusCode: err.status, data: res });
         // 全局的请求错误提示可以写在这里
+        info.code !== 1 && message.error(info.msg);
         // do some ...
         resolve(info);
       },
@@ -175,6 +177,7 @@ export default function request<T = any>(
         console.warn("XMLHttpRequest 请求超时 !!!");
         const info = getResultInfo({ statusCode: config.requestOvertime, data: {} });
         // 全局的请求超时提示可以写在这里
+        message.warning("网络请求超时！");
         // do some ...
         resolve(info);
       }
