@@ -16,8 +16,7 @@ function useMessage(params: MessageParams = {}) {
     box: `msg-box${cssModule}`,
     hide: `hide${cssModule}`,
     text: `msg-text${cssModule}`,
-    icon: `msg-icon${cssModule}`,
-    top: `--msg-top`
+    icon: `msg-icon${cssModule}`
   }
   const style = doc.createElement("style");
   style.textContent = `
@@ -31,30 +30,39 @@ function useMessage(params: MessageParams = {}) {
     top: 0;
     left: 50%;
     display: flex;
-    transform: translate3d(-50%, var(--msg-top), 0);
-    padding: 10px 16px;
+    padding: 12px 16px;
     border-radius: 2px;
     background-color: #fff;
     box-shadow: 0 3px 3px -2px rgba(0,0,0,.2),0 3px 4px 0 rgba(0,0,0,.14),0 1px 8px 0 rgba(0,0,0,.12);
     white-space: nowrap;
     animation: ${className.box}-move .4s;
     transition: .4s all;
+    transform: translate3d(-50%, 0%, 0);
     opacity: 1;
+    overflow: hidden;
+  }
+  .${className.box}::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
   }
   @keyframes ${className.box}-move {
     0% {
       opacity: 0;
-      transform: translate3d(-50%, calc(var(--msg-top) - 50px), 0);
+      transform: translate3d(-50%, -100%, 0);
     }
     100% {
       opacity: 1;
-      transform: translate3d(-50%, var(--msg-top), 0);
+      transform: translate3d(-50%, 0%, 0);
     }
   }
   .${className.box}.${className.hide} {
     opacity: 0;
-    /* transform: translate3d(-50%, calc(var(--msg-top) - 50px), 0); */
-    transform: translate3d(-50%, var(--msg-top), 0) scale(0);
+    /* transform: translate3d(-50%, -100%, 0); */
+    transform: translate3d(-50%, -100%, 0) scale(0);
   }
   .${className.icon} {
     display: inline-block;
@@ -66,9 +74,9 @@ function useMessage(params: MessageParams = {}) {
     position: relative;
   }
   .${className.text} {
-    font-size: 15px;
+    font-size: 14px;
     line-height: 18px;
-    color: #333;
+    color: #555;
   }
   .${className.icon}::after,
   .${className.icon}::before {
@@ -76,20 +84,20 @@ function useMessage(params: MessageParams = {}) {
     content: "";
     background-color: #fff;
   }
-  .${className.icon}.info {
+  .${className.box}.info .${className.icon}, .${className.box}.info::after {
     background-color: #1890ff;
   }
-  .${className.icon}.success {
+  .${className.box}.success .${className.icon}, .${className.box}.success::after {
     background-color: #52c41a;
   }
-  .${className.icon}.warning {
+  .${className.box}.warning .${className.icon}, .${className.box}.warning::after {
     background-color: #faad14;
   }
-  .${className.icon}.error {
+  .${className.box}.error .${className.icon}, .${className.box}.error::after {
     background-color: #ff4d4f;
   }
-  .${className.icon}.info::after,
-  .${className.icon}.warning::after {
+  .${className.box}.info .${className.icon}::after,
+  .${className.box}.warning .${className.icon}::after {
     top: 15%;
     left: 50%;
     margin-left: -1px;
@@ -97,16 +105,16 @@ function useMessage(params: MessageParams = {}) {
     height: 2px;
     border-radius: 50%;
   }
-  .${className.icon}.info::before,
-  .${className.icon}.warning::before {
+  .${className.box}.info .${className.icon}::before,
+  .${className.box}.warning .${className.icon}::before {
     top: calc(15% + 4px);
     left: 50%;
     margin-left: -1px;
     width: 2px;
     height: 40%;
   }
-  .${className.icon}.error::after, 
-  .${className.icon}.error::before {
+  .${className.box}.error .${className.icon}::after, 
+  .${className.box}.error .${className.icon}::before {
     top: 20%;
     left: 50%;
     width: 2px;
@@ -114,13 +122,13 @@ function useMessage(params: MessageParams = {}) {
     margin-left: -1px;
     border-radius: 1px;
   }
-  .${className.icon}.error::after {
+  .${className.box}.error .${className.icon}::after {
     transform: rotate(-45deg);
   }
-  .${className.icon}.error::before {
+  .${className.box}.error .${className.icon}::before {
     transform: rotate(45deg);
   }
-  .${className.icon}.success::after {
+  .${className.box}.success .${className.icon}::after {
     box-sizing: content-box;
     background-color: transparent;
     border: 2px solid #fff;
@@ -170,7 +178,7 @@ function useMessage(params: MessageParams = {}) {
     }
     el.classList.add(className.hide);
     messageList.forEach(function(item) {
-      item.style.setProperty(className.top, `${getItemTop(item)}px`);
+      item.style.top = `${getItemTop(item)}px`;
     });
   }
 
@@ -182,11 +190,11 @@ function useMessage(params: MessageParams = {}) {
    */
   function show(content: string, type: "info"|"success"|"warning"|"error" = "info", duration?: number) {
     const el = doc.createElement("div");
-    el.className = className.box;
-    el.style.setProperty(className.top, `${getItemTop()}px`);
+    el.className = `${className.box} ${type}`;
+    el.style.top = `${getItemTop()}px`;
     el.style.zIndex = zIndex.toString();
     el.innerHTML = `
-    <span class="${className.icon} ${type}"></span>
+    <span class="${className.icon}"></span>
     <span class="${className.text}">${content}</span>
     `;
     zIndex++;
