@@ -85,8 +85,8 @@ const loading = ref(false);
 const uploadInput = ref<HTMLInputElement>();
 
 const emit = defineEmits<{
-  (event:"load" , res: boolean): void
-  (event:"change" , res: UploadChange<any>): void
+  (event: "load" , res: boolean): void
+  (event: "change" , res: UploadChange<any>): void
 }>()
 
 function beforeUpload() {
