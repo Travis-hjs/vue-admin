@@ -1,3 +1,6 @@
+// 类型引用
+/// <reference path="./components/type.d.ts" />
+
 /** 深层递归所有属性为可选 */
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
@@ -119,3 +122,4 @@ interface Window {
   */
   version: string
 }
+

@@ -27,16 +27,6 @@ import { PropType, ref } from "vue";
 import { uploadImg } from "@/api/common";
 import message from "@/utils/message";
 
-/**
- * 上传图片`change`回调类型
- */
-export interface UploadChange<T = string | number> {
-  /** 和当前上传组件绑定的`id` */
-  id: T
-  /** 图片路径 */
-  src: string
-}
-
 const props = defineProps({
   /** 组件上传图片路径 */
   src: {
@@ -80,20 +70,14 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["change"]);
+const emit = defineEmits<{
+  (event: "change", res: UploadChange<any>): void
+}>();
 
 /** 上传组件`input`节点 */
 const uploadInput = ref<HTMLInputElement>();
 /** 上传状态 */
 const loading = ref(false);
-
-/**
- * 发送数据到父组件中
- * @param info 数据对象
-*/
-function emitChange(info: UploadChange) {
-  emit("change", info);
-}
 
 /** 上传图片 */
 async function onUpload() {
@@ -118,21 +102,19 @@ async function onUpload() {
   console.log("上传图片 >>", res);
   if (res.code === 1) {
     const result: string = res.data.img;
-    emitChange({
+    emit("change", {
       id: props.uploadId,
       src: result
-    })
-  } else {
-    message.error(res.msg);
+    });
   }
 }
 
 /** 清除当前图片 */
 function removeImg() {
-  emitChange({
+  emit("change", {
     id: props.uploadId,
     src: ""
-  })
+  });
 }
 </script>
 

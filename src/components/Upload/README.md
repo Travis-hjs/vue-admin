@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { reactive } from "vue";
-import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
+import UploadImage from "@/components/Upload/Image.vue";
 
 const formData = reactive({
   banner: "",

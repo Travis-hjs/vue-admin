@@ -83,7 +83,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
-import UploadImage, { UploadChange } from "@/components/Upload/Image.vue";
+import UploadImage from "@/components/Upload/Image.vue";
 
 const formData = reactive({
   banner: "",
