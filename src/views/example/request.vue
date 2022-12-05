@@ -21,7 +21,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getWeather } from "@/api/common";
-import { ElMessage } from "element-plus";
+import message from "@/utils/message";
 
 const pageData = reactive({
   city: "广州",
@@ -42,7 +42,7 @@ const pageData = reactive({
 // ]
 
 async function getData() {
-  if (!pageData.city) return ElMessage.warning("请输入城市名");
+  if (!pageData.city) return message.warning("请输入城市名");
   pageData.loading = true;
   const res = await getWeather(pageData.city);
   pageData.loading = false;
@@ -56,8 +56,6 @@ async function getData() {
     } else {
       pageData.desc = `${result.week} > ${result.wea} > ${result.win} > 最低温度 ${result.tem_night}° > 最高温度 ${result.tem_day}°`;
     }
-  } else {
-    ElMessage.error("网络出错了");
   }
 }
 

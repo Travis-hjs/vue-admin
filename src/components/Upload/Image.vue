@@ -26,8 +26,8 @@ export default defineComponent({
 <script lang="ts" setup>
 import { ref } from "vue"
 import { copyText } from "@/utils";
-import { ElMessage } from "element-plus";
 import { uploadFile } from "@/api/common";
+import message from "@/utils/message";
 
 const props = defineProps({
   /** 组件上传图片路径 */
@@ -90,17 +90,9 @@ function removeImg() {
     src: "",
   });
 };
-//复制
+
 function onCopy() {
-  copyText(props.src,
-    () => ElMessage({
-      message: "复制图片地址成功",
-      type: "success",
-    }),
-    tip => ElMessage({
-      message: tip,
-      type: "warning",
-    }));
+  copyText(props.src, () => message.success("复制图片地址成功！"), tip => message.error(tip));
 };
 
 /** 上传图片 */
@@ -110,11 +102,7 @@ async function onUpload() {
 
   // 判断大小
   if (file.size > 2 * 1024 * 1024) {
-    ElMessage({
-      message: `上传的文件不能大于 ${props.maxSize}M`,
-      type: "warning",
-    });
-    return;
+    return message.warning(`上传的文件不能大于 ${props.maxSize}M`);
   }
 
   const formData = new FormData();
@@ -131,8 +119,6 @@ async function onUpload() {
       src: result,
       result: res.data
     });
-  } else {
-    ElMessage.error('上传失败！')
   }
 };
 

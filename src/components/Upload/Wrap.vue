@@ -14,15 +14,16 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+
 /** 上传包裹组件 */
 export default defineComponent({
   name: "UploadWrap"
 })
 </script>
 <script lang="ts" setup>
-import { uploadFile } from "@/api/common";
 import { PropType, ref } from "vue";
-import { ElMessage } from "element-plus";
+import { uploadFile } from "@/api/common";
+import message from "@/utils/message";
 
 const props = defineProps({
   //上传图片点击设置埋点数据
@@ -112,8 +113,7 @@ async function onUpload() {
 
   // 判断大小
   if (file.size > props.maxSize * 1024 * 1024) {
-    ElMessage.warning(`上传的文件不能大于 ${props.maxSize}M`)
-    return;
+    return message.warning(`上传的文件不能大于 ${props.maxSize}M`);
   }
 
   const formData = new FormData();
@@ -137,8 +137,6 @@ async function onUpload() {
       src: result,
       result: res.data
     });
-  } else {
-    ElMessage.error("上传失败");
   }
 };
 </script>

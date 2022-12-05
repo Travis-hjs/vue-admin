@@ -9,10 +9,11 @@ import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
 import ripple from "./utils/ripple";
+import message from "./utils/message";
 
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";
-import ElementPlus, { ElMessage } from "element-plus";
+import ElementPlus from "element-plus";
 import zhCn from "element-plus/lib/locale/lang/zh-cn";
 
 window.version = version;
@@ -29,7 +30,7 @@ app.directive("copy", {
     el.addEventListener("click", function () {
       // TODO: binding.value不是动态的，所以这里设置多一个动态绑定值作为取值使用
       const value = el.getAttribute("copy-data") || binding.value || "";
-      copyText(value, () => ElMessage.success("复制成功"), tip => ElMessage.success(tip));
+      copyText(value, () => message.success("复制成功"), tip => message.success(tip));
     });
   }
 });
