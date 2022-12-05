@@ -56,8 +56,6 @@ async function getData() {
     } else {
       pageData.desc = `${result.week} > ${result.wea} > ${result.win} > 最低温度 ${result.tem_night}° > 最高温度 ${result.tem_day}°`;
     }
-  } else {
-    message.error("网络出错了");
   }
 }
 
