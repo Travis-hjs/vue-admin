@@ -1,6 +1,6 @@
 # 高度折叠过渡组件
 
-使用时，注意`height`样式不要直接写在标签的`style`上，否则会覆盖组件设置样式操作，`min-height`、`max-height`也不可以设置。
+使用时，注意`height`样式不要直接写在标签的`style`上，否则会覆盖组件设置样式操作；`min-height`、`max-height`也不可以设置，`padding`、`margin`这两个属性的值会参与高度的计算。
 
 ## 单个过渡
 
