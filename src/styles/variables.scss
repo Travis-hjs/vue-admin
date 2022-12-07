@@ -10,8 +10,12 @@
   --orange: #d46b08;
   --purple: #531dab;
   --cyan: #08979c;
+  --light-green: #42b983;
   // 矩阵节点统一使用圆角变量
   --border-radius: 2px;
+  // 艺术字
+  --text-shadow-bg: rgb(51, 51, 51);
+  --text-shadow-color: rgb(255, 222, 23);
 }
 
 @mixin moveTime($time: .3s) {

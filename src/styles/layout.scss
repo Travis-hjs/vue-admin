@@ -398,8 +398,8 @@
 }
 
 .the-layout-tag-on {
-  background-color: #42b983;
-  border-color: #42b983;
+  background-color: var(--light-green);
+  border-color: var(--light-green);
   color: #fff;
 
   &:visited, &:focus, &:hover, &:link, &:active {
