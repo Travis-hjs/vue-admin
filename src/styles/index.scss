@@ -181,25 +181,27 @@
 .the-tag.purple { @include tagColor(#f9f0ff, var(--purple)); }
 .the-tag.cyan { @include tagColor(#e6fffb, var(--cyan)); }
 
+.shadow-text {
+  letter-spacing: 3px;
+  line-height: 24px;
+  font-size: 18px;
+  color: rgb(255, 255, 255);
+  text-shadow: var(--text-shadow-bg) 1px 1px, var(--text-shadow-bg) 1px -1px, var(--text-shadow-bg) -1px 1px, var(--text-shadow-bg) -1px -1px, var(--text-shadow-bg) 0px 1.4px, var(--text-shadow-bg) 0px -1.4px, var(--text-shadow-bg) -1.4px 0px, var(--text-shadow-bg) 1.4px 0px, var(--text-shadow-color) 2px 2px, var(--text-shadow-color) 3px 3px, var(--text-shadow-color) 3px 1px, var(--text-shadow-color) 1px 3px, var(--text-shadow-color) 1px 1px, var(--text-shadow-color) 2px 3.4px, var(--text-shadow-color) 2px 0.6px, var(--text-shadow-color) 0.6px 2px, var(--text-shadow-color) 3.4px 2px;
+  box-sizing: border-box;
+  font-style: italic;
+}
+
 .the-title {
-  position: relative;
-  font-size: 24px;
-  color: #303133;
-  font-weight: normal;
+  @extend .shadow-text;
   display: inline-block;
-  padding-right: 8px;
+  position: relative;
   &::after {
     content: "";
     position: absolute;
     bottom: -4px;
     left: 0;
     width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background-color: var(--blue);
-    opacity: 0.8;
-  }
-  &::before {
-    content: "★ ";
+    height: 1px;
+    background-color: #888;
   }
 }
