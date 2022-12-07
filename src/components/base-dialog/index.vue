@@ -3,7 +3,7 @@
     <teleport to="body" :disabled="!appendToBody">
       <transition name="fade">
         <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="modelValue" @click="onClose">
-          <transition name="dialog-move">
+          <transition name="dialog-move" @after-leave="onAfterLeave" @after-enter="onAfterEnter">
             <div
               ref="contentBox"
               class="base-dialog-content flex"
@@ -69,7 +69,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["close", "update:modelValue"]);
+const emit = defineEmits(["close", "update:modelValue", "afterLeave", "afterEnd"]);
 
 const currentZIndex = zIndex;
 
@@ -148,6 +148,15 @@ function onClose(e: MouseEvent) {
   }
 }
 
+function onAfterLeave() {
+  contentShow.value && setVariable("0", "0");
+  emit("afterLeave");
+}
+
+function onAfterEnter() {
+  emit("afterEnd");
+}
+
 onMounted(function () {
   document.addEventListener("click", setContentPosition);
 })
@@ -191,7 +200,7 @@ onUnmounted(function () {
   border-bottom: solid 1px #eee;
 
   h2 {
-    font-size: 22px;
+    font-size: 18px;
     color: #303133;
     font-weight: normal;
   }
