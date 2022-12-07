@@ -221,7 +221,7 @@ onUnmounted(function () {
 }
 
 .base-dialog-body {
-  padding: 12px 14px;
+  padding: 12px 15px;
   overflow: auto;
   min-height: 0px;
   overflow: auto;
@@ -230,6 +230,6 @@ onUnmounted(function () {
 .base-dialog-footer {
   text-align: right;
   border-top: solid 1px #eee;
-  padding: 10px 14px;
+  padding: 12px 15px;
 }
 </style>
