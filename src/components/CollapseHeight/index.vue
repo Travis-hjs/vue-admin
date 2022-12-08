@@ -6,11 +6,9 @@
     @before-enter="onBeforeEnter"
     @enter="onEnter"
     @after-enter="onAfterEnter"
-    @enter-cancelled="onEnterCancelled"
     @before-leave="onBeforeLeave"
     @leave="onLeave"
     @after-leave="onAfterLeave"
-    @leave-cancelled="onLeaveCancelled"
   >
     <slot></slot>
   </component >
@@ -64,13 +62,12 @@ function onEnter(el: HTMLElement, done?: () => void) {
   el.style.overflow = "hidden";
 }
 
-// 当进入过渡完成时调用。
+/**
+ * 当进入过渡完成时调用。
+ * @param el 
+ */
 function onAfterEnter(el: HTMLElement) {
   // console.log("afterEnter >>", el);
-  el.style.transition = el.style.height = "";
-}
-function onEnterCancelled(el: HTMLElement) {
-  // console.log("onEnterCancelled >>", el);
   el.style.transition = el.style.height = "";
 }
 
@@ -105,15 +102,6 @@ function onLeave(el: HTMLElement, done?: () => void) {
 function onAfterLeave(el: HTMLElement) {
   // console.log("afterLeave >>", el);
   el.style.transition = el.style.height = "";
-}
-
-/**
- * 仅在 v-show 过渡中可用
- * @param el 
- */
-function onLeaveCancelled(el: HTMLElement) {
-  // console.log("v-show 过渡 >>", el);
-  
 }
 
 </script>
