@@ -17,7 +17,7 @@ const base: Array<RouteItem> = [
     path: "/login",
     name: "login",
     component: () => import("../views/login.vue"),
-    meta: { hidden: true, title: "请登陆" },
+    meta: { hidden: true, title: "请登录" },
   }, {
     path: "/404",
     name: "page-404",
