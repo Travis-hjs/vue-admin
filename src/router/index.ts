@@ -119,9 +119,12 @@ const add: Array<RouteItem> = [
       {
         path: "/link-baidu",
         name: "link-baidu",
-        link: "https://www.baidu.com",
         component: Page404, // 这里必需给一个组件
-        meta: { title: "百度一下", icon: "baidu" },
+        meta: {
+          title: "百度一下",
+          icon: "baidu",
+          link: "https://www.baidu.com"
+        },
       },
       {
         path: "/menu-4",
@@ -176,11 +179,14 @@ const add: Array<RouteItem> = [
   },
   {
     path: "/" + store.projectInfo.link,
-    link: store.projectInfo.link,
     name: "GitHub-Hansen",
     component: Page404, // 这里必需给一个组件
     auth: [0],
-    meta: { title: "项目地址", icon: "github" }
+    meta: {
+      title: "项目地址",
+      icon: "github",
+      link: store.projectInfo.link
+    }
   }
 ];
 

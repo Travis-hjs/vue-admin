@@ -41,7 +41,9 @@ import { RouteRecordRaw } from "vue-router";
 
 export interface RouteMeta {
   /** 侧边栏菜单名、document.title */
-  title: string,
+  title: string
+  /** 外链地址，优先级会比`path`高 */
+  link?: string
   /** `svg`名 */
   icon?: string
   /** 是否在侧边菜单栏不显示该路由 */
@@ -61,8 +63,6 @@ export type RouteItem = {
    * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
    */
   name?: string
-  /** 外链地址，优先级会比`path`高 */
-  link?: string
   /**
    * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
    * 传空数组或者不写该字段代表可以全部用户访问
