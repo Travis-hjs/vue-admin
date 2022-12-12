@@ -43,7 +43,6 @@ function formatMenuList(list: Array<RouteItem>, parentKey?: string) {
       hasActive: false,
       children: [],
       path: routeItem.path,
-      link: routeItem.link,
       ...routeItem.meta
     }
     if (!item.hidden) {
