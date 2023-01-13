@@ -222,7 +222,6 @@ onUnmounted(function () {
 
 .base-dialog-body {
   padding: 12px 15px;
-  overflow: auto;
   min-height: 0px;
   overflow: auto;
 }
