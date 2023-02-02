@@ -91,7 +91,6 @@ watch(() => route.path, function () {
 })
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
 
 @mixin font {
   font-size: 15px;
@@ -114,7 +113,7 @@ watch(() => route.path, function () {
     padding: 6px 10px 6px 4px;
     line-height: 1;
     @include font();
-    @include moveTime();
+    transition: var(--transition);
     &:hover {
       color: var(--blue);
     }

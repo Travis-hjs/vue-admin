@@ -43,7 +43,7 @@ export function uploadImg(formData: File) {
  * ```
  * [上传图片参考](https://juejin.cn/post/6844904066418491406#heading-4)
  */
- export function uploadFile(formData: FormData) {
+export function uploadFile(formData: FormData) {
   return request("POST", "/uploadFile", formData)
 }
 

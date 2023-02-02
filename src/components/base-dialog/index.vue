@@ -33,9 +33,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-/** 全局定位层级，每使用一个组件累加一次 */
-let zIndex = 1000;
-
 /** 基础弹出框组件 */
 export default defineComponent({
   name: "base-dialog"
@@ -43,6 +40,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
+import { usezIndex } from "@/hooks";
 
 const props = defineProps({
   title: {
@@ -73,9 +71,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "update:modelValue", "afterLeave", "afterEnd"]);
 
-const currentZIndex = zIndex;
-
-zIndex++;
+const currentZIndex = usezIndex();
 
 /** 当前组件节点 */
 const el = ref<HTMLElement>();
@@ -92,7 +88,7 @@ const contentShow = ref(false);
  * 当前节点记录`id`
  * - TODO: 不知道是不是`<teleport>`的bug，组件永远不会被销毁，所以这里定义一个唯一节点，用来判断并销毁当前节点
  */
-const flagId = "flag-dialog-" + zIndex;
+const flagId = "flag-dialog-" + currentZIndex;
 
 watch(() => props.modelValue, function (val) {
   if (val) {
@@ -169,7 +165,7 @@ onUnmounted(function () {
 
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
+@import "@/styles/mixins.scss";
 
 .base-dialog {
   width: 100%;
@@ -190,7 +186,7 @@ onUnmounted(function () {
 }
 
 .dialog-move-enter-active, .dialog-move-leave-active {
-  @include moveTime();
+  transition: var(--transition);
 }
 
 .dialog-move-enter-from, .dialog-move-leave-to {
@@ -214,7 +210,7 @@ onUnmounted(function () {
     cursor: pointer;
     transform: rotate(0);
     @include closeIcon(#666, 16px);
-    @include moveTime();
+    transition: var(--transition);
 
     &:hover {
       transform: rotate(180deg);

@@ -1,0 +1,36 @@
+@mixin closeIcon($color, $size, $land: 1px) {
+  position: relative;
+
+  &::before {
+    transition: var(--transition);
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $size;
+    height: $land;
+    background-color: $color;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    transition: var(--transition);
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $size;
+    height: $land;
+    background-color: $color;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+}
+
+@mixin tagColor ($bg, $color) {
+  background-color: $bg;
+  color: $color;
+
+  &:hover {
+    color: $color;
+  }
+}

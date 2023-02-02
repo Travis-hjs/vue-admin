@@ -1,4 +1,4 @@
-@import "./variables.scss";
+@import "./mixins.scss";
 
 @mixin menuHover {
   position: relative;
@@ -12,7 +12,7 @@
     height: 100%;
     background-color: rgba(255, 255, 255, 0.1);
     transform: translate3d(-100%, 0, 0);
-    @include moveTime();
+    transition: var(--transition);
   }
 
   &:hover {
@@ -57,7 +57,7 @@
   position: relative;
   overflow: hidden;
   padding-left: var(--sidebar-width);
-  @include moveTime();
+  transition: var(--transition);
 }
 
 .the-layout.collapsed-sidebar {
@@ -83,7 +83,7 @@
   top: 0;
   left: 0;
   z-index: 100;
-  @include moveTime();
+  transition: var(--transition);
 }
 
 .the-layout-navbar {
@@ -99,7 +99,7 @@
     width: var(--navbar-height);
     height: 100%;
     cursor: pointer;
-    @include moveTime();
+    transition: var(--transition);
 
     &:hover {
       background: rgba(0, 0, 0, 0.08);
@@ -108,7 +108,7 @@
     .svg-icon {
       width: 24px;
       height: 24px;
-      @include moveTime();
+      transition: var(--transition);
     }
   }
 
@@ -128,7 +128,7 @@
   left: 0;
   top: 0;
   z-index: 110;
-  @include moveTime();
+  transition: var(--transition);
 }
 
 .the-layout-content {
@@ -175,7 +175,7 @@
     border: none;
     background-color: transparent;
     overflow: hidden;
-    @include moveTime();
+    transition: var(--transition);
     @include menuHover();
 
     &:hover {
@@ -199,7 +199,7 @@
       height: calc(var(--menu-title-height) / 2);
       top: calc(var(--menu-title-height) / 4);
       transform: scaleY(0);
-      @include moveTime();
+      transition: var(--transition);
     }
   }
 
@@ -207,7 +207,7 @@
     width: 100%;
     background-color: var(--menu-item-bg-color);
     overflow: hidden;
-    @include moveTime();
+    transition: var(--transition);
 
     .the-layout-menu-title {
       background-color: var(--menu-item-bg-color);
@@ -219,7 +219,7 @@
       font-size: var(--menu-font-size);
       color: var(--menu-text-color);
       overflow: hidden;
-      @include moveTime();
+      transition: var(--transition);
       @include menuHover();
 
       &:hover {
@@ -264,7 +264,7 @@
       height: 1.5px;
       border-radius: 2px;
       transform: rotate(-45deg) translate(2.5px);
-      @include moveTime();
+      transition: var(--transition);
     }
 
     &::after {
@@ -276,7 +276,7 @@
       height: 1.5px;
       border-radius: 2px;
       transform: rotate(45deg) translate(-2.5px);
-      @include moveTime();
+      transition: var(--transition);
     }
   }
 
@@ -314,7 +314,7 @@
   color: #555;
 
   a {
-    @include moveTime();
+    transition: var(--transition);
   }
 
   &:hover {
@@ -361,7 +361,7 @@
   background-color: #fff;
   border: 1px solid #d8dce5;
   color: #495060;
-  @include moveTime();
+  transition: var(--transition);
 
   &:visited {
     color: #495060;
@@ -376,7 +376,7 @@
     border-radius: 50%;
     color: transparent;
     margin-left: 4px;
-    @include moveTime();
+    transition: var(--transition);
     @include closeIcon(#495060, 8px);
 
     &:hover {
@@ -452,7 +452,7 @@
   right: 30px;
   z-index: 100;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  @include moveTime();
+  transition: var(--transition);
 
   &::before, &::after {
     position: absolute;

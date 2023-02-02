@@ -137,7 +137,6 @@ getLoginInfo();
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
 
 .login-page {
   width: 100%;
