@@ -119,7 +119,7 @@ function removeImg() {
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
+@import "@/styles/mixins.scss";
 
 .the-upload-image {
   .the-upload-content {
@@ -127,13 +127,13 @@ function removeImg() {
     border: 1px dashed #d9d9d9;
     border-radius: var(--border-radius);
     overflow: hidden;
-    @include moveTime();
+    transition: var(--transition);
     &:hover { border-color: var(--blue); background-color: #fbfdff; }
     .the-upload-image-box { 
       position: relative; width: 100%; height: 100%; overflow: hidden;
       .image { display: block; width: 100%; object-fit: fill; }
       .remove {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); color: #f4f4f4; opacity: 0; @include moveTime();
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); color: #f4f4f4; opacity: 0; transition: var(--transition);
         &:hover { opacity: 1; }
       }
       .svg-icon { width: 28px; height: 28px; cursor: pointer; }

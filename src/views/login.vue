@@ -1,12 +1,12 @@
 <template>
-  <div class="login_page">
+  <div class="login-page">
     <div class="content">
       <div class="title">
         <span>{{ info.name }}</span>
       </div>
-      <div class="form_box">
-        <div class="login_form">
-          <div class="login_title">平台登录</div>
+      <div class="form-box">
+        <div class="login-form">
+          <div class="login-title">平台登录</div>
           <input class="the-input mgb_20" type="text" v-model="formData.account" placeholder="请输入账号">
           <input class="the-input mgb_20" type="password" v-model="formData.password" placeholder="请输入密码">
           <button class="the-btn blue mgb_20" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
@@ -116,9 +116,8 @@ getLoginInfo();
 </script>
 
 <style lang="scss">
-@import "@/styles/variables.scss";
 
-.login_page {
+.login-page {
   width: 100%;
   min-height: 100vh;
   background-color: #2253dc;
@@ -147,17 +146,17 @@ getLoginInfo();
     right: 10%;
     width: 100%;
     max-width: 480px;
-    .form_box {
+    .form-box {
       background-color: #81c7fa;
       border: solid 2px #3b9be5;
       padding: 10px;
       width: 100%;
       margin-bottom: 40px;
-      .login_form {
+      .login-form {
         background-color: #fff;
         padding: 40px 40px 30px;
       }
-      .login_title {
+      .login-title {
         font-size: 22px;
         line-height: 22px;
         color: var(--blue);
@@ -201,7 +200,7 @@ getLoginInfo();
   }
 }
 @media screen and (max-width: 500px) {
-  .login_page {
+  .login-page {
     .content {
       right: 0;
     }

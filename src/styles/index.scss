@@ -1,4 +1,5 @@
 @import "./variables.scss";
+@import "./mixins.scss";
 @import "./common.scss";
 @import "./ripple.scss";
 
@@ -33,7 +34,7 @@
 // ===================== 全局动画 =====================
 // 渐变+平移
 .fadeSlideX-leave-active, .fadeSlideX-enter-active {
-  @include moveTime(.4s);
+  transition: .4s all;
 }
 
 .fadeSlideX-enter-active, .fadeSlideX-leave-active {
@@ -53,7 +54,7 @@
 
 // 面包屑
 .breadcrumb-enter-active, .breadcrumb-leave-active {
-  @include moveTime(.4s);
+  transition: .4s all;
 }
 
 .breadcrumb-enter-from, .breadcrumb-leave-to {
@@ -67,7 +68,7 @@
 
 // 渐变
 .fade-enter-active, .fade-leave-active {
-  @include moveTime();
+  transition: var(--transition);
 }
 
 .fade-enter-from, .fade-leave-to {
@@ -102,7 +103,7 @@
   background-color: #fff;
   color: rgba(0,0,0,.87);
   box-shadow: 0 3px 1px -2px rgba(0,0,0,0.2), 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12);
-  @include moveTime();
+  transition: var(--transition);
   outline: none;
   text-align: center;
   border: none;

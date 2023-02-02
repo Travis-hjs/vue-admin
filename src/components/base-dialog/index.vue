@@ -163,7 +163,7 @@ onUnmounted(function () {
 
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
+@import "@/styles/mixins.scss";
 
 .base-dialog {
   width: 100%;
@@ -184,7 +184,7 @@ onUnmounted(function () {
 }
 
 .dialog-move-enter-active, .dialog-move-leave-active {
-  @include moveTime();
+  transition: var(--transition);
 }
 
 .dialog-move-enter-from, .dialog-move-leave-to {
@@ -208,7 +208,7 @@ onUnmounted(function () {
     cursor: pointer;
     transform: rotate(0);
     @include closeIcon(#666, 16px);
-    @include moveTime();
+    transition: var(--transition);
 
     &:hover {
       transform: rotate(180deg);
