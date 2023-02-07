@@ -9,6 +9,15 @@ export function checkType(target: any) {
 }
 
 /**
+ * 判断任意值的类型，作用与`checkType`一致，外加一个辅助功能：当函数返回值为`true`时，可以传入泛型来确定`target`的类型（类型收窄）
+ * @param target 判断目标
+ * @param type 判断的类型
+ */
+export function isType<T>(target: any, type: JavaScriptTypes): target is T {
+  return checkType(target) === type;
+}
+
+/**
  * 修改属性值-只修改之前存在的值
  * @param target 修改的目标
  * @param value 修改的内容
@@ -193,7 +202,7 @@ export function jsonToFormData(params: { [key: string]: number | string | boolea
  */
 export function jsonParse(target: any, defaultValue: any = {}) {
   let result = defaultValue;
-  if (target && checkType(target) === "string") {
+  if (isType<string>(target, "string")) {
     try {
       result = JSON.parse(target);
     } catch (error) {
