@@ -39,7 +39,7 @@ export default defineComponent({
 })
 </script>
 <script lang="ts" setup>
-import { checkType } from "@/utils";
+import { isType } from "@/utils";
 
 const props = defineProps({
   /** 最大限制几个按钮出现，超过则用【更多】代替 */
@@ -71,8 +71,8 @@ const props = defineProps({
 
 const useList = computed(() => {
   return props.list.filter(item => {
-    if (checkType(item!.hide) === "function") {
-      return !(item.hide as Function)(props.row);
+    if (isType<Function>(item!.hide, "function")) {
+      return !item.hide(props.row);
     } else {
       return !item.hide;
     }
@@ -93,13 +93,15 @@ const dropdownList = computed(() => {
 
 const useString = (item: BaseTableOptionItem, key: "text"|"icon") => {
   // console.log(item)
-  if (!item[key]) return "-";
-  return checkType(item[key]) === "function" ? (item[key] as Function)(props.row) : item[key];
+  const value = item[key];
+  if (!value) return "-";
+  return isType<Function>(value, "function") ? value(props.row) : value;
 }
 
 const useBoolean = (item: BaseTableOptionItem, key: "loading"|"disabled") => {
-  if (!item[key]) return false;
-  return checkType(item[key]) === "function" ? (item[key] as Function)(props.row) : item[key];
+  const value = item[key];
+  if (!value) return false;
+  return isType<Function>(value, "function") ? value(props.row) : value;
 }
 
 const onBtnClick = (item: BaseTableOptionItem) => {
