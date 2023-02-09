@@ -29,9 +29,9 @@ export function usePageInfo(size = 10): PageInfo {
  * [自定义防抖`ref`](https://cn.vuejs.org/api/reactivity-advanced.html#customref)
  * @param value 
  * @param delay 防抖延迟
- * @returns 
+ * @param callback 防抖延迟结束回调函数
  */
-export function debounceRef<T>(value: T, delay = 1000) {
+export function debounceRef<T>(value: T, delay = 1000, callback?: (res: T) => void) {
   let timer: NodeJS.Timeout;
   return customRef(function(track, trigger) {
     return {
@@ -40,10 +40,18 @@ export function debounceRef<T>(value: T, delay = 1000) {
         return value;
       },
       set(val) {
-        timer && clearTimeout(timer);
-        timer = setTimeout(function() {
+        if (callback) {
           value = val;
           trigger();
+        }
+        timer && clearTimeout(timer);
+        timer = setTimeout(function() {
+          if (callback) {
+            callback(val);
+          } else {
+            value = val;
+            trigger();
+          }
         }, delay);
       }
     }
