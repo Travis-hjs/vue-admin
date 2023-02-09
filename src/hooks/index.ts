@@ -28,10 +28,10 @@ export function usePageInfo(size = 10): PageInfo {
 /**
  * [自定义防抖`ref`](https://cn.vuejs.org/api/reactivity-advanced.html#customref)
  * @param value 
- * @param delay 防抖延迟（默认1秒）
- * @returns 
+ * @param delay 防抖延迟
+ * @param callback 防抖延迟结束回调函数
  */
-export function debounceRef<T>(value: T, delay = 1000) {
+export function debounceRef<T>(value: T, delay = 1000, callback?: (res: T) => void) {
   let timer: NodeJS.Timeout;
   return customRef(function(track, trigger) {
     return {
@@ -40,10 +40,18 @@ export function debounceRef<T>(value: T, delay = 1000) {
         return value;
       },
       set(val) {
-        timer && clearTimeout(timer);
-        timer = setTimeout(function() {
+        if (callback) {
           value = val;
           trigger();
+        }
+        timer && clearTimeout(timer);
+        timer = setTimeout(function() {
+          if (callback) {
+            callback(val);
+          } else {
+            value = val;
+            trigger();
+          }
         }, delay);
       }
     }
@@ -60,17 +68,17 @@ export function validateEX(formName: string, valid?: boolean) {
     const item = document.querySelector(`${formName} .is-error`);
     if (!item) return;
     item.scrollIntoView && item.scrollIntoView({
-      behavior: 'smooth'
+      behavior: "smooth"
     });
-    const input = (item.querySelector('.el-input') || item.querySelector('.el-textarea')) as HTMLInputElement;
+    const input = (item.querySelector(".el-input") || item.querySelector(".el-textarea")) as HTMLInputElement;
     if (!input) return;
-    input.classList.add('apply-shake');
+    input.classList.add("apply-shake");
     function remve() {
-      input.removeEventListener('animationend', remve);
-      input.removeEventListener('click', remve);
-      input.classList.remove('apply-shake');
+      input.removeEventListener("animationend", remve);
+      input.removeEventListener("click", remve);
+      input.classList.remove("apply-shake");
     }
-    input.addEventListener('animationend', remve);
-    input.addEventListener('click', remve);
+    input.addEventListener("animationend", remve);
+    input.addEventListener("click", remve);
   }, 1000 / 60);
 }
