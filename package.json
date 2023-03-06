@@ -8,8 +8,8 @@
     "url": "https://github.com/Hansen-hjs/vue-admin"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "dev": "vue-tsc --noEmit && vite",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "dependencies": {
