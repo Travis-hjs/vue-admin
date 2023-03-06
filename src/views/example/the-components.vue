@@ -39,7 +39,7 @@
       <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
     </div>
 
-    <div class="flex">
+    <div class="flex mgb_50">
       <button class="the-btn blue" v-ripple @click="openDialog('first')">打开弹出层-1</button>
       <div class="f1"></div>
       <button class="the-btn green" v-ripple @click="openDialog('second')">打开弹出层-2</button>
@@ -78,12 +78,31 @@
         <button class="the-btn blue" v-ripple @click="openDialog('third')">打开嵌套 Dialog</button>
       </template>
     </base-dialog>
+
+    <div class="mgb_30">
+      <h2 class="the-title">自定义 Message 控件</h2>
+    </div>
+
+    <div class="mgb_50">
+      <button v-ripple :class="['the-btn', item.className]" v-for="item in messageBtns" :key="item.type" @click="openMessage(item)">{{ item.label }}</button>
+    </div>
+
+    <div class="mgb_30">
+      <h2 class="the-title">自定义 MessageBox 控件</h2>
+    </div>
+
+    <div class="mgb_50">
+      <button class="the-btn blue" v-ripple @click="openMessageBox()">打开确认框</button>
+      <button class="the-btn green" v-ripple @click="openMessageBox(true)">打开确认取消框</button>
+    </div>
+
   </div>
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 import UploadImage from "@/components/Upload/Image.vue";
+import { Message, message, messageBox } from "@/utils/message";
 
 const formData = reactive({
   banner: "",
@@ -137,6 +156,31 @@ function clearTimer() {
   delayShow.value = false;
   clearTimeout(delayTimer);
 }
+
+interface MessageBtn {
+  label: string
+  type: Message.Type
+  className: string
+}
+
+const messageBtns: Array<MessageBtn> = [
+  { label: "message-info", type: "info", className: "blue" },
+  { label: "message-success", type: "success", className: "green" },
+  { label: "message-warning", type: "warning", className: "yellow" },
+  { label: "message-error", type: "error", className: "red" },
+];
+
+function openMessage(item: MessageBtn) {
+  message.show(`This is a prompt message for ${item.type}`, item.type);
+}
+
+function openMessageBox(isConfirm = false) {
+  messageBox({
+    content: isConfirm ? "确认取消框" : "确认框",
+    cancelText: isConfirm ? "取消" : undefined
+  });
+}
+
 </script>
 <style lang="scss">
 .the-components {

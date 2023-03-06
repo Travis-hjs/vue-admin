@@ -1,17 +1,22 @@
 import { usezIndex } from "@/hooks";
 
-interface MessageParams {
-  /** 持续时间（毫秒），默认`3000` */
-  duration?: number
-  /** 起始定位层级，默认`1000` */
-  zIndex?: number
+export namespace Message {
+  export interface Option {
+    /** 持续时间（毫秒），默认`3000` */
+    duration?: number
+    /** 起始定位层级，默认`1000` */
+    zIndex?: number
+  }
+
+  /** 消息类型 */
+  export type Type = "info" | "success" | "warning" | "error"
 }
 
 /**
  * 消息提醒功能
  * @param params 
  */
-function useMessage(params: MessageParams = {}) {
+function useMessage(params: Message.Option = {}) {
   const doc = document;
   const cssModule = `__${Math.random().toString(36).slice(2, 7)}`;
   const className = {
@@ -190,7 +195,7 @@ function useMessage(params: MessageParams = {}) {
    * @param type 消息类型
    * @param duration 持续时间，优先级比默认值高
    */
-  function show(content: string, type: "info"|"success"|"warning"|"error" = "info", duration?: number) {
+  function show(content: string, type: Message.Type = "info", duration?: number) {
     const el = doc.createElement("div");
     el.className = `${className.box} ${type}`;
     el.style.top = `${getItemTop()}px`;
@@ -237,8 +242,194 @@ function useMessage(params: MessageParams = {}) {
   }
 }
 
+namespace Dialog {
+  export interface Option {
+    /** 起始的定位层级 */
+    zIndex?: number
+
+  }
+  export interface Show {
+    /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
+    title?: string
+    /** 提示内容（可传html） */
+    content: string
+    /** 确认回调 */
+    confirm?: () => void
+    /** 确认按钮文字，默认为`"确认"` */
+    confirmText?: string
+    /** 取消回调 */
+    cancel?: () => void
+    /** 取消按钮文字，不传则没有取消操作 */
+    cancelText?: string
+  }
+}
+
+
+/**
+ * 对话框控件
+ * @param option
+ */
+function useDialog(option: Dialog.Option = {}) {
+  const doc = document;
+  let zIndex = option.zIndex || 999;
+  const cssModule = `__${Math.random().toString(36).slice(2, 7)}`;
+  const className = {
+    mask: `dialog-mask${cssModule}`,
+    popup: `dialog-popup${cssModule}`,
+    title: `dialog-title${cssModule}`,
+    content: `dialog-content${cssModule}`,
+    footer: `dialog-footer${cssModule}`,
+    confirm: `confirm${cssModule}`,
+    fade: `fade${cssModule}`,
+    show: `show${cssModule}`,
+    hide: `hide${cssModule}`
+  }
+  const cssText = `
+  .${className.mask} {
+    --time: .3s;
+    --transition: .3s all;
+    --black: #333;
+    --text-color: #555;
+    --confirm-bg: #2ec1cb;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    animation: ${className.fade} var(--time);
+  }
+  .${className.mask} * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .${className.popup} {
+    width: 74%;
+    max-width: 375px;
+    border-radius: var(--border-radius);
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+    background-color: #fff;
+    transition: var(--transition);
+    animation: ${className.show} var(--time);
+  }
+  .${className.title} {
+    font-size: 18px;
+    padding: 12px 15px;
+    border-bottom: solid 1px #eee;
+    font-weight: normal;
+    color: var(--black);
+    text-align: left;
+  }
+  .${className.content} {
+    padding: 16px 15px;
+    font-size: 15px;
+    color: var(--text-color);
+    text-align: left;
+  }
+  .${className.footer} {
+    width: 100%;
+    text-align: right;
+    border-top: solid 1px #eee;
+    padding: 12px 15px;
+  }
+  
+  @keyframes ${className.fade} {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes ${className.show} {
+    0% { transform: translate3d(var(--x), var(--y), 0) scale(0); }
+    100% { transform: translate3d(0, 0, 0) scale(1); }
+  }
+  .${className.mask}.${className.hide} {
+    opacity: 0;
+  }
+  .${className.mask}.${className.hide} .${className.popup} {
+    transform: translate3d(var(--x), var(--y), 0) scale(0);
+  }
+  `;
+  const style = doc.createElement("style");
+  style.textContent = cssText.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
+  doc.head.appendChild(style);
+  /** 点击记录坐标 */
+  const clickSize = {
+    x: "0vw",
+    y: "0vh"
+  }
+  // 添加点击事件，并记录每次点击坐标
+  doc.addEventListener("click", function(e) {
+    const { innerWidth, innerHeight } = window;
+    const centerX = innerWidth / 2;
+    const centerY = innerHeight / 2;
+    const pageY = e.clientY - centerY;
+    const pageX = e.clientX - centerX;
+    clickSize.x = `${pageX / innerWidth * 100}vw`;
+    clickSize.y = `${pageY / innerHeight * 100}vh`;
+  }, true);
+  /**
+   * 输出节点
+   * @param option
+   */
+  function show(option: Dialog.Show) {
+    const el = doc.createElement("section");
+    el.className = className.mask;
+    el.style.zIndex = zIndex.toString();
+    zIndex++;
+    // 设置起始偏移位置
+    el.style.setProperty("--x", clickSize.x);
+    el.style.setProperty("--y", clickSize.y);
+    // 设置完之后还原坐标位置
+    clickSize.x = "0vw";
+    clickSize.y = "0vh";
+    const cancelBtn = option.cancelText ? `<button class="the-btn">${option.cancelText}</button>` : "";
+    el.innerHTML = `
+    <div class="${className.popup}">
+      <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
+      <div class="${className.content}">${option.content}</div>
+      <div class="${className.footer}">
+        ${cancelBtn}
+        <button class="${className.confirm} the-btn blue">${option.confirmText || "确认"}</button>
+      </div>
+    </div>
+    `;
+    doc.body.appendChild(el);
+    el.addEventListener("transitionend", function() {
+      el.remove();
+    });
+    function hide() {
+      el.classList.add(className.hide);
+    }
+    if (option.cancelText) {
+      (el.querySelector(`.${className.footer} button`) as HTMLButtonElement).onclick = function() {
+        hide();
+        option.cancel && option.cancel();
+      }
+    }
+    (el.querySelector(`.${className.confirm}`) as HTMLButtonElement).onclick = function() {
+      hide();
+      option.confirm && option.confirm();
+    }
+  }
+
+  return {
+    show
+  }
+}
+
 /** 顶部消息提醒控件 */
 export const message = useMessage({
   duration: 3600,
   zIndex: usezIndex() + 200, // 保证永远在其他组件的上层
 });
+
+const dialog = useDialog({
+  zIndex: usezIndex() + 100
+});
+
+/** 对话弹框控件 */
+export const messageBox = dialog.show;
