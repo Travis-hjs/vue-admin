@@ -336,8 +336,28 @@ function useDialog(option: Dialog.Option = {}) {
     text-align: right;
     border-top: solid 1px #eee;
     padding: 12px 15px;
+    font-size: 0;
   }
-  
+  .${className.footer} button {
+    line-height: 1;
+    height: 32px;
+    padding: 8px 15px;
+    color: var(--el-text-color-regular);
+    background-color: #fff;
+    border: var(--el-border);
+    border-color: var(--el-border-color);
+    font-size: var(--el-font-size-base);
+    border-radius: var(--el-border-radius-base);
+    transition: .1s all;
+  }
+  .${className.footer} button + button {
+    margin-left: 12px;
+  }
+  .${className.footer} .${className.confirm} {
+    color: var(--el-color-white);
+    background-color: var(--el-color-primary);
+    border-color: var(--el-color-primary);
+  }
   @keyframes ${className.fade} {
     0% { opacity: 0; }
     100% { opacity: 1; }
@@ -386,14 +406,14 @@ function useDialog(option: Dialog.Option = {}) {
     // 设置完之后还原坐标位置
     clickSize.x = "0vw";
     clickSize.y = "0vh";
-    const cancelBtn = option.cancelText ? `<button class="the-btn">${option.cancelText}</button>` : "";
+    const cancelBtn = option.cancelText ? `<button>${option.cancelText}</button>` : "";
     el.innerHTML = `
     <div class="${className.popup}">
       <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
       <div class="${className.content}">${option.content}</div>
       <div class="${className.footer}">
         ${cancelBtn}
-        <button class="${className.confirm} the-btn blue">${option.confirmText || "确认"}</button>
+        <button class="${className.confirm}">${option.confirmText || "确认"}</button>
       </div>
     </div>
     `;

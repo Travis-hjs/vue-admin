@@ -23,7 +23,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { PropType, ref } from "vue";
 import { uploadFile } from "@/api/common";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 const props = defineProps({
   //上传图片点击设置埋点数据
