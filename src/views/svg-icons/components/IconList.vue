@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { copyText } from "@/utils";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 /** 图标列表 */
 export default defineComponent({

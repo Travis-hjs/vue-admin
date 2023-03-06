@@ -21,7 +21,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getWeather } from "@/api/common";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 const pageData = reactive({
   city: "广州",

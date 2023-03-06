@@ -1,3 +1,5 @@
+import { usezIndex } from "@/hooks";
+
 interface MessageParams {
   /** 持续时间（毫秒），默认`3000` */
   duration?: number
@@ -236,8 +238,7 @@ function useMessage(params: MessageParams = {}) {
 }
 
 /** 顶部消息提醒控件 */
-const message = useMessage({
-  duration: 3600
+export const message = useMessage({
+  duration: 3600,
+  zIndex: usezIndex() + 200, // 保证永远在其他组件的上层
 });
-
-export default message;

@@ -25,7 +25,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import { PropType, ref } from "vue";
 import { uploadImg } from "@/api/common";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 const props = defineProps({
   /** 组件上传图片路径 */

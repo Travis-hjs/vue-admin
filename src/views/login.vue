@@ -32,7 +32,7 @@ import store from "@/store";
 import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
 import { modifyData } from "@/utils";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 const cacheName = "login-info";
 
