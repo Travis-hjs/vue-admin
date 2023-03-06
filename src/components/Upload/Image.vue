@@ -27,7 +27,7 @@ export default defineComponent({
 import { ref } from "vue"
 import { copyText } from "@/utils";
 import { uploadFile } from "@/api/common";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 const props = defineProps({
   /** 组件上传图片路径 */

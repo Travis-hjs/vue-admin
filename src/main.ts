@@ -9,7 +9,7 @@ import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
 import ripple from "./utils/ripple";
-import message from "./utils/message";
+import { message } from "./utils/message";
 
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";

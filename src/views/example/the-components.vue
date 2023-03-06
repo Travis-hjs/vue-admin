@@ -78,12 +78,31 @@
         <el-button type="success" v-ripple @click="openDialog('third')">打开嵌套 Dialog</el-button>
       </template>
     </base-dialog>
+
+    <div class="mgb_30">
+      <h2 class="the-title">自定义 Message 控件</h2>
+    </div>
+
+    <div class="mgb_50">
+      <el-button v-for="item in messageBtns" :key="item.type" :type="item.btnType" @click="openMessage(item)">{{ item.label }}</el-button>
+    </div>
+
+    <div class="mgb_30">
+      <h2 class="the-title">自定义 MessageBox 控件</h2>
+    </div>
+
+    <div class="mgb_50">
+      <el-button type="primary" @click="openMessageBox()">打开确认框</el-button>
+      <el-button type="primary" @click="openMessageBox(true)">打开确认取消框</el-button>
+    </div>
+
   </div>
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 import UploadImage from "@/components/Upload/Image.vue";
+import { Message, message, messageBox } from "@/utils/message";
 
 const formData = reactive({
   banner: "",
@@ -137,6 +156,31 @@ function clearTimer() {
   delayShow.value = false;
   clearTimeout(delayTimer);
 }
+
+interface MessageBtn {
+  label: string
+  type: Message.Type
+  btnType: "primary"|"success"|"warning"|"danger"
+}
+
+const messageBtns: Array<MessageBtn> = [
+  { label: "message-info", type: "info", btnType: "primary" },
+  { label: "message-success", type: "success", btnType: "success" },
+  { label: "message-warning", type: "warning", btnType: "warning" },
+  { label: "message-error", type: "error", btnType: "danger" },
+];
+
+function openMessage(item: MessageBtn) {
+  message.show(`This is a prompt message for ${item.type}`, item.type);
+}
+
+function openMessageBox(isConfirm = false) {
+  messageBox({
+    content: isConfirm ? "确认取消框" : "确认框",
+    cancelText: isConfirm ? "取消" : undefined
+  });
+}
+
 </script>
 <style lang="scss">
 .the-components {

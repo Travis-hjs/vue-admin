@@ -1,7 +1,7 @@
 import config from "./config";
 import { checkType, jsonParse } from "./index";
 import store from "@/store";
-import message from "@/utils/message";
+import { message } from "@/utils/message";
 
 /**
  * `http`请求
