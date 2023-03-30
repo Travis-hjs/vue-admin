@@ -14,11 +14,11 @@ export const FilterWrap = defineComponent({
   setup(props, { slots }) {
     return () => (
       <section class="filter-wrap flex" style={{ [width]: props.labelWidth }}>
-        { slots.left ? <div>{ slots.left() }</div> : undefined }
+        { slots.left ? <div class="filter-side">{ slots.left() }</div> : undefined }
         <div class="fwrap f1">
           { slots.default && slots.default() }
         </div>
-        { slots.right ? <div>{ slots.right() }</div> : undefined }
+        { slots.right ? <div class="filter-side">{ slots.right() }</div> : undefined }
       </section>
     )
   },

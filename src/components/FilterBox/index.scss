@@ -2,11 +2,13 @@
   width: 100%;
   border-bottom: solid #dcdfe6 1px;
   margin-bottom: 24px;
+  .filter-side, .filter-item {
+    margin-bottom: 20px;
+  }
   .filter-item {
     min-height: 32px;
     // box-sizing: border-box;
     // padding: 0;
-    margin-bottom: 20px;
     margin-right: 20px;
   }
   .filter-label {
