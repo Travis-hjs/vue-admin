@@ -1,0 +1,25 @@
+.filter-wrap {
+  width: 100%;
+  border-bottom: solid #dcdfe6 1px;
+  margin-bottom: 24px;
+  .filter-item {
+    min-height: 32px;
+    // box-sizing: border-box;
+    // padding: 0;
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
+  .filter-label {
+    width: var(--label-width);
+    font-size: 14px;
+    padding: 0 10px;
+    font-weight: bold;
+    color: #606266;
+  }
+  .short-value {
+    width: 220px;
+  }
+  .long-value {
+    width: 380px;
+  }
+}
