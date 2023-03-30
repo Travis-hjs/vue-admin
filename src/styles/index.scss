@@ -121,48 +121,6 @@
   }
 }
 
-// 筛选搜索头部样式
-.option-box {
-  width: 100%;
-  padding-bottom: 1px;
-  border-bottom: solid #dcdfe6 1px;
-  margin-bottom: 24px;
-  .option-row {
-    padding-top: 20px;
-    &:first-child {
-      padding-top: 0px;
-    }
-  }
-  .option-item {
-    display: flex;
-    min-height: 32px;
-    box-sizing: border-box;
-    // padding: 0;
-    margin-bottom: 20px;
-    margin-right: 20px;
-  }
-  .option-label {
-    display: inline-block;
-    font-size: 14px;
-    padding: 0 10px;
-    font-weight: bold;
-    color: #606266;
-    min-width: 96px;
-    white-space: break-all;
-    line-height: 32px;
-  }
-  .short-input {
-    width: 220px;
-  }
-  .long-input {
-    width: 380px;
-  }
-}
-.option-table {
-  min-height: 500px;
-  margin-bottom: 28px;
-}
-
 @keyframes shake {
   10%, 90% {
     transform: translate3d(-1px, 0, 0);
