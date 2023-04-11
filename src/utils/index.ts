@@ -22,13 +22,12 @@ export function isType<T>(target: any, type: JavaScriptTypes): target is T {
  * @param target 修改的目标
  * @param value 修改的内容
  */
-export function modifyData<T>(target: T, value: T) {
+export function modifyData<T extends object>(target: T, value: T) {
   for (const key in value) {
     if (Object.prototype.hasOwnProperty.call(target, key)) {
-      // target[key] = value[key];
-      // 需要的话，深层逐个赋值
+      // 深层逐个赋值
       if (checkType(target[key]) === "object") {
-        modifyData(target[key], value[key]);
+        modifyData(target[key] as any, value[key]);
       } else {
         target[key] = value[key];
       }
@@ -41,7 +40,7 @@ export function modifyData<T>(target: T, value: T) {
  * @param target 设置的目标
  * @param value 设置的内容
  */
-export function setData<T>(target: T, value: T) {
+export function setData<T extends object>(target: T, value: T) {
   for (const key in value) {
     target[key] = value[key];
   }
@@ -164,7 +163,7 @@ export function findIndex<T>(array: Array<T>, compare: (value: T, index: number)
  */
 export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
   return array.filter((element, index, self) => {
-    return findIndex(self, (el: T) => compare(el, element)) === index;
+    return findIndex(self, el => compare(el, element)) === index;
   })
 }
 
