@@ -274,7 +274,7 @@ npm run build
       "",
       "const btnList: Array<BaseTableOptionItem> = [",
       "  { text: \"编辑\", icon: \"el-icon-edit\" },",
-      "  { text: \"删除\", icon: \"el-icon-close\", type: \"danger\", },",
+      "  { text: \"删除\", icon: \"el-icon-delete\", type: \"danger\", },",
       "];",
       "",
       "async function getTableData() {",
