@@ -418,8 +418,8 @@ function useDialog(option: Dialog.Option = {}) {
     </div>
     `;
     doc.body.appendChild(el);
-    el.addEventListener("transitionend", function() {
-      el.remove();
+    el.addEventListener("transitionend", function(e) {
+      e.target === el && el.classList.contains(className.hide) && el.remove();
     });
     function hide() {
       el.classList.add(className.hide);
