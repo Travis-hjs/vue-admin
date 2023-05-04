@@ -337,7 +337,6 @@ function useDialog(option: Dialog.Option = {}) {
     border-top: solid 1px #eee;
     padding: 12px 15px;
   }
-  
   @keyframes ${className.fade} {
     0% { opacity: 0; }
     100% { opacity: 1; }
@@ -398,8 +397,8 @@ function useDialog(option: Dialog.Option = {}) {
     </div>
     `;
     doc.body.appendChild(el);
-    el.addEventListener("transitionend", function() {
-      el.remove();
+    el.addEventListener("transitionend", function(e) {
+      e.target === el && el.classList.contains(className.hide) && el.remove();
     });
     function hide() {
       el.classList.add(className.hide);
