@@ -164,8 +164,7 @@ const add: Array<RouteItem> = [
   {
     path: "/icon",
     name: "icon",
-    auth: [0],
-    meta: { title: "图标栏目" },
+    meta: { title: "图标栏目", auth: [0], },
     component: Layout,
     redirect: "/icon/svg-icons",
     children: [
@@ -181,11 +180,11 @@ const add: Array<RouteItem> = [
     path: "/" + store.projectInfo.link,
     name: "GitHub-Hansen",
     component: Page404, // 这里必需给一个组件
-    auth: [0],
     meta: {
       title: "项目地址",
       icon: "github",
-      link: store.projectInfo.link
+      link: store.projectInfo.link,
+      auth: [0],
     }
   }
 ];
