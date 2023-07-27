@@ -14,16 +14,6 @@ export interface RouteMeta {
    * - 当设置该值为`true`时，路由必须要设置`name`，页面组件中的`name`也是，不然路由缓存不生效
    */
   keepAlive?: boolean
-}
-
-/** 自定义的路由类型-继承`RouteRecordRaw` */
-export type RouteItem = {
-  /**
-   * 路由名，类似唯一`key`
-   * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
-   * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
-   */
-  name?: string
   /**
    * 可以访问该权限的用户类型数组，与`userInfo.type`对应；
    * 传空数组或者不写该字段代表可以全部用户访问
@@ -34,6 +24,16 @@ export type RouteItem = {
    * | 1 | 普通用户 |
    */
   auth?: Array<number>
+}
+
+/** 自定义的路由类型-继承`RouteRecordRaw` */
+export type RouteItem = {
+  /**
+   * 路由名，类似唯一`key`
+   * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
+   * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
+   */
+  name?: string
   /** 子级路由 */
   children?: Array<RouteItem>
   /** 标头 */

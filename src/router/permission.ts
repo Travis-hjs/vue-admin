@@ -35,7 +35,8 @@ function handleAuth(routes: Array<RouteItem>) {
   const userType = store.user.info.type as number;
   for (let i = 0; i < routes.length; i++) {
     const item = routes[i];
-    if (!item.auth || (item.auth && item.auth.includes(userType))) {
+    const auth = item.meta ? item.meta.auth : undefined;
+    if (!auth || (auth && auth.includes(userType))) {
       if (item.children && item.children.length > 0) {
         item.children = handleAuth(item.children);
       }
