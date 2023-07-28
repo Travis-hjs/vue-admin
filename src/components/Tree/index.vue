@@ -352,22 +352,20 @@ defineExpose({
 
 </script>
 <style lang="scss">
-@import "@/styles/variables.scss";
-
 .base-tree {
   width: 100%;
   width: 100%;
   .base-tree-level {
     height: 30px;
     overflow: hidden;
-    @include moveTime();
+    transition: var(--transition);
   }
   .base-tree-item {
     width: 100%;
     height: 30px;
     font-size: 14px;
     color: #1f2d3d;
-    @include moveTime();
+    transition: var(--transition);
     cursor: pointer;
     border-radius: 2px;
 
@@ -378,7 +376,7 @@ defineExpose({
       padding: 4px;
       margin-right: 2px;
       color: #c0c4cc;
-      @include moveTime();
+      transition: var(--transition);
     }
     .base-tree-icon.hidden-icon {
       opacity: 0;

@@ -78,7 +78,7 @@ $grey: #DCDFE6;
     line-height: 1;
     .icon {
       margin-left: 8px;
-      @include moveTime();
+      transition: var(--transition);
     }
     .opened {
       transform: rotate(180deg);
