@@ -52,16 +52,16 @@ $grey: #DCDFE6;
     border-radius: 0;
     @include radiusLeft();
     border-right: none;
-    position: relative;
-    &::after {
-      position: absolute;
-      content: "";
-      top: 15%;
-      right: 0;
-      width: 1px;
-      height: 70%;
-      background-color: $grey;
-    }
+    // position: relative;
+    // &::after {
+    //   position: absolute;
+    //   content: "";
+    //   top: 15%;
+    //   right: 0;
+    //   width: 1px;
+    //   height: 70%;
+    //   background-color: $grey;
+    // }
   }
   .el-input-group__prepend + .el-input__inner {
     border-left: none !important;

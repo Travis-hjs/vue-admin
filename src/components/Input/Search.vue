@@ -11,7 +11,7 @@
       @keyup.native.enter="onSearch()"
     >
       <template #prepend v-if="prepends">
-        <button class="base-input-prepend" :style="{ width: prependWidth }" type="button" ref="prepend-btn" :disabled="disabled || loading">
+        <button class="base-input-prepend" :style="{ width: prependWidth }" type="button" ref="prependBtn" :disabled="disabled || loading">
           <span>{{ selectItem ? selectItem[useSetting.label] : '请选择' }}</span>
           <i :class="['icon el-icon-arrow-down', { 'opened': showPrepend }]"></i>
         </button>
@@ -58,7 +58,7 @@ const props = defineProps({
   },
   /** 前缀选项列表 */
   prepends: {
-    type: Array as PropType<Array<{ label: string, value: string | number, disabled: boolean } & BaseObj<string>>>,
+    type: Array as PropType<Array<{ label: string, value: string | number, disabled?: boolean } & BaseObj<string>>>,
     default: undefined
   },
   /** 前缀选项选中值 */
