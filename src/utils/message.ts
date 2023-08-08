@@ -4,8 +4,6 @@ export namespace Message {
   export interface Option {
     /** 持续时间（毫秒），默认`3000` */
     duration?: number
-    /** 起始定位层级，默认`1000` */
-    zIndex?: number
   }
 
   /** 消息类型 */
@@ -150,8 +148,6 @@ function useMessage(params: Message.Option = {}) {
   }
   `.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
   doc.head.appendChild(style);
-  /** 一直累加的定位层级 */
-  let zIndex = params.zIndex || 1000;
   /** 消息队列 */
   const messageList: Array<HTMLElement> = [];
 
@@ -199,12 +195,11 @@ function useMessage(params: Message.Option = {}) {
     const el = doc.createElement("div");
     el.className = `${className.box} ${type}`;
     el.style.top = `${getItemTop()}px`;
-    el.style.zIndex = zIndex.toString();
+    el.style.zIndex = zIndex.message;
     el.innerHTML = `
     <span class="${className.icon}"></span>
     <span class="${className.text}">${content}</span>
     `;
-    zIndex++;
     messageList.push(el);
     doc.body.appendChild(el);
     // 添加动画监听事件
@@ -243,11 +238,6 @@ function useMessage(params: Message.Option = {}) {
 }
 
 namespace Dialog {
-  export interface Option {
-    /** 起始的定位层级 */
-    zIndex?: number
-
-  }
   export interface Show {
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
     title?: string
@@ -264,14 +254,9 @@ namespace Dialog {
   }
 }
 
-
-/**
- * 对话框控件
- * @param option
- */
-function useDialog(option: Dialog.Option = {}) {
+/** 对话框控件 */
+function useDialog() {
   const doc = document;
-  let zIndex = option.zIndex || 999;
   const cssModule = `__${Math.random().toString(36).slice(2, 7)}`;
   const className = {
     mask: `dialog-mask${cssModule}`,
@@ -377,8 +362,7 @@ function useDialog(option: Dialog.Option = {}) {
   function show(option: Dialog.Show) {
     const el = doc.createElement("section");
     el.className = className.mask;
-    el.style.zIndex = zIndex.toString();
-    zIndex++;
+    el.style.zIndex = zIndex.dialog
     // 设置起始偏移位置
     el.style.setProperty("--x", clickSize.x);
     el.style.setProperty("--y", clickSize.y);
@@ -420,15 +404,21 @@ function useDialog(option: Dialog.Option = {}) {
   }
 }
 
+const zIndex = {
+  get message() {
+    return (usezIndex() + 20).toString();
+  },
+  get dialog() {
+    return (usezIndex() + 10).toString();
+  }
+}
+
 /** 顶部消息提醒控件 */
 export const message = useMessage({
-  duration: 3600,
-  zIndex: usezIndex() + 200, // 保证永远在其他组件的上层
+  duration: 3600
 });
 
-const dialog = useDialog({
-  zIndex: usezIndex() + 100
-});
+const dialog = useDialog();
 
 /** 对话弹框控件 */
 export const messageBox = dialog.show;
