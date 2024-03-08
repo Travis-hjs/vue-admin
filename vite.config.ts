@@ -23,5 +23,14 @@ export default defineConfig({
     //     rewrite: path => path.replace(/^\//, "")
     //   }
     // }
-  }
+  },
+  build: {
+    rollupOptions: {
+      manualChunks(id) {
+        if (id.includes("node_modules")) {
+          return "vendor";
+        }
+      }
+    }
+  },
 })
