@@ -26,9 +26,15 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      manualChunks(id) {
-        if (id.includes("node_modules")) {
-          return "vendor";
+      output: {
+        // manualChunks: {
+        //   "packgage-name": ["file-name"],
+        //   "element-plus": ["element-plus"],
+        // },
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
         }
       }
     }
