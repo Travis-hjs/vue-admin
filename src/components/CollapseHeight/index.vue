@@ -58,7 +58,7 @@ onMounted(function() {
       // el.style.height = "";
     }
   });
-  show();
+  // show(); 在弹框组件中获取到的高度为`0`
 });
 
 </script>
