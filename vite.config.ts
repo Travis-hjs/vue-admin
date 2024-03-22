@@ -35,6 +35,18 @@ export default defineConfig({
           if (id.includes("node_modules")) {
             return "vendor";
           }
+        },
+        entryFileNames: "js/[name]-[hash].js",
+        chunkFileNames: "js/[name]-[hash].js",
+        assetFileNames(target) {
+          if (target.name?.endsWith(".css")) {
+            return "css/[name]-[hash].css";
+          }
+          const imageTypes = [".png", "jpg", "jpeg", ".webp", ".gif"];
+          if (target.name && imageTypes.some(type => target.name!.endsWith(type))) {
+            return "image/[name]-[hash].[ext]";
+          }
+          return "assets/[name]-[hash].[ext]";
         }
       }
     }
