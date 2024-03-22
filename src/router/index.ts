@@ -178,7 +178,7 @@ const add: Array<RouteItem> = [
   },
   {
     path: "/" + store.projectInfo.link,
-    name: "GitHub-Hansen",
+    name: "GitHub-Travis",
     component: Page404, // 这里必需给一个组件
     meta: {
       title: "项目地址",
