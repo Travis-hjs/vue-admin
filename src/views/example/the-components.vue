@@ -9,8 +9,8 @@
     </div>
     <div class="mgb_30">
       <h2 class="the-title mgr_40">滚动条组件</h2>
-      <el-button type="success" v-ripple @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
-      <el-button type="primary" v-ripple @click="openDialog('first')">打开弹出层-1</el-button>
+      <el-button type="success" @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
+      <el-button type="primary" @click="openDialog('first')">打开弹出层-1</el-button>
     </div>
     <div class="mgb_20"><span class="the-tag green">横向滚动</span></div>
     <div class="list-x mgb_40">
@@ -41,8 +41,8 @@
 
     <section>
       <div class="mgb_20">
-        <button class="the-btn blue" v-ripple @click="collapse.showOne = !collapse.showOne">box-one switch</button>
-        <button class="the-btn blue" v-ripple @click="collapse.showTwo = !collapse.showTwo">box-one switch</button>
+        <el-button type="primary" @click="collapse.showOne = !collapse.showOne">box-one switch</el-button>
+        <el-button type="primary" @click="collapse.showTwo = !collapse.showTwo">box-one switch</el-button>
       </div>
       <div class="flex">
         <CollapseHeight :show="collapse.showOne" class="mgr_20">
@@ -59,9 +59,9 @@
     </div>
 
     <div class="flex">
-      <el-button type="primary" v-ripple @click="openDialog('first')">打开弹出层-1</el-button>
+      <el-button type="primary" @click="openDialog('first')">打开弹出层-1</el-button>
       <div class="f1"></div>
-      <el-button type="success" v-ripple @click="openDialog('second')">打开弹出层-2</el-button>
+      <el-button type="success" @click="openDialog('second')">打开弹出层-2</el-button>
     </div>
 
     <base-dialog title="第一个 dialog" v-model="dialogInfo.first.show" @close="clearTimer()">
@@ -70,7 +70,7 @@
         <div v-if="delayShow">延迟出现</div>
       </div>
       <template #footer>
-        <el-button type="danger" v-ripple @click="closeDialog('first')">关闭</el-button>
+        <el-button type="danger" @click="closeDialog('first')">关闭</el-button>
       </template>
     </base-dialog>
 
@@ -88,13 +88,13 @@
             </ul>
           </div>
           <template #footer>
-            <el-button type="danger" v-ripple @click="closeDialog('third')">关闭嵌套 Dialog</el-button>
+            <el-button type="danger" @click="closeDialog('third')">关闭嵌套 Dialog</el-button>
           </template>
         </base-dialog>
       </div>
       <template #footer>
-        <el-button type="danger" v-ripple @click="closeDialog('second')">关闭</el-button>
-        <el-button type="success" v-ripple @click="openDialog('third')">打开嵌套 Dialog</el-button>
+        <el-button type="danger" @click="closeDialog('second')">关闭</el-button>
+        <el-button type="success" @click="openDialog('third')">打开嵌套 Dialog</el-button>
       </template>
     </base-dialog>
 
@@ -243,7 +243,7 @@ const collapse = reactive({
       }
     }
   }
-  .the-upload-image + .the-upload-image {
+  .base-upload-image + .base-upload-image {
     margin-left: 14px;
   }
   .collapse-box {
