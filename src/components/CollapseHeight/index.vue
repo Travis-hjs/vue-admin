@@ -58,7 +58,8 @@ onMounted(function() {
       // el.style.height = "";
     }
   });
-  // show(); 在弹框组件中获取到的高度为`0`
+  // 这个判断操作的行为是：当组件的父元一开始处于素隐藏时，这个时候获取不到真实高度，所以不运行 show 函数
+  el.clientHeight > 0 && show();
 });
 
 </script>
