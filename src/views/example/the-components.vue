@@ -36,6 +36,25 @@
     </div>
 
     <div class="mgb_30">
+      <h2 class="the-title mgr_40">折叠盒子</h2>
+    </div>
+
+    <section>
+      <div class="mgb_20">
+        <button class="the-btn blue" v-ripple @click="collapse.showOne = !collapse.showOne">box-one switch</button>
+        <button class="the-btn blue" v-ripple @click="collapse.showTwo = !collapse.showTwo">box-one switch</button>
+      </div>
+      <div class="flex">
+        <CollapseHeight :show="collapse.showOne" class="mgr_20">
+          <div class="collapse-box">box-one</div>
+        </CollapseHeight>
+        <CollapseHeight :show="collapse.showTwo">
+          <div class="collapse-box">box-two</div>
+        </CollapseHeight>
+      </div>
+    </section>
+
+    <div class="mgb_30">
       <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
     </div>
 
@@ -102,6 +121,7 @@
 import { reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar/index.vue";
 import UploadImage from "@/components/Upload/Image.vue";
+import CollapseHeight from "@/components/CollapseHeight/index.vue";
 import { Message, message, messageBox } from "@/utils/message";
 
 const formData = reactive({
@@ -181,6 +201,11 @@ function openMessageBox(isConfirm = false) {
   });
 }
 
+const collapse = reactive({
+  showOne: true,
+  showTwo: true
+});
+
 </script>
 <style lang="scss">
 .the-components {
@@ -220,6 +245,12 @@ function openMessageBox(isConfirm = false) {
   }
   .the-upload-image + .the-upload-image {
     margin-left: 14px;
+  }
+  .collapse-box {
+    width: 300px;
+    height: 21vh;
+    background-color: #f8f8f8;
+    text-align: center;
   }
 }
 // 第三个弹出层插入至body处，所以样式要单独拎出来写在外部
