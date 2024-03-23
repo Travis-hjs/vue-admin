@@ -5,7 +5,7 @@
   "author": {
     "name": "Hjs",
     "email": "1141752341@qq.com",
-    "url": "https://github.com/Hansen-hjs/vue-admin"
+    "url": "https://github.com/Travis-hjs/vue-admin"
   },
   "scripts": {
     "dev": "vue-tsc --noEmit && vite",
