@@ -28,90 +28,90 @@
     <h2 class="the-title mgb_30">主题&样式</h2>
     <div class="form-item fvertical">
       <span class="form-label">整体背景颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.wholeBgColor">
+      <el-input v-model="styleVariable.wholeBgColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.wholeBgColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">侧边菜单栏宽度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.sidebarWidth" @input="e => onInput(e, 'sidebarWidth')">
+      <el-input v-model="styleVariable.sidebarWidth" @input="(e: string) => onInput(e, 'sidebarWidth')"></el-input>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">侧边菜单栏背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuBgColor">
+      <el-input v-model="styleVariable.menuBgColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuBgColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">菜单选项背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemBgColor">
+      <el-input v-model="styleVariable.menuItemBgColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">菜单选项激活状态背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemBgActivedColor">
+      <el-input v-model="styleVariable.menuItemBgActivedColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgActivedColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">菜单左右间距（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuPadding" @input="e => onInput(e, 'menuPadding')">
+      <el-input v-model="styleVariable.menuPadding" @input="(e: string) => onInput(e, 'menuPadding')"></el-input>
       <span class="the-tag blue">修改此值需要手动刷新页面</span>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">菜单字体大小（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuFontSize" @input="e => onInput(e, 'menuFontSize')">
+      <el-input v-model="styleVariable.menuFontSize" @input="(e: string) => onInput(e, 'menuFontSize')"></el-input>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">菜单标题高度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuTitleHeight" @input="e => onInput(e, 'menuTitleHeight')">
+      <el-input v-model="styleVariable.menuTitleHeight" @input="(e: string) => onInput(e, 'menuTitleHeight')"></el-input>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">菜单栏目高度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemHeight" @input="e => onInput(e, 'menuItemHeight')">
+      <el-input v-model="styleVariable.menuItemHeight" @input="(e: string) => onInput(e, 'menuItemHeight')"></el-input>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">侧边菜单栏文字默认颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuTextColor">
+      <el-input v-model="styleVariable.menuTextColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">侧边菜单栏文字激活颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuTextActivedColor">
+      <el-input v-model="styleVariable.menuTextActivedColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextActivedColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">顶部导航栏高度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.navbarHeight" @input="e => onInput(e, 'navbarHeight')">
+      <el-input v-model="styleVariable.navbarHeight" @input="(e: string) => onInput(e, 'navbarHeight')"></el-input>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">主容器内边距（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.contentPadding" @input="e => onInput(e, 'contentPadding')">
+      <el-input v-model="styleVariable.contentPadding" @input="(e: string) => onInput(e, 'contentPadding')"></el-input>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">主容器背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.contentBgColor">
+      <el-input v-model="styleVariable.contentBgColor"></el-input>
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.contentBgColor">
       </div>
     </div>
     <div class="form-item fvertical">
       <span class="form-label">页面内边距（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.pagePadding" @input="e => onInput(e, 'pagePadding')">
+      <el-input v-model="styleVariable.pagePadding" @input="(e: string) => onInput(e, 'pagePadding')"></el-input>
     </div>
     <div class="pdt_20 mgb_30">
-      <button class="the-btn blue mini" v-ripple @click="setStyle()">应用当前配置</button>
-      <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
-      <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
+      <el-button type="primary" @click="setStyle()">应用当前配置</el-button>
+      <el-button type="success" @click="copyStyle()">复制当前配置</el-button>
+      <el-button @click="resetStyle()">重置默认样式</el-button>
     </div>
 
     <h2 class="the-title mgb_30">打赏一下</h2>
@@ -249,9 +249,8 @@ const minValue: Record<Numbers, number> = {
 
 let timer: NodeJS.Timeout;
 
-function onInput(e: Event, key: Numbers) {
-  const inputEl = e.target as HTMLInputElement;
-  const result = inputOnlyNumber(inputEl.value);
+function onInput(val: string, key: Numbers) {
+  const result = inputOnlyNumber(val);
   const value = Number(result);
   styleVariable[key] = value;
   clearTimeout(timer);
@@ -320,14 +319,14 @@ onUnmounted(function() {
       color: #555;
       font-weight: bold;
     }
-    .the-input {
+    .el-input {
       width: 140px;
-      margin: 0 12px;
+      margin-right: 10px;
     }
     .color-box {
       border: solid 1px #dcdfe6;
       width: 100px;
-      height: 38px;
+      height: 30px;
       cursor: pointer;
       padding: 1px 2px;
       transition: var(--transition);
