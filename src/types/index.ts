@@ -64,10 +64,15 @@ export interface LayoutInfo {
   showSidebarLogo: boolean
   /** 历史记录列表 */
   historyViews: Array<HistoryViewsItem>
-  /** 系统信息 */
-  device?: "desktop" | "mobile"
-  /** 主题颜色 */
-  theme?: string
+  /** 
+   * 布局模式
+   * 
+   * | 字段 | 描述 |
+   * | --- | ----|
+   * | "" | 默认 |
+   * | "full-header" | 顶部撑满  |
+   */
+  layoutMode: "" | "full-header"
 }
 
 /** `layout`菜单列表数据 */

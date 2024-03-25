@@ -1,5 +1,12 @@
 <template>
-  <div :class="['the-layout', { 'has-tags-view': layoutInfo.showTagsView }, { 'collapsed-sidebar': !layoutInfo.sidebarOpen }]">
+  <div
+    :class="[
+      'the-layout',
+      layoutInfo.layoutMode,
+      { 'has-tags-view': layoutInfo.showTagsView },
+      { 'collapsed-sidebar': !layoutInfo.sidebarOpen }
+    ]"
+  >
     <HeaderBar />
     <Sidebar />
     <div class="the-layout-content" ref="contentBox">

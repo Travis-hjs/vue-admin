@@ -32,7 +32,8 @@ export default class ModuleLayout {
     showTagsView: true,
     sidebarOpen: true,
     showSidebarLogo: true,
-    historyViews: []
+    historyViews: [],
+    layoutMode: ""
   })
 
   private init() {
