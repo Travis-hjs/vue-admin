@@ -1,7 +1,7 @@
 <template>
   <div class="menu-2">
     <span class="the-tag green mgb_20">表单验证操作</span>
-    <el-form style="width: 600px;" ref="formRef" :model="form.data" :rules="form.rules" label-width="120px">
+    <el-form style="width: 600px;" id="the-form" ref="formRef" :model="form.data" :rules="form.rules" label-width="120px">
       <el-form-item label="活动名称" prop="name">
         <el-input v-model="form.data.name" :placeholder="form.rules.name[0].message" />
       </el-form-item>
@@ -67,6 +67,7 @@
 import { message } from "@/utils/message";
 import { FormInstance, FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { validateEX } from "@/hooks";
 
 const formRef = ref<FormInstance>();
 
@@ -109,6 +110,7 @@ const options = Array.from({ length: 10000 }).map((_, index) => ({
 
 function onSubmit() {
   formRef.value!.validate(valid => {
+    validateEX("#the-form", valid);
     if (valid) {
       message.success("验证成功，表单数据已打印至控制台");
       console.log("form.data >>", JSON.parse(JSON.stringify(form.data)));

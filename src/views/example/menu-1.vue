@@ -39,12 +39,15 @@ const tableColumns: Array<BaseTableColumn> = [
   { label: "ID", prop: "id", width: 90 },
   { label: "名称", prop: "name", minWidth: 180 },
   { label: "创建时间", prop: "date", width: 180 },
-  { label: "操作", prop: "action-right", width: 140 },
+  { label: "操作", prop: "action-right", width: 200 },
 ];
 
 const btnList: Array<BaseTableOptionItem> = [
   { text: "编辑", icon: "el-icon-edit" },
   { text: "删除", icon: "el-icon-delete", type: "danger", },
+  { text: "终止", icon: "el-icon-video-pause" },
+  { text: "启用", icon: "el-icon-video-play" },
+  { text: "下架", icon: "el-icon-folder-delete" },
 ];
 
 const options = [

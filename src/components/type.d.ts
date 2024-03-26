@@ -65,7 +65,10 @@ interface BaseTableColumn {
 interface BaseTableOptionItem<T = BaseObj> {
   /** 按钮文字 */
   text: string | ((row: T) => string)
-  /** 按钮图标`class` */
+  /** 
+   * 按钮图标`class`
+   * - [el-element icon地址](https://element.eleme.cn/#/zh-CN/component/icon)
+   */
   icon?: string | ((row: T) => string)
   /** 是否禁用 */
   disabled?: boolean | ((row: T) => boolean)
@@ -76,6 +79,7 @@ interface BaseTableOptionItem<T = BaseObj> {
   /**
    * 按钮类型，默认`"primary"`
    * - [element-plus button](http://element-plus.org/zh-CN/component/button.html)
+   * - 当按钮类型处于【更多】下拉选项中则无效
    */
   type?: "primary" | "success" | "info" | "warning" | "danger"
   /** 点击事件 */

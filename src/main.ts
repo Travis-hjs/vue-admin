@@ -71,5 +71,8 @@ declare module "vue" {
   export interface GlobalComponents {
     BaseDialog: typeof BaseDialog
     SvgIcon: typeof SvgIcon
+    BaseTable: typeof BaseTable
+    BaseTableOption: typeof BaseTableOption
+    BasePagination: typeof BasePagination
   }
 }

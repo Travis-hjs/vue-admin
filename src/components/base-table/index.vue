@@ -4,14 +4,14 @@
       ref="the-table"
       stripe
       border
-      :max-height="maxHeight"
-      :data="data"
+      :max-height="props.maxHeight"
+      :data="props.data"
       @row-click="rowClick"
       @selection-change="onSelect"
     >
-      <el-table-column type="selection" width="55" align="center" fixed="left" v-if="checkbox" :selectable="canSelect"></el-table-column>
+      <el-table-column type="selection" width="55" align="center" fixed="left" v-if="props.checkbox" :selectable="canSelect"></el-table-column>
       <el-table-column
-        v-for="item in columns"
+        v-for="item in props.columns"
         :key="item.key || item.prop"
         :prop="item.prop"
         :label="item.label"
@@ -25,7 +25,13 @@
       >
         <template #default="{row, $index}">
           <slot :name="item.slotName" v-bind="{row, $index}" v-if="item.slotName"></slot>
-          <base-table-option v-else-if="item.prop === 'action-right'" :row="row" :index="$index" :list="actions" :clickStop="isRowClick"></base-table-option>
+          <base-table-option
+            v-else-if="item.prop === 'action-right'"
+            :row="row"
+            :index="$index"
+            :list="props.actions"
+            :clickStop="props.isRowClick"
+          ></base-table-option>
           <template v-else>{{ setTableDefaultContent(row, item.prop, item) }}</template>
         </template>
       </el-table-column>
@@ -58,14 +64,17 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  /** 表格带选择操作，默认`false`，columns 中不需要定义 */
   checkbox: {
     type: Boolean,
     default: false
   },
+  /** 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<base-table-option />`组件的阻止事件冒泡作用 */
   isRowClick: {
     type: Boolean,
     default: false
   },
+  /** `<base-table-option :list="list">`组件的 list 数据 */
   actions: {
     type: Array as PropType<Array<BaseTableOptionItem>>,
     default: () => []

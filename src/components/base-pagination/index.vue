@@ -1,13 +1,13 @@
 <template>
   <div :class="['base-pagination', position]">
     <el-pagination
-      v-if="pageInfo.total"
+      v-if="props.pageInfo.total"
       background
-      :disabled="disabled"
-      :layout="layout"
-      :total="pageInfo.total"
-      :current-page="pageInfo.currentPage"
-      :page-sizes="pageSizes"
+      :disabled="props.disabled"
+      :layout="props.layout"
+      :total="props.pageInfo.total"
+      :current-page="props.pageInfo.currentPage"
+      :page-sizes="props.pageSizes"
       @size-change="onSizeChange"
       @current-change="onCurrentChange"
     ></el-pagination>

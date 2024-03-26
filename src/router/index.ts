@@ -57,13 +57,13 @@ const add: Array<RouteItem> = [
           {
             path: "/nested/menu-1",
             name: "nested/menu-1",
-            meta: { title: "菜单 2-1" },
+            meta: { title: "el-plus 表格" },
             component: () => import("../views/example/menu-1.vue")
           },
           {
             path: "/nested/menu-2",
             name: "nested/menu-2",
-            meta: { title: "菜单 2-2" },
+            meta: { title: "el-plus 表单验证" },
             component: () => import("../views/example/menu-2.vue")
           },
           {
