@@ -5,7 +5,7 @@ import { message } from "@/utils/message";
 
 /**
  * `http`请求
- * @author https://github.com/Hansen-hjs
+ * @author https://github.com/Travis-hjs
  * - [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * - [掘金](https://juejin.cn/post/6844904066418491406/#heading-1)
  */
