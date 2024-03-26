@@ -10,7 +10,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--menu-hover-bg-color);
     transform: translate3d(-100%, 0, 0);
     transition: var(--transition);
   }
@@ -29,6 +29,8 @@
   --sidebar-width: 210px;
   // 侧边菜单栏背景色
   --menu-bg-color: #001529;
+  // 菜单`hover`状态的动画背景
+  --menu-hover-bg-color: rgba(255, 255, 255, 0.1);
   // 菜单选项背景色
   --menu-item-bg-color: #000c17;
   // 菜单选项激活状态背景色
@@ -55,6 +57,8 @@
   --content-bg-color: #eee;
   // 页面内边距
   --page-padding: 14px;
+  // 顶部定位层级
+  --header-zindex: 100;
 
   width: 100%;
   height: 100%;
@@ -95,7 +99,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: var(--header-zindex);
   transition: var(--transition);
 }
 
@@ -140,7 +144,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 110;
+  z-index: calc(var(--header-zindex) + 1);
   transition: var(--transition);
 }
 
@@ -164,6 +168,7 @@
   .the-layout-sidebar {
     height: calc(100vh - var(--navbar-height) - var(--tags-height));
     top: calc(var(--navbar-height) + var(--tags-height));
+    z-index: calc(var(--header-zindex) - 1);
   }
 }
 
@@ -470,7 +475,7 @@
   position: fixed;
   bottom: 10%;
   right: 30px;
-  z-index: 100;
+  z-index: calc(var(--header-zindex) - 1);
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   transition: var(--transition);
 

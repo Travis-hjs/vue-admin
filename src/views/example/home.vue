@@ -45,6 +45,11 @@
       </div>
     </div>
     <div class="form-item fvertical">
+      <span class="form-label">菜单hover状态的动画背景</span>
+      <el-input v-model="styleVariable.menuHoverBgColor"></el-input>
+      <span class="the-tag blue">只支持rgba</span>
+    </div>
+    <div class="form-item fvertical">
       <span class="form-label">菜单选项背景色</span>
       <el-input v-model="styleVariable.menuItemBgColor"></el-input>
       <div class="color-box">
@@ -112,6 +117,7 @@
       <el-button type="primary" @click="setStyle()">应用当前配置</el-button>
       <el-button type="success" @click="copyStyle()">复制当前配置</el-button>
       <el-button @click="resetStyle()">重置默认样式</el-button>
+      <el-button type="primary" @click="onPreset()">应用预设配置</el-button>
     </div>
 
     <h2 class="the-title mgb_30">打赏一下</h2>
@@ -144,6 +150,8 @@ function useDefaultStyle() {
     sidebarWidth: 210,
     /** 侧边菜单栏背景色 */
     menuBgColor: "#001529",
+    /** 菜单`hover`状态的动画背景 */
+    menuHoverBgColor: "rgba(255, 255, 255, 0.1)",
     /** 菜单选项背景色 */
     menuItemBgColor: "#000c17",
     /** 菜单选项激活状态背景色 */
@@ -178,6 +186,7 @@ const getStyleText = () => `
   --whole-bg-color: ${styleVariable.wholeBgColor};
   --sidebar-width: ${styleVariable.sidebarWidth}px;
   --menu-bg-color: ${styleVariable.menuBgColor};
+  --menu-hover-bg-color: ${styleVariable.menuHoverBgColor};
   --menu-item-bg-color: ${styleVariable.menuItemBgColor};
   --menu-item-bg-actived-color: ${styleVariable.menuItemBgActivedColor};
   --menu-padding: ${styleVariable.menuPadding}px;
@@ -231,7 +240,19 @@ function resetStyle() {
   }
 }
 
-type Colors = "wholeBgColor"|"menuBgColor"|"menuItemBgColor"|"menuItemBgActivedColor"|"menuTextColor"|"menuTextActivedColor"|"contentBgColor";
+function onPreset() {
+  modifyData(styleVariable, {
+    menuBgColor: "#ffffff",
+    menuHoverBgColor: "rgba(121, 188, 255, 0.1)",
+    menuItemBgColor: "#ffffff",
+    menuItemBgActivedColor: "#ecf5ff",
+    menuTextColor: "#545454",
+    menuTextActivedColor: "#1388f6"
+  });
+  setStyle();
+}
+
+type Colors = "wholeBgColor"|"menuBgColor"|"menuHoverBgColor"|"menuItemBgColor"|"menuItemBgActivedColor"|"menuTextColor"|"menuTextActivedColor"|"contentBgColor";
 
 type Numbers = keyof Omit<typeof styleVariable, Colors>
 
@@ -320,7 +341,7 @@ onUnmounted(function() {
       font-weight: bold;
     }
     .el-input {
-      width: 140px;
+      width: 200px;
       margin-right: 10px;
     }
     .color-box {
