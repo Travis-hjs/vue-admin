@@ -22,14 +22,16 @@ export function isType<T>(target: any, type: JavaScriptTypes): target is T {
  * @param target 修改的目标
  * @param value 修改的内容
  */
-export function modifyData<T extends object>(target: T, value: T) {
+export function modifyData<T extends object>(target: T, value: DeepPartial<T>) {
   for (const key in value) {
     if (Object.prototype.hasOwnProperty.call(target, key)) {
+      const item = value[key] as any;
+      const _target = target[key];
       // 深层逐个赋值
-      if (checkType(target[key]) === "object") {
-        modifyData(target[key] as any, value[key]);
+      if (isType<T>(_target, "object")) {
+        modifyData(_target, item);
       } else {
-        target[key] = value[key];
+        target[key] = item;
       }
     }
   }
