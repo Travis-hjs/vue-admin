@@ -6,120 +6,104 @@
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
       <a class="the-tag green" :href="juejin" target="_blank">掘金描述说明</a>
     </div>
-    <h2 class="the-title mgb_30">布局操作开关</h2>
-    <div class="options-box mgb_40">
-      <label class="check-box fvertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
-        <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
-        显示侧边栏logo
-      </label>
-      <label class="check-box fvertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
-        <input type="checkbox" id="layout-tags" :checked="layoutInfo.showTagsView" />
-        显示历史记录标签
-      </label>
-      <label class="check-box fvertical mgb_20" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
-        <input type="checkbox" id="layout-open" :checked="layoutInfo.sidebarOpen" />
-        侧边栏展开
-      </label>
-      <label class="check-box fvertical" for="layout-mode" @change="onMode">
-        <input type="checkbox" id="layout-mode" :checked="layoutInfo.layoutMode === 'full-header'" />
-        顶部填满
-      </label>
-    </div>
-    <h2 class="the-title mgb_30">主题&样式</h2>
-    <div class="form-item fvertical">
-      <span class="form-label">整体背景颜色</span>
-      <el-input v-model="styleVariable.wholeBgColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.wholeBgColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">侧边菜单栏宽度（px）</span>
-      <el-input v-model="styleVariable.sidebarWidth" @input="(e: string) => onInput(e, 'sidebarWidth')"></el-input>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">侧边菜单栏背景色</span>
-      <el-input v-model="styleVariable.menuBgColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuBgColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单hover状态的动画背景</span>
-      <el-input v-model="styleVariable.menuHoverBgColor"></el-input>
-      <span class="the-tag blue">只支持rgba</span>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单选项背景色</span>
-      <el-input v-model="styleVariable.menuItemBgColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单选项激活状态背景色</span>
-      <el-input v-model="styleVariable.menuItemBgActivedColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgActivedColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单左右间距（px）</span>
-      <el-input v-model="styleVariable.menuPadding" @input="(e: string) => onInput(e, 'menuPadding')"></el-input>
-      <span class="the-tag blue">修改此值需要手动刷新页面</span>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单字体大小（px）</span>
-      <el-input v-model="styleVariable.menuFontSize" @input="(e: string) => onInput(e, 'menuFontSize')"></el-input>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单标题高度（px）</span>
-      <el-input v-model="styleVariable.menuTitleHeight" @input="(e: string) => onInput(e, 'menuTitleHeight')"></el-input>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">菜单栏目高度（px）</span>
-      <el-input v-model="styleVariable.menuItemHeight" @input="(e: string) => onInput(e, 'menuItemHeight')"></el-input>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">侧边菜单栏文字默认颜色</span>
-      <el-input v-model="styleVariable.menuTextColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">侧边菜单栏文字激活颜色</span>
-      <el-input v-model="styleVariable.menuTextActivedColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextActivedColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">顶部导航栏高度（px）</span>
-      <el-input v-model="styleVariable.navbarHeight" @input="(e: string) => onInput(e, 'navbarHeight')"></el-input>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">主容器内边距（px）</span>
-      <el-input v-model="styleVariable.contentPadding" @input="(e: string) => onInput(e, 'contentPadding')"></el-input>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">主容器背景色</span>
-      <el-input v-model="styleVariable.contentBgColor"></el-input>
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.contentBgColor">
-      </div>
-    </div>
-    <div class="form-item fvertical">
-      <span class="form-label">页面内边距（px）</span>
-      <el-input v-model="styleVariable.pagePadding" @input="(e: string) => onInput(e, 'pagePadding')"></el-input>
-    </div>
-    <div class="pdt_20 mgb_30">
-      <el-button type="primary" @click="setStyle()">应用当前配置</el-button>
-      <el-button type="success" @click="copyStyle()">复制当前配置</el-button>
-      <el-button @click="resetStyle()">重置默认样式</el-button>
-      <el-button type="primary" @click="onPreset()">应用预设配置</el-button>
-    </div>
-
+    <el-form class="the-form mgb_30" label-width="160px" size="small">
+      <h2 class="the-title mgb_30">布局操作开关</h2>
+      <el-form-item label="显示侧边栏logo">
+        <el-switch v-model="layoutInfo.showSidebarLogo" active-text="显示" inactive-text="隐藏" />
+      </el-form-item>
+      <el-form-item label="显示历史记录标签">
+        <el-switch v-model="layoutInfo.showTagsView" active-text="显示" inactive-text="隐藏" />
+      </el-form-item>
+      <el-form-item label="侧边栏展开">
+        <el-switch v-model="layoutInfo.sidebarOpen" active-text="展开" inactive-text="收起" />
+      </el-form-item>
+      <el-form-item label="布局模式">
+        <el-radio-group v-model="layoutInfo.layoutMode">
+          <el-radio-button label="">默认布局</el-radio-button>
+          <el-radio-button label="full-header">顶部撑满</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <h2 class="the-title mgb_30">主题&样式</h2>
+      <el-form-item label="整体背景颜色">
+        <el-input v-model="styleVariable.wholeBgColor"></el-input>
+        <el-color-picker v-model="styleVariable.wholeBgColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="侧边菜单栏宽度">
+        <el-input v-model="styleVariable.sidebarWidth" @input="(e: string) => onInput(e, 'sidebarWidth')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="侧边菜单栏背景色">
+        <el-input v-model="styleVariable.menuBgColor"></el-input>
+        <el-color-picker v-model="styleVariable.menuBgColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="菜单hover动画背景色">
+        <el-input v-model="styleVariable.menuHoverBgColor"></el-input>
+        <el-color-picker v-model="styleVariable.menuHoverBgColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="菜单选项背景色">
+        <el-input v-model="styleVariable.menuItemBgColor"></el-input>
+        <el-color-picker v-model="styleVariable.menuItemBgColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="菜单选项激活状态背景色">
+        <el-input v-model="styleVariable.menuItemBgActivedColor"></el-input>
+        <el-color-picker v-model="styleVariable.menuItemBgActivedColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="菜单左右间距">
+        <el-input v-model="styleVariable.menuPadding" @input="(e: string) => onInput(e, 'menuPadding')">
+          <template #suffix>px</template>
+        </el-input>
+        <span class="the-tag blue"><i class="el-icon-question el-icon--left"></i>修改此值需要手动刷新页面</span>
+      </el-form-item>
+      <el-form-item label="菜单字体大小">
+        <el-input v-model="styleVariable.menuFontSize" @input="(e: string) => onInput(e, 'menuFontSize')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="菜单标题高度">
+        <el-input v-model="styleVariable.menuTitleHeight" @input="(e: string) => onInput(e, 'menuTitleHeight')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="菜单栏目高度">
+        <el-input v-model="styleVariable.menuItemHeight" @input="(e: string) => onInput(e, 'menuItemHeight')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="侧边菜单栏文字默认颜色">
+        <el-input v-model="styleVariable.menuTextColor"></el-input>
+        <el-color-picker v-model="styleVariable.menuTextColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="侧边菜单栏文字激活颜色">
+        <el-input v-model="styleVariable.menuTextActivedColor"></el-input>
+        <el-color-picker v-model="styleVariable.menuTextActivedColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="顶部导航栏高度">
+        <el-input v-model="styleVariable.navbarHeight" @input="(e: string) => onInput(e, 'navbarHeight')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="主容器内边距">
+        <el-input v-model="styleVariable.contentPadding" @input="(e: string) => onInput(e, 'contentPadding')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="主容器背景色">
+        <el-input v-model="styleVariable.contentBgColor"></el-input>
+        <el-color-picker v-model="styleVariable.contentBgColor" show-alpha :predefine="predefineColors" @change="onColor()" />
+      </el-form-item>
+      <el-form-item label="页面内边距">
+        <el-input v-model="styleVariable.pagePadding" @input="(e: string) => onInput(e, 'pagePadding')">
+          <template #suffix>px</template>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="setStyle()">应用当前配置</el-button>
+        <el-button type="success" @click="copyStyle()">复制当前配置</el-button>
+        <el-button type="info" plain @click="resetStyle()">重置默认样式</el-button>
+        <el-button type="primary" @click="onPreset()">应用预设配置</el-button>
+      </el-form-item>
+    </el-form>
     <h2 class="the-title mgb_30">打赏一下</h2>
     <div class="code-box">
       <img class="hovercode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode1.jpg">
@@ -138,9 +122,22 @@ const layoutInfo = store.layout.info;
 const project = store.projectInfo.link;
 const juejin = "https://juejin.cn/post/7017278822068273166";
 
-function onMode() {
-  layoutInfo.layoutMode = layoutInfo.layoutMode === "full-header" ? "" : "full-header";
-}
+const predefineColors = [
+  "#ff4500",
+  "#ff8c00",
+  "#ffd700",
+  "#90ee90",
+  "#00ced1",
+  "#1e90ff",
+  "#c71585",
+  "rgba(255, 69, 0, 0.68)",
+  "rgb(255, 120, 0)",
+  "hsv(51, 100, 98)",
+  "hsva(120, 40, 94, 0.5)",
+  "hsl(181, 100%, 37%)",
+  "hsla(209, 100%, 56%, 0.73)",
+  "#c7158577",
+];
 
 function useDefaultStyle() {
   return {
@@ -329,37 +326,10 @@ onUnmounted(function() {
       transform: translateX(100px);
     }
   }
-  .options-box {
-    width: 220px;
-  }
-  .form-item {
-    height: 44px;
-    .form-label {
-      min-width: 180px;
-      font-size: 14px;
-      color: #555;
-      font-weight: bold;
-    }
+  .the-form {
     .el-input {
       width: 200px;
       margin-right: 10px;
-    }
-    .color-box {
-      border: solid 1px #dcdfe6;
-      width: 100px;
-      height: 30px;
-      cursor: pointer;
-      padding: 1px 2px;
-      transition: var(--transition);
-      &:hover {
-        border-color: var(--blue);
-      }
-      input {
-        width: 100%;
-        height: 100%;
-        display: block;
-        cursor: pointer;
-      }
     }
   }
 }
