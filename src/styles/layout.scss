@@ -79,6 +79,7 @@
   .the-layout-sidebar {
     height: calc(100vh - var(--navbar-height));
     top: calc(var(--navbar-height));
+    z-index: calc(var(--header-zindex) - 1);
   }
 }
 
@@ -171,7 +172,6 @@
   .the-layout-sidebar {
     height: calc(100vh - var(--navbar-height) - var(--tags-height));
     top: calc(var(--navbar-height) + var(--tags-height));
-    z-index: calc(var(--header-zindex) - 1);
   }
 }
 
