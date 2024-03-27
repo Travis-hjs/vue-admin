@@ -59,6 +59,8 @@
   --page-padding: 14px;
   // 顶部定位层级
   --header-zindex: 100;
+  // 顶部阴影
+  --header-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   width: 100%;
   height: 100%;
@@ -101,6 +103,7 @@
   left: 0;
   z-index: var(--header-zindex);
   transition: var(--transition);
+  box-shadow: var(--header-shadow);
 }
 
 .the-layout-navbar {
@@ -109,7 +112,7 @@
   overflow: hidden;
   position: relative;
   background: var(--whole-bg-color);
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  box-shadow: var(--header-shadow);
   overflow: hidden;
 
   .hamburger {
@@ -372,7 +375,8 @@
   padding: 4px 12px 0;
   background-color: var(--whole-bg-color);
   height: var(--tags-height);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  // box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
+  box-shadow: var(--header-shadow);
   white-space: nowrap;
 }
 
