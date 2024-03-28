@@ -1,5 +1,22 @@
 # 接口模块目录
 
+> 使用方式如下：
+
+## 接口调用
+
+```ts
+import { getData } from "@/api/common";
+
+// 接口获取后始终以`res.code === 1`为成功，无需在内部用 try + catch 去包一层
+// 因为 request 方法中已经做了始终执行 Promise.resolve 去作为正确和错误的响应
+async function getPageData() {
+  const res = await getData({ pageSize: 10, currentPage: 1 })
+  if (res.code === 1) {
+    // do some...
+  }
+}
+```
+
 ## GET 请求
 
 ```ts
