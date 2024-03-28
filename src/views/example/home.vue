@@ -4,7 +4,6 @@
     <div class="mgb_40">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
-      <a class="the-tag green" :href="juejin" target="_blank">掘金描述说明</a>
     </div>
     <h2 class="the-title mgb_30">布局操作开关</h2>
     <div class="options-box mgb_40">
@@ -135,8 +134,8 @@ import { message, messageBox } from "@/utils/message";
 import { ref, reactive, onMounted, onUnmounted } from "vue";
 
 const layoutInfo = store.layout.info;
+
 const project = store.projectInfo.link;
-const juejin = "https://juejin.cn/post/7017278822068273166";
 
 function onMode() {
   layoutInfo.layoutMode = layoutInfo.layoutMode === "full-header" ? "" : "full-header";
