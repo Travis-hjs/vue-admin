@@ -17,7 +17,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import Drawer from "@/components/Drawer/index.vue";
+import Drawer from "@/components/Drawer";
 
 const showDrawer = ref(false);
 
