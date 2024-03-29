@@ -119,9 +119,9 @@
 </template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import Scrollbar from "@/components/Scrollbar/index.vue";
+import Scrollbar from "@/components/Scrollbar";
 import UploadImage from "@/components/Upload/Image.vue";
-import CollapseHeight from "@/components/CollapseHeight/index.vue";
+import CollapseHeight from "@/components/CollapseHeight";
 import { Message, message, messageBox } from "@/utils/message";
 
 const formData = reactive({
