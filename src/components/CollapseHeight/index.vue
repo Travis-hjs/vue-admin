@@ -11,6 +11,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { ref, watch, onMounted } from "vue";
+import { show, hide } from "./index";
 
 const props = defineProps({
   show: {
@@ -20,32 +21,9 @@ const props = defineProps({
 
 const collapseBox = ref<HTMLElement>();
 
-function show() {
-  const el = collapseBox.value;
-  if (el) {
-    el.style.display = "";
-    el.style.height = "";
-    // console.log(el.clientHeight, el.offsetHeight);
-    const height = el.clientHeight;
-    el.style.height = "0px";
-    el.offsetHeight; // 回流
-    el.style.height = `${height}px`;
-  }
-}
-
-function hide() {
-  const el = collapseBox.value;
-  if (el) {
-    const height = el.clientHeight;
-    el.style.height = `${height}px`;
-    el.offsetHeight; // 回流
-    el.style.height = "0px";
-  }
-}
-
 watch(() => props.show, function(val, before) {
   if (val === before) return;
-  val ? show() : hide();
+  val ? show(collapseBox.value!) : hide(collapseBox.value!);
 });
 
 onMounted(function() {
@@ -59,7 +37,7 @@ onMounted(function() {
     }
   });
   // 这个判断操作的行为是：当组件的父元一开始处于素隐藏时，这个时候获取不到真实高度，所以不运行 show 函数
-  el.clientHeight > 0 && show();
+  el.clientHeight > 0 && show(el);
 });
 
 </script>

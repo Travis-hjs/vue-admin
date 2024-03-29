@@ -1,10 +1,10 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import SvgIcon from "./icons/index.vue";
-import BaseDialog from "./components/base-dialog/index.vue";
-import BaseTable from "./components/base-table/index.vue";
-import BaseTableOption from "./components/base-table-option/index.vue";
-import BasePagination from "./components/base-pagination/index.vue";
+import SvgIcon from "./icons";
+import BaseDialog from "./components/base-dialog";
+import BaseTable from "./components/base-table";
+import BaseTableOption from "./components/base-table-option";
+import BasePagination from "./components/base-pagination";
 import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";

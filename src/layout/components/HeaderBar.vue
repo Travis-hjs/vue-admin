@@ -33,7 +33,7 @@
 import { watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Breadcrumb from "./Breadcrumb.vue";
-import Scrollbar from "@/components/Scrollbar/index.vue";
+import Scrollbar from "@/components/Scrollbar";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
 import { HistoryViewsItem } from "@/types";
