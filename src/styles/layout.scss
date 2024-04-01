@@ -35,6 +35,8 @@
   --menu-item-bg-color: #000c17;
   // 菜单选项激活状态背景色
   --menu-item-bg-actived-color: var(--blue);
+  // 菜单选项激活伪类颜色，靠左边的蓝色小矩形
+  --menu-item-tag-color: var(--blue);
   // 菜单左右间距
   --menu-padding: 20px;
   // 菜单字体大小
@@ -61,6 +63,8 @@
   --header-zindex: 100;
   // 顶部阴影
   --header-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  // 侧边栏阴影
+  --sidebar-shadow: 1px 0 4px rgba(0, 21, 41, 0.08);
 
   width: 100%;
   height: 100%;
@@ -150,6 +154,7 @@
   top: 0;
   z-index: calc(var(--header-zindex) + 1);
   transition: var(--transition);
+  box-shadow: var(--sidebar-shadow);
 }
 
 .the-layout-content {
@@ -223,7 +228,7 @@
       position: absolute;
       width: 4px;
       left: 0;
-      background-color: var(--menu-item-bg-actived-color);
+      background-color: var(--menu-item-tag-color);
       height: calc(var(--menu-title-height) / 2);
       top: calc(var(--menu-title-height) / 4);
       transform: scaleY(0);
