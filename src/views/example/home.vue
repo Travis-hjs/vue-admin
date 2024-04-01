@@ -157,7 +157,7 @@ function useDefaultStyle() {
     menuItemBgColor: "#000c17",
     /** 菜单选项激活状态背景色 */
     menuItemBgActivedColor: "#1890FF",
-    /** 菜单选项激活伪类颜色 */
+    /** 菜单选项激活伪类颜色，靠左边的蓝色小矩形 */
     menuItemTagColor: "#1890FF",
     /** 菜单左右间距 */
     menuPadding: 20,
