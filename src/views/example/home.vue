@@ -63,6 +63,13 @@
       </div>
     </div>
     <div class="form-item fvertical">
+      <span class="form-label">菜单选项激活伪类颜色</span>
+      <input class="the-input" type="text" v-model="styleVariable.menuItemTagColor">
+      <div class="color-box">
+        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemTagColor">
+      </div>
+    </div>
+    <div class="form-item fvertical">
       <span class="form-label">菜单左右间距（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.menuPadding" @input="e => onInput(e, 'menuPadding')">
       <span class="the-tag blue">修改此值需要手动刷新页面</span>
@@ -155,6 +162,8 @@ function useDefaultStyle() {
     menuItemBgColor: "#000c17",
     /** 菜单选项激活状态背景色 */
     menuItemBgActivedColor: "#1890FF",
+    /** 菜单选项激活状态背景色 */
+    menuItemTagColor: "#1890FF",
     /** 菜单左右间距 */
     menuPadding: 20,
     /** 菜单字体大小 */
@@ -188,6 +197,7 @@ const getStyleText = () => `
   --menu-hover-bg-color: ${styleVariable.menuHoverBgColor};
   --menu-item-bg-color: ${styleVariable.menuItemBgColor};
   --menu-item-bg-actived-color: ${styleVariable.menuItemBgActivedColor};
+  --menu-item-tag-color: ${styleVariable.menuItemTagColor};
   --menu-padding: ${styleVariable.menuPadding}px;
   --menu-font-size: ${styleVariable.menuFontSize}px;
   --menu-title-height: ${styleVariable.menuTitleHeight}px;
@@ -240,18 +250,20 @@ function resetStyle() {
 }
 
 function onPreset() {
-  modifyData(styleVariable, {
+  const defaultStyle = useDefaultStyle();
+  modifyData(defaultStyle, {
     menuBgColor: "#ffffff",
-    menuHoverBgColor: "rgba(121, 188, 255, 0.1)",
+    menuHoverBgColor: "rgba(214, 231, 255, 0.2)",
     menuItemBgColor: "#ffffff",
     menuItemBgActivedColor: "#ecf5ff",
     menuTextColor: "#545454",
     menuTextActivedColor: "#1388f6"
   });
+  modifyData(styleVariable, defaultStyle);
   setStyle();
 }
 
-type Colors = "wholeBgColor"|"menuBgColor"|"menuHoverBgColor"|"menuItemBgColor"|"menuItemBgActivedColor"|"menuTextColor"|"menuTextActivedColor"|"contentBgColor";
+type Colors = "wholeBgColor"|"menuBgColor"|"menuHoverBgColor"|"menuItemBgColor"|"menuItemBgActivedColor"|"menuItemTagColor"|"menuTextColor"|"menuTextActivedColor"|"contentBgColor";
 
 type Numbers = keyof Omit<typeof styleVariable, Colors>
 
