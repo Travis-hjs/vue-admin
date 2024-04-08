@@ -20,7 +20,7 @@
           v-for="(item, index) in layoutInfo.historyViews"
           :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
           :key="index + item.path"
-          :to="{ path: item.path, query: item.query, params: item.params }"
+          :to="{ path: item.path, query: item.query, params: item.params } as any"
         >
           <span>{{ item.meta.title }}</span>
           <i class="close" @click.prevent.stop="onRemove(index)">-</i>
