@@ -41,16 +41,16 @@
       </el-form-item>
       <el-form-item label="活动类型" prop="type">
         <el-checkbox-group v-model="form.data.type">
-          <el-checkbox label="在线活动" name="type" />
-          <el-checkbox label="促销活动" name="type" />
-          <el-checkbox label="线下活动" name="type" />
-          <el-checkbox label="简单的品牌曝光" name="type" />
+          <el-checkbox label="在线活动" value="a" name="type" />
+          <el-checkbox label="促销活动" value="b" name="type" />
+          <el-checkbox label="线下活动" value="c" name="type" />
+          <el-checkbox label="简单的品牌曝光" value="d" name="type" />
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="来源" prop="resource">
         <el-radio-group v-model="form.data.resource">
-          <el-radio label="赞助" />
-          <el-radio label="地点" />
+          <el-radio value="sponsor" label="赞助" />
+          <el-radio value="place" label="地点" />
         </el-radio-group>
       </el-form-item>
       <el-form-item label="活动描述" prop="desc">

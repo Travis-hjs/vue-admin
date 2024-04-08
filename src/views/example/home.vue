@@ -18,8 +18,8 @@
       </el-form-item>
       <el-form-item label="布局模式">
         <el-radio-group v-model="layoutInfo.layoutMode">
-          <el-radio-button label="">默认布局</el-radio-button>
-          <el-radio-button label="full-header">顶部撑满</el-radio-button>
+          <el-radio-button value="">默认布局</el-radio-button>
+          <el-radio-button value="full-header">顶部撑满</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <h2 class="the-title mgb_30">主题&样式</h2>

@@ -14,15 +14,15 @@ import { message } from "./utils/message";
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";
 import ElementPlus from "element-plus";
-import zhCn from "element-plus/lib/locale/lang/zh-cn";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 window.version = version;
 
 const app = createApp(App);
 
 app.use(ElementPlus, {
-  locale: zhCn
-});
+  locale: zhCn,
+})
 
 // 添加一个自定义指令`v-copy`点击复制内容
 app.directive("copy", {

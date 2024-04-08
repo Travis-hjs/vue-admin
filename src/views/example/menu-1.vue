@@ -2,10 +2,20 @@
   <div class="menu-1">
     <span class="the-tag blue mgb_20">通用表格展示模板页</span>
     <FilterWrap>
+      <FilterItem>
+        <el-input placeholder="请输入关键字">
+          <template #suffix>
+            <i class="el-icon-search"></i>
+          </template>
+        </el-input>
+      </FilterItem>
       <FilterItem label="选项一">
-        <el-select v-model="searchInfo.type" placeholder="请选择" @change="onSearch">
+        <el-select class="short-value" v-model="state.searchInfo.type" placeholder="请选择" @change="onSearch">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
+      </FilterItem>
+      <FilterItem label="日期">
+        <el-date-picker v-model="state.searchInfo.date" type="datetime" placeholder="请选择日期" @change="onSearch" />
       </FilterItem>
       <template #right>
         <el-button type="primary"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
@@ -16,10 +26,10 @@
       :columns="tableColumns"
       :data="tableData"
       :actions="btnList"
-      :loading="loading"
+      :loading="state.loading"
     ></base-table>
 
-    <base-pagination :disabled="loading" :page-info="pageInfo" @change="getTableData" />
+    <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
 
   </div>
 </template>
@@ -29,9 +39,14 @@ import { usePageInfo } from "@/hooks";
 import { FilterWrap, FilterItem  } from "@/components/FilterBox/index";
 import { ranInt, randomText } from "@/utils";
 
-const loading = ref(false);
-
-const pageInfo = reactive(usePageInfo());
+const state = reactive({
+  loading: false,
+  searchInfo: {
+    type: "",
+    date: []
+  },
+  pageInfo: usePageInfo()
+});
 
 const tableData = ref<Array<BaseObj>>([]);
 
@@ -55,14 +70,10 @@ const options = [
   { label: "选项二", value: 1 }
 ];
 
-const searchInfo = reactive({
-  type: ""
-})
-
 async function getTableData() {
-  // loading.value = true;
-  // const res = await getData({...pageInfo, ...searchInfo})
-  // loading.value = false;
+  // state.loading = true;
+  // const res = await getData({...state.pageInfo, ...state.searchInfo})
+  // state.loading = false;
   // if (res.code === 1) {
   //   tableData.value = res.data.list || [];
   //   pageInfo.total = res.data.totalCount;
@@ -73,13 +84,13 @@ async function getTableData() {
     date: new Date().toLocaleString()
   }));
   tableData.value = testList;
-  pageInfo.total = testList.length;
+  state.pageInfo.total = testList.length;
 }
 
 getTableData();
 
 function onSearch() {
-  pageInfo.currentPage = 1;
+  state.pageInfo.currentPage = 1;
   getTableData();
 }
 

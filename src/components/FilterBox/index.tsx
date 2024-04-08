@@ -15,7 +15,7 @@ export const FilterWrap = defineComponent({
     return () => (
       <section class="filter-wrap flex" style={{ [width]: props.labelWidth }}>
         { slots.left ? <div class="filter-side">{ slots.left() }</div> : undefined }
-        <div class="fwrap f1">
+        <div class="filter-content f1">
           { slots.default && slots.default() }
         </div>
         { slots.right ? <div class="filter-side">{ slots.right() }</div> : undefined }
