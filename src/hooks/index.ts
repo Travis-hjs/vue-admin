@@ -60,7 +60,7 @@ export function debounceRef<T>(value: T, delay = 1000, callback?: (res: T) => vo
 
 /**
  * 表单验证加强
- * @param formName 表单`id`或`calss-name`
+ * @param formName 表单`id`或`class-name`
  */
 export function validateEX(formName: string, valid?: boolean) {
   if (valid) return;
@@ -73,12 +73,12 @@ export function validateEX(formName: string, valid?: boolean) {
     const input = (item.querySelector(".el-input") || item.querySelector(".el-textarea")) as HTMLInputElement;
     if (!input) return;
     input.classList.add("apply-shake");
-    function remve() {
-      input.removeEventListener("animationend", remve);
-      input.removeEventListener("click", remve);
+    function remove() {
+      input.removeEventListener("animationend", remove);
+      input.removeEventListener("click", remove);
       input.classList.remove("apply-shake");
     }
-    input.addEventListener("animationend", remve);
-    input.addEventListener("click", remve);
+    input.addEventListener("animationend", remove);
+    input.addEventListener("click", remove);
   }, 1000 / 60);
 }
