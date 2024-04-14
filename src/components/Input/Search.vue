@@ -48,7 +48,7 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-import { computed, ref, PropType, onMounted, onUnmounted } from "vue";
+import { computed, ref, type PropType, onMounted, onUnmounted } from "vue";
 import { useProps, useSettingComputed } from "./hooks";
 
 const props = defineProps({

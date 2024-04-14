@@ -22,7 +22,7 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-import { ref, PropType, onUnmounted, provide, watch } from "vue";
+import { ref, type PropType, onUnmounted, provide, watch } from "vue";
 import globalEvent from "@/utils/event";
 import TreeLevel from "./TreeLevel";
 

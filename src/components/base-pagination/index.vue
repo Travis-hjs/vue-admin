@@ -22,7 +22,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { usePageInfo } from "@/hooks";
-import { PropType } from "vue";
+import { type PropType } from "vue";
 
 const props = defineProps({
   pageInfo: {

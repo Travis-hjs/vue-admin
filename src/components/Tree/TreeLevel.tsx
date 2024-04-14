@@ -1,4 +1,4 @@
-import { defineComponent, inject, PropType } from "vue";
+import { defineComponent, inject, type PropType } from "vue";
 import globalEvent from "@/utils/event";
 
 /** 递归树层级组件 */

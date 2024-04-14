@@ -65,7 +65,7 @@
 </template>
 <script lang="ts" setup>
 import { message } from "@/utils/message";
-import { FormInstance, FormRules } from "element-plus";
+import { type FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { validateEX } from "@/hooks";
 

@@ -44,7 +44,7 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-import { PropType, inject } from "vue";
+import { type PropType, inject } from "vue";
 import Tree from "./index.vue";
 
 /** 父组件注入的对象 */
