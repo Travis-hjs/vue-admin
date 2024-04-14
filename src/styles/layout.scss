@@ -261,16 +261,12 @@
     }
   }
 
-  .the-layout-menu-on {
+  .the-layout-menu-selected {
     background-color: var(--menu-item-bg-actived-color) !important;
     color: var(--menu-text-actived-color) !important;
   }
 
-  // .the-layout-menu-list-close {
-  //     height: 0px !important;
-  // }
-
-  .the-layout-menu-hasopen {
+  .the-layout-menu-open {
     color: var(--menu-text-actived-color);
 
     .the-layout-menu-arrow {
@@ -313,7 +309,7 @@
     }
   }
 
-  .the-layout-menu-hasactive {
+  .the-layout-menu-actived {
     color: var(--menu-text-actived-color) !important;
 
     .the-layout-menu-arrow {

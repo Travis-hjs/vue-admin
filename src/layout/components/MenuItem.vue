@@ -17,7 +17,6 @@
         <span class="f1">{{ info.title }}</span>
       </router-link>
     </template>
-    <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
     <div class="the-layout-menu-list" :style="listStyle" v-if="info.children && info.children.length > 0">
       <div v-for="(item) in info.children" :key="item.key">
         <MenuItem v-if="hasChildren(item)" :info="item" :level="level + 1" />
@@ -86,9 +85,9 @@ const titleClass = computed(function () {
   const item = props.info;
   return {
     "the-layout-menu-title fvertical": true,
-    "the-layout-menu-on": item.isActive,
-    "the-layout-menu-hasopen": item.isOpen,
-    "the-layout-menu-hasactive": item.hasActive,
+    "the-layout-menu-selected": item.isActive,
+    "the-layout-menu-open": item.isOpen,
+    "the-layout-menu-actived": item.hasActive,
     "the-layout-menu-active-title": item.hasActive && props.level === 1
   }
 })
@@ -96,7 +95,7 @@ const titleClass = computed(function () {
 function getItemClass(item: LayoutMenuItem) {
   return {
     "the-layout-menu-item fvertical": true,
-    "the-layout-menu-on": item.isActive
+    "the-layout-menu-selected": item.isActive
   }
 }
 
