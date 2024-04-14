@@ -23,7 +23,7 @@ export default defineComponent({
 })
 </script>
 <script lang="ts" setup>
-import { PropType, ref } from "vue";
+import { type PropType, ref } from "vue";
 import { uploadImg } from "@/api/common";
 import { message } from "@/utils/message";
 

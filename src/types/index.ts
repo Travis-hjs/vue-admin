@@ -1,4 +1,4 @@
-import { LocationQueryRaw, RouteParamsRaw, RouteRecordRaw } from "vue-router";
+import type { LocationQueryRaw, RouteParamsRaw, RouteRecordRaw } from "vue-router";
 
 export interface RouteMeta {
   /** 侧边栏菜单名、document.title */

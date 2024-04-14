@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Layout from "@/layout/index.vue";
 import store from "@/store";
-import { RouteItem } from "@/types";
+import type { RouteItem } from "@/types";
 import { initPermission } from "./permission";
 import Page404 from "@/views/page-404.vue";
 

@@ -122,7 +122,7 @@ import { reactive, ref } from "vue";
 import Scrollbar from "@/components/Scrollbar";
 import UploadImage from "@/components/Upload/Image.vue";
 import CollapseHeight from "@/components/CollapseHeight";
-import { Message, message, messageBox } from "@/utils/message";
+import { type Message, message, messageBox } from "@/utils/message";
 
 const formData = reactive({
   banner: "",

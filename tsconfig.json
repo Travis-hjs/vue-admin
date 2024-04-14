@@ -12,6 +12,9 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
 
+    // 导入类型必需带有 type 关键字
+    "verbatimModuleSyntax": true,
+
     "sourceMap": true,
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
