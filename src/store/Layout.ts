@@ -1,6 +1,6 @@
 import { reactive, watch } from "vue";
-import { LayoutInfo, RouteItem } from "@/types";
 import { modifyData } from "@/utils";
+import type { LayoutInfo, RouteItem } from "@/types";
 
 const cacheName = "ModuleLayout";
 

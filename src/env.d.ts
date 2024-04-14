@@ -8,14 +8,14 @@
 // }
 
 // declare namespace NodeJS {
-//   type Timeout = number // 尝试修改 setTimeout | setInterval 的返回类型为 number; 会报错，但是成功
+//   type Timeout = number // 尝试修改 setTimeout | setInterval 的返回类型为 number; 会报错，但是可以成功修改函数返回类型
 // }
 
-declare module "timers" {
-  global {
-    // namespace NodeJS {
-    //   type Timeout = number
-    // }
-    function setTimeout(callback: (args: void) => void, ms?: number): number;
-  }
-}
+// declare module "timers" {
+//   global {
+//     // namespace NodeJS {
+//     //   type Timeout = number
+//     // }
+//     function setTimeout(callback: (args: void) => void, ms?: number): number;
+//   }
+// }
