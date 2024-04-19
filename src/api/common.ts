@@ -1,6 +1,6 @@
 import request from "../utils/request";
 import store from "../store";
-import { LoginParams, UserInfo } from "../types/user";
+import type { LoginParams, UserInfo } from "../types/user";
 
 /**
  * 上传图片

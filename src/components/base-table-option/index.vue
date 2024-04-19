@@ -32,7 +32,7 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+import { computed, defineComponent, type PropType } from "vue";
 /** 全局表格操作组件 */
 export default defineComponent({
   name: "base-table-option"

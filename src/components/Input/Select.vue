@@ -33,8 +33,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { usePageInfo } from "@/hooks";
-import { computed } from "@vue/reactivity";
-import { ref, reactive, PropType } from "vue";
+import { ref, reactive, computed, type PropType } from "vue";
 import { useProps, useSettingComputed } from "./hooks";
 
 const props = defineProps({

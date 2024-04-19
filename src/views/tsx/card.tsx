@@ -1,4 +1,4 @@
-import { defineComponent, computed, PropType, ref, Transition } from "vue";
+import { defineComponent, computed, type PropType, ref, Transition } from "vue";
 import "./card.scss";
 
 /** `tsx`卡片组件 */

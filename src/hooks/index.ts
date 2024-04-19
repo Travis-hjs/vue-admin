@@ -70,13 +70,18 @@ export function validateEX(formName: string, valid?: boolean) {
     item.scrollIntoView && item.scrollIntoView({
       behavior: "smooth"
     });
-    const input = (item.querySelector(".el-input") || item.querySelector(".el-textarea")) as HTMLInputElement;
+    const classNames = [".el-input", ".el-textarea", ".el-select"];
+    let input: HTMLElement | null = null;
+    for (let i = 0; i < classNames.length; i++) {
+      input = item.querySelector(classNames[i]) as HTMLElement;
+      if (input) break;
+    }
     if (!input) return;
     input.classList.add("apply-shake");
     function remove() {
-      input.removeEventListener("animationend", remove);
-      input.removeEventListener("click", remove);
-      input.classList.remove("apply-shake");
+      input!.removeEventListener("animationend", remove);
+      input!.removeEventListener("click", remove);
+      input!.classList.remove("apply-shake");
     }
     input.addEventListener("animationend", remove);
     input.addEventListener("click", remove);

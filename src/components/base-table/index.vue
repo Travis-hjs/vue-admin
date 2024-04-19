@@ -48,7 +48,7 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
-import { PropType, ref } from "vue";
+import { type PropType, ref } from "vue";
 import { ElTable } from "element-plus";
 
 const props = defineProps({

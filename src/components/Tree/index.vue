@@ -21,7 +21,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import { ref, PropType, onUnmounted, provide, watch } from "vue";
+import { ref, type PropType, onUnmounted, provide, watch } from "vue";
 import { useLevelProps } from "./index";
 import globalEvent from "@/utils/event";
 import Level from "./Level.vue";

@@ -36,7 +36,7 @@ import Breadcrumb from "./Breadcrumb.vue";
 import Scrollbar from "@/components/Scrollbar";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
-import { HistoryViewsItem } from "@/types";
+import type { HistoryViewsItem } from "@/types";
 
 const route = useRoute();
 const router = useRouter();

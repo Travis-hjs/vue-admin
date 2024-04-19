@@ -1,6 +1,6 @@
 <template>
   <div class="the-layout-menu" ref="menuBox">
-    <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChidren(info)">
+    <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChildren(info)">
       <svg-icon v-if="info.icon" :name="info.icon" />
       <span class="f1">{{ info.title }}</span>
       <i class="the-layout-menu-arrow"></i>
@@ -17,10 +17,9 @@
         <span class="f1">{{ info.title }}</span>
       </router-link>
     </template>
-    <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
     <div class="the-layout-menu-list" :style="listStyle" v-if="info.children && info.children.length > 0">
       <div v-for="(item) in info.children" :key="item.key">
-        <MenuItem v-if="hasChidren(item)" :info="item" :level="level + 1" />
+        <MenuItem v-if="hasChildren(item)" :info="item" :level="level + 1" />
         <template v-else>
           <!-- 外链 -->
           <a :class="getItemClass(item)" :style="itemStyle" :href="item.link" target="_blank" v-if="item.link">
@@ -38,8 +37,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, PropType, reactive, ref } from "vue";
-import { LayoutMenuItem } from "@/types";
+import { computed, onMounted, type PropType, reactive, ref } from "vue";
+import type { LayoutMenuItem } from "@/types";
 import store from "@/store";
 
 // ============= 菜单`item`组件 =============
@@ -60,7 +59,7 @@ const props = defineProps({
  * 是否有下级菜单
  * @param item
  */
-function hasChidren(item: LayoutMenuItem) {
+function hasChildren(item: LayoutMenuItem) {
   return item.children && item.children.length > 0 ? true : false;
 }
 
@@ -74,7 +73,7 @@ function getListHeight(item: LayoutMenuItem) {
   const size = store.layout.menuSizeInfo;
   if (item.isOpen && child && child.length > 0) {
     child.forEach(menuItem => {
-      const height = hasChidren(menuItem) ? size.titleHeight : size.itemHeight;
+      const height = hasChildren(menuItem) ? size.titleHeight : size.itemHeight;
       result += height;
       result += getListHeight(menuItem);
     })
@@ -86,9 +85,9 @@ const titleClass = computed(function () {
   const item = props.info;
   return {
     "the-layout-menu-title fvertical": true,
-    "the-layout-menu-on": item.isActive,
-    "the-layout-menu-hasopen": item.isOpen,
-    "the-layout-menu-hasactive": item.hasActive,
+    "the-layout-menu-selected": item.isActive,
+    "the-layout-menu-open": item.isOpen,
+    "the-layout-menu-actived": item.hasActive,
     "the-layout-menu-active-title": item.hasActive && props.level === 1
   }
 })
@@ -96,7 +95,7 @@ const titleClass = computed(function () {
 function getItemClass(item: LayoutMenuItem) {
   return {
     "the-layout-menu-item fvertical": true,
-    "the-layout-menu-on": item.isActive
+    "the-layout-menu-selected": item.isActive
   }
 }
 

@@ -1,4 +1,4 @@
-import { computed, PropType } from "vue";
+import { computed, type PropType } from "vue";
 
 export function useProps(placeholder: string) {
   return {

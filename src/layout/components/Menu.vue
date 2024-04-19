@@ -7,7 +7,7 @@ import { useRoute } from "vue-router";
 import MenuItem from "./MenuItem.vue";
 import store from "@/store";
 import { filterHidden } from "@/router";
-import { LayoutMenuItem, RouteItem } from "@/types";
+import type { LayoutMenuItem, RouteItem } from "@/types";
 
 // ============= 侧边菜单组件 =============
 

@@ -40,7 +40,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import { PropType, inject } from "vue";
+import { type PropType, inject } from "vue";
 import globalEvent from "@/utils/event";
 import Tree, { useLevelProps } from "./index";
 
