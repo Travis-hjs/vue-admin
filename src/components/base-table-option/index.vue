@@ -71,7 +71,7 @@ const props = defineProps({
 
 const useList = computed(() => {
   return props.list.filter(item => {
-    if (isType<Function>(item!.hide, "function")) {
+    if (isType(item!.hide, "function")) {
       return !item.hide(props.row);
     } else {
       return !item.hide;
@@ -95,13 +95,13 @@ const useString = (item: BaseTableOptionItem, key: "text"|"icon") => {
   // console.log(item)
   const value = item[key];
   if (!value) return "-";
-  return isType<Function>(value, "function") ? value(props.row) : value;
+  return isType(value, "function") ? value(props.row) : value;
 }
 
 const useBoolean = (item: BaseTableOptionItem, key: "loading"|"disabled") => {
   const value = item[key];
   if (!value) return false;
-  return isType<Function>(value, "function") ? value(props.row) : value;
+  return isType(value, "function") ? value(props.row) : value;
 }
 
 const onBtnClick = (item: BaseTableOptionItem) => {
