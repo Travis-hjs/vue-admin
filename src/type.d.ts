@@ -20,10 +20,26 @@ type DeepRequired<T> = {
 type NumberSymbols = "+" | "-" | "*" | "/";
 
 /**
- * `JavaScript`类型
+ * `JavaScript`类型映射表
  * - 这里只枚举一些常见类型，后续根据使用场景自行添加即可
  */
-type JavaScriptTypes = "string" | "number" | "array" | "object" | "boolean" | "function" | "null" | "undefined" | "regexp" | "promise" | "formdata";
+interface JavaScriptType {
+  string: string
+  number: number
+  boolean: boolean
+  null: null
+  undefined: undefined
+  array: Array<any>
+  object: object
+  regexp: RegExp
+  function: Function
+  promise: Promise<any>
+  formdata: FormData
+}
+
+/** `JavaScript`类型 */
+type JavaScriptTypes = keyof JavaScriptType;
+
 
 /** 基础对象 */
 interface BaseObj<T = string | number> {
