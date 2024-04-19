@@ -25,11 +25,20 @@
 ```html
 <template>
   <div class="demo">
-    <!-- 默认用法 -->
-    <Tree ref="theTree" :list="options" :setting="propSetting" checkbox @nodeChange="onChange" @nodeClick="onChange" />
-    <!-- 选择父节点时，也把其子节点也勾选上 -->
+    <h2 class="the-title">默认用法</h2>
+    <Tree
+      ref="theTree"
+      :list="options"
+      :setting="propSetting"
+      checkbox
+      @nodeChange="onChange"
+      @nodeClick="onChange"
+    />
+
+    <h2 class="the-title">选择父节点时，也把其子节点也勾选上</h2>
     <Tree :list="options" :setting="propSetting" checkbox checkChild />
-    <!-- 插槽用法 -->
+
+    <h2 class="the-title">插槽用法</h2>
     <Tree :list="options" :setting="propSetting" checkbox>
       <template #default="item">
         <span>{{ item.label }}</span>
@@ -37,12 +46,13 @@
         <span>ID: {{ item.original.id }}</span>
       </template>
     </Tree>
+    <el-button @click="getValues()">获取选中值</el-button>
+    <el-button type="success" @click="setValues()">设置选中值</el-button>
   </div>
 </template>
-
 <script lang="ts" setup>
+import Tree from "@/components/Tree";
 import { ref } from "vue";
-import Tree from "@/components/Tree/index.vue";
 
 const options = [
   {
@@ -52,7 +62,12 @@ const options = [
       {  
         id: "1-2",
         name: "选项 1-2",
-      }
+      },
+      {  
+        id: "1-3",
+        name: "选项 1-3",
+        disabled: true
+      },
     ]
   },
   {
@@ -67,10 +82,11 @@ const options = [
   },
 ];
 
-const propSetting = {
+const propSetting: ArrayItemSetting = {
   value: "id",
   label: "name",
-  children: "list"
+  children: "list",
+  key: "id"
 }
 
 const theTree = ref<InstanceType<typeof Tree>>();
@@ -83,12 +99,121 @@ function getValues() {
 
 /** 设置选中值 */
 function setValues() {
-  theTree.value?.setCheckedValues(["1", "1-2"]);
+  theTree.value?.setCheckedValues(["1", "1-2"], true);
 }
 
-function onChange(item) {
+function onChange(item: TreeItem) {
   console.log("是否选中 >>", item.checked, item);
 }
+
 </script>
 ```
 
+## 备份文件
+
+`TreeLevel.tsx`
+
+```tsx
+import { defineComponent, inject, PropType } from "vue";
+import globalEvent from "@/utils/event";
+
+/** 递归树层级组件 */
+const TreeLevel = defineComponent({
+  name: "TreeLevel",
+  props: {
+    options: {
+      type: Array as PropType<Array<TreeItem>>,
+      default: () => []
+    },
+    level: {
+      type: Number,
+      default: 0
+    },
+    /** 选择父节点时，是否也选中所有其子节点 */
+    checkChild: {
+      type: Boolean,
+      default: false
+    },
+    /** 是否需要选择功能 */
+    checkbox: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(props, context) {
+    /** 父组件注入的对象 */
+    const parentProvide = inject<{ eventMap: { itemClick: string, itemChange: string } }>("treeParent");
+
+    function onOpen(item: TreeItem) {
+      item.open = !item.open;
+      globalEvent.dispatch(parentProvide!.eventMap.itemClick, item);
+    }
+
+    function onChecked(item: TreeItem) {
+      item.checked = !item.checked;
+      /**
+       * 递归处理
+       * @param list
+       * @param value
+       */
+      function each(list: Array<TreeItem>, value: boolean) {
+        list.forEach(function (e) {
+          e.checked = value;
+          e.children.length && each(e.children, value);
+        })
+      }
+      if (props.checkChild) {
+        each(item.children, item.checked);
+      } 
+      // else {
+      //   !item.checked && each(item.children, false);
+      // }
+      globalEvent.dispatch(parentProvide!.eventMap.itemChange, item);
+    }
+    
+    return () => (
+      <div style={{ paddingLeft: props.level > 0 ? "15px" : "0px" }}>
+        {
+          props.options.map(item => (
+            <div
+              class="base-tree-level"
+              style={{ "height": item.height + "px" }}
+              key={item.key}
+              data-key={item.key}
+              data-level={props.level}
+            >
+              <div class="base-tree-item fvertical" onClick={() => onOpen(item)}>
+                <i class={`base-tree-icon el-icon-caret-right ${item.children.length ? "" : "hidden-icon"} ${item.open ? "expanded" : ""}`}></i>
+                {
+                  props.checkbox ? (
+                    <span onClick={ e => e.stopPropagation() }>
+                      <el-checkbox model-value={item.checked} onChange={() => onChecked(item)} disabled={item.disabled}></el-checkbox>
+                    </span>
+                  ) : undefined
+                }
+                { context.slots.treeitem ? context.slots.treeitem(item) : item.label }
+              </div>
+              {
+                item.children.length ? (
+                  <TreeLevel
+                    options={item.children}
+                    level={props.level + 1}
+                    checkChild={props.checkChild}
+                    checkbox={props.checkbox}
+                    v-slots={{
+                      treeitem: context.slots.treeitem ? (info: TreeItem) => context.slots.treeitem!(info) : undefined
+                    }}
+                  />
+                ) : undefined
+              }
+            </div>
+          ))
+        }
+      </div>
+    )
+  }
+});
+
+export default TreeLevel;
+
+```

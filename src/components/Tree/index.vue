@@ -1,6 +1,6 @@
 <template>
   <div class="base-tree">
-    <TreeLevel
+    <Level
       :level="0"
       :options="options"
       :checkChild="checkChild"
@@ -9,22 +9,22 @@
       <template #treeitem="slotProps" v-if="$slots.default">
         <slot v-bind="slotProps"></slot>
       </template>
-    </TreeLevel>
+    </Level>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
 /** 一直累加的`id` */
 let treeId = 1;
 /** 树形组件 */
-export default defineComponent({
+export default {
   name: "Tree"
-});
+};
 </script>
 <script lang="ts" setup>
 import { ref, PropType, onUnmounted, provide, watch } from "vue";
+import { useLevelProps } from "./index";
 import globalEvent from "@/utils/event";
-import TreeLevel from "./TreeLevel";
+import Level from "./Level.vue";
 
 const props = defineProps({
   /** 数组列表 */
@@ -32,18 +32,8 @@ const props = defineProps({
     type: Array as PropType<Array<any>>,
     default: () => []
   },
-  /** 选择父节点时，是否也选中所有其子节点 */
-  checkChild: {
-    type: Boolean,
-    default: false
-  },
   /** 选择当前节点时，把上级没有选中的关联父节点给勾选上 */
   checkParent: {
-    type: Boolean,
-    default: false
-  },
-  /** 是否需要选择功能 */
-  checkbox: {
     type: Boolean,
     default: false
   },
@@ -64,7 +54,8 @@ const props = defineProps({
   keepState: {
     type: Boolean,
     default: false
-  }
+  },
+  ...useLevelProps()
 });
 
 const emit = defineEmits<{
@@ -363,8 +354,8 @@ defineExpose({
   .base-tree-item {
     width: 100%;
     height: 30px;
+    color: #606266;
     font-size: 14px;
-    color: #1f2d3d;
     transition: var(--transition);
     cursor: pointer;
     border-radius: 2px;

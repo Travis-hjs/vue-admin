@@ -1,8 +1,3 @@
-# 模板备份文件
-
-模板写法`Volar`和`vue-tsc`会报错：`<template #treeitem="slotProps">`定义不了类型。
-
-```html
 <template>
   <div :style="{ 'padding-left': level > 0 ? '15px' : '0px' }">
     <div
@@ -15,8 +10,12 @@
     >
       <div class="base-tree-item fvertical" @click="onOpen(item)">
         <i :class="['base-tree-icon el-icon-caret-right', { 'hidden-icon': !item.children.length }, { 'expanded': item.open }]"></i>
-        <span @click.stop v-if="checkbox">
-          <el-checkbox :value="item.checked" @change="onChecked(item)" :disabled="item.disabled"></el-checkbox>
+        <span
+          v-if="checkbox"
+          @click.stop="onChecked(item)"
+          :class="['el-checkbox el-checkbox__input', { 'is-checked': item.checked, 'is-disabled': item.disabled }]"
+        >
+          <span class="el-checkbox__inner"></span>
         </span>
         <slot name="treeitem" v-bind="item">{{ item.label }}</slot>
       </div>
@@ -27,7 +26,7 @@
         :checkChild="checkChild"
         :checkbox="checkbox"
       >
-        <template #treeitem="slotProps">
+        <template #treeitem="slotProps: TreeItem">
           <slot name="treeitem" v-bind="slotProps"></slot>
         </template>
       </Level>
@@ -35,17 +34,15 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import globalEvent from "@/utils/event";
-
 /** 递归树层级组件 */
-export default defineComponent({
+export default {
   name: "Level"
-});
+};
 </script>
 <script lang="ts" setup>
 import { PropType, inject } from "vue";
-import Tree from "./index.vue";
+import globalEvent from "@/utils/event";
+import Tree, { useLevelProps } from "./index";
 
 /** 父组件注入的对象 */
 const parentProvide = inject("treeParent") as InstanceType<typeof Tree>;
@@ -59,16 +56,7 @@ const props = defineProps({
     type: Number,
     default: 0
   },
-  /** 选择父节点时，是否也选中所有其子节点 */
-  checkChild: {
-    type: Boolean,
-    default: false
-  },
-  /** 是否需要选择功能 */
-  checkbox: {
-    type: Boolean,
-    default: false
-  },
+  ...useLevelProps()
 });
 
 function onChecked(item: TreeItem) {
@@ -80,7 +68,9 @@ function onChecked(item: TreeItem) {
    */
   function each(list: Array<TreeItem>, value: boolean) {
     list.forEach(function (e) {
-      e.checked = value;
+      if (!e.disabled) {
+        e.checked = value;
+      }
       e.children.length && each(e.children, value);
     })
   }
@@ -99,4 +89,3 @@ function onOpen(item: TreeItem) {
 }
 
 </script>
-```
