@@ -40,7 +40,7 @@ export function checkType(target: any) {
  * }
  * ```
  */
-export function isType<T>(target: any, type: T extends JavaScriptTypes ? T : 'object'): target is T extends JavaScriptTypes ? JavaScriptType[T] : T {
+export function isType<T>(target: any, type: T extends "object" ? T : JavaScriptTypes): target is T extends JavaScriptTypes ? JavaScriptType[T] : T {
   return checkType(target) === type;
 }
 
