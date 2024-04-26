@@ -159,7 +159,7 @@ export default function request<T = any>(
       },
       responseType: responseType,
       data: data || {},
-      overtime: config.requestOvertime,
+      overtime: options.overtime || config.requestOvertime,
       success(res, xhr) {
         // console.log("请求成功", res);
         const info = getResultInfo({ statusCode: xhr.status, data: res });

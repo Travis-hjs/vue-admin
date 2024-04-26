@@ -87,6 +87,8 @@ interface AjaxParams {
      * - 默认`json`
      */
     responseType?: XMLHttpRequestResponseType
+    /** 单独为当前接口设置超时毫秒 */
+    overtime?: number,
   }
   /** `XMLHttpRequest.header`设置对象 */
   headers?: { [key: string]: string }
