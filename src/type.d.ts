@@ -1,6 +1,11 @@
 // 类型引用
 /// <reference path="./components/type.d.ts" />
 
+/** 作用与`readonly`相反的泛型工具 */
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P]
+}
+
 /** 深层递归所有属性为可选 */
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
