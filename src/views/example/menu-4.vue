@@ -4,44 +4,17 @@
       <span class="the-tag cyan">menu-4</span>
     </div>
     <GoodsForm class="mgb_20" :form="goods.info" />
-    <button class="the-btn blue" @click="onChange()">修改商品信息</button>
-    <button class="the-btn red" @click="onClear()">重置商品信息</button>
+    <el-button type="primary" @click="onChange()">修改商品信息</el-button>
+    <el-button @click="onClear()">重置商品信息</el-button>
   </div>
 </template>
 <script lang="ts" setup>
 import store from '@/store';
 import GoodsForm from './components/GoodsForm.vue'
 import type { Goods } from '@/store/Goods';
+import { ranInt, randomText } from '@/utils';
 
 const goods = store.goods;
-
-/**
- * 范围随机整数
- * @param min 最小数
- * @param max 最大数
- */
-function ranInt(min: number, max: number) {
-  return Math.round(Math.random() * (max - min) + min)
-}
-
-/**
- * 随机生成中文
- * @param min
- * @param max
- */
-function randomText(min: number, max: number) {
-  const len = parseInt((Math.random() * max).toString()) + min
-  const base = 20000
-  const range = 1000
-  let str = ''
-  let i = 0
-  while (i < len) {
-    i++
-    const lower = parseInt((Math.random() * range).toString())
-    str += String.fromCharCode(base + lower)
-  }
-  return str
-}
 
 function onChange() {
   const sizes: Array<Goods.Specs["size"]> = ["xs", "s", "m", "l", "xl", "2xl"];
