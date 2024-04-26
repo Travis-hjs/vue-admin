@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import type { UserInfo } from "../types/user";
-import { modifyData } from "../utils";
+import { jsonParse, modifyData } from "../utils";
 
 const cacheName = "ModuleUser";
 
@@ -30,13 +30,9 @@ export default class ModuleUser {
   /** 初始化缓存信息 */
   private init() {
     const value = sessionStorage.getItem(cacheName);
-    try {
-      if (value) {
-        const info = JSON.parse(value)
-        modifyData(this.info, info);
-      }
-    } catch (error) {
-      console.log("初始化缓存信息出错 >>", error);
+    if (value) {
+      const info = jsonParse<UserInfo>(value);
+      modifyData(this.info, info);
     }
   }
 
