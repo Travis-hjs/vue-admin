@@ -228,8 +228,8 @@ export function jsonToFormData(params: { [key: string]: number | string | boolea
  * @param target 要格式化的目标对象
  * @param defaultValue 默认返回值
  */
-export function jsonParse(target: any, defaultValue: any = {}) {
-  let result = defaultValue;
+export function jsonParse<T = any>(target: any, defaultValue: any = {}) {
+  let result: T = defaultValue;
   if (isType(target, "string")) {
     try {
       result = JSON.parse(target);
