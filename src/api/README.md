@@ -26,6 +26,17 @@ async function getPageData() {
 export function getData(params: PageInfo) {
   return request("GET", "/getList", params)
 }
+
+/**
+ * 获取超大数据量
+ * - 可以为单个接口设置超时时间
+ * @param params
+ */
+export function getMaxData(params: PageInfo) {
+  return request("GET", "/getMaxList", params, {
+    overtime: 20000
+  })
+}
 ```
 
 ## POST 请求
