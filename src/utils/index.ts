@@ -205,16 +205,16 @@ export function isExternal(path: string) {
 }
 
 /**
- * `JSON`转`FormData`
+ * `JSON`转路径传参
  * @param params `JSON`对象
  * @example 
  * ```js
  * const info = { name: "hjs", id: 123 };
- * const val = jsonToFormData(info);
+ * const val = jsonToPath(info);
  * console.log(val); // "name=hjs&id=123"
  * ```
  */
-export function jsonToFormData(params: { [key: string]: number | string | boolean }) {
+export function jsonToPath(params: { [key: string]: number | string | boolean }) {
   let result = "";
   for (const key in params) {
     result += `&${key}=${params[key]}`;

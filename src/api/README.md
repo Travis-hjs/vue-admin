@@ -56,14 +56,14 @@ export function saveBannerInfo(params: { img: string, date: string, sort: number
 `POST`表单
 
 ```js
-import { jsonToFormData } from "@/utils";
+import { jsonToPath } from "@/utils";
 
 /**
  * `post`表单请求
  * @param params
  */
 export function saveUserInfo(params: { account: string | number, password: string }) {
-  return request("POST", "/saveUserInfo", jsonToFormData(params), {
+  return request("POST", "/saveUserInfo", jsonToPath(params), {
     // headers: {
     //   "Content-Type": "application/x-www-form-urlencoded" // 可以不用传，`ajax()`函数内部做了类型判断处理
     // }
