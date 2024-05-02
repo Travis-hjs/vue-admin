@@ -3,33 +3,17 @@ import store from "../store";
 import type { LoginParams, UserInfo } from "../types/user";
 
 /**
- * 上传图片
- * @param formData 图片`FormData` 这里我模拟上传，所以类型是`File`，接口上传时才是`FormData`
+ * `blob`或者`file`转读取路径
+ * @param target 目标对象 
  */
-export function uploadImg(formData: File) {
-  // 模拟上传
-  return new Promise<ApiResult>(function (resolve) {
-    const reader = new FileReader();
-    reader.onload = function () {
-      setTimeout(function () {
-        resolve({
-          code: 1,
-          data: { img: reader.result },
-          msg: "上传成功"
-        })
-      }, 500);
-    }
-    reader.onerror = function () {
-      resolve({
-        code: -1,
-        data: null,
-        msg: "上传失败"
-      })
-    }
-    reader.readAsDataURL(formData);
-  })
-
-  // return request("POST", "/uploadImg", formData);
+function blobOrFileToUrl(target: File | Blob) {
+  let url = "";
+  if (window.URL) {
+    url = window.URL.createObjectURL(target);
+  } else if (window.webkitURL) {
+    url = window.webkitURL.createObjectURL(target);
+  }
+  return url;
 }
 
 /**
@@ -44,6 +28,19 @@ export function uploadImg(formData: File) {
  * [上传图片参考](https://juejin.cn/post/6844904066418491406#heading-4)
  */
 export function uploadFile(formData: FormData) {
+  // 模拟上传
+  const file = formData.get("file") as File;
+  return new Promise<ApiResult<{ url: string }>>(function (resolve) {
+    setTimeout(function () {
+      resolve({
+        code: 1,
+        data: {
+          url: blobOrFileToUrl(file)
+        },
+        msg: "上传成功"
+      })
+    }, 500);
+  });
   return request("POST", "/uploadFile", formData)
 }
 

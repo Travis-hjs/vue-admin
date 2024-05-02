@@ -17,11 +17,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
 /** 单个上传图片组件 */
-export default defineComponent({
+export default {
   name: "UploadImage"
-})
+}
 </script>
 <script lang="ts" setup>
 import { ref } from "vue"
@@ -97,11 +96,11 @@ function onCopy() {
 
 /** 上传图片 */
 async function onUpload() {
-
-  const file = uploadInput.value!.files![0];
-
+  const input = uploadInput.value!;
+  const file = input.files![0];
+  input.value = ""; // 用完记得清空
   // 判断大小
-  if (file.size > 2 * 1024 * 1024) {
+  if (file.size > props.maxSize * 1024 * 1024) {
     return message.warning(`上传的文件不能大于 ${props.maxSize}M`);
   }
 
@@ -113,7 +112,7 @@ async function onUpload() {
   loading.value = false;
   console.log("上传图片 >>", res);
   if (res.code === 1) {
-    const result = res.data.fileUrl;
+    const result = res.data.url;
     emit("change", {
       id: props.uploadId,
       src: result,
