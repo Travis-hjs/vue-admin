@@ -24,7 +24,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { type PropType, ref } from "vue";
-import { uploadImg } from "@/api/common";
+import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
 
 const props = defineProps({
@@ -82,26 +82,25 @@ const loading = ref(false);
 /** 上传图片 */
 async function onUpload() {
   const input = uploadInput.value!;
-  const file = (input.files as FileList)[0];
+  const file = input.files![0];
+  input.value = ""; // 使用完一定要清空
   // console.log("上传图片文件 >>", file);
 
   // 判断大小
   if (file.size > props.maxSize * 1024 * 1024) {
-    input.value = "";
     message.warning(`上传的文件不能大于 ${props.maxSize}M`);
     return;
   }
 
-  // const formData = new FormData();
-  // formData.append("file", file);
+  const formData = new FormData();
+  formData.append("file", file);
 
   loading.value = true;
-  const res = await uploadImg(file)
+  const res = await uploadFile(formData)
   loading.value = false;
-  input.value = ""; // 用完然后清空
   console.log("上传图片 >>", res);
   if (res.code === 1) {
-    const result: string = res.data.img;
+    const result: string = res.data.url;
     emit("change", {
       id: props.uploadId,
       src: result

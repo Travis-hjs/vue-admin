@@ -81,7 +81,7 @@ export function saveUserInfo(params: { account: string | number, password: strin
  * @example
  * ```js
  * const formData = new FormData();
- * formData.append('img', file);
+ * formData.append("img", file);
  * uploadImg(formData).then(res => console.log(res))
  * ```
  */

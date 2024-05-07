@@ -164,36 +164,24 @@ export function inputOnlyNumber(value: string | number, decimal?: boolean, negat
 }
 
 /**
- * ES5 兼容 ES6 `Array.findIndex`
- * @param array
- * @param compare 对比函数
+ * 深度克隆对象或数组
+ * @param target 
  */
-export function findIndex<T>(array: Array<T>, compare: (value: T, index: number) => boolean) {
-  var result = -1;
-  for (var i = 0; i < array.length; i++) {
-    if (compare(array[i], i)) {
-      result = i;
-      break;
+export function deepClone<T>(target: T) {
+  const cache = new Map();
+  function clone(value: any): T {
+    if (!value || typeof value !== "object") return value;
+    if (cache.has(value)) {
+      return cache.get(value);
     }
+    const result: any = Array.isArray(value) ? [] : {};
+    cache.set(value, result);
+    for (const key in value) {
+      result[key] = clone(value[key]);
+    }
+    return result;
   }
-  return result;
-}
-
-
-/**
- * 自定义对象数组去重
- * @param array
- * @param compare 对比函数
- * @example
- * ```js
- * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
- * filterRepeat(list, (a, b) => a.id == b.id)
- * ```
- */
-export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
-  return array.filter((element, index, self) => {
-    return findIndex(self, el => compare(el, element)) === index;
-  })
+  return clone(target);
 }
 
 /**
