@@ -110,8 +110,8 @@
     </el-form>
     <h2 class="the-title mgb_30">打赏一下</h2>
     <div class="code-box">
-      <img class="hovercode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode1.jpg">
-      <img class="qrcode" src="https://huangjingsheng.gitee.io/hjs/images/wxcode2.jpg">
+      <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
+      <img class="qrcode" src="https://travis-hjs.github.io/images/wxcode2.jpg">
     </div>
   </div>
 </template>
