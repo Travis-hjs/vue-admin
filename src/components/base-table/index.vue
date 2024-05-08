@@ -23,13 +23,13 @@
         :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
         label-class-name="base-table-label"
       >
-        <template #default="{row, $index}">
+        <template #default="{row, $index}: SlotType">
           <slot :name="item.slotName" v-bind="{row, $index}" v-if="item.slotName"></slot>
           <base-table-option
             v-else-if="item.prop === 'action-right'"
             :row="row"
             :index="$index"
-            :list="props.actions"
+            :list="props.actions as any"
             :clickStop="props.isRowClick"
           ></base-table-option>
           <template v-else>{{ setTableDefaultContent(row, item.prop, item) }}</template>
@@ -39,21 +39,19 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onBeforeUpdate } from "vue";
-
 /** 全局表格组件 */
-export default defineComponent({
+export default {
   name: "base-table"
-})
+}
 </script>
 
-<script lang="ts" setup>
-import { type PropType, ref } from "vue";
+<script lang="ts" generic="T extends BaseObj" setup>
+import { type PropType, ref, onBeforeUpdate } from "vue";
 import { ElTable } from "element-plus";
 
 const props = defineProps({
   data: {
-    type: Array,
+    type: Array as PropType<Array<T>>,
     default: () => []
   },
   columns: {
@@ -76,7 +74,7 @@ const props = defineProps({
   },
   /** `<base-table-option :list="list">`组件的 list 数据 */
   actions: {
-    type: Array as PropType<Array<BaseTableOptionItem>>,
+    type: Array as PropType<Array<BaseTableOptionItem<T>>>,
     default: () => []
   },
   /** 复选框的禁用回调函数 */
@@ -89,6 +87,11 @@ const props = defineProps({
     default: 500
   }
 });
+
+interface SlotType {
+  row: T
+  $index: number
+}
 
 const emit = defineEmits<{
   (event: "select", list: Array<any>): void

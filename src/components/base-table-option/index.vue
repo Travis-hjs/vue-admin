@@ -32,13 +32,13 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, type PropType } from "vue";
 /** 全局表格操作组件 */
-export default defineComponent({
+export default {
   name: "base-table-option"
-})
+}
 </script>
 <script lang="ts" setup>
+import { computed, type PropType } from "vue";
 import { isType } from "@/utils";
 
 const props = defineProps({
