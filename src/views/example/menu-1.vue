@@ -27,7 +27,11 @@
       :data="tableData"
       :actions="btnList"
       :loading="state.loading"
-    ></base-table>
+    >
+      <template #fuck="{ row, $index }">
+        {{ $index + 1 }}、{{ row.name }}
+      </template>
+    </base-table>
 
     <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
 
@@ -38,6 +42,7 @@ import { ref, reactive } from "vue";
 import { usePageInfo } from "@/hooks";
 import { FilterWrap, FilterItem  } from "@/components/FilterBox/index";
 import { ranInt, randomText } from "@/utils";
+import { message, messageBox } from "@/utils/message";
 
 const state = reactive({
   loading: false,
@@ -48,18 +53,37 @@ const state = reactive({
   pageInfo: usePageInfo()
 });
 
-const tableData = ref<Array<BaseObj>>([]);
+interface TableRow {
+  id: number
+  name: string
+  date: string
+}
+
+const tableData = ref<Array<TableRow>>([]);
 
 const tableColumns: Array<BaseTableColumn> = [
   { label: "ID", prop: "id", width: 90 },
-  { label: "名称", prop: "name", minWidth: 180 },
+  { label: "名称", prop: "name", minWidth: 180, slotName: "fuck" },
   { label: "创建时间", prop: "date", width: 180 },
   { label: "操作", prop: "action-right", width: 200 },
 ];
 
-const btnList: Array<BaseTableOptionItem> = [
+const btnList: Array<BaseTableOptionItem<TableRow>> = [
   { text: "编辑", icon: "el-icon-edit" },
-  { text: "删除", icon: "el-icon-delete", type: "danger", },
+  {
+    text: "删除",
+    icon: "el-icon-delete",
+    type: "danger",
+    click(row) {
+      messageBox({
+        content: `是否删除【${row.name}】？`,
+        cancelText: "取消",
+        confirm() {
+          message.info("选择了删除操作~");
+        },
+      })
+    },
+  },
   { text: "终止", icon: "el-icon-video-pause" },
   { text: "启用", icon: "el-icon-video-play" },
   { text: "下架", icon: "el-icon-folder-delete" },
