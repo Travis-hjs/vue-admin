@@ -32,7 +32,7 @@
       :actions="btnList"
       :loading="loading"
     >
-      <template #state="{row}">
+      <template #state="{ row }">
         <span class="the-tag blue" v-if="row.state == 0">未开始</span>
         <span class="the-tag green" v-if="row.state == 1">进行中</span>
         <span class="the-tag gray" v-if="row.state == 2">已结束</span>
@@ -44,7 +44,14 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-const tableData = ref([]);
+interface TableRow {
+  id: number
+  name: string
+  date: string
+  state: 0 | 1 | 2 | 3
+}
+
+const tableData = ref<Array<TableRow>>([]);
 
 const tableColumns: Array<BaseTableColumn> = [
   { label: "项目名称", prop: "projectName", minWidth: 200 },
