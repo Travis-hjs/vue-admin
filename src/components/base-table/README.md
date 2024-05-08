@@ -63,10 +63,16 @@ const tableColumns: Array<BaseTableColumn> = [
   { label: "操作", prop: "action-right", width: 160 },
 ];
 
-const btnList: Array<BaseTableOptionItem> = [
+const btnList: Array<BaseTableOptionItem<TableRow>> = [
   { text: "编辑", },
   { text: "查看", },
-  { text: "删除", type: "danger" }
+  {
+    text: "删除",
+    type: "danger",
+    click(row) {
+      console.log(row);
+    }
+  }
 ];
 
 </script>
