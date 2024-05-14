@@ -11,7 +11,7 @@ const config = (function () {
 
   return {
     /** 请求超时毫秒 */
-    get requestOvertime() {
+    get requestTimeout() {
       return 8000;
     },
     /** `api`请求域名 */

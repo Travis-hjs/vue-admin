@@ -15,7 +15,7 @@ function ajax(params: AjaxParams) {
   /** 请求方法 */
   const method = params.method;
   /** 超时检测 */
-  const overtime = params.overtime || 0;
+  const timeout = params.timeout || 0;
   /** 请求链接 */
   let url = params.url;
   /** 非`GET`请求传参 */
@@ -54,8 +54,8 @@ function ajax(params: AjaxParams) {
   }
 
   // 判断请求进度
-  if (params.progress) {
-    XHR.addEventListener("progress", params.progress);
+  if (params.onProgress) {
+    XHR.addEventListener("progress", params.onProgress);
   }
 
   // XHR.responseType = "json"; // 设置响应结果为`json`这个一般由后台返回指定格式，前端无配置
@@ -71,7 +71,7 @@ function ajax(params: AjaxParams) {
         break;
 
       case "string":
-        XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 表单请求，非`new FormData`
+        XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 表单请求，`id=1&type=2` 非`new FormData()`
         break;
 
       default:
@@ -88,11 +88,11 @@ function ajax(params: AjaxParams) {
   }
 
   // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
-  if (overtime > 0) {
-    XHR.timeout = overtime;
+  if (timeout > 0) {
+    XHR.timeout = timeout;
     XHR.ontimeout = function () {
       XHR.abort();
-      params.timeout && params.timeout(XHR);
+      params.onTimeout && params.onTimeout(XHR);
     }
   }
 
@@ -105,9 +105,9 @@ function ajax(params: AjaxParams) {
  * @param responseType 接口请求成功时，响应类型
  */
 function getResultInfo(result: { statusCode: number, data: any }, responseType?: XMLHttpRequestResponseType) {
-  const info: ApiResult = { code: -1, msg: "网络出错了", data: null }
+  const info: Api.Result = { code: -1, msg: "网络出错了", data: null }
   switch (result.statusCode) {
-    case config.requestOvertime:
+    case config.requestTimeout:
       info.msg = "网络超时了";
       break;
     case 200:
@@ -146,10 +146,10 @@ export default function request<T = any>(
   method: AjaxParams["method"],
   url: string,
   data?: AjaxParams["data"],
-  options: AjaxParams["options"] = {}
+  options: Partial<Api.Options> = {}
 ) {
   const { headers = {}, responseType = "json" } = options;
-  return new Promise<ApiResult<T>>(function (resolve) {
+  return new Promise<Api.Result<T>>(function (resolve) {
     ajax({
       url: config.apiUrl + url,
       method: method,
@@ -159,7 +159,7 @@ export default function request<T = any>(
       },
       responseType: responseType,
       data: data || {},
-      overtime: options.overtime || config.requestOvertime,
+      timeout: options.timeout || config.requestTimeout,
       success(res, xhr) {
         // console.log("请求成功", res);
         const info = getResultInfo({ statusCode: xhr.status, data: res });
@@ -173,9 +173,9 @@ export default function request<T = any>(
         // do some ...
         resolve(info);
       },
-      timeout() {
+      onTimeout() {
         console.warn("XMLHttpRequest 请求超时 !!!");
-        const info = getResultInfo({ statusCode: config.requestOvertime, data: {} });
+        const info = getResultInfo({ statusCode: config.requestTimeout, data: {} });
         // 全局的请求超时提示可以写在这里
         message.warning("网络请求超时！");
         // do some ...
