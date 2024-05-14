@@ -43,7 +43,7 @@ const props = defineProps({
   },
   /** 请求数据函数 */
   request: {
-    type: Function as PropType<(res: any) => Promise<ApiResult<ApiResultList>>>,
+    type: Function as PropType<(res: any) => Promise<Api.Result<Api.List>>>,
     required: true
   },
   /** 请求参数 */

@@ -65,7 +65,7 @@ const props = defineProps({
   },
   /** 上传时接口函数，默认是上传图片`uploadFile`，传参方式参考`uploadFile` */
   uploadFn: {
-    type: Function as PropType<() => Promise<ApiResult<any>>>,
+    type: Function as PropType<() => Promise<Api.Result<any>>>,
     default: undefined
   },
   // 上传前的判断
