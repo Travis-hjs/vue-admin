@@ -53,9 +53,9 @@ interface BaseObj<T = string | number> {
 
 interface AjaxParams {
   /** 请求路径 */
-  url: string,
+  url: string
   /** 请求方法 */
-  method: "GET" | "POST" | "PUT" | "DELETE",
+  method: "GET" | "POST" | "PUT" | "DELETE"
   /**
    * 传参对象
    * 
@@ -75,21 +75,9 @@ interface AjaxParams {
    * const data = "name=hjs&id=123";
    * ```
    */
-  data: object | string | FormData,
+  data: object | string | FormData
   /** 超时毫秒 */
-  overtime?: number,
-  /** `request`方法请求配置 */
-  options?: {
-    /** `XMLHttpRequest.header`设置对象 */
-    headers?: { [key: string]: string }
-    /**
-     * 接口数据响应类型
-     * - 默认`json`
-     */
-    responseType?: XMLHttpRequestResponseType
-    /** 单独为当前接口设置超时毫秒 */
-    overtime?: number,
-  }
+  timeout?: number
   /** `XMLHttpRequest.header`设置对象 */
   headers?: { [key: string]: string }
   /**
@@ -103,29 +91,42 @@ interface AjaxParams {
     res: any,
     /** 响应原数据结果 */
     response: XMLHttpRequest
-  ): void,
+  ): void
   /** 失败回调 */
-  fail?(value: XMLHttpRequest): void,
+  fail?(value: XMLHttpRequest): void
   /** 超时回调 */
-  timeout?(value: XMLHttpRequest): void,
+  onTimeout?(value: XMLHttpRequest): void
   /** 请求进度 */
-  progress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
+  onProgress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
 }
 
-/** 接口请求基础响应数据 */
-interface ApiResult<T = any> {
-  /** 接口状态`code === 1`为成功 */
-  code: number
-  /** 接口响应数据 */
-  data: T
-  /** 接口响应信息 */
-  msg: string
-}
+/** 接口请求类型集合 */
+declare namespace Api {
+  /** 
+   * `request`方法请求配置
+   * - 第三个传参类型
+   */
+  interface Options extends Pick<AjaxParams, "responseType"> {
+    /** `XMLHttpRequest.header`设置对象 */
+    headers: { [key: string]: string }
+    /** 单独为当前接口设置超时毫秒 */
+    timeout: number,
+  }
 
-/** 接口请求列表响应数据 */
-interface ApiResultList<T = any> extends PageInfo {
-  /** 列表数据 */
-  list: Array<T>
+  /** 接口请求基础响应数据 */
+  interface Result<T = any> {
+    /** 接口状态`code === 1`为成功 */
+    code: number
+    /** 接口响应数据 */
+    data: T
+    /** 接口响应信息 */
+    msg: string
+  }
+
+  interface List<T = any> extends PageInfo {
+    /** 列表数据 */
+    list: Array<T>
+  }
 }
 
 /** 页码信息 */
