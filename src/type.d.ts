@@ -102,10 +102,7 @@ interface AjaxParams {
 
 /** 接口请求类型集合 */
 declare namespace Api {
-  /** 
-   * `request`方法请求配置
-   * - 第三个传参类型
-   */
+  /** `request`方法请求配置 */
   interface Options extends Pick<AjaxParams, "responseType"> {
     /** `XMLHttpRequest.header`设置对象 */
     headers: { [key: string]: string }
