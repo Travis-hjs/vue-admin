@@ -89,3 +89,64 @@ export function uploadImg(formData: FormData) {
   return request("POST", "/uploadImg", formData);
 }
 ```
+
+## 接口返回数据泛型约束
+
+示例代码，通过传入泛型可以约束返回`res.data`中的类型
+
+```ts
+export interface GoodsInfo {
+  id: number
+  name: string
+  /**
+   * 价格
+   * - 单位为分
+   * - 前端展示需要除以`100`展示
+   */
+  price: number
+  /**
+   * 商品规格
+   */
+  specs: "xs"|"s"|"m"|"l"|"xl"|"2xl"|"3xl"
+  /** 商品主图 */
+  banner: string
+  /** 商品详情图列表 */
+  picList: Array<{ id: number, url: string }>
+}
+
+/**
+ * 获取商品列表
+ * @param params 
+ * @returns 
+ */
+export function getGoodsList(params: { keyword: string } & PageInfo) {
+  return request<Api.List<GoodsInfo>>("GET", "/order/goodsList", params)
+}
+
+/**
+ * 获取商品信息
+ * @param goodsId 
+ * @returns 
+ */
+export function getGoodsById(goodsId: number | string) {
+  return request<GoodsInfo>("GET", "/order/goodsDetails", { id: goodsId })
+}
+
+```
+
+注意看调用的响应数据`res.data.xxx`类型提示
+
+```ts
+getGoodsById(1).then(res => {
+  res.data.specs
+})
+
+getGoodsList({
+  keyword: "查询字段",
+  pageSize: 10,
+  currentPage: 1
+}).then(res => {
+  res.data.list[0].specs
+})
+
+```
