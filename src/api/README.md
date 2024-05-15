@@ -1,13 +1,13 @@
 # 接口模块目录
 
-> 使用方式如下：
+下面列举了大部分场景的调用方式
 
 ## 接口调用
 
 ```ts
 import { getData } from "@/api/common";
 
-// 接口获取后始终以`res.code === 1`为成功，无需在内部用 try + catch 去包一层
+// 接口获取后始终以`res.code === 1`为成功，无需在外部用 try + catch 去包一层
 // 因为 request 方法中已经做了始终执行 Promise.resolve 去作为正确和错误的响应
 async function getPageData() {
   const res = await getData({ pageSize: 10, currentPage: 1 })
@@ -33,8 +33,22 @@ export function getData(params: PageInfo) {
  * @param params
  */
 export function getMaxData(params: PageInfo) {
-  return request("GET", "/getMaxList", params, {
-    overtime: 20000
+  request("GET", "/getMaxList", params, {
+    timeout: 20000
+  })
+}
+```
+
+指定响应对象，通常用于文件下载时，获取`blob`对象使用
+
+```ts
+/**
+ * 获取`excel`文件
+ * @param id 
+ */
+export function getExcel(id: string | number) {
+  return request("GET", "/getOrderExcel", { id }, {
+    responseType: "blob"
   })
 }
 ```
@@ -54,6 +68,8 @@ export function saveBannerInfo(params: { img: string, date: string, sort: number
 ```
 
 `POST`表单
+
+- 有些后端接受的参数是`id=1&type=2`这种方式的就要用到`jsonToPath`去做处理
 
 ```js
 import { jsonToPath } from "@/utils";
