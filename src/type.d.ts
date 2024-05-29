@@ -21,6 +21,23 @@ type DeepRequired<T> = {
   [P in keyof T]-?: T[P] extends object ? Required<T[P]> : T[P];
 }
 
+/**
+ * 与`keyof`对应的工具类型
+ * @example
+ * ```ts
+ * const size = {
+ *   small: "S",
+ *   medium: "M",
+ *   max: "XL",
+ * } as const
+ * 
+ * function test(val: ValueOf<typeof size>) {
+ *   // val => "S" | "M" | "XL"
+ * }
+ * ```
+ */
+type ValueOf<T> = T[keyof T];
+
 /** 运算符号 */
 type NumberSymbols = "+" | "-" | "*" | "/";
 
