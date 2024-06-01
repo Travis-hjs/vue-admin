@@ -1,6 +1,6 @@
 <template>
   <div class="the-layout-menu" ref="menuBox">
-    <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChidren(info)">
+    <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChildren(info)">
       <svg-icon v-if="info.icon" :name="info.icon" />
       <span class="f1">{{ getTitle(info) }}</span>
       <i class="the-layout-menu-arrow"></i>
@@ -20,7 +20,7 @@
     <!-- :class="['the-layout-menu-list', { 'the-layout-menu-list-close': !info.isOpen }]" -->
     <div class="the-layout-menu-list" :style="listStyle" v-if="info.children && info.children.length > 0">
       <div v-for="(item) in info.children" :key="item.key">
-        <MenuItem v-if="hasChidren(item)" :info="item" :level="level + 1" />
+        <MenuItem v-if="hasChildren(item)" :info="item" :level="level + 1" />
         <template v-else>
           <!-- 外链 -->
           <a :class="getItemClass(item)" :style="itemStyle" :href="item.link" target="_blank" v-if="item.link">
@@ -67,7 +67,7 @@ export default class MenuItem extends Vue {
    * 是否有下级菜单
    * @param item
    */
-  hasChidren(item: LayoutMenuItem) {
+  hasChildren(item: LayoutMenuItem) {
     return item.children && item.children.length > 0 ? true : false;
   }
 
@@ -82,7 +82,7 @@ export default class MenuItem extends Vue {
     const child = item.children;
     if (item.isOpen && child && child.length > 0) {
       child.forEach(menuItem => {
-        const height = this.hasChidren(menuItem) ? this.sizeInfo.titleHeight : this.sizeInfo.itemHeight;
+        const height = this.hasChildren(menuItem) ? this.sizeInfo.titleHeight : this.sizeInfo.itemHeight;
         result += height;
         result += this.getListHeight(menuItem);
       })

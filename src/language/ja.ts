@@ -5,7 +5,7 @@ const ja: LanguageInfo = {
     account: "アカウント",
     password: "パスワード",
     register: "登録",
-    signin: "ログイン",
+    signIn: "ログイン",
     logout: "ログオンの終了"
   },
   projectName: "vue2-typescript-バックグラウンド管理",

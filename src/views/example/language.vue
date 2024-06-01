@@ -18,7 +18,7 @@
             <el-form-item :label="$language.login.password">
                 <el-input :placeholder="$language.input + $language.login.password"></el-input>
             </el-form-item>
-            <el-button type="primary" size="medium">{{ $language.login.signin }}</el-button>
+            <el-button type="primary" size="medium">{{ $language.login.signIn }}</el-button>
             <el-button type="success" size="medium">{{ $language.login.register }}</el-button>
             <el-button type="text" size="medium">{{ $language.login.logout }}</el-button>
         </el-form>

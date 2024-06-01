@@ -2,7 +2,7 @@ interface ElementResizeOptions {
   /** 监听的节点 */
   el: HTMLElement
   /** 当前实例 */
-  vue: Vue
+  vue: any
   /** 尺寸变动回调 */
   callback: (entries: Array<ResizeObserverEntry>) => void
   /** `Vue.beforeDestroy` */

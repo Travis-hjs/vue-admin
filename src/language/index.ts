@@ -1,4 +1,4 @@
-import Vue, { PluginObject, VueConstructor } from "vue";
+import { PluginObject } from "vue";
 import { LanguageInfo, LanguageState, LanguageType } from "./types";
 import en from "./en";
 import ja from "./ja";
@@ -54,7 +54,7 @@ const Language: PluginObject<LanguageState> = {
       },
       computed: {
         $language() {
-          const key = this.$languageType as LanguageType;
+          const key = (this as any).$languageType as LanguageType;
           return languageMap[key];
         },
         "$languageType": {

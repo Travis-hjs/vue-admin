@@ -57,7 +57,7 @@ export default class RichText extends Vue {
 
   private init() {
     // console.log(this.$refs["content"]);
-    const editor = new wangEditor(this.$refs["content"]);
+    const editor = new wangEditor(this.$refs["content"] as any);
 
     // 监听输入内容
     editor.config.onchange = (value: string) => {

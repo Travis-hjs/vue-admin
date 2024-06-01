@@ -5,7 +5,7 @@ const en: LanguageInfo = {
     account: "Account",
     password: "Password",
     register: "Register",
-    signin: "Sign in",
+    signIn: "Sign in",
     logout: "Log out"
   },
   projectName: "vue2-typescript-admin",
