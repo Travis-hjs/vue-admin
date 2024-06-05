@@ -274,7 +274,7 @@ const minValue: Record<Numbers, number> = {
   pagePadding: 0
 }
 
-let timer: NodeJS.Timeout;
+let timer: number;
 
 function onInput(val: string, key: Numbers) {
   const result = inputOnlyNumber(val);

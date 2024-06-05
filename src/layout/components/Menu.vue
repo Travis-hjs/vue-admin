@@ -129,14 +129,14 @@ function updateActive(list: Array<LayoutMenuItem>) {
 /**
  * 设置激活`item`状态
  * @param list
- * @param setp 层级
+ * @param level 层级
  */
-function setItem(list: Array<LayoutMenuItem>, setp = 0) {
-  const index = activeList[setp];
+function setItem(list: Array<LayoutMenuItem>, level = 0) {
+  const index = activeList[level];
   const item = list[index];
   item.hasActive = item.isOpen = true;
-  if (setp < activeList.length - 1) {
-    setItem(item.children!, setp + 1);
+  if (level < activeList.length - 1) {
+    setItem(item.children!, level + 1);
   }
 }
 

@@ -153,7 +153,7 @@ let vertical = false;
 /** 摁下滚动条时的偏移量 */
 let deviation = 0;
 /** 更新延时器 */
-let timer: NodeJS.Timeout;
+let timer: number;
 
 function onDragStart(event: MouseEvent) {
   // console.log("摁下 >>", event);
