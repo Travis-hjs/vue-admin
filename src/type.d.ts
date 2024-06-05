@@ -1,5 +1,7 @@
 // 类型引用
 /// <reference path="./components/type.d.ts" />
+// 全局组件类型声明引用
+/// <reference path="./components/global-components.d.ts" />
 
 /** 作用与`readonly`相反的泛型工具 */
 type Mutable<T> = {
