@@ -1,5 +1,5 @@
-import type baseDialog from "./base-dialog"
-import SvgIcon from "../icons";
+import type BaseDialog from "./base-dialog";
+import type SvgIcon from "../icons";
 
 
 // ---------------- 声明全局组件标签类型提示 ----------------
@@ -10,7 +10,7 @@ declare module "vue" {
    * - 自定义的全局组件需要在这里声明下才能获得 Volar 类型提示
    */
   export interface GlobalComponents {
-    BaseDialog: typeof baseDialog
+    BaseDialog: typeof BaseDialog
     SvgIcon: typeof SvgIcon
   }
 }
