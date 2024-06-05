@@ -7,9 +7,9 @@
 //   export default component
 // }
 
-// declare namespace NodeJS {
-//   type Timeout = number // 尝试修改 setTimeout | setInterval 的返回类型为 number; 会报错，但是可以成功修改函数返回类型
-// }
+declare namespace NodeJS {
+  type Timeout = number // 尝试修改 setTimeout | setInterval 的返回类型为 number;
+}
 
 // declare module "timers" {
 //   global {

@@ -157,7 +157,7 @@ const dialogInfo = reactive({
 
 const delayShow = ref(false);
 
-let delayTimer: NodeJS.Timeout;
+let delayTimer: number;
 
 function openDialog(type: "first" | "second" | "third") {
   dialogInfo[type].count++;

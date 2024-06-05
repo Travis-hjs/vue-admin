@@ -279,7 +279,7 @@ const minValue: Record<Numbers, number> = {
   pagePadding: 0
 }
 
-let timer: NodeJS.Timeout;
+let timer: number;
 
 function onInput(e: Event, key: Numbers) {
   const inputEl = e.target as HTMLInputElement;
