@@ -89,6 +89,4 @@ export interface LayoutMenuItem extends RouteMeta {
   children?: Array<LayoutMenuItem>
   /** 路由路径 */
   path: string
-  /** 外链地址，优先级会比`path`高 */
-  link?: string
 }
