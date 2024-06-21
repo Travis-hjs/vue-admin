@@ -158,5 +158,20 @@ export const dynamicRouters: Array<RouteItem> = [
       link: store.projectInfo.link,
       auth: [0],
     }
-  }
+  },
+  {
+    path: "/menu",
+    name: "menu",
+    meta: { title: "菜单管理" },
+    component: Layout,
+    redirect: "/menu/list",
+    children: [
+      {
+        path: "/menu/list",
+        name: "menu-list",
+        component: () => import("../views/menu/index.vue"),
+        meta: { title: "菜单管理", icon: "menu" }
+      }
+    ]
+  },
 ];

@@ -90,3 +90,35 @@ export interface LayoutMenuItem extends RouteMeta {
   /** 路由路径 */
   path: string
 }
+
+/**
+ * 菜单管理表单数据
+ * - 用来提交给后端做动态路由结构
+ */
+export interface MenuForm extends Pick<RouteItem, 'name' | 'meta'> {
+  /** 
+   * 菜单`id`
+   * - 编辑时有
+   */
+  id?: number
+  /** 
+   * 上级`id` 
+   * - 没有值时为第一层目录
+   */
+  parentId?: number
+  /** 菜单权限标识 */
+  code: string
+  /** 重定向 */
+  redirect: string
+  /** 当前页面路径 */
+  path: string
+  /**
+   * 组件路径
+   * - 路径为：`src/views/${component}.vue`
+   */
+  component: string
+  /** 子级列表 */
+  children?: Array<MenuForm>
+  /** 排序 */
+  sort: number
+}
