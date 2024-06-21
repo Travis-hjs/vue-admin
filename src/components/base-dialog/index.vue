@@ -11,8 +11,9 @@
               v-show="contentShow"
             >
               <div class="base-dialog-title fbetween fvertical">
-                <h2>{{ title }}</h2>
-                <i ref="closeBtn" @click="onClose"></i>
+                <h2 class="base-dialog-text" v-if="!$slots.header">{{ title }}</h2>
+                <slot name="header"></slot>
+                <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>
               </div>
               <div class="base-dialog-body">
                 <slot></slot>
@@ -195,13 +196,13 @@ onUnmounted(function () {
   padding: 12px 14px;
   border-bottom: solid 1px #eee;
 
-  h2 {
+  .base-dialog-text {
     font-size: 18px;
     color: #303133;
     font-weight: normal;
   }
 
-  i {
+  .base-dialog-icon {
     display: inline-block;
     width: 28px;
     height: 28px;
