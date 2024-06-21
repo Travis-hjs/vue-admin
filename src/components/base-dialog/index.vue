@@ -101,7 +101,9 @@ watch(() => props.modelValue, function (val) {
   } else {
     contentShow.value = false;
   }
-})
+}, {
+  immediate: true
+});
 
 /**  
  * 设置内容区域位置
