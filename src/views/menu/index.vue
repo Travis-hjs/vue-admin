@@ -43,9 +43,9 @@
           <template v-if="column.key === 'meta.hidden'">
             <span :class="['the-tag', rowData.meta.hidden ? 'red' : 'purple']">{{ rowData.meta.hidden ? '是' : '否' }}</span>
           </template>
-          <div class="w-full text-right" v-if="column.key === 'option'">
-            <el-button link type="primary" v-if="rowData.meta.type === 'menu'">新增</el-button>
-            <el-button link type="success">编辑</el-button>
+          <div style="width: 100%; text-align: right;" v-if="column.key === 'option'">
+            <el-button link type="primary" v-if="rowData.meta.type === 'menu'" @click="onAdd(rowData)">新增</el-button>
+            <el-button link type="success" @click="onEdit(rowData)">编辑</el-button>
             <el-button link type="danger">删除</el-button>
           </div>
         </template>
@@ -166,11 +166,11 @@ columns.forEach(item => {
 });
 
 function onAdd(row: Row) {
-
+  openMenu("add")
 }
 
 function onEdit(row: Row) {
-
+  openMenu("edit")
 }
 
 const tableBoxSize = reactive({
