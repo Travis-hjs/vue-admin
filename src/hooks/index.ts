@@ -1,3 +1,6 @@
+import store from "@/store";
+import { isType } from "@/utils";
+import { onMounted, onUnmounted, watch } from "vue";
 import { customRef } from "vue";
 
 let zIndex = 1000;
@@ -86,4 +89,52 @@ export function validateEX(formName: string, valid?: boolean) {
     input.addEventListener("animationend", remove);
     input.addEventListener("click", remove);
   }, 1000 / 60);
+}
+
+interface LayoutContentSize {
+  /** 
+   * 容器节点
+   * - string: `.class`、`#id`
+   * - HTMLElement: 元素节点对象
+   */
+  el: string | HTMLElement;
+  /**
+   * 尺寸变化回调
+   * 
+   */
+  callback: (size: { width: number, height: number }) => void;
+}
+
+/**
+ * 监听指定`Layout`组件下的内容节点宽高变化
+ * @param params 
+ */
+export function useLayoutContentSize(params: LayoutContentSize) {
+  let el!: HTMLElement;
+  let timer = 0;
+
+  function update() {
+    if (!el) return;
+    // console.log("update >>", el);
+    // el.offsetHeight;
+    params.callback({ width: el.clientWidth, height: el.clientHeight });
+  }
+
+  const layout = store.layout
+
+  watch(() => layout.info.sidebarOpen, function() {
+    timer && clearTimeout(timer);
+    timer = setTimeout(update, 300); // 300 是`--transition`的过渡时间
+  })
+
+  onMounted(function() {
+    el = isType(params.el, "string") ? document.querySelector(params.el)! : params.el;
+    window.addEventListener("resize", update);
+    update();
+  })
+
+  onUnmounted(function() {
+    timer && clearTimeout(timer);
+    window.removeEventListener("resize", update);
+  })
 }
