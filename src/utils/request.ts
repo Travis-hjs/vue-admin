@@ -55,7 +55,7 @@ function ajax(params: AjaxParams) {
 
   // 判断请求进度
   if (params.onProgress) {
-    XHR.addEventListener("progress", params.onProgress);
+    XHR.upload.addEventListener("progress", params.onProgress);
   }
 
   // XHR.responseType = "json"; // 设置响应结果为`json`这个一般由后台返回指定格式，前端无配置
@@ -148,7 +148,7 @@ export default function request<T = any>(
   data?: AjaxParams["data"],
   options: Partial<Api.Options> = {}
 ) {
-  const { headers = {}, responseType = "json" } = options;
+  const { headers = {}, responseType = "json", timeout, onProgress } = options;
   return new Promise<Api.Result<T>>(function (resolve) {
     ajax({
       url: config.apiUrl + url,
@@ -159,7 +159,7 @@ export default function request<T = any>(
       },
       responseType: responseType,
       data: data || {},
-      timeout: options.timeout || config.requestTimeout,
+      timeout: timeout || config.requestTimeout,
       success(res, xhr) {
         // console.log("请求成功", res);
         const info = getResultInfo({ statusCode: xhr.status, data: res });
@@ -180,7 +180,8 @@ export default function request<T = any>(
         message.warning("网络请求超时！");
         // do some ...
         resolve(info);
-      }
+      },
+      onProgress
     });
   })
 }

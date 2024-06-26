@@ -115,18 +115,18 @@ interface AjaxParams {
   fail?(value: XMLHttpRequest): void
   /** 超时回调 */
   onTimeout?(value: XMLHttpRequest): void
-  /** 请求进度 */
+  /** 请求进度（上传文件） */
   onProgress?(event: ProgressEvent<XMLHttpRequestEventTarget>): void
 }
 
 /** 接口请求类型集合 */
 declare namespace Api {
   /** `request`方法请求配置 */
-  interface Options extends Pick<AjaxParams, "responseType"> {
+  interface Options extends Pick<AjaxParams, "responseType" | "onProgress"> {
     /** `XMLHttpRequest.header`设置对象 */
     headers: { [key: string]: string }
     /** 单独为当前接口设置超时毫秒 */
-    timeout: number,
+    timeout: number
   }
 
   /** 接口请求基础响应数据 */

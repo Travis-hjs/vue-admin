@@ -34,7 +34,9 @@ export function uploadFile(formData: FormData) {
       })
     }, 500);
   });
-  // return request("POST", "/uploadFile", formData);
+  // return request("POST", "/uploadFile", formData, {
+  //   onProgress
+  // });
 }
 
 /**
