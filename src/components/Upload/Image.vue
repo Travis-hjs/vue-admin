@@ -116,7 +116,7 @@ async function onUpload() {
     emit("change", {
       id: props.uploadId,
       src: result,
-      result: res.data
+      // result: res.data
     });
   }
 };
