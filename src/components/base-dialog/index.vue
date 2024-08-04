@@ -10,7 +10,7 @@
               :style="{ 'width': width }"
               v-show="contentShow"
             >
-              <div class="base-dialog-title fbetween fvertical">
+              <div class="base-dialog-title f-between f-vertical">
                 <h2 class="base-dialog-text" v-if="!$slots.header">{{ title }}</h2>
                 <slot name="header"></slot>
                 <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>

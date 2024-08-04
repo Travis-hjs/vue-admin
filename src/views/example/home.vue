@@ -7,115 +7,115 @@
     </div>
     <h2 class="the-title mgb_30">布局操作开关</h2>
     <div class="options-box mgb_40">
-      <label class="check-box fvertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
+      <label class="check-box f-vertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
         <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
         显示侧边栏logo
       </label>
-      <label class="check-box fvertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
+      <label class="check-box f-vertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
         <input type="checkbox" id="layout-tags" :checked="layoutInfo.showTagsView" />
         显示历史记录标签
       </label>
-      <label class="check-box fvertical mgb_20" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
+      <label class="check-box f-vertical mgb_20" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
         <input type="checkbox" id="layout-open" :checked="layoutInfo.sidebarOpen" />
         侧边栏展开
       </label>
-      <label class="check-box fvertical" for="layout-mode" @change="onMode">
+      <label class="check-box f-vertical" for="layout-mode" @change="onMode">
         <input type="checkbox" id="layout-mode" :checked="layoutInfo.layoutMode === 'full-header'" />
         顶部填满
       </label>
     </div>
     <h2 class="the-title mgb_30">主题&样式</h2>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">整体背景颜色</span>
       <input class="the-input" type="text" v-model="styleVariable.wholeBgColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.wholeBgColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">侧边菜单栏宽度（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.sidebarWidth" @input="e => onInput(e, 'sidebarWidth')">
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">侧边菜单栏背景色</span>
       <input class="the-input" type="text" v-model="styleVariable.menuBgColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuBgColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单hover状态的动画背景</span>
       <input class="the-input" type="text" v-model="styleVariable.menuHoverBgColor">
       <span class="the-tag blue">只支持rgba</span>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单选项背景色</span>
       <input class="the-input" type="text" v-model="styleVariable.menuItemBgColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单选项激活状态背景色</span>
       <input class="the-input" type="text" v-model="styleVariable.menuItemBgActivedColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgActivedColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单选项激活伪类颜色</span>
       <input class="the-input" type="text" v-model="styleVariable.menuItemTagColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemTagColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单左右间距（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.menuPadding" @input="e => onInput(e, 'menuPadding')">
       <span class="the-tag blue">修改此值需要手动刷新页面</span>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单字体大小（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.menuFontSize" @input="e => onInput(e, 'menuFontSize')">
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单标题高度（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.menuTitleHeight" @input="e => onInput(e, 'menuTitleHeight')">
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">菜单栏目高度（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.menuItemHeight" @input="e => onInput(e, 'menuItemHeight')">
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">侧边菜单栏文字默认颜色</span>
       <input class="the-input" type="text" v-model="styleVariable.menuTextColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">侧边菜单栏文字激活颜色</span>
       <input class="the-input" type="text" v-model="styleVariable.menuTextActivedColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextActivedColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">顶部导航栏高度（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.navbarHeight" @input="e => onInput(e, 'navbarHeight')">
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">主容器内边距（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.contentPadding" @input="e => onInput(e, 'contentPadding')">
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">主容器背景色</span>
       <input class="the-input" type="text" v-model="styleVariable.contentBgColor">
       <div class="color-box">
         <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.contentBgColor">
       </div>
     </div>
-    <div class="form-item fvertical">
+    <div class="form-item f-vertical">
       <span class="form-label">页面内边距（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.pagePadding" @input="e => onInput(e, 'pagePadding')">
     </div>

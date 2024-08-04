@@ -5,10 +5,10 @@
         <svg-icon name="hamburger" />
       </div>
       <Breadcrumb class="f1" />
-      <div class="user-info-box fvertical">
+      <div class="user-info-box f-vertical">
         <img class="avatar" :src="userInfo.avatar || defaultAvatar">
         <span class="the-tag green mgr_10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
-        <button class="logout fvertical" @click="onLogout()">
+        <button class="logout f-vertical" @click="onLogout()">
           <svg-icon name="exit" />
           <span>退出登录</span>
         </button>

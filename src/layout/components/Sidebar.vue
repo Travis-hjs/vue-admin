@@ -3,7 +3,7 @@
     <Scrollbar :clickUpdateDelay="300" :thumbSize="10">
       <transition name="fade">
         <div class="the-logo-box" v-if="layoutInfo.showSidebarLogo">
-          <router-link class="the-logo-link fvertical" to="/">
+          <router-link class="the-logo-link f-vertical" to="/">
             <img class="the-logo" :src="info.logo" />
             <h1 class="the-logo-title ellipsis" :title="info.title">{{ info.title }}</h1>
           </router-link>
