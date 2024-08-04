@@ -16,7 +16,7 @@
     >
       <slot v-bind="item"></slot>
     </el-option>
-    <div :class="['btn-bottom-box flex', { 'pdr_10': isNoMore }]">
+    <div :class="['btn-bottom-box flex', { 'pdr-10': isNoMore }]">
       <el-button text type="primary" class="f1" :loading="loading || requesting" :disabled="isNoMore" @click="getData()">{{ isNoMore ? '数据已加载完' : '加载更多' }}</el-button>
       <el-button text type="success" @click="getData(true)" v-if="isNoMore">重新加载数据</el-button>
     </div>

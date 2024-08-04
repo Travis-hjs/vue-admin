@@ -1,6 +1,6 @@
 <template>
   <div class="nested">
-    <p class="the-title mgb_20">多级嵌套菜单</p>
+    <p class="the-title mgb-20">多级嵌套菜单</p>
     <router-view v-slot="{ Component, route }">
       <!-- <transition name="fadeSlideX" mode="out-in"> -->
       <!-- 需要保持缓存时开启 -->

@@ -1,31 +1,31 @@
 <template>
   <div class="the-components">
-    <div class="mgb_30">
+    <div class="mgb-30">
       <h2 class="the-title">上传图片组件</h2>
     </div>
-    <div class="flex mgb_40">
+    <div class="flex mgb-40">
       <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
       <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
     </div>
-    <div class="mgb_30">
-      <h2 class="the-title mgr_40">滚动条组件</h2>
+    <div class="mgb-30">
+      <h2 class="the-title mgr-40">滚动条组件</h2>
       <el-button type="success" @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
       <el-button type="primary" @click="openDialog('first')">打开弹出层-1</el-button>
     </div>
-    <div class="mgb_20"><span class="the-tag green">横向滚动</span></div>
-    <div class="list-x mgb_40">
+    <div class="mgb-20"><span class="the-tag green">横向滚动</span></div>
+    <div class="list-x mgb-40">
       <Scrollbar thumbColor="#42b983">
         <div class="item item-text" v-for="(item) in list" :key="item">item-{{ item }}</div>
       </Scrollbar>
     </div>
-    <div class="mgb_20"><span class="the-tag blue">垂直滚动</span></div>
-    <div class="list-y mgb_40">
+    <div class="mgb-20"><span class="the-tag blue">垂直滚动</span></div>
+    <div class="list-y mgb-40">
       <Scrollbar thumbColor="#42b983">
         <div class="item item-text" v-for="(item) in list" :key="item">item-{{ item }}</div>
       </Scrollbar>
     </div>
-    <div class="mgb_10"><span class="the-tag cyan">宽高超出滚动</span></div>
-    <div style="width: 300px; height: 140px;" class="mgb_30">
+    <div class="mgb-10"><span class="the-tag cyan">宽高超出滚动</span></div>
+    <div style="width: 300px; height: 140px;" class="mgb-30">
       <Scrollbar>
         <div style="width: 500px; height: 300px; background-color: yellow; color: #555; line-height: 28px">
           <p>内容内容内容内容内容内容内容</p>
@@ -35,17 +35,17 @@
       </Scrollbar>
     </div>
 
-    <div class="mgb_30">
-      <h2 class="the-title mgr_40">折叠盒子</h2>
+    <div class="mgb-30">
+      <h2 class="the-title mgr-40">折叠盒子</h2>
     </div>
 
     <section>
-      <div class="mgb_20">
+      <div class="mgb-20">
         <el-button type="primary" @click="collapse.showOne = !collapse.showOne">box-one switch</el-button>
         <el-button type="primary" @click="collapse.showTwo = !collapse.showTwo">box-one switch</el-button>
       </div>
       <div class="flex">
-        <CollapseHeight :show="collapse.showOne" class="mgr_20">
+        <CollapseHeight :show="collapse.showOne" class="mgr-20">
           <div class="collapse-box">box-one</div>
         </CollapseHeight>
         <CollapseHeight :show="collapse.showTwo">
@@ -54,8 +54,8 @@
       </div>
     </section>
 
-    <div class="mgb_30">
-      <h2 class="the-title mgr_40">自定义全局 Dialog 组件</h2>
+    <div class="mgb-30">
+      <h2 class="the-title mgr-40">自定义全局 Dialog 组件</h2>
     </div>
 
     <div class="flex">
@@ -66,7 +66,7 @@
 
     <base-dialog title="第一个 dialog" v-model="dialogInfo.first.show" @close="clearTimer()">
       <div>
-        <p class="mgb_10">出现次数：{{ dialogInfo.first.count }}</p>
+        <p class="mgb-10">出现次数：{{ dialogInfo.first.count }}</p>
         <div v-if="delayShow">延迟出现</div>
       </div>
       <template #footer>
@@ -77,12 +77,12 @@
     <base-dialog title="第二个 dialog" v-model="dialogInfo.second.show" :closeByMask="false">
       <div>
         <p><span class="the-tag orange">当前不可点击遮罩层关闭</span></p>
-        <p class="mgb_10">出现次数：{{ dialogInfo.second.count }}</p>
+        <p class="mgb-10">出现次数：{{ dialogInfo.second.count }}</p>
         <div v-if="delayShow">延迟出现</div>
 
         <base-dialog title="第三个 dialog" v-model="dialogInfo.third.show" :appendToBody="true">
           <div>
-            <p class="mgb_10">出现次数：{{ dialogInfo.third.count }}</p>
+            <p class="mgb-10">出现次数：{{ dialogInfo.third.count }}</p>
             <ul class="dialog-list">
               <li class="dialog-item f-vertical" v-for="(item) in list" :key="item">{{ item }}</li>
             </ul>
@@ -98,19 +98,19 @@
       </template>
     </base-dialog>
 
-    <div class="mgb_30">
+    <div class="mgb-30">
       <h2 class="the-title">自定义 Message 控件</h2>
     </div>
 
-    <div class="mgb_50">
+    <div class="mgb-50">
       <el-button v-for="item in messageBtns" :key="item.type" :type="item.btnType" @click="openMessage(item)">{{ item.label }}</el-button>
     </div>
 
-    <div class="mgb_30">
+    <div class="mgb-30">
       <h2 class="the-title">自定义 MessageBox 控件</h2>
     </div>
 
-    <div class="mgb_50">
+    <div class="mgb-50">
       <el-button type="primary" @click="openMessageBox()">打开确认框</el-button>
       <el-button type="primary" @click="openMessageBox(true)">打开确认取消框</el-button>
     </div>

@@ -7,7 +7,7 @@
       <Breadcrumb class="f1" />
       <div class="user-info-box f-vertical">
         <img class="avatar" :src="userInfo.avatar || defaultAvatar">
-        <span class="the-tag green mgr_10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
+        <span class="the-tag green mgr-10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
         <button class="logout f-vertical" @click="onLogout()">
           <svg-icon name="exit" />
           <span>退出登录</span>

@@ -1,12 +1,12 @@
 <template>
   <div class="page-home">
-    <h2 class="the-title mgb_30">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mgb_40">
+    <h2 class="the-title mgb-30">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mgb-40">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
     </div>
-    <el-form class="the-form mgb_30" label-width="160px" size="small">
-      <h2 class="the-title mgb_30">布局操作开关</h2>
+    <el-form class="the-form mgb-30" label-width="160px" size="small">
+      <h2 class="the-title mgb-30">布局操作开关</h2>
       <el-form-item label="显示侧边栏logo">
         <el-switch v-model="layoutInfo.showSidebarLogo" active-text="显示" inactive-text="隐藏" />
       </el-form-item>
@@ -22,7 +22,7 @@
           <el-radio-button value="full-header">顶部撑满</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <h2 class="the-title mgb_30">主题&样式</h2>
+      <h2 class="the-title mgb-30">主题&样式</h2>
       <el-form-item label="整体背景颜色">
         <el-input v-model="styleVariable.wholeBgColor"></el-input>
         <el-color-picker v-model="styleVariable.wholeBgColor" show-alpha :predefine="predefineColors" @change="onColor()" />
@@ -108,7 +108,7 @@
         <el-button type="primary" @click="onPreset()">应用预设配置</el-button>
       </el-form-item>
     </el-form>
-    <h2 class="the-title mgb_30">打赏一下</h2>
+    <h2 class="the-title mgb-30">打赏一下</h2>
     <div class="code-box">
       <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
       <img class="qrcode" src="https://travis-hjs.github.io/images/wxcode2.jpg">

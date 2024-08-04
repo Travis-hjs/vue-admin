@@ -1,11 +1,11 @@
 <template>
   <div class="page-request">
-    <h2 class="the-title mgb_30">Http 请求示例，当前页面配置路由缓存</h2>
+    <h2 class="the-title mgb-30">Http 请求示例，当前页面配置路由缓存</h2>
     <div class="flex">
-      <el-input class="mgb_20 short-input" v-model="pageData.city" placeholder="请输入城市名"></el-input>
+      <el-input class="mgb-20 short-input" v-model="pageData.city" placeholder="请输入城市名"></el-input>
       <el-button type="primary" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</el-button>
     </div>
-    <div class="mgb_20" v-if="pageData.desc">
+    <div class="mgb-20" v-if="pageData.desc">
       <span :class="['the-tag', pageData.error ? 'red' : 'green']">{{ pageData.desc }}</span>
     </div>
     <textarea cols="60" rows="30" :value="pageData.content"></textarea>

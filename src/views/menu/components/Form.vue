@@ -57,7 +57,7 @@
         </el-form-item>
         <el-form-item label="视图组件路径" prop="component">
           <el-input
-            class="f1 mgr_10"
+            class="f1 mgr-10"
             v-model="state.formData.component"
             clearable
             placeholder="当为目录时可以不用填"
@@ -77,12 +77,12 @@
         </el-form-item>
         <el-form-item label="菜单图标" prop="meta.icon">
           <el-input
-            class="f1 mgr_10"
+            class="f1 mgr-10"
             v-model="state.formData.meta.icon"
             clearable
             placeholder="请选择或者输入图标"
           ></el-input>
-          <div class="fvc mgr_10" v-if="state.formData.meta.icon">
+          <div class="fvc mgr-10" v-if="state.formData.meta.icon">
             <el-icon :size="20" style="color: var(--el-color-primary);">
               <svg-icon :name="state.formData.meta.icon" />
             </el-icon>
@@ -127,7 +127,7 @@
         </el-form-item>
         <el-form-item label="多语言设置" prop="meta.lang">
           <el-input
-            class="f1 mgr_10"
+            class="f1 mgr-10"
             v-model="state.formData.meta.lang"
             clearable
             placeholder="请输入语言配置表中的键值"
