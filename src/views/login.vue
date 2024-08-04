@@ -45,7 +45,7 @@
               <el-checkbox v-model="remember" size="large">记住账号/密码</el-checkbox>
             </el-form-item>
           </el-form>
-          <div class="mgb_10 w100 fvertical" v-for="(item, index) in tipList" :key="index">
+          <div class="mgb_10 w100 f-vertical" v-for="(item, index) in tipList" :key="index">
             <div class="f1"><span class="the-tag gray">账号: {{ item }}; 密码: 随便填</span></div>
             <el-button type="primary" plain :disabled="loading" @click="setLoginInfo(item)">一键登录</el-button>
           </div>

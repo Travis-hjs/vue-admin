@@ -84,7 +84,7 @@ function getListHeight(item: LayoutMenuItem) {
 const titleClass = computed(function () {
   const item = props.info;
   return {
-    "the-layout-menu-title fvertical": true,
+    "the-layout-menu-title f-vertical": true,
     "the-layout-menu-selected": item.isActive,
     "the-layout-menu-open": item.isOpen,
     "the-layout-menu-actived": item.hasActive,
@@ -94,7 +94,7 @@ const titleClass = computed(function () {
 
 function getItemClass(item: LayoutMenuItem) {
   return {
-    "the-layout-menu-item fvertical": true,
+    "the-layout-menu-item f-vertical": true,
     "the-layout-menu-selected": item.isActive
   }
 }

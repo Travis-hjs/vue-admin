@@ -8,7 +8,7 @@
       :data-key="item.key"
       :data-level="level"
     >
-      <div class="base-tree-item fvertical" @click="onOpen(item)">
+      <div class="base-tree-item f-vertical" @click="onOpen(item)">
         <i :class="['base-tree-icon el-icon-caret-right', { 'hidden-icon': !item.children.length }, { 'expanded': item.open }]"></i>
         <span
           v-if="checkbox"

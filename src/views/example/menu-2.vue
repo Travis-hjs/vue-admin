@@ -16,7 +16,7 @@
         <el-select-v2 v-model="form.data.count" :placeholder="form.rules.region[0].message" :options="options" />
       </el-form-item>
       <el-form-item label="活动时间" required>
-        <div class="fvertical" style="width: 100%;">
+        <div class="f-vertical" style="width: 100%;">
           <el-form-item prop="startDate">
             <el-date-picker
               v-model="form.data.startDate"

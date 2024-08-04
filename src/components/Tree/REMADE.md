@@ -182,7 +182,7 @@ const TreeLevel = defineComponent({
               data-key={item.key}
               data-level={props.level}
             >
-              <div class="base-tree-item fvertical" onClick={() => onOpen(item)}>
+              <div class="base-tree-item f-vertical" onClick={() => onOpen(item)}>
                 <i class={`base-tree-icon el-icon-caret-right ${item.children.length ? "" : "hidden-icon"} ${item.open ? "expanded" : ""}`}></i>
                 {
                   props.checkbox ? (

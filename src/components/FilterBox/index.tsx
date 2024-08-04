@@ -40,7 +40,7 @@ export const FilterItem = defineComponent({
       <div class="filter-item flex">
         {
           slots.label || props.label ? (
-            <span class="filter-label fvertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>
+            <span class="filter-label f-vertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>
           ) : undefined
         }
         { slots.default && slots.default() }

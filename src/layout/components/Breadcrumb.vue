@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="breadcrumb" tag="div" class="layout-breadcrumb fvertical">
+  <transition-group name="breadcrumb" tag="div" class="layout-breadcrumb f-vertical">
     <span :class="['layout-breadcrumb-item', {'last': index === list.length - 1}]" v-for="(item, index) in list" :key="item.path">
       <i class="separator" v-if="index > 0">/</i>
       <a href="javascript:void(0)" v-if="index === list.length - 1">{{ item.meta.title }}</a>

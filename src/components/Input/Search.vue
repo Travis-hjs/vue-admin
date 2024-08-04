@@ -28,7 +28,7 @@
         <button
           type="button"
           v-for="(pre, index) in prepends"
-          :class="['input-search-select-item fvertical', {'actived': prependValue === pre[useSetting.value]}]"
+          :class="['input-search-select-item f-vertical', {'actived': prependValue === pre[useSetting.value]}]"
           :key="pre[useSetting.key] || ('pre-' + index)"
           :disabled="!!pre[useSetting.disabled]"
           @click="onSelect(pre)"

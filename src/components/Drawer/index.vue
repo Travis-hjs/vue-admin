@@ -5,7 +5,7 @@
         <div class="f1" @click="onClose()"></div>
         <transition name="drawer-slide">
           <div class="drawer-slide-box" :style="{ 'width': size }" v-show="show">
-            <div class="drawer-header fvertical">
+            <div class="drawer-header f-vertical">
               <div class="f1" v-if="$slots.header">
                 <slot name="header"></slot>
               </div>
