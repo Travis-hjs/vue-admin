@@ -7,10 +7,10 @@
       <div class="form-box">
         <div class="login-form">
           <div class="login-title">平台登录</div>
-          <input class="the-input mgb_20" type="text" v-model="formData.account" placeholder="请输入账号">
-          <input class="the-input mgb_20" type="password" v-model="formData.password" placeholder="请输入密码">
-          <button class="the-btn blue mgb_20" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
-          <label class="check-box f-vertical mgb_20" for="check-input" @change="remember =! remember">
+          <input class="the-input mgb-20" type="text" v-model="formData.account" placeholder="请输入账号">
+          <input class="the-input mgb-20" type="password" v-model="formData.password" placeholder="请输入密码">
+          <button class="the-btn blue mgb-20" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
+          <label class="check-box f-vertical mgb-20" for="check-input" @change="remember =! remember">
             <input type="checkbox" id="check-input" :checked="remember" />
             记住账号/密码
           </label>

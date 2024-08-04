@@ -1,21 +1,21 @@
 <template>
   <div class="page-home">
-    <h2 class="the-title mgb_30">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mgb_40">
+    <h2 class="the-title mgb-30">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mgb-40">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
     </div>
-    <h2 class="the-title mgb_30">布局操作开关</h2>
-    <div class="options-box mgb_40">
-      <label class="check-box f-vertical mgb_20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
+    <h2 class="the-title mgb-30">布局操作开关</h2>
+    <div class="options-box mgb-40">
+      <label class="check-box f-vertical mgb-20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
         <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
         显示侧边栏logo
       </label>
-      <label class="check-box f-vertical mgb_20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
+      <label class="check-box f-vertical mgb-20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
         <input type="checkbox" id="layout-tags" :checked="layoutInfo.showTagsView" />
         显示历史记录标签
       </label>
-      <label class="check-box f-vertical mgb_20" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
+      <label class="check-box f-vertical mgb-20" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
         <input type="checkbox" id="layout-open" :checked="layoutInfo.sidebarOpen" />
         侧边栏展开
       </label>
@@ -24,7 +24,7 @@
         顶部填满
       </label>
     </div>
-    <h2 class="the-title mgb_30">主题&样式</h2>
+    <h2 class="the-title mgb-30">主题&样式</h2>
     <div class="form-item f-vertical">
       <span class="form-label">整体背景颜色</span>
       <input class="the-input" type="text" v-model="styleVariable.wholeBgColor">
@@ -119,14 +119,14 @@
       <span class="form-label">页面内边距（px）</span>
       <input class="the-input" type="text" v-model="styleVariable.pagePadding" @input="e => onInput(e, 'pagePadding')">
     </div>
-    <div class="pdt_20 mgb_30">
+    <div class="pdt-20 mgb-30">
       <button class="the-btn blue mini" v-ripple @click="setStyle()">应用当前配置</button>
       <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
       <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset()">应用预设配置</button>
     </div>
 
-    <h2 class="the-title mgb_30">打赏一下</h2>
+    <h2 class="the-title mgb-30">打赏一下</h2>
     <div class="code-box">
       <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
       <img class="qrcode" src="https://travis-hjs.github.io/images/wxcode2.jpg">

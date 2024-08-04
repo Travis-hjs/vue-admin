@@ -5,28 +5,28 @@
 
 /* 上下左右边距 */
 @for $index from 1 through 5 {
-  .mgl_#{$index}0 {
+  .mgl-#{$index}0 {
     margin-left: 10px * $index;
   }
-  .mgr_#{$index}0 {
+  .mgr-#{$index}0 {
     margin-right: 10px * $index;
   }
-  .mgt_#{$index}0 {
+  .mgt-#{$index}0 {
     margin-top: 10px * $index;
   }
-  .mgb_#{$index}0 {
+  .mgb-#{$index}0 {
     margin-bottom: 10px * $index;
   }
-  .pdl_#{$index}0 {
+  .pdl-#{$index}0 {
     padding-left: 10px * $index;
   }
-  .pdr_#{$index}0 {
+  .pdr-#{$index}0 {
     padding-right: 10px * $index;
   }
-  .pdt_#{$index}0 {
+  .pdt-#{$index}0 {
     padding-top: 10px * $index;
   }
-  .pdb_#{$index}0 {
+  .pdb-#{$index}0 {
     padding-bottom: 10px * $index;
   }
 }
