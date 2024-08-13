@@ -7,22 +7,10 @@
     </div>
     <h2 class="the-title mgb-30">布局操作开关</h2>
     <div class="options-box mgb-40">
-      <label class="check-box f-vertical mgb-20" for="layout-logo" @change="layoutInfo.showSidebarLogo =! layoutInfo.showSidebarLogo">
-        <input type="checkbox" id="layout-logo" :checked="layoutInfo.showSidebarLogo" />
-        显示侧边栏logo
-      </label>
-      <label class="check-box f-vertical mgb-20" for="layout-tags" @change="layoutInfo.showTagsView =! layoutInfo.showTagsView">
-        <input type="checkbox" id="layout-tags" :checked="layoutInfo.showTagsView" />
-        显示历史记录标签
-      </label>
-      <label class="check-box f-vertical mgb-20" for="layout-open" @change="layoutInfo.sidebarOpen =! layoutInfo.sidebarOpen">
-        <input type="checkbox" id="layout-open" :checked="layoutInfo.sidebarOpen" />
-        侧边栏展开
-      </label>
-      <label class="check-box f-vertical" for="layout-mode" @change="onMode">
-        <input type="checkbox" id="layout-mode" :checked="layoutInfo.layoutMode === 'full-header'" />
-        顶部填满
-      </label>
+      <CheckBox class="mgb-20" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
+      <CheckBox class="mgb-20" label="显示历史记录标签" v-model="layoutInfo.showTagsView" />
+      <CheckBox class="mgb-20" label="侧边栏展开" v-model="layoutInfo.sidebarOpen" />
+      <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
     </div>
     <h2 class="the-title mgb-30">主题&样式</h2>
     <div class="form-item f-vertical">
@@ -139,6 +127,7 @@ import store from "@/store";
 import { copyText, inputOnlyNumber, jsonParse, modifyData } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { CheckBox } from "@/components/CheckBox";
 
 const layoutInfo = store.layout.info;
 

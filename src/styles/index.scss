@@ -75,7 +75,7 @@
   opacity: 0;
 }
 
-// ================= 示例全局样式 =================
+// ================= TODO: 示例全局样式，可随意删除，不影响依赖样式 =================
 
 .the-input {
   width: 100%;
@@ -147,21 +147,6 @@
   color: #fff;
 }
 
-.check-box {
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--blue);
-  input {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
-    line-height: 1;
-    &:checked {
-      background-color: var(--blue);
-    }
-  }
-}
-
 .the-tag {
   display: inline-block;
   padding: 6px 8px;
@@ -204,5 +189,89 @@
     width: 100%;
     height: 1px;
     background-color: #888;
+  }
+}
+
+.the-switch {
+  --width: 40px;
+  --height: 22px;
+  display: inline-block;
+  width: var(--width);
+  height: var(--height);
+  border-radius: var(--height);
+  background-color: #dcdfe6;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  appearance: none;
+  outline: none;
+  border: none;
+  &::after {
+    position: absolute;
+    content: "";
+    top: 1px;
+    left: 1px;
+    width: calc(var(--height) - 2px);
+    height: calc(var(--height) - 2px);
+    transition: var(--transition);
+    transform: translateX(0px);
+    background-color: #fff;
+    border-radius: 50%;
+  }
+  &:checked {
+    background-color: var(--blue);
+    &::after {
+      transform: translateX(calc(var(--width) - var(--height) - 1px));
+    }
+  }
+}
+
+.the-checkbox {
+  appearance: none;
+  outline: none;
+  width: 16px;
+  height: 16px;
+  transition: var(--transition);
+  border: solid 1px #dcdfe6;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  position: relative;
+  &:hover {
+    border-color: var(--blue);
+  }
+  &::after {
+    position: absolute;
+    content: "";
+    border: 1px solid transparent;
+    border-left: 0;
+    border-top: 0;
+    left: 33%;
+    top: 20%;
+    height: 8px;
+    width: 4px;
+    transform: rotate(45deg) scaleY(0);
+    transform-origin: center;
+    transition: var(--transition);
+  }
+  &:checked {
+    background-color: var(--blue);
+    border-color: var(--blue);
+    &::after {
+      transform: rotate(45deg) scaleY(1);
+      border-color: #fff;
+    }
+  }
+}
+
+.the-label {
+  font-size: 14px;
+  color: #606266;
+  cursor: pointer;
+  user-select: none;
+  .the-checkbox {
+    margin-right: 6px;
+  }
+  &.checked {
+    color: var(--blue);
   }
 }
