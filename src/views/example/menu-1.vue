@@ -39,9 +39,9 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { usePageInfo } from "@/hooks";
-import { FilterWrap, FilterItem  } from "@/components/FilterBox/index";
-import { ranInt, randomText } from "@/utils";
+import { usePageInfo } from "@/hooks/common";
+import { FilterWrap, FilterItem  } from "@/components/FilterBox";
+import { formatDate, ranInt, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 
 const state = reactive({
@@ -84,9 +84,9 @@ const btnList: Array<BaseTableOptionItem<TableRow>> = [
       })
     },
   },
-  { text: "终止", icon: "el-icon-video-pause" },
-  { text: "启用", icon: "el-icon-video-play" },
-  { text: "下架", icon: "el-icon-folder-delete" },
+  { text: "终止", icon: "el-icon-video-pause", click: (row) => message.error(`【${row.name}】已终止`) },
+  { text: "启用", icon: "el-icon-video-play", click: (row) => message.success(`【${row.name}】已启用`) },
+  { text: "下架", icon: "el-icon-folder-delete", click: (row) => message.warning(`【${row.name}】已下架`) },
 ];
 
 const options = [
@@ -105,7 +105,7 @@ async function getTableData() {
   const testList = new Array(10).fill(0).map((_, index) => ({
     id: ranInt(1, 100),
     name: randomText(2, 40),
-    date: new Date().toLocaleString()
+    date: formatDate()
   }));
   tableData.value = testList;
   state.pageInfo.total = testList.length;

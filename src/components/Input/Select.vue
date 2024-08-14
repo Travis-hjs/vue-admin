@@ -32,9 +32,9 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-import { usePageInfo } from "@/hooks";
+import { usePageInfo } from "@/hooks/common";
 import { ref, reactive, computed, type PropType } from "vue";
-import { useProps, useSettingComputed } from "./hooks";
+import { useProps, useSettingComputed } from "./index";
 
 const props = defineProps({
   modelValue: {

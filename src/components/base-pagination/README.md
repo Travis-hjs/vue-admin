@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { usePageInfo } from "@/hooks";
+import { usePageInfo } from "@/hooks/common";
 
 const pageInfo = reactive(usePageInfo())
 

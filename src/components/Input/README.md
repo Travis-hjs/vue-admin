@@ -13,7 +13,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import InputSearch from "@/components/Input/Search.vue";
+import { InputSearch } from "@/components/Input";
 
 const keyword = ref("");
 
@@ -42,7 +42,7 @@ function onSearch() {
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { getList } from "@/api/xxx";
-import InputSelect from "@/components/Input/Select.vue";
+import { InputSelect } from "@/components/Input";
 
 const selectValue = ref<number|"">("");
 

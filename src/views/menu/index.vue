@@ -62,7 +62,7 @@ import {
   type Column,
   TableV2FixedDir,
 } from "element-plus";
-import { useLayoutContentSize } from "@/hooks";
+import { useLayoutContentSize } from "@/hooks/common";
 
 interface Row extends Omit<MenuForm, "id"|"parentId"|"children"> {
   /** 原来数据数据`id` */

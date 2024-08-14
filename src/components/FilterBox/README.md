@@ -34,7 +34,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import { FilterWrap, FilterItem  } from "@/components/FilterBox/index";
+import { FilterWrap, FilterItem  } from "@/components/FilterBox";
 
 const dateValue = ref([]);
 

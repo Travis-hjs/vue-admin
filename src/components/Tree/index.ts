@@ -1,4 +1,4 @@
-export { default } from "./index.vue";
+export { default as Tree } from "./index.vue";
 
 /** `<Level>`组件相同字段 */
 export function useLevelProps() {

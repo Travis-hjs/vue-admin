@@ -1,5 +1,9 @@
 import { computed, type PropType } from "vue";
 
+export { default as InputSearch } from "./Search.vue";
+
+export { default as InputSelect } from "./Select.vue";
+
 export function useProps(placeholder: string) {
   return {
     placeholder: {

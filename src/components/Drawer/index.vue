@@ -37,7 +37,7 @@ export default defineComponent({
 })
 </script>
 <script lang="ts" setup>
-import { usezIndex } from "@/hooks";
+import { usezIndex } from "@/hooks/common";
 
 defineProps({
   /** 外部传入的定位层级 */

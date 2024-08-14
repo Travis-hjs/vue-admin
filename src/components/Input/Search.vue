@@ -49,7 +49,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { computed, ref, type PropType, onMounted, onUnmounted } from "vue";
-import { useProps, useSettingComputed } from "./hooks";
+import { useProps, useSettingComputed } from "./index";
 
 const props = defineProps({
   modelValue: {

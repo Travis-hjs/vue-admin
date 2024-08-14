@@ -179,10 +179,10 @@ export default {
 <script lang="ts" setup>
 import { ref, reactive, watch, type PropType } from "vue";
 import { ElMessage, type FormInstance } from "element-plus"
-import { validateEX } from "@/hooks";
+import { validateEX } from "@/hooks/common";
 import type { MenuForm } from "@/types";
 import Icon from "./IconList.vue";
-import Drawer from "@/components/Drawer";
+import { Drawer } from "@/components/Drawer";
 
 const props = defineProps({
   show: {

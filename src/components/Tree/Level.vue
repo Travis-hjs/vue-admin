@@ -42,7 +42,7 @@ export default {
 <script lang="ts" setup>
 import { type PropType, inject } from "vue";
 import globalEvent from "@/utils/event";
-import Tree, { useLevelProps } from "./index";
+import { Tree, useLevelProps } from "./index";
 
 /** 父组件注入的对象 */
 const parentProvide = inject("treeParent") as InstanceType<typeof Tree>;
