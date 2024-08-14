@@ -39,7 +39,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
-import { usezIndex } from "@/hooks";
+import { usezIndex } from "@/hooks/common";
 
 const props = defineProps({
   title: {

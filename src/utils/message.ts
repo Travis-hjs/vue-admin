@@ -1,4 +1,4 @@
-import { usezIndex } from "@/hooks";
+import { usezIndex } from "@/hooks/common";
 
 export namespace Message {
   export interface Option {

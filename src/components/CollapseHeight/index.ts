@@ -1,6 +1,6 @@
 // import type { Directive, DirectiveBinding } from "vue";
 
-export { default } from "./index.vue";
+export { default as CollapseHeight } from "./index.vue";
 
 /**
  * 元素出现

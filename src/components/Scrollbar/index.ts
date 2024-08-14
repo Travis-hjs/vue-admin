@@ -1,1 +1,1 @@
-export { default } from "./index.vue";
+export { default as Scrollbar } from "./index.vue";
