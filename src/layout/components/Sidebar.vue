@@ -15,7 +15,7 @@
 </template>
 <script lang="ts" setup>
 import Menu from "./Menu.vue";
-import Scrollbar from "@/components/Scrollbar";
+import { Scrollbar } from "@/components/Scrollbar";
 import store from "@/store";
 
 const layoutInfo = store.layout.info;

@@ -40,7 +40,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import Scrollbar from "@/components/Scrollbar";
+import { Scrollbar } from "@/components/Scrollbar";
 
 const list = new Array(10).fill(0).map((_, index) => index);
 </script>

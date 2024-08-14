@@ -21,7 +21,7 @@
 </template>
 <script lang="ts" steup>
 import { ref } from "vue";
-import CollapseHeight from "@/components/CollapseHeight";
+import { CollapseHeight } from "@/components/CollapseHeight";
 
 const switchBox = ref(false);
 </script>
