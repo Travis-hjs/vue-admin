@@ -136,7 +136,7 @@ export const dynamicRouters: Array<RouteItem> = [
         name: "no-found",
         meta: {
           title: "404 页面",
-          link: `${location.origin}#/is-error-path`,
+          link: `${location.origin + location.pathname}#/is-error-path`,
         },
         component: Page404
       }
