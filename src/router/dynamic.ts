@@ -130,6 +130,15 @@ export const dynamicRouters: Array<RouteItem> = [
         name: "example-tsx",
         meta: { title: "tsx-示例" },
         component: () => import("../views/tsx/example")
+      },
+      {
+        path: "/example/no-found",
+        name: "no-found",
+        meta: {
+          title: "404 页面",
+          link: `${location.origin}#/is-error-path`,
+        },
+        component: Page404
       }
     ]
   },
