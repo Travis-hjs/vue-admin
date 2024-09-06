@@ -27,13 +27,21 @@
       :data="tableData"
       :actions="btnList"
       :loading="state.loading"
+      select-key="id"
+      v-model:select-list="state.selectList"
+      :select-disabled="(row) => (row.id % 4) === 0"
     >
       <template #fuck="{ row, $index }">
         {{ $index + 1 }}、{{ row.name }}
       </template>
     </base-table>
 
-    <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
+    <div class="f-vertical">
+      <div style="width: 200px;" v-if="state.selectList.length > 0">
+        <span class="the-tag blue">已选择：{{ state.selectList.length }} 条数据</span>
+      </div>
+      <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
+    </div>
 
   </div>
 </template>
@@ -44,20 +52,21 @@ import { FilterWrap, FilterItem  } from "@/components/FilterBox";
 import { formatDate, ranInt, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 
+interface TableRow {
+  id: number
+  name: string
+  date: string
+}
+
 const state = reactive({
   loading: false,
   searchInfo: {
     type: "",
     date: []
   },
-  pageInfo: usePageInfo()
+  pageInfo: usePageInfo(),
+  selectList: [] as Array<TableRow>
 });
-
-interface TableRow {
-  id: number
-  name: string
-  date: string
-}
 
 const tableData = ref<Array<TableRow>>([]);
 
@@ -94,7 +103,13 @@ const options = [
   { label: "选项二", value: 1 }
 ];
 
-async function getTableData() {
+const testList = Array.from({ length: 62 }).map((_, index) => ({
+  id: index + 1,
+  name: randomText(2, 40),
+  date: formatDate()
+}));
+
+function getTableData() {
   // state.loading = true;
   // const res = await getData({...state.pageInfo, ...state.searchInfo})
   // state.loading = false;
@@ -102,12 +117,9 @@ async function getTableData() {
   //   tableData.value = res.data.list || [];
   //   pageInfo.total = res.data.totalCount;
   // }
-  const testList = new Array(10).fill(0).map((_, index) => ({
-    id: ranInt(1, 100),
-    name: randomText(2, 40),
-    date: formatDate()
-  }));
-  tableData.value = testList;
+  const size = state.pageInfo.pageSize;
+  const page = state.pageInfo.currentPage;
+  tableData.value = testList.slice((page - 1) * size, page * size);
   state.pageInfo.total = testList.length;
 }
 
@@ -115,6 +127,7 @@ getTableData();
 
 function onSearch() {
   state.pageInfo.currentPage = 1;
+  state.selectList = []
   getTableData();
 }
 

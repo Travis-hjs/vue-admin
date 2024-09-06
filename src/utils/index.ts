@@ -255,3 +255,19 @@ export function randomText(min: number, max: number) {
   }
   return str;
 }
+
+/**
+ * 自定义对象数组去重
+ * @param array
+ * @param compare 对比函数
+ * ```js
+ * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
+ * filterRepeat(list, (a, b) => a.id === b.id)
+ * ```
+ */
+export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolean) {
+  return array.filter((element, index, self) => {
+    // return findIndex(self, el => compare(el, element)) === index;
+    return self.findIndex(el => compare(el, element)) === index
+  })
+}

@@ -1,8 +1,8 @@
-import type BaseDialog from "./base-dialog";
 import type SvgIcon from "../icons";
-import type BaseTable from "./components/base-table";
-import type BaseTableOption from "./components/base-table-option";
-import type BasePagination from "./components/base-pagination";
+import type BaseDialog from "./base-dialog";
+import type BaseTable from "./base-table";
+import type BaseTableOption from "./base-table-option";
+import type BasePagination from "./base-pagination";
 
 // ---------------- 声明全局组件标签类型提示 ----------------
 // declare module "@vue/runtime-core"
@@ -38,9 +38,9 @@ declare module "vue" {
     // ElCarouselItem: typeof import('element-plus')['ElCarouselItem']
     // ElCascader: typeof import('element-plus')['ElCascader']
     // ElCascaderPanel: typeof import('element-plus')['ElCascaderPanel']
-    // ElCheckbox: typeof import('element-plus')['ElCheckbox']
-    // ElCheckboxButton: typeof import('element-plus')['ElCheckboxButton']
-    // ElCheckboxGroup: typeof import('element-plus')['ElCheckboxGroup']
+    ElCheckbox: typeof import('element-plus')['ElCheckbox']
+    ElCheckboxButton: typeof import('element-plus')['ElCheckboxButton']
+    ElCheckboxGroup: typeof import('element-plus')['ElCheckboxGroup']
     // ElCol: typeof import('element-plus')['ElCol']
     // ElCollapse: typeof import('element-plus')['ElCollapse']
     // ElCollapseItem: typeof import('element-plus')['ElCollapseItem']
