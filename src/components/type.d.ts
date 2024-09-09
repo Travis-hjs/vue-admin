@@ -15,7 +15,7 @@ interface UploadChange<T = number | string> {
 }
 
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */
-interface BaseTableColumn {
+interface BaseTableColumn <T = any> {
   /** 表格列标题 */
   label: string
   /**
@@ -58,7 +58,7 @@ interface BaseTableColumn {
    * 函数会传递三个参数 function (row, cellValue, column)
    * 第一个参数是行信息，第一个参数的当前值，第三个参数是列信息
    */
-  formatter?: (row: any, cellValue: any, column: any) => string
+  formatter?: (row: T, cellValue: any, column: any) => string
 }
 
 /** 表格操作列列表对象 */
