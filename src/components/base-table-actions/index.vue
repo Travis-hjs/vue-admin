@@ -1,29 +1,29 @@
 <template>
-  <div class="base-table-option fvc" @click="onBoxClick">
+  <div class="base-table-actions fvc" @click="onBoxClick">
     <el-button
       text
       :type="btn.type || 'primary'"
-      v-for="(btn, index) in btnList"
+      v-for="(btn, index) in useList.btn"
       :key="'btn-' + index"
       :loading="useBoolean(btn, 'loading')"
       :disabled="useBoolean(btn, 'disabled')"
       @click="onBtnClick(btn)"
     >
-      <i :class="['base-table-option-icon', useString(btn, 'icon')]" v-if="btn.icon && !useBoolean(btn, 'loading')"></i>
+      <i :class="['base-table-actions-icon', useString(btn, 'icon')]" v-if="btn.icon && !useBoolean(btn, 'loading')"></i>
       {{ useString(btn, 'text') }}
     </el-button>
-    <el-dropdown v-if="dropdownList.length">
+    <el-dropdown v-if="useList.dropdown.length">
       <el-button text type="primary">更多<i class="el-icon-arrow-down el-icon--right"></i></el-button>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item
-            v-for="(drop, index) in dropdownList"
+            v-for="(drop, index) in useList.dropdown"
             :key="'drop-' + index"
             :disabled="useBoolean(drop, 'disabled') || useBoolean(drop, 'loading')"
             @click="onBtnClick(drop)"
           >
             <i class="el-icon-loading" v-if="useBoolean(drop, 'loading')"></i>
-            <i :class="['base-table-option-icon', useString(drop, 'icon')]" v-else-if="drop.icon && !useBoolean(drop, 'loading')"></i>
+            <i :class="['base-table-actions-icon', useString(drop, 'icon')]" v-else-if="drop.icon && !useBoolean(drop, 'loading')"></i>
             {{ useString(drop, 'text') }}
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -34,7 +34,7 @@
 <script lang="ts">
 /** 全局表格操作组件 */
 export default {
-  name: "base-table-option"
+  name: "base-table-actions"
 }
 </script>
 <script lang="ts" setup>
@@ -58,7 +58,7 @@ const props = defineProps({
     default: -1
   },
   /** 按钮列表 */
-  list: {
+  actions: {
     type: Array as PropType<Array<BaseTableOptionItem>>,
     default: []
   },
@@ -70,25 +70,22 @@ const props = defineProps({
 });
 
 const useList = computed(() => {
-  return props.list.filter(item => {
-    if (isType(item!.hide, "function")) {
-      return !item.hide(props.row);
+  const btnList = props.actions.filter(item => {
+    if (isType(item!.show, "function")) {
+      return item.show(props.row);
+    } else if (isType(item!.show, "boolean")) {
+      return item.show;
     } else {
-      return !item.hide;
+      return true;
     }
   });
-})
-
-const btnList = computed(() => {
+  
   const max = Number(props.max);
-  const btns = useList;
-  return btns.value?.length > max ? btns.value?.filter((_, index) => index < max - 1) : btns.value;
-})
 
-const dropdownList = computed(() => {
-  const max = Number(props.max);
-  const btns = useList;
-  return btns.value?.length > max ? btns.value?.filter((_, index) => index >= (max - 1)) : [];
+  return {
+    btn: btnList.length > max ? btnList.filter((_, index) => index < max - 1) : btnList,
+    dropdown: btnList.length > max ? btnList.filter((_, index) => index >= (max - 1)) : []
+  }
 })
 
 const useString = (item: BaseTableOptionItem, key: "text"|"icon") => {
@@ -118,7 +115,7 @@ const onBoxClick = (e: MouseEvent) => {
 </script>
 
 <style lang="scss">
-.base-table-option {
+.base-table-actions {
   line-height: 1;
   .el-button {
     height: 28px;
@@ -127,7 +124,7 @@ const onBoxClick = (e: MouseEvent) => {
   .el-button + .el-button {
     margin-left: 0;
   }
-  .base-table-option-icon {
+  .base-table-actions-icon {
     padding-right: 4px;
   }
 }

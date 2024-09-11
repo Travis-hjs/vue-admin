@@ -1,7 +1,7 @@
 import type SvgIcon from "../icons";
 import type BaseDialog from "./base-dialog";
 import type BaseTable from "./base-table";
-import type BaseTableOption from "./base-table-option";
+import type BaseTableActions from "./base-table-actions";
 import type BasePagination from "./base-pagination";
 
 // ---------------- 声明全局组件标签类型提示 ----------------
@@ -15,7 +15,7 @@ declare module "vue" {
     BaseDialog: typeof BaseDialog
     SvgIcon: typeof SvgIcon
     BaseTable: typeof BaseTable
-    BaseTableOption: typeof BaseTableOption
+    BaseTableActions: typeof BaseTableActions
     BasePagination: typeof BasePagination
 
     // 用到哪些再手动放开注释

@@ -74,8 +74,8 @@ interface BaseTableOptionItem<T = BaseObj> {
   disabled?: boolean | ((row: T) => boolean)
   /** 是否加载状态 */
   loading?: boolean | ((row: T) => boolean)
-  /** 是否隐藏该按钮 */
-  hide?: boolean | ((row: T) => boolean)
+  /** 显示按钮的条件，不传则显示，和`v-if`一样的作用 */
+  show?: boolean | ((row: T) => boolean)
   /**
    * 按钮类型，默认`"primary"`
    * - [element-plus button](http://element-plus.org/zh-CN/component/button.html)

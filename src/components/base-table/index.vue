@@ -43,11 +43,11 @@
         </template>
         <template #default="{row, $index}: SlotType">
           <slot :name="item.slotName" v-bind="{row, $index}" v-if="item.slotName"></slot>
-          <base-table-option
+          <base-table-actions
             v-else-if="item.prop === 'action-right'"
             :row="row"
             :index="$index"
-            :list="props.actions as any"
+            :actions="props.actions as any"
             :clickStop="props.isRowClick"
           />
           <template v-else>{{ setTableDefaultContent(row, item.prop, item) }}</template>
@@ -86,12 +86,12 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  /** 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<base-table-option />`组件的阻止事件冒泡作用 */
+  /** 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<base-table-actions />`组件的阻止事件冒泡作用 */
   isRowClick: {
     type: Boolean,
     default: false
   },
-  /** `<base-table-option :list="list">`组件的 list 数据 */
+  /** `<base-table-actions :list="list">`组件的 list 数据 */
   actions: {
     type: Array as PropType<Array<BaseTableOptionItem<T>>>,
     default: () => []

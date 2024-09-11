@@ -3,7 +3,7 @@ import App from "./App.vue";
 import SvgIcon from "./icons";
 import BaseDialog from "./components/base-dialog";
 import BaseTable from "./components/base-table";
-import BaseTableOption from "./components/base-table-option";
+import BaseTableActions from "./components/base-table-actions";
 import BasePagination from "./components/base-pagination";
 import router from "./router";
 import { copyText, isMobile } from "./utils";
@@ -53,7 +53,7 @@ app.component("base-dialog", BaseDialog);
 // 全局表格
 app.component('base-table', BaseTable);
 // 全局表格选项
-app.component('base-table-option', BaseTableOption);
+app.component('base-table-actions', BaseTableActions);
 // 全局分页
 app.component('base-pagination', BasePagination);
 

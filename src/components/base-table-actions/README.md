@@ -1,6 +1,6 @@
 # 表格操作按钮栏组件
 
-- 已注册为全局组件`<base-table-option>`
+- 已注册为全局组件`<base-table-actions>`
 
 ## `props`说明
 
@@ -24,7 +24,7 @@
       <el-table-column prop="address" label="地址" min-width="180" align="center"></el-table-column>
       <el-table-column prop="option" label="操作" width="200" align="center" fixed="right">
         <template slot-scope="{ row }">
-          <base-table-option :row="row" :list="btnList"></base-table-option>
+          <base-table-actions :row="row" :list="btnList"></base-table-actions>
         </template>
       </el-table-column>
     </el-table>
