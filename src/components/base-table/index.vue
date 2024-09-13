@@ -14,6 +14,7 @@
           <el-checkbox
             :indeterminate="isIndeterminate"
             :model-value="selectedAll"
+            :disabled="disabledAll"
             @change="onSelectAll"
           />
         </template>
@@ -191,8 +192,15 @@ function selected(row: T) {
  * - 当前页的表单数据
  */
 const canSelectList = computed(() => props.data.filter((item, index) => canSelect(item, index)));
+/** 是否禁用选择全部 */
+const disabledAll = computed(() => canSelectList.value.length === 0)
 /** 是否选中全部（当前表格页） */
-const selectedAll = computed(() => canSelectList.value.every(item => selected(item)));
+const selectedAll = computed(function() {
+  if (disabledAll.value) {
+    return false;
+  }
+  return canSelectList.value.every(item => selected(item));
+});
 /** 是否有选中（当前表格页） */
 const isIndeterminate = computed(() => selectedAll.value ? false : canSelectList.value.some(item => selected(item)));
 
