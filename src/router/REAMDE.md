@@ -45,9 +45,11 @@ export type RouteItem = {
 } & RouteRecordRaw
 ```
 
-**当前路由配置分两种**
+## 当前路由配置分两种
 
-1. 静态路由
+- **静态路由**
+
+参考`src/router/dynamic.ts`
 
 ```ts
 const list: Array<RouteItem> = [
@@ -65,6 +67,8 @@ async function getDynamic() {
 }
 ```
 
-2. 动态路由
+- **动态路由**
 
-依然是在`getDynamic`中进行，当获取到后端返回的列表之后，组装成`Array<RouteItem>`返回即可；如果后端返回的数据格式和当前路由列表一致，则无需理会；注意，动态路由列表中，`component`字段为空时是`Layout`，其他字段则是`src/views/${string}.vue`中的`string`，在做菜单管理的时候需求约定好使用情况。
+依然是在`getDynamic`中进行，当获取到后端返回的列表之后，组装成`Array<RouteItem>`返回即可；如果后端返回的数据格式和当前路由列表一致，则无需理会；注意，动态路由列表中，`component`字段为空时是`Layout`，其他字段则是`src/views/${string}.vue`中的`string`，在做菜单管理的时候需要约定好使用情况。
+
+当前`getDynamic`方法中注释的便是动态路由的代码实现，这里不就展开代码赘述了。

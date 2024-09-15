@@ -41,7 +41,7 @@ export default defineComponent({
 </script>
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
-import { usezIndex } from "@/hooks/common";
+import { useZIndex } from "@/hooks/common";
 
 const props = defineProps({
   title: {
@@ -72,7 +72,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "update:modelValue", "afterLeave", "afterEnd"]);
 
-const currentZIndex = usezIndex();
+const currentZIndex = useZIndex();
 
 /** 当前组件节点 */
 const el = ref<HTMLElement>();
