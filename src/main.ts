@@ -14,7 +14,6 @@ import { message } from "./utils/message";
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";
 // import ElementPlus from "element-plus";
-// import zhCn from "element-plus/es/locale/lang/zh-cn";
 import {
   ElButton,
   ElButtonGroup,
@@ -56,9 +55,7 @@ window.version = version;
 
 const app = createApp(App);
 
-// app.use(ElementPlus, {
-//   locale: zhCn,
-// });
+// app.use(ElementPlus);
 
 // 用到哪些单独手动去加
 const elComponents = [
