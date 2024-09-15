@@ -27,15 +27,15 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // manualChunks: {
-        //   "packgage-name": ["file-name"],
-        //   "element-plus": ["element-plus"],
-        // },
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            return "vendor";
-          }
+        manualChunks: {
+          // "packgage-name": ["file-name"],
+          "element-plus": ["element-plus"],
         },
+        // manualChunks(id) {
+        //   if (id.includes("node_modules")) {
+        //     return "vendor";
+        //   }
+        // },
         entryFileNames: "js/[name]-[hash].js",
         chunkFileNames: "js/[name]-[hash].js",
         assetFileNames(target) {
