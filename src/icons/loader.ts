@@ -5,7 +5,7 @@ import { readFileSync, readdirSync } from "fs";
 // 其他地方导入会报错，因为浏览器环境不支持`fs`模块
 
 /** `id`前缀 */
-let idPerfix = "";
+let idPrefix = "";
 
 const svgTitle = /<svg([^>+].*?)>/;
 
@@ -21,10 +21,10 @@ const clearReturn = /(\r)|(\n)/g;
  */
 function findSvgFile(dir: string): Array<string> {
   const svgRes: Array<string> = []
-  const dirents = readdirSync(dir, {
+  const direntList = readdirSync(dir, {
     withFileTypes: true
   });
-  dirents.forEach(function(dirent) {
+  direntList.forEach(function(dirent) {
     if (dirent.isDirectory()) {
       svgRes.push(...findSvgFile(dir + dirent.name + "/"));
     } else {
@@ -44,7 +44,7 @@ function findSvgFile(dir: string): Array<string> {
         if (!hasViewBox.test(group)) {
           content += `viewBox="0 0 ${width} ${height}"`;
         }
-        return `<symbol id="${idPerfix}-${dirent.name.replace(".svg", "")}" ${content}>`;
+        return `<symbol id="${idPrefix}-${dirent.name.replace(".svg", "")}" ${content}>`;
       }).replace("</svg>", "</symbol>");
       svgRes.push(svg);
     }
@@ -55,11 +55,11 @@ function findSvgFile(dir: string): Array<string> {
 /**
  * `svg`打包器
  * @param path 资源路径
- * @param perfix 后缀名（标签`id`前缀）
+ * @param prefix 后缀名（标签`id`前缀）
  */
-export function svgBuilder(path: string, perfix = "icon") {
+export function svgBuilder(path: string, prefix = "icon") {
   if (path.trim() === "") return;
-  idPerfix = perfix;
+  idPrefix = prefix;
   const res = findSvgFile(path);
   // console.log(res.length)
   return {

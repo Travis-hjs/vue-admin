@@ -2,9 +2,10 @@
 
 > 因为是类文件，所以统一大写开头命名文件名
 
-*使用示例*
+- **使用示例**
 
 新建一个状态模块`/store/Order.ts`
+
 ```ts
 import { reactive } from "vue";
 import { jsonParse, modifyData } from "@/utils";
@@ -78,6 +79,7 @@ export default class ModuleOrder {
 ```
 
 导入到整体store模块下 `/store/index.ts`
+
 ```ts
 import ModuleUser from "./User"; // 与 Order 一样的操作文件
 import ModuleOrder from "./Order";
@@ -98,6 +100,7 @@ export default store;
 ```
 
 页面应用 `/views/demo.vue`
+
 ```html
 <template>
   <div>

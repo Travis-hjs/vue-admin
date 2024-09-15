@@ -19,7 +19,7 @@
     </CollapseHeight>
   </div>
 </template>
-<script lang="ts" steup>
+<script lang="ts" setup>
 import { ref } from "vue";
 import { CollapseHeight } from "@/components/CollapseHeight";
 
@@ -32,4 +32,3 @@ const switchBox = ref(false);
 }
 </style>
 ```
-

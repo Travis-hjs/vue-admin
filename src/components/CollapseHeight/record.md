@@ -112,8 +112,7 @@ function onAfterLeave(el: HTMLElement) {
 </script>
 ```
 
-
-# 高度折叠过渡组件
+## 高度折叠过渡组件
 
 使用时，注意`height`样式不要直接写在标签的`style`上，否则会覆盖组件设置样式操作；`min-height`、`max-height`也不可以设置，`padding`、`margin`这两个属性的值会参与高度的计算。
 
@@ -134,7 +133,7 @@ function onAfterLeave(el: HTMLElement) {
     </CollapseHeight>
   </div>
 </template>
-<script lang="ts" steup>
+<script lang="ts" setup>
 import { ref } from "vue";
 import CollapseHeight from "@/components/CollapseHeight/index.vue";
 
@@ -164,7 +163,7 @@ const switchBox = ref(false);
     </CollapseHeight>
   </div>
 </template>
-<script lang="ts" steup>
+<script lang="ts" setup>
 import { ref } from "vue";
 import CollapseHeight from "@/components/CollapseHeight/index.vue";
 

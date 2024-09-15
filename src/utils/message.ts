@@ -1,4 +1,4 @@
-import { usezIndex } from "@/hooks/common";
+import { useZIndex } from "@/hooks/common";
 
 export namespace Message {
   export interface Option {
@@ -406,10 +406,10 @@ function useDialog() {
 
 const zIndex = {
   get message() {
-    return (usezIndex() + 20).toString();
+    return (useZIndex() + 20).toString();
   },
   get dialog() {
-    return (usezIndex() + 10).toString();
+    return (useZIndex() + 10).toString();
   }
 }
 
