@@ -2,7 +2,7 @@
   <div class="base-input-search type-1">
     <el-input
       v-model="keyword"
-      :placeholder="placeholder"
+      :placeholder="placeholder.toString()"
       :disabled="disabled || loading"
       clearable
       @clear="onSearch()"

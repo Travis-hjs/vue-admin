@@ -1,7 +1,7 @@
 <template>
   <el-select
     v-model="useValue"
-    :placeholder="placeholder"
+    :placeholder="placeholder.toString()"
     :disabled="disabled || requesting"
     :multiple="multiple"
     clearable

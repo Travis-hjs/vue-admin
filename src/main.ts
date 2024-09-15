@@ -13,16 +13,95 @@ import { message } from "./utils/message";
 
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";
-import ElementPlus from "element-plus";
+// import ElementPlus from "element-plus";
+import {
+  ElButton,
+  ElButtonGroup,
+  ElCheckbox,
+  ElCheckboxButton,
+  ElCheckboxGroup,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElSwitch,
+  ElRadio,
+  ElRadioButton,
+  ElRadioGroup,
+  ElColorPicker,
+  ElDatePicker,
+  ElSelectV2,
+  ElIcon,
+  ElInputNumber,
+  ElTooltip,
+  ElDivider,
+  ElText,
+  ElTreeSelect,
+  ElTable,
+  ElTableColumn,
+  ElTableV2,
+  ElScrollbar,
+  ElPagination,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElEmpty,
+  vLoading,
+} from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 window.version = version;
 
 const app = createApp(App);
 
-app.use(ElementPlus, {
-  locale: zhCn,
-})
+// app.use(ElementPlus, {
+//   locale: zhCn,
+// });
+
+// 用到哪些单独手动去加
+const elComponents = [
+  ElButton,
+  ElButtonGroup,
+  ElCheckbox,
+  ElCheckboxButton,
+  ElCheckboxGroup,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElSwitch,
+  ElRadio,
+  ElRadioButton,
+  ElRadioGroup,
+  ElColorPicker,
+  ElDatePicker,
+  ElSelectV2,
+  ElIcon,
+  ElInputNumber,
+  ElTooltip,
+  ElDivider,
+  ElText,
+  ElTreeSelect,
+  ElTable,
+  ElTableColumn,
+  ElTableV2,
+  ElScrollbar,
+  ElPagination,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElEmpty,
+]
+
+elComponents.forEach(item => {
+  app.use(item, {
+    locale: zhCn,
+  });
+});
+
+app.directive("loading", vLoading);
 
 // 添加一个自定义指令`v-copy`点击复制内容
 app.directive("copy", {

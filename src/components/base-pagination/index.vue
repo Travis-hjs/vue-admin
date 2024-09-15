@@ -30,7 +30,7 @@ const props = defineProps({
     default: () => usePageInfo(),
   },
   pageSizes: {
-    type: Array,
+    type: Array as PropType<Array<number>>,
     default: () => [10, 30, 100, 200, 300],
   },
   layout: {

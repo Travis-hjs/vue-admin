@@ -62,7 +62,7 @@ const state = reactive({
   loading: false,
   searchInfo: {
     type: "",
-    date: []
+    date: ''
   },
   pageInfo: usePageInfo(),
   selectList: [] as Array<TableRow>

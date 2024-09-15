@@ -24,6 +24,12 @@ export interface RouteMeta {
    * | 1 | 普通用户 |
    */
   auth?: Array<number>
+  /** 多语言语言字段 */
+  lang?: string
+  /** 路由应用状态 */
+  status?: number
+  /** 菜单还是权限标识 */
+  type?: "auth" | "menu"
 }
 
 /** 自定义的路由类型-继承`RouteRecordRaw` */
