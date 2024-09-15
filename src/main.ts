@@ -14,6 +14,7 @@ import { message } from "./utils/message";
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";
 // import ElementPlus from "element-plus";
+// import zhCn from "element-plus/es/locale/lang/zh-cn";
 import {
   ElButton,
   ElButtonGroup,
@@ -47,9 +48,9 @@ import {
   ElDropdownMenu,
   ElDropdownItem,
   ElEmpty,
+  ElConfigProvider,
   vLoading,
 } from "element-plus";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 window.version = version;
 
@@ -93,12 +94,11 @@ const elComponents = [
   ElDropdownMenu,
   ElDropdownItem,
   ElEmpty,
+  ElConfigProvider,
 ]
 
 elComponents.forEach(item => {
-  app.use(item, {
-    locale: zhCn,
-  });
+  app.use(item);
 });
 
 app.directive("loading", vLoading);
