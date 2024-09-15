@@ -37,7 +37,7 @@ export default defineComponent({
 })
 </script>
 <script lang="ts" setup>
-import { usezIndex } from "@/hooks/common";
+import { useZIndex } from "@/hooks/common";
 
 defineProps({
   /** 外部传入的定位层级 */
@@ -76,7 +76,7 @@ const emit = defineEmits<{
   (event: "close"): void
 }>();
 
-const currentZIndex = usezIndex();
+const currentZIndex = useZIndex();
 
 function onClose() {
   emit("close");
