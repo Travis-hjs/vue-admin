@@ -7,7 +7,7 @@
 | 字段 | 类型 | 是否必需 | 说明 |
 | --- | --- | --- | --- |
 | data | `Array` | 是 | 表格数据 |
-| columns | `Array` | 是 | 表格列数据，结构看下面`KchTableColumn` |
+| columns | `Array` | 是 | 表格列数据，结构看下面`BaseTableColumn` |
 | loading | `Boolean` | 否 | 表格加载状态，默认`false` |
 | selectKey | `string` | 否 | 选择操作的判断字段，设置该值才会开启选择功能，复选框列固定在左边 |
 | selectList | `Array` | 否 | 绑定的选择列表，即`checkbox`操作列表，和`selectKey`需要配合一起使用 |
