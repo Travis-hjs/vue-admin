@@ -13,7 +13,7 @@
 | selectList | `Array` | 否 | 绑定的选择列表，即`checkbox`操作列表，和`selectKey`需要配合一起使用 |
 | selectDisabled | `Function` | 否 | 选择框禁用的条件函数 |
 | isRowClick | `Boolean` | 否 | 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<base-table-actions />`组件的阻止事件冒泡作用 |
-| actions | `Array` | 否 | `<base-table-actions :list="list">`组件的 list 数据 |
+| actions | `Array` | 否 | `<base-table-actions :actions="list">`组件的列表数据 |
 
 这里不使用`el-table`自带的选择功能理由是：
 
