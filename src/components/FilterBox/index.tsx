@@ -13,12 +13,12 @@ export const FilterWrap = defineComponent({
   },
   setup(props, { slots }) {
     return () => (
-      <section class="filter-wrap flex" style={{ [width]: props.labelWidth }}>
-        { slots.left ? <div class="filter-side">{ slots.left() }</div> : undefined }
-        <div class="filter-content f1">
+      <section class="the-filter-wrap flex" style={{ [width]: props.labelWidth }}>
+        { slots.left ? <div class="the-filter-side">{ slots.left() }</div> : undefined }
+        <div class="the-filter-content f1">
           { slots.default && slots.default() }
         </div>
-        { slots.right ? <div class="filter-side">{ slots.right() }</div> : undefined }
+        { slots.right ? <div class="the-filter-side">{ slots.right() }</div> : undefined }
       </section>
     )
   },
@@ -37,10 +37,10 @@ export const FilterItem = defineComponent({
   },
   setup(props, { slots }) {
     return () => (
-      <div class="filter-item flex">
+      <div class="the-filter-item flex">
         {
           slots.label || props.label ? (
-            <span class="filter-label f-vertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>
+            <span class="the-filter-label f-vertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>
           ) : undefined
         }
         { slots.default && slots.default() }

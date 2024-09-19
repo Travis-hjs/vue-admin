@@ -1,20 +1,20 @@
-.filter-wrap {
+.the-filter-wrap {
   width: 100%;
   border-bottom: solid #dcdfe6 1px;
   margin-bottom: 24px;
-  .filter-content {
+  .the-filter-content {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
   }
-  .filter-content,
-  .filter-side {
+  .the-filter-content,
+  .the-filter-side {
     margin-bottom: 20px;
   }
-  .filter-item {
+  .the-filter-item {
     min-height: 32px;
   }
-  .filter-label {
+  .the-filter-label {
     min-width: var(--label-width);
     width: var(--label-width);
     font-size: 14px;
