@@ -136,8 +136,8 @@ function setContentPosition(e: MouseEvent) {
 function setVariable(x: string, y: string) {
   const el = contentBox.value;
   if (el) {
-    el.style.setProperty("--contentX", x);
-    el.style.setProperty("--contentY", y);
+    el.style.setProperty("--content-x", x);
+    el.style.setProperty("--content-y", y);
   }
 }
 
@@ -193,7 +193,7 @@ onUnmounted(function () {
 }
 
 .dialog-move-enter-from, .dialog-move-leave-to {
-  transform: translate3d(var(--contentX), var(--contentY), 0) scale(0);
+  transform: translate3d(var(--content-x), var(--content-y), 0) scale(0);
 }
 
 .base-dialog-title {
