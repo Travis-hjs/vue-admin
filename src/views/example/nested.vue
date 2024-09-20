@@ -2,7 +2,7 @@
   <div class="nested">
     <p class="the-title mgb-20">多级嵌套菜单</p>
     <router-view v-slot="{ Component, route }">
-      <!-- <transition name="fadeSlideX" mode="out-in"> -->
+      <!-- <transition name="fade-slide-x" mode="out-in"> -->
       <!-- 需要保持缓存时开启 -->
       <!-- <keep-alive> -->
       <component :is="Component" :key="route.path" />
