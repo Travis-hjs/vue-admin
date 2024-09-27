@@ -2,11 +2,25 @@
  * 项目配置模块
  */
 const config = (function () {
-  const env = process.env.NODE_ENV === "development" ? "dev" : "prod";
+  /** 当前项目运行地址 */
+  let url = location.origin;
+  /** 当前环境 */
+  let env: "dev" | "test" | "prod" = "dev";
+  /** 请求域名 */
+  let requestUrl = "";
 
-  const url = {
-    dev: "https://www.tianqiapi.com", // `http://${location.host}`,
-    prod: "https://www.tianqiapi.com"
+  // 测试环境
+  if (location.hostname === "test.com") {
+    env = "test";
+    requestUrl = `https://api.test.com`;
+    url = "https://test.com";
+  }
+
+  // 正式环境
+  if (location.hostname === "prod.com") {
+    env = "prod";
+    requestUrl = "https://api.prod.com";
+    url = "https://prod.com";
   }
 
   return {
@@ -16,12 +30,16 @@ const config = (function () {
     },
     /** `api`请求域名 */
     get apiUrl() {
-      return url[env];
+      return requestUrl;
     },
     /** 是否开发环境 */
     get isDev() {
       return env === "dev";
-    }
+    },
+    /** 当前项目运行地址 */
+    get webUrl() {
+      return url;
+    },
   }
 })();
 
