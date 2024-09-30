@@ -204,10 +204,13 @@ const selectedAll = computed(function() {
 /** 是否有选中（当前表格页） */
 const isIndeterminate = computed(() => selectedAll.value ? false : canSelectList.value.some(item => selected(item)));
 
+const getCloneList = () => JSON.parse(JSON.stringify(props.selectList)) as Array<any>;
+
 function onSelectAll() {
+  if (!props.selectList) return console.warn("选择功能需要绑定 selectList 属性！");
   const key = props.selectKey!;
   const keys = canSelectList.value.map((item: any) => item[key]);
-  let list: Array<any> = JSON.parse(JSON.stringify(props.selectList));
+  let list = getCloneList();
   if (selectedAll.value) {
     list = list.filter(item => !keys.includes(item[key]));
   } else {
@@ -217,9 +220,10 @@ function onSelectAll() {
 }
 
 function onSelect(item: any) {
+  if (!props.selectList) return console.warn("选择功能需要绑定 selectList 属性！");
   const key = props.selectKey!;
   const keys = selectKeys.value;
-  let list: Array<any> = JSON.parse(JSON.stringify(props.selectList));
+  let list = getCloneList();
   if (keys.includes(item[key])) {
     list = list.filter(selected => selected[key] !== item[key]);
   } else {
