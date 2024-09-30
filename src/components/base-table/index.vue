@@ -48,7 +48,7 @@
             v-else-if="item.prop === 'action-right'"
             :row="row"
             :index="$index"
-            :actions="props.actions as any"
+            :actions="(props.actions as any)"
             :clickStop="props.isRowClick"
           />
           <template v-else>{{ setTableDefaultContent(row, item.prop, item) }}</template>
