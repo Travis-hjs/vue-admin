@@ -1,6 +1,30 @@
 # 接口模块目录
 
-下面列举了大部分场景的调用方式
+这里我使用的是原生`XMLHttpRequest`封装的请求方法 [ajax](https://github.com/Travis-hjs/my-note/blob/master/example/pages/request/js/index.js)，理由是：
+
+- 代码少，功能足以覆盖常用的大部分场景。
+- 在`ts`中可以更友好的声明接口返回类型。
+
+在适配后端接口返回数据时，需要在 [getResultInfo 方法](../utils/request.ts) 中设置好要使用的字段，在使用时，`request`函数始终返回`Promise.resolve`，所以在调用时只需要判断`res.code`即可，不需要在外部再包多一层`try catch`，这样的好处在`Promise.all([ ... ])`的使用场景时非常明显。
+
+```ts
+// 下面这个代码片段，无论哪个请求出现异常，都不会阻止后面的代码正常运行，因为始终会返回结果
+const [user, goods, order] = Promise.all([getUserInfo(), getGoodsById(12), getOrderById(21)]);
+
+if (user.code === 1) {
+  // do some...
+}
+
+if (goods.code === 1) {
+  // do some...
+}
+
+if (order.code === 1) {
+  // do some...
+}
+```
+
+下面列举了大部分场景的调用方式 ↓↓↓
 
 ## 接口调用
 
