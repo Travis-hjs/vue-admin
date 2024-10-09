@@ -17,9 +17,10 @@
         </div>
       </div>
       <div class="from-bottom-box flex">
-        <div class="qrcode-box"></div>
+        <img class="qrcode-box" src="https://travis-hjs.github.io/images/reward-code.jpg" alt="谢谢打赏！">
         <div class="pdt-20">
           <p class="desc">如需技术支持，请扫码联系作者。</p>
+          <p class="desc">邮箱地址：1141752341@qq.com</p>
           <p class="desc">项目地址：{{ link }}</p>
         </div>
       </div>
@@ -88,10 +89,10 @@ export default {
   .qrcode-box {
     width: 120px;
     height: 120px;
-    background-image: url("https://travis-hjs.github.io/images/wxcode2.jpg");
-    background-size: 216px 292px;
-    background-position: -48px -64px;
-    margin-right: 16px;
+    // border-radius: 50%;
+    overflow: hidden;
+    display: block;
+    margin-right: 20px;
   }
   .from-top-box {
     animation: from-top 0.5s ease;
