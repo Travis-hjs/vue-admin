@@ -20,8 +20,8 @@
         <img class="qrcode-box" src="https://travis-hjs.github.io/images/reward-code.jpg" alt="谢谢打赏！">
         <div class="pdt-20">
           <p class="desc">如需技术支持，请扫码联系作者。</p>
-          <p class="desc">邮箱地址：1141752341@qq.com</p>
-          <p class="desc">项目地址：{{ link }}</p>
+          <p class="desc">邮箱地址：{{ project.email }}</p>
+          <p class="desc">项目地址：{{ project.link }}</p>
         </div>
       </div>
     </section>
@@ -34,7 +34,7 @@ export default {
   name: "page-404",
   data() {
     return {
-      link: store.projectInfo.link
+      project: store.projectInfo
     }
   }
 }
