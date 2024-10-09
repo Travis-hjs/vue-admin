@@ -148,10 +148,10 @@ export default function request<T = any>(
   data?: AjaxParams["data"],
   options: Partial<Api.Options> = {}
 ) {
-  const { headers = {}, responseType = "json", timeout, onProgress } = options;
+  const { headers = {}, responseType = "json", timeout, onProgress, domain } = options;
   return new Promise<Api.Result<T>>(function (resolve) {
     ajax({
-      url: config.apiUrl + url,
+      url: domain || (config.apiUrl + url),
       method: method,
       headers: {
         "authorization": store.user.info.token, // TODO: 每次请求时带上 token
@@ -177,7 +177,7 @@ export default function request<T = any>(
         console.warn("XMLHttpRequest 请求超时 !!!");
         const info = getResultInfo({ statusCode: config.requestTimeout, data: {} });
         // 全局的请求超时提示可以写在这里
-        message.warning("网络请求超时！");
+        message.warning(info.msg);
         // do some ...
         resolve(info);
       },

@@ -124,9 +124,14 @@ declare namespace Api {
   /** `request`方法请求配置 */
   interface Options extends Pick<AjaxParams, "responseType" | "onProgress"> {
     /** `XMLHttpRequest.header`设置对象 */
-    headers: { [key: string]: string }
+    headers: { [key: string]: string };
     /** 单独为当前接口设置超时毫秒 */
-    timeout: number
+    timeout: number;
+    /**
+     * 请求域名
+     * - 会覆盖默认的请求域名
+     */
+    domain: string;
   }
 
   /** 接口请求基础响应数据 */
