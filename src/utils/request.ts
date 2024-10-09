@@ -105,7 +105,7 @@ function ajax(params: AjaxParams) {
  * @param responseType 接口请求成功时，响应类型
  */
 function getResultInfo(result: { statusCode: number, data: any }, responseType?: XMLHttpRequestResponseType) {
-  const info: Api.Result = { code: -1, msg: "网络出错了", data: null }
+  const info: Api.Result = { code: result.statusCode, msg: "网络出错了", data: null }
   switch (result.statusCode) {
     case config.requestTimeout:
       info.msg = "网络超时了";
@@ -122,6 +122,7 @@ function getResultInfo(result: { statusCode: number, data: any }, responseType?:
       break;
     case 401:
       info.msg = "登录已过期";
+      // TODO: 这里可以做确认弹框交互处理
       break;
     case 404:
       info.msg = "接口不存在";
@@ -151,7 +152,7 @@ export default function request<T = any>(
   const { headers = {}, responseType = "json", timeout, onProgress, domain } = options;
   return new Promise<Api.Result<T>>(function (resolve) {
     ajax({
-      url: domain || (config.apiUrl + url),
+      url: (domain || config.apiUrl) + url,
       method: method,
       headers: {
         "authorization": store.user.info.token, // TODO: 每次请求时带上 token
