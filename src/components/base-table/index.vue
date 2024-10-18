@@ -125,7 +125,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: 'update:selectList', list: Array<T>): void
+  (event: "update:selectList", list: Array<T>): void
   (event: "row", row: T, col: any, e: Event): void
 }>();
 
