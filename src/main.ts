@@ -48,6 +48,7 @@ import {
   ElDropdownItem,
   ElEmpty,
   ElConfigProvider,
+  ElCascader,
   vLoading,
 } from "element-plus";
 
@@ -92,6 +93,7 @@ const elComponents = [
   ElDropdownItem,
   ElEmpty,
   ElConfigProvider,
+  ElCascader,
 ]
 
 elComponents.forEach(item => {

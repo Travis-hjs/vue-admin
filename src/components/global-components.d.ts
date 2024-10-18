@@ -36,7 +36,7 @@ declare module "vue" {
     // ElCard: typeof import("element-plus")["ElCard"]
     // ElCarousel: typeof import("element-plus")["ElCarousel"]
     // ElCarouselItem: typeof import("element-plus")["ElCarouselItem"]
-    // ElCascader: typeof import("element-plus")["ElCascader"]
+    ElCascader: typeof import("element-plus")["ElCascader"]
     // ElCascaderPanel: typeof import("element-plus")["ElCascaderPanel"]
     ElCheckbox: typeof import("element-plus")["ElCheckbox"]
     ElCheckboxButton: typeof import("element-plus")["ElCheckboxButton"]
