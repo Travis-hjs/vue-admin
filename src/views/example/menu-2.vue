@@ -67,7 +67,7 @@
 import { message } from "@/utils/message";
 import { type FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
-import { validateEX } from "@/hooks/common";
+import { validateEX } from "@/utils/dom";
 
 const formRef = ref<FormInstance>();
 

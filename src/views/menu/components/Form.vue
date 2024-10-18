@@ -179,7 +179,7 @@ export default {
 <script lang="ts" setup>
 import { ref, reactive, watch, type PropType } from "vue";
 import { ElMessage, type FormInstance } from "element-plus"
-import { validateEX } from "@/hooks/common";
+import { validateEX } from "@/utils/dom";
 import type { MenuForm } from "@/types";
 import Icon from "./IconList.vue";
 import { Drawer } from "@/components/Drawer";

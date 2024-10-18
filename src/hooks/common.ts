@@ -61,36 +61,6 @@ export function debounceRef<T>(value: T, delay = 1000, callback?: (res: T) => vo
   });
 }
 
-/**
- * 表单验证加强
- * @param formName 表单`id`或`class-name`
- */
-export function validateEX(formName: string, valid?: boolean) {
-  if (valid) return;
-  setTimeout(function() {
-    const item = document.querySelector(`${formName} .is-error`);
-    if (!item) return;
-    item.scrollIntoView && item.scrollIntoView({
-      behavior: "smooth"
-    });
-    const classNames = [".el-input", ".el-textarea", ".el-select"];
-    let input: HTMLElement | null = null;
-    for (let i = 0; i < classNames.length; i++) {
-      input = item.querySelector(classNames[i]) as HTMLElement;
-      if (input) break;
-    }
-    if (!input) return;
-    input.classList.add("apply-shake");
-    function remove() {
-      input!.removeEventListener("animationend", remove);
-      input!.removeEventListener("click", remove);
-      input!.classList.remove("apply-shake");
-    }
-    input.addEventListener("animationend", remove);
-    input.addEventListener("click", remove);
-  }, 1000 / 60);
-}
-
 interface LayoutContentSize {
   /** 
    * 容器节点

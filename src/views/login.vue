@@ -63,7 +63,7 @@ import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
 import { jsonParse, modifyData } from "@/utils";
 import { type FormInstance } from "element-plus";
-import { validateEX } from "@/hooks/common";
+import { validateEX } from "@/utils/dom";
 
 const cacheName = "login-info";
 
