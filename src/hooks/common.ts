@@ -138,3 +138,83 @@ export function useLayoutContentSize(params: LayoutContentSize) {
     window.removeEventListener("resize", update);
   })
 }
+
+interface ListDragOption<T> {
+  /** 返回列表函数 */
+  list(): Array<T>;
+  /**
+   * 触发更新列表函数
+   * @param newList 更新后的新数组
+   */
+  update(newList: Array<T>): void;
+  /**
+   * 向上查找节点的最大层数，默认`3`
+   * - 目的是为了找到`:data-key`的值
+   */
+  findLevel?: number;
+  /**
+   * 默认`"key"`，则元素绑定`<element data-key="xxx">`
+   * - 当有多种拖拽列表处于同一场景时，设置该值作为区分用
+   */
+  dataKey?: string;
+}
+
+/**
+ * 列表拖拽
+ * - `item`节点一定要绑定`<element :data-key="唯一值">`
+ * @param option 
+ */
+export function useListDrag<T>(option: ListDragOption<T>) {
+  const maxLevel = option.findLevel || 3;
+  const dataKey = option.dataKey || "key";
+  const current = {
+    index: -1
+  }
+
+  const target = {
+    key: ""
+  }
+
+  function findDataKey(el: HTMLElement, level = 1) {
+    const key = el.dataset[dataKey];
+    if (key) return key;
+    if (level < maxLevel && el.parentElement) {
+      return findDataKey(el.parentElement, level + 1);
+    }
+    console.warn(`找不到<element :data-${dataKey}="xxx">绑定值，请检查是否在元素中设置绑定值或调整 findLevel`);
+    return undefined;
+  }
+
+  function onDragStart(index: number) {
+    current.index = index;
+  }
+
+  function onDropEnd() {
+    current.index = -1;
+  }
+
+  function onDragMove(event: DragEvent, targetIndex: number) {
+    event.preventDefault();
+    if (current.index < 0) return;
+    const targetKey = findDataKey(event.target as HTMLElement);
+    if (!targetKey || targetKey === target.key) return;
+    target.key = targetKey;
+    // 记录原始数据字符串，下面做对比用
+    const str = JSON.stringify(option.list());
+    // 拷贝响应数据
+    const ls: Array<T> = JSON.parse(str);
+    // 交替数组位置
+    [ls[current.index], ls[targetIndex]] = [ls[targetIndex], ls[current.index]];
+    // 上一次修改如果和当前数组一致则不重新赋值
+    if (str === JSON.stringify(ls)) return;
+    // 最终赋值给响应数据
+    option.update(ls);
+    // 更新当前索引，必须！！！
+    current.index = targetIndex;
+  }
+  return {
+    onDragStart,
+    onDragMove,
+    onDropEnd
+  }
+}
