@@ -62,9 +62,8 @@ export const dateTypeOptions: Array<DateTypeOption> = [
 const oneDay = 3600 * 1000 * 24;
 
 function getLastMonth(last = 0) {
-  const now = new Date();
-  const date = new Date(now);
-  date.setMonth(now.getMonth() - last);
+  const date = new Date();
+  date.setMonth(new Date().getMonth() - last);
   return date;
 }
 
