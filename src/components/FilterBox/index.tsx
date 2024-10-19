@@ -9,16 +9,18 @@ export const FilterWrap = defineComponent({
     labelWidth: {
       type: String,
       default: "96px"
-    }
+    },
+    /** `label`靠右对齐 */
+    labelRight: Boolean
   },
   setup(props, { slots }) {
     return () => (
-      <section class="the-filter-wrap flex" style={{ [width]: props.labelWidth }}>
-        { slots.left ? <div class="the-filter-side">{ slots.left() }</div> : undefined }
+      <section class={`the-filter-wrap flex${props.labelRight ? " label-right" : ""}`} style={{ [width]: props.labelWidth }}>
+        { slots.left ? <div class="the-filter-side">{ slots.left() }</div> : null }
         <div class="the-filter-content f1">
           { slots.default && slots.default() }
         </div>
-        { slots.right ? <div class="the-filter-side">{ slots.right() }</div> : undefined }
+        { slots.right ? <div class="the-filter-side">{ slots.right() }</div> : null }
       </section>
     )
   },
@@ -41,7 +43,7 @@ export const FilterItem = defineComponent({
         {
           slots.label || props.label ? (
             <span class="the-filter-label f-vertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>
-          ) : undefined
+          ) : null
         }
         { slots.default && slots.default() }
       </div>

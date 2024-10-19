@@ -29,3 +29,9 @@
     width: 380px;
   }
 }
+
+.the-filter-wrap.label-right {
+  .the-filter-label {
+    justify-content: flex-end;
+  }
+}
