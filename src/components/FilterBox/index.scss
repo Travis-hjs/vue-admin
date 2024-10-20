@@ -13,6 +13,7 @@
   }
   .the-filter-item {
     min-height: 32px;
+    position: relative;
   }
   .the-filter-label {
     min-width: var(--label-width);
@@ -21,6 +22,7 @@
     padding: 0 10px;
     font-weight: bold;
     color: #606266;
+    white-space: nowrap;
   }
   .short-value {
     width: 220px;
