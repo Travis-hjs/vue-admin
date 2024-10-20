@@ -139,7 +139,13 @@ export const dynamicRouters: Array<RouteItem> = [
           link: `${location.origin + location.pathname}#/is-error-path`,
         },
         component: Page404
-      }
+      },
+      {
+        path: "/example/curd",
+        name: "example-curd",
+        meta: { title: "curd 低代码" },
+        component: () => import("../views/example/curd-page.vue")
+      },
     ]
   },
   {
