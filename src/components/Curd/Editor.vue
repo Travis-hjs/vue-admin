@@ -28,7 +28,7 @@
           <Example :selected="state.formData?.type" @choose="chooseField" />
         </template>
         <template v-if="state.step === 1">
-          <div class="f-vertical mgb-10">
+          <div class="f-vertical mgb-20">
             <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
             <div class="f1"></div>
             <el-button link type="success" @click="onStep(0)">上一步</el-button>
