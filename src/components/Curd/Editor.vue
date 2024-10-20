@@ -453,6 +453,7 @@ function onSubmit() {
     const data: CurdType.Select = JSON.parse(JSON.stringify(state.formData));
     hasOptions.includes(data.type) && onOptions();
     data.valueType = checkType(data.defaultValue);
+    // TODO: 转换数字类型处理
     if (data.defaultValue === -1) {
       data.defaultValue = "";
       data.valueType = "number";
