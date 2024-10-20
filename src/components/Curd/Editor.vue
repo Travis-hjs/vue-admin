@@ -175,7 +175,20 @@
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item label="格式化值规则" prop="format">
+              <el-form-item prop="format">
+                <template #label>
+                  格式化规则
+                  <el-tooltip
+                    effect="light"
+                    :content="formatTips"
+                    raw-content
+                    placement="top-start"
+                  >
+                    <el-button type="info" link style="height: 32px;">
+                      <i class="el-icon-question"></i>
+                    </el-button>
+                  </el-tooltip>
+                </template>
                 <el-input
                   v-model="state.formData.format"
                   clearable
@@ -243,6 +256,10 @@ const numberTips = `
 <p><span class="el-text"><b style="color: var(--blue)"> -1 </b>为代码中约定的特殊处理，</span></p>
 <p><span class="el-text">默认值依然是空的字符串</span></p>
 `;
+
+const formatTips = `
+<p><span class="el-text">参考 src/utils/index.ts 中的<b style="color: var(--blue)"> formatDate </b>函数</span></p>
+`
 
 /** 父组件注入的对象 */
 const provideState = useProvideState();
