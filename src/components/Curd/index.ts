@@ -165,7 +165,9 @@ export namespace CurdType {
   /** 搜索/筛选节点类型 */
   export interface Search {
     /** 统一的`label`宽度 */
-    labelWidth?: string;
+    labelWidth: string;
+    /** label整体靠右排列 */
+    labelRight: boolean;
     /** 操作列表 */
     list: Array<Field>;
   }
@@ -188,6 +190,11 @@ export namespace CurdType {
     index: number;
   }
 
+  /**
+   * 内部状态数据，会注入到各个组件中
+   * - 为什么不用`props`的方式传递进组件内使用？
+   * 理由是当组件内要做一些递归组件和修改数据时可以非常方便地进行，如果是`props`方式则非常麻烦，要写很多代码
+   */
   export interface State {
     loading: boolean;
     /** 编辑器信息 */
@@ -387,8 +394,45 @@ export function setFieldDefaultValue(field: CurdType.Field) {
     if (isType(field.shortcutIndex, "number")) {
       const date = shortcutMap[field.dateType][field.shortcutIndex].value();
       field.value = date as any;
+    } else {
+      field.value = field.valueType === "array" ? [] : "";
     }
   } else {
     field.value = field.defaultValue;
+  }
+}
+
+export function useTestData(): CurdType.Config {
+  return {
+    search: {
+      labelRight: false,
+      labelWidth: "",
+      list: [
+        useFieldData("input", "keyword"),
+        {
+          ...useFieldData("select", "gameId"),
+          label: "游戏",
+          defaultValue: 1,
+          options: [
+            { label: "英雄联盟", value: 1 },
+            { label: "魔兽争霸", value: 2 },
+            { label: "只狼", value: 3 },
+            { label: "死亡细胞", value: 4 },
+          ]
+        },
+        {
+          ...useFieldData("select", "gender"),
+          label: "性别",
+          options: [
+            { label: "先生", value: "1" },
+            { label: "女士", value: "2" },
+          ]
+        },
+        {
+          ...useFieldData("date", "date"),
+          label: "日期范围",
+        },
+      ]
+    }
   }
 }

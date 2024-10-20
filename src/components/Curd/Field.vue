@@ -1,5 +1,5 @@
 <template>
-  <div class="the-curd-form-field f-vertical" :style="{ width: data.valueWidth }">
+  <div class="the-curd-form-field f-vertical short-value" :style="{ width: data.valueWidth }">
     <el-input
       v-if="data.type === 'input'"
       v-model="data.value"
@@ -143,6 +143,7 @@ const cascaderProps = computed(() => {
 </script>
 <style lang="scss">
 .the-curd-form-field {
+  width: 100%;
   .the-curd-field {
     width: 100%;
   }

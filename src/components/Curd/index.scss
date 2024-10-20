@@ -1,0 +1,134 @@
+.curd-main-page {
+  display: flex;
+  width: 100%;
+  --border-color: #dcdfe6;
+
+  .the-curd-edit-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.75);
+    width: 100%;
+    height: 100%;
+    cursor: move;
+    border: dashed 1px var(--border-color);
+    padding: 0 10px;
+    display: none;
+    animation: curd-edit-mask-move .3s ease;
+  }
+
+  .the-filter-item:hover {
+    .the-curd-edit-mask {
+      display: flex;
+    }
+  }
+
+  .the-curd-selected::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background-color: rgba(121, 187, 255, 0.5);
+    border: dashed var(--purple) 1px;
+    border-radius: var(--border-radius);
+  }
+
+  .the-curd-editor {
+    height: var(--layout-content-height);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .the-curd-editor-content {
+      width: 400px;
+    }
+  }
+
+  .the-curd-editor::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+  }
+
+  // .the-curd-editor::-webkit-scrollbar-track {
+  //   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  //   border-radius: 3px;
+  //   background-color: #F5F5F5;
+  // }
+
+  .the-curd-editor::-webkit-scrollbar-thumb {
+    background-color: rgba(153, 153, 153, 0.5);
+    border-radius: 3px;
+  }
+
+
+  .the-curd-editor.is-show {
+    border-left: solid var(--border-color) 1px;
+    padding-left: 12px;
+  }
+
+  .the-curd-example {
+    border: dashed 1px var(--border-color);
+
+    .the-curd-example-item {
+      position: relative;
+      width: 100%;
+      min-height: 60px;
+      padding: 8px 12px;
+      border-top: dashed 1px var(--border-color);
+      cursor: pointer;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      &::after {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        content: "";
+        z-index: 2;
+      }
+    }
+  }
+}
+
+@keyframes curd-edit-mask-move {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  from {
+    opacity: 0;
+    transform: translate3d(20px, 0, 0);
+  }
+}
+
+.the-curd-editor-move-enter-active,
+.the-curd-editor-move-leave-active {
+  transition: var(--transition);
+  transform: translate3d(0, 0, 0);
+}
+
+.the-curd-editor-move-enter-from,
+.the-curd-editor-move-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
+
+.the-group-move,
+.the-group-enter-active,
+.the-group-leave-active {
+  transition: 0.3s all;
+}
+
+.the-group-enter-from,
+.the-group-leave-to {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+}
+
+.the-group-leave-active {
+  position: absolute;
+}

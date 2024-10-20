@@ -151,7 +151,7 @@ export function useListDrag<T>(option: ListDragOption<T>) {
     if (level < maxLevel && el.parentElement) {
       return findDataKey(el.parentElement, level + 1);
     }
-    console.warn(`找不到<element :data-${dataKey}="xxx">绑定值，请检查是否在元素中设置绑定值或调整 findLevel`);
+    // console.warn(`找不到<element :data-${dataKey}="xxx">绑定值，请检查是否在元素中设置绑定值或调整 findLevel`);
     return undefined;
   }
 
