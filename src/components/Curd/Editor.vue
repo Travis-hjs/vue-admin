@@ -200,6 +200,7 @@
               </el-form-item>
             </template>
             <div class="f-right">
+              <el-button @click="onClose()">关闭</el-button>
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">
                 <i class="el-icon--left el-icon-plus"></i>
                 新增
