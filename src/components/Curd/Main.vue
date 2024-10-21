@@ -1,5 +1,5 @@
 <template>
-  <div class="curd-main-page">
+  <div class="the-curd-main-page">
     <section class="f1">
       <Search :data="props.config.search" @search="onSearch" />
       <template v-if="state.editor.type">

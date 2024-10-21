@@ -1,4 +1,4 @@
-.curd-main-page {
+.the-curd-main-page {
   display: flex;
   width: 100%;
   --border-color: #dcdfe6;
@@ -120,7 +120,7 @@
 .the-group-move,
 .the-group-enter-active,
 .the-group-leave-active {
-  transition: 0.3s all;
+  transition: var(--transition);
 }
 
 .the-group-enter-from,

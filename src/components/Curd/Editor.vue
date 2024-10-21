@@ -2,7 +2,7 @@
   <section :class="['the-curd-editor', { 'is-show': props.show }]">
     <transition name="the-curd-editor-move">
       <div v-if="props.show" class="the-curd-editor-content">
-        <h2 class="the-title mgb-10">基础设置</h2>
+        <h2 class="the-title mgb-20">基础设置</h2>
         <el-form label-position="right" label-width="120px">
           <el-form-item label="整体标题宽度">
             <el-input
@@ -21,8 +21,8 @@
           </el-form-item>
         </el-form>
         <template v-if="state.step === 0">
-          <div class="f-vertical f-between mgb-10">
-            <h2 class="the-title">第1步：选取组件</h2>
+          <div class="f-vertical f-between mgb-20">
+            <h2 class="the-title">第1步：点击选取组件</h2>
             <el-button link type="primary" @click="onClose()">退出编辑</el-button>
           </div>
           <Example :selected="state.formData?.type" @choose="chooseField" />
@@ -144,7 +144,10 @@
                     inactive-text="否"
                   ></el-switch>
                 </el-form-item>
-                <el-form-item label="能只选中某一项" prop="checkStrictly">
+                <el-form-item prop="checkStrictly">
+                  <template #label>
+                    <span style="font-size: 13px">允许只选中某一项</span>
+                  </template>
                   <el-switch
                     v-model="state.formData.checkStrictly"
                     inline-prompt
@@ -198,11 +201,11 @@
             </template>
             <div class="f-right">
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">
-                <i class="el-icon-plus el-icon--left"></i>
+                <i class="el-icon--left el-icon-plus"></i>
                 新增
               </el-button>
               <el-button v-else type="success" @click="onSubmit()">
-                <i class="el-icon-edit el-icon--left"></i>
+                <i class="el-icon--left el-icon-edit"></i>
                 确认
               </el-button>
             </div>
