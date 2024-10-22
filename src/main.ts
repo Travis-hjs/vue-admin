@@ -49,6 +49,8 @@ import {
   ElEmpty,
   ElConfigProvider,
   ElCascader,
+  ElImage,
+  ElImageViewer,
   vLoading,
 } from "element-plus";
 
@@ -94,6 +96,8 @@ const elComponents = [
   ElEmpty,
   ElConfigProvider,
   ElCascader,
+  ElImage,
+  ElImageViewer,
 ]
 
 elComponents.forEach(item => {
