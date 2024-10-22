@@ -23,8 +23,13 @@ interface BaseTableColumn <T = any> {
    * - `"action-right"`为固定右边
    */
   prop: string
-  /** 当需要自定义插槽去写表格模板时需要，字段和`prop`一致 */
-  slotName?: string
+  /** 当需要自定义插槽去写表格模板时需要，建议字段和`prop`一致 */
+  slot?: string;
+  /**
+   * 自定义表头插槽名
+   * - 注意不要和`slot`重名！！！
+   */
+  slotHead?: string;
   /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */
   key?: string
   /** 

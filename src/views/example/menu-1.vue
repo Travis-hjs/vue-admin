@@ -72,7 +72,7 @@ const tableData = ref<Array<TableRow>>([]);
 
 const tableColumns: Array<BaseTableColumn> = [
   { label: "ID", prop: "id", width: 90 },
-  { label: "名称", prop: "name", minWidth: 180, slotName: "fuck" },
+  { label: "名称", prop: "name", minWidth: 180, slot: "fuck" },
   { label: "创建时间", prop: "date", width: 180 },
   { label: "操作", prop: "action-right", width: 200 },
 ];

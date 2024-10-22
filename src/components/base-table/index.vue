@@ -39,19 +39,19 @@
         :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
         label-class-name="base-table-label"
       >
-        <template #header>
-          <slot v-if="item.slotName" :name="`header-${item.slotName}`"></slot>
+        <template #header="scope">
+          <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
         </template>
-        <template #default="{row, $index}: SlotType">
-          <slot :name="item.slotName" v-bind="{row, $index}" v-if="item.slotName"></slot>
+        <template #default="scope: SlotType">
+          <slot :name="item.slot" v-bind="scope" v-if="item.slot"></slot>
           <base-table-actions
             v-else-if="item.prop === 'action-right'"
-            :row="row"
-            :index="$index"
+            :row="scope.row"
+            :index="scope.$index"
             :actions="(props.actions as any)"
             :clickStop="props.isRowClick"
           />
-          <template v-else>{{ setTableDefaultContent(row, item.prop, item) }}</template>
+          <template v-else>{{ setTableDefaultContent(scope.row, item.prop, item) }}</template>
         </template>
       </el-table-column>
     </el-table>
@@ -66,12 +66,14 @@ export default {
 
 <script lang="ts" generic="T extends BaseObj" setup>
 import { type PropType, ref, onBeforeUpdate, computed } from "vue";
-import { ElTable } from "element-plus";
+import { ElTable, type Column } from "element-plus";
 import { filterRepeat, isType } from "@/utils";
 
 interface SlotType {
-  row: T
-  $index: number
+  row: T;
+  $index: number;
+  /** `<el-table>`内部结构数据 */
+  column: Column;
 }
 
 const props = defineProps({

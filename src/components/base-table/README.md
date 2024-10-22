@@ -65,7 +65,7 @@ const tableColumns: Array<BaseTableColumn> = [
   { label: "项目名称", prop: "projectName", minWidth: 200 },
   { label: "项目类型", prop: "projectTypeStr", width: 140 },
   { label: "项目创建人", prop: "projectLeader", width: 140 },
-  { label: "项目状态", prop: "state", width: 140, slotName: "state" },
+  { label: "项目状态", prop: "state", width: 140, slot: "state" },
   { label: "创建时间", prop: "createTime", width: 180 },
   { label: "更新时间", prop: "updateTime", width: 180 },
   { label: "操作", prop: "action-right", width: 160 },
