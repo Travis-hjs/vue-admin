@@ -51,6 +51,7 @@
             :actions="(props.actions as any)"
             :clickStop="props.isRowClick"
           />
+          <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.prop], scope.row)"></div>
           <template v-else>{{ setTableDefaultContent(scope.row, item.prop, item) }}</template>
         </template>
       </el-table-column>
