@@ -1,5 +1,5 @@
 <template>
-  <section :class="['the-curd-editor', { 'is-show': props.show }]">
+  <section :class="['the-curd-editor the-curd-scrollbar', { 'is-show': props.show }]">
     <transition name="the-curd-editor-move">
       <div v-if="props.show" class="the-curd-editor-content">
         <h2 class="the-title mgb-20">基础设置</h2>
@@ -34,14 +34,17 @@
             <el-button link type="success" @click="onStep(0)">上一步</el-button>
             <el-button link type="primary" @click="onClose()">退出编辑</el-button>
           </div>
+          <div v-if="state.formData" class="the-curd-target-box">
+            <Field :field-data="state.formData" edit-mode />
+          </div>
           <el-form
             v-if="state.formData"
+            id="the-editor-form"
             ref="formRef"
             :model="state.formData"
             :rules="formRules"
             label-position="right"
-            label-width="120px"
-            scroll-to-error
+            label-width="128px"
           >
             <el-form-item label="组件标题" prop="label">
               <el-input v-model="state.formData.label" clearable :placeholder="formRules.label[0].message" />
@@ -78,8 +81,8 @@
                 组件默认值
                 <el-tooltip
                   v-if="hasOptions.includes(state.formData.type)"
-                  effect="light"
                   :content="numberTips"
+                  effect="dark"
                   raw-content
                   placement="top-start"
                 >
@@ -144,10 +147,7 @@
                     inactive-text="否"
                   ></el-switch>
                 </el-form-item>
-                <el-form-item prop="checkStrictly">
-                  <template #label>
-                    <span style="font-size: 13px">允许只选中某一项</span>
-                  </template>
+                <el-form-item label="允许只选中某一项" prop="checkStrictly">
                   <el-switch
                     v-model="state.formData.checkStrictly"
                     inline-prompt
@@ -182,7 +182,7 @@
                 <template #label>
                   格式化规则
                   <el-tooltip
-                    effect="light"
+                    effect="dark"
                     :content="formatTips"
                     raw-content
                     placement="top-start"
@@ -218,12 +218,14 @@
 </template>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
-import { fieldTitleMap, useFieldData, useProvideState, type CurdType } from "./index";
+import { fieldTitleMap, getFieldData, useProvideState, type CurdType } from "./index";
 import Example from "./Example.vue";
+import Field from "./Field.vue";
 import type { FormInstance } from "element-plus";
 import { checkType, isType } from "@/utils";
 import { dateTypeOptions, shortcutMap } from "./date";
 import { message } from "@/utils/message";
+import { validateEX } from "@/utils/dom";
 
 const props = defineProps({
   show: {
@@ -255,14 +257,14 @@ const arrayField = ["input-between", "select-multiple", "checkbox"];
 const arrayDate = ["daterange", "datetimerange"];
 
 const numberTips = `
-<p><span class="el-text">当需要设置组件的绑定值为数字类型时，</span></p>
-<p><span class="el-text">可以填入<b style="color: var(--blue)"> {"value": -1} </b>来实现，</span></p>
-<p><span class="el-text"><b style="color: var(--blue)"> -1 </b>为代码中约定的特殊处理，</span></p>
-<p><span class="el-text">默认值依然是空的字符串</span></p>
+<p>当需要设置组件的绑定值为数字类型时，</p>
+<p>可以填入<b style="color: var(--yellow)"> {"value": -1} </b>来实现，</p>
+<p><b style="color: var(--yellow)"> -1 </b>为代码中约定的特殊处理，</p>
+<p>默认值依然是空的字符串</p>
 `;
 
 const formatTips = `
-<p><span class="el-text">参考 src/utils/index.ts 中的<b style="color: var(--blue)"> formatDate </b>函数</span></p>
+<p>参考 src/utils/index.ts 中的<b style="color: var(--yellow)"> formatDate </b>函数</p>
 `
 
 /** 父组件注入的对象 */
@@ -370,7 +372,7 @@ function setJson(field: CurdType.Field) {
  * @param type
  */
 function chooseField(type: CurdType.Field["type"]) {
-  const field = useFieldData(type);
+  const field = getFieldData(type);
   state.formData = field;
   setJson(field);
   formRef.value?.clearValidate();
@@ -466,6 +468,7 @@ function isNumber(value: string) {
 
 function onSubmit() {
   formRef.value?.validate(valid => {
+    validateEX("#the-editor-form", valid);
     if (!valid) return
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();

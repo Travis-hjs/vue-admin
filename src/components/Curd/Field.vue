@@ -55,24 +55,34 @@
         :label="item[optionSetting.label]"
       />
     </el-select>
-    <el-checkbox-group v-if="data.type === 'checkbox'" v-model="data.value" :disabled="props.disabled">
-      <el-checkbox
-        v-for="item in data.options"
-        :key="item[optionSetting.value]"
-        :value="item[optionSetting.value]"
-      >
-        {{ item[optionSetting.label] }}
-      </el-checkbox>
-    </el-checkbox-group>
-    <el-radio-group v-if="data.type === 'radio'" v-model="data.value" :disabled="props.disabled">
-      <el-radio
-        v-for="item in data.options"
-        :key="item[optionSetting.value]"
-        :value="item[optionSetting.value]"
-      >
-        {{ item[optionSetting.label] }}
-      </el-radio>
-    </el-radio-group>
+    <template v-if="data.type === 'checkbox'">
+      <el-checkbox-group v-model="data.value" :disabled="props.disabled">
+        <el-checkbox
+          v-for="item in data.options"
+          :key="item[optionSetting.value]"
+          :value="item[optionSetting.value]"
+        >
+          {{ item[optionSetting.label] }}
+        </el-checkbox>
+      </el-checkbox-group>
+      <el-text v-if="props.editMode && !data.options.length" type="primary">
+        {{ fieldTitleMap.checkbox }}（空数据）
+      </el-text>
+    </template>
+    <template v-if="data.type === 'radio'">
+      <el-radio-group v-model="data.value" :disabled="props.disabled">
+        <el-radio
+          v-for="item in data.options"
+          :key="item[optionSetting.value]"
+          :value="item[optionSetting.value]"
+        >
+          {{ item[optionSetting.label] }}
+        </el-radio>
+      </el-radio-group>
+      <el-text v-if="props.editMode && !data.options.length" type="primary">
+        {{ fieldTitleMap.radio }}（空数据）
+      </el-text>
+    </template>
     <el-switch
       v-if="data.type === 'switch'"
       v-model="data.value"
@@ -105,7 +115,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { setFieldDefaultValue, type CurdType } from "./index";
+import { fieldTitleMap, setFieldValue, type CurdType } from "./index";
 import { shortcutMap } from "./date";
 
 const props = defineProps({
@@ -113,12 +123,17 @@ const props = defineProps({
     type: Object as PropType<CurdType.Field>,
     required: true
   },
+  /**
+   * 是否为编辑模式
+   * - 主要为`radio`和`checkbox`组件做空数据占位显示用
+   */
+  editMode: Boolean,
   readonly: Boolean,
   disabled: Boolean
 });
 
 // TODO: 设置默认值给组件
-setFieldDefaultValue(props.fieldData);
+setFieldValue(props.fieldData);
 
 const data = computed(() => props.fieldData);
 

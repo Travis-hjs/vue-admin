@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import type { PropType } from "vue";
 import Field from "./Field.vue";
-import { fieldTitleMap, useFieldData, type CurdType } from "./index";
+import { fieldTitleMap, getFieldData, type CurdType } from "./index";
 
 type FieldType = CurdType.Field["type"];
 
@@ -28,27 +28,27 @@ const emit = defineEmits<{
 
 const example = [
   {
-    ...useFieldData("input"),
+    ...getFieldData("input"),
     placeholder: fieldTitleMap.input
   },
   {
-    ...useFieldData("select"),
+    ...getFieldData("select"),
     placeholder: fieldTitleMap.select
   },
   {
-    ...useFieldData("select-multiple"),
+    ...getFieldData("select-multiple"),
     placeholder: fieldTitleMap["select-multiple"]
   },
   {
-    ...useFieldData("cascader"),
+    ...getFieldData("cascader"),
     placeholder: fieldTitleMap.cascader
   },
   {
-    ...useFieldData("date"),
+    ...getFieldData("date"),
     placeholder: fieldTitleMap.date
   },
   {
-    ...useFieldData("checkbox"),
+    ...getFieldData("checkbox"),
     options: [
       { label: "多选-A", value: 1 },
       { label: "多选-B", value: 2 }
@@ -56,7 +56,7 @@ const example = [
     defaultValue: [1]
   },
   {
-    ...useFieldData("radio"),
+    ...getFieldData("radio"),
     options: [
       { label: "单选-A", value: "radio-1" },
       { label: "单选-B", value: "radio-2" }
@@ -64,15 +64,15 @@ const example = [
     defaultValue: "radio-1"
   },
   {
-    ...useFieldData("switch"),
+    ...getFieldData("switch"),
     defaultValue: true
   },
   {
-    ...useFieldData("textarea"),
+    ...getFieldData("textarea"),
     placeholder: fieldTitleMap.textarea
   },
   {
-    ...useFieldData("input-between"),
+    ...getFieldData("input-between"),
     placeholder: ["范围区间操作", "范围区间操作"]
   },
 ];

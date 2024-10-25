@@ -35,36 +35,56 @@
     border-radius: var(--border-radius);
   }
 
+  .the-curd-scrollbar {
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(153 153 153 / 50%);
+      border-radius: 3px;
+    }
+  }
+
   .the-curd-editor {
     height: var(--layout-content-height);
     overflow-x: hidden;
     overflow-y: auto;
 
+    &.is-show {
+      border-left: solid var(--border-color) 1px;
+      padding-left: var(--page-padding);
+      padding-right: 2px;
+    }
+
     .the-curd-editor-content {
-      width: 400px;
+      width: 420px;
     }
   }
 
-  .the-curd-editor::-webkit-scrollbar {
-    width: 6px;
-    background-color: transparent;
-  }
+  .the-curd-target-box {
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    border: dashed 1px var(--purple);
+    border-radius: var(--border-radius);
+    position: relative;
+    &::after {
+      position: absolute;
+      content: "组件预览区域";
+      font-size: var(--page-padding);
+      background-color: #fff;
+      color: var(--purple);
+      padding: 0px var(--page-padding);
+      left: 24px;
+      top: -10px;
+      animation: curd-target-text-move 3s 3;
+    }
 
-  // .the-curd-editor::-webkit-scrollbar-track {
-  //   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  //   border-radius: 3px;
-  //   background-color: #F5F5F5;
-  // }
-
-  .the-curd-editor::-webkit-scrollbar-thumb {
-    background-color: rgba(153, 153, 153, 0.5);
-    border-radius: 3px;
-  }
-
-
-  .the-curd-editor.is-show {
-    border-left: solid var(--border-color) 1px;
-    padding-left: 12px;
+    .the-curd-form-field {
+      max-width: 100%;
+    }
   }
 
   .the-curd-example {
@@ -74,7 +94,7 @@
       position: relative;
       width: 100%;
       min-height: 60px;
-      padding: 8px 12px;
+      padding: 8px var(--page-padding);
       border-top: dashed 1px var(--border-color);
       cursor: pointer;
 
@@ -103,6 +123,50 @@
   from {
     opacity: 0;
     transform: translate3d(20px, 0, 0);
+  }
+}
+
+@keyframes curd-target-text-move {
+  0% {
+    content: "";
+  }
+  14% {
+    content: "组";
+  }
+  29% {
+    content: "组件";
+  }
+  43% {
+    content: "组件预";
+  }
+  57% {
+    content: "组件预览";
+  }
+  71% {
+    content: "组件预览区";
+  }
+  85% {
+    content: "组件预览区域";
+  }
+  100% {
+    content: "组件预览区域";
+  }
+}
+
+.the-curd-option-item {
+  position: relative;
+  height: 38px;
+  padding: 0 var(--page-padding);
+  margin-bottom: var(--page-padding);
+  font-size: var(--el-font-size-base);
+  line-height: 34px;
+  color: var(--el-text-color-regular);
+  border: dashed #dcdfe6 1px;
+  border-radius: var(--border-radius);
+
+  &:hover {
+    color: var(--el-color-primary);
+    background-color: var(--el-fill-color-light);
   }
 }
 

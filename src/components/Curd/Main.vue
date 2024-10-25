@@ -13,7 +13,7 @@
 </template>
 <script lang="ts" setup>
 import { provide, reactive, type PropType } from "vue";
-import { provideKey, setFieldDefaultValue, type CurdType } from "./index";
+import { provideKey, setFieldValue, type CurdType } from "./index";
 import Search from "./Search.vue";
 import type { FilterBtnType } from "../FilterBox";
 import Editor from "./Editor.vue";
@@ -42,7 +42,7 @@ provide(provideKey, state);
 
 function onSearch(type: FilterBtnType) {
   if (type === "reset") {
-    props.config.search.list.forEach(setFieldDefaultValue);
+    props.config.search.list.forEach(setFieldValue);
   }
 }
 

@@ -2,10 +2,10 @@
   <Curd :config="config" />
 </template>
 <script lang="ts" setup>
-import { Curd, useTestData } from "@/components/Curd";
+import { Curd, getTestData } from "@/components/Curd";
 import { ref, reactive } from "vue";
 
-const config = reactive(useTestData());
+const config = reactive(getTestData());
 
 </script>
 <style lang="scss"></style>

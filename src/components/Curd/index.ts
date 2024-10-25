@@ -205,11 +205,16 @@ export namespace CurdType {
 
 }
 
+export const provideKey = "the-curd-state";
+
+/** 父组件注入的对象 */
+export const useProvideState = () => inject(provideKey) as CurdType.State;
+
 /** 递增`ID` */
 let incrementId = 0;
 
 /** 获取递增`id`每调用一次都会自动递增 */
-export function getIncrementId() {
+function getIncrementId() {
   incrementId++;
   return incrementId;
 }
@@ -232,7 +237,7 @@ interface FieldMap {
  * @param type 表单类型
  * @param key 键值
  */
-export function useFieldData<T extends keyof FieldMap>(type: T, key = ""): FieldMap[T] {
+export function getFieldData<T extends keyof FieldMap>(type: T, key = ""): FieldMap[T] {
   const fieldId = getIncrementId();
   const time = Date.now();
   const tipsInput = "请输入";
@@ -380,16 +385,12 @@ export const fieldTitleMap = {
   cascader: "级联选择器"
 };
 
-export const provideKey = "the-curd-state";
-
-/** 父组件注入的对象 */
-export const useProvideState = () => inject(provideKey) as CurdType.State;
-
 /**
  * 设置表单项的默认值
- * @param field 
+ * - 将对应的默认值设置到绑定的`value`中去
+ * @param field
  */
-export function setFieldDefaultValue(field: CurdType.Field) {
+export function setFieldValue(field: CurdType.Field) {
   if (field.type == "date") {
     if (isType(field.shortcutIndex, "number")) {
       const date = shortcutMap[field.dateType][field.shortcutIndex].value();
@@ -402,15 +403,15 @@ export function setFieldDefaultValue(field: CurdType.Field) {
   }
 }
 
-export function useTestData(): CurdType.Config {
+export function getTestData(): CurdType.Config {
   return {
     search: {
       labelRight: false,
       labelWidth: "",
       list: [
-        useFieldData("input", "keyword"),
+        getFieldData("input", "keyword"),
         {
-          ...useFieldData("select", "gameId"),
+          ...getFieldData("select", "gameId"),
           label: "游戏",
           defaultValue: 1,
           options: [
@@ -421,7 +422,7 @@ export function useTestData(): CurdType.Config {
           ]
         },
         {
-          ...useFieldData("select", "gender"),
+          ...getFieldData("select", "gender"),
           label: "性别",
           options: [
             { label: "先生", value: "1" },
@@ -429,7 +430,7 @@ export function useTestData(): CurdType.Config {
           ]
         },
         {
-          ...useFieldData("date", "date"),
+          ...getFieldData("date", "date"),
           label: "日期范围",
         },
       ]
