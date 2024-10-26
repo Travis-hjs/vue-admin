@@ -31,10 +31,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reative, ref } from "vue"
+import { reactive, ref } from "vue"
 import { randomText } from "@/utils";
 
-const tableData = reative(new Array(5).fill(0).map((_, index) => {
+const tableData = reactive(new Array(5).fill(0).map((_, index) => {
   return {
     id: index + 1,
     name: randomText(2, 4),
@@ -70,5 +70,3 @@ const btnList: Array<BaseTableAction> = [
 ]
 </script>
 ```
-
-
