@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "Vue.volar",
+    "dariofuzinato.vue-peek",
+    "christian-kohler.path-intellisense",
+    "wayou.vscode-todo-highlight",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}
