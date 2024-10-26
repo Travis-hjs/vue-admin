@@ -28,6 +28,7 @@ interface BaseTableColumn <T = any> {
   /**
    * 自定义表头插槽名
    * - 注意不要和`slot`重名！！！
+   * - 在curd界面操作配置生成时，规则为`header-${prop}`
    */
   slotHead?: string;
   /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */
