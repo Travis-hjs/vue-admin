@@ -4,21 +4,49 @@
       <div v-if="props.show" class="the-curd-editor-content">
         <h2 class="the-title mgb-20">基础设置</h2>
         <el-form label-position="right" label-width="120px">
-          <el-form-item label="整体标题宽度">
-            <el-input
-              v-model="props.config.search.labelWidth"
-              clearable
-              placeholder="例如：120px"
-            />
-          </el-form-item>
-          <el-form-item label="标题靠右对齐">
-            <el-switch
-              v-model="props.config.search.labelRight"
-              inline-prompt
-              active-text="是"
-              inactive-text="否"
-            ></el-switch>
-          </el-form-item>
+          <template v-if="provideState.editor.type === 'search'">
+            <el-form-item label="整体标题宽度">
+              <el-input
+                v-model="props.config.search.labelWidth"
+                clearable
+                placeholder="例如：120px"
+              />
+            </el-form-item>
+            <el-form-item label="标题靠右对齐">
+              <el-switch
+                v-model="props.config.search.labelRight"
+                inline-prompt
+                active-text="是"
+                inactive-text="否"
+              />
+            </el-form-item>
+          </template>
+          <template v-if="provideState.editor.type === 'table' && provideState.editor.form">
+            <el-form-item label="表单宽度">
+              <el-input
+                v-model="provideState.editor.form.width"
+                placeholder="请输入宽度(px)"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item label="文字宽度">
+              <el-input
+                v-model="provideState.editor.form.labelWidth"
+                placeholder="请输入标题宽度(px)"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item label="文字靠右排版">
+              <el-switch
+                v-model="provideState.editor.form.labelPosition"
+                inline-prompt
+                active-value="right"
+                inactive-value="left"
+                active-text="是"
+                inactive-text="否"
+              />
+            </el-form-item>
+          </template>
         </el-form>
         <template v-if="state.step === 0">
           <div class="f-vertical f-between mgb-20">
@@ -49,6 +77,9 @@
             <el-form-item label="组件标题" prop="label">
               <el-input v-model="state.formData.label" clearable :placeholder="formRules.label[0].message" />
             </el-form-item>
+            <el-form-item label="绑定的键值" prop="key">
+              <el-input v-model="state.formData.key" clearable placeholder="请输入绑定的键值" />
+            </el-form-item>
             <el-form-item label="标题宽度" prop="labelWidth">
               <el-input v-model="state.formData.labelWidth" clearable placeholder="请输入宽度，例如：120px" />
             </el-form-item>
@@ -72,9 +103,6 @@
                 />
               </template>
               <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
-            </el-form-item>
-            <el-form-item label="绑定的键值" prop="key">
-              <el-input v-model="state.formData.key" clearable placeholder="请输入绑定的键值" />
             </el-form-item>
             <el-form-item v-if="state.formData.type !== 'date'" prop="defaultValue">
               <template #label>
@@ -199,6 +227,14 @@
                 />
               </el-form-item>
             </template>
+            <el-form-item v-if="provideState.editor.type === 'table'" label="是否必填" prop="required">
+              <el-switch
+                v-model="state.formData.required"
+                inline-prompt
+                active-text="是"
+                inactive-text="否"
+              />
+            </el-form-item>
             <div class="f-right">
               <el-button @click="onClose()">关闭</el-button>
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">
@@ -338,7 +374,8 @@ const formRules = {
         }
       }
     }
-  ]
+  ],
+
 };
 
 const formRef = ref<FormInstance>();
@@ -372,7 +409,11 @@ function setJson(field: CurdType.Field) {
  * @param type
  */
 function chooseField(type: CurdType.Field["type"]) {
+  const editor = provideState.editor;
   const field = getFieldData(type);
+  if (editor.type === "table") {
+    field.required = false;
+  }
   state.formData = field;
   setJson(field);
   formRef.value?.clearValidate();
@@ -472,8 +513,7 @@ function onSubmit() {
     if (!valid) return
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
-    const editorType = provideState.editor.type!;
-    const index = provideState.editor.index;
+    const editor = provideState.editor;
     const data: CurdType.Select = JSON.parse(JSON.stringify(state.formData));
     hasOptions.includes(data.type) && onOptions();
     data.valueType = checkType(data.defaultValue);
@@ -484,11 +524,17 @@ function onSubmit() {
     }
     // TODO: 判断选项数据是否合法并进行值的转换
     if (hasOptions.includes(data.type) && data.valueType === "number") {
+      const optionKey = data.optionSetting.value;
+      // 当没有配置字段时，默认设置为`"value"`
+      if (!optionKey) {
+        data.optionSetting.value = "value";
+      }
       for (let i = 0; i < data.options.length; i++) {
         const option = data.options[i];
-        const optionValue = option[data.optionSetting.value];
+        const optionValue = option[optionKey];
+        if ([null, undefined].includes(optionValue as any)) return message.error(`数据值字段与选项数据不匹配，请检查！`);
         if (isNumber(optionValue.toString())) {
-          option[data.optionSetting.value] = Number(optionValue);
+          option[optionKey] = Number(optionValue);
         } else {
           const label = option[data.optionSetting.label];
           return message.error(`选项数据中【${label}】的值应该为数字！`);
@@ -500,18 +546,28 @@ function onSubmit() {
         if (add) {
           props.config.search.list.push(data);
         } else {
-          props.config.search.list[index] = data;
+          props.config.search.list[editor.index] = data;
         }
       },
       table(add: boolean) {
         if (add) {
-
+          const fields = JSON.parse(JSON.stringify(editor.form!.fields));
+          fields.push(data);
+          editor.form!.fields = fields;
+          // TODO: 这里不直接调用数组方法或者修改的理由是想要出发配置表单组件里面的`watch`
+          // 因为不想`deep`去遍历深层，在有选项数据的时候会有性能问题，所以这里用最原始的方式处理
+          // 在 vue3.5+ deep可以设置层数，那样就可以不用这么麻烦
+          // editor.form!.fields.push(data);
         } else {
-
+          const fields = JSON.parse(JSON.stringify(editor.form!.fields));
+          fields[editor.index] = data;
+          editor.form!.fields = fields;
+          // TODO: 与上面同理
+          // editor.form!.fields[editor.index] = data;
         }
       }
     }
-    actionMap[editorType](isAdd.value);
+    actionMap[editor.type!](isAdd.value);
     onClose();
   });
 }
@@ -523,7 +579,17 @@ let keyList: Array<string> = [];
  * @param excludeKey 需要排除的值
  */
 function updateKeyList(excludeKey?: string) {
-  keyList = props.config.search.list.map(item => item.key);
+  const editor = provideState.editor;
+  keyList = [];
+  const actionMap = {
+    search() {
+      keyList = props.config.search.list.map(item => item.key);
+    },
+    table() {
+      keyList = editor.form!.fields.map(item => item.key);
+    }
+  }
+  actionMap[editor.type!]();
   if (excludeKey) {
     keyList = keyList.filter(val => val !== excludeKey);
   }
@@ -540,11 +606,20 @@ watch(() => props.show, function(show) {
     state.formData = undefined;
     updateKeyList();
   } else {
-    state.step = 1;
-    if (editor.type === "search") {
-      state.formData = JSON.parse(JSON.stringify(props.config.search.list[editor.index]));
+    const current = editor.index;
+    const actionMap = {
+      search() {
+        state.formData = JSON.parse(JSON.stringify(props.config.search.list[current]));
       setJson(state.formData!);
+      },
+      table() {
+        state.formData = JSON.parse(JSON.stringify(editor.form?.fields[current]));
+      }
     }
+    actionMap[editor.type!]();
+    setJson(state.formData!);
+    updateKeyList(state.formData!.key);
+    state.step = 1;
   }
 });
 </script>

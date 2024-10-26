@@ -7,7 +7,6 @@ import {
   watch,
   computed
 } from "vue";
-import { openPreview } from "../ImageViewer";
 import {
   getActionData,
   getColumnData,
@@ -16,8 +15,9 @@ import {
   type CurdType
 } from "./index";
 import type { FormInstance } from "element-plus";
-import { deepClone, inputOnlyNumber } from "@/utils";
+import { openPreview } from "../ImageViewer";
 import Field from "./Field.vue";
+import { deepClone, inputOnlyNumber } from "@/utils";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
 
@@ -35,13 +35,13 @@ export type EditBtnType = "exit" | "copy" | "complete";
  * @param props
  */
 export function EditBtn(props: { onAction?: (type: EditBtnType) => void }) {
-  const emit = props.onAction || (() => { });
+  const emit = props.onAction || (() => {});
   return (
     <>
       <el-button link onClick={() => emit("exit")}>
         退出编辑
       </el-button>
-      <el-button type="success" link onClick={() => emit("copy")}>
+      <el-button type="success" plain onClick={() => emit("copy")}>
         <i class="el-icon-document-copy el-icon--left" />
         复制JSON
       </el-button>
@@ -91,7 +91,7 @@ export function TableImage(props: TableImageProps) {
 
   return props.column.cellType === "image" ? (
     <el-image
-      class="h-[80px] w-[80px] cursor-pointer"
+      class="table-image"
       style={getImageStyle(props.column)}
       src={props.src}
       onClick={onPreview}
@@ -100,68 +100,77 @@ export function TableImage(props: TableImageProps) {
   ) : null;
 }
 
-interface TableHeaderProps extends Part {
-  /**
-   * 触发排序方法
-   * @param key 数据对象对应的键值
-   * @param action 排序操作
-   */
-  onSort?: (key: string, action: CurdType.Table.Column["sort"]) => void;
-}
-
 /**
  * 自定义表头
  * @param props
  */
-export function TableHeader(props: TableHeaderProps) {
-  const col = props.column;
-  const map = {
-    true: {
-      index: 0,
-      icon: "el-icon-sort"
-    },
-    asc: {
-      index: 1,
-      icon: "el-icon-sort-up"
-    },
-    desc: {
-      index: 2,
-      icon: "el-icon-sort-down"
+export const TableHeader = defineComponent({
+  props: {
+    column: {
+      type: Object as PropType<CurdType.Table.Column>,
+      required: true
     }
-  };
-  const actions = [true, "asc", "desc"] as const;
+  },
+  emits: {
+    /**
+     * 触发排序方法
+     * @param key 数据对象对应的键值
+     * @param action 排序操作 
+     */
+    sort(key: string, action: CurdType.Table.Column["sort"]) {
+      return true;
+    }
+  },
+  setup(props, { emit }) {
+    const isText = computed(() => !props.column.sort && !props.column.iconTips);
+    const map = {
+      true: {
+        index: 0,
+        icon: "el-icon-sort"
+      },
+      asc: {
+        index: 1,
+        icon: "el-icon-sort-up"
+      },
+      desc: {
+        index: 2,
+        icon: "el-icon-sort-down"
+      }
+    };
+    const actions = [true, "asc", "desc"] as const;
 
-  function onSwitch() {
-    const key = col.sort.toString() as keyof typeof map;
-    let index = map[key].index;
-    index++;
-    if (index >= actions.length) {
-      index = 0;
+    function onSwitch() {
+      const key = props.column.sort.toString() as keyof typeof map;
+      let index = map[key].index;
+      index++;
+      if (index >= actions.length) {
+        index = 0;
+      }
+      const action = actions[index];
+      emit("sort", props.column.prop, action);
     }
-    const action = actions[index];
-    props.onSort && props.onSort(col.prop, action);
+
+    return () => isText.value ? (
+      <>{props.column.label}</>
+    ) : (
+      <div class="f-vertical w-full">
+        <span>{props.column.label}</span>
+        {props.column.iconTips ? (
+          <el-tooltip effect="dark" content={props.column.iconTips} placement="top">
+            <i class="el-icon--right el-icon-question" style="font-size: 16px; color: #666; cursor: pointer;" />
+          </el-tooltip>
+        ) : null}
+        {props.column.sort ? (
+          <div class="f1 f-right">
+            <el-button link onClick={onSwitch}>
+              <i class={`el-icon--right ${map[props.column.sort.toString() as keyof typeof map].icon}`} />
+            </el-button>
+          </div>
+        ) : null}
+      </div>
+    );
   }
-
-  return !col.sort && !col.iconTips ? (
-    <>{col.label}</>
-  ) : (
-    <div class="f-vertical w-full">
-      {col.label}
-      {col.iconTips ? (
-        <el-tooltip effect="dark" content={col.iconTips} placement="top">
-          <i class="el-icon--right el-icon-question text-[#666]" />
-        </el-tooltip>
-      ) : null}
-      {col.sort ? (
-        <div class="f1 f-right">
-          <el-button link onClick={onSwitch}>
-            <i class={`el-icon--right ${map[col.sort.toString() as keyof typeof map].icon}`} />
-          </el-button>
-        </div>
-      ) : null}
-    </div>
-  );
-}
+});
 
 export type OptionBtn = "delete" | "add" | "export" | "setting" | "edit";
 
@@ -393,7 +402,8 @@ export const ConfigColumn = defineComponent({
           state.form = deepClone(props.form)!;
         }
         setTimeout(() => formRef.value?.clearValidate());
-      }
+      },
+      { immediate: true }
     );
 
     const cellTypeOptions: Array<CurdType.Table.ColumnOption<"cellType">> = [
@@ -416,7 +426,7 @@ export const ConfigColumn = defineComponent({
         width="580px"
         onClose={onClose}
         v-slots={{
-          footer: <FooterBtn onClose={onClose} onSubmit={onSubmit} />
+          footer: () => <FooterBtn onClose={onClose} onSubmit={onSubmit} />
         }}
       >
         <el-form
@@ -456,7 +466,7 @@ export const ConfigColumn = defineComponent({
               onChange={(e: string) => onInputNumber(e, "minWidth")}
             />
           </el-form-item>
-          <el-form-item label="表格列展示类型" prop="prop">
+          <el-form-item label="表格列展示类型" prop="cellType">
             <el-select v-model={state.form.cellType}>
               {cellTypeOptions.map(item => (
                 <el-option
@@ -494,7 +504,7 @@ export const ConfigColumn = defineComponent({
                 type="textarea"
                 placeholder="请输入代码片段"
               />
-              <span class="the-tag mt-[10px] leading-[18px]">
+              <span class="the-tag blue mgt-10" style="line-height: 18px">
                 函数代码片段：第一个参数 cellValue 是表格值，第二个参数 row
                 是完整对象
               </span>
@@ -580,21 +590,21 @@ export const ConfigDelete = defineComponent({
         width="420px"
         onClose={onClose}
         v-slots={{
-          footer: <FooterBtn onClose={onClose} onSubmit={onSubmit} />
+          footer: () => <FooterBtn onClose={onClose} onSubmit={onSubmit} />
         }}
       >
         <el-form labelPosition="right" labelWidth="120px">
           <el-form-item label="数据键值">
             <el-input
-              class="mb-[8px]"
+              class="mgb-10"
               v-model={state.keyword}
               placeholder="请输入数据键值"
               clearable
             />
-            <div class="the-tag">
-              <p class="mb-[8px]">表格数据中的字段，例如表格数：</p>
-              <p class="mb-[8px]">{tips}</p>
-              <p class="mb-[8px]">则键值可以为 id</p>
+            <div class="the-tag blue">
+              <p class="mgb-10">表格数据中的字段，例如表格数：</p>
+              <p class="mgb-10">{tips}</p>
+              <p class="mgb-10">则键值可以为 id</p>
               <p>
                 <i class="el-icon-info el-icon--left" />
                 不填则没有删除功能
@@ -753,7 +763,7 @@ export const ConfigAction = defineComponent({
     const transitionProp: any = {
       name: "the-group",
       tag: "div",
-      class: "f1 the-curd-action-list"
+      class: "the-curd-option-list f1"
     };
 
     return () => (
@@ -763,10 +773,82 @@ export const ConfigAction = defineComponent({
         width="840px"
         onClose={onClose}
         v-slots={{
-          footer: <FooterBtn onClose={onClose} onSubmit={onSubmit} />
+          footer: () => <FooterBtn onClose={onClose} onSubmit={onSubmit} />
         }}
       >
         <div class="flex">
+          <el-form
+            ref={formRef}
+            model={state.form}
+            rules={formRules}
+            labelPosition="right"
+            labelWidth="120px"
+            class="f1"
+          >
+            <el-form-item label="操作列宽度">
+              <el-input
+                v-model={state.width}
+                placeholder="请输入表格列宽度，例如：160"
+                clearable
+                onChange={onInputWidth}
+              />
+            </el-form-item>
+            <el-form-item label="按钮文字" prop="text">
+              <el-input
+                v-model={state.form.text}
+                placeholder={formRules.text.message}
+                clearable
+              />
+            </el-form-item>
+            <el-form-item label="按钮功能代码" prop="jsCode">
+              <el-input
+                v-model={state.form.jsCode}
+                type="textarea"
+                placeholder="请输入代码片段"
+              />
+              <span class="the-tag blue mgt-10" style="line-height: 18px">
+                函数代码片段，点击的时候运行：第一个参数 row 是表格对象值，第二个参数 index 是当前索引
+              </span>
+            </el-form-item>
+            <el-form-item label="按钮图标" prop="icon">
+              <div class="f-vertical w-full">
+                <el-input
+                  v-model={state.form.icon}
+                  placeholder={formRules.icon.message}
+                  clearable
+                />
+                <el-text type="primary" style="width: 110px; text-align: right;">
+                  <a href={iconLink} target="_blank">去官网复制</a>
+                </el-text>
+              </div>
+            </el-form-item>
+            <el-form-item label="按钮类型" prop="type">
+              <el-select v-model={state.form.type} placeholder={formRules.type.message}>
+                {typeOptions.map(item => (
+                  <el-option
+                    key={item.value}
+                    value={item.value}
+                    label={item.label}
+                  />
+                ))}
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <div class="f-right w-full">
+                {state.index > -1 ? (
+                  <el-button type="primary" onClick={onConfirm}>
+                    <i class="el-icon--left el-icon-finished" />
+                    确认
+                  </el-button>
+                ) : (
+                  <el-button type="primary" onClick={onAdd}>
+                    <i class="el-icon--left el-icon-plus" />
+                    新增按钮
+                  </el-button>
+                )}
+              </div>
+            </el-form-item>
+          </el-form>
           <TransitionGroup {...transitionProp}>
             {state.list.map((item, itemIndex) => (
               <div
@@ -809,80 +891,8 @@ export const ConfigAction = defineComponent({
                 )}
               </div>
             ))}
-            {!state.list.length ? (<el-empty image-size={120} description="请添加操作列功能按钮" />) : null}
+            {!state.list.length ? (<el-empty key="empty" image-size={120} description="请添加操作列功能按钮" />) : null}
           </TransitionGroup>
-          <el-form
-            ref={formRef}
-            model={state.form}
-            rules={formRules}
-            labelPosition="right"
-            labelWidth="120px"
-            class="f1"
-          >
-            <el-form-item label="操作列宽度">
-              <el-input
-                v-model={state.width}
-                placeholder="请输入表格列宽度，例如：160"
-                clearable
-                onChange={onInputWidth}
-              />
-            </el-form-item>
-            <el-form-item label="按钮文字" prop="text">
-              <el-input
-                v-model={state.form.text}
-                placeholder={formRules.text.message}
-                clearable
-              />
-            </el-form-item>
-            <el-form-item label="按钮功能代码" prop="jsCode">
-              <el-input
-                v-model={state.form.jsCode}
-                type="textarea"
-                placeholder="请输入代码片段"
-              />
-              <span class="the-tag mt-[10px] leading-[18px]">
-                函数代码片段，点击的时候运行：第一个参数 row 是表格对象值，第二个参数 index 是当前索引
-              </span>
-            </el-form-item>
-            <el-form-item label="按钮图标" prop="icon">
-              <div class="f-vertical w-full">
-                <el-input
-                  v-model={state.form.icon}
-                  placeholder={formRules.icon.message}
-                  clearable
-                />
-                <el-text type="primary" style="width: 110px; text-align: right;">
-                  <a href={iconLink} target="_blank">去官网复制</a>
-                </el-text>
-              </div>
-            </el-form-item>
-            <el-form-item label="按钮类型" prop="type">
-              <el-select v-model={state.form.type} placeholder={formRules.type.message}>
-                {typeOptions.map(item => (
-                  <el-option
-                    key={item.value}
-                    value={item.value}
-                    label={item.label}
-                  />
-                ))}
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <div class="f-right w-full">
-                {state.index > -1 ? (
-                  <el-button type="primary" plain onClick={onConfirm}>
-                    <i class="el-icon--left el-icon-finished" />
-                    确认
-                  </el-button>
-                ) : (
-                  <el-button type="primary" plain onClick={onAdd}>
-                    <i class="el-icon--left el-icon-plus" />
-                    新增按钮
-                  </el-button>
-                )}
-              </div>
-            </el-form-item>
-          </el-form>
         </div>
       </base-dialog>
     );
@@ -1087,7 +1097,7 @@ export const TableForm = defineComponent({
                   onDrop={onDropEnd}
                 >
                   <div class="f-vertical w-full">
-                    <Field class="mr-[10px]" fieldData={field} editMode />
+                    <Field class="mgr-10" fieldData={field} editMode />
                     <el-button
                       link
                       type="success"
@@ -1165,6 +1175,8 @@ export const TableSetting = defineComponent({
       show: false,
       list: [] as typeof props.columns
     });
+    /** 操作列 */
+    let actionColumn: CurdType.Table.Column | undefined;
 
     function onClose() {
       emit("update:show", false);
@@ -1172,7 +1184,9 @@ export const TableSetting = defineComponent({
 
     function onSubmit() {
       onClose();
-      emit("submit", JSON.parse(JSON.stringify(state.list)));
+      const list: typeof state.list = JSON.parse(JSON.stringify(state.list));
+      if (actionColumn) list.push(actionColumn);
+      emit("submit", list);
     }
 
     const { onDragStart, onDragMove, onDropEnd } = useListDrag({
@@ -1189,7 +1203,16 @@ export const TableSetting = defineComponent({
         if (!show) return;
         const list: typeof props.columns = JSON.parse(JSON.stringify(props.columns));
         // 这里要将操作栏过滤掉
-        state.list = list.filter(item => item.prop !== actionEditKey);
+        const showList: typeof list = [];
+        for (let i = 0; i < list.length; i++) {
+          const item = list[i];
+          if (item.prop === actionProp) {
+            actionColumn = item;
+          } else {
+            showList.push(item);
+          }
+        }
+        state.list = showList;
       },
       { immediate: true }
     );
@@ -1216,11 +1239,11 @@ export const TableSetting = defineComponent({
         width="840px"
         onClose={onClose}
         v-slots={{
-          footer: <FooterBtn onClose={onClose} onSubmit={onSubmit} />
+          footer: () => <FooterBtn onClose={onClose} onSubmit={onSubmit} />
         }}
       >
         <TransitionGroup name="the-group" tag="div">
-          {state.list.map((item, itemIndex) => (
+          {state.list.length > 0 ? state.list.map((item, itemIndex) => (
             <div
               class="the-curd-option-item f-vertical"
               key={item.prop}
@@ -1240,9 +1263,8 @@ export const TableSetting = defineComponent({
                 {fixedOptions.map(item => (
                   <el-radio-button
                     key={item.value.toString()}
-                    label={item.label}
                     value={item.value}
-                  />
+                  >{item.label}</el-radio-button>
                 ))}
               </el-radio-group>
               <el-switch
@@ -1252,7 +1274,7 @@ export const TableSetting = defineComponent({
                 inactive-text="隐藏"
               />
             </div>
-          ))}
+          )) : <el-empty key="empty" image-size={120} description="暂无可以设置的表格列" />}
         </TransitionGroup>
       </base-dialog>
     );

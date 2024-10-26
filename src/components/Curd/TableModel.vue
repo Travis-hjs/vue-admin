@@ -3,20 +3,21 @@
     v-if="!tableForm.show"
     class="mgb-10 w-full"
     :editMode="true"
-    :config="props.data"
+    :config="props.config"
     @action="onOption"
   />
   <div class="the-curd-table-model the-curd-scrollbar">
     <TableForm
-      v-if="tableForm.show && tableForm.form"
-      :config="tableForm.form"
+      v-if="tableForm.show"
+      :config="tableForm.form!"
       :type="tableForm.type"
       :editMode="true"
       @change="onFormEdit"
     />
     <transition-group v-else name="the-group" tag="div" class="fake-table">
       <el-empty
-        v-if="!props.data.columns.length"
+        v-if="!props.config.columns.length"
+        key="empty"
         style="padding: 10px 40px"
         :image-size="120"
         description="请添加表格列"
@@ -62,29 +63,41 @@
           <TableImage :column="column" :src="demoUrl" />
         </div>
       </div>
-      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" class="fake-table-item">
+      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="actionProp" class="fake-table-item" >
         <div class="fake-table-head fvc">操作</div>
-        <div class="fake-table-cell">
-          <el-button link type="primary" @click="openConfigAction()">
-            <i class="el-icon--left el-icon-setting" />
-            配置操作
-          </el-button>
-          <el-button type="danger" link @click="deleteActionColumn()">
-            <i class="el-icon-delete el-icon--left" />
-            删除列
+        <div class="fake-table-cell" style="text-align: center;">
+          <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
+            <el-button 
+              circle
+              plain
+              type="primary"
+              size="small"
+              @click="openConfigAction()"
+            >
+              <i class="el-icon-setting" />
+            </el-button>
+          </el-tooltip>
+          <el-button 
+            circle
+            plain
+            type="danger"
+            size="small"
+            @click="deleteActionColumn()"
+          >
+            <i class="el-icon-delete" />
           </el-button>
         </div>
         <div class="fake-table-cell">
           <base-table-actions
-            v-if="props.data.actions.length"
+            v-if="props.config.actions.length"
             :row="{}"
             :index="1"
-            :actions="props.data.actions"
+            :actions="props.config.actions"
           />
           <el-text v-else type="info">待添加操作~</el-text>
         </div>
       </div>
-      <div class="f-vertical">
+      <div class="f-vertical" key="fixed">
         <div>
           <p>
             <el-button type="primary" text @click="openConfigCol('add')">
@@ -102,7 +115,7 @@
       </div>
     </transition-group>
   </div>
-  <EditBtn v-if="!tableForm.show" :type="tableForm.type" @action="e => emit('action', e)" />
+  <EditBtn v-if="!tableForm.show" :type="tableForm.type"  @action="e => emit('action', e)" />
   <ConfigColumn
     v-model:show="configCol.show"
     :type="configCol.type"
@@ -118,7 +131,7 @@
   <ConfigAction
     v-model:show="configAction.show"
     :columnWidth="configAction.columnWidth"
-    :list="props.data.actions"
+    :list="props.config.actions"
     @submit="onConfigAction"
   />
 </template>
@@ -133,17 +146,17 @@ import {
   type OptionBtn,
   ConfigColumn,
   TableForm,
-  EditBtn,
-  type EditBtnType,
   ConfigDelete,
   actionEditKey,
   ConfigAction,
-  actionProp
+  actionProp,
+  EditBtn,
+  type EditBtnType,
 } from "./TablePart";
 import { messageBox } from "@/utils/message";
 
 const props = defineProps({
-  data: {
+  config: {
     type: Object as PropType<CurdType.Table.Config>,
     required: true
   }
@@ -165,13 +178,13 @@ const configCol = reactive({
 
 /** 可拖拽的列表 */
 const dragColumns = computed(() =>
-  props.data.columns.filter(item => item.prop !== actionProp)
+  props.config.columns.filter(item => item.prop !== actionProp)
 );
 
 function openConfigCol(type: typeof configCol.type, index?: number) {
-  configCol.keys = props.data.columns.map(col => col.prop);
+  configCol.keys = props.config.columns.map(col => col.prop);
   if (type === "edit") {
-    const form = props.data.columns[index!];
+    const form = props.config.columns[index!];
     configCol.keys = configCol.keys.filter(val => val !== form.prop);
     configCol.index = index!;
     configCol.form = form;
@@ -184,9 +197,9 @@ function openConfigCol(type: typeof configCol.type, index?: number) {
 
 function onColSubmit(form: CurdType.Table.Column) {
   if (configCol.type === "add") {
-    props.data.columns.push(form);
+    props.config.columns.push(form);
   } else {
-    props.data.columns[configCol.index] = form;
+    props.config.columns[configCol.index] = form;
   }
 }
 
@@ -197,17 +210,17 @@ function deleteColumn(index: number) {
     content: `是否删除【${col.label}】列？`,
     cancelText: "取消",
     confirm() {
-      const n = props.data.columns.findIndex(item => item.prop === col.prop);
-      props.data.columns.splice(n, 1);
+      const n = props.config.columns.findIndex(item => item.prop === col.prop);
+      props.config.columns.splice(n, 1);
     }
   });
 }
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
-  list: () => props.data.columns,
+  list: () => props.config.columns,
   update(newList) {
     // TODO: 如果丢失响应式，则要改用数组方法进行替换
-    props.data.columns = newList;
+    props.config.columns = newList;
   },
   findLevel: 5
 });
@@ -224,7 +237,7 @@ function getColumnWidth(column?: CurdType.Table.Column) {
 }
 
 const actionColumn = computed(() => {
-  const list = props.data.columns;
+  const list = props.config.columns;
   // TODO: 因为操作栏永远都是处于最后一列，所以可以直接判最后一个即可
   if (list.length > 0 && list[list.length - 1].prop === actionProp) {
     return list[list.length - 1];
@@ -244,21 +257,21 @@ function addActionColumn() {
   action.label = "操作";
   action.prop = actionProp;
   action.minWidth = 120;
-  props.data.columns.push(action);
+  props.config.columns.push(action);
 }
 
 function deleteActionColumn() {
-  const list = props.data.columns;
+  const list = props.config.columns;
   messageBox({
     title: "操作提示",
     content: "是否删除操作列？删除之后需要重新配置。",
     cancelText: "取消",
     confirm() {
       list.splice(list.length - 1, 1);
-      props.data.actions = [];
+      props.config.actions = [];
       // TODO: 记得把编辑表单也清空
-      if (props.data.formEdit) {
-        props.data.formEdit = null;
+      if (props.config.formEdit) {
+        props.config.formEdit = null;
       }
     }
   });
@@ -270,13 +283,13 @@ const configDele = reactive({
 });
 
 function openConfigDele() {
-  const key = props.data.selectKey;
+  const key = props.config.selectKey;
   configDele.keyword = key ? key.toString() : "";
   configDele.show = true;
 }
 
 function onConfigDele(val: string) {
-  props.data.selectKey = val;
+  props.config.selectKey = val;
 }
 
 const configAction = reactive({
@@ -289,9 +302,9 @@ function openConfigAction() {
   configAction.columnWidth = actionColumn.value!.width || "";
 }
 
-function onConfigAction(list: typeof props.data.actions, width: number) {
-  props.data.actions = list;
-  const column = props.data.columns.find(item => item.prop === actionProp);
+function onConfigAction(list: typeof props.config.actions, width: number) {
+  props.config.actions = list;
+  const column = props.config.columns.find(item => item.prop === actionProp);
   column!.width = width;
 }
 
@@ -303,11 +316,11 @@ const tableForm = reactive({
 
 function openTableForm(type: typeof tableForm.type) {
   tableForm.type = type;
-  if (type === "add" && props.data.formAdd) {
-    tableForm.form = props.data.formAdd;
+  if (type === "add" && props.config.formAdd) {
+    tableForm.form = props.config.formAdd;
   }
-  if (type === "edit" && props.data.formEdit) {
-    tableForm.form = props.data.formEdit;
+  if (type === "edit" && props.config.formEdit) {
+    tableForm.form = props.config.formEdit;
   }
   tableForm.show = true;
 }
@@ -318,7 +331,7 @@ function openTableForm(type: typeof tableForm.type) {
  * @param sync 是否同步其他表单
  */
 function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
-  const data = props.data;
+  const data = props.config;
   const actions = data.actions;
   /** 判断并在操作列中添加一个数据 */
   function handleEditAction() {

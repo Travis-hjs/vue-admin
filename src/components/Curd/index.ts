@@ -66,6 +66,12 @@ export namespace CurdType {
      * - 当`type: "cascader"`多选的时候为二唯数据，在提交时可以拍平+去重处理，最后再发送请求
      */
     defaultValue: T;
+    /**
+     * 是否为必填项
+     * - 当配置表单的时候的时候需要
+     * - 选取组件时，手动赋值为`false`
+     */
+    required?: boolean;
   }
 
   type HasOption = "options" | "optionSetting" | "optionApi";
@@ -209,10 +215,10 @@ export namespace CurdType {
       visible: boolean;
     }
 
-    // export interface ColumnOption<K extends "cellType" | "sort"> {
-    //   label: string;
-    //   value: Column[K];
-    // }
+    export interface ColumnOption<K extends "cellType" | "sort"> {
+      label: string;
+      value: Column[K];
+    }
 
     /** 表单配置 */
     export interface From {
@@ -273,6 +279,11 @@ export namespace CurdType {
     action: "add" | "edit";
     /** 编辑的索引 */
     index: number;
+    /**
+     * 正在编辑的表单
+     * - 注意该值在赋值时不能克隆，不然`<Editor />`里面无法进行数据修改处理
+     */
+    form: Table.From | null;
   }
 
   /**
@@ -562,8 +573,52 @@ export function getTestData(): CurdType.Config {
     },
     table: {
       actions: [],
-      columns: [],
-      formAdd: null,
+      columns: [
+        {
+          ...getColumnData(),
+          label: "用户姓名",
+          prop: "userName"
+        },
+        {
+          ...getColumnData(),
+          label: "性别",
+          prop: "gender"
+        },
+        {
+          ...getColumnData(),
+          label: "价格",
+          prop: "price",
+          slotHead: "header-price",
+          cellType: "js",
+          jsCode: "return `￥${cellValue}`",
+          sort: true
+        },
+        {
+          ...getColumnData(),
+          label: "入驻时间",
+          prop: "date",
+          width: 180
+        },
+      ],
+      formAdd: {
+        labelPosition: "left",
+        labelWidth: "120px",
+        width: "500px",
+        fields: [
+          {
+            ...getFieldData("input", "userName"),
+            label: "用户姓名"
+          },
+          {
+            ...getFieldData("radio", "gender"),
+            label: "性别",
+            options: [
+              { label: "先生", value: 1 },
+              { label: "女士", value: 2 },
+            ]
+          },
+        ]
+      },
       formEdit: null,
       selectKey: null
     }

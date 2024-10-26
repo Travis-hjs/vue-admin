@@ -3,6 +3,16 @@
   width: 100%;
   --border-color: #dcdfe6;
 
+  .w-full {
+    width: 100%;
+  }
+
+  .table-image {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+  }
+
   .the-curd-edit-mask {
     position: absolute;
     top: 0;
@@ -70,6 +80,7 @@
     border: dashed 1px var(--purple);
     border-radius: var(--border-radius);
     position: relative;
+
     &::after {
       position: absolute;
       content: "组件预览区域";
@@ -113,10 +124,76 @@
     }
   }
 
+  .the-curd-table-model {
+    --border: 1px solid #ebeef5;
+
+    width: 100%;
+    max-height: var(--layout-content-height);
+    margin-bottom: 20px;
+    overflow-x: auto;
+
+    .fake-table {
+      display: inline-flex;
+      flex-wrap: nowrap;
+      border: var(--border);
+    }
+
+    .fake-table-item {
+      border-right: var(--border);
+
+      .el-empty {
+        border-right: var(--border);
+      }
+    }
+
+    .fake-table-item[draggable="true"] .fake-table-head {
+      cursor: move;
+    }
+
+    .fake-table-head,
+    .fake-table-cell {
+      padding: var(--page-padding);
+      font-size: 14px;
+      line-height: 1;
+      color: var(--el-text-color-regular);
+      background-color: #fff;
+    }
+
+    .fake-table-head {
+      min-height: 50px;
+      font-weight: 600;
+      color: #18181a;
+      user-select: none;
+      background-color: #f6f7fb;
+    }
+
+    .fake-table-cell {
+      min-height: 40px;
+      border-top: var(--border);
+    }
+
+    .is-edit-form {
+      box-sizing: content-box;
+      padding-right: var(--page-padding);
+      border-right: var(--border);
+      border-right-style: dashed;
+
+      .el-form-item,
+      .el-form-item__label {
+        cursor: move;
+        user-select: none;
+      }
+
+      .el-form-item {
+        position: relative;
+      }
+    }
+  }
+
   .the-curd-entrance {
     position: fixed;
     bottom: var(--page-padding);
-    right: 0;                                                                                                                                                         
+    right: 0;
     z-index: 10;
     padding: 5px 0;
 
@@ -142,24 +219,31 @@
   0% {
     content: "";
   }
+
   14% {
     content: "组";
   }
+
   29% {
     content: "组件";
   }
+
   43% {
     content: "组件预";
   }
+
   57% {
     content: "组件预览";
   }
+
   71% {
     content: "组件预览区";
   }
+
   85% {
     content: "组件预览区域";
   }
+
   100% {
     content: "组件预览区域";
   }
@@ -172,6 +256,7 @@
   transition: var(--transition);
   font-size: 14px;
   color: var(--el-text-color-regular);
+
   &:hover {
     border-color: var(--blue);
     color: var(--blue);
@@ -179,8 +264,14 @@
   }
 }
 
-.the-curd-entrance-item + .the-curd-entrance-item {
+.the-curd-entrance-item+.the-curd-entrance-item {
   margin-top: 16px;
+}
+
+.the-curd-option-list {
+  padding-left: var(--page-padding);
+  margin-left: var(--page-padding);
+  border-left: 1px solid #ebeef5;
 }
 
 .the-curd-option-item {
@@ -197,6 +288,10 @@
   &:hover {
     color: var(--el-color-primary);
     background-color: var(--el-fill-color-light);
+  }
+
+  &[draggable="true"] {
+    cursor: move;
   }
 }
 
