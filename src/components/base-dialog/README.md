@@ -13,7 +13,7 @@
       <div>
         ...your code
       </div>
-      <template slot="footer">
+      <template #footer>
         <el-button @click="show = false">关 闭</el-button>
       </template>
     </base-dialog>
