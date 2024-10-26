@@ -110,14 +110,7 @@ export namespace CurdType {
      * 日期选择类型
      * - [参考](https://element-plus.org/zh-CN/component/datetime-picker.html#attributes)
      */
-    dateType:
-      | "year"
-      | "month"
-      | "week"
-      | "date"
-      | "datetime"
-      | "datetimerange"
-      | "daterange";
+    dateType: "year" | "month" | "week" | "date" | "datetime" | "datetimerange" | "daterange";
     /**
      * 组件展示格式化规则
      * - [参考](https://day.js.org/docs/zh-CN/display/format)
@@ -172,18 +165,110 @@ export namespace CurdType {
     list: Array<Field>;
   }
 
+  export namespace Table {
+    /** 表格列配置 */
+    export interface Column<T = any> extends BaseTableColumn<T> {
+      /**
+       * 表格列渲染内容
+       * | 字段 | 说明 |
+       * | --- | --- |
+       * | text | 默认文本 |
+       * | image | 图片组件`<el-image>` |
+       * | js | `js`代码 |
+       */
+      cellType: "text" | "image" | "js";
+      /**
+       * 图片宽度
+       * - 当`cellType: "image"`时生效，默认`80px`
+       */
+      imageWidth: string | number;
+      /**
+       * 图片高度
+       * - 当`cellType: "image"`时生效，默认`80px`
+       */
+      imageHeight: string | number;
+      /**
+       * 排序
+       * - 当为字符串的时候是默认排序操作
+       * - 升序`"asc"`，降序`"desc"`
+       */
+      sort: boolean | "asc" | "desc";
+      /** 表头图标提示文字 */
+      iconTips: string;
+      /**
+       * `js`代码
+       * - 当`cellType: "js"`时生效
+       * - 代码中需要返回值标识`return xxx;`
+       */
+      jsCode: string;
+      /**
+       * 表格列是否可见
+       * - 用户动态编辑表格列时需要该字段为标识符
+       * - 默认`true`
+       */
+      visible: boolean;
+    }
+
+    // export interface ColumnOption<K extends "cellType" | "sort"> {
+    //   label: string;
+    //   value: Column[K];
+    // }
+
+    /** 表单配置 */
+    export interface From {
+      /** 表单整体宽度 */
+      width: string;
+      /** 标题宽度 */
+      labelWidth: string;
+      /** 标题排版 */
+      labelPosition: "left" | "right";
+      /** 表单项列表 */
+      fields: Array<Field>;
+    }
+
+    /** 表格操作按钮类型 */
+    export interface Action<T = any> extends BaseTableAction<T> {
+      /** 标记用 */
+      key: string;
+      /**
+       * 按钮点击时运行的`js`代码
+       * - 函数有两个传参`function (row, index)`
+       */
+      jsCode?: string;
+    }
+
+    /** 表格配置 */
+    export interface Config<T = any> {
+      /** 表格操作包含项 */
+      actions: Array<Action<T>>;
+      /** 表格列 */
+      columns: Array<Column<T>>;
+      /**
+       * 表单新增对象
+       * - 考虑到新增和编辑有可能字段不一样，所以这里分开两个对象存储
+       */
+      formAdd: From | null;
+      /**
+       * 表单编辑对象
+       * - 考虑到新增和编辑有可能字段不一样，所以这里分开两个对象存储
+       */
+      formEdit: From | null;
+      /** 复选框选中目标键值值 */
+      selectKey: string | null;
+    }
+  }
+
   /** 整体配置数据项 */
-  export interface Config {
+  export interface Config<T = any> {
     search: Search;
-    // table: Table.Data;
-    // form: {};
+    table: Table.Config<T>;
   }
 
   export interface Editor {
     /** 是否显示编辑器 */
     show: boolean;
     /** 编辑器类型 */
-    type: "search" | "form" | "table" | "";
+    type: keyof Config | null;
     /** 编辑操作类型 */
     action: "add" | "edit";
     /** 编辑的索引 */
@@ -199,8 +284,8 @@ export namespace CurdType {
     loading: boolean;
     /** 编辑器信息 */
     editor: Editor;
-    /** 是否显示右下角操作容器 */
-    showOperate: boolean;
+    /** 是否显示编辑入口弹框 */
+    showEntrance: boolean;
   }
 
 }
@@ -209,6 +294,24 @@ export const provideKey = "the-curd-state";
 
 /** 父组件注入的对象 */
 export const useProvideState = () => inject(provideKey) as CurdType.State;
+
+/**
+ * 设置表单项的默认值
+ * - 将对应的默认值设置到绑定的`value`中去
+ * @param field
+ */
+export function setFieldValue(field: CurdType.Field) {
+  if (field.type == "date") {
+    if (isType(field.shortcutIndex, "number")) {
+      const date = shortcutMap[field.dateType][field.shortcutIndex].value();
+      field.value = date as any;
+    } else {
+      field.value = field.valueType === "array" ? [] : "";
+    }
+  } else {
+    field.value = field.defaultValue;
+  }
+}
 
 /** 递增`ID` */
 let incrementId = 0;
@@ -231,6 +334,20 @@ interface FieldMap {
   date: CurdType.Date;
   cascader: CurdType.Cascader;
 }
+
+/** 表单组件标题对象 */
+export const fieldTitleMap = {
+  input: "输入框",
+  textarea: "文本域",
+  "input-between": "输入框-串联",
+  select: "下拉框-单选",
+  "select-multiple": "下拉框-多选",
+  checkbox: "多选复选框",
+  radio: "单选选择框",
+  switch: "开关切换",
+  date: "日期选择器",
+  cascader: "级联选择器"
+};
 
 /**
  * 表单组件数据
@@ -371,36 +488,44 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = ""): Field
   return data;
 }
 
-/** 表单组件标题对象 */
-export const fieldTitleMap = {
-  input: "输入框",
-  textarea: "文本域",
-  "input-between": "输入框-串联",
-  select: "下拉框-单选",
-  "select-multiple": "下拉框-多选",
-  checkbox: "多选复选框",
-  radio: "单选选择框",
-  switch: "开关切换",
-  date: "日期选择器",
-  cascader: "级联选择器"
-};
+/** 表格列默认数据 */
+export function getColumnData(): CurdType.Table.Column {
+  return {
+    label: "",
+    prop: "",
+    width: undefined,
+    minWidth: undefined,
+    tooltip: false,
+    cellType: "text",
+    sort: false,
+    fixed: false,
+    iconTips: "",
+    imageWidth: "",
+    imageHeight: "",
+    jsCode: "",
+    visible: true
+  };
+}
 
-/**
- * 设置表单项的默认值
- * - 将对应的默认值设置到绑定的`value`中去
- * @param field
- */
-export function setFieldValue(field: CurdType.Field) {
-  if (field.type == "date") {
-    if (isType(field.shortcutIndex, "number")) {
-      const date = shortcutMap[field.dateType][field.shortcutIndex].value();
-      field.value = date as any;
-    } else {
-      field.value = field.valueType === "array" ? [] : "";
-    }
-  } else {
-    field.value = field.defaultValue;
-  }
+/** 默认表单配置数据 */
+export function getFormConfig(): CurdType.Table.From {
+  return {
+    width: "500px",
+    labelWidth: "120px",
+    labelPosition: "left",
+    fields: []
+  };
+}
+
+/** 默认表单操作按钮数据 */
+export function getActionData(): CurdType.Table.Action {
+  return {
+    key: `action-${getIncrementId()}-${Date.now()}`,
+    text: "",
+    icon: "",
+    jsCode: "",
+    type: "primary"
+  };
 }
 
 export function getTestData(): CurdType.Config {
@@ -434,6 +559,13 @@ export function getTestData(): CurdType.Config {
           label: "日期范围",
         },
       ]
+    },
+    table: {
+      actions: [],
+      columns: [],
+      formAdd: null,
+      formEdit: null,
+      selectKey: null
     }
   }
 }

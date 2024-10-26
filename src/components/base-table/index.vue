@@ -97,7 +97,7 @@ const props = defineProps({
   },
   /** `<base-table-actions :list="list">`组件的 list 数据 */
   actions: {
-    type: Array as PropType<Array<BaseTableOptionItem<T>>>,
+    type: Array as PropType<Array<BaseTableAction<T>>>,
     default: () => []
   },
   maxHeight: {

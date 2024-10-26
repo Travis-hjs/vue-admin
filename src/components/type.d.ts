@@ -51,7 +51,7 @@ interface BaseTableColumn <T = any> {
    * 固定位置
    * - 当`prop: "action-right"`时，不需要设置该值，固定为靠右
    */
-  fixed?: "right" | "left" | "true"
+  fixed?: "right" | "left" | boolean
   /**
    * 表格列对齐设置
    * - 当`prop: "action-right"`时，不需要设置该值，固定为居中状态
@@ -77,7 +77,7 @@ interface BaseTableColumn <T = any> {
 }
 
 /** 表格操作列列表对象 */
-interface BaseTableOptionItem<T = BaseObj> {
+interface BaseTableAction<T = BaseObj> {
   /** 按钮文字 */
   text: string | ((row: T) => string)
   /** 

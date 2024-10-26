@@ -77,7 +77,7 @@ const tableColumns: Array<BaseTableColumn> = [
   { label: "操作", prop: "action-right", width: 200 },
 ];
 
-const btnList: Array<BaseTableOptionItem<TableRow>> = [
+const btnList: Array<BaseTableAction<TableRow>> = [
   { text: "编辑", icon: "el-icon-edit" },
   {
     text: "删除",

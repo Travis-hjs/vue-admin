@@ -472,7 +472,7 @@ function onSubmit() {
     if (!valid) return
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
-    const editorType = provideState.editor.type;
+    const editorType = provideState.editor.type!;
     const index = provideState.editor.index;
     const data: CurdType.Select = JSON.parse(JSON.stringify(state.formData));
     hasOptions.includes(data.type) && onOptions();
@@ -495,31 +495,23 @@ function onSubmit() {
         }
       }
     }
-    if (isAdd.value) {
-      switch (editorType) {
-        case "search":
+    const map = {
+      search(add: boolean) {
+        if (add) {
           props.config.search.list.push(data);
-          break;
-
-        case "table":
-          break;
-
-        case "form":
-          break;
-      }
-    } else {
-      switch (editorType) {
-        case "search":
+        } else {
           props.config.search.list[index] = data;
-          break;
+        }
+      },
+      table(add: boolean) {
+        if (add) {
 
-        case "table":
-          break;
+        } else {
 
-        case "form":
-          break;
+        }
       }
     }
+    map[editorType](isAdd.value);
     onClose();
   });
 }

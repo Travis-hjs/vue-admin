@@ -59,7 +59,7 @@ const props = defineProps({
   },
   /** 按钮列表 */
   actions: {
-    type: Array as PropType<Array<BaseTableOptionItem>>,
+    type: Array as PropType<Array<BaseTableAction>>,
     default: []
   },
   /** 是否阻止事件冒泡 */
@@ -88,20 +88,20 @@ const useList = computed(() => {
   }
 })
 
-const useString = (item: BaseTableOptionItem, key: "text"|"icon") => {
+const useString = (item: BaseTableAction, key: "text"|"icon") => {
   // console.log(item)
   const value = item[key];
   if (!value) return "-";
   return isType(value, "function") ? value(props.row) : value;
 }
 
-const useBoolean = (item: BaseTableOptionItem, key: "loading"|"disabled") => {
+const useBoolean = (item: BaseTableAction, key: "loading"|"disabled") => {
   const value = item[key];
   if (!value) return false;
   return isType(value, "function") ? value(props.row) : value;
 }
 
-const onBtnClick = (item: BaseTableOptionItem) => {
+const onBtnClick = (item: BaseTableAction) => {
   item.click && item.click(props.row, props.index);
 }
 

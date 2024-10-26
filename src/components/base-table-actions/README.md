@@ -6,7 +6,7 @@
 
 | 字段 | 类型 | 是否必需 | 说明 |
 | --- | --- | --- | --- |
-| list | `Array` | 是 | 按钮列表，列表对象数据看`BaseTableOptionItem`全局类型 |
+| list | `Array` | 是 | 按钮列表，列表对象数据看`BaseTableAction`全局类型 |
 | max | `number,string` | 否 | 最大限制几个按钮出现，超过则用【更多】下拉菜单代替，默认`3` |
 | row | `object` | 否 | 传入的数据，事件绑定或者返回用，当`list`数据中需要引用当前表格数据时，需要绑定该值 |
 | clickStop | `boolean` | 否 | 阻止事件冒泡用 |
@@ -57,7 +57,7 @@ const onOther = (row) => {
   console.log("其他操作 >>", row);
 }
 
-const btnList: Array<BaseTableOptionItem> = [
+const btnList: Array<BaseTableAction> = [
   { text: "新增", click: onAdd },
   { text: "编辑", click: onEdit },
   { text: "删除", click: onDelete, disabled: (row) => row.id === 2 },

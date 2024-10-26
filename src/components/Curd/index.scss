@@ -112,6 +112,18 @@
       }
     }
   }
+
+  .the-curd-entrance {
+    position: fixed;
+    bottom: var(--page-padding);
+    right: 0;                                                                                                                                                         
+    z-index: 10;
+    padding: 5px 0;
+
+    &:hover {
+      padding: 5px 11px;
+    }
+  }
 }
 
 @keyframes curd-edit-mask-move {
@@ -151,6 +163,24 @@
   100% {
     content: "组件预览区域";
   }
+}
+
+.the-curd-entrance-item {
+  border-radius: var(--border-radius);
+  border: solid 1px #dcdfe6;
+  padding: 14px 20px;
+  transition: var(--transition);
+  font-size: 14px;
+  color: var(--el-text-color-regular);
+  &:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    cursor: pointer;
+  }
+}
+
+.the-curd-entrance-item + .the-curd-entrance-item {
+  margin-top: 16px;
 }
 
 .the-curd-option-item {

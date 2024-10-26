@@ -4,11 +4,31 @@
       <Search :data="props.config.search" @search="onSearch" />
       <template v-if="state.editor.type">
         <el-button @click="onExit()">退出编辑</el-button>
-        <el-button type="success" @click="onCopy()">复制JSON</el-button>
+        <el-button type="success" plain @click="onCopy()">复制JSON</el-button>
         <el-button type="primary" @click="onComplete()">完成编辑</el-button>
       </template>
     </section>
     <Editor v-model:show="state.editor.show" :config="props.config" />
+    <el-button
+      v-if="!state.showEntrance && !state.editor.type"
+      class="the-curd-entrance"
+      type="primary"
+      size="small"
+      @click="state.showEntrance = true"
+    >
+      <i class="el-icon-arrow-left" />
+    </el-button>
+    <base-dialog v-model="state.showEntrance" title="请选择配置操作" width="400px">
+      <div class="the-curd-entrance-item" @click="onEditor('search')">
+        <p>配置筛选相关功能</p>
+      </div>
+      <div class="the-curd-entrance-item" @click="onEditor('table')">
+        <p>配置表格相关功能</p>
+      </div>
+      <template #footer>
+        <el-button @click="state.showEntrance = false">关 闭</el-button>
+      </template>
+    </base-dialog>
   </div>
 </template>
 <script lang="ts" setup>
@@ -31,14 +51,29 @@ const state = reactive<CurdType.State>({
   loading: false,
   editor: {
     show: false,
-    type: "search",
+    type: null,
     action: "add",
     index: -1
   },
-  showOperate: false,
+  showEntrance: false,
 });
 
 provide(provideKey, state);
+
+/** 备份编辑之前的数据 */
+let backupsConfig: CurdType.Config;
+
+/**
+ * 开始进入编辑模式
+ * @param type 
+ */
+function onEditor(type: typeof state.editor.type) {
+  state.editor.type = type;
+  state.editor.show = false;
+  state.editor.index = -1;
+  state.showEntrance = false;
+  backupsConfig = JSON.parse(JSON.stringify(props.config));
+}
 
 function onSearch(type: FilterBtnType) {
   if (type === "reset") {
@@ -49,7 +84,7 @@ function onSearch(type: FilterBtnType) {
 function onExit() {
   state.editor.index = -1;
   state.editor.show = false;
-  state.editor.type = "";
+  state.editor.type = null;
 }
 
 function onComplete() {
