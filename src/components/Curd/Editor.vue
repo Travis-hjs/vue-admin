@@ -495,7 +495,7 @@ function onSubmit() {
         }
       }
     }
-    const map = {
+    const actionMap = {
       search(add: boolean) {
         if (add) {
           props.config.search.list.push(data);
@@ -511,7 +511,7 @@ function onSubmit() {
         }
       }
     }
-    map[editorType](isAdd.value);
+    actionMap[editorType](isAdd.value);
     onClose();
   });
 }
