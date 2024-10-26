@@ -539,16 +539,31 @@ export function getActionData(): CurdType.Table.Action {
   };
 }
 
+/**
+ * 将属性挂载到全局，以下划线为标识符开头
+ * - 配合`jsCode`中动态代码调用
+ * @param target 
+ */
+export function exportPropToWindow<T extends object>(target: T) {
+  for (const key in target) {
+    const props = `_${key}`;
+    (window as any)[props] = target[key];
+  }
+}
+
 export function getTestData(): CurdType.Config {
   return {
     search: {
       labelRight: false,
-      labelWidth: "",
+      labelWidth: "100px",
       list: [
-        getFieldData("input", "keyword"),
+        {
+          ...getFieldData("input", "keyword"),
+          label: "查询关键字"
+        },
         {
           ...getFieldData("select", "gameId"),
-          label: "游戏",
+          label: "游戏种类",
           defaultValue: 1,
           options: [
             { label: "英雄联盟", value: 1 },
@@ -558,16 +573,20 @@ export function getTestData(): CurdType.Config {
           ]
         },
         {
-          ...getFieldData("select", "gender"),
-          label: "性别",
+          ...getFieldData("select", "gameType"),
+          label: "游戏类型",
+          valueType: "number",
           options: [
-            { label: "先生", value: "1" },
-            { label: "女士", value: "2" },
+            { label: "单机", value: 1 },
+            { label: "网游", value: 2 },
           ]
         },
         {
           ...getFieldData("date", "date"),
-          label: "日期范围",
+          dateType: "daterange",
+          valueWidth: "360px",
+          formatShow: "YYYY-MM-DD HH:mm:ss",
+          label: "上架日期",
         },
       ]
     },
@@ -576,27 +595,30 @@ export function getTestData(): CurdType.Config {
       columns: [
         {
           ...getColumnData(),
-          label: "用户姓名",
-          prop: "userName"
+          label: "游戏名称",
+          prop: "gameName"
         },
         {
           ...getColumnData(),
-          label: "性别",
-          prop: "gender"
+          label: "游戏类型",
+          prop: "gameType"
         },
         {
           ...getColumnData(),
-          label: "价格",
+          label: "游戏售价",
           prop: "price",
           slotHead: "header-price",
           cellType: "js",
           jsCode: "return `￥${cellValue}`",
+          width: 140,
           sort: true
         },
         {
           ...getColumnData(),
-          label: "入驻时间",
+          label: "上架时间",
           prop: "date",
+          cellType: "js",
+          jsCode: "return _formatDate(cellValue, 'Y年M月D日 h:m:s')",
           width: 180
         },
       ],
@@ -606,16 +628,21 @@ export function getTestData(): CurdType.Config {
         width: "500px",
         fields: [
           {
-            ...getFieldData("input", "userName"),
-            label: "用户姓名"
+            ...getFieldData("input", "gameName"),
+            label: "游戏名称"
           },
           {
-            ...getFieldData("radio", "gender"),
-            label: "性别",
+            ...getFieldData("radio", "gameType"),
+            label: "游戏类型",
             options: [
-              { label: "先生", value: 1 },
-              { label: "女士", value: 2 },
+              { label: "单机", value: 1 },
+            { label: "网游", value: 2 },
             ]
+          },
+          {
+            ...getFieldData("date", "date"),
+            dateType: "datetimerange",
+            label: "上架日期",
           },
         ]
       },

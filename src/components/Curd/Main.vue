@@ -84,11 +84,11 @@
 </template>
 <script lang="ts" setup>
 import { computed, provide, reactive, ref, type PropType } from "vue";
-import { provideKey, setFieldValue, type CurdType } from "./index";
+import { exportPropToWindow, provideKey, setFieldValue, type CurdType } from "./index";
 import Search from "./Search.vue";
 import type { FilterBtnType } from "../FilterBox";
 import Editor from "./Editor.vue";
-import { copyText } from "@/utils";
+import { copyText, formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
 import TableModel from "./TableModel.vue";
@@ -369,6 +369,12 @@ function onTableSetting(list: Array<CurdType.Table.Column>) {
   props.config.table.columns = list;
 }
 
+exportPropToWindow({
+  formatDate,
+  copyText,
+  messageBox,
+  message,
+});
 </script>
 <style lang="scss">
 @import url("./index.scss");
