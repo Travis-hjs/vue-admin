@@ -555,7 +555,7 @@ export function getTestData(): CurdType.Config {
   return {
     search: {
       labelRight: false,
-      labelWidth: "100px",
+      labelWidth: "90px",
       list: [
         {
           ...getFieldData("input", "keyword"),
@@ -584,7 +584,7 @@ export function getTestData(): CurdType.Config {
         {
           ...getFieldData("date", "date"),
           dateType: "daterange",
-          valueWidth: "360px",
+          valueWidth: "380px",
           formatShow: "YYYY-MM-DD HH:mm:ss",
           label: "上架日期",
         },
