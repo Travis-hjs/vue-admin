@@ -414,10 +414,7 @@ function setJson(field: CurdType.Field) {
  */
 function chooseField(type: CurdType.Field["type"]) {
   const editor = provideState.editor;
-  const field = getFieldData(type);
-  if (editor.type === "table") {
-    field.required = false;
-  }
+  const field = getFieldData(type, "", editor.type === "search");
   state.formData = field;
   setJson(field);
   formRef.value?.clearValidate();

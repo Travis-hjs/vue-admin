@@ -62,7 +62,7 @@ export namespace CurdType {
     valueType: JavaScriptTypes | "";
     /**
      * 组件默认值
-     * - 注意！！！该值只会在初始化的时候设置，具体看`Field.vue`
+     * - 注意！！！该值只会在初始化的时候设置，具体看`Field`组件
      * - 当`type: "cascader"`多选的时候为二唯数据，在提交时可以拍平+去重处理，最后再发送请求
      */
     defaultValue: T;
@@ -364,8 +364,9 @@ export const fieldTitleMap = {
  * 表单组件数据
  * @param type 表单类型
  * @param key 键值
+ * @param search 是否为搜索数据使用
  */
-export function getFieldData<T extends keyof FieldMap>(type: T, key = ""): FieldMap[T] {
+export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search?: boolean): FieldMap[T] {
   const fieldId = getIncrementId();
   const time = Date.now();
   const tipsInput = "请输入";
@@ -496,6 +497,11 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = ""): Field
   };
   const data = map[type];
   data.label = "";
+  if (search) {
+    // 可以为搜索相关设置对应的属性
+  } else {
+    data.required = false;
+  }
   return data;
 }
 
