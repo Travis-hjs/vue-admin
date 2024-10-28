@@ -1,19 +1,19 @@
 <template>
   <div class="the-curd-main-page">
     <section :class="[state.editor.show ? 'f1' : 'w-full']">
-      <Search v-if="showSearch" :data="props.config.search" @search="onSearch" />
-      <TableModel v-if="state.editor.type === 'table'" :config="props.config.table" @action="onEditChange" />
+      <Search v-if="showSearch" :data="props.data.search" @search="onSearch" />
+      <TableModel v-if="state.editor.type === 'table'" :config="props.data.table" @action="onEditChange" />
       <template v-else-if="state.editor.type === 'search'">
         <EditBtn @action="onEditChange" />
       </template>
       <template v-else>
-        <template v-if="props.config.table.columns.length > 0">
+        <template v-if="props.data.table.columns.length > 0">
           <div class="f-vertical mgb-10">
-            <span v-if="props.config.table.selectKey" class="the-tag blue">
+            <span v-if="props.data.table.selectKey" class="the-tag blue">
               已选择 {{ tableState.selectList.length }} 条数据
             </span>
             <div class="f1" />
-            <TableOption :config="props.config.table" @action="onTableOption" />
+            <TableOption :config="props.data.table" @action="onTableOption" />
           </div>
           <base-table
             v-model:select-list="tableState.selectList"
@@ -21,7 +21,7 @@
             :columns="tableColumns"
             :actions="actionList"
             :loading="state.loading"
-            :select-key="props.config.table.selectKey!"
+            :select-key="props.data.table.selectKey!"
           >
             <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="scope">
               <TableHeader :column="tableColumns[scope.$index]" @sort="onSort" />
@@ -42,7 +42,7 @@
         </el-empty>
       </template>
     </section>
-    <Editor v-model:show="state.editor.show" :config="props.config" />
+    <Editor v-model:show="state.editor.show" :config="props.data" />
     <base-dialog
       v-model="tableState.formShow"
       :title="formSetting.title"
@@ -59,7 +59,7 @@
         <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()"  @submit="onSubmitForm()" />
       </template>
     </base-dialog>
-    <TableSetting v-model:show="tableSetting.show" :columns="props.config.table.columns" @submit="onTableSetting" />
+    <TableSetting v-model:show="tableSetting.show" :columns="props.data.table.columns" @submit="onTableSetting" />
     <el-button
       v-if="!state.showEntrance && !state.editor.type"
       class="the-curd-entrance"
@@ -106,7 +106,8 @@ import {
 } from "./TablePart";
 
 const props = defineProps({
-  config: {
+  /** 是配置，同时也是响应数据 */
+  data: {
     type: Object as PropType<CurdType.Config>,
     required: true
   }
@@ -129,7 +130,7 @@ const showSearch = computed(() => {
   if (editorType === "search") {
     return true;
   }
-  if (!editorType && props.config.search.list.length > 0) {
+  if (!editorType && props.data.search.list.length > 0) {
     return true;
   }
   return false;
@@ -149,12 +150,12 @@ function onEditor(type: typeof state.editor.type) {
   state.editor.show = false;
   state.editor.index = -1;
   state.showEntrance = false;
-  backupsConfig = JSON.parse(JSON.stringify(props.config));
+  backupsConfig = JSON.parse(JSON.stringify(props.data));
 }
 
 function onSearch(type: FilterBtnType) {
   if (type === "reset") {
-    props.config.search.list.forEach(setFieldValue);
+    props.data.search.list.forEach(setFieldValue);
   }
 }
 
@@ -169,7 +170,7 @@ function onComplete() {
 }
 
 function onCopy() {
-  copyText(JSON.stringify(props.config), () => message.success("复制成功！"));
+  copyText(JSON.stringify(props.data), () => message.success("复制成功！"));
 }
 
 const tableState = reactive({
@@ -183,7 +184,7 @@ const tableState = reactive({
 });
 
 const tableColumns = computed(() => {
-  const list = props.config.table.columns.filter(item => item.visible);
+  const list = props.data.table.columns.filter(item => item.visible);
   return list.map(item => {
     const column = {
       ...item
@@ -207,7 +208,7 @@ const tableColumns = computed(() => {
 });
 
 const actionList = computed(() => {
-  const list = props.config.table.actions;
+  const list = props.data.table.actions;
   return list.map(item => {
     const newAction = {
       ...item
@@ -249,11 +250,11 @@ const actionList = computed(() => {
 const formSetting = computed(() => {
   const info = {
     title: "编辑表单",
-    config: (props.config.table.formEdit || {}) as CurdType.Table.From
+    config: (props.data.table.formEdit || {}) as CurdType.Table.From
   };
   if (tableState.formType === "add") {
     info.title = "新增表单";
-    info.config = (props.config.table.formAdd || {}) as CurdType.Table.From;
+    info.config = (props.data.table.formAdd || {}) as CurdType.Table.From;
   }
   return info;
 });
@@ -263,7 +264,7 @@ const formSetting = computed(() => {
  * @param prop 注意这里值和插槽名相同
  */
 function getColumnByProp(prop: string) {
-  const column = props.config.table.columns.find(col => col.prop === prop);
+  const column = props.data.table.columns.find(col => col.prop === prop);
   // console.log("getColumnByProp >>", column, prop);
   return column || ({} as CurdType.Table.Column);
 }
@@ -299,7 +300,7 @@ function onSubmitForm() {
 
 function onSort(key: string, action: CurdType.Table.Column["sort"]) {
   // console.log(key, action);
-  const columns = props.config.table.columns;
+  const columns = props.data.table.columns;
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
     if (column.sort) {
@@ -380,7 +381,7 @@ function openTableSetting() {
 }
 
 function onTableSetting(list: Array<CurdType.Table.Column>) {
-  props.config.table.columns = list;
+  props.data.table.columns = list;
 }
 
 exportPropToWindow({

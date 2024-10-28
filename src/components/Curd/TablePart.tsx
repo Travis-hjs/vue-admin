@@ -52,6 +52,29 @@ export function EditBtn(props: { onAction?: (type: EditBtnType) => void }) {
   );
 }
 
+interface FooterBtnProps {
+  loading?: boolean;
+  onClose?: () => void;
+  onSubmit?: () => void;
+}
+
+/**
+ * 底部按钮
+ * @param props
+ */
+export function FooterBtn(props: FooterBtnProps) {
+  const close = props.onClose || (() => { });
+  const submit = props.onSubmit || (() => { });
+  return (
+    <>
+      <el-button onClick={close}>取 消</el-button>
+      <el-button type="primary" loading={props.loading} onClick={submit}>
+        确 认
+      </el-button>
+    </>
+  );
+}
+
 /**
  * 获取元素尺寸样式
  * @param column
@@ -262,29 +285,6 @@ export function TableOption(props: TableOptionProps) {
         </>
       )}
     </div>
-  );
-}
-
-interface FooterBtnProps {
-  loading?: boolean;
-  onClose?: () => void;
-  onSubmit?: () => void;
-}
-
-/**
- * 底部按钮
- * @param props
- */
-export function FooterBtn(props: FooterBtnProps) {
-  const close = props.onClose || (() => { });
-  const submit = props.onSubmit || (() => { });
-  return (
-    <>
-      <el-button onClick={close}>取 消</el-button>
-      <el-button type="primary" loading={props.loading} onClick={submit}>
-        确 认
-      </el-button>
-    </>
   );
 }
 

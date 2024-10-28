@@ -1,11 +1,11 @@
 <template>
-  <Curd :config="config" />
+  <Curd :data="data" />
 </template>
 <script lang="ts" setup>
 import { Curd, getTestData } from "@/components/Curd";
 import { ref, reactive } from "vue";
 
-const config = reactive(getTestData());
+const data = reactive(getTestData());
 
 </script>
 <style lang="scss"></style>
