@@ -299,6 +299,48 @@ export namespace CurdType {
     showEntrance: boolean;
   }
 
+  /** `curd`操作配置，不需要为响应式 */
+  export interface Action {
+    /**
+     * 获取表格数据
+     * - 获取数据的操作始终留给开发者自己手动决定运行时机，这样更加灵活
+     * @param searchInfo 通过处理筛选组件配置返回的对象
+     * @param pageInfo 分页数据
+     */
+    getTableData(searchInfo: BaseObj<any>, pageInfo: PageInfo): Promise<Api.Result<Api.List<any>>>;
+    /**
+     * 组件创建完成回调
+     * - 可以在该函数声内部调用`getTableData()`从而一开始就获取数据
+     * @param getData 内部获取数据的函数，会触发`getTableData`
+     */
+    created?(getData: () => Promise<void>): void;
+    /**
+     * 点击【完成编辑】按钮触发，保存当前`curd`配置
+     * @param type 当前完成编辑的类型
+     */
+    saved?(type: keyof Config): void;
+    /**
+     * 删除功能
+     * @param selectList 
+     */
+    onDelete?(selectList: Array<BaseObj>): Promise<Api.Result>;
+    /**
+     * 新增表单
+     * @param form 
+     */
+    onAdd?<T = BaseObj>(form: T): Promise<Api.Result>;
+    /**
+     * 编辑表单
+     * @param form 
+     */
+    onEdit?<T = BaseObj>(form: T): Promise<Api.Result>;
+    /**
+     * 导出功能
+     * @param searchInfo 通过处理筛选组件配置返回的对象
+     */
+    onExport?(searchInfo: BaseObj<any>): void;
+  }
+  
 }
 
 export const provideKey = "the-curd-state";

@@ -111,3 +111,7 @@ export async function login(params: LoginParams) {
   // }
   // return res;
 }
+
+export function getTableList(params: BaseObj<any>) {
+  return request<Api.List>("GET", "/getTableList", params)
+}

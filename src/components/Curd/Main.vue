@@ -110,6 +110,10 @@ const props = defineProps({
   data: {
     type: Object as PropType<CurdType.Config>,
     required: true
+  },
+  action: {
+    type: Object as PropType<CurdType.Action>,
+    required: true
   }
 });
 
@@ -332,8 +336,6 @@ async function getTableData() {
   tableState.data = list;
 }
 
-getTableData();
-
 function onTableOption(type: OptionBtn) {
   const selects = tableState.selectList;
   switch (type) {
@@ -390,6 +392,8 @@ exportPropToWindow({
   messageBox,
   message,
 });
+
+props.action.created && props.action.created(getTableData);
 </script>
 <style lang="scss">
 @import url("./index.scss");
