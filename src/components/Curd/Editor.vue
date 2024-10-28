@@ -53,7 +53,11 @@
             <h2 class="the-title">第1步：点击选取组件</h2>
             <el-button link type="primary" @click="onClose()">退出编辑</el-button>
           </div>
-          <Example :selected="state.formData?.type" @choose="chooseField" />
+          <Example
+            :selected="state.formData?.type"
+            :type="provideState.editor.type"
+            @choose="chooseField"
+          />
         </template>
         <template v-if="state.step === 1">
           <div class="f-vertical mgb-20">
@@ -610,7 +614,6 @@ watch(() => props.show, function(show) {
     const actionMap = {
       search() {
         state.formData = JSON.parse(JSON.stringify(props.config.search.list[current]));
-      setJson(state.formData!);
       },
       table() {
         state.formData = JSON.parse(JSON.stringify(editor.form?.fields[current]));

@@ -1,7 +1,7 @@
 <template>
   <div class="the-curd-example">
     <Field
-      v-for="item in example"
+      v-for="item in fieldList"
       :key="item.type"
       :field-data="item"
       :class="['the-curd-example-item fvc', { 'the-curd-selected': props.selected === item.type }]"
@@ -11,15 +11,23 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from "vue";
+import { computed, type PropType } from "vue";
 import Field from "./Field.vue";
 import { fieldTitleMap, getFieldData, type CurdType } from "./index";
 
 type FieldType = CurdType.Field["type"];
 
+type EditorType = CurdType.Editor["type"];
+
 const props = defineProps({
   /** 选中的类型 */
-  selected: String as PropType<FieldType>
+  selected: {
+    type: String as PropType<FieldType>
+  },
+  /** 当前编辑的类型 */
+  type: {
+    type: String as PropType<EditorType>
+  }
 });
 
 const emit = defineEmits<{
@@ -76,5 +84,13 @@ const example = [
     placeholder: ["范围区间操作", "范围区间操作"]
   },
 ];
+
+const exclude: Array<FieldType> = ["radio", "checkbox", "textarea", "switch"];
+
+const fieldList = computed(() => {
+  if (props.type === "search") {
+    return example.filter(item => !exclude.includes(item.type));
+  }
+  return example;
+});
 </script>
-<style lang="scss"></style>

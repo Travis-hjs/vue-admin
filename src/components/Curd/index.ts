@@ -243,7 +243,7 @@ export namespace CurdType {
       jsCode?: string;
     }
 
-    /** 表格配置 */
+    /** 表格相关配置 */
     export interface Config<T = any> {
       /** 表格操作包含项 */
       actions: Array<Action<T>>;
@@ -601,7 +601,10 @@ export function getTestData(): CurdType.Config {
         {
           ...getColumnData(),
           label: "游戏类型",
-          prop: "gameType"
+          prop: "gameType",
+          width: 140,
+          cellType: "js",
+          jsCode: 'const map = {1: "英雄联盟", 2: "魔兽争霸", 3: "只狼", 4: "死亡细胞"}; return `<span class="the-tag blue">${map[cellValue]}</span>`'
         },
         {
           ...getColumnData(),
@@ -619,7 +622,7 @@ export function getTestData(): CurdType.Config {
           prop: "date",
           cellType: "js",
           jsCode: "return _formatDate(cellValue, 'Y年M月D日 h:m:s')",
-          width: 180
+          width: 200
         },
       ],
       formAdd: {

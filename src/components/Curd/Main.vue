@@ -88,7 +88,7 @@ import { exportPropToWindow, provideKey, setFieldValue, type CurdType } from "./
 import Search from "./Search.vue";
 import type { FilterBtnType } from "../FilterBox";
 import Editor from "./Editor.vue";
-import { copyText, formatDate } from "@/utils";
+import { copyText, formatDate, ranInt } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
 import TableModel from "./TableModel.vue";
@@ -315,8 +315,23 @@ function onSort(key: string, action: CurdType.Table.Column["sort"]) {
 }
 
 async function getTableData() {
-  state.loading = true;
+  // state.loading = true;
+  const list = Array.from({ length: 10 }).map((_, index) => {
+    const count = index + 1;
+    return {
+      id: count,
+      gameName: `游戏-${count}`,
+      gameType: ranInt(1, 4),
+      price: 199.98,
+      date: new Date().toLocaleString()
+    }
+  });
+  // console.log(list);
+  tableState.pageInfo.total = list.length;
+  tableState.data = list;
 }
+
+getTableData();
 
 function onTableOption(type: OptionBtn) {
   const selects = tableState.selectList;
@@ -326,8 +341,7 @@ function onTableOption(type: OptionBtn) {
       break;
 
     case "delete":
-      if (!selects.length)
-        return message.error("请选择要删除的列表再进行操作~");
+      if (!selects.length) return message.error("请选择要删除的列表再进行操作~");
       messageBox({
         title: "操作提示",
         content: `是否删除选中的 ${selects.length} 条数据？`,
@@ -349,12 +363,12 @@ function onTableOption(type: OptionBtn) {
 }
 
 function onEditChange(type: EditBtnType) {
-  const map = {
+  const actionMap = {
     exit: onExit,
     copy: onCopy,
     complete: onComplete
   };
-  map[type]();
+  actionMap[type]();
 }
 
 const tableSetting = reactive({
