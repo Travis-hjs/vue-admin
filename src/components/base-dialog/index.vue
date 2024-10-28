@@ -61,7 +61,7 @@ const props = defineProps({
   /** 是否可以通过点击遮罩层关闭`Dialog` */
   closeByMask: {
     type: Boolean,
-    default: true
+    default: false
   },
   /** `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true` */
   appendToBody: {
