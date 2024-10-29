@@ -57,11 +57,16 @@ export const FilterItem = defineComponent({
 
 export type FilterBtnType = "search" | "reset";
 
+interface FilterBtnProps {
+  loading?: boolean;
+  onSearch?: (type: FilterBtnType) => void;
+}
+
 /**
  * 搜索 + 重置按钮
  * @param props 
  */
-export function FilterBtn(props: { loading?: boolean; onSearch?: (type: FilterBtnType) => void; }) {
+export function FilterBtn(props: FilterBtnProps) {
   const emit = props.onSearch || (() => {});
   return (
     <>
