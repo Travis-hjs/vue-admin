@@ -35,7 +35,7 @@
               />
             </template>
           </base-table>
-          <base-pagination :disabled="state.loading" :pageInfo="tableState.pageInfo" @change="getTableData" />
+          <base-pagination :disabled="state.loading" :pageInfo="tableState.pageInfo" @change="getData" />
         </template>
         <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
           <el-button type="primary" @click="onEditor('table')">去配置</el-button>
@@ -111,6 +111,7 @@ const props = defineProps({
     type: Object as PropType<CurdType.Config>,
     required: true
   },
+  /** 操作对象 */
   action: {
     type: Object as PropType<CurdType.Action>,
     required: true
@@ -319,8 +320,13 @@ function onSort(key: string, action: CurdType.Table.Column["sort"]) {
   // TODO: 执行请求逻辑
 }
 
-async function getTableData() {
+async function getData() {
   // state.loading = true;
+  // const res = await props.action.getTableData({}, tableState.pageInfo);
+  // if (res.code === 1) {
+  //   console.log("getData >>", res);
+  // }
+  // state.loading = false;
   const list = Array.from({ length: 10 }).map((_, index) => {
     const count = index + 1;
     return {
@@ -393,7 +399,7 @@ exportPropToWindow({
   message,
 });
 
-props.action.created && props.action.created(getTableData);
+props.action.created && props.action.created(getData);
 </script>
 <style lang="scss">
 @import url("./index.scss");

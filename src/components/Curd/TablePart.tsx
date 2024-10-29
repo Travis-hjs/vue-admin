@@ -966,7 +966,7 @@ export const TableForm = defineComponent({
                       return;
                     }
                     if (field.valueType === "array" && !(field.value as Array<string>).length) {
-                      callback( new Error((field.placeholder as string) || "请选择"));
+                      callback(new Error((field.placeholder as string) || "请选择"));
                       return;
                     }
                     if (field.valueType !== "boolean" && [undefined, null, ""].includes(field.value as string)) {

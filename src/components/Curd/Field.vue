@@ -96,6 +96,7 @@
       :options="data.options"
       :props="cascaderProps"
       :placeholder="data.placeholder"
+      :disabled="props.disabled"
       clearable
       collapse-tags
       collapse-tags-tooltip
@@ -106,12 +107,13 @@
       v-if="data.type === 'date'"
       v-model="(data.value as any)"
       :placeholder="data.placeholder"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
       :type="data.dateType"
       :format="data.formatShow"
       :shortcuts="shortcutMap[data.dateType]"
+      :disabled="props.disabled"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
       class="the-curd-field"
     />
   </div>

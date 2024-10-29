@@ -205,6 +205,7 @@ export namespace CurdType {
        * `js`代码
        * - 当`cellType: "js"`时生效
        * - 代码中需要返回值标识`return xxx;`
+       * - 代码中有两个参数：第一个参数`cellValue`是表格值，第二个参数`row`是完整对象
        */
       jsCode: string;
       /**

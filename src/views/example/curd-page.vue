@@ -13,7 +13,7 @@ const action: CurdType.Action = {
     return getTableList({...searchInfo, pageInfo});
   },
   created(getData) {
-    // console.log("执行");
+    // console.log("curd created");
     getData();
   },
 }
