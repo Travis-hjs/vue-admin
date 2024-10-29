@@ -62,21 +62,22 @@ export type FilterBtnType = "search" | "reset";
  * @param props 
  */
 export function FilterBtn(props: { loading?: boolean; onSearch?: (type: FilterBtnType) => void; }) {
+  const emit = props.onSearch || (() => {});
   return (
     <>
       <el-button
-        loading={props.loading}
-        onClick={() => props.onSearch && props.onSearch("reset")}
+        disabled={props.loading}
+        onClick={() => emit("reset")}
       >
-        <i class="el-icon-refresh el-icon--left" />
+        <i class={`el-icon-${props.loading ? "loading" : "refresh"} el-icon--left`} />
         重置
       </el-button>
       <el-button
         type="primary"
-        loading={props.loading}
-        onClick={() => props.onSearch && props.onSearch("search")}
+        disabled={props.loading}
+        onClick={() => emit("search")}
       >
-        <i class="el-icon-search el-icon--left" />
+        <i class={`el-icon-${props.loading ? "loading" : "search"} el-icon--left`} />
         搜索
       </el-button>
     </>
