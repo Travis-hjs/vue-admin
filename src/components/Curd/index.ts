@@ -15,9 +15,9 @@ export namespace CurdType {
   interface BaseField<T> extends Base {
     label?: string;
     /** 单独的`label`宽度 */
-    labelWidth?: string;
+    labelWidth?: number;
     /** 内容部分宽度 */
-    valueWidth?: string;
+    valueWidth?: number;
     /** 接收值的字段 */
     key: string;
     /**
@@ -46,11 +46,6 @@ export namespace CurdType {
       children?: string;
     };
     /**
-     * 选项数据接口请求路径
-     * - 预留字段，可以动态配置请求接口，暂未用到该字段
-     */
-    optionApi?: string;
-    /**
      * 组件绑定的值
      * - 当`type: "cascader"`多选的时候为二唯数据，在提交时可以拍平+去重处理，最后再发送请求
      */
@@ -69,7 +64,6 @@ export namespace CurdType {
     /**
      * 是否为必填项
      * - 当配置表单的时候的时候需要
-     * - 选取组件时，手动赋值为`false`
      */
     required?: boolean;
   }
@@ -164,7 +158,7 @@ export namespace CurdType {
   /** 搜索/筛选节点类型 */
   export interface Search {
     /** 统一的`label`宽度 */
-    labelWidth: string;
+    labelWidth: number;
     /** label整体靠右排列 */
     labelRight: boolean;
     /** 操作列表 */
@@ -185,14 +179,15 @@ export namespace CurdType {
       cellType: "text" | "image" | "js";
       /**
        * 图片宽度
-       * - 当`cellType: "image"`时生效，默认`80px`
+       * - 当`cellType: "image"`时生效，css中设置默认`80px`
+       * - 输入框输入
        */
-      imageWidth: string | number;
+      imageWidth: number;
       /**
        * 图片高度
-       * - 当`cellType: "image"`时生效，默认`80px`
+       * - 当`cellType: "image"`时生效，css中设置默认`80px`
        */
-      imageHeight: string | number;
+      imageHeight: number;
       /**
        * 排序
        * - 当为字符串的时候是默认排序操作
@@ -224,9 +219,9 @@ export namespace CurdType {
     /** 表单配置 */
     export interface From {
       /** 表单整体宽度 */
-      width: string;
+      width: number;
       /** 标题宽度 */
-      labelWidth: string;
+      labelWidth: number;
       /** 标题排版 */
       labelPosition: "left" | "right";
       /** 表单项列表 */
@@ -376,19 +371,6 @@ function getIncrementId() {
   return incrementId;
 }
 
-interface FieldMap {
-  input: CurdType.Input;
-  textarea: CurdType.Input;
-  "input-between": CurdType.InputBetween;
-  select: CurdType.Select;
-  "select-multiple": CurdType.SelectMultiple;
-  checkbox: CurdType.Checkbox;
-  radio: CurdType.Radio;
-  switch: CurdType.Switch;
-  date: CurdType.Date;
-  cascader: CurdType.Cascader;
-}
-
 /** 表单组件标题对象 */
 export const fieldTitleMap = {
   input: "输入框",
@@ -403,6 +385,19 @@ export const fieldTitleMap = {
   cascader: "级联选择器"
 };
 
+interface FieldMap {
+  input: CurdType.Input;
+  textarea: CurdType.Input;
+  "input-between": CurdType.InputBetween;
+  select: CurdType.Select;
+  "select-multiple": CurdType.SelectMultiple;
+  checkbox: CurdType.Checkbox;
+  radio: CurdType.Radio;
+  switch: CurdType.Switch;
+  date: CurdType.Date;
+  cascader: CurdType.Cascader;
+}
+
 /**
  * 表单组件数据
  * @param type 表单类型
@@ -414,10 +409,11 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
   const time = Date.now();
   const tipsInput = "请输入";
   const tipsChange = "请选择";
+  const id = `field-${type}-${fieldId}-${time}`;
   const map: FieldMap = {
     input: {
       key,
-      id: `field-input-${fieldId}-${time}`,
+      id,
       type: "input",
       value: "",
       defaultValue: "",
@@ -425,7 +421,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       valueType: ""
     },
     textarea: {
-      id: `field-textarea-${fieldId}-${time}`,
+      id,
       value: "",
       defaultValue: "",
       type: "textarea",
@@ -435,7 +431,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     "input-between": {
       key,
-      id: `field-input-between-${fieldId}-${time}`,
+      id,
       value: ["", ""],
       defaultValue: ["", ""],
       type: "input-between",
@@ -445,7 +441,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     select: {
       key,
-      id: `field-select-${fieldId}-${time}`,
+      id,
       value: "",
       defaultValue: "",
       type: "select",
@@ -459,7 +455,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     "select-multiple": {
       key,
-      id: `field-select-multiple-${fieldId}-${time}`,
+      id,
       value: [],
       defaultValue: [],
       type: "select-multiple",
@@ -473,7 +469,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     checkbox: {
       key,
-      id: `field-checkbox-${fieldId}-${time}`,
+      id,
       value: [],
       defaultValue: [],
       type: "checkbox",
@@ -487,7 +483,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     radio: {
       key,
-      id: `field-radio-${fieldId}-${time}`,
+      id,
       value: "",
       defaultValue: "",
       type: "radio",
@@ -501,7 +497,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     switch: {
       key,
-      id: `field-switch-${fieldId}-${time}`,
+      id,
       value: false,
       defaultValue: false,
       type: "switch",
@@ -510,7 +506,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     date: {
       key,
-      id: `field-date-${fieldId}-${time}`,
+      id,
       value: "",
       type: "date",
       placeholder: tipsChange,
@@ -522,7 +518,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
     },
     cascader: {
       key,
-      id: `field-cascader-${fieldId}-${time}`,
+      id,
       value: [],
       defaultValue: [],
       type: "cascader",
@@ -560,8 +556,8 @@ export function getColumnData(): CurdType.Table.Column {
     sort: false,
     fixed: false,
     iconTips: "",
-    imageWidth: "",
-    imageHeight: "",
+    imageWidth: 0,
+    imageHeight: 0,
     jsCode: "",
     visible: true
   };
@@ -570,8 +566,8 @@ export function getColumnData(): CurdType.Table.Column {
 /** 默认表单配置数据 */
 export function getFormConfig(): CurdType.Table.From {
   return {
-    width: "500px",
-    labelWidth: "120px",
+    width: 500,
+    labelWidth: 120,
     labelPosition: "left",
     fields: []
   };
@@ -586,6 +582,17 @@ export function getActionData(): CurdType.Table.Action {
     jsCode: "",
     type: "primary"
   };
+}
+
+/**
+ * 转换`px`单位，只允许有正整数
+ * @param value 
+ */
+export function convertPx(value?: number) {
+  if (!value) return undefined;
+  value = parseInt(value.toString());
+  value = Math.abs(value);
+  return `${value}px`;
 }
 
 /**
@@ -604,7 +611,7 @@ export function getTestData(): CurdType.Config {
   return {
     search: {
       labelRight: false,
-      labelWidth: "90px",
+      labelWidth: 90,
       list: [
         {
           ...getFieldData("input", "keyword"),
@@ -633,7 +640,7 @@ export function getTestData(): CurdType.Config {
         {
           ...getFieldData("date", "date"),
           dateType: "daterange",
-          valueWidth: "380px",
+          valueWidth: 380,
           formatShow: "YYYY-MM-DD HH:mm:ss",
           label: "上架日期",
         },
@@ -676,8 +683,8 @@ export function getTestData(): CurdType.Config {
       ],
       formAdd: {
         labelPosition: "left",
-        labelWidth: "120px",
-        width: "500px",
+        labelWidth: 120,
+        width: 500,
         fields: [
           {
             ...getFieldData("input", "gameName"),

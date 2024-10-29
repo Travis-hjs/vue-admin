@@ -294,15 +294,15 @@ function onConfigDele(val: string) {
 
 const configAction = reactive({
   show: false,
-  columnWidth: "" as string | number
+  columnWidth: undefined as (number | undefined)
 });
 
 function openConfigAction() {
   configAction.show = true;
-  configAction.columnWidth = actionColumn.value!.width || "";
+  configAction.columnWidth = (actionColumn.value!.width as number);
 }
 
-function onConfigAction(list: typeof props.config.actions, width: number) {
+function onConfigAction(list: typeof props.config.actions, width?: number) {
   props.config.actions = list;
   const column = props.config.columns.find(item => item.prop === actionProp);
   column!.width = width;

@@ -6,9 +6,10 @@
         <el-form label-position="right" label-width="120px">
           <template v-if="provideState.editor.type === 'search'">
             <el-form-item label="整体标题宽度">
-              <el-input
+              <el-input-number
                 v-model="props.config.search.labelWidth"
-                clearable
+                class="w-full"
+                controls-position="right"
                 placeholder="例如：120px"
               />
             </el-form-item>
@@ -23,15 +24,19 @@
           </template>
           <template v-if="provideState.editor.type === 'table' && provideState.editor.form">
             <el-form-item label="表单宽度">
-              <el-input
+              <el-input-number
                 v-model="provideState.editor.form.width"
+                class="w-full"
+                controls-position="right"
                 placeholder="请输入宽度(px)"
                 clearable
               />
             </el-form-item>
             <el-form-item label="文字宽度">
-              <el-input
+              <el-input-number
                 v-model="provideState.editor.form.labelWidth"
+                class="w-full"
+                controls-position="right"
                 placeholder="请输入标题宽度(px)"
                 clearable
               />
@@ -85,10 +90,20 @@
               <el-input v-model="state.formData.key" clearable placeholder="请输入绑定的键值" />
             </el-form-item>
             <el-form-item label="标题宽度" prop="labelWidth">
-              <el-input v-model="state.formData.labelWidth" clearable placeholder="请输入宽度，例如：120px" />
+              <el-input-number
+                v-model="state.formData.labelWidth"
+                class="w-full"
+                controls-position="right"
+                placeholder="请输入宽度，例如：120"
+              />
             </el-form-item>
             <el-form-item v-if="!noValueWidth.includes(state.formData.type)" label="组件宽度" prop="valueWidth">
-              <el-input v-model="state.formData.valueWidth" clearable placeholder="请输入宽度，例如：140px" />
+              <el-input-number
+                v-model="state.formData.valueWidth"
+                class="w-full"
+                controls-position="right"
+                placeholder="请输入宽度，例如：140"
+              />
             </el-form-item>
             <el-form-item label="提示/规则文字" prop="placeholder">
               <template v-if="state.formData.type === 'input-between'">

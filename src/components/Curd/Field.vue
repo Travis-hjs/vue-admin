@@ -1,5 +1,5 @@
 <template>
-  <div class="the-curd-form-field f-vertical short-value" :style="{ width: data.valueWidth }">
+  <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
     <el-input
       v-if="data.type === 'input'"
       v-model="data.value"
@@ -120,7 +120,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { fieldTitleMap, setFieldValue, type CurdType } from "./index";
+import { convertPx, fieldTitleMap, setFieldValue, type CurdType } from "./index";
 import { shortcutMap } from "./date";
 
 const props = defineProps({

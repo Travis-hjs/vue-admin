@@ -2,7 +2,7 @@
   <FilterWrap
     class="the-curd-search"
     :label-right="props.data.labelRight"
-    :label-width="props.data.labelWidth"
+    :label-width="convertPx(props.data.labelWidth)"
   >
     <template #content>
       <transition-group name="the-group" tag="div" class="the-filter-content f1">
@@ -12,7 +12,7 @@
           :data-key="item.id"
           :class="[{ 'the-curd-selected': isEdit(itemIndex) }]"
           :label="item.label"
-          :label-width="item.labelWidth"
+          :label-width="convertPx(item.labelWidth)"
           :draggable="isEditMode"
           @dragstart="onDragStart(itemIndex)"
           @dragover="onDragMove($event, itemIndex)"
@@ -53,7 +53,7 @@
 import { computed, type PropType } from "vue";
 import { FilterWrap, FilterItem, FilterBtn, type FilterBtnType } from "../FilterBox";
 import Field from "./Field.vue";
-import { useProvideState, type CurdType } from "./index";
+import { convertPx, useProvideState, type CurdType } from "./index";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
 

@@ -178,10 +178,12 @@
       border-right: var(--border);
       border-right-style: dashed;
 
-      .el-form-item,
-      .el-form-item__label {
+      .el-form-item[draggable="true"] {
         cursor: move;
-        user-select: none;
+        .el-form-item__label {
+          cursor: move;
+          user-select: none;
+        }
       }
 
       .el-form-item {
@@ -200,6 +202,10 @@
     &:hover {
       padding: 5px 11px;
     }
+  }
+
+  .el-input-number .el-input__inner {
+    text-align: left;
   }
 }
 

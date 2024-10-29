@@ -46,7 +46,7 @@
     <base-dialog
       v-model="tableState.formShow"
       :title="formSetting.title"
-      :width="formSetting.config.width"
+      :width="convertPx(formSetting.config.width)"
       @close="onCloseForm()"
     >
       <TableForm
@@ -84,7 +84,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, provide, reactive, ref, type PropType } from "vue";
-import { exportPropToWindow, provideKey, setFieldValue, type CurdType } from "./index";
+import { convertPx, exportPropToWindow, provideKey, setFieldValue, type CurdType } from "./index";
 import Search from "./Search.vue";
 import type { FilterBtnType } from "../FilterBox";
 import Editor from "./Editor.vue";

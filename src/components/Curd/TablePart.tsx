@@ -8,6 +8,7 @@ import {
   computed
 } from "vue";
 import {
+  convertPx,
   getActionData,
   getColumnData,
   getFormConfig,
@@ -354,10 +355,6 @@ export const ConfigColumn = defineComponent({
       ]
     };
 
-    function onInputNumber(val: string, key: "width" | "minWidth" | "imageWidth" | "imageHeight") {
-      state.form[key] = inputOnlyNumber(val);
-    }
-
     function onClose() {
       emit("update:show", false);
     }
@@ -451,19 +448,19 @@ export const ConfigColumn = defineComponent({
             />
           </el-form-item>
           <el-form-item label="表格列宽度" prop="width">
-            <el-input
+            <el-input-number
               v-model={state.form.width}
-              clearable
+              class="w-full"
+              controls-position="right"
               placeholder="请输入表格列宽度，例如：120（默认自适应）"
-              onChange={(e: string) => onInputNumber(e, "width")}
             />
           </el-form-item>
           <el-form-item label="表格列最小宽度" prop="minWidth">
-            <el-input
+            <el-input-number
               v-model={state.form.minWidth}
-              clearable
+              class="w-full"
+              controls-position="right"
               placeholder="请输入表格列最小宽度，例如：120（默认自适应）"
-              onChange={(e: string) => onInputNumber(e, "minWidth")}
             />
           </el-form-item>
           <el-form-item label="表格列展示类型" prop="cellType">
@@ -480,19 +477,19 @@ export const ConfigColumn = defineComponent({
           {state.form.cellType === "image" ? (
             <>
               <el-form-item label="图片宽度(像素)" prop="imageWidth">
-                <el-input
+                <el-input-number
                   v-model={state.form.imageWidth}
-                  clearable
+                  class="w-full"
+                  controls-position="right"
                   placeholder="请输入数字（默认80px）"
-                  onChange={(e: string) => onInputNumber(e, "imageWidth")}
                 />
               </el-form-item>
               <el-form-item label="图片高度(像素)" prop="imageHeight">
-                <el-input
+                <el-input-number
                   v-model={state.form.imageHeight}
-                  clearable
+                  class="w-full"
+                  controls-position="right"
                   placeholder="请输入数字（默认80px）"
-                  onChange={(e: string) => onInputNumber(e, "imageHeight")}
                 />
               </el-form-item>
             </>
@@ -631,8 +628,7 @@ export const ConfigAction = defineComponent({
     },
     /** 列宽 */
     columnWidth: {
-      type: [String, Number],
-      default: ""
+      type: Number
     }
   },
   emits: ["update:show", "submit"],
@@ -642,7 +638,7 @@ export const ConfigAction = defineComponent({
       show: false,
       list: [] as typeof props.list,
       form: getActionData(),
-      width: "",
+      width: undefined as (number | undefined),
       index: -1,
       /** 是否有编辑按钮在当前列表中 */
       hasEdit: false
@@ -677,7 +673,7 @@ export const ConfigAction = defineComponent({
 
     function onSubmit() {
       onClose();
-      emit("submit", JSON.parse(JSON.stringify(state.list)), Number(state.width));
+      emit("submit", JSON.parse(JSON.stringify(state.list)), state.width);
     }
 
     function onAdd() {
@@ -724,7 +720,7 @@ export const ConfigAction = defineComponent({
         state.form = getActionData();
         state.index = -1;
         state.hasEdit = state.list.some(item => item.key === actionEditKey);
-        state.width = props.columnWidth.toString();
+        state.width = props.columnWidth;
         setTimeout(() => formRef.value?.clearValidate());
       },
       { immediate: true }
@@ -746,10 +742,6 @@ export const ConfigAction = defineComponent({
         state.list = newList;
       }
     });
-
-    function onInputWidth(val: string) {
-      state.width = inputOnlyNumber(val);
-    }
 
     /** 是否能拖拽 */
     function canDraggable(action: CurdType.Table.Action) {
@@ -786,11 +778,11 @@ export const ConfigAction = defineComponent({
             class="f1"
           >
             <el-form-item label="操作列宽度">
-              <el-input
+              <el-input-number
                 v-model={state.width}
+                class="w-full"
+                controls-position="right"
                 placeholder="请输入表格列宽度，例如：160"
-                clearable
-                onChange={onInputWidth}
               />
             </el-form-item>
             <el-form-item label="按钮文字" prop="text">
@@ -1067,7 +1059,7 @@ export const TableForm = defineComponent({
     });
 
     const isEdit = computed(() => provideState.editor.show);
-    
+
     const emptyText = `当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`;
 
     return () => (
@@ -1075,10 +1067,10 @@ export const TableForm = defineComponent({
         ref={formRef}
         model={state.form}
         rules={state.rules}
-        labelWidth={state.config.labelWidth}
+        labelWidth={convertPx(state.config.labelWidth)}
         labelPosition={state.config.labelPosition}
         disabled={props.disabled}
-        style={props.editMode ? { width: state.config.width } : {}}
+        style={props.editMode ? { width: convertPx(state.config.width) } : {}}
         class={props.editMode ? "is-edit-form" : ""}
       >
         {props.editMode ? (
@@ -1089,12 +1081,21 @@ export const TableForm = defineComponent({
                   class={provideState.editor.index === fieldIndex && isEdit.value ? "the-curd-selected" : "" }
                   prop={field.key}
                   key={field.key}
-                  label={field.label}
                   data-key={field.key}
-                  draggable={state.config.fields.length > 1}
+                  draggable={state.config.fields.length > 1 && !provideState.editor.show ? true : null}
                   onDragstart={() => onDragStart(fieldIndex)}
                   onDragover={(e: DragEvent) => onDragMove(e, fieldIndex)}
                   onDrop={onDropEnd}
+                  v-slots={{
+                    label: props.editMode ? () => (
+                      <>
+                        {
+                          state.config.fields.length > 1 && !provideState.editor.show ? <i class="el-icon-rank el-icon--left" style="line-height: 32px" /> : null
+                        }
+                        <span>{field.label}</span>
+                      </>
+                    ) : null
+                  }}
                 >
                   <div class="f-vertical w-full">
                     <Field class="mgr-10" fieldData={field} editMode />
