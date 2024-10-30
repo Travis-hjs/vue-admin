@@ -308,8 +308,8 @@ const emit = defineEmits<{
   (event: "update:show", val: boolean): void;
 }>();
 
-function onClose(val = false) {
-  emit("update:show", val);
+function onClose() {
+  emit("update:show", false);
 }
 
 /** 没有宽度属性的组件类型 */
