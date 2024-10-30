@@ -257,6 +257,7 @@ function addActionColumn() {
   action.label = "操作";
   action.prop = actionProp;
   action.minWidth = 120;
+  action.width = 160;
   props.config.columns.push(action);
 }
 
@@ -335,8 +336,7 @@ function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
   const actions = data.actions;
   /** 判断并在操作列中添加一个数据 */
   function handleEditAction() {
-    const hasEditAction =
-      actions.length > 0 && actions[0].key === actionEditKey;
+    const hasEditAction = actions.length > 0 && actions[0].key === actionEditKey;
     if (config && config.fields.length > 0) {
       if (!actionColumn.value) {
         addActionColumn();
