@@ -2,12 +2,14 @@
   <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
     <el-input
       v-if="data.type === 'input'"
-      v-model="data.value"
+      :model-value="data.value"
       :placeholder="data.placeholder"
       :disabled="props.disabled"
       :readonly="props.readonly"
       clearable
       class="the-curd-field"
+      @input="onInput"
+      @blur="onBlur"
     />
     <el-input
       v-if="data.type === 'textarea'"
@@ -21,21 +23,25 @@
     />
     <template v-if="data.type === 'input-between'">
       <el-input
-        v-model="data.value[0]"
+        :model-value="data.value[0]"
         :placeholder="data.placeholder[0]"
         :readonly="props.readonly"
         :disabled="props.disabled"
         clearable
         class="f1"
+        @input="e => onInputBetween(e, 0)"
+        @blur="onBlurBetween(0)"
       />
       <el-text style="padding: 0 6px;">{{ data.separator }}</el-text>
       <el-input
-        v-model="data.value[1]"
+        :model-value="data.value[1]"
         :placeholder="data.placeholder[1]"
         :readonly="props.readonly"
         :disabled="props.disabled"
         clearable
         class="f1"
+        @input="e => onInputBetween(e, 1)"
+        @blur="onBlurBetween(1)"
       />
     </template>
     <el-select
@@ -122,6 +128,7 @@
 import { computed, type PropType } from "vue";
 import { convertPx, fieldTitleMap, setFieldValue, type CurdType } from "./index";
 import { shortcutMap } from "./date";
+import { inputOnlyNumber } from "@/utils";
 
 const props = defineProps({
   fieldData: {
@@ -137,7 +144,7 @@ const props = defineProps({
   disabled: Boolean
 });
 
-// TODO: 设置默认值给组件
+// TODO: 初始化时设置默认值给组件
 setFieldValue(props.fieldData);
 
 const data = computed(() => props.fieldData);
@@ -160,6 +167,49 @@ const cascaderProps = computed(() => {
     children: cascader.optionSetting.children || "children"
   }
 });
+
+function onInput(value: string) {
+  const field = props.fieldData;
+  if (field.valueType === "number") {
+    field.value = inputOnlyNumber(value, true, true);
+  } else {
+    field.value = value;
+  }
+}
+
+function onInputBetween(value: string, index: number) {
+  const between = props.fieldData as CurdType.InputBetween;
+  if (between.valueType === "array<number>") {
+    between.value[index] = inputOnlyNumber(value, true, true);
+  } else {
+    between.value[index] = value;
+  }
+}
+
+const numberSymbol = ["-", "."];
+
+function onBlur() {
+  const field = props.fieldData;
+  if (field.valueType === "number") {
+    if (numberSymbol.includes(field.value as string)) {
+      field.value = "";
+    } else if (field.value !== "") {
+      field.value = Number(field.value);
+    }
+  }
+}
+
+function onBlurBetween(index: number) {
+  const between = props.fieldData as CurdType.InputBetween;
+  if (between.valueType === "array<number>") {
+    const val = between.value[index] as string;
+    if (numberSymbol.includes(val)) {
+      between.value[index] = "";
+    } else if (val !== "") {
+      between.value[index] = Number(val);
+    }
+  }
+}
 </script>
 <style lang="scss">
 .the-curd-form-field {

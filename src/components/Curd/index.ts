@@ -53,8 +53,9 @@ export namespace CurdType {
     /**
      * 值的类型，提交给后端的时候可能会用到，前端也可以通过该值去做一些特殊处理
      * - 当为`defaultValue: -1`的时候要将`defaultValue = ""`，约定为`number`类型，但初始值为空
+     * - `"array<number>"`为特殊校验类型，主要是用来校验数据选项值、数组数字值用
      */
-    valueType: JavaScriptTypes | "";
+    valueType: JavaScriptTypes | "array<number>" | "";
     /**
      * 组件默认值
      * - 注意！！！该值只会在初始化的时候设置，具体看`Field`组件
@@ -74,7 +75,7 @@ export namespace CurdType {
     type: "input" | "textarea";
   }
 
-  export interface InputBetween extends Omit<BaseField<Array<string>>, HasOption | "placeholder"> {
+  export interface InputBetween extends Omit<BaseField<Array<string | number>>, HasOption | "placeholder"> {
     type: "input-between";
     placeholder: Array<string>;
     /**

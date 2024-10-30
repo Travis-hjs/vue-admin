@@ -111,33 +111,39 @@
                   v-model="state.formData.placeholder[0]"
                   class="f1"
                   clearable
-                  placeholder="文字-1"
+                  placeholder="请输入提示-1"
                 />
                 <el-text style="padding: 0 6px;">-</el-text>
                 <el-input
                   v-model="state.formData.placeholder[1]"
                   class="f1"
                   clearable
-                  placeholder="文字-2"
+                  placeholder="请输入提示-2"
                 />
               </template>
               <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
             </el-form-item>
-            <el-form-item v-if="state.formData.type !== 'date'" prop="defaultValue">
-              <template #label>
-                组件默认值
-                <el-tooltip
-                  v-if="hasOptions.includes(state.formData.type)"
-                  :content="numberTips"
-                  effect="dark"
-                  raw-content
-                  placement="top-start"
-                >
-                  <el-button type="info" link style="height: 32px;">
-                    <i class="el-icon-question"></i>
-                  </el-button>
-                </el-tooltip>
-              </template>
+            <el-form-item v-if="checkNumberFields.includes(state.formData.type)" label="绑定值为数字类型" key="is-number">
+              <el-switch
+                v-if="arrayFields.includes(state.formData.type)"
+                v-model="state.formData.valueType"
+                inline-prompt
+                active-text="是"
+                inactive-text="否"
+                active-value="array<number>"
+                inactive-value="array"
+              />
+              <el-switch
+                v-else
+                v-model="state.formData.valueType"
+                inline-prompt
+                active-text="是"
+                inactive-text="否"
+                active-value="number"
+                inactive-value="string"
+              />
+            </el-form-item>
+            <el-form-item v-if="state.formData.type !== 'date'" label="组件默认值" prop="defaultValue">
               <el-input
                 v-model="json.defaultValue"
                 type="textarea"
@@ -160,9 +166,14 @@
                   type="textarea"
                   :autosize="{ minRows: 2, maxRows: 10 }"
                   placeholder="请输入数组JSON"
-                  class="mbg-10"
+                  style="margin-bottom: 4px;"
                   @blur="onOptions()"
                 />
+                <el-button link type="primary">
+                  <a href="https://www.json.cn/" target="_blank">
+                    JSON编辑工具
+                  </a>
+                </el-button>
               </el-form-item>
               <el-form-item label="数据展示字段" prop="optionSetting.label">
                 <el-input
@@ -192,7 +203,7 @@
                     inline-prompt
                     active-text="是"
                     inactive-text="否"
-                  ></el-switch>
+                  />
                 </el-form-item>
                 <el-form-item label="允许只选中某一项" prop="checkStrictly">
                   <el-switch
@@ -200,7 +211,7 @@
                     inline-prompt
                     active-text="是"
                     inactive-text="否"
-                  ></el-switch>
+                  />
                 </el-form-item>
               </template>
             </template>
@@ -301,22 +312,20 @@ function onClose(val = false) {
   emit("update:show", val);
 }
 
+/** 没有宽度属性的组件类型 */
 const noValueWidth = ["checkbox", "radio", "switch"];
-
+/** 是否有选项数据的组件类型 */
 const hasOptions = ["select", "select-multiple", "radio", "checkbox", "cascader"];
-
+/** 默认值为数字或字符串的组件类型 */
 const stringAndNumber = ["input", "textarea", "select", "radio"];
-
-const arrayField = ["input-between", "select-multiple", "checkbox"];
-
-const arrayDate = ["daterange", "datetimerange"];
-
-const numberTips = `
-<p>当需要设置组件的绑定值为数字类型时，</p>
-<p>可以填入<b style="color: var(--yellow)"> {"value": -1} </b>来实现，</p>
-<p><b style="color: var(--yellow)"> -1 </b>为代码中约定的特殊处理，</p>
-<p>默认值依然是空的字符串</p>
-`;
+/** 值为数组类型的组件 */
+const arrayFields = ["input-between", "select-multiple", "checkbox", "cascader"];
+/** 允许为数字类型的组件 */
+const allowNumberFields = ["input", "select", "radio"];
+/** 数组日期组件 */
+const arrayDateFields = ["daterange", "datetimerange"];
+/** 需要校验为数字类型的组件 */
+const checkNumberFields = allowNumberFields.concat(arrayFields);
 
 const formatTips = `
 <p>参考 src/utils/index.ts 中的<b style="color: var(--yellow)"> formatDate </b>函数</p>
@@ -442,6 +451,7 @@ function checkDefaultValue() {
   const val = json.defaultValue;
   if (!val) return formatError;
   const type = state.formData!.type;
+  const valueType = state.formData!.valueType;
   const name = fieldTitleMap[type];
   try {
     const obj = JSON.parse(val);
@@ -449,20 +459,24 @@ function checkDefaultValue() {
     if (type === "switch") {
       if (!isType(obj.value, "boolean")) return `${name}的绑定值应该为 boolean 类型`;
     }
-    else if (arrayField.includes(type)) {
+    if (arrayFields.includes(type)) {
       if (!isType(obj.value, "array")) return `${name}的绑定值应该为 array 类型`;
+      if (valueType === "array<number>" && obj.value.some(val => (val !== "" && !isType(val , "number")))) return "数组中只能出现数字";
     }
-    else if (stringAndNumber.includes(type)) {
+    if (stringAndNumber.includes(type)) {
       if (!["string", "number"].includes(checkType(obj.value))) return `${name}的绑定值应该为 string/number 类型`;
     }
-    else if (type === "date") {
+    if (type === "date") {
       const field = state.formData as CurdType.Date;
-      if (arrayDate.includes(field.dateType)) {
+      if (arrayDateFields.includes(field.dateType)) {
         if (!isType(obj.value, "array")) return "范围日期绑定值应该为 array 类型";
       }
       else {
         if (!isType(obj.value, "string")) return "日期类型绑定值应该为 string 类型";
       }
+    }
+    if (allowNumberFields.includes(type) && valueType === "number" && obj.value !== "" && !isType(obj.value, "number")) {
+      return `${name}的绑定值应该为 number 类型`;
     }
   } catch (error) {
     console.warn("checkDefaultValue >>", error);
@@ -478,8 +492,21 @@ function checkOptions() {
   try {
     const list = JSON.parse(val);
     if (!isType(list, "array")) return "选项数据格式不正确，需要为数组类型！";
-    const isAccord = list.every(item => isType(item, "object"));
-    if (!isAccord) return "数组项必须为对象！";
+    const field = state.formData as CurdType.Select;
+    const key = field.optionSetting.value! || "value";
+    const empty = [undefined, null];
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i];
+      if (!isType<BaseObj<any>>(item, "object")) {
+        return "数组项必须为对象！";
+      }
+      if (empty.includes(item[key])) {
+        return `数组项的值不能为${empty.join("/")}`;
+      }
+      if (["array<number>", "number"].includes(field.valueType) && !isType(item[key], "number") && item[key] !== "") {
+        return "数组项的值必须为 number 类型"
+      }
+    }
     return true;
   } catch (error) {
     console.warn("checkOptions >>", error);
@@ -508,9 +535,8 @@ function onDefaultValue() {
 function onDateType(type: CurdType.Date["dateType"]) {
   const item = dateTypeOptions.find(item => item.value === type)!;
   const dateField = state.formData as CurdType.Date;
-  // console.log("选择日期类型 >>", item);
   dateField.shortcutIndex = "";
-  if (arrayDate.includes(item.value)) {
+  if (arrayDateFields.includes(item.value)) {
     dateField.value = [];
   } else {
     dateField.value = "";
@@ -532,18 +558,16 @@ function onSubmit() {
     const editor = provideState.editor;
     const data: CurdType.Select = JSON.parse(JSON.stringify(state.formData));
     hasOptions.includes(data.type) && onOptions();
-    data.valueType = checkType(data.defaultValue);
-    // TODO: 转换数字类型处理
-    if (data.defaultValue === -1) {
-      data.defaultValue = "";
-      data.valueType = "number";
+    if (!data.valueType) {
+      data.valueType = checkType(data.defaultValue);
     }
     // TODO: 判断选项数据是否合法并进行值的转换
-    if (hasOptions.includes(data.type) && data.valueType === "number") {
-      const optionKey = data.optionSetting.value;
+    if (hasOptions.includes(data.type) && ["number", "array<number>"].includes(data.valueType)) {
+      let optionKey = data.optionSetting.value;
       // 当没有配置字段时，默认设置为`"value"`
       if (!optionKey) {
-        data.optionSetting.value = "value";
+        optionKey = "value";
+        data.optionSetting.value = optionKey;
       }
       for (let i = 0; i < data.options.length; i++) {
         const option = data.options[i];
