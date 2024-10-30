@@ -240,17 +240,17 @@ function useMessage(params: Message.Option = {}) {
 namespace Dialog {
   export interface Show {
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
-    title?: string
+    title?: string;
     /** 提示内容（可传html） */
-    content: string
+    content: string;
     /** 确认回调 */
-    confirm?: () => void
+    confirm?: (() => void) | (() => Promise<any>);
     /** 确认按钮文字，默认为`"确认"` */
-    confirmText?: string
+    confirmText?: string;
     /** 取消回调 */
-    cancel?: () => void
+    cancel?: (() => void) | (() => Promise<any>);
     /** 取消按钮文字，不传则没有取消操作 */
-    cancelText?: string
+    cancelText?: string;
   }
 }
 
@@ -265,6 +265,7 @@ function useDialog() {
     content: `dialog-content${cssModule}`,
     footer: `dialog-footer${cssModule}`,
     confirm: `confirm${cssModule}`,
+    cancel: `cancel${cssModule}`,
     fade: `fade${cssModule}`,
     show: `show${cssModule}`,
     hide: `hide${cssModule}`
@@ -391,15 +392,30 @@ function useDialog() {
     function hide() {
       el.classList.add(className.hide);
     }
+    const confirm = el.querySelector(`.${className.confirm}`) as HTMLButtonElement;
+    const cancel = el.querySelector(`.${className.cancel}`) as HTMLButtonElement;
+    let pending = false;
+    async function handleAsync(fn?: (() => void) | (() => Promise<any>)) {
+      if (pending) return;
+      if (fn) {
+        pending = true;
+        const icon = `<i class="el-icon-loading el-icon--left"></i>`;
+        confirm.innerHTML = icon + confirm.innerHTML;
+        if (cancel) {
+          cancel.innerHTML = icon + cancel.innerHTML;
+        }
+        await fn();
+      }
+      pending = false;
+      hide();
+    }
     if (option.cancelText) {
-      (el.querySelector(`.${className.footer} button`) as HTMLButtonElement).onclick = function() {
-        hide();
-        option.cancel && option.cancel();
+      cancel.onclick = function () {
+        handleAsync(option.cancel);
       }
     }
-    (el.querySelector(`.${className.confirm}`) as HTMLButtonElement).onclick = function() {
-      hide();
-      option.confirm && option.confirm();
+    confirm.onclick = function () {
+      handleAsync(option.confirm);
     }
   }
 
