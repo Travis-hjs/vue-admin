@@ -1,4 +1,4 @@
-import { isType } from "@/utils";
+import { formatDate, isType } from "@/utils";
 import { shortcutMap } from "./date";
 import { inject } from "vue";
 import type { CascaderOption } from "element-plus";
@@ -582,6 +582,29 @@ export function getActionData(): CurdType.Table.Action {
     jsCode: "",
     type: "primary"
   };
+}
+
+/**
+ * 获取最终处理过的表单项值
+ * @param field 表单项
+ */
+export function getFieldValue<T extends CurdType.Field>(field: T): T["value"] {
+  if (field.type === "date") {
+    if (["datetimerange", "daterange"].includes(field.dateType)) {
+      const list = field.value as Array<Date>;
+      if (list.length > 1) {
+        return list.map(date => formatDate(date, field.format));
+      }
+    }
+    if (field.value) {
+      return formatDate(field.value as string, field.format);
+    }
+  }
+  if (field.type === "input-between") {
+    // do some...
+    // field.value
+  }
+  return field.value;
 }
 
 /**
