@@ -33,35 +33,36 @@
 }
 
 // ===================== 全局动画 =====================
-// 渐变+平移
-.fade-slide-x-enter-active, .fade-slide-x-leave-active {
+// 页面 X 平移动画
+.page-x-enter-active, .page-x-leave-active {
   transition: .4s all;
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.fade-slide-x-enter-from {
+.page-x-enter-from {
   opacity: 0;
   transform: translate3d(30px, 0 0);
 }
 
-.fade-slide-x-leave-to {
+.page-x-leave-to {
   opacity: 0;
   transform: translate3d(-30px, 0, 0);
 }
 
-.fade-slide-y-enter-active, .fade-slide-y-leave-active {
+// 页面 Y 平移动画
+.page-y-enter-active, .page-y-leave-active {
   transition: .4s all;
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.fade-slide-y-enter-from {
+.page-y-enter-from {
   opacity: 0;
   transform: translate3d(0, 30px, 0);
 }
 
-.fade-slide-y-leave-to {
+.page-y-leave-to {
   opacity: 0;
   transform: translate3d(0, -30px, 0);
 }
