@@ -18,7 +18,7 @@ import {
 import type { FormInstance } from "element-plus";
 import { openPreview } from "../ImageViewer";
 import Field from "./Field.vue";
-import { deepClone, inputOnlyNumber } from "@/utils";
+import { deepClone } from "@/utils";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
 
@@ -701,14 +701,7 @@ export const ConfigAction = defineComponent({
     }
 
     function onDelete(index: number) {
-      messageBox({
-        title: "操作提示",
-        content: `是否删除【${state.list[index].text}】？`,
-        cancelText: "取消",
-        confirm() {
-          state.list.splice(index, 1);
-        }
-      });
+      state.list.splice(index, 1);
     }
 
     watch(
@@ -871,9 +864,18 @@ export const ConfigAction = defineComponent({
                     <div class="f1"></div>
                     {state.index === -1 ? (
                       <>
-                        <el-button link type="danger" onClick={() => onDelete(itemIndex)}>
-                          <i class="el-icon-delete" />
-                        </el-button>
+                        <el-popconfirm
+                          width="186px"
+                          title="是否删除该按钮功能？"
+                          onConfirm={() => onDelete(itemIndex)}
+                          v-slots={{
+                            reference: () => (
+                              <el-button link type="danger">
+                                <i class="el-icon-delete" />
+                              </el-button>
+                            )
+                          }}
+                        />
                         <el-button link type="success" onClick={() => onEdit(itemIndex)}>
                           <i class="el-icon-edit" />
                         </el-button>
