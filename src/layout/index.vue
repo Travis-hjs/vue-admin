@@ -11,7 +11,7 @@
     <Sidebar />
     <div class="the-layout-content" ref="contentBox">
       <router-view class="the-layout-page" v-slot="{ Component, route }">
-        <transition name="fade-slide-y" mode="out-in">
+        <transition name="page-y" mode="out-in">
           <keep-alive :include="cacheList">
             <component :is="Component" :key="route.path" />
           </keep-alive>
