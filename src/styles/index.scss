@@ -67,16 +67,16 @@
   transform: translate3d(0, -30px, 0);
 }
 
-.fadeSlideY-leave-active, .fadeSlideY-enter-active {
+.fade-slide-y-leave-active, .fade-slide-y-enter-active {
   transition: var(--transition);
 }
 
-.fadeSlideY-enter-active, .fadeSlideY-leave-active {
+.fade-slide-y-enter-active, .fade-slide-y-leave-active {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.fadeSlideY-enter-from, .fadeSlideY-leave-to {
+.fade-slide-y-enter-from, .fade-slide-y-leave-to {
   opacity: 0;
   transform: translate3d(0, var(--slide-y), 0);
 }

@@ -23,7 +23,7 @@
         </el-button>
       </template>
     </el-input>
-    <transition name="fadeSlideY">
+    <transition name="fade-slide-y">
       <div class="base-input-search-select-list" :style="{ '--slide-y':  '20px', width: prependWidth }" v-show="showPrepend">
         <button
           type="button"
