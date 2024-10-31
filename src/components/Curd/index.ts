@@ -231,7 +231,10 @@ export namespace CurdType {
 
     /** 表格操作按钮类型 */
     export interface Action<T = any> extends BaseTableAction<T> {
-      /** 标记用 */
+      /**
+       * 标记用
+       * - 当等于`"action-edit"`时，点击事件自动设置为内部的打开编辑表单功能，在`TableModel.vue`中，当配置完编辑表单数据后会自动添加，具体位置看`onFormEdit`方法
+       */
       key: string;
       /**
        * 按钮点击时运行的`js`代码
