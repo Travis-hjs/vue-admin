@@ -74,7 +74,7 @@ declare module "vue" {
     // ElOptionGroup: typeof import("element-plus")["ElOptionGroup"]
     // ElPageHeader: typeof import("element-plus")["ElPageHeader"]
     ElPagination: typeof import("element-plus")["ElPagination"]
-    // ElPopconfirm: typeof import("element-plus")["ElPopconfirm"]
+    ElPopconfirm: typeof import("element-plus")["ElPopconfirm"]
     // ElPopper: typeof import("element-plus")["ElPopper"]
     // ElPopover: typeof import("element-plus")["ElPopover"]
     // ElProgress: typeof import("element-plus")["ElProgress"]

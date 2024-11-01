@@ -51,6 +51,7 @@ import {
   ElCascader,
   ElImage,
   ElImageViewer,
+  ElPopconfirm,
   vLoading,
 } from "element-plus";
 
@@ -98,6 +99,7 @@ const elComponents = [
   ElCascader,
   ElImage,
   ElImageViewer,
+  ElPopconfirm,
 ]
 
 elComponents.forEach(item => {
