@@ -4,6 +4,7 @@
     "Cascader",
     "daterange",
     "datetime",
-    "datetimerange"
+    "datetimerange",
+    "popconfirm"
   ],
 }
