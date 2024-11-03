@@ -23,11 +23,11 @@
         description="请添加表格列"
       />
       <div
-        v-for="(column, columnIndex) in dragColumns"
+        v-for="(column, columnIndex) in columnInfo.drag"
         :key="column.prop"
         :data-key="column.prop"
         class="fake-table-item"
-        :draggable="dragColumns.length > 1"
+        :draggable="columnInfo.drag.length > 1"
         :style="getColumnWidth(column)"
         @dragstart="onDragStart(columnIndex)"
         @dragover="onDragMove($event, columnIndex)"
@@ -175,10 +175,25 @@ const configCol = reactive({
   keys: [] as Array<string>
 });
 
-/** 可拖拽的列表 */
-const dragColumns = computed(() =>
-  props.config.columns.filter(item => item.prop !== actionProp)
-);
+const columnInfo = computed(() => {
+  const columns = props.config.columns;
+  /** 可以拖拽的列表 */
+  const drag = [];
+  /** 操作列 */
+  const action = [];
+  for (let i = 0; i < columns.length; i++) {
+    const column = columns[i];
+    if (column.prop === actionProp) {
+      action.push(column);
+    } else {
+      drag.push(column);
+    }
+  }
+  return {
+    drag,
+    action
+  }
+});
 
 function openConfigCol(type: typeof configCol.type, index?: number) {
   configCol.keys = props.config.columns.map(col => col.prop);
@@ -195,15 +210,18 @@ function openConfigCol(type: typeof configCol.type, index?: number) {
 }
 
 function onColSubmit(form: CurdType.Table.Column) {
+  const config = props.config;
   if (configCol.type === "add") {
-    props.config.columns.push(form);
+    const drag: Array<CurdType.Table.Column> = JSON.parse(JSON.stringify(columnInfo.value.drag));
+    drag.push(form);
+    config.columns = drag.concat(columnInfo.value.action);
   } else {
-    props.config.columns[configCol.index] = form;
+    config.columns[configCol.index] = form;
   }
 }
 
 function deleteColumn(index: number) {
-  const col = dragColumns.value[index];
+  const col = columnInfo.value.drag[index];
   messageBox({
     title: "操作提示",
     content: `是否删除【${col.label}】列？`,
