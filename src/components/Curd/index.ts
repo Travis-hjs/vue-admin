@@ -1,4 +1,4 @@
-export { default as Curd } from "./src/Main.vue";
+export { default as Curd } from "./src/index.vue";
 export { default as Field } from "./src/Field.vue";
 export { default as TableForm } from "./src/TableForm.vue";
 
