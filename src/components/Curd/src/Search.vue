@@ -49,6 +49,12 @@
     </template>
   </FilterWrap>
 </template>
+<script lang="ts">
+/** 筛选组件 */
+export default {
+  name: "Search"
+}
+</script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
 import { FilterWrap, FilterItem, FilterBtn, type FilterBtnType } from "@/components/FilterBox";
