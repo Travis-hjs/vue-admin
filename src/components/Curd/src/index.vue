@@ -82,6 +82,12 @@
     </base-dialog>
   </div>
 </template>
+<script lang="ts">
+/** 增删改查低代码组件 */
+export default {
+  name: "Curd"
+}
+</script>
 <script lang="ts" setup>
 import { computed, provide, reactive, ref, type PropType } from "vue";
 import type { CurdType, EditBtnType, TableOptionType } from "./types";
