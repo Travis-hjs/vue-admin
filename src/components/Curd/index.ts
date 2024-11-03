@@ -7,7 +7,9 @@ export {
   getFieldValue,
   getColumnData,
   getActionData,
-  getFormConfig
+  getFormConfig,
+  actionProp,
+  actionEditKey,
 } from "./src/data";
 
 export type {
