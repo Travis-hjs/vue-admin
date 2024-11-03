@@ -374,7 +374,7 @@ function useDialog() {
     // 设置完之后还原坐标位置
     clickSize.x = "0vw";
     clickSize.y = "0vh";
-    const cancelBtn = option.cancelText ? `<button class="el-button">${option.cancelText}</button>` : "";
+    const cancelBtn = option.cancelText ? `<button class="el-button ${className.cancel}">${option.cancelText}</button>` : "";
     el.innerHTML = `
     <div class="${className.popup}">
       <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
