@@ -42,7 +42,7 @@
         </el-form-item>
       </transition-group>
       <el-empty v-if="!state.config.fields.length" :description="emptyText" />
-      <div v-if="isEdit">
+      <div v-if="!isEdit">
         <el-button link @click="onExit()">
           退出编辑
         </el-button>
