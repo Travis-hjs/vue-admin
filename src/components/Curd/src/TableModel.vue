@@ -116,44 +116,43 @@
     </transition-group>
   </div>
   <EditBtn v-if="!tableForm.show" :type="tableForm.type"  @action="e => emit('action', e)" />
-  <ConfigColumn
+  <TableColumnConfig
     v-model:show="configCol.show"
     :type="configCol.type"
     :keys="configCol.keys"
     :form="configCol.form"
     @submit="onColSubmit"
   />
-  <ConfigDelete
+  <TableDeleteConfig
     v-model:show="configDele.show"
     :select-key="configDele.keyword"
     @submit="onConfigDele"
   />
-  <ConfigAction
+  <TableActionConfig
     v-model:show="configAction.show"
     :columnWidth="configAction.columnWidth"
     :list="props.config.actions"
     @submit="onConfigAction"
   />
 </template>
+<script>
+/** 表格配置模型组件 */
+export default {
+  name: "TableModel"
+}
+</script>
 <script lang="ts" setup>
 import { computed, type PropType, reactive } from "vue";
-import { type CurdType, getColumnData } from "./index";
+import { actionEditKey, actionProp, getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
-import {
-  TableImage,
-  TableHeader,
-  TableOption,
-  type OptionBtn,
-  ConfigColumn,
-  TableForm,
-  ConfigDelete,
-  actionEditKey,
-  ConfigAction,
-  actionProp,
-  EditBtn,
-  type EditBtnType,
-} from "./TablePart";
 import { messageBox } from "@/utils/message";
+import type { CurdType, EditBtnType, TableOptionType } from "./types";
+import { EditBtn, TableImage, TableOption } from "./part";
+import TableForm from "./TableForm.vue";
+import TableHeader from "./TableHeader.vue";
+import TableColumnConfig from "./TableColumnConfig.vue";
+import TableDeleteConfig from "./TableDeleteConfig.vue";
+import TableActionConfig from "./TableActionConfig.vue";
 
 const props = defineProps({
   config: {
@@ -372,7 +371,7 @@ function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
   tableForm.form = null;
 }
 
-function onOption(type: OptionBtn) {
+function onOption(type: TableOptionType) {
   switch (type) {
     case "delete":
       openConfigDele();
