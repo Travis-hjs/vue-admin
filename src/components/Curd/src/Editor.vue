@@ -559,6 +559,7 @@ function onSubmit() {
     const editor = provideState.editor;
     const data: CurdType.Select = JSON.parse(JSON.stringify(state.formData));
     hasOptions.includes(data.type) && onOptions();
+    // TODO: 处理空类型
     if (!data.valueType) {
       data.valueType = checkType(data.defaultValue);
     }

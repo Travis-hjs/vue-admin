@@ -87,7 +87,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       value: "",
       defaultValue: "",
       placeholder: tipsInput,
-      valueType: ""
+      valueType: "string"
     },
     textarea: {
       id,
@@ -96,7 +96,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       type: "textarea",
       placeholder: tipsInput,
       key,
-      valueType: ""
+      valueType: "string"
     },
     "input-between": {
       key,
@@ -106,7 +106,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       type: "input-between",
       placeholder: ["请输入范围一", "请输入范围二"],
       separator: "-",
-      valueType: ""
+      valueType: "array"
     },
     select: {
       key,
@@ -120,7 +120,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
         label: "",
         value: ""
       },
-      valueType: ""
+      valueType: "string"
     },
     "select-multiple": {
       key,
@@ -134,7 +134,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
         label: "",
         value: ""
       },
-      valueType: ""
+      valueType: "array"
     },
     checkbox: {
       key,
@@ -148,7 +148,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
         label: "",
         value: ""
       },
-      valueType: ""
+      valueType: "array"
     },
     radio: {
       key,
@@ -162,7 +162,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
         label: "",
         value: ""
       },
-      valueType: ""
+      valueType: "string"
     },
     switch: {
       key,
@@ -171,7 +171,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       defaultValue: false,
       type: "switch",
       placeholder: "",
-      valueType: ""
+      valueType: "boolean"
     },
     date: {
       key,
@@ -200,7 +200,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       },
       multiple: false,
       checkStrictly: false,
-      valueType: ""
+      valueType: "array"
     }
   };
   const data = map[type];
