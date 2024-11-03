@@ -318,17 +318,17 @@ export namespace CurdType {
      * 删除功能
      * @param selectList 
      */
-    onDelete?(selectList: Array<BaseObj>): Promise<Api.Result>;
+    onDelete?(selectList: Array<BaseObj<any>>): Promise<Api.Result>;
     /**
      * 新增表单
      * @param form 
      */
-    onAdd?<T = BaseObj>(form: T): Promise<Api.Result>;
+    onAdd?(form: BaseObj<any>): Promise<Api.Result>;
     /**
      * 编辑表单
      * @param form 
      */
-    onEdit?<T = BaseObj>(form: T): Promise<Api.Result>;
+    onEdit?(form: BaseObj<any>): Promise<Api.Result>;
     /**
      * 导出功能
      * @param searchInfo 通过处理筛选组件配置返回的对象
