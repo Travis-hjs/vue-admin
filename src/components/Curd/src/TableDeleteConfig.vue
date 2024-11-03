@@ -1,8 +1,8 @@
 <template>
   <base-dialog
     v-model="state.show"
-    title="配置操作列按钮功能"
-    width="840px"
+    title="配置表格删除功能"
+    width="400px"
     @close="onClose"
   >
     <el-form labelPosition="right" labelWidth="120px">
