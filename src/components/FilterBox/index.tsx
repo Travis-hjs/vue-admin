@@ -8,7 +8,7 @@ export const FilterWrap = defineComponent({
   props: {
     labelWidth: {
       type: String,
-      default: "96px"
+      // default: "96px"
     },
     /** `label`靠右对齐 */
     labelRight: Boolean
