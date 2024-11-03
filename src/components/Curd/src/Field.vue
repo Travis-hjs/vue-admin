@@ -127,8 +127,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { convertPx, fieldTitleMap, setFieldValue } from "../index";
-import { shortcutMap } from "./date";
+import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
 import { inputOnlyNumber } from "@/utils";
 import type { CurdType } from "./types";
 
