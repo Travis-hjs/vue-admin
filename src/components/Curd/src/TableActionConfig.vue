@@ -123,11 +123,10 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { reactive, ref, type PropType } from 'vue';
+import { reactive, ref, watch, type PropType } from 'vue';
 import { type CurdType } from './types';
 import type { FormInstance } from 'element-plus';
 import { actionEditKey, getActionData } from './data';
-import { watch } from 'vue';
 import { useListDrag } from '@/hooks/common';
 import { FooterBtn } from './part';
 
@@ -223,16 +222,20 @@ function onDelete(index: number) {
   state.list.splice(index, 1);
 }
 
-watch(() => props.show, function (show) {
-  state.show = show;
-  if (!show) return;
-  state.list = JSON.parse(JSON.stringify(props.list));
-  state.form = getActionData();
-  state.index = -1;
-  state.hasEdit = state.list.some(item => item.key === actionEditKey);
-  state.width = props.columnWidth;
-  setTimeout(() => formRef.value?.clearValidate());
-}, { immediate: true });
+watch(
+  () => props.show,
+  function (show) {
+    state.show = show;
+    if (!show) return;
+    state.list = JSON.parse(JSON.stringify(props.list));
+    state.form = getActionData();
+    state.index = -1;
+    state.hasEdit = state.list.some(item => item.key === actionEditKey);
+    state.width = props.columnWidth;
+    setTimeout(() => formRef.value?.clearValidate());
+  },
+  { immediate: true }
+);
 
 const typeOptions = [
   { label: "默认（蓝色）", value: "primary" },

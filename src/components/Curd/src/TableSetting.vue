@@ -49,9 +49,10 @@ export default {
 </script>
 <script lang="ts" setup>
 import { reactive, type PropType, watch } from "vue";
-import { actionProp, type CurdType } from "./types";
+import { type CurdType } from "./types";
 import { useListDrag } from "@/hooks/common";
 import { FooterBtn } from "./part";
+import { actionProp } from "./data";
 
 const props = defineProps({
   show: {

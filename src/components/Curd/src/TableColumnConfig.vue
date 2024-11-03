@@ -238,14 +238,18 @@ function onSubmit() {
   });
 }
 
-watch(() => props.show, function (show) {
-  state.show = show;
-  if (!show) return;
-  if (props.type === "add") {
-    state.form = getColumnData();
-  } else {
-    state.form = deepClone(props.form)!;
-  }
-  setTimeout(() => formRef.value?.clearValidate());
-}, { immediate: true });
+watch(
+  () => props.show,
+  function (show) {
+    state.show = show;
+    if (!show) return;
+    if (props.type === "add") {
+      state.form = getColumnData();
+    } else {
+      state.form = deepClone(props.form)!;
+    }
+    setTimeout(() => formRef.value?.clearValidate());
+  },
+  { immediate: true }
+);
 </script>
