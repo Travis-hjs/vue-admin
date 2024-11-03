@@ -125,6 +125,12 @@
     />
   </div>
 </template>
+<script lang="ts">
+/** 表单相关功能组件 */
+export default {
+  name: "Field"
+}
+</script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
 import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
