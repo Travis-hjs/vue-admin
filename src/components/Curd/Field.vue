@@ -52,6 +52,7 @@
       :multiple="data.type === 'select-multiple'"
       clearable
       filterable
+      collapse-tags
       class="the-curd-field"
     >
       <el-option

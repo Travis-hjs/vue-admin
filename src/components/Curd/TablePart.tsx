@@ -28,7 +28,7 @@ import { messageBox } from "@/utils/message";
 export const actionProp = "action-right";
 /** 表格操作列中，编辑按钮的`key` */
 export const actionEditKey = "action-edit";
-
+/** 页面编辑按钮类型 */
 export type EditBtnType = "exit" | "copy" | "complete";
 
 /**
