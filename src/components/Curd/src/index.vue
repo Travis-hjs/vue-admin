@@ -90,16 +90,19 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, provide, reactive, ref, type PropType } from "vue";
+import Search from "./Search.vue";
+import TableModel from "./TableModel.vue";
+import Editor from "./Editor.vue";
+import TableHeader from "./TableHeader.vue";
+import TableSetting from "./TableSetting.vue";
+import TableForm from "./TableForm.vue";
+import { EditBtn, FooterBtn, TableImage, TableOption } from "./part";
 import type { CurdType, EditBtnType, TableOptionType } from "./types";
 import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, provideKey, setFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
 import { copyText, formatDate } from "@/utils";
-import Search from "./Search.vue";
-import TableModel from "./TableModel.vue";
-import { EditBtn, TableImage, TableOption } from "./part";
-import TableHeader from "./TableHeader.vue";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */

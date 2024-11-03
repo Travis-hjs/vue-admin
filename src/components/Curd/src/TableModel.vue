@@ -135,7 +135,7 @@
     @submit="onConfigAction"
   />
 </template>
-<script>
+<script lang="ts">
 /** 表格配置模型组件 */
 export default {
   name: "TableModel"

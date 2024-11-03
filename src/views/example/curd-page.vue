@@ -3,10 +3,23 @@
 </template>
 <script lang="ts" setup>
 import { getTableList } from "@/api/common";
-import { Curd, getTestData, type CurdType } from "@/components/Curd";
-import { ref, reactive } from "vue";
+import { Curd, type CurdType } from "@/components/Curd";
+import { reactive } from "vue";
 
-const data = reactive(getTestData());
+const data = reactive<CurdType.Config>({
+  search: {
+    labelRight: false,
+    labelWidth: 0,
+    list: [],
+  },
+  table: {
+    columns: [],
+    actions: [],
+    selectKey: null,
+    formAdd: null,
+    formEdit: null,
+  }
+});
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {
