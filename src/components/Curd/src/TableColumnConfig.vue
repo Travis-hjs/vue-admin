@@ -151,7 +151,7 @@ const emit = defineEmits<{
 
 const state = reactive({
   show: false,
-  form: getColumnData()
+  form: getColumnData("", "")
 });
 
 const title = computed(() => `${props.type === "add" ? "新增" : "编辑"}表格列`);
@@ -244,7 +244,7 @@ watch(
     state.show = show;
     if (!show) return;
     if (props.type === "add") {
-      state.form = getColumnData();
+      state.form = getColumnData("", "");
     } else {
       state.form = deepClone(props.form)!;
     }

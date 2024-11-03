@@ -270,9 +270,7 @@ const actionColumn = computed(() => {
 
 /** 添加操作列 */
 function addActionColumn() {
-  const action = getColumnData();
-  action.label = "操作";
-  action.prop = actionProp;
+  const action = getColumnData(actionProp, "操作");
   action.minWidth = 120;
   action.width = 160;
   props.config.columns.push(action);

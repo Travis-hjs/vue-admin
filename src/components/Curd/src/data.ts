@@ -213,11 +213,15 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
   return data;
 }
 
-/** 表格列默认数据 */
-export function getColumnData(): CurdType.Table.Column {
+/**
+ * 表格列默认数据
+ * @param prop 
+ * @param label 
+ */
+export function getColumnData(prop: string, label: string): CurdType.Table.Column {
   return {
-    label: "",
-    prop: "",
+    label,
+    prop,
     width: undefined,
     minWidth: undefined,
     tooltip: false,
