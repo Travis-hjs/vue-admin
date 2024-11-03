@@ -538,8 +538,10 @@ function onDateType(type: CurdType.Date["dateType"]) {
   dateField.shortcutIndex = "";
   if (arrayDateFields.includes(item.value)) {
     dateField.value = [];
+    dateField.valueType = "array";
   } else {
     dateField.value = "";
+    dateField.valueType = "string";
   }
   dateField.formatShow = item.formatShow;
   dateField.format = item.format;

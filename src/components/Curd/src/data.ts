@@ -182,7 +182,7 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
       dateType: "date",
       formatShow: "YYYY-MM-DD",
       format: "Y-M-D",
-      valueType: "",
+      valueType: "string",
       shortcutIndex: ""
     },
     cascader: {
