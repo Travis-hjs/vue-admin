@@ -257,7 +257,7 @@
 
 .the-curd-entrance-item {
   border-radius: var(--border-radius);
-  border: solid 1px #dcdfe6;
+  border: dashed 1px #dcdfe6;
   padding: 14px 20px;
   transition: var(--transition);
   font-size: 14px;
@@ -327,4 +327,45 @@
 
 .the-group-leave-active {
   position: absolute;
+}
+
+.the-thumbnail-search {
+  border: #dcdfe6 solid 2px;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  --item-height: 30px;
+
+  .the-thumbnail-search-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--page-padding);
+    .the-thumbnail-search-item {
+      background-color: #edeef1;
+      width: 168px;
+      height: var(--item-height);
+      border-radius: var(--border-radius);
+    }
+  }
+  .the-thumbnail-search-btn {
+    background-color: #9fceff;
+    width: 80px;
+    height: var(--item-height);
+    border-radius: 2px;
+    padding: 0 14px;
+    i {
+      font-size: 18px;
+      color: #fff;
+    }
+  }
+}
+
+.the-thumbnail-table {
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+  display: flex;
+  .the-thumbnail-table-svg {
+    margin: 0 auto;
+    transform: scale(2.4);
+  }
 }

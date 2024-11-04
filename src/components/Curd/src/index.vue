@@ -69,12 +69,14 @@
     >
       <i class="el-icon-arrow-left" />
     </el-button>
-    <base-dialog v-model="state.showEntrance" title="请选择配置操作" width="400px">
+    <base-dialog v-model="state.showEntrance" title="请选择配置操作" width="600px">
       <div class="the-curd-entrance-item" @click="onEditor('search')">
-        <p>配置筛选相关功能</p>
+        <p class="mgb-10">配置筛选相关功能</p>
+        <ThumbnailSearch />
       </div>
       <div class="the-curd-entrance-item" @click="onEditor('table')">
         <p>配置表格相关功能</p>
+        <ThumbnailTable />
       </div>
       <template #footer>
         <el-button @click="state.showEntrance = false">关 闭</el-button>
@@ -96,13 +98,14 @@ import Editor from "./Editor.vue";
 import TableHeader from "./TableHeader.vue";
 import TableSetting from "./TableSetting.vue";
 import TableForm from "./TableForm.vue";
-import { EditBtn, FooterBtn, TableImage, TableOption } from "./part";
+import { EditBtn, FooterBtn, TableImage, TableOption, ThumbnailSearch, ThumbnailTable } from "./part";
 import type { CurdType, EditBtnType, TableOptionType } from "./types";
 import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, provideKey, setFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
 import { copyText, formatDate } from "@/utils";
+
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */
