@@ -13,6 +13,29 @@ export const actionProp = "action-right";
 /** 表格操作列中，编辑按钮的`key` */
 export const actionEditKey = "action-edit";
 
+/** 表单组件标题对象 */
+export const fieldTitleMap = {
+  input: "输入框",
+  textarea: "文本域",
+  "input-between": "输入框-串联",
+  select: "下拉框-单选",
+  "select-multiple": "下拉框-多选",
+  checkbox: "多选复选框",
+  radio: "单选选择框",
+  switch: "开关切换",
+  date: "日期选择器",
+  cascader: "级联选择器"
+};
+
+/** 递增`ID` */
+let incrementId = 0;
+
+/** 获取递增`id`每调用一次都会自动递增 */
+function getIncrementId() {
+  incrementId++;
+  return incrementId;
+}
+
 /**
  * 设置表单项的默认值
  * - 将对应的默认值设置到绑定的`value`中去
@@ -30,29 +53,6 @@ export function setFieldValue(field: CurdType.Field) {
     field.value = field.defaultValue;
   }
 }
-
-/** 递增`ID` */
-let incrementId = 0;
-
-/** 获取递增`id`每调用一次都会自动递增 */
-function getIncrementId() {
-  incrementId++;
-  return incrementId;
-}
-
-/** 表单组件标题对象 */
-export const fieldTitleMap = {
-  input: "输入框",
-  textarea: "文本域",
-  "input-between": "输入框-串联",
-  select: "下拉框-单选",
-  "select-multiple": "下拉框-多选",
-  checkbox: "多选复选框",
-  radio: "单选选择框",
-  switch: "开关切换",
-  date: "日期选择器",
-  cascader: "级联选择器"
-};
 
 interface FieldMap {
   input: CurdType.Input;
