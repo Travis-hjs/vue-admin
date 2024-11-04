@@ -273,10 +273,7 @@ function getColumnByProp(prop: string) {
   return column || ({} as CurdType.Table.Column);
 }
 
-const formRef = ref<{
-  validate: (callback?: () => void) => void;
-  clear: () => void;
-}>();
+const formRef = ref<InstanceType<typeof TableForm>>();
 
 /**
  * 新增 or 编辑表单
