@@ -19,8 +19,8 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType } from 'vue';
-import type { CurdType } from './types';
+import { computed, type PropType } from "vue";
+import type { CurdType } from "./types";
 
 const props = defineProps({
   column: {

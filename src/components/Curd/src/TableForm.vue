@@ -80,14 +80,14 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, reactive, ref, type PropType } from 'vue';
-import type { CurdType } from './types';
-import type { FormInstance } from 'element-plus';
-import { convertPx, getFormConfig, useProvideState } from './data';
-import { watch } from 'vue';
-import { messageBox } from '@/utils/message';
-import { useListDrag } from '@/hooks/common';
-import Field from './Field.vue';
+import { computed, reactive, ref, type PropType } from "vue";
+import type { CurdType } from "./types";
+import type { FormInstance } from "element-plus";
+import { convertPx, getFormConfig, useProvideState } from "./data";
+import { watch } from "vue";
+import { messageBox } from "@/utils/message";
+import { useListDrag } from "@/hooks/common";
+import Field from "./Field.vue";
 
 const props = defineProps({
   /** 表单配置 */

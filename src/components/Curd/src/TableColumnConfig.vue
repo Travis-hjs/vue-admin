@@ -121,12 +121,12 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, reactive, ref, watch, type PropType } from 'vue';
-import type { CurdType } from './types';
-import { getColumnData } from './data';
-import type { FormInstance } from 'element-plus';
-import { deepClone } from '@/utils';
-import { FooterBtn } from './part';
+import { computed, reactive, ref, watch, type PropType } from "vue";
+import type { CurdType } from "./types";
+import { getColumnData } from "./data";
+import type { FormInstance } from "element-plus";
+import { deepClone } from "@/utils";
+import { FooterBtn } from "./part";
 
 const props = defineProps({
   show: {

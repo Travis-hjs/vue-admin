@@ -123,12 +123,12 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { reactive, ref, watch, type PropType } from 'vue';
-import { type CurdType } from './types';
-import type { FormInstance } from 'element-plus';
-import { actionEditKey, getActionData } from './data';
-import { useListDrag } from '@/hooks/common';
-import { FooterBtn } from './part';
+import { reactive, ref, watch, type PropType } from "vue";
+import { type CurdType } from "./types";
+import type { FormInstance } from "element-plus";
+import { actionEditKey, getActionData } from "./data";
+import { useListDrag } from "@/hooks/common";
+import { FooterBtn } from "./part";
 
 const props = defineProps({
   show: {

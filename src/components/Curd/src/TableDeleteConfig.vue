@@ -36,8 +36,8 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { reactive, watch } from 'vue';
-import { FooterBtn } from './part';
+import { reactive, watch } from "vue";
+import { FooterBtn } from "./part";
 
 const props = defineProps({
   show: {
