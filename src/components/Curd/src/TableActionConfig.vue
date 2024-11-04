@@ -85,6 +85,7 @@
           @dragover="e => onDragMove(e, itemIndex)"
           @drop="onDropEnd"
         >
+          <i v-if="state.index === -1 && item.key !== actionEditKey" class="el-icon--left el-icon-rank"></i>
           <el-button :type="item.type" link>
             <i v-if="item.icon" :class="['el-icon--left', item.icon]"></i>
             {{ item.text }}
@@ -98,7 +99,7 @@
               @confirm="onDelete(itemIndex)"
             >
               <template #reference>
-                <el-button link type="danger">
+                <el-button link type="danger" :disabled="state.index > -1">
                   <i class="el-icon-delete" />
                 </el-button>
               </template>

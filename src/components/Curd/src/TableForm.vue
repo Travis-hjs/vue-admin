@@ -41,7 +41,7 @@
           </div>
         </el-form-item>
       </transition-group>
-      <el-empty v-if="!state.config.fields.length" :description="emptyText" />
+      <el-empty v-if="!state.config.fields.length" :description="`当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`" />
       <div v-if="!isEdit">
         <el-button link @click="onExit()">
           退出编辑
@@ -122,11 +122,9 @@ const state = reactive({
 /** 父组件注入的对象 */
 const provideState = useProvideState();
 /** 当前表单操作名 */
-const currentName = props.type === "add" ? "新增" : "编辑";
+const currentName = computed(() => props.type === "add" ? "新增" : "编辑");
 
 const isEdit = computed(() => provideState.editor.show);
-
-const emptyText = `当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`;
 
 function openEditor(index: number) {
   clear();
@@ -152,7 +150,7 @@ function onDelete(index: number) {
 function onDeleteAll() {
   messageBox({
     title: "操作提示",
-    content: `是否移除【${currentName}】表单？移除后将不会出现对应功能按钮。`,
+    content: `是否移除【${currentName.value}】表单？移除后将不会出现对应功能按钮。`,
     cancelText: "取消",
     confirm() {
       state.config.fields = [];
