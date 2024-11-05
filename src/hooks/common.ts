@@ -174,10 +174,11 @@ export function useListDrag<T>(option: ListDragOption<T>) {
     const targetKey = findDataKey(event.target as HTMLElement);
     if (!targetKey || targetKey === target.key) return;
     target.key = targetKey;
+    const list = option.list();
     // 记录原始数据字符串，下面做对比用
-    const str = JSON.stringify(option.list());
+    const str = JSON.stringify(list);
     // 拷贝响应数据
-    const ls: Array<T> = option.clone ? deepClone(option.list()) : JSON.parse(str);
+    const ls: Array<T> = option.clone ? deepClone(list) : JSON.parse(str);
     // 交替数组位置
     [ls[current.index], ls[targetIndex]] = [ls[targetIndex], ls[current.index]];
     // 上一次修改如果和当前数组一致则不重新赋值
