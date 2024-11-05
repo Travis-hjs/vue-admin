@@ -1,6 +1,7 @@
 import request from "../utils/request";
 import store from "../store";
 import type { LoginParams, UserInfo } from "../types/user";
+import { randomText, ranInt } from "@/utils";
 
 /**
  * `blob`或者`file`转读取路径
@@ -112,6 +113,35 @@ export async function login(params: LoginParams) {
   // return res;
 }
 
-export function getTableList(params: BaseObj<any>) {
-  return request<Api.List>("GET", "/getTableList", params)
+const staticTableData = Array.from({ length: 32 }).map((_, index) => {
+  const id = index + 1;
+  const path = ranInt(1, 2) === 1 ? "/skin/big_0d45ca44-f198-492b-a1ac-7bb23476ace5.jpg" : "/skinloading/107000.jpg";
+  return {
+    id,
+    gameName: randomText(2, 30),
+    gameType: ranInt(1, 2),
+    gamePrice: ranInt(19, 1999),
+    date: new Date().toLocaleString(),
+    banner: `https://game.gtimg.cn/images/lol/act/img${path}`
+  }
+});
+
+export function getTableList<T extends PageInfo>(params: T) {
+  const result: Api.Result<Api.List<any>> = {
+    code: 1,
+    data: {
+      total: staticTableData.length,
+      list: [],
+      pageSize: params.pageSize,
+      currentPage: params.currentPage
+    },
+    msg: "static data"
+  }
+  return new Promise<typeof result>(function(resolve) {
+    setTimeout(() => {
+      result.data.list = staticTableData.slice((params.currentPage - 1) * params.pageSize, 1 * params.pageSize);
+      resolve(result)
+    }, ranInt(100, 3000));
+  });
+  // return request<Api.List>("POST", "/getTableList", params)
 }
