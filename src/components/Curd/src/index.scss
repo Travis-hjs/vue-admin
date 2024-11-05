@@ -30,6 +30,7 @@
   .the-filter-item:hover {
     .the-curd-edit-mask {
       display: flex;
+      z-index: 5;
     }
   }
 

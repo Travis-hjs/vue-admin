@@ -1,16 +1,20 @@
 <template>
   <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
-    <el-input
-      v-if="data.type === 'input'"
-      :model-value="data.value"
-      :placeholder="data.placeholder"
-      :disabled="props.disabled"
-      :readonly="props.readonly"
-      clearable
-      class="the-curd-field"
-      @input="onInput"
-      @blur="onBlur"
-    />
+    <template v-if="data.type === 'input'">
+      <el-input-number
+        v-if="data.valueType === 'number'"
+        v-model="(data.value as any)"
+        v-bind="getInputProps()"
+        controls-position="right"
+        class="the-curd-field"
+      />
+      <el-input
+        v-else
+        v-model="data.value"
+        v-bind="getInputProps()"
+        class="the-curd-field"
+      />
+    </template>
     <el-input
       v-if="data.type === 'textarea'"
       v-model="data.value"
@@ -22,26 +26,32 @@
       class="the-curd-field"
     />
     <template v-if="data.type === 'input-between'">
-      <el-input
-        :model-value="data.value[0]"
-        :placeholder="data.placeholder[0]"
-        :readonly="props.readonly"
-        :disabled="props.disabled"
-        clearable
+      <el-input-number
+        v-if="data.valueType === 'array<number>'"
+        v-model="(data.value[0] as any)"
+        v-bind="getInputProps(0)"
+        controls-position="right"
         class="f1"
-        @input="e => onInputBetween(e, 0)"
-        @blur="onBlurBetween(0)"
+      />
+      <el-input
+        v-else
+        v-model="data.value[0]"
+        v-bind="getInputProps(0)"
+        class="f1"
       />
       <el-text style="padding: 0 6px;">{{ data.separator }}</el-text>
-      <el-input
-        :model-value="data.value[1]"
-        :placeholder="data.placeholder[1]"
-        :readonly="props.readonly"
-        :disabled="props.disabled"
-        clearable
+      <el-input-number
+        v-if="data.valueType === 'array<number>'"
+        v-model="(data.value[1] as any)"
+        v-bind="getInputProps(1)"
+        controls-position="right"
         class="f1"
-        @input="e => onInputBetween(e, 1)"
-        @blur="onBlurBetween(1)"
+      />
+      <el-input
+        v-else
+        v-model="data.value[1]"
+        v-bind="getInputProps(1)"
+        class="f1"
       />
     </template>
     <el-select
@@ -134,8 +144,8 @@ export default {
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
 import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
-import { inputOnlyNumber } from "@/utils";
 import type { CurdType } from "./types";
+import { isType } from "@/utils";
 
 const props = defineProps({
   fieldData: {
@@ -175,46 +185,13 @@ const cascaderProps = computed(() => {
   }
 });
 
-function onInput(value: string) {
-  const field = props.fieldData;
-  if (field.valueType === "number") {
-    field.value = inputOnlyNumber(value, true, true);
-  } else {
-    field.value = value;
-  }
-}
-
-function onInputBetween(value: string, index: number) {
-  const between = props.fieldData as CurdType.InputBetween;
-  if (between.valueType === "array<number>") {
-    between.value[index] = inputOnlyNumber(value, true, true);
-  } else {
-    between.value[index] = value;
-  }
-}
-
-const numberSymbol = ["-", "."];
-
-function onBlur() {
-  const field = props.fieldData;
-  if (field.valueType === "number") {
-    if (numberSymbol.includes(field.value as string)) {
-      field.value = "";
-    } else if (field.value !== "") {
-      field.value = Number(field.value);
-    }
-  }
-}
-
-function onBlurBetween(index: number) {
-  const between = props.fieldData as CurdType.InputBetween;
-  if (between.valueType === "array<number>") {
-    const val = between.value[index] as string;
-    if (numberSymbol.includes(val)) {
-      between.value[index] = "";
-    } else if (val !== "") {
-      between.value[index] = Number(val);
-    }
+function getInputProps(index?: number) {
+  const tips = data.value.placeholder as string;
+  return {
+    disabled: props.disabled,
+    readonly: props.readonly,
+    clearable: true,
+    placeholder: isType(index, "number") ? tips[index] : tips
   }
 }
 </script>
