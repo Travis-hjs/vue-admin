@@ -102,7 +102,7 @@ const props = defineProps({
   },
   maxHeight: {
     type: Number,
-    default: 500
+    default: undefined
   },
   /**
    * 选择操作的判断字段
