@@ -123,6 +123,14 @@
               </template>
               <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
             </el-form-item>
+            <el-form-item label="是否必填" prop="required">
+              <el-switch
+                v-model="state.formData.required"
+                inline-prompt
+                active-text="是"
+                inactive-text="否"
+              />
+            </el-form-item>
             <el-form-item v-if="checkNumberFields.includes(state.formData.type)" label="绑定值为数字类型" key="is-number">
               <el-switch
                 v-if="arrayFields.includes(state.formData.type)"
@@ -142,6 +150,14 @@
                 active-value="number"
                 inactive-value="string"
               />
+              <el-tooltip
+                v-if="hasOptions.includes(state.formData.type)"
+                effect="dark"
+                content="设为数字类型之后，将会在保存时校验选项数据"
+                placement="top"
+              >
+                <i class="el-icon--right el-icon-question" style="font-size: 16px; color: #999; cursor: pointer; margin-left: 14px;" />
+              </el-tooltip>
             </el-form-item>
             <el-form-item v-if="state.formData.type !== 'date'" label="组件默认值" prop="defaultValue">
               <el-input
@@ -257,14 +273,6 @@
                 />
               </el-form-item>
             </template>
-            <el-form-item v-if="provideState.editor.type === 'table'" label="是否必填" prop="required">
-              <el-switch
-                v-model="state.formData.required"
-                inline-prompt
-                active-text="是"
-                inactive-text="否"
-              />
-            </el-form-item>
             <div class="f-right">
               <el-button @click="onClose()">关闭</el-button>
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">

@@ -27,13 +27,15 @@ const data = reactive<CurdType.Config>({
         ...getFieldData("input-between", "gamePrice"),
         label: "游戏价格",
         placeholder: ["最小价格", "最大价格"],
-        valueType: "array<number>"
+        valueType: "array<number>",
       },
       {
         ...getFieldData("select", "gameType"),
         label: "游戏类型",
         placeholder: "请选择游戏类型",
-        options: option.gameType
+        options: option.gameType,
+        required: true,
+        defaultValue: 1
       },
       {
         ...getFieldData("date", "gameDate"),
@@ -54,27 +56,46 @@ const data = reactive<CurdType.Config>({
       {
         ...getColumnData("gameType", "游戏类型"),
         width: 140,
-        formatter(row, cellValue) {
+        rawContent(cellValue) {
           const map = {
-            1: "单机",
-            2: "网游"
+            1: {
+              color: "cyan",
+              text: "单机"
+            },
+            2: {
+              color: "purple",
+              text: "网游"
+            }
           }
-          return map[cellValue as keyof typeof map] || "-";
+          const key = cellValue as keyof typeof map;
+          const val = map[key];
+          return `<span class="the-tag ${val.color}">${val.text}</span>`
         }
+      },
+      {
+        ...getColumnData("banner", "游戏封面"),
+        width: 110,
+        cellType: "image",
+        slot: "banner"
       },
       {
         ...getColumnData("gamePrice", "游戏价格"),
         width: 140,
         formatter(row, cellValue) {
           return cellValue ? `￥${cellValue}` : "-";
-        }
+        },
+        sort: "desc",
+        slotHead: "gamePrice",
       },
       {
         ...getColumnData("date", "上架时间"),
         width: 200,
         formatter(row, cellValue) {
           return cellValue ? formatDate(cellValue) : "-";
-        }
+        },
+        sort: true,
+        slotHead: "date",
+        iconTips: "人工设置的时间"
       },
       {
         ...getColumnData(actionProp, "操作"),
@@ -85,12 +106,14 @@ const data = reactive<CurdType.Config>({
       {
         key: actionEditKey,
         text: "编辑",
+        type: "success",
+        icon: "el-icon-edit"
       },
       {
         key: "1",
         text: "上报游戏",
         click(row, index) {
-          console.log(row, index);
+          console.log("上报游戏 >>", row, index);
         },
       }
     ],
@@ -124,6 +147,13 @@ const data = reactive<CurdType.Config>({
         {
           ...getFieldData("date", "gameDate"),
           label: "上架日期"
+        },
+        {
+          ...getFieldData("switch", "gameLimit"),
+          label: "设备登录限制",
+          show(current) {
+            return current.gameType === 2;
+          },
         }
       ]
     },
@@ -160,7 +190,8 @@ const data = reactive<CurdType.Config>({
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {
-    return getTableList({...searchInfo, pageInfo});
+    // console.log(searchInfo, pageInfo);
+    return getTableList({...searchInfo, ...pageInfo});
   },
   created(getData) {
     // console.log("curd created");

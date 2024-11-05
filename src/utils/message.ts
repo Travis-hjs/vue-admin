@@ -1,4 +1,5 @@
 import { useZIndex } from "@/hooks/common";
+import { isType } from "./index";
 
 export namespace Message {
   export interface Option {
@@ -397,7 +398,7 @@ function useDialog() {
     let pending = false;
     async function handleAsync(fn?: (() => void) | (() => Promise<any>)) {
       if (pending) return;
-      if (fn) {
+      if (isType(fn, "asyncfunction")) {
         pending = true;
         const icon = `<i class="el-icon-loading el-icon--left"></i>`;
         confirm.innerHTML = icon + confirm.innerHTML;

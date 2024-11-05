@@ -53,6 +53,7 @@ import { type CurdType } from "./types";
 import { useListDrag } from "@/hooks/common";
 import { FooterBtn } from "./part";
 import { actionProp } from "./data";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   show: {
@@ -94,7 +95,8 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.list,
   update(newList) {
     state.list = newList;
-  }
+  },
+  clone: true
 });
 
 /** 操作列 */
@@ -106,7 +108,7 @@ function onClose() {
 
 function onSubmit() {
   onClose();
-  const list: typeof state.list = JSON.parse(JSON.stringify(state.list));
+  const list: typeof state.list = deepClone(state.list);
   if (actionColumn) list.push(actionColumn);
   emit("submit", list);
 }
@@ -116,7 +118,7 @@ watch(
   function (show) {
     state.show = show;
     if (!show) return;
-    const list: typeof props.columns = JSON.parse(JSON.stringify(props.columns));
+    const list: typeof props.columns = deepClone(props.columns);
     const showList: typeof list = [];
     // 这里要将操作栏过滤掉
     for (let i = 0; i < list.length; i++) {

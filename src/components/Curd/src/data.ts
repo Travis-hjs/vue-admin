@@ -71,9 +71,9 @@ interface FieldMap {
  * 表单组件数据
  * @param type 表单类型
  * @param key 键值
- * @param search 是否为搜索数据使用
+ * @param isSearch 是否为搜索数据使用，可以为表单和搜索数据做字段区分（预留参数，目前暂无区分）
  */
-export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search?: boolean): FieldMap[T] {
+export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSearch?: boolean): FieldMap[T] {
   const fieldId = getIncrementId();
   const time = Date.now();
   const tipsInput = "请输入";
@@ -205,11 +205,8 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", search
   };
   const data = map[type];
   data.label = "";
-  if (search) {
-    // 可以为搜索相关设置对应的属性
-  } else {
-    data.required = false;
-  }
+  // if (isSearch) {}
+  data.required = false;
   return data;
 }
 
@@ -257,27 +254,61 @@ export function getActionData(): CurdType.Table.Action {
   };
 }
 
+interface FieldValueRes<T = any> {
+  /** 组件处理之后最终获取的值 */
+  value: T;
+  /** 校验结果，`true`为通过，字符串则是对应的提示文字 */
+  result: boolean | string;
+}
 /**
  * 获取最终处理过的表单项值
  * @param field 表单项
  */
-export function getFieldValue<T extends CurdType.Field>(field: T): T["value"] {
+export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes<T["value"]> {
+  const res: FieldValueRes = {
+    value: field.value,
+    result: true
+  }
   if (field.type === "date") {
+    if (!res.value) {
+      res.result = field.placeholder;
+      return res;
+    }
     if (["datetimerange", "daterange"].includes(field.dateType)) {
-      const list = field.value as Array<Date>;
-      if (list.length > 1) {
-        return list.map(date => formatDate(date, field.format));
+      const dates = field.value as Array<Date>;
+      if (dates.length < 2) {
+        res.result = field.placeholder;
+        return res;
       }
+      res.value = dates.map(date => formatDate(date, field.format));
+      return res;
     }
-    if (field.value) {
-      return formatDate(field.value as string, field.format);
-    }
+    res.value = formatDate(field.value as string, field.format);
+    return res;
   }
+  const empty: Array<any> = [null, undefined, ""];
   if (field.type === "input-between") {
-    // do some...
-    // field.value
+    const values = field.value;
+    if (empty.includes(values[0])) {
+      res.result = field.placeholder[0];
+      return res;
+    }
+    if (empty.includes(values[1])) {
+      res.result = field.placeholder[1];
+      return res;
+    }
   }
-  return field.value;
+  const single: Array<CurdType.Field["type"]> = ["input", "textarea", "radio", "select"];
+  if (single.includes(field.type) && empty.includes(field.value)) {
+    res.result = field.placeholder as string;
+    return res;
+  }
+  const multiple: Array<CurdType.Field["type"]> = ["checkbox", "select-multiple"];
+  if (multiple.includes(field.type) && !(field.value as Array<any>).length) {
+    res.result = field.placeholder as string;
+    return res; 
+  }
+  return res;
 }
 
 /**

@@ -1,5 +1,5 @@
 import store from "@/store";
-import { isType } from "@/utils";
+import { deepClone, isType } from "@/utils";
 import { onMounted, onUnmounted, watch } from "vue";
 import { customRef } from "vue";
 
@@ -127,6 +127,11 @@ interface ListDragOption<T> {
    * - 当有多种拖拽列表处于同一场景时，设置该值作为区分用
    */
   dataKey?: string;
+  /**
+   * 是否采用克隆函数去处理数据
+   * - 数据量大时会有性能开销，默认使用`JSON.parse` + `JSON.stringify`去处理
+   */
+  clone?: boolean;
 }
 
 /**
@@ -172,7 +177,7 @@ export function useListDrag<T>(option: ListDragOption<T>) {
     // 记录原始数据字符串，下面做对比用
     const str = JSON.stringify(option.list());
     // 拷贝响应数据
-    const ls: Array<T> = JSON.parse(str);
+    const ls: Array<T> = option.clone ? deepClone(option.list()) : JSON.parse(str);
     // 交替数组位置
     [ls[current.index], ls[targetIndex]] = [ls[targetIndex], ls[current.index]];
     // 上一次修改如果和当前数组一致则不重新赋值

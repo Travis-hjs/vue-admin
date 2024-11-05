@@ -62,6 +62,12 @@ export namespace CurdType {
      * - 当配置表单的时候的时候需要
      */
     required?: boolean;
+    /**
+     * 动态表单项的条件显示逻辑函数，返回`true`则展示对应项
+     * @param current 当前界面上的字段
+     * @param whole 完整的字段
+     */
+    show?(current: BaseObj<any>, whole: BaseObj<any>): boolean;
   }
 
   type HasOption = "options" | "optionSetting" | "optionApi";

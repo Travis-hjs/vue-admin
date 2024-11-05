@@ -85,7 +85,7 @@ export function TableImage(props: TableImageProps) {
 
   return props.column.cellType === "image" ? (
     <el-image
-      class="table-image"
+      class="the-table-image"
       style={getImageStyle(props.column)}
       src={props.src}
       onClick={onPreview}
@@ -97,6 +97,8 @@ export function TableImage(props: TableImageProps) {
 interface TableOptionProps {
   /** 是否编辑模式 */
   editMode?: boolean;
+  /** 是否禁用状态 */
+  disabled?: boolean;
   /** 配置数据 */
   config: CurdType.Table.Config;
   /**
@@ -154,18 +156,18 @@ export function TableOption(props: TableOptionProps) {
       ) : (
         <>
           {hasDelete ? (
-            <el-button type="danger" link onClick={() => emit("delete")}>
+            <el-button type="danger" link disabled={props.disabled} onClick={() => emit("delete")}>
               <i class="el-icon--left el-icon-delete" />
               删除
             </el-button>
           ) : null}
           {hasAdd ? (
-            <el-button type="primary" link onClick={() => emit("add")}>
+            <el-button type="primary" link disabled={props.disabled} onClick={() => emit("add")}>
               <i class="el-icon--left el-icon-plus" />
               新增
             </el-button>
           ) : null}
-          <el-button type="primary" link onClick={() => emit("export")}>
+          <el-button type="primary" link disabled={props.disabled} onClick={() => emit("export")}>
             <i class="el-icon--left el-icon-download" />
             导出
           </el-button>
@@ -174,7 +176,7 @@ export function TableOption(props: TableOptionProps) {
             content="配置表格展示、排序等操作"
             placement="top-end"
           >
-            <el-button type="primary" link onClick={() => emit("setting")}>
+            <el-button type="primary" link disabled={props.disabled} onClick={() => emit("setting")}>
               <i class="el-icon--left el-icon-setting" />
               设置
             </el-button>

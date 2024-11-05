@@ -14,6 +14,16 @@
   .the-filter-item {
     min-height: 32px;
     position: relative;
+    &.is-required {
+      .the-filter-label::before {
+        color: var(--el-color-danger);
+        content: "*";
+        margin-right: 4px;
+      }
+    }
+    &.apply-shake {
+      outline: dashed 1px var(--el-color-danger);
+    }
   }
   .the-filter-label {
     min-width: var(--label-width);

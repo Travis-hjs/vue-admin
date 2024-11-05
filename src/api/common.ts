@@ -127,19 +127,21 @@ const staticTableData = Array.from({ length: 32 }).map((_, index) => {
 });
 
 export function getTableList<T extends PageInfo>(params: T) {
+  const page = params.currentPage;
+  const size = params.pageSize;
   const result: Api.Result<Api.List<any>> = {
     code: 1,
     data: {
       total: staticTableData.length,
       list: [],
-      pageSize: params.pageSize,
-      currentPage: params.currentPage
+      pageSize: size,
+      currentPage: page
     },
     msg: "static data"
   }
   return new Promise<typeof result>(function(resolve) {
     setTimeout(() => {
-      result.data.list = staticTableData.slice((params.currentPage - 1) * params.pageSize, 1 * params.pageSize);
+      result.data.list = staticTableData.slice((page - 1) * size, page * size);
       resolve(result)
     }, ranInt(100, 3000));
   });

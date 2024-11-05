@@ -57,6 +57,7 @@ interface JavaScriptType {
   object: object
   regexp: RegExp
   function: Function
+  asyncfunction: (...params: any) => Promise<any>;
   promise: Promise<any>
   formdata: FormData
 }

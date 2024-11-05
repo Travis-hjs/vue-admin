@@ -8,7 +8,7 @@ export const FilterWrap = defineComponent({
   props: {
     labelWidth: {
       type: String,
-      // default: "96px"
+      default: "96px"
     },
     /** `label`靠右对齐 */
     labelRight: Boolean
@@ -39,11 +39,13 @@ export const FilterItem = defineComponent({
      */
     label: String,
     /** 优先级比`FilterWrap`高 */
-    labelWidth: String
+    labelWidth: String,
+    /** 是否必填（样式区分） */
+    required: Boolean
   },
   setup(props, { slots }) {
     return () => (
-      <div class="the-filter-item flex">
+      <div class={`the-filter-item flex${props.required ? " is-required" : ""}`}>
         {
           slots.label || props.label ? (
             <span class="the-filter-label f-vertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>

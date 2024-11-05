@@ -13,7 +13,7 @@
               已选择 {{ tableState.selectList.length }} 条数据
             </span>
             <div class="f1" />
-            <TableOption :config="props.data.table" @action="onTableOption" />
+            <TableOption :config="props.data.table" :disabled="state.loading" @action="onTableOption" />
           </div>
           <base-table
             v-model:select-list="tableState.selectList"
@@ -23,15 +23,18 @@
             :loading="state.loading"
             :select-key="props.data.table.selectKey!"
           >
-            <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="scope">
-              <TableHeader :column="tableColumns[scope.$index]" @sort="onSort" />
+            <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
+              <TableHeader
+                :column="tableColumns[props.data.table.selectKey ? $index - 1 : $index]"
+                @sort="onSort"
+              />
             </template>
-            <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="scope">
+            <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
               <!-- TODO: 因为插槽中只有图片这个功能，所以不需要做条件判断 -->
               <TableImage
                 :column="getColumnByProp(cell)"
-                :src="(scope.row[cell] as string)"
-                :previewList="(tableSlot.cell.map(k => scope.row[k]) as Array<string>)"
+                :src="(row[cell] as string)"
+                :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
               />
             </template>
           </base-table>
@@ -91,7 +94,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, provide, reactive, ref, type PropType } from "vue";
+import { computed, onMounted, provide, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
 import Editor from "./Editor.vue";
@@ -101,11 +104,11 @@ import TableForm from "./TableForm.vue";
 import { EditBtn, FooterBtn, TableImage, TableOption, ThumbnailSearch, ThumbnailTable } from "./part";
 import type { CurdType, EditBtnType, TableOptionType } from "./types";
 import type { FilterBtnType } from "@/components/FilterBox";
-import { actionEditKey, convertPx, exportPropToWindow, provideKey, setFieldValue } from "./data";
+import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, setFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
-import { copyText, formatDate } from "@/utils";
-
+import { copyText, formatDate, isType } from "@/utils";
+import { setElementShake } from "@/utils/dom";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */
@@ -164,6 +167,9 @@ function onSearch(type: FilterBtnType) {
   if (type === "reset") {
     props.data.search.list.forEach(setFieldValue);
   }
+  tableState.pageInfo.currentPage = 1;
+  tableState.selectList = []; // TODO: 搜索的时候情况选中
+  getData();
 }
 
 function onExit() {
@@ -191,7 +197,7 @@ const tableState = reactive({
 });
 
 const tableColumns = computed(() => {
-  const list = props.data.table.columns.filter(item => item.visible);
+  const list = props.data.table.columns.filter(item => item.visible);  
   return list.map(item => {
     const column = {
       ...item
@@ -316,29 +322,54 @@ function onSort(key: string, action: CurdType.Table.Column["sort"]) {
       }
     }
   }
-  // TODO: 执行请求逻辑
+  getData();
 }
 
 async function getData() {
-  // state.loading = true;
-  // const res = await props.action.getTableData({}, tableState.pageInfo);
-  // if (res.code === 1) {
-  //   console.log("getData >>", res);
-  // }
-  // state.loading = false;
-  // const list = Array.from({ length: 10 }).map((_, index) => {
-  //   const count = index + 1;
-  //   return {
-  //     id: count,
-  //     gameName: `游戏-${count}`,
-  //     gameType: ranInt(1, 4),
-  //     price: 199.98,
-  //     date: new Date().toLocaleString()
-  //   }
-  // });
-  // console.log(list);
-  // tableState.pageInfo.total = list.length;
-  // tableState.data = list;
+  const searchList = props.data.search.list;
+  const searchInfo: BaseObj<any> = {};
+  // 处理搜索字段并进行赋值 
+  for (let i = 0; i < searchList.length; i++) {
+    const field = searchList[i];
+    const res = getFieldValue(field);
+    if (field.required && isType(res.result, "string")) {
+      setElementShake(document.querySelector(`.${field.id}`));
+      message.error(res.result);
+      return;
+    }
+    // TODO: 只设置有值的情况
+    if (res.result === true) {
+      searchInfo[field.key] = res.value;
+    }
+    // searchInfo[field.key] = res.value;
+  }
+  // 处理排序字段
+  const columns = props.data.table.columns;
+  const ascList: Array<string> = [];
+  const descList: Array<string> = [];
+  columns.forEach(item => {
+    if (item.sort === "asc") {
+      ascList.push(item.prop);
+    }
+    if (item.sort === "desc") {
+      descList.push(item.prop);
+    }
+  });
+  if (ascList.length) {
+    searchInfo.asc = ascList.toString();
+  }
+  if (descList.length) {
+    searchInfo.desc = descList.toString();
+  }
+  const page = JSON.parse(JSON.stringify(tableState.pageInfo));
+  state.loading = true;
+  const res = await props.action.getTableData(searchInfo, page);
+  state.loading = false;
+  if (res.code === 1) {
+    console.log("getData >>", res);
+    tableState.pageInfo.total = res.data.total;
+    tableState.data = res.data.list || [];
+  }
 }
 
 function onTableOption(type: TableOptionType) {
@@ -354,8 +385,20 @@ function onTableOption(type: TableOptionType) {
         title: "操作提示",
         content: `是否删除选中的 ${selects.length} 条数据？`,
         cancelText: "取消",
-        confirm() {
-          console.log("删除逻辑");
+        async confirm() {
+          if (props.action.onDelete) {
+            state.loading = true;
+            const res = await props.action.onDelete(JSON.parse(JSON.stringify(tableState.selectList)));
+            if (res.code === 1) {
+              message.success("删除成功！");
+              tableState.selectList = [];
+              getData();
+            } else {
+              state.loading = false;
+            }
+          } else {
+            console.log("请设置 action.onDelete 删除逻辑");
+          }
         }
       });
       break;
@@ -398,7 +441,9 @@ exportPropToWindow({
   message,
 });
 
-props.action.created && props.action.created(getData);
+onMounted(function() {
+  props.action.created && props.action.created(getData);
+});
 </script>
 <style lang="scss">
 @import url("./index.scss");

@@ -2,7 +2,7 @@
   <FilterWrap
     class="the-curd-search"
     :label-right="props.data.labelRight"
-    :label-width="convertPx(props.data.labelWidth)"
+    :label-width="convertPx(props.data.labelWidth) || 'auto'"
   >
     <template #content>
       <transition-group name="the-group" tag="div" class="the-filter-content f1">
@@ -10,9 +10,10 @@
           v-for="(item, itemIndex) in props.data.list"
           :key="item.id"
           :data-key="item.id"
-          :class="[{ 'the-curd-selected': isEdit(itemIndex) }]"
+          :class="[{ 'the-curd-selected': isEdit(itemIndex) }, item.id]"
           :label="item.label"
           :label-width="convertPx(item.labelWidth)"
+          :required="item.required"
           :draggable="isEditMode"
           @dragstart="onDragStart(itemIndex)"
           @dragover="onDragMove($event, itemIndex)"
@@ -22,7 +23,7 @@
             <i v-if="isEditMode" class="el-icon-rank el-icon--left" />
             {{ item.label }}
           </template>
-          <Field :field-data="item" />
+          <Field :field-data="item" :disabled="provideState.loading"/>
           <div v-if="isEditMode" class="the-curd-edit-mask f-vertical f-right">
             <el-button link type="danger" @click="onDeleteItem(itemIndex)">
               <i class="el-icon-delete el-icon--left"></i>
