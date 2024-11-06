@@ -1,20 +1,13 @@
 <template>
   <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
-    <template v-if="data.type === 'input'">
-      <el-input-number
-        v-if="data.valueType === 'number'"
-        v-model="(data.value as any)"
-        v-bind="getInputProps()"
-        controls-position="right"
-        class="the-curd-field"
-      />
-      <el-input
-        v-else
-        v-model="data.value"
-        v-bind="getInputProps()"
-        class="the-curd-field"
-      />
-    </template>
+    <el-input
+      v-if="data.type === 'input'"
+      :model-value="data.value"
+      v-bind="getInputProps()"
+      class="the-curd-field"
+      @input="onInput"
+      @blur="onBlur"
+    />
     <el-input
       v-if="data.type === 'textarea'"
       v-model="data.value"
@@ -26,32 +19,20 @@
       class="the-curd-field"
     />
     <template v-if="data.type === 'input-between'">
-      <el-input-number
-        v-if="data.valueType === 'array<number>'"
-        v-model="(data.value[0] as any)"
-        v-bind="getInputProps(0)"
-        controls-position="right"
-        class="f1"
-      />
       <el-input
-        v-else
-        v-model="data.value[0]"
+        :model-value="data.value[0]"
         v-bind="getInputProps(0)"
         class="f1"
+        @input="e => onInputBetween(e, 0)"
+        @blur="onBlurBetween(0)"
       />
       <el-text style="padding: 0 6px;">{{ data.separator }}</el-text>
-      <el-input-number
-        v-if="data.valueType === 'array<number>'"
-        v-model="(data.value[1] as any)"
-        v-bind="getInputProps(1)"
-        controls-position="right"
-        class="f1"
-      />
       <el-input
-        v-else
-        v-model="data.value[1]"
+        :model-value="data.value[1]"
         v-bind="getInputProps(1)"
         class="f1"
+        @input="e => onInputBetween(e, 1)"
+        @blur="onBlurBetween(1)"
       />
     </template>
     <el-select
@@ -145,7 +126,7 @@ export default {
 import { computed, type PropType } from "vue";
 import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
 import type { CurdType } from "./types";
-import { isType } from "@/utils";
+import { inputOnlyNumber, isType } from "@/utils";
 
 const props = defineProps({
   fieldData: {
@@ -192,6 +173,49 @@ function getInputProps(index?: number) {
     readonly: props.readonly,
     clearable: true,
     placeholder: isType(index, "number") ? tips[index] : tips
+  }
+}
+
+function onInput(value: string) {
+  const field = props.fieldData;
+  if (field.valueType === "number") {
+    field.value = inputOnlyNumber(value, true, true);
+  } else {
+    field.value = value;
+  }
+}
+
+function onInputBetween(value: string, index: number) {
+  const between = props.fieldData as CurdType.InputBetween;
+  if (between.valueType === "array<number>") {
+    between.value[index] = inputOnlyNumber(value, true, true);
+  } else {
+    between.value[index] = value;
+  }
+}
+
+const numberSymbol: Array<any> = ["-", ".", "", null, undefined];
+
+function onBlur() {
+  const field = props.fieldData;
+  if (field.valueType === "number") {
+    if (numberSymbol.includes(field.value)) {
+      field.value = "";
+    } else {
+      field.value = Number(field.value);
+    }
+  }
+}
+
+function onBlurBetween(index: number) {
+  const between = props.fieldData as CurdType.InputBetween;
+  if (between.valueType === "array<number>") {
+    const val = between.value[index];
+    if (numberSymbol.includes(val)) {
+      between.value[index] = "";
+    } else {
+      between.value[index] = Number(val);
+    }
   }
 }
 </script>

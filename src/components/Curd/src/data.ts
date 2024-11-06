@@ -1,6 +1,6 @@
 import { inject, onUnmounted } from "vue";
 import type { CurdType } from "./types";
-import { formatDate, isType } from "@/utils";
+import { checkType, deepClone, formatDate, isType } from "@/utils";
 // ----------------------- 数据相关 -----------------------
 
 export const provideKey = "the-curd-state";
@@ -50,7 +50,11 @@ export function setFieldValue(field: CurdType.Field) {
       field.value = field.valueType === "array" ? [] : "";
     }
   } else {
-    field.value = field.defaultValue;
+    if (["object", "array"].includes(checkType(field.defaultValue))) {
+      field.value = deepClone(field.defaultValue);
+    } else {
+      field.value = field.defaultValue;
+    }
   }
 }
 
@@ -288,15 +292,16 @@ export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes
   }
   const empty: Array<any> = [null, undefined, ""];
   if (field.type === "input-between") {
-    const values = field.value;
-    if (empty.includes(values[0])) {
+    const inputList = field.value;
+    if (empty.includes(inputList[0])) {
       res.result = field.placeholder[0];
       return res;
     }
-    if (empty.includes(values[1])) {
+    if (empty.includes(inputList[1])) {
       res.result = field.placeholder[1];
       return res;
     }
+    res.value = JSON.parse(JSON.stringify(inputList));
   }
   const single: Array<CurdType.Field["type"]> = ["input", "textarea", "radio", "select"];
   if (single.includes(field.type) && empty.includes(field.value)) {
@@ -304,9 +309,13 @@ export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes
     return res;
   }
   const multiple: Array<CurdType.Field["type"]> = ["checkbox", "select-multiple"];
-  if (multiple.includes(field.type) && !(field.value as Array<any>).length) {
-    res.result = field.placeholder as string;
-    return res; 
+  if (multiple.includes(field.type)) {
+    const list = field.value as Array<any>;
+    if (!list.length) {
+      res.result = field.placeholder as string;
+      return res;
+    }
+    res.value = JSON.parse(JSON.stringify(list));
   }
   return res;
 }

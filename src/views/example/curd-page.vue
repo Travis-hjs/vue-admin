@@ -28,6 +28,7 @@ const data = reactive<CurdType.Config>({
         label: "游戏价格",
         placeholder: ["最小价格", "最大价格"],
         valueType: "array<number>",
+        valueWidth: 300
       },
       {
         ...getFieldData("select", "gameType"),
@@ -35,7 +36,7 @@ const data = reactive<CurdType.Config>({
         placeholder: "请选择游戏类型",
         options: option.gameType,
         required: true,
-        defaultValue: 1
+        defaultValue: 1,
       },
       {
         ...getFieldData("date", "gameDate"),
@@ -142,7 +143,7 @@ const data = reactive<CurdType.Config>({
           label: "游戏价格",
           required: true,
           placeholder: "请输入游戏价格",
-          valueType: "number"
+          valueType: "number",
         },
         {
           ...getFieldData("date", "gameDate"),

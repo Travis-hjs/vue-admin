@@ -366,7 +366,7 @@ async function getData() {
   const res = await props.action.getTableData(searchInfo, page);
   state.loading = false;
   if (res.code === 1) {
-    console.log("getData >>", res);
+    // console.log("getData >>", res);
     tableState.pageInfo.total = res.data.total;
     tableState.data = res.data.list || [];
   }
