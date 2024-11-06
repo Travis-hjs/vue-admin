@@ -213,37 +213,37 @@ watch(
     const form: typeof state.form = {};
     const rules: typeof state.rules = {};
     const blurs = ["input", "input-between", "textarea"];
-    fields &&
-      fields.forEach(field => {
-        // TODO: 这里赋值什么都不重要，因为校验规则和组件绑定的数据不是这个对象，只是表单组件需要绑定而已
-        form[field.key] = field.value;
-        if (field.required) {
-          // TODO: 验证数据的操作才是关键
-          rules[field.key] = [
-            {
-              required: true,
-              validator(_: any, val: any, callback: (err?: Error) => void) {
-                // console.log("validator >>", val);
-                if (field.type === "input-between" && !field.value[0] && !field.value[1]) {
-                  callback(new Error("请输入两个范围字段"));
-                  return;
-                }
-                if (field.valueType === "array" && !(field.value as Array<string>).length) {
-                  callback(new Error((field.placeholder as string) || "请选择"));
-                  return;
-                }
-                if (field.valueType !== "boolean" && [undefined, null, ""].includes(field.value as string)) {
-                  const tips = blurs.includes(field.type) ? "请输入内容" : "请选择";
-                  callback(new Error((field.placeholder as string) || tips));
-                  return;
-                }
-                callback();
-              },
-              trigger: blurs.includes(field.type) ? "blur" : "change"
-            }
-          ];
-        }
-      });
+    fields && fields.forEach(field => {
+      // TODO: 这里赋值什么都不重要，因为校验规则和组件绑定的数据不是这个对象，只是表单组件需要绑定而已
+      form[field.key] = field.value;
+      if (field.required) {
+        // TODO: 验证数据的操作才是关键
+        rules[field.key] = [
+          {
+            required: true,
+            validator(_: any, val: any, callback: (err?: Error) => void) {
+              const empty: Array<any> = [undefined, null, ""];
+              // console.log("validator >>", val);
+              if (field.type === "input-between" && !field.value[0] && !field.value[1]) {
+                callback(new Error("请输入两个范围字段"));
+                return;
+              }
+              if (field.valueType === "array" && !(field.value as Array<string>).length) {
+                callback(new Error((field.placeholder as string) || "请选择"));
+                return;
+              }
+              if (field.valueType !== "boolean" && empty.includes(field.value)) {
+                const tips = blurs.includes(field.type) ? "请输入内容" : "请选择";
+                callback(new Error((field.placeholder as string) || tips));
+                return;
+              }
+              callback();
+            },
+            trigger: blurs.includes(field.type) ? "blur" : "change"
+          }
+        ];
+      }
+    });
     state.form = form;
     state.rules = rules;
     setTimeout(clear);
