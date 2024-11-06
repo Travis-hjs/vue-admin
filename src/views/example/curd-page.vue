@@ -191,7 +191,7 @@ const data = reactive<CurdType.Config>({
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {
-    console.log("getTableData >>", searchInfo, pageInfo);
+    console.log("searchInfo >>", searchInfo);
     return getTableList({...searchInfo, ...pageInfo});
   },
   created(getData) {

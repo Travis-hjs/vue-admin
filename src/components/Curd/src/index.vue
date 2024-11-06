@@ -341,6 +341,7 @@ async function getData() {
     if (res.result === true) {
       searchInfo[field.key] = res.value;
     }
+    // TODO: 看情况可以使用这种方式，将所有的值都往外传，不管是否通过检验的值
     // searchInfo[field.key] = res.value;
   }
   // 处理排序字段
@@ -362,6 +363,7 @@ async function getData() {
     searchInfo.desc = descList.toString();
   }
   const page = JSON.parse(JSON.stringify(tableState.pageInfo));
+  // 最后请求列表并把参数传入到外部声明方法中
   state.loading = true;
   const res = await props.action.getTableData(searchInfo, page);
   state.loading = false;

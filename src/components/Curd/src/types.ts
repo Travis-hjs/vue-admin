@@ -57,10 +57,7 @@ export namespace CurdType {
      * - 当`type: "cascader"`多选的时候为二唯数据，在提交时可以拍平+去重处理，最后再发送请求
      */
     defaultValue: T;
-    /**
-     * 是否为必填项
-     * - 当配置表单的时候的时候需要
-     */
+    /** 是否为必填项 */
     required?: boolean;
     /**
      * 动态表单项的条件显示逻辑函数，返回`true`则展示对应项
@@ -311,7 +308,7 @@ export namespace CurdType {
     getTableData(searchInfo: BaseObj<any>, pageInfo: PageInfo): Promise<Api.Result<Api.List<any>>>;
     /**
      * 组件创建完成回调
-     * - 可以在该函数声内部调用`getTableData()`从而一开始就获取数据
+     * - 可以在该函数声内部调用`getData()`从而一开始就获取数据
      * @param getData 内部获取数据的函数，会触发`getTableData`
      */
     created?(getData: () => Promise<void>): void;
