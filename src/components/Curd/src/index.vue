@@ -107,8 +107,9 @@ import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, setFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
-import { copyText, formatDate, isType } from "@/utils";
+import { copyText, formatDate, isType, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
+import request from "@/utils/request";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */
@@ -441,6 +442,8 @@ exportPropToWindow({
   copyText,
   messageBox,
   message,
+  jsonToPath,
+  request,
 });
 
 onMounted(function() {
