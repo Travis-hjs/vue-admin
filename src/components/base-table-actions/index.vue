@@ -39,7 +39,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { isType } from "@/utils";
+import { checkType, isType } from "@/utils";
 
 const props = defineProps({
   /** 最大限制几个按钮出现，超过则用【更多】代替 */
@@ -70,11 +70,11 @@ const props = defineProps({
 });
 
 const useList = computed(() => {
+  const types = ["boolean", "function", "string"];
+
   const btnList = props.actions.filter(item => {
-    if (isType(item!.show, "function")) {
-      return item.show(props.row);
-    } else if (isType(item!.show, "boolean")) {
-      return item.show;
+    if (types.includes(checkType(item.show))) {
+      return getBoolean(item, "show");
     } else {
       return true;
     }
@@ -88,6 +88,11 @@ const useList = computed(() => {
   }
 })
 
+// function getString(item: BaseTableAction, key: "text" | "icon") {
+//   const value = item[key];
+//   if (!value) return "-";
+//   return isType(value, "function") ? value(props.row) : value;
+// }
 function getString(item: BaseTableAction, key: "text" | "icon") {
   // console.log(item)
   const value = item[key];
@@ -108,10 +113,27 @@ function getString(item: BaseTableAction, key: "text" | "icon") {
   return value;
 }
 
-function getBoolean(item: BaseTableAction, key: "loading" | "disabled") {
+// function getBoolean(item: BaseTableAction, key: "loading" | "disabled" | "show") {
+//   const value = item[key];
+//   if (!value) return false;
+//   return isType(value, "function") ? value(props.row) : value;
+// }
+function getBoolean(item: BaseTableAction, key: "loading" | "disabled" | "show") {
   const value = item[key];
   if (!value) return false;
-  return isType(value, "function") ? value(props.row) : value;
+  if (isType(value, "function")) {
+    return value(props.row);
+  } else if (isType(value, "string") && value.includes("return")) {
+    let val = false;
+    try {
+      const fn = new Function("row", value);
+      val = fn(props.row);
+    }  catch (error) {
+      console.warn(`解析 ${key} 字段代码错误 >>`, error);
+    }
+    return val;
+  }
+  return value as boolean;
 }
 
 function onBtnClick(item: BaseTableAction) {

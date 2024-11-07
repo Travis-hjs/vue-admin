@@ -80,26 +80,32 @@ interface BaseTableColumn <T = any> {
 /** 表格操作列列表对象 */
 interface BaseTableAction<T = BaseObj> {
   /** 按钮文字 */
-  text: string | ((row: T) => string)
+  text: string | ((row: T) => string);
   /** 
    * 按钮图标`class`
    * - [el-element icon地址](https://element.eleme.cn/#/zh-CN/component/icon)
    */
-  icon?: string | ((row: T) => string)
-  /** 是否禁用 */
-  disabled?: boolean | ((row: T) => boolean)
+  icon?: string | ((row: T) => string);
+  /**
+   * 是否禁用
+   * - 可以在`<Curd />`组件中配置运行代码，这个时候是`string`类型，并解析运行对应的代码片段
+   */
+  disabled?: boolean | ((row: T) => boolean) | string;
   /** 是否加载状态 */
-  loading?: boolean | ((row: T) => boolean)
-  /** 显示按钮的条件，不传则显示，和`v-if`一样的作用 */
-  show?: boolean | ((row: T) => boolean)
+  loading?: boolean | ((row: T) => boolean);
+  /**
+   * 显示按钮的条件，不传则显示，和`v-if`一样的作用
+   * - 可以在`<Curd />`组件中配置运行代码，这个时候是`string`类型，并解析运行对应的代码片段
+   */
+  show?: boolean | ((row: T) => boolean) | string;
   /**
    * 按钮类型，默认`"primary"`
    * - [element-plus button](http://element-plus.org/zh-CN/component/button.html)
    * - 当按钮类型处于【更多】下拉选项中则无效
    */
-  type?: "primary" | "success" | "info" | "warning" | "danger"
+  type?: "primary" | "success" | "info" | "warning" | "danger";
   /** 点击事件 */
-  click?: (row: T, index?: number) => void
+  click?: (row: T, index?: number) => void;
 }
 
 /** 分页器 change 事件参数 */
