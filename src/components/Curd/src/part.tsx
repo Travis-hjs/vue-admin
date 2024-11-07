@@ -94,6 +94,33 @@ export function TableImage(props: TableImageProps) {
   ) : null;
 }
 
+interface LabelTipsProps {
+  label: string;
+  tips: string;
+}
+
+/**
+ * 表单`label`文字 + 提示文字组件
+ * @param props
+ */
+export function LabelTips(props: LabelTipsProps) {
+  return (
+    <>
+      {props.label}
+      <el-tooltip
+        effect="dark"
+        content={props.tips}
+        raw-content
+        placement="top-start"
+      >
+        <el-button type="info" link style="height: 32px;">
+          <i class="el-icon-question"></i>
+        </el-button>
+      </el-tooltip>
+    </>
+  );
+}
+
 interface TableOptionProps {
   /** 是否编辑模式 */
   editMode?: boolean;
