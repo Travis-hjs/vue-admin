@@ -100,6 +100,11 @@ const props = defineProps({
     type: Array as PropType<Array<BaseTableAction<T>>>,
     default: () => []
   },
+  /** `<base-table-actions :max="actionMax">` 组件的 max 属性 */
+  actionMax: {
+    type: Number,
+    default: undefined
+  },
   maxHeight: {
     type: Number,
     default: undefined
