@@ -88,6 +88,7 @@ import { watch } from "vue";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
 import Field from "./Field.vue";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   /** 表单配置 */
@@ -196,13 +197,14 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   update(newList) {
     state.config.fields = newList;
   },
-  findLevel: 10
+  findLevel: 10,
+  clone: true
 });
 
 watch(() => props.config, function (config) {
   // console.log("config >>", config);
   if (config) {
-    state.config = JSON.parse(JSON.stringify(config));
+    state.config = deepClone(config);
   }
 }, { immediate: true });
 
