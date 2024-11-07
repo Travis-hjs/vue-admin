@@ -156,7 +156,7 @@
                 content="设为数字类型之后，将会在保存时校验选项数据"
                 placement="top"
               >
-                <i class="el-icon--right el-icon-question" style="font-size: 16px; color: #999; cursor: pointer; margin-left: 14px;" />
+                <i class="el-icon-question the-tips-icon mgl-10" />
               </el-tooltip>
             </el-form-item>
             <el-form-item v-if="state.formData.type !== 'date'" label="组件默认值" prop="defaultValue">
@@ -254,17 +254,7 @@
               </el-form-item>
               <el-form-item prop="format">
                 <template #label>
-                  格式化规则
-                  <el-tooltip
-                    effect="dark"
-                    :content="formatTips"
-                    raw-content
-                    placement="top-start"
-                  >
-                    <el-button type="info" link style="height: 32px;">
-                      <i class="el-icon-question"></i>
-                    </el-button>
-                  </el-tooltip>
+                  <LabelTips label="格式化规则" :tips="formatTips" />
                 </template>
                 <el-input
                   v-model="state.formData.format"
@@ -298,7 +288,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
-import { fieldTitleMap, getFieldData, useProvideState, dateTypeOptions, shortcutMap } from "./data";
+import { fieldTitleMap, getFieldData, useProvideState, dateTypeOptions, shortcutMap, getBoldLabel } from "./data";
 import Example from "./Example.vue";
 import Field from "./Field.vue";
 import type { FormInstance } from "element-plus";
@@ -306,6 +296,7 @@ import { checkType, isType } from "@/utils";
 import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
+import { LabelTips } from "./part";
 
 const props = defineProps({
   show: {
@@ -341,9 +332,7 @@ const arrayDateFields = ["daterange", "datetimerange"];
 /** 需要校验为数字类型的组件 */
 const checkNumberFields = allowNumberFields.concat(arrayFields);
 
-const formatTips = `
-<p>参考 src/utils/index.ts 中的<b style="color: var(--yellow)"> formatDate </b>函数</p>
-`
+const formatTips = `<p>参考 src/utils/index.ts 中的${getBoldLabel("formatDate")}函数</p>`;
 
 /** 父组件注入的对象 */
 const provideState = useProvideState();

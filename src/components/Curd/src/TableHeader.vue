@@ -3,7 +3,7 @@
   <div v-else class="f-vertical w-full">
     <span>{{ props.column.label }}</span>
     <el-tooltip v-if="props.column.iconTips" effect="dark" :content="props.column.iconTips" placement="top">
-      <i class="el-icon--right el-icon-question" style="font-size: 16px; color: #666; cursor: pointer;" />
+      <i class="el-icon--right el-icon-question the-tips-icon" />
     </el-tooltip>
     <div v-if="props.column.sort" class="f1 f-right">
       <el-button link @click="onSwitch">

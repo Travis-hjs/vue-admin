@@ -2,7 +2,7 @@
   <base-dialog
     v-model="state.show"
     title="配置操作列按钮功能"
-    width="860px"
+    width="880px"
     @close="onClose"
   >
     <div class="flex">
@@ -15,7 +15,7 @@
           :model="form.column"
           :rules="columnRules"
           labelPosition="right"
-          labelWidth="120px"
+          labelWidth="128px"
         >
           <el-form-item label="操作列宽度" prop="width">
             <el-input-number
@@ -43,27 +43,47 @@
           :model="form.btn"
           :rules="btnRules"
           labelPosition="right"
-          labelWidth="120px"
+          labelWidth="128px"
         >
-          <el-form-item label="按钮文字" prop="text">
+          <el-form-item prop="text">
+            <template #label>
+              <LabelTips label="按钮文字" :tips="textTips" />
+            </template>
             <el-input
               v-model="(form.btn.text as string)"
               type="textarea"
               :placeholder="btnRules.text.message"
             />
-            <span class="the-tag blue mgt-10" style="line-height: 18px">
-              可以输入代码片段，以 return 关键字为函数标记，函数传参和下面一致
-            </span>
           </el-form-item>
-          <el-form-item label="按钮功能代码" prop="jsCode">
+          <el-form-item prop="jsCode">
+            <template #label>
+              <LabelTips label="按钮功能代码" :tips="fnTips" />
+            </template>
             <el-input
               v-model="form.btn.jsCode"
               type="textarea"
               placeholder="请输入代码片段"
             />
-            <span class="the-tag blue mgt-10" style="line-height: 18px">
-              函数代码片段，点击的时候运行：第一个参数 row 是表格对象值，第二个参数 index 是当前索引
-            </span>
+          </el-form-item>
+          <el-form-item prop="show">
+            <template #label>
+              <LabelTips label="按钮显示条件" :tips="booleanTips" />
+            </template>
+            <el-input
+              v-model="(form.btn.show as string)"
+              type="textarea"
+              placeholder="请输入条件代码，为空则默认显示"
+            />
+          </el-form-item>
+          <el-form-item prop="disabled">
+            <template #label>
+              <LabelTips label="按钮禁用条件" :tips="booleanTips" />
+            </template>
+            <el-input
+              v-model="(form.btn.disabled as string)"
+              type="textarea"
+              placeholder="请输入条件代码，为空则默认不禁用"
+            />
           </el-form-item>
           <el-form-item label="按钮图标" prop="icon">
             <div class="f-vertical w-full">
@@ -89,11 +109,11 @@
           </el-form-item>
           <el-form-item>
             <div class="f-right w-full">
-              <el-button v-if="state.index > -1" type="primary" @click="onConfirm">
+              <el-button v-if="state.index > -1" type="primary" plain @click="onConfirm">
                 <i class="el-icon--left el-icon-finished"></i>
                 确认
               </el-button>
-              <el-button v-else type="primary" @click="onAdd">
+              <el-button v-else type="primary" plain @click="onAdd">
                 <i class="el-icon--left el-icon-plus"></i>
                 新增按钮
               </el-button>
@@ -154,9 +174,9 @@ export default {
 import { reactive, ref, watch, type PropType } from "vue";
 import { type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { actionEditKey, getActionData } from "./data";
+import { actionEditKey, getActionData, getBoldLabel } from "./data";
 import { useListDrag } from "@/hooks/common";
-import { FooterBtn } from "./part";
+import { FooterBtn, LabelTips } from "./part";
 
 const props = defineProps({
   show: {
@@ -329,8 +349,36 @@ function canDraggable(action: CurdType.Table.Action) {
 function getBtnText(action: CurdType.Table.Action) {
   const text = action.text as string;
   if (text.includes("return")) {
-    return "自定义文字";
+    let str = "文字配置有误";
+    try {
+      const fn = new Function("row", text);
+      str = fn({});
+    } catch (error) {
+      console.warn("解析按钮文字代码错误 >>", error);
+    }
+    return str;
   }
   return text;
 }
+
+const textTips = `
+<p>可以输入代码片段，</p>
+<p>以${getBoldLabel("return")}关键字为函数标记，</p>
+<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
+<p>例如：${getBoldLabel('return row.status === 1 ? "下架" : "上架"')}</p>
+`;
+
+const fnTips = `
+<p>函数代码片段，点击的时候运行</p>
+<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
+<p>第二个参数${getBoldLabel("index")}是当前索引</p>
+<p>例如：${getBoldLabel("console.log(row);")}</p>
+`;
+
+const booleanTips = `
+<p>可以输入代码片段，</p>
+<p>以${getBoldLabel("return")}关键字为函数标记，</p>
+<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
+<p>例如：${getBoldLabel("return row.status === 1;")}返回布尔值进行判断</p>
+`;
 </script>
