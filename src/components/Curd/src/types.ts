@@ -243,6 +243,11 @@ export namespace CurdType {
 
     /** 表格相关配置 */
     export interface Config<T = any> {
+      /**
+       * 最大限制几个按钮出现，超过则用【更多】下拉菜单代替展示
+       * - 不传则默认`3`个
+       */
+      actionMax?: number;
       /** 表格操作包含项 */
       actions: Array<Action<T>>;
       /** 表格列 */

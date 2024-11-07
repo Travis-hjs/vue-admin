@@ -2,78 +2,105 @@
   <base-dialog
     v-model="state.show"
     title="配置操作列按钮功能"
-    width="840px"
+    width="860px"
     @close="onClose"
   >
     <div class="flex">
-      <el-form
-        ref="formRef"
-        :model="state.form"
-        :rules="formRules"
-        labelPosition="right"
-        labelWidth="120px"
-        class="f1"
-      >
-      <el-form-item label="操作列宽度">
-        <el-input-number
-          v-model="state.width"
-          class="w-full"
-          controls-position="right"
-          placeholder="请输入表格列宽度，例如：160"
-        />
-      </el-form-item>
-      <el-form-item label="按钮文字" prop="text">
-        <el-input
-          v-model="(state.form.text as string)"
-          :placeholder="formRules.text.message"
-          clearable
-        />
-      </el-form-item>
-      <el-form-item label="按钮功能代码" prop="jsCode">
-        <el-input
-          v-model="state.form.jsCode"
-          type="textarea"
-          placeholder="请输入代码片段"
-        />
-        <span class="the-tag blue mgt-10" style="line-height: 18px">
-          函数代码片段，点击的时候运行：第一个参数 row 是表格对象值，第二个参数 index 是当前索引
-        </span>
-      </el-form-item>
-      <el-form-item label="按钮图标" prop="icon">
-        <div class="f-vertical w-full">
-          <el-input
-            v-model="(state.form.icon as string)"
-            :placeholder="formRules.icon.message"
-            clearable
-          />
-          <el-text type="primary" style="width: 110px; text-align: right;">
-            <a :href="iconLink" target="_blank">去官网复制</a>
-          </el-text>
-        </div>
-      </el-form-item>
-      <el-form-item label="按钮类型" prop="type">
-        <el-select v-model="state.form.type" :placeholder="formRules.type.message">
-          <el-option
-            v-for="item in typeOptions"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <div class="f-right w-full">
-          <el-button v-if="state.index > -1" type="primary" @click="onConfirm">
-            <i class="el-icon--left el-icon-finished"></i>
-            确认
-          </el-button>
-          <el-button v-else type="primary" @click="onAdd">
-            <i class="el-icon--left el-icon-plus"></i>
-            新增按钮
-          </el-button>
-        </div>
-      </el-form-item>
-      </el-form>
+      <section class="f1">
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">操作列配置</el-text>
+        </el-divider>
+        <el-form
+          ref="formColumn"
+          :model="form.column"
+          :rules="columnRules"
+          labelPosition="right"
+          labelWidth="120px"
+        >
+          <el-form-item label="操作列宽度" prop="width">
+            <el-input-number
+              v-model="form.column.width"
+              class="w-full"
+              controls-position="right"
+              :placeholder="columnRules.width.message"
+            />
+          </el-form-item>
+          <el-form-item label="操作按钮限制" prop="max">
+            <el-input-number
+              v-model="form.column.max"
+              class="w-full"
+              controls-position="right"
+              :min="2"
+              :placeholder="columnRules.max.message"
+            />
+          </el-form-item>
+        </el-form>
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">操作按钮配置</el-text>
+        </el-divider>
+        <el-form
+          ref="formBtn"
+          :model="form.btn"
+          :rules="btnRules"
+          labelPosition="right"
+          labelWidth="120px"
+        >
+          <el-form-item label="按钮文字" prop="text">
+            <el-input
+              v-model="(form.btn.text as string)"
+              type="textarea"
+              :placeholder="btnRules.text.message"
+            />
+            <span class="the-tag blue mgt-10" style="line-height: 18px">
+              可以输入代码片段，以 return 关键字为函数标记，函数传参和下面一致
+            </span>
+          </el-form-item>
+          <el-form-item label="按钮功能代码" prop="jsCode">
+            <el-input
+              v-model="form.btn.jsCode"
+              type="textarea"
+              placeholder="请输入代码片段"
+            />
+            <span class="the-tag blue mgt-10" style="line-height: 18px">
+              函数代码片段，点击的时候运行：第一个参数 row 是表格对象值，第二个参数 index 是当前索引
+            </span>
+          </el-form-item>
+          <el-form-item label="按钮图标" prop="icon">
+            <div class="f-vertical w-full">
+              <el-input
+                v-model="(form.btn.icon as string)"
+                :placeholder="btnRules.icon.message"
+                clearable
+              />
+              <el-text type="primary" style="width: 110px; text-align: right;">
+                <a :href="iconLink" target="_blank">去官网复制</a>
+              </el-text>
+            </div>
+          </el-form-item>
+          <el-form-item label="按钮类型" prop="type">
+            <el-select v-model="form.btn.type" :placeholder="btnRules.type.message">
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.value"
+                :value="item.value"
+                :label="item.label"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <div class="f-right w-full">
+              <el-button v-if="state.index > -1" type="primary" @click="onConfirm">
+                <i class="el-icon--left el-icon-finished"></i>
+                确认
+              </el-button>
+              <el-button v-else type="primary" @click="onAdd">
+                <i class="el-icon--left el-icon-plus"></i>
+                新增按钮
+              </el-button>
+            </div>
+          </el-form-item>
+        </el-form>
+      </section>
       <transition-group name="the-group" tag="div" class="the-curd-option-list f1">
         <div
           v-for="(item, itemIndex) in state.list"
@@ -88,10 +115,10 @@
           <i v-if="state.index === -1 && item.key !== actionEditKey" class="el-icon--left el-icon-rank"></i>
           <el-button :type="item.type" link>
             <i v-if="item.icon" :class="['el-icon--left', item.icon]"></i>
-            {{ item.text }}
+            {{ getBtnText(item) }}
           </el-button>
           <div class="f1"></div>
-          <el-text v-if="item.key === actionEditKey" type="info">编辑按钮不可删除、拖拽等操作，且处于首位</el-text>
+          <el-text v-if="item.key === actionEditKey" type="info" size="small">编辑按钮不可删除、拖拽等操作，且处于首位</el-text>
           <template v-else>
             <el-popconfirm
               width="186px"
@@ -144,26 +171,52 @@ const props = defineProps({
   /** 列宽 */
   columnWidth: {
     type: Number
+  },
+  /** 最大限制几个按钮出现，超过则用【更多】下拉菜单代替展示 */
+  actionMax: {
+    type: Number
   }
 });
 
 const emit = defineEmits<{
   (event: "update:show", show: boolean): void;
-  (event: "submit", list: Array<CurdType.Table.Action>, width?: number): void;
+  (event: "submit", list: Array<CurdType.Table.Action>, width?: number, max?: number): void;
 }>();
 
-const formRef = ref<FormInstance>();
+const formBtn = ref<FormInstance>();
+
+const formColumn = ref<FormInstance>();
+
 const state = reactive({
   show: false,
   list: [] as typeof props.list,
-  form: getActionData(),
-  width: undefined as (number | undefined),
   index: -1,
   /** 是否有编辑按钮在当前列表中 */
-  hasEdit: false
+  hasEdit: false,
 });
 
-const formRules = {
+const form = reactive({
+  btn: getActionData(),
+  column: {
+    width: 160,
+    max: 3
+  }
+});
+
+const columnRules = {
+  width: {
+    required: true,
+    message: "请输入表格列宽度，例如：160",
+    trigger: "blur"
+  },
+  max: {
+    required: false,
+    message: "请输入数量，超出用“更多”下拉展示",
+    trigger: "blur"
+  }
+}
+
+const btnRules = {
   text: {
     required: true,
     message: "请输入按钮文字",
@@ -184,38 +237,42 @@ const formRules = {
     message: "请选择按钮类型",
     trigger: "change"
   }
-};
+}
 
 function onClose() {
   emit("update:show", false);
 }
 
 function onSubmit() {
-  onClose();
-  emit("submit", JSON.parse(JSON.stringify(state.list)), state.width);
+  formColumn.value!.validate(val => {
+    if (!val) return;
+    onClose();
+    const { width, max } = form.column;
+    emit("submit", JSON.parse(JSON.stringify(state.list)), width, max);
+  });
 }
 
 function onAdd() {
-  formRef.value?.validate(val => {
+  formBtn.value!.validate(val => {
     if (!val) return;
-    const data = JSON.parse(JSON.stringify(state.form));
+    const data = JSON.parse(JSON.stringify(form.btn));
     state.list.push(data);
-    state.form = getActionData();
+    form.btn = getActionData();
   });
 }
 
 function onConfirm() {
-  formRef.value?.validate(val => {
+  formBtn.value!.validate(val => {
     if (!val) return;
-    state.list[state.index] = state.form;
+    state.list[state.index] = form.btn;
     state.index = -1;
-    state.form = getActionData();
+    form.btn = getActionData();
   });
 }
 
 function onEdit(index: number) {
   const data = state.list[index];
-  state.form = JSON.parse(JSON.stringify(data));
+  form.btn = JSON.parse(JSON.stringify(data));
   state.index = index;
 }
 
@@ -229,11 +286,17 @@ watch(
     state.show = show;
     if (!show) return;
     state.list = JSON.parse(JSON.stringify(props.list));
-    state.form = getActionData();
-    state.index = -1;
     state.hasEdit = state.list.some(item => item.key === actionEditKey);
-    state.width = props.columnWidth;
-    setTimeout(() => formRef.value?.clearValidate());
+    state.index = -1;
+    form.btn = getActionData();
+    form.column = {
+      width: props.columnWidth as number,
+      max: props.actionMax as number
+    };
+    setTimeout(() => {
+      formBtn.value?.clearValidate();
+      formColumn.value?.clearValidate();
+    });
   },
   { immediate: true }
 );
@@ -261,5 +324,13 @@ function canDraggable(action: CurdType.Table.Action) {
     return true;
   }
   return undefined;
+}
+
+function getBtnText(action: CurdType.Table.Action) {
+  const text = action.text as string;
+  if (text.includes("return")) {
+    return "自定义文字";
+  }
+  return text;
 }
 </script>

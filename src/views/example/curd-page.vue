@@ -3,7 +3,14 @@
 </template>
 <script lang="ts" setup>
 import { getTableList } from "@/api/common";
-import { actionEditKey, actionProp, Curd, getColumnData, getFieldData, type CurdType } from "@/components/Curd";
+import {
+  actionEditKey,
+  actionProp,
+  Curd,
+  getColumnData,
+  getFieldData,
+  type CurdType
+} from "@/components/Curd";
 import { formatDate } from "@/utils";
 import { reactive } from "vue";
 
@@ -113,6 +120,7 @@ const data = reactive<CurdType.Config>({
       {
         key: "1",
         text: "上报游戏",
+        type: "primary",
         click(row, index) {
           console.log("上报游戏 >>", row, index);
         },

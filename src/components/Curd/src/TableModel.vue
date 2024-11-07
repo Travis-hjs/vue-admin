@@ -131,6 +131,7 @@
   <TableActionConfig
     v-model:show="configAction.show"
     :columnWidth="configAction.columnWidth"
+    :actionMax="configAction.actionMax"
     :list="props.config.actions"
     @submit="onConfigAction"
   />
@@ -310,12 +311,14 @@ function onConfigDele(val: string) {
 
 const configAction = reactive({
   show: false,
-  columnWidth: undefined as (number | undefined)
+  columnWidth: 0,
+  actionMax: 0
 });
 
 function openConfigAction() {
   configAction.show = true;
-  configAction.columnWidth = (actionColumn.value!.width as number);
+  configAction.columnWidth = actionColumn.value!.width as number;
+  configAction.actionMax = props.config.actionMax as number;
 }
 
 function onConfigAction(list: typeof props.config.actions, width?: number) {

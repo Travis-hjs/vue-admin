@@ -20,6 +20,7 @@
             :data="tableState.data"
             :columns="tableColumns"
             :actions="actionList"
+            :actionMax="props.data.table.actionMax"
             :loading="state.loading"
             :select-key="props.data.table.selectKey!"
           >
@@ -227,9 +228,11 @@ const actionList = computed(() => {
     const newAction = {
       ...item
     };
+    // 处理内部编辑功能
     if (newAction.key === actionEditKey) {
       newAction.click = openTableForm;
     }
+    // 处理外部配置点击事件
     if (newAction.jsCode) {
       newAction.click = function (row, index) {
         try {
