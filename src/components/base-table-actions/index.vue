@@ -5,12 +5,12 @@
       :type="btn.type || 'primary'"
       v-for="(btn, index) in useList.btn"
       :key="'btn-' + index"
-      :loading="useBoolean(btn, 'loading')"
-      :disabled="useBoolean(btn, 'disabled')"
+      :loading="getBoolean(btn, 'loading')"
+      :disabled="getBoolean(btn, 'disabled')"
       @click="onBtnClick(btn)"
     >
-      <i :class="['base-table-actions-icon', useString(btn, 'icon')]" v-if="btn.icon && !useBoolean(btn, 'loading')"></i>
-      {{ useString(btn, 'text') }}
+      <i :class="['base-table-actions-icon', getString(btn, 'icon')]" v-if="btn.icon && !getBoolean(btn, 'loading')"></i>
+      {{ getString(btn, 'text') }}
     </el-button>
     <el-dropdown v-if="useList.dropdown.length">
       <el-button text type="primary">更多<i class="el-icon-arrow-down el-icon--right"></i></el-button>
@@ -19,12 +19,12 @@
           <el-dropdown-item
             v-for="(drop, index) in useList.dropdown"
             :key="'drop-' + index"
-            :disabled="useBoolean(drop, 'disabled') || useBoolean(drop, 'loading')"
+            :disabled="getBoolean(drop, 'disabled') || getBoolean(drop, 'loading')"
             @click="onBtnClick(drop)"
           >
-            <i class="el-icon-loading" v-if="useBoolean(drop, 'loading')"></i>
-            <i :class="['base-table-actions-icon', useString(drop, 'icon')]" v-else-if="drop.icon && !useBoolean(drop, 'loading')"></i>
-            {{ useString(drop, 'text') }}
+            <i class="el-icon-loading" v-if="getBoolean(drop, 'loading')"></i>
+            <i :class="['base-table-actions-icon', getString(drop, 'icon')]" v-else-if="drop.icon && !getBoolean(drop, 'loading')"></i>
+            {{ getString(drop, 'text') }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -88,32 +88,43 @@ const useList = computed(() => {
   }
 })
 
-const useString = (item: BaseTableAction, key: "text"|"icon") => {
+function getString(item: BaseTableAction, key: "text" | "icon") {
   // console.log(item)
   const value = item[key];
   if (!value) return "-";
-  return isType(value, "function") ? value(props.row) : value;
+  if (isType(value, "function")) {
+    return value(props.row);
+  } else if (value.includes("return")) {
+    // 处理按钮文字操作
+    let str = "文字配置有误";
+    try {
+      const fn = new Function("row", value);
+      str = fn(props.row);
+    } catch (error) {
+      console.warn("解析按钮文字代码错误 >>", error);
+    }
+    return str;
+  }
+  return value;
 }
 
-const useBoolean = (item: BaseTableAction, key: "loading"|"disabled") => {
+function getBoolean(item: BaseTableAction, key: "loading" | "disabled") {
   const value = item[key];
   if (!value) return false;
   return isType(value, "function") ? value(props.row) : value;
 }
 
-const onBtnClick = (item: BaseTableAction) => {
+function onBtnClick(item: BaseTableAction) {
   item.click && item.click(props.row, props.index);
 }
 
-const onBoxClick = (e: MouseEvent) => {
+function onBoxClick(e: MouseEvent) {
   if (props.clickStop) {
     e.stopPropagation();
     e.preventDefault();
   }
 }
-
 </script>
-
 <style lang="scss">
 .base-table-actions {
   line-height: 1;
