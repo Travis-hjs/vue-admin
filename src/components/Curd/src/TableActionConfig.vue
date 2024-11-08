@@ -44,6 +44,8 @@
           :rules="btnRules"
           labelPosition="right"
           labelWidth="128px"
+          :class="{'the-filter-mask': !state.formEdit}"
+          data-tips="待新增或编辑操作"
         >
           <el-form-item prop="text">
             <template #label>
@@ -55,12 +57,12 @@
               :placeholder="btnRules.text.message"
             />
           </el-form-item>
-          <el-form-item prop="jsCode">
+          <el-form-item prop="click">
             <template #label>
               <LabelTips label="按钮功能代码" :tips="fnTips" />
             </template>
             <el-input
-              v-model="form.btn.jsCode"
+              v-model="(form.btn.click as string)"
               type="textarea"
               placeholder="请输入代码片段"
             />
@@ -109,13 +111,14 @@
           </el-form-item>
           <el-form-item>
             <div class="f-right w-full">
-              <el-button v-if="state.index > -1" type="primary" plain @click="onConfirm">
+              <el-button @click="onRestBtn()">取 消</el-button>
+              <el-button v-if="state.index > -1" type="primary" plain @click="onSubmitBtn('edit')">
                 <i class="el-icon--left el-icon-finished"></i>
-                确认
+                确认修改
               </el-button>
-              <el-button v-else type="primary" plain @click="onAdd">
+              <el-button v-else type="primary" plain @click="onSubmitBtn('add')">
                 <i class="el-icon--left el-icon-plus"></i>
-                新增按钮
+                确认新增
               </el-button>
             </div>
           </el-form-item>
@@ -156,11 +159,17 @@
             </el-button>
           </template>
         </div>
+        <div v-if="!state.formEdit" class="w-full f-right">
+          <el-button v-if="!state.formEdit" type="primary" plain @click="state.formEdit = true">
+            <i class="el-icon--left el-icon-plus"></i>
+            新增功能按钮
+          </el-button>
+        </div>
         <el-empty v-if="!state.list.length" key="empty" :image-size="120" description="请添加操作列功能按钮" />
       </transition-group>
     </div>
     <template #footer>
-      <FooterBtn @close="onClose" @submit="onSubmit" />
+      <FooterBtn :disabledSubmit="state.formEdit" @close="onClose" @submit="onSubmit" />
     </template>
   </base-dialog>
 </template>
@@ -209,10 +218,14 @@ const formColumn = ref<FormInstance>();
 
 const state = reactive({
   show: false,
+  /** 按钮列表 */
   list: [] as typeof props.list,
+  /** 当前编辑的索引 */
   index: -1,
   /** 是否有编辑按钮在当前列表中 */
   hasEdit: false,
+  /** 当前表单是否处于编辑状态 */
+  formEdit: false,
 });
 
 const form = reactive({
@@ -220,7 +233,7 @@ const form = reactive({
   column: {
     width: 160,
     max: 3
-  }
+  },
 });
 
 const columnRules = {
@@ -242,7 +255,7 @@ const btnRules = {
     message: "请输入按钮文字",
     trigger: "blur"
   },
-  jsCode: {
+  click: {
     required: true,
     message: "请输入按钮操作代码",
     trigger: "blur"
@@ -272,28 +285,31 @@ function onSubmit() {
   });
 }
 
-function onAdd() {
+function onSubmitBtn(type: "add" | "edit") {
   formBtn.value!.validate(val => {
     if (!val) return;
     const data = JSON.parse(JSON.stringify(form.btn));
-    state.list.push(data);
-    form.btn = getActionData();
+    if (type === "add") {
+      state.list.push(data);
+    } else {
+      state.list[state.index] = form.btn;
+    }
+    onRestBtn();
   });
 }
 
-function onConfirm() {
-  formBtn.value!.validate(val => {
-    if (!val) return;
-    state.list[state.index] = form.btn;
-    state.index = -1;
-    form.btn = getActionData();
-  });
+function onRestBtn() {
+  state.index = -1;
+  form.btn = getActionData();
+  state.formEdit = false;
+  setTimeout(() => formBtn.value?.clearValidate());
 }
 
 function onEdit(index: number) {
   const data = state.list[index];
   form.btn = JSON.parse(JSON.stringify(data));
   state.index = index;
+  state.formEdit = true;
 }
 
 function onDelete(index: number) {
@@ -372,7 +388,7 @@ const fnTips = `
 <p>函数代码片段，点击的时候运行</p>
 <p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
 <p>第二个参数${getBoldLabel("index")}是当前索引</p>
-<p>例如：${getBoldLabel("console.log(row);")}</p>
+<p>例如：${getBoldLabel("console.log(row, index);")}</p>
 `;
 
 const booleanTips = `

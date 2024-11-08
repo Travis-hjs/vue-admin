@@ -27,6 +27,7 @@ export function EditBtn(props: { onAction?: (type: EditBtnType) => void }) {
 
 interface FooterBtnProps {
   loading?: boolean;
+  disabledSubmit?: boolean;
   onClose?: () => void;
   onSubmit?: () => void;
 }
@@ -41,7 +42,7 @@ export function FooterBtn(props: FooterBtnProps) {
   return (
     <>
       <el-button onClick={close}>取 消</el-button>
-      <el-button type="primary" loading={props.loading} onClick={submit}>
+      <el-button type="primary" loading={props.loading} disabled={props.disabledSubmit} onClick={submit}>
         确 认
       </el-button>
     </>
