@@ -71,16 +71,15 @@
         </el-form-item>
       </template>
       <template v-if="state.form.cellType === 'js'">
-        <el-form-item label="js代码" prop="jsCode">
+        <el-form-item prop="jsCode">
+          <template #label>
+            <LabelTips label="js代码" :tips="codeTips" />
+          </template>
           <el-input
             v-model="state.form.jsCode"
             type="textarea"
             placeholder="请输入代码片段"
           />
-          <span class="the-tag blue mgt-10" style="line-height: 18px">
-            函数代码片段：第一个参数 cellValue 是表格值，第二个参数 row
-            是完整对象
-          </span>
         </el-form-item>
       </template>
       <el-form-item label="表格列排序操作" prop="sort">
@@ -123,10 +122,10 @@ export default {
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
 import type { CurdType } from "./types";
-import { getColumnData } from "./data";
+import { getBoldLabel, getColumnData } from "./data";
 import type { FormInstance } from "element-plus";
 import { deepClone } from "@/utils";
-import { FooterBtn } from "./part";
+import { FooterBtn, LabelTips } from "./part";
 
 const props = defineProps({
   show: {
@@ -204,6 +203,12 @@ const sortOptions: Array<CurdType.Table.ColumnOption<"sort">> = [
   { label: "默认升序", value: "asc" },
   { label: "默认降序", value: "desc" }
 ];
+
+const codeTips = `
+<p>函数代码片段：</p>
+<p>第一个参数${getBoldLabel("cellValue")}是表格值，</p>
+<p>第二个参数${getBoldLabel("row")}是完整对象</p>
+`;
 
 function onClose() {
   emit("update:show", false);
