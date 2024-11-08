@@ -35,24 +35,23 @@
         @blur="onBlurBetween(1)"
       />
     </template>
-    <el-select
-      v-if="data.type === 'select' || data.type === 'select-multiple'"
-      v-model="data.value"
-      :placeholder="data.placeholder"
-      :disabled="props.disabled"
-      :multiple="data.type === 'select-multiple'"
-      clearable
-      filterable
-      collapse-tags
-      class="the-curd-field"
-    >
-      <el-option
-        v-for="item in data.options"
-        :key="item[optionSetting.value]"
-        :value="item[optionSetting.value]"
-        :label="item[optionSetting.label]"
+    <template v-if="data.type === 'select' || data.type === 'select-multiple'">
+      <el-select-v2
+        v-if="data.options.length > 50"
+        v-model="data.value"
+        :options="data.options"
+        :props="data.optionSetting"
+        v-bind="getSelectProps(data)"
       />
-    </el-select>
+      <el-select v-else v-model="data.value" v-bind="getSelectProps(data)">
+        <el-option
+          v-for="item in data.options"
+          :key="item[optionSetting.value]"
+          :value="item[optionSetting.value]"
+          :label="item[optionSetting.label]"
+        />
+      </el-select>
+    </template>
     <template v-if="data.type === 'checkbox'">
       <el-checkbox-group v-model="data.value" :disabled="props.disabled">
         <el-checkbox
@@ -216,6 +215,18 @@ function onBlurBetween(index: number) {
     } else {
       between.value[index] = Number(val);
     }
+  }
+}
+
+function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
+  return {
+    placeholder: field.placeholder,
+    disabled: props.disabled,
+    multiple: field.type === "select-multiple",
+    clearable: true,
+    filterable: true,
+    collapseTags: true,
+    class: "field-item"
   }
 }
 </script>
