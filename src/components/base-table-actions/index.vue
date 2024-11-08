@@ -136,8 +136,23 @@ function getBoolean(item: BaseTableAction, key: "loading" | "disabled" | "show")
   return value as boolean;
 }
 
+// function onBtnClick(item: BaseTableAction) {
+//   item.click && item.click(props.row, props.index);
+// }
 function onBtnClick(item: BaseTableAction) {
-  item.click && item.click(props.row, props.index);
+  const fn = item.click;
+  if (!fn) return;
+  const { row, index } = props;
+  if (isType(fn, "function")) {
+    fn(row, index);
+  } else if (isType(fn, "string")) {
+    try {
+      const _click = new Function("row", "index", fn);
+      _click(row, index);
+    } catch (error) {
+      console.warn("解析按钮点击代码错误 >>", error);
+    }
+  }
 }
 
 function onBoxClick(e: MouseEvent) {

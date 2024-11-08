@@ -104,8 +104,11 @@ interface BaseTableAction<T = BaseObj> {
    * - 当按钮类型处于【更多】下拉选项中则无效
    */
   type?: "primary" | "success" | "info" | "warning" | "danger";
-  /** 点击事件 */
-  click?: (row: T, index?: number) => void;
+  /**
+   * 点击事件
+   * - 可以在`<Curd />`组件中配置运行代码，这个时候是`string`类型，并解析运行对应的代码片段
+   */
+  click?: ((row: T, index?: number) => void) | string;
 }
 
 /** 分页器 change 事件参数 */
