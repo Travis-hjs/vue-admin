@@ -232,17 +232,6 @@ const actionList = computed(() => {
     if (newAction.key === actionEditKey) {
       newAction.click = openTableForm;
     }
-    // 处理外部配置点击事件
-    if (newAction.jsCode) {
-      newAction.click = function (row, index) {
-        try {
-          const fn = new Function("row", "index", newAction.jsCode!);
-          fn(row, index);
-        } catch (error) {
-          console.warn("解析按钮点击代码错误 >>", error);
-        }
-      };
-    }
     return newAction;
   });
 });
