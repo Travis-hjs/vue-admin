@@ -263,6 +263,16 @@
                 />
               </el-form-item>
             </template>
+            <el-form-item v-if="provideState.editor.type === 'table'" prop="show">
+              <template #label>
+                <LabelTips label="表单显示逻辑" :tips="showTips" />
+              </template>
+              <el-input
+                v-model="(state.formData.show as string)"
+                type="textarea"
+                placeholder="请输入条件代码，为空则默认展示"
+              />
+            </el-form-item>
             <div class="f-right">
               <el-button @click="onClose()">关闭</el-button>
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">
@@ -333,6 +343,14 @@ const arrayDateFields = ["daterange", "datetimerange"];
 const checkNumberFields = allowNumberFields.concat(arrayFields);
 
 const formatTips = `<p>参考 src/utils/index.ts 中的${getBoldLabel("formatDate")}函数</p>`;
+
+const showTips = `
+<p>动态表单项的条件显示逻辑函数；</p>
+<p>返回${getBoldLabel("false")}则不展示对应项；</p>
+<p>函数有一个参数：${getBoldLabel("formData")}为当前表单的数据值；</p>
+<p>以${getBoldLabel("return")}为函数代码片段标记；</p>
+<p>例如：${getBoldLabel("return formData.type !== 2")}</p>
+`;
 
 /** 父组件注入的对象 */
 const provideState = useProvideState();

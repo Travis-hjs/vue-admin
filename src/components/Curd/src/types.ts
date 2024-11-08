@@ -61,11 +61,10 @@ export namespace CurdType {
     required?: boolean;
     /**
      * 动态表单项的条件显示逻辑函数，返回`true`则展示对应项
-     * - 同时也可以为配置的函数代码，以`return`为代码标记
-     * @param current 当前界面上的字段
-     * @param whole 完整的字段
+     * - 可以在`<Curd />`组件中配置运行代码，这个时候是`string`类型，并解析运行对应的代码片段
+     * @param formData 表单数据
      */
-    show?: ((current: BaseObj<any>, whole: BaseObj<any>) => boolean) | string;
+    show?: ((formData: BaseObj<any>) => boolean) | string;
   }
 
   type HasOption = "options" | "optionSetting" | "optionApi";
@@ -325,19 +324,21 @@ export namespace CurdType {
     onDelete?(selectList: Array<BaseObj<any>>): Promise<Api.Result>;
     /**
      * 新增表单
-     * @param form 
+     * @param form 完整表单对象
+     * @param current 当前展示中的字段对象
      */
-    onAdd?(form: BaseObj<any>): Promise<Api.Result>;
+    onAdd?(form: BaseObj<any>, current: BaseObj<any>): Promise<Api.Result>;
     /**
      * 编辑表单
-     * @param form 
+     * @param form 完整表单对象
+     * @param current 当前展示中的字段对象
      */
-    onEdit?(form: BaseObj<any>): Promise<Api.Result>;
+    onEdit?(form: BaseObj<any>, current: BaseObj<any>): Promise<Api.Result>;
     /**
      * 导出功能
-     * @param searchInfo 通过处理筛选组件配置返回的对象
+     * - 待开发者自己根据项目情况实现
      */
-    onExport?(searchInfo: BaseObj<any>): void;
+    onExport?(): void;
   }
   
 }

@@ -2,7 +2,7 @@
   <Curd :data="data" :action="action" />
 </template>
 <script lang="ts" setup>
-import { getTableList } from "@/api/common";
+import { getTableList, saveForm } from "@/api/common";
 import {
   actionEditKey,
   actionProp,
@@ -160,8 +160,9 @@ const data = reactive<CurdType.Config>({
         {
           ...getFieldData("switch", "gameLimit"),
           label: "设备登录限制",
-          show(current) {
-            return current.gameType === 2;
+          show(formData) {
+            // console.log("formData >>", formData);
+            return formData.gameType === 2;
           },
         }
       ]
@@ -199,12 +200,20 @@ const data = reactive<CurdType.Config>({
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {
-    console.log("searchInfo >>", searchInfo);
+    // console.log("searchInfo >>", searchInfo);
     return getTableList({...searchInfo, ...pageInfo});
   },
   created(getData) {
     // console.log("curd created");
     getData();
+  },
+  onAdd(form, current) {
+    // console.log("onAdd >>", form, current);
+    return saveForm(current);
+  },
+  onEdit(form, current) {
+    // console.log("onEdit >>", form, current);
+    return saveForm(form);
   },
 }
 

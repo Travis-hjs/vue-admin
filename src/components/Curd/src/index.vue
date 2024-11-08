@@ -49,18 +49,19 @@
     <Editor v-model:show="state.editor.show" :config="props.data" />
     <base-dialog
       v-model="tableState.formShow"
-      :title="formSetting.title"
-      :width="convertPx(formSetting.config.width)"
+      :title="formInfo.title"
+      :width="convertPx(formInfo.config.width)"
       @close="onCloseForm()"
+      @after-end="onOpened()"
     >
       <TableForm
         ref="formRef"
-        :config="formSetting.config"
+        :config="formInfo.config"
         :type="tableState.formType"
         :disabled="tableState.formLoading"
       />
       <template #footer>
-        <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()"  @submit="onSubmitForm()" />
+        <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
       </template>
     </base-dialog>
     <TableSetting v-model:show="tableSetting.show" :columns="props.data.table.columns" @submit="onTableSetting" />
@@ -195,7 +196,6 @@ const tableState = reactive({
   formShow: false,
   formType: "add" as "add" | "edit",
   formLoading: false
-
 });
 
 const tableColumns = computed(() => {
@@ -253,18 +253,6 @@ const actionList = computed(() => {
   };
 });
 
-const formSetting = computed(() => {
-  const info = {
-    title: "编辑表单",
-    config: (props.data.table.formEdit || {}) as CurdType.Table.From
-  };
-  if (tableState.formType === "add") {
-    info.title = "新增表单";
-    info.config = (props.data.table.formAdd || {}) as CurdType.Table.From;
-  }
-  return info;
-});
-
 /**
  * 通过键值获取对应的`column`对象
  * @param prop 注意这里值和插槽名相同
@@ -277,6 +265,28 @@ function getColumnByProp(prop: string) {
 
 const formRef = ref<InstanceType<typeof TableForm>>();
 
+const formInfo = computed(() => {
+  const tableConfig = props.data.table;
+  const info = {
+    title: "编辑表单",
+    config: (tableConfig.formEdit || {}) as CurdType.Table.From
+  }
+  if (tableState.formType === "add") {
+    info.title = "新增表单";
+    info.config = (tableConfig.formAdd || {}) as CurdType.Table.From;
+  }
+  return info;
+});
+
+/** 点击操作的表格数据，不需要为响应式 */
+let tableRow = null as null | BaseObj<any>;
+
+// TODO: 为什么不在 openTableForm 中设置表单数据？因为`<Field />`组件中会在初始化时设置默认值，
+// 如果在这之前就设置值的话会导致被覆盖不生效的情况。所以在弹框打开之后再设置
+function onOpened() {
+  tableRow && formRef.value?.setFormData(tableRow);
+}
+
 /**
  * 新增 or 编辑表单
  * @param row
@@ -284,6 +294,7 @@ const formRef = ref<InstanceType<typeof TableForm>>();
 function openTableForm(row?: any) {
   if (row) {
     tableState.formType = "edit";
+    tableRow = row;
   } else {
     tableState.formType = "add";
   }
@@ -293,11 +304,29 @@ function openTableForm(row?: any) {
 
 function onCloseForm() {
   tableState.formShow = false;
+  formRef.value?.reset();
+  tableRow = null;
 }
 
 function onSubmitForm() {
-  formRef.value?.validate(() => {
-    console.log("提交表单");
+  formRef.value?.validate(async (formData, current) => {
+    // console.log("提交表单 >>", formData, current);
+    if (tableState.formType === "add" && props.action.onAdd) {
+      tableState.formLoading = true;
+      const res = await props.action.onAdd(formData, current);
+      tableState.formLoading = false;
+      if (res.code !== 1) return;
+      onCloseForm();
+      getData();
+    }
+    if (tableState.formType === "edit" && props.action.onEdit) {
+      tableState.formLoading = true;
+      const res = await props.action.onEdit(formData, current);
+      tableState.formLoading = false;
+      if (res.code !== 1) return;
+      onCloseForm();
+      getData();
+    }
   });
 }
 
@@ -318,7 +347,7 @@ function onSort(key: string, action: CurdType.Table.Column["sort"]) {
   getData();
 }
 
-async function getData() {
+function getSearchInfo() {
   const searchList = props.data.search.list;
   const searchInfo: BaseObj<any> = {};
   // 处理搜索字段并进行赋值 
@@ -328,7 +357,7 @@ async function getData() {
     if (field.required && isType(res.result, "string")) {
       setElementShake(document.querySelector(`.${field.id}`));
       message.error(res.result);
-      return;
+      return null;
     }
     // TODO: 只设置有值的情况
     if (res.result === true) {
@@ -355,6 +384,12 @@ async function getData() {
   if (descList.length) {
     searchInfo.desc = descList.toString();
   }
+  return searchInfo;
+}
+
+async function getData() {
+  const searchInfo = getSearchInfo();
+  if (!searchInfo) return;
   const page = JSON.parse(JSON.stringify(tableState.pageInfo));
   // 最后请求列表并把参数传入到外部声明方法中
   state.loading = true;
@@ -392,7 +427,7 @@ function onTableOption(type: TableOptionType) {
               state.loading = false;
             }
           } else {
-            console.log("请设置 action.onDelete 删除逻辑");
+            message.info("请设置 action.onDelete 删除逻辑");
           }
         }
       });
@@ -403,7 +438,11 @@ function onTableOption(type: TableOptionType) {
       break;
 
     case "export":
-      message.info("开发中~");
+      if (props.action.onExport) {
+        props.action.onExport();
+      } else {
+        message.info("请设置 action.onExport 导出逻辑");
+      }
       break;
   }
 }

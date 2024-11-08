@@ -63,7 +63,7 @@
     </template>
     <template v-if="!props.editMode && state.config && state.config.fields">
       <el-form-item
-        v-for="field in state.config.fields"
+        v-for="field in usableFields"
         :label="field.label"
         :prop="field.key"
         :key="field.key"
@@ -83,12 +83,12 @@ export default {
 import { computed, reactive, ref, type PropType } from "vue";
 import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { convertPx, getFormConfig, useProvideState } from "./data";
+import { convertPx, getFieldValue, getFormConfig, setFieldValue, useProvideState } from "./data";
 import { watch } from "vue";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
 import Field from "./Field.vue";
-import { deepClone } from "@/utils";
+import { deepClone, isType } from "@/utils";
 
 const props = defineProps({
   /** 表单配置 */
@@ -181,15 +181,59 @@ function onComplete() {
 
 /**
  * 表单验证
- * @param callback
+ * @param callback 回调函数，第一个参数`formData`为完整对象，第二个参数`current`为当前展示中的字段
  */
-function validate(callback?: () => void) {
-  formRef.value?.validate(val => val && callback && callback());
+function validate(callback?: (formData: BaseObj<any>, current: BaseObj<any>) => void) {
+  formRef.value?.validate(val => {
+    if (val && callback) {
+      const data = formData.value;
+      const current: BaseObj<any> = {};
+      usableFields.value.forEach(field => {
+        current[field.key] = data[field.key];
+      });
+      callback(data, current);
+    }
+  });
 }
 
 /** 表单移除验证 */
 function clear() {
   formRef.value?.clearValidate();
+}
+
+/** 表单重置 */
+function reset() {
+  state.config.fields.forEach(setFieldValue);
+}
+
+/**
+ * 设置表单数据
+ * @param data 
+ */
+function setFormData(data: BaseObj<any>) {
+  state.config.fields.forEach(field => {
+    if (Object.prototype.hasOwnProperty.call(data, field.key)) {
+      const value = data[field.key];
+      if (!value) return;
+      switch (field.type) {
+        case "date":
+          if (isType(value, "array")) {
+            field.value = value.map(val => new Date(val));
+          } else {
+            field.value = new Date(value);
+          }
+          break;
+
+        // case "cascader":
+        //   // TODO: 级联的值处理待开发者自己根据具体情况处理
+        //   break;
+
+        default:
+          field.value = value;
+          break;
+      }
+    }
+  });
 }
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
@@ -253,8 +297,38 @@ watch(
   { immediate: true }
 );
 
+const formData = computed(() => {
+  const data: BaseObj<any> = {};
+  state.config.fields.forEach(field => {
+    data[field.key] = getFieldValue(field).value;
+  });
+  return data;
+});
+
+/** 当前出现在界面的表单列表 */
+const usableFields = computed(() => {
+  return state.config.fields.filter(field => {
+    const show = field.show;
+    if (!show) return true;
+    if (isType(show, "function")) {
+      return show(formData.value);
+    }
+    if (show.includes("return")) {
+      try {
+        const fn = new Function("formData", show);
+        return fn(formData.value);
+      } catch (error) {
+        console.warn("解析表单展示逻辑代码错误 >>", error);
+        return true;
+      }
+    }
+  });
+});
+
 defineExpose({
   clear,
-  validate
+  validate,
+  reset,
+  setFormData,
 });
 </script>

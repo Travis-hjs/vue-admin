@@ -253,7 +253,7 @@ export function getActionData(): CurdType.Table.Action {
     key: `action-${getIncrementId()}-${Date.now()}`,
     text: "",
     icon: "",
-    jsCode: "",
+    click: "",
     type: "primary"
   };
 }
@@ -317,6 +317,9 @@ export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes
     }
     res.value = JSON.parse(JSON.stringify(list));
   }
+  // if (field.type === "cascader") {
+  //   // TODO: 级联的值处理待开发者自己根据具体情况处理
+  // }
   return res;
 }
 

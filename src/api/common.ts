@@ -142,8 +142,21 @@ export function getTableList<T extends PageInfo>(params: T) {
   return new Promise<typeof result>(function(resolve) {
     setTimeout(() => {
       result.data.list = staticTableData.slice((page - 1) * size, page * size);
-      resolve(result)
+      resolve(result);
     }, ranInt(100, 3000));
   });
   // return request<Api.List>("POST", "/getTableList", params)
+}
+
+export function saveForm<T>(params: T) {
+  const result: Api.Result<T> = {
+    code: 1,
+    data: params,
+    msg: "模拟表单保存"
+  }
+  return new Promise<typeof result>(function(resolve) {
+    setTimeout(() => {
+      resolve(result);
+    }, ranInt(100, 3000));
+  });
 }
