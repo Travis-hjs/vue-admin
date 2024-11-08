@@ -12,7 +12,7 @@
       <i :class="['base-table-actions-icon', getString(btn, 'icon')]" v-if="btn.icon && !getBoolean(btn, 'loading')"></i>
       {{ getString(btn, 'text') }}
     </el-button>
-    <el-dropdown v-if="useList.dropdown.length">
+    <el-dropdown v-if="useList.dropdown.length" trigger="click">
       <el-button text type="primary">更多<i class="el-icon-arrow-down el-icon--right"></i></el-button>
       <template #dropdown>
         <el-dropdown-menu>
