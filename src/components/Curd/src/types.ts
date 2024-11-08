@@ -61,10 +61,11 @@ export namespace CurdType {
     required?: boolean;
     /**
      * 动态表单项的条件显示逻辑函数，返回`true`则展示对应项
+     * - 同时也可以为配置的函数代码，以`return`为代码标记
      * @param current 当前界面上的字段
      * @param whole 完整的字段
      */
-    show?(current: BaseObj<any>, whole: BaseObj<any>): boolean;
+    show?: ((current: BaseObj<any>, whole: BaseObj<any>) => boolean) | string;
   }
 
   type HasOption = "options" | "optionSetting" | "optionApi";
@@ -234,11 +235,6 @@ export namespace CurdType {
        * - 当等于`"action-edit"`时，点击事件自动设置为内部的打开编辑表单功能，在`TableModel.vue`中，当配置完编辑表单数据后会自动添加，具体位置看`onFormEdit`方法
        */
       key: string;
-      /**
-       * 按钮点击时运行的`js`代码
-       * - 函数有两个传参`function (row, index)`
-       */
-      jsCode?: string;
     }
 
     /** 表格相关配置 */
