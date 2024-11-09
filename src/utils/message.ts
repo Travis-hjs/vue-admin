@@ -402,12 +402,17 @@ function useDialog() {
         pending = true;
         const icon = `<i class="el-icon-loading el-icon--left"></i>`;
         confirm.innerHTML = icon + confirm.innerHTML;
+        confirm.classList.add("is-loading");
         if (cancel) {
-          cancel.innerHTML = icon + cancel.innerHTML;
+          // cancel.innerHTML = icon + cancel.innerHTML;
+          cancel.classList.add("is-disabled");
         }
         await fn();
+        pending = false;
       }
-      pending = false;
+      if (isType(fn, "function")) {
+        fn();
+      }
       hide();
     }
     if (option.cancelText) {
