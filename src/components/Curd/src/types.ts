@@ -179,12 +179,12 @@ export namespace CurdType {
        * - 当`cellType: "image"`时生效，css中设置默认`80px`
        * - 输入框输入
        */
-      imageWidth: number;
+      imageWidth?: number;
       /**
        * 图片高度
        * - 当`cellType: "image"`时生效，css中设置默认`80px`
        */
-      imageHeight: number;
+      imageHeight?: number;
       /**
        * 排序
        * - 当为字符串的时候是默认排序操作

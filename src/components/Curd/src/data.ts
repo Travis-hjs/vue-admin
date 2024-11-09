@@ -230,8 +230,8 @@ export function getColumnData(prop: string, label: string): CurdType.Table.Colum
     sort: false,
     fixed: false,
     iconTips: "",
-    imageWidth: 0,
-    imageHeight: 0,
+    imageWidth: undefined,
+    imageHeight: undefined,
     jsCode: "",
     visible: true
   };

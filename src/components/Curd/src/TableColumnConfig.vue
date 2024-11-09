@@ -206,8 +206,10 @@ const sortOptions: Array<CurdType.Table.ColumnOption<"sort">> = [
 
 const codeTips = `
 <p>函数代码片段：</p>
-<p>第一个参数${getBoldLabel("cellValue")}是表格值，</p>
-<p>第二个参数${getBoldLabel("row")}是完整对象</p>
+<p>第一个参数${getBoldLabel("cellValue")}是表格值;</p>
+<p>第二个参数${getBoldLabel("row")}是完整对象;</p>
+<p>例如：${getBoldLabel("return cellValue + row.id;")};</p>
+<p>也可以是HTML：${getBoldLabel("return `html 标签`")};</p>
 `;
 
 function onClose() {
