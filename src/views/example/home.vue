@@ -1,18 +1,18 @@
 <template>
   <div class="page-home">
-    <h2 class="the-title mgb-30">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <h2 class="the-title is-line mgb-30">Vue3 + Vite + TypeScript 后台管理模板</h2>
     <div class="mgb-40">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
     </div>
-    <h2 class="the-title mgb-30">布局操作开关</h2>
+    <h2 class="the-title is-line mgb-30">布局操作开关</h2>
     <div class="options-box mgb-40">
       <CheckBox class="mgb-20" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
       <CheckBox class="mgb-20" label="显示历史记录标签" v-model="layoutInfo.showTagsView" />
       <CheckBox class="mgb-20" label="侧边栏展开" v-model="layoutInfo.sidebarOpen" />
       <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
     </div>
-    <h2 class="the-title mgb-30">主题&样式</h2>
+    <h2 class="the-title is-line mgb-30">主题&样式</h2>
     <div class="form-item f-vertical">
       <span class="form-label">整体背景颜色</span>
       <input class="the-input" type="text" v-model="styleVariable.wholeBgColor">
@@ -114,7 +114,7 @@
       <button class="the-btn blue mini" v-ripple @click="onPreset()">应用预设配置</button>
     </div>
 
-    <h2 class="the-title mgb-30">打赏一下</h2>
+    <h2 class="the-title is-line mgb-30">打赏一下</h2>
     <div class="code-box">
       <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
       <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">

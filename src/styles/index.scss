@@ -189,88 +189,17 @@
   text-shadow: var(--text-shadow-bg) 1px 1px, var(--text-shadow-bg) 1px -1px, var(--text-shadow-bg) -1px 1px, var(--text-shadow-bg) -1px -1px, var(--text-shadow-bg) 0px 1.4px, var(--text-shadow-bg) 0px -1.4px, var(--text-shadow-bg) -1.4px 0px, var(--text-shadow-bg) 1.4px 0px, var(--text-shadow-color) 2px 2px, var(--text-shadow-color) 3px 3px, var(--text-shadow-color) 3px 1px, var(--text-shadow-color) 1px 3px, var(--text-shadow-color) 1px 1px, var(--text-shadow-color) 2px 3.4px, var(--text-shadow-color) 2px 0.6px, var(--text-shadow-color) 0.6px 2px, var(--text-shadow-color) 3.4px 2px;
   box-sizing: border-box;
   font-style: italic;
-}
-
-.the-switch {
-  --width: 40px;
-  --height: 22px;
-  display: inline-block;
-  width: var(--width);
-  height: var(--height);
-  border-radius: var(--height);
-  background-color: #dcdfe6;
-  transition: var(--transition);
-  cursor: pointer;
-  position: relative;
-  appearance: none;
-  outline: none;
-  border: none;
-  &::after {
-    position: absolute;
-    content: "";
-    top: 1px;
-    left: 1px;
-    width: calc(var(--height) - 2px);
-    height: calc(var(--height) - 2px);
-    transition: var(--transition);
-    transform: translateX(0px);
-    background-color: #fff;
-    border-radius: 50%;
-  }
-  &:checked {
-    background-color: var(--blue);
+  &.is-line {
+    display: inline-block;
+    position: relative;
     &::after {
-      transform: translateX(calc(var(--width) - var(--height) - 1px));
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #888;
     }
-  }
-}
-
-.the-checkbox {
-  appearance: none;
-  outline: none;
-  width: 16px;
-  height: 16px;
-  transition: var(--transition);
-  border: solid 1px #dcdfe6;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  position: relative;
-  &:hover {
-    border-color: var(--blue);
-  }
-  &::after {
-    position: absolute;
-    content: "";
-    border: 1px solid transparent;
-    border-left: 0;
-    border-top: 0;
-    left: 33%;
-    top: 20%;
-    height: 8px;
-    width: 4px;
-    transform: rotate(45deg) scaleY(0);
-    transform-origin: center;
-    transition: var(--transition);
-  }
-  &:checked {
-    background-color: var(--blue);
-    border-color: var(--blue);
-    &::after {
-      transform: rotate(45deg) scaleY(1);
-      border-color: #fff;
-    }
-  }
-}
-
-.the-label {
-  font-size: 14px;
-  color: #606266;
-  cursor: pointer;
-  user-select: none;
-  .the-checkbox {
-    margin-right: 6px;
-  }
-  &.checked {
-    color: var(--blue);
   }
 }

@@ -24,3 +24,43 @@ const state = reactive({
 
 </script>
 ```
+
+## 开关切换样式
+
+```scss
+.the-switch {
+  --width: 40px;
+  --height: 22px;
+  display: inline-block;
+  width: var(--width);
+  height: var(--height);
+  border-radius: var(--height);
+  background-color: #dcdfe6;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  appearance: none;
+  outline: none;
+  border: none;
+
+  &::after {
+    position: absolute;
+    content: "";
+    top: 1px;
+    left: 1px;
+    width: calc(var(--height) - 2px);
+    height: calc(var(--height) - 2px);
+    transition: var(--transition);
+    transform: translateX(0px);
+    background-color: #fff;
+    border-radius: 50%;
+  }
+
+  &:checked {
+    background-color: var(--blue);
+    &::after {
+      transform: translateX(calc(var(--width) - var(--height) - 1px));
+    }
+  }
+}
+```
