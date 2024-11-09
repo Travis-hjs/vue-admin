@@ -1,6 +1,6 @@
 <template>
   <div class="goods-form">
-    <h2 class="the-title mgb-20">商品表单组件-测试文件</h2>
+    <h2 class="the-title is-line mgb-20">商品表单组件-测试文件</h2>
     <div>
       <textarea cols="30" rows="10" readonly :value="JSON.stringify(props.form, null, 4)"></textarea>
     </div>

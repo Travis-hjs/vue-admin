@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mgb-30">
-      <h2 class="the-title mgr-20">Svg Icons</h2>
+      <h2 class="the-title is-line mgr-20">Svg Icons</h2>
       <span class="the-tag blue">点击复制代码</span>
     </div>
     <IconList />

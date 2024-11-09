@@ -1,14 +1,14 @@
 <template>
   <div class="the-components">
     <div class="mgb-30">
-      <h2 class="the-title">上传图片组件</h2>
+      <h2 class="the-title is-line">上传图片组件</h2>
     </div>
     <div class="flex mgb-40">
       <UploadImage uploadId="logo" :src="formData.logo" tip="正方形图片" @change="onUpload" />
       <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
     </div>
     <div class="mgb-30">
-      <h2 class="the-title mgr-40">滚动条组件</h2>
+      <h2 class="the-title is-line mgr-40">滚动条组件</h2>
       <el-button type="success" @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
       <el-button type="primary" @click="openDialog('first')">打开弹出层-1</el-button>
     </div>
@@ -36,7 +36,7 @@
     </div>
 
     <div class="mgb-30">
-      <h2 class="the-title mgr-40">折叠盒子</h2>
+      <h2 class="the-title is-line mgr-40">折叠盒子</h2>
     </div>
 
     <section>
@@ -55,7 +55,7 @@
     </section>
 
     <div class="mgb-30">
-      <h2 class="the-title mgr-40">自定义全局 Dialog 组件</h2>
+      <h2 class="the-title is-line mgr-40">自定义全局 Dialog 组件</h2>
     </div>
 
     <div class="flex">
@@ -99,7 +99,7 @@
     </base-dialog>
 
     <div class="mgb-30">
-      <h2 class="the-title">自定义 Message 控件</h2>
+      <h2 class="the-title is-line">自定义 Message 控件</h2>
     </div>
 
     <div class="mgb-50">
@@ -107,7 +107,7 @@
     </div>
 
     <div class="mgb-30">
-      <h2 class="the-title">自定义 MessageBox 控件</h2>
+      <h2 class="the-title is-line">自定义 MessageBox 控件</h2>
     </div>
 
     <div class="mgb-50">

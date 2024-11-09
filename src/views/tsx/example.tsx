@@ -27,7 +27,7 @@ const TsxExample = defineComponent({
 
     return () => (
       <div class="tsx-example">
-        <h2 class="the-title mgb-20">{content}</h2>
+        <h2 class="the-title is-line mgb-20">{content}</h2>
         <div class="tsx-center">
           <el-input v-model={inputValue.value} placeholder="请输入卡片标题" clearable show-word-limit maxlength="17" />
         </div>
