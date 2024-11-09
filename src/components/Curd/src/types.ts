@@ -3,11 +3,9 @@ import type { CascaderOption } from "element-plus";
 type NativeDate = Date;
 
 export namespace CurdType {
-  interface Base {
-    id: number | string;
-  }
 
-  interface BaseField<T> extends Base {
+  interface BaseField<T> {
+    id: number | string;
     label?: string;
     /** 单独的`label`宽度 */
     labelWidth?: number;
