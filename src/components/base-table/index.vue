@@ -9,7 +9,7 @@
       @row-click="rowClick"
       @selection-change="onSelect"
     >
-      <el-table-column v-if="props.selectKey" width="55" align="center" fixed="left">
+      <el-table-column v-if="props.selectKey" :resizable="false" width="55" align="center" fixed="left">
         <template #header>
           <el-checkbox
             :indeterminate="isIndeterminate"
@@ -37,7 +37,6 @@
         :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
         :align="item.prop === 'action-right' ? 'center' : item.align"
         :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
-        label-class-name="base-table-label"
       >
         <template #header="scope">
           <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
@@ -263,9 +262,6 @@ function onSelect(item: any) {
   // }
   .base-column-click {
     cursor: pointer;
-  }
-  .base-table-label {
-    cursor: default;
   }
 }
 </style>
