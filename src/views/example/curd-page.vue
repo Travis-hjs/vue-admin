@@ -2,7 +2,7 @@
   <Curd :data="data" :action="action" />
 </template>
 <script lang="ts" setup>
-import { getTableList, saveForm } from "@/api/common";
+import { getTableList, saveForm, setReport } from "@/api/common";
 import {
   actionEditKey,
   actionProp,
@@ -12,6 +12,7 @@ import {
   type CurdType
 } from "@/components/Curd";
 import { formatDate } from "@/utils";
+import { message, messageBox } from "@/utils/message";
 import { reactive } from "vue";
 
 const option = {
@@ -60,6 +61,7 @@ const data = reactive<CurdType.Config>({
     columns: [
       {
         ...getColumnData("gameName", "游戏名称"),
+        minWidth: 140,
       },
       {
         ...getColumnData("gameType", "游戏类型"),
@@ -79,6 +81,12 @@ const data = reactive<CurdType.Config>({
           const val = map[key];
           return `<span class="the-tag ${val.color}">${val.text}</span>`
         }
+      },
+      {
+        ...getColumnData("num", "游戏编号"),
+        width: 140,
+        cellType: "js",
+        jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;'
       },
       {
         ...getColumnData("banner", "游戏封面"),
@@ -119,10 +127,20 @@ const data = reactive<CurdType.Config>({
       },
       {
         key: "1",
-        text: "上报游戏",
+        text: row => row.report === 1 ? "上报游戏" : "取消上报",
         type: "primary",
         click(row, index) {
           console.log("上报游戏 >>", row, index);
+          const name = row.report === 1 ? "上报游戏" : "取消上报";
+          messageBox({
+            content: `是否${name}？`,
+            cancelText: "取消",
+            async confirm() {
+              const res = await setReport(row.report);
+              row.report = res.data;
+              message.success(`${name}成功~`);
+            },
+          });
         },
       }
     ],

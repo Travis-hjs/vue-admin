@@ -122,7 +122,9 @@ const staticTableData = Array.from({ length: 32 }).map((_, index) => {
     gameType: ranInt(1, 2),
     gamePrice: ranInt(19, 1999),
     date: new Date().toLocaleString(),
-    banner: `https://game.gtimg.cn/images/lol/act/img${path}`
+    banner: `https://game.gtimg.cn/images/lol/act/img${path}`,
+    report: ranInt(1, 2),
+    num: ranInt(10000, 99999)
   }
 });
 
@@ -153,6 +155,19 @@ export function saveForm<T>(params: T) {
     code: 1,
     data: params,
     msg: "模拟表单保存"
+  }
+  return new Promise<typeof result>(function(resolve) {
+    setTimeout(() => {
+      resolve(result);
+    }, ranInt(100, 3000));
+  });
+}
+
+export function setReport(value: number) {
+  const result: Api.Result<number> = {
+    code: 1,
+    data: value === 1 ? 2 : 1,
+    msg: "模拟修改状态"
   }
   return new Promise<typeof result>(function(resolve) {
     setTimeout(() => {
