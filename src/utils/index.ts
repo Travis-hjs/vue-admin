@@ -110,7 +110,7 @@ export function formatDate(value: string | number | Date = Date.now(), format = 
  * @param fail 出错回调
  */
 export function copyText(text: string, success?: () => void, fail?: (res: string) => void) {
-  text = text.replace(/(^\s*)|(\s*$)/g, "");
+  text = text.toString().replace(/(^\s*)|(\s*$)/g, "");
   if (!text) {
     fail && fail("复制的内容不能为空！");
     return;

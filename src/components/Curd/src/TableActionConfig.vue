@@ -186,6 +186,7 @@ import type { FormInstance } from "element-plus";
 import { actionEditKey, getActionData, getBoldLabel } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { FooterBtn, LabelTips } from "./part";
+import { deepClone, isType } from "@/utils";
 
 const props = defineProps({
   show: {
@@ -281,14 +282,14 @@ function onSubmit() {
     if (!val) return;
     onClose();
     const { width, max } = form.column;
-    emit("submit", JSON.parse(JSON.stringify(state.list)), width, max);
+    emit("submit", deepClone(state.list), width, max);
   });
 }
 
 function onSubmitBtn(type: "add" | "edit") {
   formBtn.value!.validate(val => {
     if (!val) return;
-    const data = JSON.parse(JSON.stringify(form.btn));
+    const data = deepClone(form.btn);
     if (type === "add") {
       state.list.push(data);
     } else {
@@ -321,7 +322,7 @@ watch(
   function (show) {
     state.show = show;
     if (!show) return;
-    state.list = JSON.parse(JSON.stringify(props.list));
+    state.list = deepClone(props.list);
     state.hasEdit = state.list.some(item => item.key === actionEditKey);
     state.index = -1;
     form.btn = getActionData();
@@ -351,7 +352,8 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.list,
   update(newList) {
     state.list = newList;
-  }
+  },
+  clone: true
 });
 
 /** 是否能拖拽 */
@@ -363,8 +365,9 @@ function canDraggable(action: CurdType.Table.Action) {
 }
 
 function getBtnText(action: CurdType.Table.Action) {
-  const text = action.text as string;
-  if (text.includes("return")) {
+  const text = action.text;
+  if (isType(text, "string")) {
+    if (!text.includes("return")) return text; 
     let str = "文字配置有误";
     try {
       const fn = new Function("row", text);
@@ -374,7 +377,10 @@ function getBtnText(action: CurdType.Table.Action) {
     }
     return str;
   }
-  return text;
+  if (isType(text, "function")) {
+    return text({});
+  }
+  return "未设置按钮";
 }
 
 const textTips = `
