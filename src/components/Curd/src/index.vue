@@ -109,7 +109,7 @@ import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, setFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
-import { copyText, formatDate, isType, jsonToPath } from "@/utils";
+import { copyText, deepClone, formatDate, isType, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
 
@@ -152,18 +152,20 @@ const showSearch = computed(() => {
 provide(provideKey, state);
 
 /** 备份编辑之前的数据 */
-let backupsConfig: CurdType.Config;
+let backupsConfig: Partial<CurdType.Config> | null = null;
 
 /**
  * 开始进入编辑模式
  * @param type 
  */
-function onEditor(type: typeof state.editor.type) {
+function onEditor(type: keyof CurdType.Config) {
   state.editor.type = type;
   state.editor.show = false;
   state.editor.index = -1;
   state.showEntrance = false;
-  backupsConfig = JSON.parse(JSON.stringify(props.data));
+  backupsConfig = {
+    [type]: deepClone(props.data[type]),
+  }
 }
 
 function onSearch(type: FilterBtnType) {
@@ -175,10 +177,15 @@ function onSearch(type: FilterBtnType) {
   getData();
 }
 
-function onExit() {
+function onExit(reset?: boolean) {
+  const type = state.editor.type!;
   state.editor.index = -1;
   state.editor.show = false;
   state.editor.type = null;
+  if (reset && backupsConfig) {
+    props.data[type] = backupsConfig[type] as any;
+  }
+  backupsConfig = null;
 }
 
 function onComplete() {
@@ -449,7 +456,7 @@ function onTableOption(type: TableOptionType) {
 
 function onEditChange(type: EditBtnType) {
   const actionMap = {
-    exit: onExit,
+    exit: () => onExit(true),
     copy: onCopy,
     complete: onComplete
   };

@@ -58,7 +58,7 @@
           <i class="el-icon--left el-icon-plus"></i>
           添加一项
         </el-button>
-        <el-button @click="validate()">调试验证</el-button>
+        <!-- <el-button @click="validate()">调试验证</el-button> -->
       </div>
     </template>
     <template v-if="!props.editMode && state.config && state.config.fields">
