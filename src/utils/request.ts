@@ -112,11 +112,16 @@ function getResultInfo(result: { statusCode: number, data: any }, responseType?:
       info.msg = "网络超时了";
       break;
     case 200:
-      info.code = checkType(result.data.code) === "number" ? result.data.code : 1;
-      info.msg = result.data.message || "ok";
-      info.data = result.data;
       // do some ... 这里可以做一些类型响应数据结构组装处理，有些时候后端返回的接口不一样
-      // if (responseType === "blob") {}
+      if (responseType === "blob") {
+        info.code = 1;
+        info.data = result.data;
+        info.msg = "ok";
+      } else {
+        info.code = checkType(result.data.code) === "number" ? result.data.code : 1;
+        info.data = result.data;
+        info.msg = result.data.message || "ok";
+      }
       break;
     case 400:
       info.msg = "接口传参不正确";
@@ -164,7 +169,7 @@ export default function request<T = any>(
       timeout: timeout || config.requestTimeout,
       success(res, xhr) {
         // console.log("请求成功", res);
-        const info = getResultInfo({ statusCode: xhr.status, data: res });
+        const info = getResultInfo({ statusCode: xhr.status, data: res }, responseType);
         resolve(info);
       },
       fail(err) {
