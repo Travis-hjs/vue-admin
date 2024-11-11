@@ -168,23 +168,19 @@ function onEditor(type: keyof CurdType.Config) {
   }
 }
 
-function onSearch(type: FilterBtnType) {
-  if (type === "reset") {
-    props.data.search.list.forEach(setFieldValue);
-  }
-  tableState.pageInfo.currentPage = 1;
-  tableState.selectList = []; // TODO: 搜索的时候情况选中
-  getData();
-}
-
-function onExit(reset?: boolean) {
+/**
+ * 退出编辑
+ * @param cancel 是否取消编辑，取消则还原编辑之前的数据
+ */
+function onExit(cancel?: boolean) {
   const type = state.editor.type!;
+  if (cancel && backupsConfig) {
+    props.data[type] = backupsConfig[type] as any;
+  }
   state.editor.index = -1;
   state.editor.show = false;
   state.editor.type = null;
-  if (reset && backupsConfig) {
-    props.data[type] = backupsConfig[type] as any;
-  }
+  state.editor.form = null;
   backupsConfig = null;
 }
 
@@ -194,6 +190,15 @@ function onComplete() {
 
 function onCopy() {
   copyText(JSON.stringify(props.data), () => message.success("复制成功！"));
+}
+
+function onSearch(type: FilterBtnType) {
+  if (type === "reset") {
+    props.data.search.list.forEach(setFieldValue);
+  }
+  tableState.pageInfo.currentPage = 1;
+  tableState.selectList = []; // TODO: 搜索的时候情况选中
+  getData();
 }
 
 const tableState = reactive({
