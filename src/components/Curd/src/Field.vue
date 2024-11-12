@@ -113,6 +113,7 @@
       start-placeholder="开始日期"
       end-placeholder="结束日期"
       class="the-curd-field"
+      @change="resetPanelBtn"
     />
   </div>
 </template>
@@ -123,7 +124,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import { computed, onMounted, type PropType } from "vue";
 import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
 import type { CurdType } from "./types";
 import { inputOnlyNumber, isType } from "@/utils";
@@ -231,6 +232,39 @@ function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
   }
 }
 
+// --------------------------------- 处理日期组件的快捷栏交互细节 ---------------------------------
+/** 日期侧边栏按钮列表 */
+let shortcutBtnList: Array<HTMLElement> = [];
+
+const className = "the-date-shortcut-selected";
+
+function resetPanelBtn() {
+  const selected = document.querySelector(`.${className}`);
+  selected && selected.classList.remove(className);
+}
+
+function selectPanelBtn(el: HTMLElement) {
+  // resetPanelBtn(); // TODO: 因为日期组件的 change 事件会先触发，所以这里不需要再执行多一次了
+  el.classList.add(className);
+}
+
+onMounted(function () {
+  const field = props.fieldData;
+  if (field.type === "date") {
+    const className = `.${field.id} .el-picker-panel__sidebar`;
+    const panel = document.querySelector(className);
+    if (!panel) return console.warn("找不到日期快捷面板节点！");
+    shortcutBtnList = Array.from(panel.children) as Array<HTMLElement>;
+    shortcutBtnList.forEach(btn => {
+      btn.addEventListener("click", () => selectPanelBtn(btn));
+    });
+    const index = field.shortcutIndex;
+    if (isType(index, "number") && index >= 0) {
+      selectPanelBtn(shortcutBtnList[index]);
+    }
+  }
+});
+
 </script>
 <style lang="scss">
 .the-curd-form-field {
@@ -240,8 +274,8 @@ function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
   }
 }
 
-// .the-date-shortcut-selected {
-//   color: var(--blue);
-//   background-color: var(--el-color-primary-light-9);
-// }
+.the-date-shortcut-selected {
+  color: var(--blue);
+  background-color: var(--el-color-primary-light-9);
+}
 </style>

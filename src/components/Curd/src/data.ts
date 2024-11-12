@@ -1,4 +1,4 @@
-import { inject, onUnmounted } from "vue";
+import { inject, nextTick, onUnmounted } from "vue";
 import type { CurdType } from "./types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 // ----------------------- 数据相关 -----------------------
@@ -44,10 +44,19 @@ function getIncrementId() {
 export function setFieldValue(field: CurdType.Field) {
   if (field.type == "date") {
     const shortcut = field.shortcutIndex;
+    // 先移除当前有选中的快捷选中日期样式
+    const className = "the-date-shortcut-selected";
+    const selected = document.querySelector(`.${className}`);
+    selected && selected.classList.remove(className);
     // 处理日期选项默认值
     if (isType(shortcut, "number") && shortcut >= 0) {
       const date = shortcutMap[field.dateType][shortcut].value();
       field.value = date;
+      // 如果有选中快捷日期的情况下重设选中
+      const selectedName = `.${field.id} .el-picker-panel__sidebar`;
+      const panel = document.querySelector(selectedName);
+      // 因为重设数据时，会重新渲染，这个时候设置 dom 是会被覆盖的，所以这里放在 nextTick 之后再操作 dom
+      panel && nextTick(() => panel.children[shortcut].classList.add(className));
     }
     // 处理绑定值不等于类型时，纠正绑定值
     if (!isType(field.value, "array") && field.valueType === "array") {
