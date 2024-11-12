@@ -108,10 +108,12 @@
       :format="data.formatShow"
       :shortcuts="shortcutMap[data.dateType]"
       :disabled="props.disabled"
+      :popper-class="data.id.toString()"
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期"
       class="the-curd-field"
+      @calendar-change="onCalendar"
     />
   </div>
 </template>
@@ -122,7 +124,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import { computed, onMounted, type PropType } from "vue";
 import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
 import type { CurdType } from "./types";
 import { inputOnlyNumber, isType } from "@/utils";
@@ -229,6 +231,53 @@ function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
     class: "field-item"
   }
 }
+
+// --------------------------------- 处理日期组件的交互细节 ---------------------------------
+/** 日期侧边栏按钮列表 */
+let shortcutBtnList: Array<HTMLElement> = [];
+
+function onCalendar(date: Date) {
+  // console.log("onCalendar >>", date);
+  resetPanelBtn();
+}
+
+function resetPanelBtn(exclude?: HTMLElement) {
+  shortcutBtnList.forEach(el => {
+    if (el === exclude) return;
+    el.style.color = "";
+    el.style.backgroundColor = "";
+  });
+}
+
+function onPanelBtn(el: HTMLElement) {
+  resetPanelBtn(el);
+  el.style.color = "var(--blue)";
+  el.style.backgroundColor = "var(--el-color-primary-light-9)";
+}
+
+onMounted(function () {
+  const field = props.fieldData;
+  if (field.type === "date") {
+    const className = `.${field.id} .el-picker-panel__sidebar`;
+    const panel = document.querySelector(className);
+    if (!panel) return console.warn("找不到日期快捷面板节点！");
+    shortcutBtnList = Array.from(panel.children) as Array<HTMLElement>;
+    // console.log(shortcutBtnList);
+    shortcutBtnList.forEach(btn => {
+      btn.addEventListener("click", function (e) {
+        // TODO: 尝试阻止日期面板收起，不生效，内部实现应该通过输入框聚焦来判断收起展开状态
+        // e.stopPropagation();
+        // e.preventDefault();
+        onPanelBtn(btn);
+      });
+    });
+    const index = field.shortcutIndex;
+    if (isType(index, "number") && index >= 0) {
+      onPanelBtn(shortcutBtnList[index]);
+    }
+  }
+});
+
 </script>
 <style lang="scss">
 .the-curd-form-field {
