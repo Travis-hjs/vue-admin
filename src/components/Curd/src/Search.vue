@@ -118,4 +118,3 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
 });
 
 </script>
-<style lang="scss"></style>

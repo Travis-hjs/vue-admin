@@ -679,4 +679,3 @@ watch(() => props.show, function(show) {
   }
 });
 </script>
-<style lang="scss"></style>
