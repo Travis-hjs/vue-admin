@@ -43,11 +43,15 @@ function getIncrementId() {
  */
 export function setFieldValue(field: CurdType.Field) {
   if (field.type == "date") {
-    if (isType(field.shortcutIndex, "number")) {
-      const date = shortcutMap[field.dateType][field.shortcutIndex].value();
-      field.value = date as any;
-    } else {
-      field.value = field.valueType === "array" ? [] : "";
+    const shortcut = field.shortcutIndex;
+    // 处理日期选项默认值
+    if (isType(shortcut, "number") && shortcut >= 0) {
+      const date = shortcutMap[field.dateType][shortcut].value();
+      field.value = date;
+    }
+    // 处理绑定值不等于类型时，纠正绑定值
+    if (!isType(field.value, "array") && field.valueType === "array") {
+      field.value = [];
     }
   } else {
     if (["object", "array"].includes(checkType(field.defaultValue))) {

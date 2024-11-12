@@ -233,7 +233,7 @@
             </template>
             <template v-if="state.formData.type === 'date'">
               <el-form-item label="日期类型" prop="dateType">
-                <el-select v-model="state.formData.dateType" style="width: 100%;" @change="onDateType">
+                <el-select v-model="state.formData.dateType" class="w-full" @change="onDateType">
                   <el-option
                     v-for="item in dateTypeOptions"
                     :key="item.value"
@@ -243,9 +243,9 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="日期默认值" prop="shortcutIndex">
-                <el-select v-model="state.formData.shortcutIndex" style="width: 100%;" placeholder="请选择" clearable>
+                <el-select v-model="state.formData.shortcutIndex" class="w-full" placeholder="请选择" clearable>
                   <el-option
-                    v-for="item in dateShortcutOptions"
+                    v-for="item in shortcutOptions"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -357,12 +357,17 @@ const provideState = useProvideState();
 
 const isAdd = computed(() => provideState.editor.action === "add");
 
-const dateShortcutOptions = computed(() => {
+const shortcutOptions = computed(() => {
+  let option: Array<{ label: string; value: number }> = [];
   if (state.formData && state.formData.type === "date") {
     const list = shortcutMap[state.formData.dateType];
-    return list.map((item, index) => ({ label: item.text, value: index }));
+    option = list.map((item, index) => ({ label: item.text, value: index }));
   }
-  return [];
+  option.unshift({
+    label: "将预览组件中的值设为默认",
+    value: -1
+  });
+  return option;
 });
 
 const state = reactive({
@@ -572,55 +577,60 @@ function onSubmit() {
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
     const editor = provideState.editor;
-    const data: CurdType.Select = JSON.parse(JSON.stringify(state.formData));
-    hasOptions.includes(data.type) && onOptions();
+    const form = JSON.parse(JSON.stringify(state.formData));
+    hasOptions.includes(form.type) && onOptions();
     // TODO: 处理空类型
-    if (!data.valueType) {
-      data.valueType = checkType(data.defaultValue);
+    if (!form.valueType) {
+      form.valueType = checkType(form.defaultValue);
     }
     // TODO: 判断选项数据是否合法并进行值的转换
-    if (hasOptions.includes(data.type) && ["number", "array<number>"].includes(data.valueType)) {
-      let optionKey = data.optionSetting.value;
+    if (hasOptions.includes(form.type) && ["number", "array<number>"].includes(form.valueType)) {
+      let optionKey = form.optionSetting.value;
       // 当没有配置字段时，默认设置为`"value"`
       if (!optionKey) {
         optionKey = "value";
-        data.optionSetting.value = optionKey;
+        form.optionSetting.value = optionKey;
       }
-      for (let i = 0; i < data.options.length; i++) {
-        const option = data.options[i];
+      for (let i = 0; i < form.options.length; i++) {
+        const option = form.options[i];
         const optionValue = option[optionKey];
         if ([null, undefined].includes(optionValue as any)) return message.error(`数据值字段与选项数据不匹配，请检查！`);
         if (isNumber(optionValue.toString())) {
           option[optionKey] = Number(optionValue);
         } else {
-          const label = option[data.optionSetting.label];
+          const label = option[form.optionSetting.label];
           return message.error(`选项数据中【${label}】的值应该为数字！`);
         }
       }
     }
+    // TODO: 处理日期默认值，当没有选中预设日期时，但又通过预览组件修改了绑定值，则要清空
+    if (form.type === "date" && !isType(form.shortcutIndex, "number")) {
+      form.value = form.valueType === "array" ? [] : "";
+    }
+    // console.log("submit form >>", form);
     const actionMap = {
       search(add: boolean) {
         if (add) {
-          props.config.search.list.push(data);
+          props.config.search.list.push(form);
         } else {
-          props.config.search.list[editor.index] = data;
+          props.config.search.list[editor.index] = form;
         }
       },
       table(add: boolean) {
         if (add) {
           const fields = JSON.parse(JSON.stringify(editor.form!.fields));
-          fields.push(data);
+          fields.push(form);
           editor.form!.fields = fields;
           // TODO: 这里不直接调用数组方法或者修改的理由是想要出发配置表单组件里面的`watch`
           // 因为不想`deep`去遍历深层，在有选项数据的时候会有性能问题，所以这里用最原始的方式处理
           // 在 vue3.5+ deep可以设置层数，那样就可以不用这么麻烦
-          // editor.form!.fields.push(data);
+          // editor.form!.fields.push(form);
         } else {
           const fields = JSON.parse(JSON.stringify(editor.form!.fields));
-          fields[editor.index] = data;
+          fields[editor.index] = form;
           editor.form!.fields = fields;
           // TODO: 与上面同理
-          // editor.form!.fields[editor.index] = data;
+          // editor.form!.fields[editor.index] = form;
         }
       }
     }

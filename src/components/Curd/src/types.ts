@@ -121,6 +121,7 @@ export namespace CurdType {
     /**
      * 默认值的预设选项索引
      * - 注意！！！该值只会在初始化的时候设置，具体看`Field.vue`
+     * - 当为`-1`时则不处理，在可视化配置中使用预览组件的值
      */
     shortcutIndex: number | "";
   }
