@@ -65,7 +65,7 @@ export namespace CurdType {
     show?: ((formData: BaseObj<any>) => boolean) | string;
   }
 
-  type HasOption = "options" | "optionSetting" | "optionApi";
+  type HasOption = "options" | "optionSetting";
 
   export interface Input extends Omit<BaseField<string>, HasOption> {
     type: "input" | "textarea";
