@@ -21,7 +21,7 @@
         >
           <template v-if="provideState.editor.type === 'search'" #label>
             <i v-if="isEditMode" class="el-icon-rank el-icon--left" />
-            {{ item.label }}
+            <span style="line-height: 1;">{{ item.label }}</span>
           </template>
           <Field :field-data="item" :disabled="provideState.loading"/>
           <div v-if="isEditMode" class="the-curd-edit-mask f-vertical f-right">
