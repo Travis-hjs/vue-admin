@@ -9,15 +9,15 @@ import { reactive } from "vue";
 const data = reactive<CurdType.Config>({
   search: {
     labelRight: false,
-    labelWidth: 0,
+    labelWidth: undefined,
     list: [],
   },
   table: {
     columns: [],
     actions: [],
-    selectKey: null,
-    formAdd: null,
-    formEdit: null
+    selectKey: undefined,
+    formAdd: undefined,
+    formEdit: undefined
   }
 });
 

@@ -288,7 +288,7 @@ function deleteActionColumn() {
       props.config.actions = [];
       // TODO: 记得把编辑表单也清空
       if (props.config.formEdit) {
-        props.config.formEdit = null;
+        props.config.formEdit = undefined;
       }
     }
   });

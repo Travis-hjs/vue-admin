@@ -156,7 +156,7 @@ export namespace CurdType {
   /** 搜索/筛选节点类型 */
   export interface Search {
     /** 统一的`label`宽度 */
-    labelWidth: number;
+    labelWidth?: number;
     /** label整体靠右排列 */
     labelRight: boolean;
     /** 操作列表 */
@@ -250,14 +250,14 @@ export namespace CurdType {
        * 表单新增对象
        * - 考虑到新增和编辑有可能字段不一样，所以这里分开两个对象存储
        */
-      formAdd: From | null;
+      formAdd?: From;
       /**
        * 表单编辑对象
        * - 考虑到新增和编辑有可能字段不一样，所以这里分开两个对象存储
        */
-      formEdit: From | null;
+      formEdit?: From;
       /** 复选框选中目标键值值 */
-      selectKey: string | null;
+      selectKey?: string;
     }
   }
 
@@ -271,7 +271,7 @@ export namespace CurdType {
     /** 是否显示编辑器 */
     show: boolean;
     /** 编辑器类型 */
-    type: keyof Config | null;
+    type?: keyof Config;
     /** 编辑操作类型 */
     action: "add" | "edit";
     /** 编辑的索引 */
@@ -280,7 +280,7 @@ export namespace CurdType {
      * 正在编辑的表单
      * - 注意该值在赋值时不能克隆，不然`<Editor />`里面无法进行数据修改处理
      */
-    form: Table.From | null;
+    form?: Table.From;
   }
 
   /**

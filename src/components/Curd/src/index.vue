@@ -130,8 +130,8 @@ const state = reactive<CurdType.State>({
   loading: false,
   editor: {
     show: false,
-    type: null,
-    form: null,
+    type: undefined,
+    form: undefined,
     action: "add",
     index: -1
   },
@@ -152,7 +152,7 @@ const showSearch = computed(() => {
 provide(provideKey, state);
 
 /** 备份编辑之前的数据 */
-let backupsConfig: Partial<CurdType.Config> | null = null;
+let backupsConfig: Partial<CurdType.Config> | undefined = undefined;
 
 /**
  * 开始进入编辑模式
@@ -179,9 +179,9 @@ function onExit(cancel?: boolean) {
   }
   state.editor.index = -1;
   state.editor.show = false;
-  state.editor.type = null;
-  state.editor.form = null;
-  backupsConfig = null;
+  state.editor.type = undefined;
+  state.editor.form = undefined;
+  backupsConfig = undefined;
 }
 
 function onComplete() {

@@ -25,7 +25,7 @@ const option = {
 const data = reactive<CurdType.Config>({
   search: {
     labelRight: false,
-    labelWidth: 0,
+    labelWidth: undefined,
     list: [
       {
         ...getFieldData("input", "gameName"),
