@@ -490,7 +490,9 @@ exportPropToWindow({
 });
 
 onMounted(function() {
-  props.action.created && props.action.created(getData);
+  if (props.action.created && props.data.table.columns.length) {
+    props.action.created(getData);
+  }
 });
 </script>
 <style lang="scss">

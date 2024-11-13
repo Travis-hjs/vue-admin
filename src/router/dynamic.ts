@@ -146,6 +146,12 @@ export const dynamicRouters: Array<RouteItem> = [
         meta: { title: "curd 低代码" },
         component: () => import("../views/example/curd-page.vue")
       },
+      {
+        path: "/example/curd-config",
+        name: "example-curd-config",
+        meta: { title: "curd 低代码配置" },
+        component: () => import("../views/example/curd-config.vue")
+      }
     ]
   },
   {
