@@ -387,7 +387,7 @@ const textTips = `
 <p>可以输入代码片段，</p>
 <p>以${getBoldLabel("return")}关键字为函数标记，</p>
 <p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>例如：${getBoldLabel('return row.status === 1 ? "下架" : "上架"')}</p>
+<p>例如：${getBoldLabel('return row.status === 1 ? "下架" : "上架";')}</p>
 `;
 
 const fnTips = `

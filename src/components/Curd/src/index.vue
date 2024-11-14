@@ -487,6 +487,8 @@ exportPropToWindow({
   message,
   jsonToPath,
   request,
+  getData,
+  state,
 });
 
 onMounted(function() {

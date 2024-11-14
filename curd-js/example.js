@@ -9,6 +9,10 @@ import {
   message as _message
 } from "../src/utils/message";
 
+// ----------------- 其他暴露的全局属性 -----------------
+// _state.loading // 整体加载状态
+// _getData();    // 获取表格数据
+
 /**
  * 表格列渲染函数
  * @param {string|number} cellValue 表格值
