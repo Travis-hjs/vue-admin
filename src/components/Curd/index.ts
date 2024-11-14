@@ -8,6 +8,7 @@ export {
   getColumnData,
   getActionData,
   getFormConfig,
+  exportPropToWindow,
   actionProp,
   actionEditKey,
 } from "./src/data";

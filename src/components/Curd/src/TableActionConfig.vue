@@ -159,13 +159,13 @@
             </el-button>
           </template>
         </div>
+        <el-empty v-if="!state.list.length" key="empty" :image-size="120" description="请添加操作列功能按钮" />
         <div v-if="!state.formEdit" class="w-full f-right">
           <el-button v-if="!state.formEdit" type="primary" plain @click="state.formEdit = true">
             <i class="el-icon--left el-icon-plus"></i>
             新增功能按钮
           </el-button>
         </div>
-        <el-empty v-if="!state.list.length" key="empty" :image-size="120" description="请添加操作列功能按钮" />
       </transition-group>
     </div>
     <template #footer>

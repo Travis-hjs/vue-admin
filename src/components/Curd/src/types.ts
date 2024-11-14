@@ -157,7 +157,7 @@ export namespace CurdType {
   export interface Search {
     /** 统一的`label`宽度 */
     labelWidth?: number;
-    /** label整体靠右排列 */
+    /** `label`整体靠右排列 */
     labelRight: boolean;
     /** 操作列表 */
     list: Array<Field>;
