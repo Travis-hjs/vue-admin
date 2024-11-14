@@ -319,9 +319,9 @@ const usableFields = computed(() => {
         return fn(formData.value);
       } catch (error) {
         console.warn("解析表单展示逻辑代码错误 >>", error);
-        return true;
       }
     }
+    return true;
   });
 });
 
