@@ -111,9 +111,7 @@ function onAddItem() {
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => props.data.list,
-  update(newList) {
-    props.data.list = newList;
-  },
+  key: "id",
   findLevel: 5
 });
 

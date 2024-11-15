@@ -93,10 +93,7 @@ const state = reactive({
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.list,
-  update(newList) {
-    state.list = newList;
-  },
-  clone: true
+  key: "prop",
 });
 
 /** 操作列 */

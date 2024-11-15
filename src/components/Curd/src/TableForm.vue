@@ -15,8 +15,8 @@
           v-for="(field, fieldIndex) in state.config.fields"
           :class="[{'the-curd-selected': provideState.editor.index === fieldIndex && isEdit}]"
           :prop="field.key"
-          :key="field.key"
-          :data-key="field.key"
+          :key="field.id"
+          :data-key="field.id"
           :draggable="state.config.fields.length > 1 && !provideState.editor.show ? true : null"
           @dragstart="onDragStart(fieldIndex)"
           @dragover="e => onDragMove(e, fieldIndex)"
@@ -238,11 +238,8 @@ function setFormData(data: BaseObj<any>) {
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.config.fields,
-  update(newList) {
-    state.config.fields = newList;
-  },
+  key: "id",
   findLevel: 10,
-  clone: true
 });
 
 watch(() => props.config, function (config) {

@@ -236,10 +236,7 @@ function deleteColumn(index: number) {
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => props.config.columns,
-  update(newList) {
-    // TODO: 如果丢失响应式，则要改用数组方法进行替换
-    props.config.columns = newList;
-  },
+  key: "prop",
   findLevel: 5
 });
 

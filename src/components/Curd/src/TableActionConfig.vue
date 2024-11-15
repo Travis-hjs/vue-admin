@@ -350,10 +350,7 @@ const iconLink = "https://element.eleme.cn/#/zh-CN/component/icon";
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.list,
-  update(newList) {
-    state.list = newList;
-  },
-  clone: true
+  key: "key",
 });
 
 /** 是否能拖拽 */

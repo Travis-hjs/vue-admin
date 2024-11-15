@@ -112,11 +112,8 @@ export function useLayoutContentSize(params: LayoutContentSize) {
 interface ListDragOption<T> {
   /** 返回列表函数 */
   list(): Array<T>;
-  /**
-   * 触发更新列表函数
-   * @param newList 更新后的新数组
-   */
-  update(newList: Array<T>): void;
+  /** 数组项唯一值 */
+  key: keyof T;
   /**
    * 向上查找节点的最大层数，默认`3`
    * - 目的是为了找到`:data-key`的值
@@ -127,11 +124,6 @@ interface ListDragOption<T> {
    * - 当有多种拖拽列表处于同一场景时，设置该值作为区分用
    */
   dataKey?: string;
-  /**
-   * 是否采用克隆函数去处理数据
-   * - 数据量大时会有性能开销，默认使用`JSON.parse` + `JSON.stringify`去处理
-   */
-  clone?: boolean;
 }
 
 /**
@@ -139,7 +131,7 @@ interface ListDragOption<T> {
  * - `item`节点一定要绑定`<element :data-key="唯一值">`
  * @param option 
  */
-export function useListDrag<T>(option: ListDragOption<T>) {
+export function useListDrag<T extends object>(option: ListDragOption<T>) {
   const maxLevel = option.findLevel || 3;
   const dataKey = option.dataKey || "key";
   const current = {
@@ -160,6 +152,16 @@ export function useListDrag<T>(option: ListDragOption<T>) {
     return undefined;
   }
 
+  /**
+   * 获取排序对比对象
+   * @param list 
+   */
+  function getSortMap(list: Array<T[keyof T]>) {
+    const indexMap: BaseObj<number> = {};
+    list.forEach((item, index) => indexMap[item as string] = index);
+    return indexMap;
+  } 
+
   function onDragStart(index: number) {
     current.index = index;
   }
@@ -174,20 +176,27 @@ export function useListDrag<T>(option: ListDragOption<T>) {
     const targetKey = findDataKey(event.target as HTMLElement);
     if (!targetKey || targetKey === target.key) return;
     target.key = targetKey;
-    const list = option.list();
+    const list = option.list().map(item => item[option.key]);
     // 记录原始数据字符串，下面做对比用
     const str = JSON.stringify(list);
     // 拷贝响应数据
-    const ls: Array<T> = option.clone ? deepClone(list) : JSON.parse(str);
+    const ls: typeof list = JSON.parse(str);
     // 交替数组位置
     [ls[current.index], ls[targetIndex]] = [ls[targetIndex], ls[current.index]];
     // 上一次修改如果和当前数组一致则不重新赋值
     if (str === JSON.stringify(ls)) return;
-    // 最终赋值给响应数据
-    option.update(ls);
+    // 最后设置排序
+    const indexMap = getSortMap(ls);
+    option.list().sort(function(a, b) {
+      const key = option.key;
+      const valueA = indexMap[a[key] as string];
+      const valueB = indexMap[b[key] as string];
+      return valueA - valueB;
+    });
     // 更新当前索引，必须！！！
     current.index = targetIndex;
   }
+
   return {
     onDragStart,
     onDragMove,
