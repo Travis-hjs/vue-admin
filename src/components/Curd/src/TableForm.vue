@@ -66,7 +66,7 @@
         v-for="field in usableFields"
         :label="field.label"
         :prop="field.key"
-        :key="field.key"
+        :key="field.id"
       >
         <Field :fieldData="field" />
       </el-form-item>

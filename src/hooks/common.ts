@@ -127,7 +127,7 @@ interface ListDragOption<T> {
 }
 
 /**
- * 列表拖拽
+ * [列表拖拽](https://juejin.cn/post/7354039500811845670)
  * - `item`节点一定要绑定`<element :data-key="唯一值">`
  * @param option 
  */
@@ -158,7 +158,7 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
    */
   function getSortMap(list: Array<T[keyof T]>) {
     const indexMap: BaseObj<number> = {};
-    list.forEach((item, index) => indexMap[item as string] = index);
+    list.forEach((item, index) => (indexMap[item as string] = index));
     return indexMap;
   } 
 
