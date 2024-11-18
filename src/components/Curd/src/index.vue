@@ -2,32 +2,32 @@
   <div class="the-curd-main-page">
     <section :class="[state.editor.show ? 'f1' : 'w-full']">
       <Search v-if="showSearch" :data="props.data.search" @search="onSearch" />
-      <TableModel v-if="state.editor.type === 'table'" :config="props.data.table" @action="onEditChange" />
+      <TableModel v-if="state.editor.type === 'table'" :config="tableConfig" @action="onEditChange" />
       <template v-else-if="state.editor.type === 'search'">
         <EditBtn @action="onEditChange" />
       </template>
       <template v-else>
-        <template v-if="props.data.table.columns.length > 0">
+        <template v-if="tableConfig.columns.length > 0">
           <div class="f-vertical mgb-10">
-            <span v-if="props.data.table.selectKey" class="the-tag blue">
+            <span v-if="tableConfig.selectKey" class="the-tag blue">
               已选择 {{ tableState.selectList.length }} 条数据
             </span>
             <div class="f1" />
-            <TableOption :config="props.data.table" :disabled="state.loading" @action="onTableOption" />
+            <TableOption :config="tableConfig" :disabled="state.loading" @action="onTableOption" />
           </div>
           <base-table
             v-model:select-list="tableState.selectList"
             :data="tableState.data"
             :columns="tableColumns"
             :actions="actionList"
-            :actionMax="props.data.table.actionMax"
+            :actionMax="tableConfig.actionMax"
             :loading="state.loading"
-            :select-key="props.data.table.selectKey!"
+            :select-key="tableConfig.selectKey!"
           >
             <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
               <TableHeader
-                :column="tableColumns[props.data.table.selectKey ? $index - 1 : $index]"
-                @sort="onSort"
+                :column="tableColumns[tableConfig.selectKey ? $index - 1 : $index]"
+                @sort="(prop, action) => getData({ key: 'sort', prop, action })"
               />
             </template>
             <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
@@ -39,7 +39,11 @@
               />
             </template>
           </base-table>
-          <base-pagination :disabled="state.loading" :pageInfo="tableState.pageInfo" @change="getData" />
+          <base-pagination
+            :disabled="state.loading"
+            :pageInfo="tableState.pageInfo"
+            @change="info => getData({ key: 'page', ...info })"
+          />
         </template>
         <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
           <el-button type="primary" @click="onEditor('table')">去配置</el-button>
@@ -64,7 +68,7 @@
         <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
       </template>
     </base-dialog>
-    <TableSetting v-model:show="tableSetting.show" :columns="props.data.table.columns" @submit="onTableSetting" />
+    <TableSetting v-model:show="tableSetting.show" :columns="tableConfig.columns" @submit="onTableSetting" />
     <el-button
       v-if="!state.showEntrance && !state.editor.type"
       class="the-curd-entrance"
@@ -104,7 +108,7 @@ import TableHeader from "./TableHeader.vue";
 import TableSetting from "./TableSetting.vue";
 import TableForm from "./TableForm.vue";
 import { EditBtn, FooterBtn, TableImage, TableOption, ThumbnailSearch, ThumbnailTable } from "./part";
-import type { CurdType, EditBtnType, TableOptionType } from "./types";
+import type { CurdType, EditBtnType, GetDataParams, TableOptionType } from "./types";
 import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, setFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
@@ -210,8 +214,10 @@ const tableState = reactive({
   formLoading: false
 });
 
+const tableConfig = computed(() => props.data.table);
+
 const tableColumns = computed(() => {
-  const list = props.data.table.columns.filter(item => item.visible);  
+  const list = tableConfig.value.columns.filter(item => item.visible);  
   return list.map(item => {
     const column = {
       ...item
@@ -235,7 +241,7 @@ const tableColumns = computed(() => {
 });
 
 const actionList = computed(() => {
-  const list = props.data.table.actions;
+  const list = tableConfig.value.actions;
   return list.map(item => {
     const newAction = {
       ...item
@@ -270,7 +276,7 @@ const actionList = computed(() => {
  * @param prop 注意这里值和插槽名相同
  */
 function getColumnByProp(prop: string) {
-  const column = props.data.table.columns.find(col => col.prop === prop);
+  const column = tableConfig.value.columns.find(col => col.prop === prop);
   // console.log("getColumnByProp >>", column, prop);
   return column || ({} as CurdType.Table.Column);
 }
@@ -278,14 +284,14 @@ function getColumnByProp(prop: string) {
 const formRef = ref<InstanceType<typeof TableForm>>();
 
 const formInfo = computed(() => {
-  const tableConfig = props.data.table;
+  const config = tableConfig.value;
   const info = {
     title: "编辑表单",
-    config: (tableConfig.formEdit || {}) as CurdType.Table.From
+    config: (config.formEdit || {}) as CurdType.Table.From
   }
   if (tableState.formType === "add") {
     info.title = "新增表单";
-    info.config = (tableConfig.formAdd || {}) as CurdType.Table.From;
+    info.config = (config.formAdd || {}) as CurdType.Table.From;
   }
   return info;
 });
@@ -342,24 +348,11 @@ function onSubmitForm() {
   });
 }
 
-function onSort(key: string, action: CurdType.Table.Column["sort"]) {
-  // console.log(key, action);
-  const columns = props.data.table.columns;
-  for (let i = 0; i < columns.length; i++) {
-    const column = columns[i];
-    if (column.sort) {
-      if (column.prop === key) {
-        column.sort = action;
-      } else {
-        // 将其他的全部重置掉
-        column.sort = true;
-      }
-    }
-  }
-  getData();
-}
-
-function getSearchInfo() {
+/**
+ * 检测并校验搜索数据
+ * @param params 
+ */
+function getSearchInfo(params?: GetDataParams) {
   const searchList = props.data.search.list;
   const searchInfo: BaseObj<any> = {};
   // 处理搜索字段并进行赋值 
@@ -369,6 +362,10 @@ function getSearchInfo() {
     if (field.required && isType(res.result, "string")) {
       setElementShake(document.querySelector(`.${field.id}`));
       message.error(res.result);
+      // 还原分页器操作之前的数据
+      if (params && params.key === "page") {
+        tableState.pageInfo = params.before;
+      }
       return null;
     }
     // TODO: 只设置有值的情况
@@ -379,17 +376,28 @@ function getSearchInfo() {
     // searchInfo[field.key] = res.value;
   }
   // 处理排序字段
-  const columns = props.data.table.columns;
+  const columns = tableConfig.value.columns;
   const ascList: Array<string> = [];
   const descList: Array<string> = [];
-  columns.forEach(item => {
-    if (item.sort === "asc") {
-      ascList.push(item.prop);
-    }
-    if (item.sort === "desc") {
-      descList.push(item.prop);
-    }
-  });
+  if (params && params.key === "sort") {
+    columns.forEach(column => {
+      if (column.sort) {
+        if (column.prop === params.prop) {
+          column.sort = params.action;
+        } else {
+          // 将其他的全部重置掉
+          column.sort = true;
+        }
+      }
+      column.sort === "asc" && ascList.push(column.prop);
+      column.sort === "desc" && descList.push(column.prop);
+    });
+  } else {
+    columns.forEach(column => {
+      column.sort === "asc" && ascList.push(column.prop);
+      column.sort === "desc" && descList.push(column.prop);
+    });
+  }
   if (ascList.length) {
     searchInfo.asc = ascList.toString();
   }
@@ -399,8 +407,12 @@ function getSearchInfo() {
   return searchInfo;
 }
 
-async function getData() {
-  const searchInfo = getSearchInfo();
+/**
+ * 获取表格数据
+ * @param params 
+ */
+async function getData(params?: GetDataParams) {
+  const searchInfo = getSearchInfo(params);
   if (!searchInfo) return;
   const page = JSON.parse(JSON.stringify(tableState.pageInfo));
   // 最后请求列表并把参数传入到外部声明方法中
@@ -477,7 +489,7 @@ function openTableSetting() {
 }
 
 function onTableSetting(list: Array<CurdType.Table.Column>) {
-  props.data.table.columns = list;
+  tableConfig.value.columns = list;
 }
 
 exportPropToWindow({
@@ -492,7 +504,7 @@ exportPropToWindow({
 });
 
 onMounted(function() {
-  if (props.action.created && props.data.table.columns.length) {
+  if (props.action.created && tableConfig.value.columns.length) {
     props.action.created(getData);
   }
 });

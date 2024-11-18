@@ -346,3 +346,16 @@ export namespace CurdType {
 export type EditBtnType = "exit" | "copy" | "complete";
 /** 表格操作类型 */
 export type TableOptionType = "delete" | "add" | "export" | "setting" | "edit";
+
+interface GetDataSort {
+  key: "sort";
+  prop: string;
+  action: CurdType.Table.Column["sort"];
+}
+
+interface GetDataPage extends PaginationChange {
+  key: "page";
+}
+
+/** `index.vue`中`getData`方法传参对象 */
+export type GetDataParams = GetDataSort | GetDataPage;

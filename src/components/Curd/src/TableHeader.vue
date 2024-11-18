@@ -30,7 +30,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "sort", key: string, action: CurdType.Table.Column["sort"]): void;
+  (event: "sort", prop: string, action: CurdType.Table.Column["sort"]): void;
 }>();
 
 const isText = computed(() => !props.column.sort && !props.column.iconTips);
