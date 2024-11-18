@@ -14,11 +14,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-/** 分页组件 */
-export default defineComponent({
+/** 通用分页组件 */
+export default {
   name: "base-pagination"
-})
+}
 </script>
 <script lang="ts" setup>
 import { usePageInfo } from "@/hooks/common";
@@ -52,14 +51,16 @@ const emit = defineEmits<{
 }>();
 
 function onSizeChange(n: number) {
+  const before = JSON.parse(JSON.stringify(props.pageInfo));
   props.pageInfo.currentPage = 1;
   props.pageInfo.pageSize = n;
-  emit("change", { type: "pageSize", value: n });
+  emit("change", { type: "pageSize", value: n, before });
 }
 
 function onCurrentChange(n: number) {
+  const before = JSON.parse(JSON.stringify(props.pageInfo));
   props.pageInfo.currentPage = n;
-  emit("change", { type: "currentPage", value: n });
+  emit("change", { type: "currentPage", value: n, before });
 }
 </script>
 <style lang="scss">
