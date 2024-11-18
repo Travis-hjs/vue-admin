@@ -18,8 +18,8 @@
 | 分支 | 演示地址 | 所用技术 | 补充/说明 |
 | --- | --- | --- | --- |
 | [master](https://github.com/Travis-hjs/vue-admin) | [预览](https://travis-hjs.github.io/vue-admin) | vite 5.x、vue 3.x、vue-router 4.x、typescript | vue3 版本，无引用任何 UI 框架 |
-| [el-plus](https://github.com/Travis-hjs/vue-admin/tree/el-plus) | [预览](https://travis-hjs.github.io/vue-admin-el) | vite 5.x、vue 3.x、vue-router 4.x、typescript、element-plus | 基于`master`加入了 UI 框架的配置使用 |
-| [v2](https://github.com/Travis-hjs/vue-admin/tree/v2) | [预览](https://travis-hjs.github.io/vue2-admin) | vue-cli 4.x 、vue 2.x、vue-router 3.x、typescript、element-ui | vue2 版本，`element-ui`在这里默认作为常规功能展示引用，模板核心功能依然是无 UI 框架依赖，并增加了 [curd 低代码功能](https://github.com/Travis-hjs/vue-admin/tree/el-plus/src/components/Curd) |
+| [el-plus](https://github.com/Travis-hjs/vue-admin/tree/el-plus) | [预览](https://travis-hjs.github.io/vue-admin-el) | vite 5.x、vue 3.x、vue-router 4.x、typescript、element-plus | 基于`master`加入了 UI 框架的配置使用，并增加了 [curd 低代码功能](https://github.com/Travis-hjs/vue-admin/tree/el-plus/src/components/Curd) |
+| [v2](https://github.com/Travis-hjs/vue-admin/tree/v2) | [预览](https://travis-hjs.github.io/vue2-admin) | vue-cli 4.x 、vue 2.x、vue-router 3.x、typescript、element-ui | vue2 版本，`element-ui`在这里默认作为常规功能展示引用，模板核心功能依然是无 UI 框架依赖 |
 
 ## 功能清单
 
