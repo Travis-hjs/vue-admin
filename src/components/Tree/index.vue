@@ -39,7 +39,7 @@ const props = defineProps({
   },
   /** 配置表 */
   setting: {
-    type: Object as PropType<ArrayItemSetting>,
+    type: Object as PropType<CommonOption>,
     default: () => ({})
   },
   /** 节点过滤函数 */
@@ -72,7 +72,7 @@ let backups: Array<TreeItem> = [];
 let timer: NodeJS.Timeout | undefined;
 
 function updateOptions() {
-  const setting: ArrayItemSetting = {
+  const setting: CommonOption = {
     label: "label",
     value: "value",
     children: "children",

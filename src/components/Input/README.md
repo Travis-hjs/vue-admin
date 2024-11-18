@@ -52,7 +52,7 @@ const apiParams = reactive({
   state: 1,
 });
 
-const optSetting: ArrayItemSetting = {
+const optSetting: CommonOption = {
   label: "name",
   value: "id",
   key: "id",
@@ -64,4 +64,3 @@ function onSelect() {
 
 </script>
 ```
-

@@ -3,26 +3,26 @@
 /** 上传组件`change`事件参数 */
 interface UploadChange<T = number | string> {
   /** 组件绑定的 uploadId，多个上传组件的时候用来区分用 */
-  id: T
+  id: T;
   /** 返回图片路径 */
-  src: string
+  src: string;
   /** 上传接口返回原始数据 */
   result?: {
-    fileName: string
-    fileUrl: string
-    size: number
-  }
+    fileName: string;
+    fileUrl: string;
+    size: number;
+  };
 }
 
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */
 interface BaseTableColumn <T = any> {
   /** 表格列标题 */
-  label: string
+  label: string;
   /**
    * 对应表格数据值的`key`
    * - `"action-right"`为固定右边
    */
-  prop: string
+  prop: string;
   /** 当需要自定义插槽去写表格模板时需要，建议字段和`prop`一致 */
   slot?: string;
   /**
@@ -32,32 +32,32 @@ interface BaseTableColumn <T = any> {
    */
   slotHead?: string;
   /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */
-  key?: string
+  key?: string;
   /** 
    * 列宽度
    * - 推荐直接用`number`类型
    */
-  width?: string | number
+  width?: string | number;
   /**
    * 列最新宽度
    * - 推荐直接用`number`类型
    */
-  minWidth?: string | number
+  minWidth?: string | number;
   /**
    * 超出...提示
    * - 默认`true`
    */
-  tooltip?: boolean
+  tooltip?: boolean;
   /** 
    * 固定位置
    * - 当`prop: "action-right"`时，不需要设置该值，固定为靠右
    */
-  fixed?: "right" | "left" | boolean
+  fixed?: "right" | "left" | boolean;
   /**
    * 表格列对齐设置
    * - 当`prop: "action-right"`时，不需要设置该值，固定为居中状态
    */
-  align?: "left" | "center" | "right"
+  align?: "left" | "center" | "right";
   /**
    * 格式化当前值
    * - 在不使用插槽的情况下快速给内容做格式化，比如添加单位，格式化时间等
@@ -113,44 +113,47 @@ interface BaseTableAction<T = BaseObj> {
 
 /** 分页器 change 事件参数 */
 interface PaginationChange {
-  type: "pageSize" | "currentPage",
-  value: number
+  type: "pageSize" | "currentPage";
+  /** 当前修改的值 */
+  value: number;
+  /** 修改之前的完整对象 */
+  before: PageInfo;
 }
 
-/** 通用树型结构列表item数据 */
-interface ArrayItemSetting {
+/** 通用列表选项数据 */
+interface CommonOption {
   /** 显示值，默认`label` */
-  label?: string
+  label?: string;
   /** 对应值，默认`value` */
-  value?: string
+  value?: string;
   /** 下级数据字段，默认`children` */
-  children?: string
+  children?: string;
   /** 禁用值，默认`disabled` */
-  disabled?: string
+  disabled?: string;
   /** 唯一key，默认空 */
-  key?: string
+  key?: string;
 }
 
 /** 多级树节点对象 */
 interface TreeItem<T = any> {
   /** 字段名 */
-  label: string
+  label: string;
   /** 对应的值 */
-  value: string
+  value: string;
   /** 下级数据 */
-  children: Array<TreeItem>
+  children: Array<TreeItem>;
   /** 唯一`key` */
-  key: string
+  key: string;
   /** 索引，多层用`-`串联 */
-  indexs: string
+  indexs: string;
   /** 是否展开下级 */
-  open: boolean
+  open: boolean;
   /** 是否选中 */
-  checked: boolean
+  checked: boolean;
   /** 是否禁用 */
-  disabled: boolean
+  disabled: boolean;
   /** 组件展开收起高度，默认`30` */
-  height: number
+  height: number;
   /** 原始数据 */
-  original: T
+  original: T;
 }

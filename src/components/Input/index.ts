@@ -20,13 +20,13 @@ export function useProps(placeholder: string) {
     },
     /** 选项数据配置项 */
     optionSetting: {
-      type: Object as PropType<Partial<ArrayItemSetting>>,
+      type: Object as PropType<Partial<CommonOption>>,
       default: () => ({})
     }
   }
 }
 
-export function useSettingComputed(props: { optionSetting: Partial<ArrayItemSetting> }) {
+export function useSettingComputed(props: { optionSetting: Partial<CommonOption> }) {
   return computed(function() {
     const setting = {
       label: "label",

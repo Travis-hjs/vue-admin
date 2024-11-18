@@ -1,9 +1,9 @@
-# 树形层级组件
+# 树型层级组件
 
-## 参数说明：
+## 参数说明
 
 | props |  类型 | 是否必选 | 说明 |
-| --- | --- | --- | --- | 
+| --- | --- | --- | --- |
 | list | array | 是 | 树型结构数据 |
 | checkChild | boolean | 否 | 选择父节点时，是否也选中所有其子节点 |
 | checkParent | boolean | 否 | 选择当前节点时，把上级没有选中的关联父节点给勾选上 |
@@ -12,7 +12,7 @@
 | filterNodeMethod | function | 否 | 节点过滤函数，要求返回布尔值 |
 | keepState | boolean | 否 | 是否保留操作状态：展开，选中等；保留操作一定要设置`setting.key`唯一值 |
 
-## 暴露的方法：
+## 暴露的方法
 
 | 方法名 | 说明 |
 | --- | --- |
@@ -82,7 +82,7 @@ const options = [
   },
 ];
 
-const propSetting: ArrayItemSetting = {
+const propSetting: CommonOption = {
   value: "id",
   label: "name",
   children: "list",
