@@ -5,6 +5,7 @@
     "daterange",
     "datetime",
     "datetimerange",
+    "indexs",
     "popconfirm"
   ],
 }
