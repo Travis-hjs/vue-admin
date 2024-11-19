@@ -28,7 +28,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // "packgage-name": ["file-name"],
+          // "package-name": ["file-name"],
           "element-plus": ["element-plus"],
         },
         // manualChunks(id) {
