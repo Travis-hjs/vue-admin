@@ -17,6 +17,7 @@
       :placeholder="data.placeholder"
       type="textarea"
       class="the-curd-field"
+      @input="onChange()"
     />
     <template v-if="data.type === 'input-between'">
       <el-input
@@ -42,8 +43,9 @@
         :options="data.options"
         :props="data.optionSetting"
         v-bind="getSelectProps(data)"
+        @change="onChange()"
       />
-      <el-select v-else v-model="data.value" v-bind="getSelectProps(data)">
+      <el-select v-else v-model="data.value" v-bind="getSelectProps(data)" @change="onChange()">
         <el-option
           v-for="item in data.options"
           :key="item[optionSetting.value]"
@@ -53,7 +55,7 @@
       </el-select>
     </template>
     <template v-if="data.type === 'checkbox'">
-      <el-checkbox-group v-model="data.value" :disabled="props.disabled">
+      <el-checkbox-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
         <el-checkbox
           v-for="item in data.options"
           :key="item[optionSetting.value]"
@@ -67,7 +69,7 @@
       </el-text>
     </template>
     <template v-if="data.type === 'radio'">
-      <el-radio-group v-model="data.value" :disabled="props.disabled">
+      <el-radio-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
         <el-radio
           v-for="item in data.options"
           :key="item[optionSetting.value]"
@@ -86,6 +88,7 @@
       inline-prompt
       active-text="是"
       inactive-text="否"
+      @change="onChange()"
     />
     <el-cascader
       v-if="data.type === 'cascader'"
@@ -99,6 +102,7 @@
       collapse-tags-tooltip
       filterable
       class="the-curd-field"
+      @change="onChange()"
     />
     <el-date-picker
       v-if="data.type === 'date'"
@@ -127,7 +131,7 @@ export default {
 import { computed, onMounted, type PropType } from "vue";
 import { convertPx, fieldTitleMap, initFieldValue, shortcutMap } from "./data";
 import type { CurdType } from "./types";
-import { inputOnlyNumber, isType } from "@/utils";
+import { deepClone, inputOnlyNumber, isType } from "@/utils";
 
 const props = defineProps({
   fieldData: {
@@ -143,8 +147,20 @@ const props = defineProps({
   disabled: Boolean
 });
 
+const emit = defineEmits<{
+  (event: "change", val: any): void;
+}>();
+
 // TODO: 初始化时设置默认值给组件
 initFieldValue(props.fieldData);
+
+function onChange<T>(val?: T) {
+  let result = val || props.fieldData.value;
+  if (isType(result, "array")) {
+    result = deepClone(result);
+  }
+  emit("change", result);
+}
 
 const data = computed(() => props.fieldData);
 
@@ -181,8 +197,10 @@ function onInput(value: string) {
   const field = props.fieldData;
   if (field.valueType === "number") {
     field.value = inputOnlyNumber(value, true, true);
+    onChange(Number(field.value));
   } else {
     field.value = value;
+    onChange();
   }
 }
 
@@ -190,8 +208,10 @@ function onInputBetween(value: string, index: number) {
   const between = props.fieldData as CurdType.InputBetween;
   if (between.valueType === "array<number>") {
     between.value[index] = inputOnlyNumber(value, true, true);
+    onChange(between.value.map(v => Number(v)));
   } else {
     between.value[index] = value;
+    onChange();
   }
 }
 
@@ -242,6 +262,7 @@ const className = "the-date-shortcut-selected";
 function resetPanelBtn() {
   const selected = document.querySelector(`.${className}`);
   selected && selected.classList.remove(className);
+  onChange();
 }
 
 function selectPanelBtn(el: HTMLElement) {
