@@ -565,3 +565,34 @@ vue3-popup-component
 - 就能快速生成弹框组件
 
 当前项目定义了两个常用的代码片段 <sup>vscode</sup>，而用代码片段的方式定制页面远比拓展复杂程序来得容易得多，并且更容易维护。
+
+## 注意事项
+
+在拓展或使用`<Field>`组件时，其内部会执行`initFieldValue()`方法，在做数据修改导致组件重新渲染时，每次都会初始化绑定值，这就导致了上一次修改的值会被`defaultValue`冲掉<sup>（这个行为是有意为之的，在做数据处理时更好的区分和操作状态）</sup>，如果需要保持交互上的操作不被重置，只需要在`<Field>`绑定一个`change`事件，然后在组件外进行处理，像这样：
+
+```html
+<template>
+  <Field
+    v-if="showField"
+    :field-data="data"
+    @change="val => onField(data, val)"
+  />
+</template>
+<script lang="ts" setup>
+// 省略前置代码
+
+/**
+ * @param value 
+ * @param index 
+ */
+function onField<T>(field: CurdType.Field, value: T) {
+  console.log("组件 change 值 >>", value);
+  // TODO: 这里的目的是为了在组件因为数据变动而重新渲染时，组件初始化时恢复默认值的行为
+  if (field.type !== "date") {
+    field.defaultValue = field.value;
+  }
+}
+</script>
+```
+
+同理，日期类型如果不需要重置默认选中的日期，那么就需要修改`shortcutIndex`。
