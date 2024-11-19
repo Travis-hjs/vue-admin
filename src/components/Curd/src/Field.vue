@@ -125,7 +125,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, onMounted, type PropType } from "vue";
-import { convertPx, fieldTitleMap, setFieldValue, shortcutMap } from "./data";
+import { convertPx, fieldTitleMap, initFieldValue, shortcutMap } from "./data";
 import type { CurdType } from "./types";
 import { inputOnlyNumber, isType } from "@/utils";
 
@@ -144,7 +144,7 @@ const props = defineProps({
 });
 
 // TODO: 初始化时设置默认值给组件
-setFieldValue(props.fieldData);
+initFieldValue(props.fieldData);
 
 const data = computed(() => props.fieldData);
 

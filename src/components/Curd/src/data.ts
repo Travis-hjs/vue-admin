@@ -37,11 +37,11 @@ function getIncrementId() {
 }
 
 /**
- * 设置表单项的默认值
+ * 初始化设置表单绑定值
  * - 将对应的默认值设置到绑定的`value`中去
  * @param field
  */
-export function setFieldValue(field: CurdType.Field) {
+export function initFieldValue(field: CurdType.Field) {
   if (field.type == "date") {
     const shortcut = field.shortcutIndex;
     // 先移除当前有选中的快捷选中日期样式

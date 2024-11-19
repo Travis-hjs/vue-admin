@@ -110,7 +110,7 @@ import TableForm from "./TableForm.vue";
 import { EditBtn, FooterBtn, TableImage, TableOption, ThumbnailSearch, ThumbnailTable } from "./part";
 import type { CurdType, EditBtnType, GetDataParams, TableOptionType } from "./types";
 import type { FilterBtnType } from "@/components/FilterBox";
-import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, setFieldValue } from "./data";
+import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
 import { copyText, deepClone, formatDate, isType, jsonToPath } from "@/utils";
@@ -198,7 +198,7 @@ function onCopy() {
 
 function onSearch(type: FilterBtnType) {
   if (type === "reset") {
-    props.data.search.list.forEach(setFieldValue);
+    props.data.search.list.forEach(initFieldValue);
   }
   tableState.pageInfo.currentPage = 1;
   tableState.selectList = []; // TODO: 搜索的时候情况选中

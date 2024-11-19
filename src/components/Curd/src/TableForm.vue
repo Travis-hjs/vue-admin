@@ -83,7 +83,7 @@ export default {
 import { computed, reactive, ref, type PropType } from "vue";
 import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { convertPx, getFieldValue, getFormConfig, setFieldValue, useProvideState } from "./data";
+import { convertPx, getFieldValue, getFormConfig, initFieldValue, useProvideState } from "./data";
 import { watch } from "vue";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
@@ -203,7 +203,7 @@ function clear() {
 
 /** 表单重置 */
 function reset() {
-  state.config.fields.forEach(setFieldValue);
+  state.config.fields.forEach(initFieldValue);
 }
 
 /**
