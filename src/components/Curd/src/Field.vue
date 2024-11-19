@@ -221,6 +221,7 @@ function onBlurBetween(index: number) {
 }
 
 function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
+  const isMultiple = field.type === "select-multiple";
   return {
     placeholder: field.placeholder,
     disabled: props.disabled,
@@ -228,7 +229,7 @@ function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
     clearable: true,
     filterable: true,
     collapseTags: true,
-    class: "field-item"
+    class: `field-item${isMultiple ? " is-multiple-select" : ""}`
   }
 }
 
@@ -269,8 +270,15 @@ onMounted(function () {
 <style lang="scss">
 .the-curd-form-field {
   width: 100%;
+
   .the-curd-field {
     width: 100%;
+  }
+
+  .is-multiple-select {
+    .el-select__selection {
+      flex-wrap: nowrap;
+    }
   }
 }
 
