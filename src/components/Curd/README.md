@@ -538,7 +538,7 @@ import TheUpload from "@/components/Upload";
 </script>
 ```
 
-如果自定义的组件需要处理默认值和最终获取的值处理时，需要在 [data.ts](./src/data.ts) 中同步修改`getFieldValue`和`setFieldValue`这两个方法。当前程序在做其他操作时会统一调用这两个函数。
+如果自定义的组件需要处理默认值和最终获取的值处理时，需要在 [data.ts](./src/data.ts) 中同步修改`getFieldValue`和`initFieldValue`这两个方法。当前程序在做其他操作时会统一调用这两个函数。
 
 ## 如何满足复杂拓展功能
 
