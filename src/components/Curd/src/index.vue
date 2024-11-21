@@ -56,7 +56,6 @@
       :title="formInfo.title"
       :width="convertPx(formInfo.config.width)"
       @close="onCloseForm()"
-      @after-end="onOpened()"
     >
       <TableForm
         ref="formRef"
@@ -100,7 +99,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, onMounted, provide, reactive, ref, type PropType } from "vue";
+import { computed, nextTick, onMounted, provide, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
 import Editor from "./Editor.vue";
@@ -299,12 +298,6 @@ const formInfo = computed(() => {
 /** 点击操作的表格数据，不需要为响应式 */
 let tableRow = null as null | BaseObj<any>;
 
-// TODO: 为什么不在 openTableForm 中设置表单数据？因为`<Field />`组件中会在初始化时设置默认值，
-// 如果在这之前就设置值的话会导致被覆盖不生效的情况。所以在弹框打开之后再设置
-function onOpened() {
-  tableRow && formRef.value?.setFormData(tableRow);
-}
-
 /**
  * 新增 or 编辑表单
  * @param row
@@ -317,7 +310,11 @@ function openTableForm(row?: any) {
     tableState.formType = "add";
   }
   tableState.formShow = true;
+  // <el-form> 验证 bug ，nextTick 有时候会不生效
   setTimeout(() => formRef.value?.clear());
+  // TODO: 为什么需要在 nextTick 设置表单数据？因为`<Field />`组件中会在初始化时设置默认值，
+  // 如果在这之前就设置值的话，会导致被覆盖不生效的情况。
+  nextTick(() => tableRow && formRef.value?.setFormData(tableRow));
 }
 
 function onCloseForm() {
