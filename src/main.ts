@@ -52,6 +52,7 @@ import {
   ElImage,
   ElImageViewer,
   ElPopconfirm,
+  ElPopover,
   vLoading,
 } from "element-plus";
 
@@ -100,6 +101,7 @@ const elComponents = [
   ElImage,
   ElImageViewer,
   ElPopconfirm,
+  ElPopover,
 ]
 
 elComponents.forEach(item => {
