@@ -345,7 +345,7 @@ export namespace CurdType {
 /** 页面编辑按钮类型 */
 export type EditBtnType = "exit" | "copy" | "complete";
 /** 表格操作类型 */
-export type TableOptionType = "delete" | "add" | "export" | "setting" | "edit";
+export type TableOperationType = "delete" | "add" | "export" | "edit";
 
 interface GetDataSort {
   key: "sort";

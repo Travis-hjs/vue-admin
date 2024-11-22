@@ -46,19 +46,6 @@
     border-radius: var(--border-radius);
   }
 
-  .the-curd-scrollbar {
-    &::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-      background-color: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: rgb(153 153 153 / 50%);
-      border-radius: 3px;
-    }
-  }
-
   .the-curd-editor {
     height: var(--layout-content-height);
     overflow-x: hidden;
@@ -261,6 +248,19 @@
   }
 }
 
+.the-curd-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(153 153 153 / 50%);
+    border-radius: 3px;
+  }
+}
+
 .the-curd-entrance-item {
   border-radius: var(--border-radius);
   border: dashed 1px #dcdfe6;
@@ -406,4 +406,12 @@
     font-size: 16px;
     color: var(--blue);
   }
+}
+
+.the-curd-setting-list {
+  --page-padding: 14px;
+  width: 100%;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

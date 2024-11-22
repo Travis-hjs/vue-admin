@@ -8,13 +8,15 @@
       </template>
       <template v-else>
         <template v-if="tableConfig.columns.length > 0">
-          <div class="f-vertical mgb-10">
+          <TableOperation
+            :config="tableConfig"
+            :disabled="state.loading"
+            @action="onTableOperation"
+          >
             <span v-if="tableConfig.selectKey" class="the-tag blue">
               已选择 {{ tableState.selectList.length }} 条数据
             </span>
-            <div class="f1" />
-            <TableOption :config="tableConfig" :disabled="state.loading" @action="onTableOption" />
-          </div>
+          </TableOperation>
           <base-table
             v-model:select-list="tableState.selectList"
             :data="tableState.data"
@@ -67,7 +69,6 @@
         <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
       </template>
     </base-dialog>
-    <TableSetting v-model:show="tableSetting.show" :columns="tableConfig.columns" @submit="onTableSetting" />
     <el-button
       v-if="!state.showEntrance && !state.editor.type"
       class="the-curd-entrance"
@@ -104,10 +105,10 @@ import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
 import Editor from "./Editor.vue";
 import TableHeader from "./TableHeader.vue";
-import TableSetting from "./TableSetting.vue";
+import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
-import { EditBtn, FooterBtn, TableImage, TableOption, ThumbnailSearch, ThumbnailTable } from "./part";
-import type { CurdType, EditBtnType, GetDataParams, TableOptionType } from "./types";
+import { EditBtn, FooterBtn, TableImage, ThumbnailSearch, ThumbnailTable } from "./part";
+import type { CurdType, EditBtnType, GetDataParams, TableOperationType } from "./types";
 import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
@@ -423,7 +424,7 @@ async function getData(params?: GetDataParams) {
   }
 }
 
-function onTableOption(type: TableOptionType) {
+function onTableOperation(type: TableOperationType) {
   const selects = tableState.selectList;
   switch (type) {
     case "add":
@@ -454,10 +455,6 @@ function onTableOption(type: TableOptionType) {
       });
       break;
 
-    case "setting":
-      openTableSetting();
-      break;
-
     case "export":
       if (props.action.onExport) {
         props.action.onExport();
@@ -475,18 +472,6 @@ function onEditChange(type: EditBtnType) {
     complete: onComplete
   };
   actionMap[type]();
-}
-
-const tableSetting = reactive({
-  show: false
-});
-
-function openTableSetting() {
-  tableSetting.show = true;
-}
-
-function onTableSetting(list: Array<CurdType.Table.Column>) {
-  tableConfig.value.columns = list;
 }
 
 exportPropToWindow({

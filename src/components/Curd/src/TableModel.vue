@@ -1,7 +1,6 @@
 <template>
-  <TableOption
+  <TableOperation
     v-if="!tableForm.show"
-    class="mgb-10 w-full"
     :editMode="true"
     :config="props.config"
     @action="onOption"
@@ -147,8 +146,9 @@ import { computed, type PropType, reactive } from "vue";
 import { actionEditKey, actionProp, getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
-import type { CurdType, EditBtnType, TableOptionType } from "./types";
-import { EditBtn, TableImage, TableOption } from "./part";
+import type { CurdType, EditBtnType, TableOperationType } from "./types";
+import { EditBtn, TableImage } from "./part";
+import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import TableHeader from "./TableHeader.vue";
 import TableColumnConfig from "./TableColumnConfig.vue";
@@ -427,7 +427,7 @@ function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
   tableForm.form = null;
 }
 
-function onOption(type: TableOptionType) {
+function onOption(type: TableOperationType) {
   switch (type) {
     case "delete":
       openConfigDele();

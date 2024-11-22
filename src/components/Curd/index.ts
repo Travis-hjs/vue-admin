@@ -15,6 +15,6 @@ export {
 
 export type {
   CurdType,
-  TableOptionType,
+  TableOperationType as TableOperationAction,
 } from "./src/types";
 

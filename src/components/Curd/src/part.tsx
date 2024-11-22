@@ -1,5 +1,5 @@
 import { openPreview } from "@/components/ImageViewer";
-import type { CurdType, EditBtnType, TableOptionType } from "./types";
+import type { CurdType, EditBtnType } from "./types";
 
 // ----------------- 一些零散且无状态的单一组件 -----------------
 
@@ -119,99 +119,6 @@ export function LabelTips(props: LabelTipsProps) {
         </el-button>
       </el-tooltip>
     </>
-  );
-}
-
-interface TableOptionProps {
-  /** 是否编辑模式 */
-  editMode?: boolean;
-  /** 是否禁用状态 */
-  disabled?: boolean;
-  /** 配置数据 */
-  config: CurdType.Table.Config;
-  /**
-   * 按钮操作回调
-   * @param type
-   */
-  onAction?: (type: TableOptionType) => void;
-}
-
-/**
- * 表格操作选项组件
- * @param props
- */
-export function TableOption(props: TableOptionProps) {
-  const emit = props.onAction || (() => {});
-  const state = props.config;
-  const hasDelete = !!state.selectKey;
-  const hasAdd = state.formAdd && state.formAdd.fields.length > 0;
-  const hasEdit = state.formEdit && state.formEdit.fields.length > 0;
-  const icon = {
-    on: "el-icon-success",
-    off: "el-icon-remove-outline"
-  };
-  const editModeBtnList = [
-    {
-      type: "delete",
-      text: hasDelete ? "修改删除" : "配置删除",
-      icon: hasDelete ? icon.on : icon.off,
-      style: hasDelete ? "primary" : "info"
-    },
-    {
-      type: "add",
-      text: hasAdd ? "修改新增表单" : "配置新增表单",
-      icon: hasAdd ? icon.on : icon.off,
-      style: hasAdd ? "primary" : "info"
-    },
-    {
-      type: "edit",
-      text: hasEdit ? "修改编辑表单" : "配置编辑表单",
-      icon: hasEdit ? icon.on : icon.off,
-      style: hasEdit ? "primary" : "info"
-    }
-  ] as const;
-  return (
-    <div>
-      {props.editMode ? (
-        <>
-          {editModeBtnList.map(btn => (
-            <el-button type={btn.style} link onClick={() => emit(btn.type)}>
-              <i class={`el-icon--left ${btn.icon}`} />
-              {btn.text}
-            </el-button>
-          ))}
-        </>
-      ) : (
-        <>
-          {hasDelete ? (
-            <el-button type="danger" link disabled={props.disabled} onClick={() => emit("delete")}>
-              <i class="el-icon--left el-icon-delete" />
-              删除
-            </el-button>
-          ) : null}
-          {hasAdd ? (
-            <el-button type="primary" link disabled={props.disabled} onClick={() => emit("add")}>
-              <i class="el-icon--left el-icon-plus" />
-              新增
-            </el-button>
-          ) : null}
-          <el-button type="primary" link disabled={props.disabled} onClick={() => emit("export")}>
-            <i class="el-icon--left el-icon-download" />
-            导出
-          </el-button>
-          <el-tooltip
-            effect="dark"
-            content="配置表格展示、排序等操作"
-            placement="top-end"
-          >
-            <el-button type="primary" link disabled={props.disabled} onClick={() => emit("setting")}>
-              <i class="el-icon--left el-icon-setting" />
-              设置
-            </el-button>
-          </el-tooltip>
-        </>
-      )}
-    </div>
   );
 }
 
