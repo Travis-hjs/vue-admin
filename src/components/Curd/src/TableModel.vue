@@ -37,25 +37,25 @@
           <i class="el-icon-rank el-icon--left" />
           <TableHeader :column="column" />
         </div>
-        <div class="fake-table-cell">
-          <el-button
-            circle
-            plain
-            type="success"
-            size="small"
-            @click="openConfigCol('edit', columnIndex)"
-          >
-            <i class="el-icon-edit" />
-          </el-button>
-          <el-button
-            circle
-            plain
-            type="danger"
-            size="small"
-            @click="deleteColumn(columnIndex)"
-          >
-            <i class="el-icon-delete" />
-          </el-button>
+        <div class="fake-table-cell operation f-vertical">
+          <el-dropdown trigger="click">
+            <el-button link type="primary">
+              配置列
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="menu in columnMenus"
+                  :key="menu.key"
+                  @click="menu.click(columnIndex)"
+                >
+                  <i :class="['el-icon--left', menu.icon]"></i>
+                  {{ menu.label }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <div class="fake-table-cell f-vertical">
           <template v-if="column.cellType === 'text'">文本内容</template>
@@ -65,7 +65,7 @@
       </div>
       <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="actionProp" class="fake-table-item" >
         <div class="fake-table-head fvc">操作</div>
-        <div class="fake-table-cell" style="text-align: center;">
+        <div class="fake-table-cell operation fvc">
           <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
             <el-button 
               circle
@@ -154,6 +154,7 @@ import TableHeader from "./TableHeader.vue";
 import TableColumnConfig from "./TableColumnConfig.vue";
 import TableDeleteConfig from "./TableDeleteConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   config: {
@@ -168,9 +169,39 @@ const emit = defineEmits<{
 
 const demoUrl = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
 
+const columnMenus = [
+  {
+    key: "edit",
+    label: "编辑列",
+    icon: "el-icon-edit",
+    // style: "el-button el-button--primary is-link",
+    click(columnIndex: number) {
+      openConfigCol("edit", columnIndex);
+    }
+  },
+  {
+    key: "copy",
+    label: "复制列",
+    icon: "el-icon-document-copy",
+    // style: "el-button el-button--success is-link",
+    click(columnIndex: number) {
+      openConfigCol("copy", columnIndex);
+    }
+  },
+  {
+    key: "delete",
+    label: "删除列",
+    icon: "el-icon-delete",
+    // style: "el-button el-button--danger is-link",
+    click(columnIndex: number) {
+      deleteColumn(columnIndex);
+    }
+  },
+]; 
+
 const configCol = reactive({
   show: false,
-  type: "add" as "add" | "edit",
+  type: "add" as "add" | "edit" | "copy",
   index: -1,
   form: undefined as CurdType.Table.Column | undefined,
   keys: [] as Array<string>
@@ -198,22 +229,31 @@ const columnInfo = computed(() => {
 
 function openConfigCol(type: typeof configCol.type, index?: number) {
   configCol.keys = props.config.columns.map(col => col.prop);
-  if (type === "edit") {
-    const form = props.config.columns[index!];
-    configCol.keys = configCol.keys.filter(val => val !== form.prop);
-    configCol.index = index!;
-    configCol.form = form;
-  } else {
-    configCol.form = undefined;
+  const actionMap = {
+    add() {
+      configCol.form = undefined;
+    },
+    edit() {
+      const form = props.config.columns[index!];
+      configCol.keys = configCol.keys.filter(val => val !== form.prop);
+      configCol.index = index!;
+      configCol.form = form;
+    },
+    copy() {
+      const form = props.config.columns[index!];
+      // configCol.index = index!;
+      configCol.form = form;
+    }
   }
+  actionMap[type]();
   configCol.type = type;
   configCol.show = true;
 }
 
 function onColSubmit(form: CurdType.Table.Column) {
   const config = props.config;
-  if (configCol.type === "add") {
-    const drag: Array<CurdType.Table.Column> = JSON.parse(JSON.stringify(columnInfo.value.drag));
+  if (["add", "copy"].includes(configCol.type)) {
+    const drag = deepClone(columnInfo.value.drag);
     drag.push(form);
     config.columns = drag.concat(columnInfo.value.action);
   } else {
@@ -372,13 +412,13 @@ function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
     if (tableForm.type === "add") {
       data.formAdd = config;
       if (sync) {
-        data.formEdit = JSON.parse(JSON.stringify(config));
+        data.formEdit = deepClone(config);
         handleEditAction();
       }
     } else {
       data.formEdit = config;
       if (sync) {
-        data.formAdd = JSON.parse(JSON.stringify(config));
+        data.formAdd = deepClone(config);
       }
       handleEditAction();
     }

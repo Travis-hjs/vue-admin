@@ -11,15 +11,15 @@ export function EditBtn(props: { onAction?: (type: EditBtnType) => void }) {
   const emit = props.onAction || (() => {});
   return (
     <>
-      <el-button link onClick={() => emit("exit")}>
-        退出编辑
+      <el-button onClick={() => emit("exit")}>
+        退 出
       </el-button>
       <el-button type="success" plain onClick={() => emit("copy")}>
         <i class="el-icon-document-copy el-icon--left" />
         复制JSON
       </el-button>
       <el-button type="primary" onClick={() => emit("complete")}>
-        完成编辑
+        保 存
       </el-button>
     </>
   );

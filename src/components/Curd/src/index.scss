@@ -172,6 +172,10 @@
     .fake-table-cell {
       min-height: 40px;
       border-top: var(--border);
+
+      &.operation {
+        min-height: 54px;
+      }
     }
 
     .is-edit-form {

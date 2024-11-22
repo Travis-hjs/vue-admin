@@ -133,7 +133,7 @@ const props = defineProps({
     required: true
   },
   type: {
-    type: String as PropType<"add" | "edit">,
+    type: String as PropType<"add" | "edit" | "copy">,
     required: true
   },
   keys: {
@@ -153,7 +153,14 @@ const state = reactive({
   form: getColumnData("", "")
 });
 
-const title = computed(() => `${props.type === "add" ? "新增" : "编辑"}表格列`);
+const title = computed(() => {
+  const map = {
+    add: "新增",
+    edit: "编辑",
+    copy: "复制"
+  }
+  return map[props.type] + "表格列";
+});
 
 const formRef = ref<FormInstance>();
 
@@ -254,6 +261,9 @@ watch(
       state.form = getColumnData("", "");
     } else {
       state.form = deepClone(props.form)!;
+      if (props.type === "copy") {
+        state.form.prop = "";
+      }
     }
     setTimeout(() => formRef.value?.clearValidate());
   },
