@@ -183,7 +183,6 @@ function getDragProps(col: CurdType.Table.Column, index: number) {
 }
 
 const setting = reactive({
-  width: 300,
   showFixed: false,
 });
 
