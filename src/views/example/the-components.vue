@@ -120,7 +120,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { Scrollbar } from "@/components/Scrollbar";
-import { UploadImage } from "@/components/Upload";
+import { UploadImage, type UploadChange } from "@/components/Upload";
 import { CollapseHeight } from "@/components/CollapseHeight";
 import { type Message, message, messageBox } from "@/utils/message";
 

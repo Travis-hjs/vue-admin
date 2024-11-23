@@ -22,10 +22,9 @@ export default {
 </script>
 <script lang="ts" setup>
 import { ref, type PropType, onUnmounted, provide, watch } from "vue";
-import { useLevelProps } from "./index";
+import { useLevelProps, type TreeItem } from "./index";
 import globalEvent from "@/utils/event";
 import Level from "./Level.vue";
-import type { OptionSetting, TreeItem } from "../Input";
 
 const props = defineProps({
   /** 数组列表 */

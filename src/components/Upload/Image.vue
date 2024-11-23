@@ -27,6 +27,7 @@ import { ref } from "vue"
 import { copyText } from "@/utils";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
+import type { UploadChange } from "./index";
 
 const props = defineProps({
   /** 组件上传图片路径 */
@@ -60,7 +61,7 @@ const props = defineProps({
   /** 上传图片最大体积（M） */
   maxSize: {
     type: Number,
-    default: 2,
+    default: 5,
   },
   /** 是否需要复制图片地址功能 */
   copy: {

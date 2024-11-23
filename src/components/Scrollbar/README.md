@@ -2,15 +2,9 @@
 
 [详细介绍](https://juejin.cn/post/7068617486186479653)
 
-参数说明：
+`<Scrollbar>`根据外部节点自动撑满宽高，尺寸只需要设置父节点即可。
 
-| props |  类型 | 是否必选 | 说明 |
-| --- | --- | --- | --- |
-| thumbColor | string | 否 | 滚动条颜色 |
-| thumbSize | string | 否 | 滚动条厚度 |
-| clickUpdateDelay | number | 否 | 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒；使用场景：内部有子节点尺寸变动撑开包裹器的滚动尺寸时，并且带有动画的情况，这时设置的延迟就为动画持续时间 |
-
-`<Scrollbar>`根据外部节点自动撑满宽高，尺寸只需要设置父节点即可，使用示例：
+## 使用示例
 
 ```html
 <template>
@@ -80,4 +74,34 @@ const list = new Array(10).fill(0).map((_, index) => index);
   }
 }
 </style>
+```
+
+## 参数说明
+
+| props |  类型 | 是否必选 | 说明 |
+| --- | --- | --- | --- |
+| thumbColor | string | 否 | 滚动条颜色 |
+| thumbSize | string | 否 | 滚动条厚度 |
+| clickUpdateDelay | number | 否 | 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒；使用场景：内部有子节点尺寸变动撑开包裹器的滚动尺寸时，并且带有动画的情况，这时设置的延迟就为动画持续时间 |
+
+## 事件说明
+
+当前组件对外暴露了两个方法，用于特殊场景需要手动更新界面用。
+
+| 事件名 | 说明 |
+| --- | --- |
+| updateWrapStyle | 更新滚动包裹器样式 |
+| updateThumbStyle | 更新滚动指示器样式 |
+
+例如：
+
+```ts
+import { ref } from "vue";
+import { Scrollbar } from "@/components/Scrollbar";
+
+const barRef = ref<InstanceType<typeof Scrollbar>>();
+
+function onUpdate() {
+  barRef.value?.updateThumbStyle();
+}
 ```

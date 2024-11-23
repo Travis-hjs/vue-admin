@@ -1,17 +1,10 @@
-// =================== src/components 组件全局类型 ===================
 
-/** 上传组件`change`事件参数 */
-interface UploadChange<T = number | string> {
-  /** 组件绑定的 uploadId，多个上传组件的时候用来区分用 */
-  id: T;
-  /** 返回图片路径 */
-  src: string;
-  /** 上传接口返回原始数据 */
-  result?: {
-    fileName: string;
-    fileUrl: string;
-    size: number;
-  };
+/** 通用选项结构 */
+interface CommonOption<T = string | number> {
+  label: string;
+  value: T;
+  children?: Array<CommonOption<T>>;
+  disabled?: boolean;
 }
 
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */
@@ -118,4 +111,18 @@ interface PaginationChange {
   value: number;
   /** 修改之前的完整对象 */
   before: PageInfo;
+}
+
+/** 列表选项结构配置 */
+interface OptionSetting {
+  /** 显示值，默认`label` */
+  label?: string;
+  /** 对应值，默认`value` */
+  value?: string;
+  /** 下级数据字段，默认`children` */
+  children?: string;
+  /** 禁用值，默认`disabled` */
+  disabled?: string;
+  /** 唯一key，默认空 */
+  key?: string;
 }

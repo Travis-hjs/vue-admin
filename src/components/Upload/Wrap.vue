@@ -13,24 +13,18 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-
 /** 上传包裹组件 */
-export default defineComponent({
+export default {
   name: "UploadWrap"
-})
+}
 </script>
 <script lang="ts" setup>
 import { type PropType, ref } from "vue";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
+import type { UploadChange } from "./index";
 
 const props = defineProps({
-  //上传图片点击设置埋点数据
-  point: {
-    type: String,
-    default: ""
-  },
   /** 组件`id`,多个组件使用时区分用 */
   uploadId: {
     type: [String, Number],
