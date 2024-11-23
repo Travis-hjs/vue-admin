@@ -25,6 +25,7 @@ import { ref, type PropType, onUnmounted, provide, watch } from "vue";
 import { useLevelProps } from "./index";
 import globalEvent from "@/utils/event";
 import Level from "./Level.vue";
+import type { OptionSetting, TreeItem } from "../Input";
 
 const props = defineProps({
   /** 数组列表 */
@@ -39,12 +40,12 @@ const props = defineProps({
   },
   /** 配置表 */
   setting: {
-    type: Object as PropType<CommonOption>,
+    type: Object as PropType<OptionSetting>,
     default: () => ({})
   },
   /** 节点过滤函数 */
   filterNodeMethod: {
-    type: Function as PropType<(value: string, data: any, node: TreeItem<any>) => boolean>,
+    type: Function as PropType<(value: string, data: any, node: TreeItem) => boolean>,
     default: undefined
   },
   /** 
@@ -72,7 +73,7 @@ let backups: Array<TreeItem> = [];
 let timer: NodeJS.Timeout | undefined;
 
 function updateOptions() {
-  const setting: CommonOption = {
+  const setting: OptionSetting = {
     label: "label",
     value: "value",
     children: "children",
@@ -87,15 +88,15 @@ function updateOptions() {
    * 格式化选项数据
    * @param arr 要格式化的数据
    * @param parentIndex 父节点索引字段
-   * @param befores 原始数据
+   * @param beforeList 原始数据
    */
-  function format(arr: Array<any>, parentIndex: string, befores: Array<TreeItem> = []): Array<TreeItem> {
+  function format(arr: Array<any>, parentIndex: string, beforeList: Array<TreeItem> = []): Array<TreeItem> {
     return arr.map(function (item, index) {
       const indexs = parentIndex ? `${parentIndex}-${index}` : index.toString();
       const key = setting.key && item[setting.key] ? item[setting.key] : indexs;
       const children = item[setting.children!] || undefined;
-      // const before = (befores[index] && befores[index].key === key) ? befores[index] : undefined;
-      const before = keep ? befores.find(b => b.key === key) : undefined;
+      // const before = (beforeList[index] && beforeList[index].key === key) ? beforeList[index] : undefined;
+      const before = keep ? beforeList.find(b => b.key === key) : undefined;
       // console.log("before >>", before, before && before.label);
       return {
         label: item[setting.label!],
