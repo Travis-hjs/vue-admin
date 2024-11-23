@@ -2,7 +2,9 @@
 
 [详细介绍](https://juejin.cn/post/7054088327376404488)
 
-使用方式，已注册为全局组件
+## 使用方式
+
+已注册为全局组件
 
 ```html
 <template>
@@ -21,7 +23,7 @@
 </template>
 ```
 
-参数说明：
+## 参数说明
 
 | props |  类型 | 是否必选 | 说明 |
 | --- | --- | --- | --- |
@@ -31,7 +33,7 @@
 | closeByMask | boolean | 否 | 是否可以通过点击遮罩层关闭`Dialog`，默认`true` |
 | appendToBody | boolean | 否 | `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true`，默认`false` |
 
-事件说明：
+## 事件说明
 
 | 事件名 | 说明 |
 | --- | --- |

@@ -1,9 +1,5 @@
 # 复选框组件
 
-## 参数
-
-看`index.vue`，懒得写了
-
 ## 使用示例
 
 ```html
@@ -24,6 +20,10 @@ const state = reactive({
 
 </script>
 ```
+
+## 参数
+
+看`index.vue`，懒得写了
 
 ## 开关切换样式
 
