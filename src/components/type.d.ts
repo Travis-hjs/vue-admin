@@ -1,9 +1,8 @@
-/**
- * 上传组件`change`回调类型
- */
-interface UploadChange<T = string | number> {
-  /** 和当前上传组件绑定的`id` */
-  id: T
-  /** 图片路径 */
-  src: string
+
+/** 通用选项结构 */
+interface CommonOption<T = string | number> {
+  label: string;
+  value: T;
+  children?: Array<CommonOption<T>>;
+  disabled?: boolean;
 }

@@ -12,8 +12,6 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-
 /** 滚动条的厚度 */
 const scrollbarSize = (function () {
   const el = document.createElement("div");
@@ -29,9 +27,9 @@ const scrollbarSize = (function () {
 /**
  * 滚动条组件
  */
-export default defineComponent({
+export default {
   name: "Scrollbar"
-})
+}
 </script>
 <script lang="ts" setup>
 import { onMounted, ref, reactive, onUnmounted } from "vue";
@@ -236,8 +234,7 @@ onUnmounted(function () {
 defineExpose({
   updateWrapStyle,
   updateThumbStyle
-})
-
+});
 </script>
 <style lang="scss">
 .the-scrollbar {

@@ -16,16 +16,16 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
 /** 上传图片组件 */
-export default defineComponent({
+export default {
   name: "UploadImage"
-})
+}
 </script>
 <script lang="ts" setup>
 import { type PropType, ref } from "vue";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
+import type { UploadChange } from "./index";
 
 const props = defineProps({
   /** 组件上传图片路径 */
@@ -61,7 +61,7 @@ const props = defineProps({
   /** 上传图片最大体积（M） */
   maxSize: {
     type: Number,
-    default: 2
+    default: 5
   },
   /** 是否禁用状态 */
   disabled: {
