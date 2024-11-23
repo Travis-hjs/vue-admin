@@ -41,25 +41,34 @@
           </div>
         </el-form-item>
       </transition-group>
-      <el-empty v-if="!state.config.fields.length" :description="`当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`" />
-      <div v-if="!isEdit">
-        <el-button link @click="onExit()">
-          退出编辑
-        </el-button>
-        <el-button type="danger" link :disabled="!state.config.fields.length" @click="onDeleteAll()">
-          <i class="el-icon--left el-icon-delete"></i>
-          删除表单
-        </el-button>
-        <el-button type="success" link @click="onComplete()">
-          <i class="el-icon--left el-icon-finished"></i>
-          完成表单
-        </el-button>
-        <el-button type="primary" link @click="openEditor(-1)">
+      <el-empty v-if="!state.config.fields.length" :description="`当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`">
+        <el-button v-if="!isEdit" type="primary" @click="openEditor(-1)">
           <i class="el-icon--left el-icon-plus"></i>
-          添加一项
+          添加表单项
         </el-button>
-        <!-- <el-button @click="validate()">调试验证</el-button> -->
-      </div>
+      </el-empty>
+      <template v-if="!isEdit">
+        <el-form-item v-if="state.config.fields.length" key="bottom-add">
+          <el-button type="primary" @click="openEditor(-1)">
+            <i class="el-icon--left el-icon-plus"></i>
+            继续添加
+          </el-button>
+          <!-- <el-button @click="validate()">调试验证</el-button> -->
+        </el-form-item>
+        <div key="bottom-setting">
+          <el-button link @click="onExit()">
+            退出编辑
+          </el-button>
+          <el-button type="danger" link :disabled="!state.config.fields.length" @click="onDeleteAll()">
+            <i class="el-icon--left el-icon-delete"></i>
+            清空表单
+          </el-button>
+          <el-button type="success" link @click="onComplete()">
+            <i class="el-icon--left el-icon-check"></i>
+            保存表单
+          </el-button>
+        </div>
+      </template>
     </template>
     <template v-if="!props.editMode && state.config && state.config.fields">
       <el-form-item
