@@ -238,7 +238,7 @@ export function getColumnData(prop: string, label: string): CurdType.Table.Colum
     prop,
     width: undefined,
     minWidth: undefined,
-    tooltip: false,
+    tooltip: prop === actionProp ? false : true,
     cellType: "text",
     sort: false,
     fixed: false,

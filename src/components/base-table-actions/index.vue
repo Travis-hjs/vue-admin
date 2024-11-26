@@ -1,5 +1,6 @@
 <template>
   <div class="base-table-actions fvc" @click="onBoxClick">
+    <span v-if="!useList.btn.length">-</span>
     <el-button
       text
       :type="btn.type || 'primary'"
@@ -71,7 +72,6 @@ const props = defineProps({
 
 const useList = computed(() => {
   const types = ["boolean", "function", "string"];
-
   const btnList = props.actions.filter(item => {
     if (types.includes(checkType(item.show))) {
       return getBoolean(item, "show");
@@ -79,7 +79,6 @@ const useList = computed(() => {
       return true;
     }
   });
-  
   const max = Number(props.max);
 
   return {
@@ -94,23 +93,23 @@ const useList = computed(() => {
 //   return isType(value, "function") ? value(props.row) : value;
 // }
 function getString(item: BaseTableAction, key: "text" | "icon") {
-  // console.log(item)
   const value = item[key];
-  if (!value) return "-";
   if (isType(value, "function")) {
     return value(props.row);
-  } else if (value.includes("return")) {
-    // 处理按钮文字操作
-    let str = "文字配置有误";
-    try {
-      const fn = new Function("row", value);
-      str = fn(props.row);
-    } catch (error) {
-      console.warn("解析按钮文字代码错误 >>", error);
-    }
-    return str;
   }
-  return value;
+  if (isType(value, "string")) {
+    let text = value;
+    if (value.includes("return")) {
+      try {
+        const fn = new Function("row", value);
+        text = fn(props.row);
+      } catch (error) {
+        console.warn("解析按钮文字代码错误 >>", error);
+      }
+    }
+    return text;
+  }
+  return undefined;
 }
 
 // function getBoolean(item: BaseTableAction, key: "loading" | "disabled" | "show") {
@@ -120,20 +119,22 @@ function getString(item: BaseTableAction, key: "text" | "icon") {
 // }
 function getBoolean(item: BaseTableAction, key: "loading" | "disabled" | "show") {
   const value = item[key];
-  if (!value) return false;
   if (isType(value, "function")) {
     return value(props.row);
-  } else if (isType(value, "string") && value.includes("return")) {
-    let val = false;
-    try {
-      const fn = new Function("row", value);
-      val = fn(props.row);
-    }  catch (error) {
-      console.warn(`解析 ${key} 字段代码错误 >>`, error);
+  }
+  if (isType(value, "string")) {
+    let val = key === "show";
+    if (value.includes("return")) {
+      try {
+        const fn = new Function("row", value);
+        val = fn(props.row);
+      }  catch (error) {
+        console.warn(`解析 ${key} 字段代码错误 >>`, error);
+      }
     }
     return val;
   }
-  return value as boolean;
+  return false;
 }
 
 // function onBtnClick(item: BaseTableAction) {

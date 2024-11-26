@@ -33,7 +33,7 @@
         :label="item.label"
         :min-width="item.minWidth"
         :width="item.width"
-        :show-overflow-tooltip="item.tooltip === undefined ? true : item.tooltip"
+        :show-overflow-tooltip="hasTooltip(item)"
         :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
         :align="item.prop === 'action-right' ? 'center' : item.align"
         :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
@@ -150,6 +150,11 @@ function isEmpty(val: any) {
   return ["", null, undefined, "null", "undefined"].includes(val);
 }
 
+function hasTooltip(col: BaseTableColumn) {
+  const defaultVal = col.prop === "action-right" ? false : true;
+  return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
+}
+
 /** 
  * 设置默认的表格内容 
  * @param row 行信息
@@ -238,7 +243,6 @@ function onSelect(item: any) {
   }
   emit("update:selectList", list);
 }
-
 </script>
 <style lang="scss">
 .base-table {

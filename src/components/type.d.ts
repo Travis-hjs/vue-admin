@@ -38,7 +38,7 @@ interface BaseTableColumn <T = any> {
   minWidth?: string | number;
   /**
    * 超出...提示
-   * - 默认`true`
+   * - 当`prop !== "action-right"`时，默认为`true`
    */
   tooltip?: boolean;
   /** 
