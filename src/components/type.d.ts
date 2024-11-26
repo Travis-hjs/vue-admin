@@ -32,7 +32,7 @@ interface BaseTableColumn <T = any> {
    */
   width?: string | number;
   /**
-   * 列最新宽度
+   * 列最小宽度
    * - 推荐直接用`number`类型
    */
   minWidth?: string | number;
