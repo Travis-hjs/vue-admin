@@ -32,7 +32,7 @@
         @dragover="onDragMove($event, columnIndex)"
         @drop="onDropEnd()"
       >
-        <div class="fake-table-head f-vertical">
+        <div class="fake-table-head f-vertical" :data-head="column.prop">
           <i class="el-icon-rank el-icon--left" />
           <TableHeader :column="column" />
         </div>
@@ -62,7 +62,7 @@
           <TableImage :column="column" :src="demoUrl" />
         </div>
       </div>
-      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="actionProp" class="fake-table-item" >
+      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="actionProp" class="fake-table-item">
         <div class="fake-table-head fvc">操作</div>
         <div class="fake-table-cell operation fvc">
           <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
@@ -96,7 +96,7 @@
           <el-text v-else type="info">待添加操作~</el-text>
         </div>
       </div>
-      <div class="f-vertical" key="fixed">
+      <div class="f-vertical" key="right-setting">
         <div>
           <p>
             <el-button type="primary" text @click="openConfigCol('add')">
@@ -114,7 +114,13 @@
       </div>
     </transition-group>
   </div>
-  <EditBtn v-if="!tableForm.show" :type="tableForm.type"  @action="e => emit('action', e)" />
+  <div v-if="!tableForm.show">
+    <EditBtn :type="tableForm.type" @action="onEdit" />
+    <span v-if="hasNotWidth" class="the-tag blue mgl-10">
+      <i class="el-icon--left el-icon-info"></i>
+      当前表格列配置中存在没配置【宽度/最小宽度】，保存时将自动设置最小宽度，提高表格美观性。
+    </span>
+  </div>
   <TableColumnConfig
     v-model:show="configCol.show"
     :type="configCol.type"
@@ -441,5 +447,28 @@ function onOption(type: TableOperationType) {
       openTableForm("edit");
       break;
   }
+}
+
+/** 是否有未设置宽度或最小宽度的列 */
+const hasNotWidth = computed(() => columnInfo.value.drag.some(col => !col.width && !col.minWidth));
+
+function onEdit(type: EditBtnType) {
+  // 自动设置最小宽度
+  if (type === "complete" && hasNotWidth.value) {
+    const heads: Array<HTMLElement> = Array.from(document.querySelectorAll(".fake-table-head"));
+    const domInfo: BaseObj<number> = {};
+    heads.forEach(el => {
+      const key = el.dataset.head || "";
+      if (key) {
+        domInfo[key] = Math.round(el.clientWidth);
+      }
+    });
+    props.config.columns.forEach(col => {
+      if (Object.prototype.hasOwnProperty.call(domInfo, col.prop)) {
+        col.minWidth = domInfo[col.prop];
+      }
+    });
+  }
+  emit("action", type);
 }
 </script>

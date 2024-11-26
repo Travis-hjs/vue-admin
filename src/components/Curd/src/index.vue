@@ -217,7 +217,7 @@ const tableState = reactive({
 const tableConfig = computed(() => props.data.table);
 
 const tableColumns = computed(() => {
-  const list = tableConfig.value.columns.filter(item => item.visible);  
+  const list = tableConfig.value.columns.filter(item => item.visible);
   return list.map(item => {
     const column = {
       ...item
