@@ -57,11 +57,14 @@ export const FilterItem = defineComponent({
   },
 });
 
-export type FilterBtnType = "search" | "reset";
-
 interface FilterBtnProps {
   loading?: boolean;
-  onSearch?: (type: FilterBtnType) => void;
+  disabled?: boolean;
+  /**
+   * 搜索操作
+   * @param reset 是否重置
+   */
+  onSearch?: (reset: boolean) => void;
 }
 
 /**
@@ -72,18 +75,11 @@ export function FilterBtn(props: FilterBtnProps) {
   const emit = props.onSearch || (() => {});
   return (
     <>
-      <el-button
-        disabled={props.loading}
-        onClick={() => emit("reset")}
-      >
+      <el-button disabled={props.disabled || props.loading} onClick={() => emit(true)}>
         <i class={`el-icon-${props.loading ? "loading" : "refresh"} el-icon--left`} />
         重置
       </el-button>
-      <el-button
-        type="primary"
-        disabled={props.loading}
-        onClick={() => emit("search")}
-      >
+      <el-button type="primary" disabled={props.disabled || props.loading} onClick={() => emit(false)}>
         <i class={`el-icon-${props.loading ? "loading" : "search"} el-icon--left`} />
         搜索
       </el-button>

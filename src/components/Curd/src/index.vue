@@ -109,7 +109,6 @@ import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import { EditBtn, FooterBtn, TableImage, ThumbnailSearch, ThumbnailTable } from "./part";
 import type { CurdType, EditBtnType, GetDataParams, TableOperationType } from "./types";
-import type { FilterBtnType } from "@/components/FilterBox";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { usePageInfo } from "@/hooks/common";
@@ -196,8 +195,8 @@ function onCopy() {
   copyText(JSON.stringify(props.data), () => message.success("复制成功！"));
 }
 
-function onSearch(type: FilterBtnType) {
-  if (type === "reset") {
+function onSearch(reset: boolean) {
+  if (reset) {
     props.data.search.list.forEach(initFieldValue);
   }
   tableState.pageInfo.currentPage = 1;

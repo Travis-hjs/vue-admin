@@ -46,7 +46,7 @@
       </transition-group>
     </template>
     <template v-if="!provideState.editor.type" #right>
-      <FilterBtn :loading="provideState.loading" @search="e => emit('search', e)" />
+      <FilterBtn :loading="provideState.loading" @search="reset => emit('search', reset)" />
     </template>
   </FilterWrap>
 </template>
@@ -58,7 +58,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { FilterWrap, FilterItem, FilterBtn, type FilterBtnType } from "@/components/FilterBox";
+import { FilterWrap, FilterItem, FilterBtn } from "@/components/FilterBox";
 import Field from "./Field.vue";
 import { convertPx, useProvideState } from "./data";
 import { messageBox } from "@/utils/message";
@@ -73,7 +73,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "search", type: FilterBtnType): void;
+  (event: "search", reset: boolean): void;
 }>();
 
 const provideState = useProvideState();
