@@ -121,9 +121,14 @@ export namespace CurdType {
     /**
      * 默认值的预设选项索引
      * - 注意！！！该值只会在初始化的时候设置，具体看`Field.vue`
-     * - 当为`-1`时则不处理，在可视化配置中使用预览组件的值
+     * - 当为`-1`时则不处理，在可视化配置中使用预览组件的值，同时设置`shortcutDate`为预览中的值
      */
     shortcutIndex: number | "";
+    /**
+     * 快捷日期值
+     * - 当`shortcutIndex`为`-1`时才生效，为预览的日期，也可以手动设置，在重置时需要
+     */
+    shortcutDate?: NativeDate | Array<NativeDate> | string;
   }
 
   export interface Cascader extends Omit<BaseField<Array<string | number> | Array<Array<string | number>>>, "options"> {

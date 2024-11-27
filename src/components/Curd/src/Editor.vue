@@ -603,8 +603,11 @@ function onSubmit() {
         }
       }
     }
-    // TODO: 处理日期默认值，当没有选中预设日期时，但又通过预览组件修改了绑定值，则要清空
-    if (form.type === "date" && !isType(form.shortcutIndex, "number")) {
+    // TODO: 处理日期默认值
+    if (form.type === "date") {
+      if (form.shortcutIndex === -1) {
+        form.shortcutDate = form.value;
+      }
       form.value = form.valueType === "array" ? [] : "";
     }
     // console.log("submit form >>", form);

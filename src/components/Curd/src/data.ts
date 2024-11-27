@@ -48,19 +48,23 @@ export function initFieldValue(field: CurdType.Field) {
     const className = "the-date-shortcut-selected";
     const selected = document.querySelector(`.${className}`);
     selected && selected.classList.remove(className);
-    // 处理日期选项默认值
-    if (isType(shortcut, "number") && shortcut >= 0) {
-      const date = shortcutMap[field.dateType][shortcut].value();
-      field.value = date;
-      // 如果有选中快捷日期的情况下重设选中
-      const selectedName = `.${field.id} .el-picker-panel__sidebar`;
-      const panel = document.querySelector(selectedName);
-      // 因为重设数据时，会重新渲染，这个时候设置 dom 是会被覆盖的，所以这里放在 nextTick 之后再操作 dom
-      panel && nextTick(() => panel.children[shortcut].classList.add(className));
-    }
-    // 处理绑定值不等于类型时，纠正绑定值
-    if (!isType(field.value, "array") && field.valueType === "array") {
-      field.value = [];
+    // 处理日期快捷默认日期
+    if (isType(shortcut, "number")) {
+      if (shortcut === -1) {
+        field.value = field.shortcutDate!;
+      } else {
+        const date = shortcutMap[field.dateType][shortcut].value();
+        field.value = date;
+        // 如果有选中快捷日期的情况下重设选中
+        const selectedName = `.${field.id} .el-picker-panel__sidebar`;
+        const panel = document.querySelector(selectedName);
+        // 因为重设数据时，会重新渲染，这个时候设置 dom 是会被覆盖的，所以这里放在 nextTick 之后再操作 dom。
+        // 如果 dom 依然是没有更新，尝试使用 setTimeout
+        panel && nextTick(() => panel.children[shortcut].classList.add(className));
+      }
+    } else {
+      // 没有快捷日期则重置
+      field.value = ["daterange", "datetimerange"].includes(field.dateType) ? [] : "";
     }
   } else {
     if (["object", "array"].includes(checkType(field.defaultValue))) {
