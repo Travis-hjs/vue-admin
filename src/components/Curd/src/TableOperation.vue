@@ -12,9 +12,10 @@
         {{ btn.text }}
       </el-button>
     </template>
-    <slot></slot>
+    <slot name="left"></slot>
     <template v-if="!props.editMode">
       <div class="f1"></div>
+      <slot name="right"></slot>
       <el-button v-if="has.delete" type="danger" link :disabled="props.disabled" @click="onAction('delete')">
         <i class="el-icon--left el-icon-delete"></i>
         删除

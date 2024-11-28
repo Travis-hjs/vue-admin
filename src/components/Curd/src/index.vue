@@ -13,9 +13,11 @@
             :disabled="state.loading"
             @action="onTableOperation"
           >
-            <span v-if="tableConfig.selectKey" class="the-tag blue">
-              已选择 {{ tableState.selectList.length }} 条数据
-            </span>
+            <template #left>
+              <span v-if="tableConfig.selectKey" class="the-tag blue">
+                已选择 {{ tableState.selectList.length }} 条数据
+              </span>
+            </template>
           </TableOperation>
           <base-table
             v-model:select-list="tableState.selectList"
