@@ -41,16 +41,20 @@
         v-if="data.options.length > 50"
         v-model="data.value"
         :options="data.options"
-        :props="data.optionSetting"
+        :props="optionSetting"
         v-bind="getSelectProps(data)"
         @change="onChange()"
-      />
+      >
+        <template #default="{ item }">
+          <span :title="getSelectLabel(data, item)">{{ getSelectLabel(data, item) }}</span>
+        </template>
+      </el-select-v2>
       <el-select v-else v-model="data.value" v-bind="getSelectProps(data)" @change="onChange()">
         <el-option
           v-for="item in data.options"
           :key="item[optionSetting.value]"
           :value="item[optionSetting.value]"
-          :label="item[optionSetting.label]"
+          :label="getSelectLabel(data, item)"
         />
       </el-select>
     </template>
@@ -174,12 +178,13 @@ const optionSetting = computed(() => {
 
 const cascaderProps = computed(() => {
   const cascader = props.fieldData as CurdType.Cascader;
+  const setting = cascader.optionSetting;
   return {
     multiple: cascader.multiple,
     checkStrictly: cascader.checkStrictly,
-    value: cascader.optionSetting.value || "value",
-    label: cascader.optionSetting.label || "label",
-    children: cascader.optionSetting.children || "children"
+    value: setting.value || "value",
+    label: setting.label || "label",
+    children: setting.children || "children"
   }
 });
 
@@ -253,6 +258,13 @@ function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
   }
 }
 
+function getSelectLabel(field: CurdType.SelectMultiple | CurdType.Select, option: BaseObj<string | number>) {
+  const setting = optionSetting.value;
+  if (field.joinShow) {
+    return `${option[setting.label]}-${option[setting.value]}`;
+  }
+  return `${option[setting.label]}`;
+}
 // --------------------------------- 处理日期组件的快捷栏交互细节 ---------------------------------
 /** 日期侧边栏按钮列表 */
 let shortcutBtnList: Array<HTMLElement> = [];

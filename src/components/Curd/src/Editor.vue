@@ -230,6 +230,15 @@
                   />
                 </el-form-item>
               </template>
+              <el-form-item v-if="['select', 'select-multiple'].includes(state.formData.type)" label="串联显示名称" prop="joinShow">
+                <el-switch
+                  v-model="(state.formData as CurdType.Select).joinShow"
+                  inline-prompt
+                  active-text="是"
+                  inactive-text="否"
+                />
+                <span class="the-tag blue mgl-10">例如【英雄联盟-12】</span>
+              </el-form-item>
             </template>
             <template v-if="state.formData.type === 'date'">
               <el-form-item label="日期类型" prop="dateType">

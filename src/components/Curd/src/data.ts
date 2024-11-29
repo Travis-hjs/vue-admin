@@ -141,7 +141,8 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
         label: "",
         value: ""
       },
-      valueType: "string"
+      valueType: "string",
+      joinShow: false
     },
     "select-multiple": {
       key,
@@ -155,7 +156,8 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
         label: "",
         value: ""
       },
-      valueType: "array"
+      valueType: "array",
+      joinShow: false
     },
     checkbox: {
       key,

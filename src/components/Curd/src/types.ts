@@ -83,10 +83,14 @@ export namespace CurdType {
 
   export interface Select extends BaseField<string | number> {
     type: "select";
+    /** 是否将`label`和`value`串联在一起显示 */
+    joinShow: boolean;
   }
 
   export interface SelectMultiple extends BaseField<Array<string | number>> {
     type: "select-multiple";
+    /** 是否将`label`和`value`串联在一起显示 */
+    joinShow: boolean;
   }
 
   export interface Checkbox extends BaseField<Array<string | number>> {
