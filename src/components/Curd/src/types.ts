@@ -368,21 +368,3 @@ interface GetDataPage extends PaginationChange {
 
 /** `index.vue`中`getData`方法传参对象 */
 export type GetDataParams = GetDataSort | GetDataPage;
-
-// interface TextCol<T extends object = Record<string, any>> {
-//   key: keyof T | "action-right";
-// }
-
-// interface Row {
-//   id: number;
-//   arr: Array<string>;
-//   name: string;
-//   sub: Row;
-// }
-
-// function onTest(row: TextCol<Row>) {
-//   const prop = row.key
-//   if (prop === "id") {
-
-//   }
-// }
