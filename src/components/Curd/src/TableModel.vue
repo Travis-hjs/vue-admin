@@ -62,7 +62,7 @@
           <TableImage :column="column" :src="demoUrl" />
         </div>
       </div>
-      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="actionProp" class="fake-table-item">
+      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="columnActionKey" class="fake-table-item">
         <div class="fake-table-head fvc">操作</div>
         <div class="fake-table-cell operation fvc">
           <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
@@ -149,7 +149,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType, reactive } from "vue";
-import { actionEditKey, actionProp, getColumnData } from "./data";
+import { actionEditKey, columnActionKey, getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
 import type { CurdType, EditBtnType, TableOperationType } from "./types";
@@ -221,7 +221,7 @@ const columnInfo = computed(() => {
   const action = [];
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
-    if (column.key === actionProp) {
+    if (column.key === columnActionKey) {
       action.push(column);
     } else {
       drag.push(column);
@@ -300,12 +300,12 @@ function getColumnWidth(column?: CurdType.Table.Column) {
 const actionColumn = computed(() => {
   const list = props.config.columns;
   // TODO: 因为操作栏永远都是处于最后一列，所以可以直接判最后一个即可
-  if (list.length > 0 && list[list.length - 1].key === actionProp) {
+  if (list.length > 0 && list[list.length - 1].key === columnActionKey) {
     return list[list.length - 1];
   }
   // for (let i = list.length - 1; i >= 0; i--) {
   //   const column = list[i];
-  //   if (column.key === actionProp) {
+  //   if (column.key === actionColumn) {
   //     return column;
   //   }
   // }
@@ -314,7 +314,7 @@ const actionColumn = computed(() => {
 
 /** 添加操作列 */
 function addActionColumn() {
-  const action = getColumnData(actionProp, "操作");
+  const action = getColumnData(columnActionKey, "操作");
   action.minWidth = 120;
   action.width = 160;
   props.config.columns.push(action);
@@ -366,7 +366,7 @@ function openConfigAction() {
 
 function onConfigAction(list: typeof props.config.actions, width?: number) {
   props.config.actions = list;
-  const column = props.config.columns.find(item => item.key === actionProp);
+  const column = props.config.columns.find(item => item.key === columnActionKey);
   column!.width = width;
 }
 

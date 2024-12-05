@@ -5,7 +5,7 @@
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
   actionEditKey,
-  actionProp,
+  columnActionKey,
   Curd,
   getColumnData,
   getFieldData,
@@ -114,7 +114,7 @@ const data = reactive<CurdType.Config>({
         iconTips: "人工设置的时间"
       },
       {
-        ...getColumnData(actionProp, "操作"),
+        ...getColumnData(columnActionKey, "操作"),
         width: 160,
       },
     ],

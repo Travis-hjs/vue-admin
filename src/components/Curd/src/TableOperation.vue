@@ -48,7 +48,7 @@
             class="the-curd-option-item f-vertical"
             v-bind="getDragProps(item, itemIndex)"
           >
-            <i v-if="item.key !== actionProp" class="el-icon--left el-icon-rank"></i>
+            <i v-if="item.key !== columnActionKey" class="el-icon--left el-icon-rank"></i>
             <span class="f1">{{ item.title }}</span>
             <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mgr-10">
               <el-radio-button
@@ -81,7 +81,7 @@ export default {
 <script lang="ts" setup>
 import { type PropType, computed, reactive } from "vue";
 import type { CurdType, TableOperationType } from "./types";
-import { actionProp } from "./data";
+import { columnActionKey } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { watch } from "vue";
 import { deepClone } from "@/utils";
@@ -170,7 +170,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
 });
 
 function getDragProps(col: CurdType.Table.Column, index: number) {
-  const isAction = col.key === actionProp;
+  const isAction = col.key === columnActionKey;
   const k = col.key || col.key;
   return {
     "data-key": k,

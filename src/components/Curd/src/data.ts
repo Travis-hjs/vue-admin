@@ -8,8 +8,8 @@ export const provideKey = "the-curd-state";
 /** 父组件注入的对象 */
 export const useProvideState = () => inject(provideKey) as CurdType.State;
 
-/** 操作栏的标记 */
-export const actionProp = "action-right";
+/** 表格列操作栏的标记 */
+export const columnActionKey = "action-right";
 /** 表格操作列中，编辑按钮的`key` */
 export const actionEditKey = "action-edit";
 
@@ -244,7 +244,7 @@ export function getColumnData(key: string, title: string): CurdType.Table.Column
     key,
     width: undefined,
     minWidth: undefined,
-    tooltip: key === actionProp ? false : true,
+    tooltip: key === columnActionKey ? false : true,
     cellType: "text",
     sort: false,
     fixed: false,

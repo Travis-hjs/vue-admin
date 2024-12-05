@@ -9,7 +9,7 @@ export {
   getActionData,
   getFormConfig,
   exportPropToWindow,
-  actionProp,
+  columnActionKey as columnActionKey,
   actionEditKey,
 } from "./src/data";
 
