@@ -7,7 +7,7 @@
       "  <div class=\"$name\">",
       "    <FilterWrap>",
       "      <FilterItem label=\"查询名称\">",
-      "       <el-input v-model=\"state.searchInfo.keyword\" clearable placeholder=\"请输入查询关键字\" />",
+      "        <el-input v-model=\"state.searchInfo.keyword\" clearable placeholder=\"请输入查询关键字\" />",
       "      </FilterItem>",
       "      <template #right>",
       "        <SearchBtn :loading=\"state.loading\" @search=\"onSearch\" />",
