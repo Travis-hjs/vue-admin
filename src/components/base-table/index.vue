@@ -63,14 +63,15 @@ export default {
   name: "base-table"
 }
 </script>
-
-<script lang="ts" generic="T extends BaseObj" setup>
+<script lang="ts" generic="T extends BaseObj<any>" setup>
 import { type PropType, ref, onBeforeUpdate, computed } from "vue";
 import { ElTable, type Column } from "element-plus";
 import { filterRepeat, isType } from "@/utils";
 
 interface SlotType {
+  /** 表格行数据 */
   row: T;
+  /** 表格行索引 */
   $index: number;
   /** `<el-table>`内部结构数据 */
   column: Column;
