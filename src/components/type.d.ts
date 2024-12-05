@@ -8,7 +8,7 @@ interface CommonOption<T = string | number> {
 }
 
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */
-interface BaseTableColumn <T extends object = Record<string, any>> {
+interface BaseTableColumn<T extends object = Record<string, any>> {
   /** 表格列标题 */
   title: string;
   /**
