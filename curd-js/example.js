@@ -10,8 +10,8 @@ import {
 } from "../src/utils/message";
 
 // ----------------- 其他暴露的全局属性 -----------------
-// _state.loading // 整体加载状态
-// _getData();    // 获取表格数据
+// _setLoading(true)    // 整体加载状态
+// _getData();          // 获取表格数据
 
 /**
  * 表格列渲染函数
