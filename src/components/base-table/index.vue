@@ -29,7 +29,7 @@
       <el-table-column
         v-for="item in props.columns"
         :key="item.key"
-        :prop="item.key"
+        :prop="(item.key as string)"
         :label="item.title"
         :min-width="item.minWidth"
         :width="item.width"
@@ -51,7 +51,7 @@
             :clickStop="props.isRowClick"
           />
           <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.key], scope.row)"></div>
-          <template v-else>{{ setTableDefaultContent(scope.row, item.key, item) }}</template>
+          <template v-else>{{ setTableDefaultContent(scope.row, item.key as string, item) }}</template>
         </template>
       </el-table-column>
     </el-table>
@@ -82,7 +82,7 @@ const props = defineProps({
     default: () => []
   },
   columns: {
-    type: Array as PropType<Array<BaseTableColumn>>,
+    type: Array as PropType<Array<BaseTableColumn<T>>>,
     default: () => []
   },
   loading: {
@@ -150,7 +150,7 @@ function isEmpty(val: any) {
   return ["", null, undefined, "null", "undefined"].includes(val);
 }
 
-function hasTooltip(col: BaseTableColumn) {
+function hasTooltip(col: BaseTableColumn<T>) {
   const defaultVal = col.key === "action-right" ? false : true;
   return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
 }
@@ -161,7 +161,7 @@ function hasTooltip(col: BaseTableColumn) {
  * @param key 当前行的键值
  * @param item 列信息
  * */
-function setTableDefaultContent(row: any, key: string, item: BaseTableColumn) {
+function setTableDefaultContent(row: any, key: string, item: BaseTableColumn<T>) {
   if (isType(item.formatter, "function")) {
     return item.formatter(row, row[key], item);
   }

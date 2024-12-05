@@ -8,7 +8,7 @@ interface CommonOption<T = string | number> {
 }
 
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */
-interface BaseTableColumn <T = any> {
+interface BaseTableColumn <T extends object = Record<string, any>> {
   /** 表格列标题 */
   title: string;
   /**
@@ -16,13 +16,13 @@ interface BaseTableColumn <T = any> {
    * - `"action-right"`为固定右边
    * - 请确保唯一性
    */
-  key: string;
+  key: keyof T | "action-right";
   /** 当需要自定义插槽去写表格模板时需要，建议字段和`key`一致 */
   slot?: string;
   /**
    * 自定义表头插槽名
    * - 注意不要和`slot`重名！！！
-   * - 在curd界面操作配置生成时，规则为`header-${key}`
+   * - 在`<curd>`界面操作配置生成时，规则为`header-${key}`
    */
   slotHead?: string;
   /** 
@@ -70,7 +70,7 @@ interface BaseTableColumn <T = any> {
 }
 
 /** 表格操作列列表对象 */
-interface BaseTableAction<T = BaseObj> {
+interface BaseTableAction<T extends object = Record<string, any>> {
   /** 按钮文字 */
   text: string | ((row: T) => string);
   /** 

@@ -174,7 +174,7 @@ export namespace CurdType {
 
   export namespace Table {
     /** 表格列配置 */
-    export interface Column<T = any> extends BaseTableColumn<T> {
+    export interface Column<T extends object = Record<string, any>> extends BaseTableColumn<T> {
       /**
        * 表格列渲染内容
        * | 字段 | 说明 |
@@ -236,7 +236,7 @@ export namespace CurdType {
     }
 
     /** 表格操作按钮类型 */
-    export interface Action<T = any> extends BaseTableAction<T> {
+    export interface Action<T extends object = Record<string, any>> extends BaseTableAction<T> {
       /**
        * 标记用
        * - 当等于`"action-edit"`时，点击事件自动设置为内部的打开编辑表单功能，在`TableModel.vue`中，当配置完编辑表单数据后会自动添加，具体位置看`onFormEdit`方法
@@ -245,7 +245,7 @@ export namespace CurdType {
     }
 
     /** 表格相关配置 */
-    export interface Config<T = any> {
+    export interface Config<T extends object = Record<string, any>> {
       /**
        * 最大限制几个按钮出现，超过则用【更多】下拉菜单代替展示
        * - 不传则默认`3`个
@@ -271,7 +271,7 @@ export namespace CurdType {
   }
 
   /** 整体配置数据项 */
-  export interface Config<T = any> {
+  export interface Config<T extends object = Record<string, any>> {
     search: Search;
     table: Table.Config<T>;
   }
@@ -368,3 +368,21 @@ interface GetDataPage extends PaginationChange {
 
 /** `index.vue`中`getData`方法传参对象 */
 export type GetDataParams = GetDataSort | GetDataPage;
+
+// interface TextCol<T extends object = Record<string, any>> {
+//   key: keyof T | "action-right";
+// }
+
+// interface Row {
+//   id: number;
+//   arr: Array<string>;
+//   name: string;
+//   sub: Row;
+// }
+
+// function onTest(row: TextCol<Row>) {
+//   const prop = row.key
+//   if (prop === "id") {
+
+//   }
+// }
