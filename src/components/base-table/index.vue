@@ -28,15 +28,15 @@
       </el-table-column>
       <el-table-column
         v-for="item in props.columns"
-        :key="item.key || item.prop"
-        :prop="item.prop"
-        :label="item.label"
+        :key="item.key"
+        :prop="item.key"
+        :label="item.title"
         :min-width="item.minWidth"
         :width="item.width"
         :show-overflow-tooltip="hasTooltip(item)"
-        :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
-        :align="item.prop === 'action-right' ? 'center' : item.align"
-        :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
+        :fixed="item.key === 'action-right' ? 'right' : item.fixed"
+        :align="item.key === 'action-right' ? 'center' : item.align"
+        :class-name="(isRowClick && item.key !== 'action-right') ? 'base-column-click' : ''"
       >
         <template #header="scope">
           <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
@@ -44,14 +44,14 @@
         <template #default="scope: SlotType">
           <slot :name="item.slot" v-bind="scope" v-if="item.slot"></slot>
           <base-table-actions
-            v-else-if="item.prop === 'action-right'"
+            v-else-if="item.key === 'action-right'"
             :row="scope.row"
             :index="scope.$index"
             :actions="(props.actions as any)"
             :clickStop="props.isRowClick"
           />
-          <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.prop], scope.row)"></div>
-          <template v-else>{{ setTableDefaultContent(scope.row, item.prop, item) }}</template>
+          <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.key], scope.row)"></div>
+          <template v-else>{{ setTableDefaultContent(scope.row, item.key, item) }}</template>
         </template>
       </el-table-column>
     </el-table>
@@ -151,21 +151,21 @@ function isEmpty(val: any) {
 }
 
 function hasTooltip(col: BaseTableColumn) {
-  const defaultVal = col.prop === "action-right" ? false : true;
+  const defaultVal = col.key === "action-right" ? false : true;
   return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
 }
 
 /** 
  * 设置默认的表格内容 
  * @param row 行信息
- * @param prop 当前行的 key
+ * @param key 当前行的键值
  * @param item 列信息
  * */
-function setTableDefaultContent(row: any, prop: string, item: BaseTableColumn) {
+function setTableDefaultContent(row: any, key: string, item: BaseTableColumn) {
   if (isType(item.formatter, "function")) {
-    return item.formatter(row, row[prop], item);
+    return item.formatter(row, row[key], item);
   }
-  return isEmpty(row[item.prop]) ? "-" : row[item.prop];
+  return isEmpty(row[item.key]) ? "-" : row[item.key];
 }
 
 /**

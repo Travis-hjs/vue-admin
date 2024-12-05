@@ -14,14 +14,14 @@
     >
     <el-form-item label="表格列标题" prop="label">
         <el-input
-          v-model="state.form.label"
+          v-model="state.form.title"
           clearable
-          :placeholder="formRules.label.message"
+          :placeholder="formRules.title.message"
         />
       </el-form-item>
-      <el-form-item label="表格列键值" prop="prop">
+      <el-form-item label="表格列键值" prop="key">
         <el-input
-          v-model="state.form.prop"
+          v-model="state.form.key"
           clearable
           placeholder="请输入表格列键值"
         />
@@ -165,14 +165,14 @@ const title = computed(() => {
 const formRef = ref<FormInstance>();
 
 const formRules = {
-  label: { required: true, message: "请输入表格列标题", trigger: "blur" },
-  prop: {
+  title: { required: true, message: "请输入表格列标题", trigger: "blur" },
+  key: {
     required: true,
-    validator(r: any, v: string, callback: (err?: Error) => void) {
+    validator(_: any, v: string, callback: (err?: Error) => void) {
       if (!v) {
         callback(new Error("输入字段不能为空！"));
       } else {
-        if (props.keys.includes(state.form.prop)) {
+        if (props.keys.includes(state.form.key)) {
           callback(new Error("已经存在相同的值！"));
         } else {
           callback();
@@ -183,7 +183,7 @@ const formRules = {
   },
   jsCode: {
     required: true,
-    validator(r: any, v: string, callback: (err?: Error) => void) {
+    validator(_: any, v: string, callback: (err?: Error) => void) {
       if (!v) {
         callback(new Error("代码片段不能为空！"));
       } else {
@@ -240,12 +240,11 @@ function onSubmit() {
       }
     });
     // TODO: 设置必须属性
-    // form.key = form.prop;
     if (form.cellType === "image") {
-      form.slot = form.prop;
+      form.slot = form.key;
     }
     if (form.sort || form.iconTips) {
-      form.slotHead = `header-${form.prop}`;
+      form.slotHead = `header-${form.key}`;
     }
     emit("submit", form);
     onClose();
@@ -262,7 +261,7 @@ watch(
     } else {
       state.form = deepClone(props.form)!;
       if (props.type === "copy") {
-        state.form.prop = "";
+        state.form.key = "";
       }
     }
     setTimeout(() => formRef.value?.clearValidate());

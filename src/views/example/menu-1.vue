@@ -49,7 +49,7 @@
 import { ref, reactive } from "vue";
 import { usePageInfo } from "@/hooks/common";
 import { FilterWrap, FilterItem  } from "@/components/FilterBox";
-import { formatDate, ranInt, randomText } from "@/utils";
+import { formatDate, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 
 interface TableRow {
@@ -70,11 +70,11 @@ const state = reactive({
 
 const tableData = ref<Array<TableRow>>([]);
 
-const tableColumns: Array<BaseTableColumn> = [
-  { label: "ID", prop: "id", width: 90 },
-  { label: "名称", prop: "name", minWidth: 180, slot: "fuck" },
-  { label: "创建时间", prop: "date", width: 180 },
-  { label: "操作", prop: "action-right", width: 200 },
+const tableColumns: Array<BaseTableColumn<TableRow>> = [
+  { title: "ID", key: "id", width: 90 },
+  { title: "名称", key: "name", minWidth: 180, slot: "fuck" },
+  { title: "创建时间", key: "date", width: 180 },
+  { title: "操作", key: "action-right", width: 200 },
 ];
 
 const btnList: Array<BaseTableAction<TableRow>> = [

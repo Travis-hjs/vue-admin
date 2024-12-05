@@ -48,15 +48,15 @@
             class="the-curd-option-item f-vertical"
             v-bind="getDragProps(item, itemIndex)"
           >
-            <i v-if="item.prop !== actionProp" class="el-icon--left el-icon-rank"></i>
-            <span class="f1">{{ item.label }}</span>
+            <i v-if="item.key !== actionProp" class="el-icon--left el-icon-rank"></i>
+            <span class="f1">{{ item.title }}</span>
             <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mgr-10">
               <el-radio-button
-                v-for="item in fixedOptions"
-                :key="item.value.toString()"
-                :value="item.value"
+                v-for="opt in fixedOptions"
+                :key="opt.value.toString()"
+                :value="opt.value"
               >
-                {{ item.label }}
+                {{ opt.label }}
               </el-radio-button>
             </el-radio-group>
             <el-switch
@@ -166,12 +166,12 @@ const fixedOptions = [
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => props.config.columns,
-  key: "prop",
+  key: "key",
 });
 
 function getDragProps(col: CurdType.Table.Column, index: number) {
-  const isAction = col.prop === actionProp;
-  const k = col.key || col.prop;
+  const isAction = col.key === actionProp;
+  const k = col.key || col.key;
   return {
     "data-key": k,
     key: k,

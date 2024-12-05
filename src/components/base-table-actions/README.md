@@ -2,7 +2,7 @@
 
 - 已注册为全局组件`<base-table-actions>`
 
-## `props`说明
+## 参数说明
 
 | 字段 | 类型 | 是否必需 | 说明 |
 | --- | --- | --- | --- |
@@ -18,7 +18,7 @@
 ```html
 <template>
   <div>
-    <el-table stripe border :data="tableData">
+    <el-table stripe border :data="state.data">
       <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
       <el-table-column prop="name" label="名称" width="180" align="center"></el-table-column>
       <el-table-column prop="address" label="地址" min-width="180" align="center"></el-table-column>
@@ -34,30 +34,40 @@
 import { reactive, ref } from "vue"
 import { randomText } from "@/utils";
 
-const tableData = reactive(new Array(5).fill(0).map((_, index) => {
-  return {
-    id: index + 1,
-    name: randomText(2, 4),
-    address: randomText(6, 20)
-  }
-}))
+interface TableRow {
+  id: number;
+  name: string;
+  address: string;
+}
 
-const loading = ref<boolean>(false)
+const state = reactive({
+  data: new Array(5).fill(0).map((_, index) => {
+    return {
+      id: index + 1,
+      name: randomText(2, 4),
+      address: randomText(6, 20)
+    }
+  }),
+  loading: false,
+});
 
-const onAdd = (row) => {
+function onAdd(row: TableRow) {
   console.log("新增 >>", row);
 }
-const onEdit = (row) => {
+
+function onEdit(row: TableRow) {
   console.log("编辑 >>", row);
 }
-const onDelete = (row) => {
+
+function onDelete(row: TableRow) {
   console.log("删除 >>", row);
 }
-const onOther = (row) => {
+
+function onOther(row: TableRow) {
   console.log("其他操作 >>", row);
 }
 
-const btnList: Array<BaseTableAction> = [
+const btnList: Array<BaseTableAction<TableRow>> = [
   { text: "新增", click: onAdd },
   { text: "编辑", click: onEdit },
   { text: "删除", click: onDelete, disabled: (row) => row.id === 2 },

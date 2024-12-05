@@ -62,13 +62,13 @@ interface TableRow {
 const tableData = ref<Array<TableRow>>([]);
 
 const tableColumns: Array<BaseTableColumn> = [
-  { label: "项目名称", prop: "projectName", minWidth: 200 },
-  { label: "项目类型", prop: "projectTypeStr", width: 140 },
-  { label: "项目创建人", prop: "projectLeader", width: 140 },
-  { label: "项目状态", prop: "state", width: 140, slot: "state" },
-  { label: "创建时间", prop: "createTime", width: 180 },
-  { label: "更新时间", prop: "updateTime", width: 180 },
-  { label: "操作", prop: "action-right", width: 160 },
+  { title: "项目名称", key: "projectName", minWidth: 200 },
+  { title: "项目类型", key: "projectTypeStr", width: 140 },
+  { title: "项目创建人", key: "projectLeader", width: 140 },
+  { title: "项目状态", key: "state", width: 140, slot: "state" },
+  { title: "创建时间", key: "createTime", width: 180 },
+  { title: "更新时间", key: "updateTime", width: 180 },
+  { title: "操作", key: "action-right", width: 160 },
 ];
 
 const btnList: Array<BaseTableAction<TableRow>> = [

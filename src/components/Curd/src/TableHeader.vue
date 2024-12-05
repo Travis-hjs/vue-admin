@@ -1,7 +1,7 @@
 <template>
-  <template v-if="isText">{{ props.column.label }}</template>
+  <template v-if="isText">{{ props.column.title }}</template>
   <div v-else class="f-vertical w-full">
-    <span>{{ props.column.label }}</span>
+    <span>{{ props.column.title }}</span>
     <el-tooltip v-if="props.column.iconTips" effect="dark" :content="props.column.iconTips" placement="top">
       <i class="el-icon--right el-icon-question the-tips-icon" />
     </el-tooltip>
@@ -30,7 +30,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "sort", prop: string, action: CurdType.Table.Column["sort"]): void;
+  (event: "sort", key: string, action: CurdType.Table.Column["sort"]): void;
 }>();
 
 const isText = computed(() => !props.column.sort && !props.column.iconTips);
@@ -60,6 +60,6 @@ function onSwitch() {
     index = 0;
   }
   const action = actions[index];
-  emit("sort", props.column.prop, action);
+  emit("sort", props.column.key, action);
 }
 </script>

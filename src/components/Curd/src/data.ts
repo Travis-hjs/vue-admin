@@ -235,16 +235,16 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
 
 /**
  * 表格列默认数据
- * @param prop 
- * @param label 
+ * @param key 
+ * @param title 
  */
-export function getColumnData(prop: string, label: string): CurdType.Table.Column {
+export function getColumnData(key: string, title: string): CurdType.Table.Column {
   return {
-    label,
-    prop,
+    title,
+    key,
     width: undefined,
     minWidth: undefined,
-    tooltip: prop === actionProp ? false : true,
+    tooltip: key === actionProp ? false : true,
     cellType: "text",
     sort: false,
     fixed: false,

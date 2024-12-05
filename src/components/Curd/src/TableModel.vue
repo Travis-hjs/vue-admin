@@ -23,8 +23,8 @@
       />
       <div
         v-for="(column, columnIndex) in columnInfo.drag"
-        :key="column.prop"
-        :data-key="column.prop"
+        :key="column.key"
+        :data-key="column.key"
         class="fake-table-item"
         :draggable="columnInfo.drag.length > 1"
         :style="getColumnWidth(column)"
@@ -32,8 +32,8 @@
         @dragover="onDragMove($event, columnIndex)"
         @drop="onDropEnd()"
       >
-        <div class="fake-table-head f-vertical" :data-head="column.prop">
-          <i class="el-icon-rank el-icon--left" />
+        <div class="fake-table-head f-vertical" :data-head="column.key">
+          <i class="el-icon-rank el-icon--left"></i>
           <TableHeader :column="column" />
         </div>
         <div class="fake-table-cell operation f-vertical">
@@ -221,7 +221,7 @@ const columnInfo = computed(() => {
   const action = [];
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
-    if (column.prop === actionProp) {
+    if (column.key === actionProp) {
       action.push(column);
     } else {
       drag.push(column);
@@ -234,14 +234,14 @@ const columnInfo = computed(() => {
 });
 
 function openConfigCol(type: typeof configCol.type, index?: number) {
-  configCol.keys = props.config.columns.map(col => col.prop);
+  configCol.keys = props.config.columns.map(col => col.key);
   const actionMap = {
     add() {
       configCol.form = undefined;
     },
     edit() {
       const form = props.config.columns[index!];
-      configCol.keys = configCol.keys.filter(val => val !== form.prop);
+      configCol.keys = configCol.keys.filter(val => val !== form.key);
       configCol.index = index!;
       configCol.form = form;
     },
@@ -271,10 +271,10 @@ function deleteColumn(index: number) {
   const col = columnInfo.value.drag[index];
   messageBox({
     title: "操作提示",
-    content: `是否删除【${col.label}】列？`,
+    content: `是否删除【${col.title}】列？`,
     cancelText: "取消",
     confirm() {
-      const n = props.config.columns.findIndex(item => item.prop === col.prop);
+      const n = props.config.columns.findIndex(item => item.key === col.key);
       props.config.columns.splice(n, 1);
     }
   });
@@ -282,7 +282,7 @@ function deleteColumn(index: number) {
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => props.config.columns,
-  key: "prop",
+  key: "key",
   findLevel: 5
 });
 
@@ -300,12 +300,12 @@ function getColumnWidth(column?: CurdType.Table.Column) {
 const actionColumn = computed(() => {
   const list = props.config.columns;
   // TODO: 因为操作栏永远都是处于最后一列，所以可以直接判最后一个即可
-  if (list.length > 0 && list[list.length - 1].prop === actionProp) {
+  if (list.length > 0 && list[list.length - 1].key === actionProp) {
     return list[list.length - 1];
   }
   // for (let i = list.length - 1; i >= 0; i--) {
   //   const column = list[i];
-  //   if (column.prop === actionProp) {
+  //   if (column.key === actionProp) {
   //     return column;
   //   }
   // }
@@ -366,7 +366,7 @@ function openConfigAction() {
 
 function onConfigAction(list: typeof props.config.actions, width?: number) {
   props.config.actions = list;
-  const column = props.config.columns.find(item => item.prop === actionProp);
+  const column = props.config.columns.find(item => item.key === actionProp);
   column!.width = width;
 }
 
@@ -464,8 +464,8 @@ function onEdit(type: EditBtnType) {
       }
     });
     props.config.columns.forEach(col => {
-      if (Object.prototype.hasOwnProperty.call(domInfo, col.prop)) {
-        col.minWidth = domInfo[col.prop];
+      if (Object.prototype.hasOwnProperty.call(domInfo, col.key)) {
+        col.minWidth = domInfo[col.key];
       }
     });
   }

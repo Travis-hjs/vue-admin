@@ -277,7 +277,7 @@ const actionList = computed(() => {
  * @param prop 注意这里值和插槽名相同
  */
 function getColumnByProp(prop: string) {
-  const column = tableConfig.value.columns.find(col => col.prop === prop);
+  const column = tableConfig.value.columns.find(col => col.key === prop);
   // console.log("getColumnByProp >>", column, prop);
   return column || ({} as CurdType.Table.Column);
 }
@@ -381,20 +381,20 @@ function getSearchInfo(params?: GetDataParams) {
   if (params && params.key === "sort") {
     columns.forEach(column => {
       if (column.sort) {
-        if (column.prop === params.prop) {
+        if (column.key === params.prop) {
           column.sort = params.action;
         } else {
           // 将其他的全部重置掉
           column.sort = true;
         }
       }
-      column.sort === "asc" && ascList.push(column.prop);
-      column.sort === "desc" && descList.push(column.prop);
+      column.sort === "asc" && ascList.push(column.key);
+      column.sort === "desc" && descList.push(column.key);
     });
   } else {
     columns.forEach(column => {
-      column.sort === "asc" && ascList.push(column.prop);
-      column.sort === "desc" && descList.push(column.prop);
+      column.sort === "asc" && ascList.push(column.key);
+      column.sort === "desc" && descList.push(column.key);
     });
   }
   if (ascList.length) {
@@ -433,7 +433,7 @@ function onTableOperation(type: TableOperationType) {
       break;
 
     case "delete":
-      if (!selects.length) return message.error("请选择要删除的列表再进行操作~");
+      if (!selects.length) return message.warning("请选择要删除的列表再进行操作~");
       messageBox({
         title: "操作提示",
         content: `是否删除选中的 ${selects.length} 条数据？`,
@@ -475,6 +475,10 @@ function onEditChange(type: EditBtnType) {
   actionMap[type]();
 }
 
+function setLoading(val: boolean) {
+  state.loading = val;
+}
+
 exportPropToWindow({
   formatDate,
   copyText,
@@ -483,7 +487,7 @@ exportPropToWindow({
   jsonToPath,
   request,
   getData,
-  state,
+  setLoading,
 });
 
 onMounted(function() {

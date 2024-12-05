@@ -10,22 +10,21 @@ interface CommonOption<T = string | number> {
 /** `<base-table :columns="columns">`组局的`columns`单个对象 */
 interface BaseTableColumn <T = any> {
   /** 表格列标题 */
-  label: string;
+  title: string;
   /**
-   * 对应表格数据值的`key`
+   * 对应表格数据值的键值
    * - `"action-right"`为固定右边
+   * - 请确保唯一性
    */
-  prop: string;
-  /** 当需要自定义插槽去写表格模板时需要，建议字段和`prop`一致 */
+  key: string;
+  /** 当需要自定义插槽去写表格模板时需要，建议字段和`key`一致 */
   slot?: string;
   /**
    * 自定义表头插槽名
    * - 注意不要和`slot`重名！！！
-   * - 在curd界面操作配置生成时，规则为`header-${prop}`
+   * - 在curd界面操作配置生成时，规则为`header-${key}`
    */
   slotHead?: string;
-  /** 当需要动态改变列数的时候设置指定`key`来保证显示的位置对应数据列表用 */
-  key?: string;
   /** 
    * 列宽度
    * - 推荐直接用`number`类型
@@ -38,17 +37,17 @@ interface BaseTableColumn <T = any> {
   minWidth?: string | number;
   /**
    * 超出...提示
-   * - 当`prop !== "action-right"`时，默认为`true`
+   * - 当`key !== "action-right"`时，默认为`true`
    */
   tooltip?: boolean;
   /** 
    * 固定位置
-   * - 当`prop: "action-right"`时，不需要设置该值，固定为靠右
+   * - 当`key: "action-right"`时，不需要设置该值，固定为靠右
    */
   fixed?: "right" | "left" | boolean;
   /**
    * 表格列对齐设置
-   * - 当`prop: "action-right"`时，不需要设置该值，固定为居中状态
+   * - 当`key: "action-right"`时，不需要设置该值，固定为居中状态
    */
   align?: "left" | "center" | "right";
   /**
