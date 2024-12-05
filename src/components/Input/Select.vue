@@ -32,7 +32,7 @@ export default defineComponent({
 });
 </script>
 <script lang="ts" setup>
-import { usePageInfo } from "@/hooks/common";
+import { getPageInfo } from "@/hooks/common";
 import { ref, reactive, computed, type PropType } from "vue";
 import { useProps, useSettingComputed } from "./index";
 
@@ -81,7 +81,7 @@ function onSelect() {
   emit("change", props.modelValue);
 }
 
-const pageInfo = reactive(usePageInfo());
+const pageInfo = reactive(getPageInfo());
 
 const requesting = ref(false);
 

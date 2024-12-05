@@ -71,7 +71,7 @@ interface FilterBtnProps {
  * 搜索 + 重置按钮
  * @param props 
  */
-export function FilterBtn(props: FilterBtnProps) {
+export function SearchBtn(props: FilterBtnProps) {
   const emit = props.onSearch || (() => {});
   return (
     <>

@@ -113,7 +113,7 @@ import { EditBtn, FooterBtn, TableImage, ThumbnailSearch, ThumbnailTable } from 
 import type { CurdType, EditBtnType, GetDataParams, TableOperationType } from "./types";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
-import { usePageInfo } from "@/hooks/common";
+import { getPageInfo } from "@/hooks/common";
 import { copyText, deepClone, formatDate, isType, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
@@ -209,7 +209,7 @@ function onSearch(reset: boolean) {
 const tableState = reactive({
   selectList: [] as Array<BaseObj>,
   data: [] as Array<BaseObj>,
-  pageInfo: usePageInfo(),
+  pageInfo: getPageInfo(),
   formShow: false,
   formType: "add" as "add" | "edit",
   formLoading: false

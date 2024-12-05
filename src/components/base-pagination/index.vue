@@ -20,13 +20,13 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { usePageInfo } from "@/hooks/common";
+import { getPageInfo } from "@/hooks/common";
 import { type PropType } from "vue";
 
 const props = defineProps({
   pageInfo: {
     type: Object,
-    default: () => usePageInfo(),
+    default: () => getPageInfo(),
   },
   pageSizes: {
     type: Array as PropType<Array<number>>,

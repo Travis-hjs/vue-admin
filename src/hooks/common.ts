@@ -20,7 +20,7 @@ export function useZIndex() {
  * 页码数据
  * @param size 条数（默认10条）
  */
-export function usePageInfo(size = 10): PageInfo {
+export function getPageInfo(size = 10): PageInfo {
   return {
     pageSize: size,
     currentPage: 1,

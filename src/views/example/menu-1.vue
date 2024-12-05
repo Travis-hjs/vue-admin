@@ -47,7 +47,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { usePageInfo } from "@/hooks/common";
+import { getPageInfo } from "@/hooks/common";
 import { FilterWrap, FilterItem  } from "@/components/FilterBox";
 import { formatDate, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
@@ -64,7 +64,7 @@ const state = reactive({
     type: "",
     date: ''
   },
-  pageInfo: usePageInfo(),
+  pageInfo: getPageInfo(),
   selectList: [] as Array<TableRow>
 });
 

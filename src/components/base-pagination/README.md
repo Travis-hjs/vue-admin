@@ -6,17 +6,18 @@
 <template>
   <div>
     <!-- 默认使用方式 -->
-    <base-pagination :disabled="loading" :pageInfo="pageInfo" @change="paginationChange" />
+    <base-pagination :disabled="state.loading" :pageInfo="state.pageInfo" @change="paginationChange" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { usePageInfo } from "@/hooks/common";
+import { getPageInfo } from "@/hooks/common";
 
-const pageInfo = reactive(usePageInfo())
-
-const loading = ref(false);
+const state = reactive({
+  loading: false,
+  pageInfo: getPageInfo(),
+});
 
 function paginationChange() {
   console.log("分页器变动");
