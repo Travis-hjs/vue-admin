@@ -1,4 +1,3 @@
-import { customRef } from "vue";
 
 let zIndex = 1000;
 
@@ -23,37 +22,4 @@ export function getPageInfo(size = 10): PageInfo {
     currentPage: 1,
     total: 0
   }
-}
-
-/**
- * [自定义防抖`ref`](https://cn.vuejs.org/api/reactivity-advanced.html#customref)
- * @param value 
- * @param delay 防抖延迟
- * @param callback 防抖延迟结束回调函数
- */
-export function debounceRef<T>(value: T, delay = 1000, callback?: (res: T) => void) {
-  let timer: NodeJS.Timeout;
-  return customRef(function(track, trigger) {
-    return {
-      get() {
-        track();
-        return value;
-      },
-      set(val) {
-        if (callback) {
-          value = val;
-          trigger();
-        }
-        timer && clearTimeout(timer);
-        timer = setTimeout(function() {
-          if (callback) {
-            callback(val);
-          } else {
-            value = val;
-            trigger();
-          }
-        }, delay);
-      }
-    }
-  });
 }
