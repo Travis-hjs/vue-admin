@@ -142,18 +142,19 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
     const targetKey = findDataKey(event.target as HTMLElement);
     if (!targetKey || targetKey === target.key) return;
     target.key = targetKey;
-    const list = option.list().map(item => item[option.key]);
+    const optionList = option.list();
+    const before = optionList.map(item => item[option.key]);
     // 记录原始数据字符串，下面做对比用
-    const str = JSON.stringify(list);
-    // 拷贝响应数据
-    const ls: typeof list = JSON.parse(str);
+    const beforeStr = JSON.stringify(before);
+    // 拷贝原来数组
+    const next: typeof before = JSON.parse(beforeStr);
     // 交替数组位置
-    [ls[current.index], ls[targetIndex]] = [ls[targetIndex], ls[current.index]];
-    // 上一次修改如果和当前数组一致则不重新赋值
-    if (str === JSON.stringify(ls)) return;
+    [next[current.index], next[targetIndex]] = [next[targetIndex], next[current.index]];
+    // 上一次修改如果和当前数组一致则不作处理
+    if (beforeStr === JSON.stringify(next)) return;
     // 最后设置排序
-    const indexMap = getSortMap(ls);
-    option.list().sort(function(a, b) {
+    const indexMap = getSortMap(next);
+    optionList.sort((a, b) => {
       const key = option.key;
       const valueA = indexMap[a[key] as string];
       const valueB = indexMap[b[key] as string];
