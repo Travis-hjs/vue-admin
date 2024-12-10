@@ -31,7 +31,7 @@
 | width | string | 否 | 弹出内容宽度：`px`,`%`,`vw`,`em`等 |
 | title | string | 否 | 弹出框标题 |
 | closeByMask | boolean | 否 | 是否可以通过点击遮罩层关闭`Dialog`，默认`false` |
-| appendToBody | boolean | 否 | `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true`，默认`false` |
+| appendToBody | boolean | 否 | `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性，默认`false` |
 
 ## 事件说明
 

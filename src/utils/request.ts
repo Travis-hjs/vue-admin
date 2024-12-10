@@ -118,6 +118,9 @@ function getResultInfo(result: { statusCode: number, data: any }, responseType?:
         info.data = result.data;
         info.msg = "ok";
       } else {
+        if (checkType(result.data) !== "object") {
+          result.data = {}
+        }
         info.code = checkType(result.data.code) === "number" ? result.data.code : 1;
         info.data = result.data;
         info.msg = result.data.message || "ok";
