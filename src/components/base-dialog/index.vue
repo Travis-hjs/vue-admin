@@ -107,7 +107,7 @@ watch(() => props.modelValue, function (val) {
  * @param e 鼠标事件
  */
 function setContentPosition(e: MouseEvent) {
-  console.log("setContentPosition >>", e);
+  // console.log("setContentPosition >>", e);
   // 只有在外部点击，且关闭的情况下才会记录坐标
   if (!props.modelValue || contentShow.value || el.value!.contains(e.target as HTMLElement)) return;
   const { clientWidth, clientHeight } = el.value!;
