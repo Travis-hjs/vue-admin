@@ -7,7 +7,7 @@ interface CommonOption<T = string | number> {
   disabled?: boolean;
 }
 
-/** `<base-table :columns="columns">`组局的`columns`单个对象 */
+/** `<base-table :columns="tableColumns">`组件的`tableColumns`单个对象 */
 interface BaseTableColumn<T extends object = Record<string, any>> {
   /** 表格列标题 */
   title: string;
@@ -69,13 +69,16 @@ interface BaseTableColumn<T extends object = Record<string, any>> {
   rawContent?: (cellValue: any, row: T) => string;
 }
 
-/** 表格操作列列表对象 */
+/**
+ * 表格操作列列表对象
+ * - `<base-table-actions :list="tableActions" />`组件的`tableActions`单个对象
+ */
 interface BaseTableAction<T extends object = Record<string, any>> {
   /** 按钮文字 */
   text: string | ((row: T) => string);
   /** 
    * 按钮图标`class`
-   * - [el-element icon地址](https://element.eleme.cn/#/zh-CN/component/icon)
+   * - [el-element icon 地址](https://element.eleme.cn/#/zh-CN/component/icon)
    */
   icon?: string | ((row: T) => string);
   /**
@@ -92,7 +95,7 @@ interface BaseTableAction<T extends object = Record<string, any>> {
   show?: boolean | ((row: T) => boolean) | string;
   /**
    * 按钮类型，默认`"primary"`
-   * - [element-plus button](http://element-plus.org/zh-CN/component/button.html)
+   * - [element-plus Button](http://element-plus.org/zh-CN/component/button.html)
    * - 当按钮类型处于【更多】下拉选项中则无效
    */
   type?: "primary" | "success" | "info" | "warning" | "danger";
@@ -103,7 +106,7 @@ interface BaseTableAction<T extends object = Record<string, any>> {
   click?: ((row: T, index?: number) => void) | string;
 }
 
-/** 分页器 change 事件参数 */
+/** 分页器`change`事件参数 */
 interface PaginationChange {
   type: "pageSize" | "currentPage";
   /** 当前修改的值 */
