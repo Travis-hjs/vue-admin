@@ -35,43 +35,49 @@
 <template>
   <div class="demo">
     <base-table
-      :data="tableData"
+      :data="state.data"
       :columns="tableColumns"
-      :actions="btnList"
-      :loading="loading"
+      :actions="tableActions"
+      :loading="state.loading"
     >
-      <template #state="{ row }">
-        <span class="the-tag blue" v-if="row.state == 0">未开始</span>
-        <span class="the-tag green" v-if="row.state == 1">进行中</span>
-        <span class="the-tag gray" v-if="row.state == 2">已结束</span>
-        <span class="the-tag red" v-if="row.state == 3">已终止</span>
+      <template #status="{ row }">
+        <span class="the-tag blue" v-if="row.status === 0">未开始</span>
+        <span class="the-tag green" v-if="row.status === 1">进行中</span>
+        <span class="the-tag gray" v-if="row.status === 2">已结束</span>
+        <span class="the-tag red" v-if="row.status === 3">已终止</span>
       </template>
     </base-table>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
+import { reactive } from "vue";
 
 interface TableRow {
-  id: number
-  name: string
-  date: string
-  state: 0 | 1 | 2 | 3
+  id: number;
+  projectName: string;
+  projectTypeStr: string;
+  projectLeader: string;
+  createTime: string;
+  updateTime: string;
+  status: 0 | 1 | 2 | 3;
 }
 
-const tableData = ref<Array<TableRow>>([]);
+const state = reactive({
+  loading: false,
+  data: [] as Array<TableRow>,
+});
 
-const tableColumns: Array<BaseTableColumn> = [
-  { title: "项目名称", key: "projectName", minWidth: 200 },
-  { title: "项目类型", key: "projectTypeStr", width: 140 },
-  { title: "项目创建人", key: "projectLeader", width: 140 },
-  { title: "项目状态", key: "state", width: 140, slot: "state" },
-  { title: "创建时间", key: "createTime", width: 180 },
-  { title: "更新时间", key: "updateTime", width: 180 },
-  { title: "操作", key: "action-right", width: 160 },
+const tableColumns: Array<BaseTableColumn<TableRow>> = [
+  { title: "项目名称", prop: "projectName", minWidth: 200 },
+  { title: "项目类型", prop: "projectTypeStr", width: 140 },
+  { title: "项目创建人", prop: "projectLeader", width: 140 },
+  { title: "项目状态", prop: "status", width: 140, slot: "status" },
+  { title: "创建时间", prop: "createTime", width: 180 },
+  { title: "更新时间", prop: "updateTime", width: 180 },
+  { title: "操作", prop: "action-right", width: 160 },
 ];
 
-const btnList: Array<BaseTableAction<TableRow>> = [
+const tableActions: Array<BaseTableAction<TableRow>> = [
   { text: "编辑", },
   { text: "查看", },
   {
@@ -79,9 +85,88 @@ const btnList: Array<BaseTableAction<TableRow>> = [
     type: "danger",
     click(row) {
       console.log(row);
-    }
+    },
+  }
+];
+</script>
+```
+
+## 使用示例-带选择操作
+
+```html
+<template>
+  <div class="demo">
+    <el-button @click="onSearch()">搜索</el-button>
+    <base-table
+      :data="state.data"
+      :columns="tableColumns"
+      :actions="tableActions"
+      :loading="state.loading"
+      select-key="id"
+      v-model:select-list="state.selected"
+      :select-disabled="(row) => (row.id % 4) === 0"
+    ></base-table>
+  </div>
+</template>
+<script lang="ts" setup>
+import { reactive } from "vue";
+
+interface TableRow {
+  id: number;
+  projectName: string;
+  projectTypeStr: string;
+  projectLeader: string;
+  createTime: string;
+  updateTime: string;
+  status: 0 | 1 | 2 | 3;
+}
+
+const state = reactive({
+  loading: false,
+  data: [] as Array<TableRow>,
+  selected: [] as Array<TableRow>,
+});
+
+const tableColumns: Array<BaseTableColumn<TableRow>> = [
+  { title: "项目名称", prop: "projectName", minWidth: 200 },
+  { title: "项目类型", prop: "projectTypeStr", width: 140 },
+  { title: "项目创建人", prop: "projectLeader", width: 140 },
+  {
+    title: "项目状态",
+    prop: "status",
+    width: 140,
+    rawContent(_, row) {
+      const list = [
+        { text: "未开始", color: "blue" },
+        { text: "进行中", color: "green" },
+        { text: "已结束", color: "gray" },
+        { text: "已终止", color: "red" },
+      ];
+      const target = list[row.status];
+      return `<span class="the-tag ${target.color}">${target.text}</span>`;
+    },
+  },
+  { title: "创建时间", prop: "createTime", width: 180 },
+  { title: "更新时间", prop: "updateTime", width: 180 },
+  { title: "操作", prop: "action-right", width: 160 },
+];
+
+const tableActions: Array<BaseTableAction<TableRow>> = [
+  { text: "编辑", },
+  { text: "查看", },
+  {
+    text: "删除",
+    type: "danger",
+    click(row) {
+      console.log(row);
+    },
   }
 ];
 
+function onSearch() {
+  // TODO: 选择列表重置的操作由开发者自行决定
+  state.selected = [];
+  // 再去进行列表查询请求操作
+}
 </script>
 ```
