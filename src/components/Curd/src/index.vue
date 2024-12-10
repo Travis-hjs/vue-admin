@@ -277,7 +277,7 @@ const actionList = computed(() => {
  * @param prop 注意这里值和插槽名相同
  */
 function getColumnByProp(prop: string) {
-  const column = tableConfig.value.columns.find(col => col.key === prop);
+  const column = tableConfig.value.columns.find(col => col.prop === prop);
   // console.log("getColumnByProp >>", column, prop);
   return column || ({} as CurdType.Table.Column);
 }
@@ -381,20 +381,20 @@ function getSearchInfo(params?: GetDataParams) {
   if (params && params.key === "sort") {
     columns.forEach(column => {
       if (column.sort) {
-        if (column.key === params.prop) {
+        if (column.prop === params.prop) {
           column.sort = params.action;
         } else {
           // 将其他的全部重置掉
           column.sort = true;
         }
       }
-      column.sort === "asc" && ascList.push(column.key);
-      column.sort === "desc" && descList.push(column.key);
+      column.sort === "asc" && ascList.push(column.prop);
+      column.sort === "desc" && descList.push(column.prop);
     });
   } else {
     columns.forEach(column => {
-      column.sort === "asc" && ascList.push(column.key);
-      column.sort === "desc" && descList.push(column.key);
+      column.sort === "asc" && ascList.push(column.prop);
+      column.sort === "desc" && descList.push(column.prop);
     });
   }
   if (ascList.length) {

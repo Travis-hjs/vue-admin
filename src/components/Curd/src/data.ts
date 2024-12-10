@@ -9,7 +9,7 @@ export const provideKey = "the-curd-state";
 export const useProvideState = () => inject(provideKey) as CurdType.State;
 
 /** 表格列操作栏的标记 */
-export const columnActionKey = "action-right";
+export const columnActionProp = "action-right";
 /** 表格操作列中，编辑按钮的`key` */
 export const actionEditKey = "action-edit";
 
@@ -235,16 +235,16 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
 
 /**
  * 表格列默认数据
- * @param key 
+ * @param prop 
  * @param title 
  */
-export function getColumnData(key: string, title: string): CurdType.Table.Column {
+export function getColumnData(prop: string, title: string): CurdType.Table.Column {
   return {
     title,
-    key,
+    prop,
     width: undefined,
     minWidth: undefined,
-    tooltip: key === columnActionKey ? false : true,
+    tooltip: prop === columnActionProp ? false : true,
     cellType: "text",
     sort: false,
     fixed: false,

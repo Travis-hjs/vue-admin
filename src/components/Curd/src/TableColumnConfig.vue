@@ -19,9 +19,9 @@
           :placeholder="formRules.title.message"
         />
       </el-form-item>
-      <el-form-item label="表格列键值" prop="key">
+      <el-form-item label="表格列键值" prop="prop">
         <el-input
-          v-model="state.form.key"
+          v-model="state.form.prop"
           clearable
           placeholder="请输入表格列键值"
         />
@@ -166,13 +166,13 @@ const formRef = ref<FormInstance>();
 
 const formRules = {
   title: { required: true, message: "请输入表格列标题", trigger: "blur" },
-  key: {
+  prop: {
     required: true,
     validator(_: any, v: string, callback: (err?: Error) => void) {
       if (!v) {
         callback(new Error("输入字段不能为空！"));
       } else {
-        if (props.keys.includes(state.form.key)) {
+        if (props.keys.includes(state.form.prop)) {
           callback(new Error("已经存在相同的值！"));
         } else {
           callback();
@@ -241,10 +241,10 @@ function onSubmit() {
     });
     // TODO: 设置必须属性
     if (form.cellType === "image") {
-      form.slot = form.key;
+      form.slot = form.prop;
     }
     if (form.sort || form.iconTips) {
-      form.slotHead = `header-${form.key}`;
+      form.slotHead = `header-${form.prop}`;
     }
     emit("submit", form);
     onClose();
@@ -261,7 +261,7 @@ watch(
     } else {
       state.form = deepClone(props.form)!;
       if (props.type === "copy") {
-        state.form.key = "";
+        state.form.prop = "";
       }
     }
     setTimeout(() => formRef.value?.clearValidate());

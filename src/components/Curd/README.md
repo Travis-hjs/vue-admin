@@ -239,7 +239,7 @@ exportPropToWindow({
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
   actionEditKey,
-  columnActionKey,
+  columnActionProp,
   Curd,
   getColumnData,
   getFieldData,
@@ -348,7 +348,7 @@ const data = reactive<CurdType.Config>({
         iconTips: "人工设置的时间"
       },
       {
-        ...getColumnData(columnActionKey, "操作"),
+        ...getColumnData(columnActionProp, "操作"),
         width: 160,
       },
     ],

@@ -48,7 +48,7 @@
             class="the-curd-option-item f-vertical"
             v-bind="getDragProps(item, itemIndex)"
           >
-            <i v-if="item.key !== columnActionKey" class="el-icon--left el-icon-rank"></i>
+            <i v-if="item.prop !== columnActionProp" class="el-icon--left el-icon-rank"></i>
             <span class="f1">{{ item.title }}</span>
             <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mgr-10">
               <el-radio-button
@@ -81,7 +81,7 @@ export default {
 <script lang="ts" setup>
 import { type PropType, computed, reactive } from "vue";
 import type { CurdType, TableOperationType } from "./types";
-import { columnActionKey } from "./data";
+import { columnActionProp } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { watch } from "vue";
 import { deepClone } from "@/utils";
@@ -166,15 +166,15 @@ const fixedOptions = [
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => props.config.columns,
-  key: "key",
+  key: "prop",
 });
 
 function getDragProps(col: CurdType.Table.Column, index: number) {
-  const isAction = col.key === columnActionKey;
-  const k = col.key || col.key;
+  const isAction = col.prop === columnActionProp;
+  const key = col.prop;
   return {
-    "data-key": k,
-    key: k,
+    "data-key": key,
+    key: key,
     draggable: !isAction ? true : undefined,
     title: isAction ? "操作栏不可排序，只能显示隐藏操作" : undefined,
     onDragstart: !isAction ? () => onDragStart(index) : undefined,

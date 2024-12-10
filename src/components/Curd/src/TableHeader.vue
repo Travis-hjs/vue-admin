@@ -60,6 +60,6 @@ function onSwitch() {
     index = 0;
   }
   const action = actions[index];
-  emit("sort", props.column.key, action);
+  emit("sort", props.column.prop, action);
 }
 </script>

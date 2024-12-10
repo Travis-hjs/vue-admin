@@ -24,8 +24,8 @@
 
     <base-table
       :columns="tableColumns"
-      :data="tableData"
-      :actions="btnList"
+      :data="state.data"
+      :actions="tableActions"
       :loading="state.loading"
       select-key="id"
       v-model:select-list="state.selectList"
@@ -65,19 +65,18 @@ const state = reactive({
     date: ''
   },
   pageInfo: getPageInfo(),
-  selectList: [] as Array<TableRow>
+  data: [] as Array<TableRow>,
+  selectList: [] as Array<TableRow>,
 });
 
-const tableData = ref<Array<TableRow>>([]);
-
 const tableColumns: Array<BaseTableColumn<TableRow>> = [
-  { title: "ID", key: "id", width: 90 },
-  { title: "名称", key: "name", minWidth: 180, slot: "fuck" },
-  { title: "创建时间", key: "date", width: 180 },
-  { title: "操作", key: "action-right", width: 200 },
+  { title: "ID", prop: "id", width: 90 },
+  { title: "名称", prop: "name", minWidth: 180, slot: "fuck" },
+  { title: "创建时间", prop: "date", width: 180 },
+  { title: "操作", prop: "action-right", width: 200 },
 ];
 
-const btnList: Array<BaseTableAction<TableRow>> = [
+const tableActions: Array<BaseTableAction<TableRow>> = [
   { text: "编辑", icon: "el-icon-edit" },
   {
     text: "删除",
@@ -119,7 +118,7 @@ function getTableData() {
   // }
   const size = state.pageInfo.pageSize;
   const page = state.pageInfo.currentPage;
-  tableData.value = testList.slice((page - 1) * size, page * size);
+  state.data = testList.slice((page - 1) * size, page * size);
   state.pageInfo.total = testList.length;
 }
 
