@@ -26,16 +26,13 @@
         </div>
       </transition>
     </teleport>
-    <div v-if="appendToBody" :id="flagId" description="用来标记 teleport 开启之后插入的节点用"></div>
   </section>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-
 /** 基础弹出框组件 */
-export default defineComponent({
+export default {
   name: "base-dialog"
-})
+}
 </script>
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
@@ -59,16 +56,21 @@ const props = defineProps({
   /** 是否可以通过点击遮罩层关闭`Dialog` */
   closeByMask: {
     type: Boolean,
-    default: true
+    default: false
   },
-  /** `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性并赋值为`true` */
+  /** `Dialog`自身是否插入至`body`元素上。嵌套的`Dialog`必须指定该属性 */
   appendToBody: {
     type: Boolean,
     default: false
-  }
+  },
 });
 
-const emit = defineEmits(["close", "update:modelValue", "afterLeave", "afterEnd"]);
+const emit = defineEmits<{
+  (event: "close"): void;
+  (event: "update:modelValue", show: boolean): void;
+  (event: "afterLeave"): void;
+  (event: "afterEnd"): void;
+}>();
 
 const currentZIndex = useZIndex();
 
@@ -83,11 +85,6 @@ const contentBox = ref<HTMLElement>();
  * - 因为需要动态设置偏移位置，所以设置完位置之后单独控制该节点切换动画
  */
 const contentShow = ref(false);
-/** 
- * 当前节点记录`id`
- * - TODO: 不知道是不是`<teleport>`的bug，组件永远不会被销毁，所以这里定义一个唯一节点，用来判断并销毁当前节点
- */
-const flagId = "flag-dialog-" + currentZIndex;
 
 watch(() => props.modelValue, function (val) {
   if (val) {
@@ -108,12 +105,7 @@ watch(() => props.modelValue, function (val) {
  * @param e 鼠标事件
  */
 function setContentPosition(e: MouseEvent) {
-  // 判断标记的节点是否存在页面
-  if (props.appendToBody && !document.getElementById(flagId)) {
-    el.value!.remove();
-    el.value = undefined;
-    document.removeEventListener("click", setContentPosition);
-  }
+  console.log("setContentPosition >>", e);
   // 只有在外部点击，且关闭的情况下才会记录坐标
   if (!props.modelValue || contentShow.value || el.value!.contains(e.target as HTMLElement)) return;
   const { clientWidth, clientHeight } = el.value!;
@@ -158,12 +150,11 @@ function onAfterEnter() {
 
 onMounted(function () {
   document.addEventListener("click", setContentPosition);
-})
+});
 
 onUnmounted(function () {
   document.removeEventListener("click", setContentPosition);
-})
-
+});
 </script>
 <style lang="scss">
 @import "@/styles/mixins.scss";

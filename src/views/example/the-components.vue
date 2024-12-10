@@ -64,7 +64,7 @@
       <button class="the-btn green" v-ripple @click="openDialog('second')">打开弹出层-2</button>
     </div>
 
-    <base-dialog title="第一个 dialog" v-model="dialogInfo.first.show" @close="clearTimer()">
+    <base-dialog title="第一个 dialog" v-model="dialogInfo.first.show" close-by-mask @close="clearTimer()">
       <div>
         <p class="mgb-10">出现次数：{{ dialogInfo.first.count }}</p>
         <div v-if="delayShow">延迟出现</div>
@@ -74,13 +74,13 @@
       </template>
     </base-dialog>
 
-    <base-dialog title="第二个 dialog" v-model="dialogInfo.second.show" :closeByMask="false">
+    <base-dialog title="第二个 dialog" v-model="dialogInfo.second.show">
       <div>
         <p><span class="the-tag orange">当前不可点击遮罩层关闭</span></p>
         <p class="mgb-10">出现次数：{{ dialogInfo.second.count }}</p>
         <div v-if="delayShow">延迟出现</div>
 
-        <base-dialog title="第三个 dialog" v-model="dialogInfo.third.show" :appendToBody="true">
+        <base-dialog title="第三个 dialog" v-model="dialogInfo.third.show" append-to-body>
           <div>
             <p class="mgb-10">出现次数：{{ dialogInfo.third.count }}</p>
             <ul class="dialog-list">
