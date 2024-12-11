@@ -62,7 +62,7 @@
       "",
       "async function getTableData() {",
       "  // state.loading = true;",
-      "  // const res = await getApiTableList({...state.pageInfo, ...state.searchInfo})",
+      "  // const res = await getApiTableList({ ...state.pageInfo, ...state.searchInfo })",
       "  // state.loading = false;",
       "  // if (res.code !== 1) return;",
       "  // state.data = res.data.list || [];",
