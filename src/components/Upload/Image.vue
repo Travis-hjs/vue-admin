@@ -4,8 +4,9 @@
       <div v-if="src" class="image-box">
         <img class="image" :src="src" :style="{ 'height': autoHeight ? '' : height }">
         <div class="remove fvc">
-          <i class="upload-icon el-icon-delete" @click="removeImg()"></i>
-          <i class="upload-icon el-icon-document-copy" @click="onCopy()"></i>
+          <i class="upload-icon el-icon-delete" title="移除图片" @click="removeImg()"></i>
+          <i class="upload-icon el-icon-document-copy" title="复制图片地址" @click="onCopy()"></i>
+          <i class="upload-icon el-icon-search" title="查看大图" @click="onPreview()"></i>
         </div>
       </div>
       <div v-else class="upload-box fvc" :style="{ 'height': height }">
@@ -28,6 +29,7 @@ import { copyText } from "@/utils";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
 import type { UploadChange } from "./index";
+import { openPreview } from "../ImageViewer";
 
 const props = defineProps({
   /** 组件上传图片路径 */
@@ -66,7 +68,12 @@ const props = defineProps({
   /** 是否需要复制图片地址功能 */
   copy: {
     type: Boolean,
-    default: true
+    default: false
+  },
+  /** 是否需要预览图片地址功能 */
+  preview: {
+    type: Boolean,
+    default: false
   },
   /** 上传文件类型 */
   accept: {
@@ -89,11 +96,17 @@ function removeImg() {
     id: props.uploadId,
     src: "",
   });
-};
+}
 
 function onCopy() {
   copyText(props.src, () => message.success("复制图片地址成功！"), tip => message.error(tip));
-};
+}
+
+function onPreview() {
+  openPreview({
+    urls: [props.src]
+  });
+}
 
 /** 上传图片 */
 async function onUpload() {
@@ -104,9 +117,7 @@ async function onUpload() {
   if (file.size > props.maxSize * 1024 * 1024) {
     return message.warning(`上传的文件不能大于 ${props.maxSize}M`);
   }
-
   const formData = new FormData();
-
   formData.append("file", file);
   loading.value = true;
   const res = await uploadFile(formData);
@@ -120,8 +131,7 @@ async function onUpload() {
       // result: res.data
     });
   }
-};
-
+}
 </script>
 <style lang="scss">
 @mixin time() {
@@ -173,7 +183,7 @@ async function onUpload() {
           opacity: 1;
         }
         .upload-icon {
-          font-size: 28px;
+          font-size: 20px;
           cursor: pointer;
         }
         .upload-icon + .upload-icon {
