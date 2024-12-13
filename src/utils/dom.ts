@@ -27,7 +27,13 @@ export function validateEX(formName: string, valid?: boolean) {
     item.scrollIntoView && item.scrollIntoView({
       behavior: "smooth"
     });
-    const classNames = [".el-input", ".el-textarea", ".el-select"];
+    // TODO: 不够再加
+    const classNames = [
+      ".el-input",
+      ".el-textarea",
+      ".el-select",
+      ".el-date-editor"
+    ];
     let input: HTMLElement | null = null;
     for (let i = 0; i < classNames.length; i++) {
       input = item.querySelector(classNames[i]);
