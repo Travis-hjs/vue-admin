@@ -16,6 +16,7 @@
       "      label-position=\"left\"",
       "      :model=\"state.formData\"",
       "      :rules=\"formRules\"",
+      "      :disabled=\"state.loading\"",
       "    >",
       "      <el-form-item label=\"名称\" prop=\"name\">",
       "        <el-input",
