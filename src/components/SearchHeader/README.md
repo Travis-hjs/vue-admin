@@ -28,8 +28,8 @@ interface Search {
 
 function getSearchInfo(): Search {
   return {
-    keyword: ""
-  };
+    keyword: "",
+  }
 }
 
 const searchFields: Array<TheField.Type<Search>> = [
@@ -37,7 +37,7 @@ const searchFields: Array<TheField.Type<Search>> = [
     label: "搜索关键字",
     prop: "keyword",
     type: "input",
-    placeholder: "请输入关键字"
+    placeholder: "请输入关键字",
   },
   {
     label: "应用",
@@ -45,7 +45,7 @@ const searchFields: Array<TheField.Type<Search>> = [
     type: "select",
     placeholder: "请选择应用",
     options: [],
-    optionSetting: { label: "appName", value: "id" }
+    optionSetting: { label: "appName", value: "id" },
   },
   {
     label: "类型",
@@ -54,8 +54,8 @@ const searchFields: Array<TheField.Type<Search>> = [
     placeholder: "请选择类型",
     options: [
       { label: "单机", value: 1 },
-      { label: "网游", value: 2 }
-    ]
+      { label: "网游", value: 2 },
+    ],
   }
 ];
 
