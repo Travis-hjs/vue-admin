@@ -13,6 +13,8 @@ export {
   actionEditKey,
 } from "./src/data";
 
+export { LabelTips } from "./src/part";
+
 export type {
   CurdType,
   TableOperationType as TableOperationAction,
