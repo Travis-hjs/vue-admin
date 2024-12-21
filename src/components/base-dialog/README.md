@@ -11,7 +11,7 @@
   <div>
     <button @click="show = true">打开弹出层</button>
 
-    <base-dialog title="第一个 dialog" v-model="show">
+    <base-dialog title="第一个 dialog" v-model:show="show">
       <div>
         ...your code
       </div>
@@ -27,7 +27,7 @@
 
 | props |  类型 | 是否必选 | 说明 |
 | --- | --- | --- | --- |
-| v-model | boolean | 是 | 显示隐藏 |
+| show | boolean | 是 | 显示隐藏 |
 | width | string | 否 | 弹出内容宽度：`px`,`%`,`vw`,`em`等 |
 | title | string | 否 | 弹出框标题 |
 | closeByMask | boolean | 否 | 是否可以通过点击遮罩层关闭`Dialog`，默认`false` |
