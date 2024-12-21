@@ -1,6 +1,6 @@
 <template>
   <base-dialog
-    v-model="state.show"
+    v-model:show="state.show"
     :title="title"
     width="580px"
     @close="onClose"

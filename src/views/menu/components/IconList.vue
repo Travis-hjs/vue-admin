@@ -1,6 +1,6 @@
 <template>
   <base-dialog
-    v-model="state.show"
+    v-model:show="state.show"
     title="图标库"
     width="922px"
     @close="onClose()"

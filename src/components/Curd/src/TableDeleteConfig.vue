@@ -1,6 +1,6 @@
 <template>
   <base-dialog
-    v-model="state.show"
+    v-model:show="state.show"
     title="配置表格删除功能"
     width="400px"
     @close="onClose"

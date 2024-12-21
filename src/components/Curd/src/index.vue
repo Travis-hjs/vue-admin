@@ -56,7 +56,7 @@
     </section>
     <Editor v-model:show="state.editor.show" :config="props.data" />
     <base-dialog
-      v-model="tableState.formShow"
+      v-model:show="tableState.formShow"
       :title="formInfo.title"
       :width="convertPx(formInfo.config.width)"
       @close="onCloseForm()"
@@ -80,7 +80,7 @@
     >
       <i class="el-icon-arrow-left" />
     </el-button>
-    <base-dialog v-model="state.showEntrance" title="请选择配置操作" width="600px">
+    <base-dialog v-model:show="state.showEntrance" title="请选择配置操作" width="600px">
       <div class="the-curd-entrance-item" @click="onEditor('search')">
         <p class="mgb-10">配置筛选相关功能</p>
         <ThumbnailSearch />

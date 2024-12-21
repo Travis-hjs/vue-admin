@@ -1,6 +1,6 @@
 <template>
   <base-dialog
-    v-model="state.show"
+    v-model:show="state.show"
     title="配置操作列按钮功能"
     width="880px"
     @close="onClose"
