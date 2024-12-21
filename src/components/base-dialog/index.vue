@@ -1,13 +1,13 @@
 <template>
   <section>
-    <teleport to="body" :disabled="!appendToBody">
+    <teleport to="body" :disabled="!props.appendToBody">
       <transition name="fade">
-        <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="modelValue" @click="onClose">
+        <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="props.show" @click="onClose">
           <transition name="dialog-move" @after-leave="onAfterLeave" @after-enter="onAfterEnter">
             <div
               ref="contentBox"
               class="base-dialog-content flex"
-              :style="{ 'width': width }"
+              :style="{ 'width': props.width }"
               v-show="contentShow"
             >
               <div class="base-dialog-title f-between f-vertical">
@@ -43,8 +43,8 @@ const props = defineProps({
     type: String,
     default: "提示"
   },
-  /** 双向绑定显示隐藏值 */
-  modelValue: {
+  /** 是否显示 */
+  show: {
     type: Boolean,
     default: false
   },
@@ -67,7 +67,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (event: "close"): void;
-  (event: "update:modelValue", show: boolean): void;
+  (event: "update:show", show: boolean): void;
   (event: "afterLeave"): void;
   (event: "afterEnd"): void;
 }>();
@@ -86,7 +86,7 @@ const contentBox = ref<HTMLElement>();
  */
 const contentShow = ref(false);
 
-watch(() => props.modelValue, function (val) {
+watch(() => props.show, function (val) {
   if (val) {
     // TODO: 等设置完偏移变量值之后，再开始缩放动画
     // 这里不能用 nextTick 代替
@@ -107,7 +107,7 @@ watch(() => props.modelValue, function (val) {
 function setContentPosition(e: MouseEvent) {
   // console.log("setContentPosition >>", e);
   // 只有在外部点击，且关闭的情况下才会记录坐标
-  if (!props.modelValue || contentShow.value || el.value!.contains(e.target as HTMLElement)) return;
+  if (!props.show || contentShow.value || el.value!.contains(e.target as HTMLElement)) return;
   const { clientWidth, clientHeight } = el.value!;
   const centerX = clientWidth / 2;
   const centerY = clientHeight / 2;
@@ -134,7 +134,7 @@ function setVariable(x: string, y: string) {
 function onClose(e: MouseEvent) {
   // console.log("onClose >>", e.target);
   if ((e && e.target === el.value && props.closeByMask) || (e && e.target === closeBtn.value)) {
-    emit("update:modelValue", false);
+    emit("update:show", false);
     emit("close");
   }
 }
