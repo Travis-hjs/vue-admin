@@ -11,20 +11,20 @@
         :height="tableBoxSize.height"
         expand-column-key="meta.title"
         fixed
+        border
       >
         <template #cell="{ rowData, column }: SlotCell">
           <template v-if="column.key === 'meta.title'">
-            <el-icon class="icon mr-[6px]" v-if="rowData.meta.icon">
-              <component :is="rowData.meta.icon" />
-            </el-icon>
+            <svg-icon v-if="rowData.meta.icon" class="el-icon--left" :name="rowData.meta.icon" />
             <span>{{ rowData.meta.title }}</span>
           </template>
           <template v-if="column.key === 'meta.type'">
-            <span :class="['the-tag', rowData.meta.type === 'menu' ? 'blue' : 'green']">{{ rowData.meta.type === 'menu' ? '菜单' : '权限' }}</span>
+            <span :class="['the-tag', rowData.meta.type === 'menu' ? 'blue' : 'green']">
+              {{ rowData.meta.type === 'menu' ? '菜单' : '权限' }}
+            </span>
           </template>
           <template v-if="column.key === 'sort'">
             <el-input-number
-              class="w-[140px]"
               v-model="rowData.sort"
               :min="1"
               @blur="onBlur(rowData)"
@@ -64,7 +64,7 @@ import {
 } from "element-plus";
 import { useLayoutContentSize } from "@/hooks/common";
 
-interface Row extends Omit<MenuForm, "id"|"parentId"|"children"> {
+interface Row extends Omit<MenuForm, "id" | "parentId" | "children"> {
   /** 原来数据数据`id` */
   _id?: number;
   /** 原来数据`parentId` */
@@ -122,11 +122,11 @@ function createData(length: number, level = 1, maxLevel?: number, pId?: string) 
       sort: 1,
       redirect: "",
       meta: {
-        title: `菜单-${level}-${index}`,
-        icon: pId ? (isMenu ? "Eleme" : "") : "Eleme",
+        title: `${isMenu ? "菜单" : "权限"}-${level}-${index}`,
+        icon: (isMenu ? "menu" : "guide"),
         hidden: false,
         keepAlive: false,
-        type: pId ? (isMenu ? "menu" : "auth") : "menu",
+        type: (isMenu ? "menu" : "auth"),
         status: 1
       }
     }

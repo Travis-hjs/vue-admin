@@ -8,6 +8,7 @@ export {
   getColumnData,
   getActionData,
   getFormConfig,
+  getBoldLabel,
   exportPropToWindow,
   columnActionProp as columnActionProp,
   actionEditKey,

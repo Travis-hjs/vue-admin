@@ -27,14 +27,13 @@
   </section>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue';
 /**
  * 自定义抽屉组件
  * - `<el-drawer>`组件内部做了阻止事件冒泡处理，导致其他用户操作点击事件的异常情况，这里重写一个功能类似的组件
  */
-export default defineComponent({
+export default {
   name: "Drawer"
-})
+}
 </script>
 <script lang="ts" setup>
 import { useZIndex } from "@/hooks/common";
@@ -72,8 +71,8 @@ defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "update:show", val: boolean): void
-  (event: "close"): void
+  (event: "update:show", val: boolean): void;
+  (event: "close"): void;
 }>();
 
 const currentZIndex = useZIndex();

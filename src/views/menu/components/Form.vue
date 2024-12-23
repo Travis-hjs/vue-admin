@@ -55,18 +55,15 @@
             placeholder="请确保路径唯一性，如不填，则在提交时自动设置"
           ></el-input>
         </el-form-item>
-        <el-form-item label="视图组件路径" prop="component">
+        <el-form-item prop="component">
+          <template #label>
+            <LabelTips label="视图组件路径" :tips="tips.component" />
+          </template>
           <el-input
-            class="f1 mgr-10"
             v-model="state.formData.component"
             clearable
             placeholder="当为目录时可以不用填"
           ></el-input>
-          <el-tooltip effect="light" placement="top" :content="tips.component" raw-content>
-            <el-button type="primary" plain>
-              <i class="el-icon-question"></i>
-            </el-button>
-          </el-tooltip>
         </el-form-item>
         <el-form-item label="重定向路径" prop="redirect">
           <el-input
@@ -125,18 +122,15 @@
             placeholder="设置外链时则覆盖路由路径"
           ></el-input>
         </el-form-item>
-        <el-form-item label="多语言设置" prop="meta.lang">
+        <el-form-item prop="meta.lang">
+          <template #label>
+            <LabelTips label="多语言设置" :tips="tips.lang" />
+          </template>
           <el-input
-            class="f1 mgr-10"
             v-model="state.formData.meta.lang"
             clearable
             placeholder="请输入语言配置表中的键值"
           ></el-input>
-          <el-tooltip effect="light" placement="top" :content="tips.lang" raw-content>
-            <el-button type="primary" plain>
-              <i class="el-icon-question"></i>
-            </el-button>
-          </el-tooltip>
         </el-form-item>
       </template>
       <template v-else>
@@ -162,7 +156,7 @@
         </el-form-item>
       </template>
     </el-form>
-    <Icon v-model:show="state.showIcon" @select="onIcon" />
+    <IconList v-model:show="state.showIcon" @select="onIcon" />
     <template #footer>
       <el-button @click="onClose()">取 消</el-button>
       <el-button @click="onSubmit()" type="primary">确 认</el-button>
@@ -170,7 +164,6 @@
   </Drawer>
 </template>
 <script lang="ts">
-
 /** 菜单编辑表单 */
 export default {
   name: "Form"
@@ -181,8 +174,9 @@ import { ref, reactive, watch, type PropType } from "vue";
 import { ElMessage, type FormInstance } from "element-plus"
 import { validateEX } from "@/utils/dom";
 import type { MenuForm } from "@/types";
-import Icon from "./IconList.vue";
+import IconList from "./IconList.vue";
 import { Drawer } from "@/components/Drawer";
+import { LabelTips, getBoldLabel } from "@/components/Curd";
 
 const props = defineProps({
   show: {
@@ -266,10 +260,10 @@ const formRules = {
 }
 
 const tips = {
-  component: '<p class="el-text">路径规则为：`src/views/<b class="el-text el-text--primary">${component}</b>.vue`</p><p class="el-text"><b class="el-text el-text--primary">component</b> 就是要填写的路径</p>',
+  component: `<p>路径规则为："src/views/${getBoldLabel("${component}")}.vue"</p><p>${getBoldLabel("component")}就是要填写的路径</p>`,
   lang: `
-  <p class="el-text">参考 src/language/zh.ts 中的语言对象结构</p>
-  <p class="el-text">比如 <b class="el-text el-text--primary">login.account</b>、<b class="el-text el-text--primary">languageSetting</b> 等</p>
+  <p>参考 src/language/zh.ts 中的语言对象结构</p>
+  <p>比如 ${getBoldLabel("login.account")}、${getBoldLabel("languageSetting")} 等</p>
   `
 }
 
@@ -304,19 +298,6 @@ function onSubmit() {
   })
 }
 
-watch(() => props.show, function(val) {
-  state.show = val;
-  if (val) {
-    // 可以做一些重置操作
-    state.formData = props.type === "edit" ? JSON.parse(JSON.stringify(props.form)) : useFormData();
-    setTimeout(() => {
-      formRef.value && formRef.value.clearValidate();
-    })
-  }
-}, {
-  immediate: true
-});
-
 const options = new Array(10).fill(0).map((_, index) => {
   const id = index + 1
   return {
@@ -340,6 +321,16 @@ function onType() {
   state.formData.meta.status = 1;
 }
 
+watch(() => props.show, function(val) {
+  state.show = val;
+  if (val) {
+    // 可以做一些重置操作
+    state.formData = props.type === "edit" ? JSON.parse(JSON.stringify(props.form)) : useFormData();
+    formRef.value && setTimeout(() => formRef.value!.clearValidate());
+  }
+}, {
+  immediate: true
+});
 </script>
 <style lang="scss" scoped>
 // .value-box {
