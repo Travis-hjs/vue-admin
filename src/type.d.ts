@@ -40,6 +40,17 @@ type DeepRequired<T> = {
  */
 type ValueOf<T> = T[keyof T];
 
+/**
+ * 获取嵌套属性的键
+ * - 辅助类型，用于生成嵌套属性的字符串拼写
+ * - 这里`(string | number)`是为了兼容数组下标，在大多数情况下都是字符串，所以后续可以看情况把它去掉
+ */
+type NestedKeyOf<T extends object> = {
+  [K in keyof T & (string | number)]: T[K] extends object
+    ? `${K}` | `${K}.${NestedKeyOf<T[K]>}`
+    : `${K}`;
+}[keyof T & (string | number)];
+
 /** 运算符号 */
 type NumberSymbols = "+" | "-" | "*" | "/";
 
