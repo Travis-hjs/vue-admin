@@ -8,7 +8,7 @@ export namespace TheField {
     /** 展示文案 */
     label: string;
     /** 表单数据对象键值 */
-    prop: keyof T;
+    prop: keyof T | NestedKeyOf<T>;
     /** 组件的`placeholder` */
     placeholder?: string;
     /** 额外的提示文案 */
@@ -79,7 +79,10 @@ export namespace TheField {
     showAll?: boolean;
   }
 
-  export interface Date<T extends object> extends Common<T>, Pick<CurdType.Date, "dateType" | "formatShow" | "format"> {
+  export interface Date<T extends object>
+    extends Common<T>,
+      Pick<CurdType.Date, "dateType">,
+      Partial<Pick<CurdType.Date, "formatShow" | "format">> {
     /**
      * 日期组件
      * - 当前组件没有对绑定值做任何操作，所以传入的值和返回的值都是组件原始类型
@@ -91,7 +94,7 @@ export namespace TheField {
      * - 当前为单向绑定，即组件值发生变动时会修改`bind: ["updateTime"]`，`obj.updateTime = "xxx"`不会修改组件数据
      * - 当为日期范围时，按照数组顺序进行值的绑定，例如：`bind: ["startDate", "endDate"]`
      */
-    bind: Array<keyof T>;
+    bind: Array<keyof T | NestedKeyOf<T>>;
   }
 
   export interface Switch<T extends object> extends Omit<Common<T>, "placeholder"> {

@@ -5,7 +5,7 @@ export { default as TheFields } from "./src/index.vue";
 export type { TheField } from "./src/types";
 
 /**
- * 设置表单项组件选项数据
+ * 设置表单项组件`<TheFields />`选项数据
  * - 考虑到数组中直接通过`list[number].options = xxx`这种方式不够方便
  * - 例如：1.类型要指定；2.数组顺序可能会被调整；
  * - 所以提供一个方法进行精准匹配并设置

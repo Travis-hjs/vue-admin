@@ -30,6 +30,9 @@ interface FormData {
   name: string;
   type?: number;
   price?: number;
+  sub: {
+    content: string;
+  }
 }
 
 const fields: Array<TheField.Type<FormData>> = [
@@ -46,6 +49,7 @@ const fields: Array<TheField.Type<FormData>> = [
     placeholder: "请选择类型"
   },
   { label: "价格", prop: "price", type: "number", placeholder: "请输入价格" },
+  { label: "子内容", prop: "sub.content", type: "textarea", placeholder: "请输入内容" },
 ];
 
 const state = reactive({

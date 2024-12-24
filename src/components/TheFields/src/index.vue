@@ -12,76 +12,48 @@
     </template>
     <el-input
       v-if="field.type === 'input'"
-      v-model="props.data[field.prop]"
       v-bind="getCommonProps(field)"
-      @input="onChange(field)"
+      @input="e => onChange(field, e)"
     />
     <el-input
       v-if="field.type === 'textarea'"
-      v-model="props.data[field.prop]"
       v-bind="getCommonProps(field)"
       show-word-limit
       type="textarea"
-      @input="onChange(field)"
+      @input="e => onChange(field, e)"
     />
     <el-input-number
       v-if="field.type === 'number'"
-      v-model="props.data[field.prop]"
       v-bind="getCommonProps(field)"
       :min="field.min"
       :max="field.max"
       controls-position="right"
-      @input="onChange(field)"
+      @input="e => onChange(field, e)"
     />
-    <template v-if="field.type === 'select' || field.type === 'select-multiple'">
-      <el-select-v2
-        v-if="field.options.length > 36"
-        v-model="props.data[field.prop]"
-        :options="field.options"
-        :props="getOptionSetting(field)"
-        v-bind="getSelectProps(field)"
-        @change="onChange(field)"
-      >
-        <template #default="{ item }">
-          <span :title="getSelectLabel(field, item)">
-            {{ getSelectLabel(field, item) }}
-          </span>
-        </template>
-      </el-select-v2>
-      <el-select
-        v-else
-        v-model="props.data[field.prop]"
-        v-bind="getSelectProps(field)"
-        @change="onChange(field)"
-      >
-        <el-option
-          v-for="item in field.options"
-          :key="item[getOptionSetting(field).value]"
-          :value="item[getOptionSetting(field).value]"
-          :label="getSelectLabel(field, item)"
-        />
-      </el-select>
-    </template>
-    <el-date-picker
+    <TheSelect
+      v-if="field.type === 'select' || field.type === 'select-multiple'"
+      :attrs="getSelectProps(field)"
+      :field="field"
+      @change="e => onChange(field, e)"
+    />
+    <TheDatePicker
       v-if="field.type === 'date'"
-      v-model="props.data[field.prop]"
-      :type="field.dateType"
-      :format="field.formatShow"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      v-bind="getCommonProps(field)"
-      @change="onDatePicker(field)"
+      :attrs="{
+        type: field.dateType,
+        format: field.formatShow,
+        ...getCommonProps(field),
+      }"
+      @change="(e: any) => onDatePicker(field, e)"
     />
     <el-switch
       v-if="field.type === 'switch'"
-      v-model="props.data[field.prop]"
+      :model-value="getFieldValue(field)"
       inline-prompt
       :active-text="field.activeText || '是'"
       :inactive-text="field.inactiveText || '否'"
       :active-value="field.activeValue"
       :inactive-value="field.inactiveValue"
-      @change="onChange(field)"
+      @change="e => onChange(field, e)"
     />
     <div v-if="field.type === 'text'" :class="['text-box', field.class || 'w-full'] ">
       <el-text>{{ getTextContent(field) }}</el-text>
@@ -107,6 +79,7 @@ import { computed, type PropType } from "vue";
 import type { TheField } from "./types";
 import { formatDate, isType } from "@/utils";
 import { LabelTips } from "@/components/Curd";
+import { TheDatePicker, TheSelect } from "./part";
 
 const props = defineProps({
   /**
@@ -134,13 +107,6 @@ const emit = defineEmits<{
   (event: "change", prop: string, value: any): void;
 }>();
 
-function onChange(field: TheField.Type) {
-  const key = field.prop;
-  const value = props.data[key];
-  field.onChange && field.onChange(value);
-  emit("change", key, value);
-}
-
 const fields = computed(() => props.list.filter(item => {
   if (isType(item.show, "boolean")) {
     return item.show;
@@ -149,6 +115,68 @@ const fields = computed(() => props.list.filter(item => {
   }
   return true;
 }));
+
+/**
+ * 获取表单项值
+ * @param field 表单项配置
+ * @param key 指定的键值
+ */
+function getFieldValue(field: TheField.Type, key?: string) {
+  const _key = key || field.prop;
+  const model = props.data;
+  // 处理嵌套属性：`props.data["sub.name"]`这种
+  if (_key.includes(".")) {
+    const empty = [null, undefined];
+    const keys = _key.split(".");
+    let obj = model;
+    for (const k of keys) {
+      if (empty.includes(obj[k])) {
+        return undefined;
+      }
+      obj = obj[k];
+    }
+    return obj;
+  }
+  return model[field.prop];
+}
+
+/**
+ * 设置表单项值
+ * @param field 表单项配置
+ * @param value 变更的值
+ * @param key 指定的键值
+ */
+function setFieldValue(field: TheField.Type, value: any, key?: string) {
+  const _key = key || field.prop;
+  const model = props.data;
+  // 处理嵌套属性：`props.data["sub.name"]`这种
+  if (_key.includes(".")) {
+    const keys = _key.split(".");
+    let obj = model;
+    for (let i = 0; i < keys.length - 1; i++) {
+      const k = keys[i];
+      // 如果当前键不存在，则创建一个空对象
+      if (!obj[k]) {
+        obj[k] = {};
+      }
+      obj = obj[k];
+    }
+    obj[keys[keys.length - 1]] = value;
+  } else {
+    model[_key] = value;
+  }
+}
+
+function onChange(field: TheField.Type, val: any) {
+  const key = field.prop;
+  const value = val;
+  // 日期的特殊处理一下
+  if (field.type !== "date") {
+    setFieldValue(field, value);
+  }
+  field.onChange && field.onChange(value);
+  emit("change", key, value);
+}
 
 function getClassName(field: TheField.Type) {
   return field.class || (props.type === "form" ? "w-full" : "short-value");
@@ -161,14 +189,7 @@ function getCommonProps(field: TheField.Type) {
     disabled: isDisabled,
     class: getClassName(field),
     clearable: field.type === "textarea" ? undefined : true,
-  }
-}
-
-function getOptionSetting(field: TheField.HasOption) {
-  const setting = field.optionSetting || {};
-  return {
-    value: setting.value || "value",
-    label: setting.label || "label",
+    modelValue: getFieldValue(field),
   }
 }
 
@@ -184,12 +205,8 @@ function getSelectProps(field: TheField.Select<any> | TheField.SelectMultiple<an
     filterable: true,
     collapseTags: !showAll,
     class: getClassName(field),
+    modelValue: getFieldValue(field),
   }
-}
-
-function getSelectLabel(field: TheField.HasOption, option: Record<string, any>) {
-  const setting = getOptionSetting(field);
-  return `${option[setting.label] || option[setting.value]}`;
 }
 
 function getTextContent(field: TheField.Text<any>) {
@@ -199,22 +216,21 @@ function getTextContent(field: TheField.Text<any>) {
   return text || "-";
 }
 
-function onDatePicker(field: TheField.Date<Record<string, any>>) {
-  const model = props.data;
-  const value = model[field.prop];
-  const bind = field.bind;
+function onDatePicker(field: TheField.Date<Record<string, any>>, value: any) {
+  const keys = field.bind;
+  setFieldValue(field, value); // 为什么要先设置值？因为bind的值和组件的值可能是同一个，所以要先设置，最后再格式化
   if (["daterange", "datetimerange"].includes(field.dateType)) {
     if (value) {
-      model[bind[0]] = formatDate(value[0], field.format);
-      model[bind[1]] = formatDate(value[1], field.format);
+      setFieldValue(field, formatDate(value[0], field.format), keys[0]);
+      setFieldValue(field, formatDate(value[1], field.format), keys[1]);
     } else {
-      model[bind[0]] = undefined;
-      model[bind[1]] = undefined;
+      setFieldValue(field, undefined, keys[0]);
+      setFieldValue(field, undefined, keys[1]);
     }
   } else {
-    model[bind[0]] = value ? formatDate(value, field.format) : undefined;
+    setFieldValue(field, value ? formatDate(value, field.format) : undefined, keys[0]);
   }
-  onChange(field);
+  onChange(field, value);
 }
 </script>
 <style lang="scss">
