@@ -96,7 +96,9 @@ export function TableImage(props: TableImageProps) {
 }
 
 interface LabelTipsProps {
+  /** `<el-form-item :label="label">` */
   label: string;
+  /** `<el-tooltip />`提示内容 */
   tips: string;
 }
 

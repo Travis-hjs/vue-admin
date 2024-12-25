@@ -34,44 +34,7 @@
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">基础配置</el-text>
         </el-divider>
-        <el-form-item label="菜单名称" prop="meta.title">
-          <el-input
-            v-model="state.formData.meta.title"
-            clearable
-            :placeholder="formRules['meta.title'][0].message"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="菜单权限标识" prop="code">
-          <el-input
-            v-model="state.formData.code"
-            clearable
-            :placeholder="formRules.code[0].message"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="路由路径" prop="path">
-          <el-input
-            v-model="state.formData.path"
-            clearable
-            placeholder="请确保路径唯一性，如不填，则在提交时自动设置"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="component">
-          <template #label>
-            <LabelTips label="视图组件路径" :tips="tips.component" />
-          </template>
-          <el-input
-            v-model="state.formData.component"
-            clearable
-            placeholder="当为目录时可以不用填"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="重定向路径" prop="redirect">
-          <el-input
-            v-model="state.formData.redirect"
-            clearable
-            placeholder="当为目录且不填时，则默认拿下级第一项作为该值"
-          ></el-input>
-        </el-form-item>
+        <TheFields :data="state.formData" :list="baseConfigs" />
         <el-form-item label="菜单图标" prop="meta.icon">
           <el-input
             class="f1 mgr-10"
@@ -89,71 +52,10 @@
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">辅助配置</el-text>
         </el-divider>
-        <el-form-item label="菜单排序" prop="sort">
-          <el-input-number v-model="state.formData.sort" :min="1" />
-        </el-form-item>
-        <el-form-item label="菜单隐藏" prop="meta.hidden">
-          <el-switch
-            v-model="state.formData.meta.hidden"
-            inline-prompt
-            active-text="是"
-            inactive-text="否"
-          />
-        </el-form-item>
-        <el-form-item label="是否需要路由缓存" prop="meta.keepAlive">
-          <el-switch
-            v-model="state.formData.meta.keepAlive"
-            inline-prompt
-            active-text="是"
-            inactive-text="否"
-          />
-        </el-form-item>
-        <el-form-item label="路由名称" prop="name">
-          <el-input
-            v-model="state.formData.name"
-            clearable
-            placeholder="请确保名称唯一性，否则路由缓存匹配会异常"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="设置为外链" prop="meta.link">
-          <el-input
-            v-model="state.formData.meta.link"
-            clearable
-            placeholder="设置外链时则覆盖路由路径"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="meta.lang">
-          <template #label>
-            <LabelTips label="多语言设置" :tips="tips.lang" />
-          </template>
-          <el-input
-            v-model="state.formData.meta.lang"
-            clearable
-            placeholder="请输入语言配置表中的键值"
-          ></el-input>
-        </el-form-item>
+        <TheFields :data="state.formData" :list="auxiliaryConfigs" />
       </template>
       <template v-else>
-        <el-form-item label="功能名称" prop="meta.title" key="auth-title">
-          <el-input
-            v-model="state.formData.meta.title"
-            clearable
-            :placeholder="formRules['meta.title'][0].message"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="功能权限标识" prop="code" key="auth">
-          <el-input
-            v-model="state.formData.code"
-            clearable
-            :placeholder="formRules.code[0].message"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="功能权限标识" prop="meta.status" key="status">
-          <el-radio-group v-model="state.formData.meta.status">
-            <el-radio-button label="正常" :value="1" />
-            <el-radio-button label="停用" :value="2" />
-          </el-radio-group>
-        </el-form-item>
+        <TheFields :data="state.formData" :list="permissionConfigs" />
       </template>
     </el-form>
     <IconList v-model:show="state.showIcon" @select="onIcon" />
@@ -176,7 +78,8 @@ import { validateEX } from "@/utils/dom";
 import type { MenuForm } from "@/types";
 import IconList from "./IconList.vue";
 import { Drawer } from "@/components/Drawer";
-import { LabelTips, getBoldLabel } from "@/components/Curd";
+import { getBoldLabel } from "@/components/Curd";
+import { type TheField, TheFields } from "@/components/TheFields";
 
 const props = defineProps({
   show: {
@@ -220,45 +123,6 @@ function useFormData(): MenuForm {
   }
 }
 
-const state = reactive({
-  show: false,
-  loading: false,
-  formData: useFormData(),
-  showIcon: false,
-});
-
-const formRules = {
-  "meta.icon": [
-    {
-      validator(_: any, value: string, callback: (err?: Error) => void) {
-        if (!state.formData.parentId && !value) {
-          callback(new Error("首级菜单必需设置图标"));
-        } else {
-          callback();
-        }
-      }
-    },
-  ],
-  "meta.title": [
-    { required: true, message: "请输入名称", trigger: "blur" }
-  ],
-  code: [
-    { required: true, message: "请输入权限标识", trigger: "blur" }
-  ],
-  name: [
-    {
-      trigger: "blur",
-      validator(_: any, value: string, callback: (err?: Error) => void) {
-        if (state.formData.meta.keepAlive && !value) {
-          callback(new Error("当设置路由缓存时，必需设置路由名称！"));
-        } else {
-          callback();
-        }
-      }
-    }
-  ]
-}
-
 const tips = {
   component: `<p>路径规则为："src/views/${getBoldLabel("${component}")}.vue"</p><p>${getBoldLabel("component")}就是要填写的路径</p>`,
   lang: `
@@ -266,6 +130,134 @@ const tips = {
   <p>比如 ${getBoldLabel("login.account")}、${getBoldLabel("languageSetting")} 等</p>
   `
 }
+
+const formRules = {
+  "meta.icon": {
+    validator(_: any, value: string, callback: (err?: Error) => void) {
+      if (!state.formData.parentId && !value) {
+        callback(new Error("首级菜单必需设置图标"));
+      } else {
+        callback();
+      }
+    }
+  },
+  "meta.title": { required: true, message: "请输入名称", trigger: "blur" },
+  code: { required: true, message: "请输入权限标识", trigger: "blur" },
+  name: {
+    trigger: "blur",
+    validator(_: any, value: string, callback: (err?: Error) => void) {
+      if (state.formData.meta.keepAlive && !value) {
+        callback(new Error("当设置路由缓存时，必需设置路由名称！"));
+      } else {
+        callback();
+      }
+    }
+  }
+}
+
+const baseConfigs: Array<TheField.Type<MenuForm>> = [
+  {
+    label: "菜单名称",
+    prop: "meta.title",
+    type: "input",
+    placeholder: formRules['meta.title'].message,
+  },
+  {
+    label: "菜单权限标识",
+    prop: "code",
+    type: "input",
+    placeholder: formRules.code.message,
+  },
+  {
+    label: "路由路径",
+    prop: "path",
+    type: "input",
+    placeholder: "请确保路径唯一性，如不填，则在提交时自动设置",
+  },
+  {
+    label: "视图组件路径",
+    prop: "component",
+    type: "input",
+    placeholder: "当为目录时可以不用填",
+    tooltip: tips.component
+  },
+  {
+    label: "重定向路径",
+    prop: "redirect",
+    type: "input",
+    placeholder: "当为目录且不填时，则默认拿下级第一项作为该值",
+  },
+];
+
+const auxiliaryConfigs: Array<TheField.Type<MenuForm>> = [
+  {
+    label: "菜单排序",
+    prop: "sort",
+    type: "number",
+    placeholder: "请输入排序值",
+    min: 1,
+  },
+  {
+    label: "菜单隐藏",
+    prop: "meta.hidden",
+    type: "switch",
+  },
+  {
+    label: "是否需要路由缓存",
+    prop: "meta.keepAlive",
+    type: "switch",
+  },
+  {
+    label: "路由名称",
+    prop: "name",
+    type: "input",
+    placeholder: "请确保名称唯一性，否则路由缓存匹配会异常",
+  },
+  {
+    label: "设置为外链",
+    prop: "meta.link",
+    type: "input",
+    placeholder: "设置外链时则覆盖路由路径",
+  },
+  {
+    label: "多语言设置",
+    prop: "meta.lang",
+    type: "input",
+    placeholder: "请输入语言配置表中的键值",
+    tooltip: tips.lang
+  }
+];
+
+const permissionConfigs: Array<TheField.Type<MenuForm>> = [
+  {
+    label: "权限标识",
+    prop: "code",
+    type: "input",
+    placeholder: "请输入权限标识",
+  },
+  {
+    label: "权限名称",
+    prop: "meta.title",
+    type: "input",
+    placeholder: formRules['meta.title'].message,
+  },
+  {
+    label: "权限状态",
+    prop: "meta.status",
+    type: "select",
+    options: [
+      { label: "正常", value: 1 },
+      { label: "停用", value: 2 }
+    ]
+  }
+];
+
+const state = reactive({
+  show: false,
+  loading: false,
+  formData: useFormData(),
+  showIcon: false,
+});
 
 function onClose() {
   emit("update:show", false);

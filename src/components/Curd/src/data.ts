@@ -563,7 +563,7 @@ export function exportPropToWindow<T extends object>(target: T) {
 }
 
 /**
- * 获取加重标签`<b>内容</b>`
+ * 获取加重标签`<b>${content}</b>`
  * @param content 标签内容
  */
 export function getBoldLabel(content: string) {
