@@ -12,101 +12,7 @@
       label-position="right"
       label-width="130px"
     >
-    <el-form-item label="表格列标题" prop="label">
-        <el-input
-          v-model="state.form.title"
-          clearable
-          :placeholder="formRules.title.message"
-        />
-      </el-form-item>
-      <el-form-item label="表格列键值" prop="prop">
-        <el-input
-          v-model="state.form.prop"
-          clearable
-          placeholder="请输入表格列键值"
-        />
-      </el-form-item>
-      <el-form-item label="表格列宽度" prop="width">
-        <el-input-number
-          v-model="(state.form.width as number)"
-          class="w-full"
-          controls-position="right"
-          placeholder="请输入表格列宽度，例如：120（默认自适应）"
-        />
-      </el-form-item>
-      <el-form-item label="表格列最小宽度" prop="minWidth">
-        <el-input-number
-          v-model="(state.form.minWidth as number)"
-          class="w-full"
-          controls-position="right"
-          placeholder="请输入表格列最小宽度，例如：120（默认自适应）"
-        />
-      </el-form-item>
-      <el-form-item label="表格列展示类型" prop="cellType">
-        <el-select v-model="state.form.cellType">
-          <el-option
-            v-for="item in cellTypeOptions"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          />
-        </el-select>
-      </el-form-item>
-      <template v-if="state.form.cellType === 'image'">
-        <el-form-item label="图片宽度(像素)" prop="imageWidth">
-          <el-input-number
-            v-model="state.form.imageWidth"
-            class="w-full"
-            controls-position="right"
-            placeholder="请输入数字（默认80px）"
-          />
-        </el-form-item>
-        <el-form-item label="图片高度(像素)" prop="imageHeight">
-          <el-input-number
-            v-model="state.form.imageHeight"
-            class="w-full"
-            controls-position="right"
-            placeholder="请输入数字（默认80px）"
-          />
-        </el-form-item>
-      </template>
-      <template v-if="state.form.cellType === 'js'">
-        <el-form-item prop="jsCode">
-          <template #label>
-            <LabelTips label="js代码" :tips="codeTips" />
-          </template>
-          <el-input
-            v-model="state.form.jsCode"
-            type="textarea"
-            placeholder="请输入代码片段"
-          />
-        </el-form-item>
-      </template>
-      <el-form-item label="表格列排序操作" prop="sort">
-        <el-select v-model="state.form.sort">
-          <el-option
-            v-for="item in sortOptions"
-            :key="item.value.toString()"
-            :value="item.value"
-            :label="item.label"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="内容溢出截断" prop="tooltip">
-        <el-switch
-          v-model="state.form.tooltip"
-          inline-prompt
-          active-text="是"
-          inactive-text="否"
-        />
-      </el-form-item>
-      <el-form-item label="表头图标提示文字" prop="iconTips">
-        <el-input
-          v-model="state.form.iconTips"
-          clearable
-          placeholder="请输入表头图标提示文字"
-        />
-      </el-form-item>
+      <TheFields :data="state.form" :list="itemList" />
     </el-form>
     <template #footer>
       <FooterBtn @close="onClose" @submit="onSubmit" />
@@ -125,7 +31,8 @@ import type { CurdType } from "./types";
 import { getBoldLabel, getColumnData } from "./data";
 import type { FormInstance } from "element-plus";
 import { deepClone } from "@/utils";
-import { FooterBtn, LabelTips } from "./part";
+import { FooterBtn } from "./part";
+import { TheFields, type TheField } from "@/components/TheFields";
 
 const props = defineProps({
   show: {
@@ -181,6 +88,8 @@ const formRules = {
     },
     trigger: "blur"
   },
+  cellType: { required: true, message: "请选择展示类型", trigger: "change" },
+  sort: { required: true, message: "请选择排序操作", trigger: "change" },
   jsCode: {
     required: true,
     validator(_: any, v: string, callback: (err?: Error) => void) {
@@ -218,6 +127,79 @@ const codeTips = `
 <p>例如：${getBoldLabel("return cellValue + row.id;")};</p>
 <p>也可以是HTML：${getBoldLabel("return `html 标签`")};</p>
 `;
+
+const itemList: Array<TheField.Type<CurdType.Table.Column>> = [
+  {
+    label: "表格列标题",
+    prop: "title",
+    type: "input",
+    placeholder: formRules.title.message
+  },
+  {
+    label: "表格列键值",
+    prop: "prop",
+    type: "input",
+    placeholder: "请输入表格列键值"
+  },
+  {
+    label: "表格列宽度",
+    prop: "width",
+    type: "number",
+    placeholder: "请输入表格列宽度，例如：120（默认自适应）"
+  },
+  {
+    label: "表格列最小宽度",
+    prop: "minWidth",
+    type: "number",
+    placeholder: "请输入表格列最小宽度，例如：120（默认自适应）"
+  },
+  {
+    label: "表格列展示类型",
+    prop: "cellType",
+    type: "select",
+    options: cellTypeOptions
+  },
+  {
+    label: "图片宽度",
+    prop: "imageWidth",
+    type: "number",
+    placeholder: "请输入数字（默认80px）",
+    show: () => state.form.cellType === "image"
+  },
+  {
+    label: "图片高度",
+    prop: "imageHeight",
+    type: "number",
+    placeholder: "请输入数字（默认80px）",
+    show: () => state.form.cellType === "image"
+  },
+  {
+    label: "js代码",
+    prop: "jsCode",
+    type: "textarea",
+    placeholder: "请输入代码片段",
+    tooltip: codeTips,
+    tips: '例如：return `<span class="the-tag blue">${cellValue || "-"}<span>`;',
+    show: () => state.form.cellType === "js"
+  },
+  {
+    label: "表格列排序操作",
+    prop: "sort",
+    type: "select",
+    options: sortOptions
+  },
+  {
+    label: "内容溢出截断",
+    prop: "tooltip",
+    type: "switch"
+  },
+  {
+    label: "表头提示文字",
+    prop: "iconTips",
+    type: "input",
+    placeholder: "请输入提示文字"
+  }
+];
 
 function onClose() {
   emit("update:show", false);

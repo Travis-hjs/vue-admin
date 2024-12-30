@@ -2,6 +2,8 @@ import type { TheField } from "./src/types";
 
 export { default as TheFields } from "./src/index.vue";
 
+export { LabelTips } from "./src/part";
+
 export type { TheField } from "./src/types";
 
 /**

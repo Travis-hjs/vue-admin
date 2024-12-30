@@ -315,7 +315,7 @@ import { checkType, isType } from "@/utils";
 import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
-import { LabelTips } from "./part";
+import { LabelTips } from "@/components/TheFields";
 
 const props = defineProps({
   show: {

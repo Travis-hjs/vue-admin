@@ -7,6 +7,35 @@ import {
 } from "vue";
 import type { TheField } from "./types";
 
+interface LabelTipsProps {
+  /** `<el-form-item :label="label">` */
+  label: string;
+  /** `<el-tooltip />`提示内容 */
+  tips: string;
+}
+
+/**
+ * 表单`label`文字 + 提示文字组件
+ * @param props
+ */
+export function LabelTips(props: LabelTipsProps) {
+  return (
+    <>
+      {props.label}
+      <el-tooltip
+        effect="dark"
+        content={props.tips}
+        raw-content
+        placement="top-start"
+      >
+        <el-button type="info" link style="height: 32px;">
+          <i class="el-icon-question"></i>
+        </el-button>
+      </el-tooltip>
+    </>
+  );
+}
+
 /**
  * 日期选择器
  * - 为什么要单独提取出来？因为 element-plus 的日期选择器有个 bug，如果通过`v-bind`的方式绑定`modelValue`，则无法触发`onChange`事件, 所以需要通过`v-model`的方式绑定

@@ -17,23 +17,7 @@
           labelPosition="right"
           labelWidth="128px"
         >
-          <el-form-item label="操作列宽度" prop="width">
-            <el-input-number
-              v-model="form.column.width"
-              class="w-full"
-              controls-position="right"
-              :placeholder="columnRules.width.message"
-            />
-          </el-form-item>
-          <el-form-item label="操作按钮限制" prop="max">
-            <el-input-number
-              v-model="form.column.max"
-              class="w-full"
-              controls-position="right"
-              :min="2"
-              :placeholder="columnRules.max.message"
-            />
-          </el-form-item>
+          <TheFields :data="form.column" :list="columnItems" />
         </el-form>
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">操作按钮配置</el-text>
@@ -47,68 +31,11 @@
           :class="{'the-filter-mask': !state.formEdit}"
           data-tips="待新增或编辑操作"
         >
-          <el-form-item prop="text">
-            <template #label>
-              <LabelTips label="按钮文字" :tips="textTips" />
+          <TheFields :data="form.btn" :list="btnItems">
+            <template #iconInput>
+              <IconInput v-model:value="form.btn.icon" />
             </template>
-            <el-input
-              v-model="(form.btn.text as string)"
-              type="textarea"
-              :placeholder="btnRules.text.message"
-            />
-          </el-form-item>
-          <el-form-item prop="click">
-            <template #label>
-              <LabelTips label="按钮功能代码" :tips="fnTips" />
-            </template>
-            <el-input
-              v-model="(form.btn.click as string)"
-              type="textarea"
-              placeholder="请输入代码片段"
-            />
-          </el-form-item>
-          <el-form-item prop="show">
-            <template #label>
-              <LabelTips label="按钮显示条件" :tips="booleanTips" />
-            </template>
-            <el-input
-              v-model="(form.btn.show as string)"
-              type="textarea"
-              placeholder="请输入条件代码，为空则默认显示"
-            />
-          </el-form-item>
-          <el-form-item prop="disabled">
-            <template #label>
-              <LabelTips label="按钮禁用条件" :tips="booleanTips" />
-            </template>
-            <el-input
-              v-model="(form.btn.disabled as string)"
-              type="textarea"
-              placeholder="请输入条件代码，为空则默认不禁用"
-            />
-          </el-form-item>
-          <el-form-item label="按钮图标" prop="icon">
-            <div class="f-vertical w-full">
-              <el-input
-                v-model="(form.btn.icon as string)"
-                :placeholder="btnRules.icon.message"
-                clearable
-              />
-              <el-text type="primary" style="width: 110px; text-align: right;">
-                <a :href="iconLink" target="_blank">去官网复制</a>
-              </el-text>
-            </div>
-          </el-form-item>
-          <el-form-item label="按钮类型" prop="type">
-            <el-select v-model="form.btn.type" :placeholder="btnRules.type.message">
-              <el-option
-                v-for="item in typeOptions"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label"
-              />
-            </el-select>
-          </el-form-item>
+          </TheFields>
           <el-form-item>
             <div class="f-right w-full">
               <el-button @click="onRestBtn()">取 消</el-button>
@@ -185,8 +112,9 @@ import { type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { actionEditKey, getActionData, getBoldLabel } from "./data";
 import { useListDrag } from "@/hooks/common";
-import { FooterBtn, LabelTips } from "./part";
+import { FooterBtn, IconInput } from "./part";
 import { deepClone, isType } from "@/utils";
+import { TheFields, type TheField } from "@/components/TheFields";
 
 const props = defineProps({
   show: {
@@ -212,6 +140,27 @@ const emit = defineEmits<{
   (event: "update:show", show: boolean): void;
   (event: "submit", list: Array<CurdType.Table.Action>, width?: number, max?: number): void;
 }>();
+
+const textTips = `
+<p>可以输入代码片段，</p>
+<p>以${getBoldLabel("return")}关键字为函数标记，</p>
+<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
+<p>例如：${getBoldLabel('return row.status === 1 ? "下架" : "上架";')}</p>
+`;
+
+const fnTips = `
+<p>函数代码片段，点击的时候运行</p>
+<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
+<p>第二个参数${getBoldLabel("index")}是当前索引</p>
+<p>例如：${getBoldLabel("console.log(row, index);")}</p>
+`;
+
+const booleanTips = `
+<p>可以输入代码片段，</p>
+<p>以${getBoldLabel("return")}关键字为函数标记，</p>
+<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
+<p>例如：${getBoldLabel("return row.status === 1;")}返回布尔值进行判断</p>
+`;
 
 const formBtn = ref<FormInstance>();
 
@@ -250,6 +199,22 @@ const columnRules = {
   }
 }
 
+const columnItems: Array<TheField.Type<typeof form.column>> = [
+  {
+    label: "操作列宽度",
+    prop: "width",
+    type: "number",
+    placeholder: columnRules.width.message
+  },
+  {
+    label: "操作按钮限制",
+    prop: "max",
+    type: "number",
+    min: 2,
+    placeholder: columnRules.max.message
+  }
+];
+
 const btnRules = {
   text: {
     required: true,
@@ -272,6 +237,55 @@ const btnRules = {
     trigger: "change"
   }
 }
+
+const btnItems: Array<TheField.Type<CurdType.Table.Action>> = [
+  {
+    label: "按钮文字",
+    prop: "text",
+    type: "textarea",
+    placeholder: btnRules.text.message,
+    tooltip: textTips
+  },
+  {
+    label: "按钮功能代码",
+    prop: "click",
+    type: "textarea",
+    placeholder: "请输入代码片段",
+    tooltip: fnTips
+  },
+  {
+    label: "按钮显示条件",
+    prop: "show",
+    type: "textarea",
+    placeholder: "请输入条件代码，为空则默认显示",
+    tooltip: booleanTips
+  },
+  {
+    label: "按钮禁用条件",
+    prop: "disabled",
+    type: "textarea",
+    placeholder: "请输入条件代码，为空则默认不禁用",
+    tooltip: booleanTips
+  },
+  {
+    label: "按钮图标",
+    prop: "icon",
+    type: "slot",
+    slotName: "iconInput"
+  },
+  {
+    label: "按钮类型",
+    prop: "type",
+    type: "select",
+    options: [
+      { label: "默认（蓝色）", value: "primary" },
+      { label: "成功（绿色）", value: "success" },
+      { label: "警告（橙色）", value: "warning" },
+      { label: "危险（红色）", value: "danger" },
+      { label: "文本（灰色）", value: "info" }
+    ]
+  }
+];
 
 function onClose() {
   emit("update:show", false);
@@ -338,16 +352,6 @@ watch(
   { immediate: true }
 );
 
-const typeOptions = [
-  { label: "默认（蓝色）", value: "primary" },
-  { label: "成功（绿色）", value: "success" },
-  { label: "警告（橙色）", value: "warning" },
-  { label: "危险（红色）", value: "danger" },
-  { label: "文本（灰色）", value: "info" }
-];
-
-const iconLink = "https://element.eleme.cn/#/zh-CN/component/icon";
-
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.list,
   key: "key",
@@ -379,25 +383,4 @@ function getBtnText(action: CurdType.Table.Action) {
   }
   return "未设置按钮";
 }
-
-const textTips = `
-<p>可以输入代码片段，</p>
-<p>以${getBoldLabel("return")}关键字为函数标记，</p>
-<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>例如：${getBoldLabel('return row.status === 1 ? "下架" : "上架";')}</p>
-`;
-
-const fnTips = `
-<p>函数代码片段，点击的时候运行</p>
-<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>第二个参数${getBoldLabel("index")}是当前索引</p>
-<p>例如：${getBoldLabel("console.log(row, index);")}</p>
-`;
-
-const booleanTips = `
-<p>可以输入代码片段，</p>
-<p>以${getBoldLabel("return")}关键字为函数标记，</p>
-<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>例如：${getBoldLabel("return row.status === 1;")}返回布尔值进行判断</p>
-`;
 </script>

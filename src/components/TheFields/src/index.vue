@@ -2,7 +2,7 @@
   <component
     :is="props.type === 'form' ? ElFormItem : FilterItem"
     v-for="(field, fieldIndex) in fields"
-    :key="`${field.prop}-${fieldIndex}`"
+    :key="field.key || `${field.prop}-${fieldIndex}`"
     :label="field.label"
     :prop="field.prop"
     class="the-base-field-item"
@@ -58,6 +58,7 @@
     <div v-if="field.type === 'text'" :class="['text-box', field.class || 'w-full'] ">
       <el-text>{{ getTextContent(field) }}</el-text>
     </div>
+    <slot v-if="field.type === 'slot' && field.slotName" :name="field.slotName" v-bind="field"></slot>
     <div v-if="field.tips" class="tips-box">
       <span class="the-tag blue">
         <i class="el-icon--left el-icon-info"></i>
@@ -78,8 +79,7 @@ import { FilterItem } from "@/components/FilterBox";
 import { computed, type PropType } from "vue";
 import type { TheField } from "./types";
 import { formatDate, isType } from "@/utils";
-import { LabelTips } from "@/components/Curd";
-import { TheDatePicker, TheSelect } from "./part";
+import { TheDatePicker, TheSelect, LabelTips } from "./part";
 
 const props = defineProps({
   /**
@@ -248,6 +248,9 @@ function onDatePicker(field: TheField.Date<Record<string, any>>, value: any) {
   .tips-box {
     width: 100%;
     padding-top: 5px;
+    .the-tag {
+      line-height: 18px;
+    }
   }
   .text-box {
     padding: 8px 10px;

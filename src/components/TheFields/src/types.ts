@@ -5,6 +5,8 @@ import type { CurdType } from "@/components/Curd";
  */
 export namespace TheField {
   interface Common<T extends object> {
+    /** 表单项唯一值，一些特殊场景需要设置 */
+    key?: string;
     /** 展示文案 */
     label: string;
     /** 表单数据对象键值 */
@@ -131,6 +133,13 @@ export namespace TheField {
     type: "text";
   }
 
+  export interface Slot<T extends object> extends Common<T> {
+    /** 插槽类型 */
+    type: "slot";
+    /** 插槽名 */
+    slotName: string;
+  }
+
   /**
    * `<TheFields :list="fields">`组件列表单个类型集合
    */
@@ -141,6 +150,6 @@ export namespace TheField {
     | SelectMultiple<T>
     | Date<T>
     | Switch<T>
-    | Text<T>;
-    // | UploadImage<T>;
+    | Text<T>
+    | Slot<T>;
 }

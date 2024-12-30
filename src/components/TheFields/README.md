@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 import { reactive } from "vue";
-import { type TheField, TheFields } from "@/components/TheFields";
+import { TheFields, type TheField } from "@/components/TheFields";
 import { FilterWrap  } from "@/components/FilterBox";
 
 interface FormData {

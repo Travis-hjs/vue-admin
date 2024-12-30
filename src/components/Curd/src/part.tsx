@@ -1,5 +1,6 @@
 import { openPreview } from "@/components/ImageViewer";
 import type { CurdType, EditBtnType } from "./types";
+import { computed, defineComponent } from "vue";
 
 // ----------------- 一些零散且无状态的单一组件 -----------------
 
@@ -95,34 +96,45 @@ export function TableImage(props: TableImageProps) {
   ) : null;
 }
 
-interface LabelTipsProps {
-  /** `<el-form-item :label="label">` */
-  label: string;
-  /** `<el-tooltip />`提示内容 */
-  tips: string;
-}
+/** 图标`class`输入框 */
+export const IconInput = defineComponent({
+  props: {
+    value: {
+      type: [String, Function],
+      default: ""
+    }
+  },
+  emits: ["update:value"],
+  setup(props, { emit }) {
+    const iconClass = computed({
+      get() {
+        const val = typeof props.value === "function" ? "" : props.value;
+        return val;
+      },
+      set(val) {
+        emit("update:value", val);
+      }
+    });
 
-/**
- * 表单`label`文字 + 提示文字组件
- * @param props
- */
-export function LabelTips(props: LabelTipsProps) {
-  return (
-    <>
-      {props.label}
-      <el-tooltip
-        effect="dark"
-        content={props.tips}
-        raw-content
-        placement="top-start"
-      >
-        <el-button type="info" link style="height: 32px;">
-          <i class="el-icon-question"></i>
+    const iconLink = "https://element.eleme.cn/#/zh-CN/component/icon";
+
+    return () => (
+      <div class="f-vertical w-full">
+        <el-input
+          v-model={iconClass.value}
+          placeholder="请输入图标 class"
+          class="mgr-10"
+          clearable
+        />
+        <el-button type="primary" link>
+          <a href={iconLink} target="_blank">
+            去官网复制
+          </a>
         </el-button>
-      </el-tooltip>
-    </>
-  );
-}
+      </div>
+    );
+  }
+});
 
 /** 搜索组件缩略图 */
 export function ThumbnailSearch() {
