@@ -34,6 +34,8 @@ export namespace TheField {
      * - 当组件传入`:type="form"`时生效
      */
     tooltip?: string;
+    /** 是否不设置清除功能 */
+    noClear?: boolean;
     /**
      * 字面意思，不解释
      * @param val
@@ -60,6 +62,11 @@ export namespace TheField {
   export interface Input<T extends object> extends Common<T> {
     /** 普通文本输入框 */
     type: "input" | "textarea";
+    /**
+     * 默认行数
+     * - 仅`"textarea"`生效
+     */
+    rows?: number;
   }
 
   export interface NumberInput<T extends object> extends Common<T> {

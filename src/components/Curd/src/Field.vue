@@ -13,7 +13,6 @@
       v-model="data.value"
       :readonly="props.readonly"
       :disabled="props.disabled"
-      :autosize="{ minRows: 2, maxRows: 10 }"
       :placeholder="data.placeholder"
       type="textarea"
       class="the-curd-field"

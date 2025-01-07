@@ -4,54 +4,16 @@
       <div v-if="props.show" class="the-curd-editor-content">
         <h2 class="the-title mgb-20">基础设置</h2>
         <el-form label-position="right" label-width="120px">
-          <template v-if="provideState.editor.type === 'search'">
-            <el-form-item label="整体标题宽度">
-              <el-input-number
-                v-model="props.config.search.labelWidth"
-                class="w-full"
-                controls-position="right"
-                placeholder="例如：120px"
-              />
-            </el-form-item>
-            <el-form-item label="标题靠右对齐">
-              <el-switch
-                v-model="props.config.search.labelRight"
-                inline-prompt
-                active-text="是"
-                inactive-text="否"
-              />
-            </el-form-item>
-          </template>
-          <template v-if="provideState.editor.type === 'table' && provideState.editor.form">
-            <el-form-item label="表单宽度">
-              <el-input-number
-                v-model="provideState.editor.form.width"
-                class="w-full"
-                controls-position="right"
-                placeholder="请输入宽度(px)"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item label="文字宽度">
-              <el-input-number
-                v-model="provideState.editor.form.labelWidth"
-                class="w-full"
-                controls-position="right"
-                placeholder="请输入标题宽度(px)"
-                clearable
-              />
-            </el-form-item>
-            <el-form-item label="文字靠右排版">
-              <el-switch
-                v-model="provideState.editor.form.labelPosition"
-                inline-prompt
-                active-value="right"
-                inactive-value="left"
-                active-text="是"
-                inactive-text="否"
-              />
-            </el-form-item>
-          </template>
+          <TheFields
+            v-if="provideState.editor.type === 'search'"
+            :data="props.config.search"
+            :list="searchConfigs"
+          />
+          <TheFields
+            v-if="provideState.editor.type === 'table' && provideState.editor.form"
+            :data="provideState.editor.form"
+            :list="formConfigs"
+          />
         </el-form>
         <template v-if="state.step === 0">
           <div class="f-vertical f-between mgb-20">
@@ -83,104 +45,38 @@
             label-position="right"
             label-width="128px"
           >
-            <el-form-item label="组件标题" prop="label">
-              <el-input v-model="state.formData.label" clearable :placeholder="formRules.label.message" />
-            </el-form-item>
-            <el-form-item label="绑定的键值" prop="key">
-              <el-input v-model="state.formData.key" clearable placeholder="请输入绑定的键值" />
-            </el-form-item>
-            <el-form-item label="标题宽度" prop="labelWidth">
-              <el-input-number
-                v-model="state.formData.labelWidth"
-                class="w-full"
-                controls-position="right"
-                placeholder="请输入宽度，例如：120"
-              />
-            </el-form-item>
-            <el-form-item v-if="!noValueWidth.includes(state.formData.type)" label="组件宽度" prop="valueWidth">
-              <el-input-number
-                v-model="state.formData.valueWidth"
-                class="w-full"
-                controls-position="right"
-                placeholder="请输入宽度，例如：140"
-              />
-            </el-form-item>
-            <el-form-item label="提示/规则文字" prop="placeholder">
-              <template v-if="state.formData.type === 'input-between'">
+            <TheFields :data="state.formData" :list="formItems">
+              <template #ruleText>
+                <template v-if="state.formData.type === 'input-between'">
+                  <el-input
+                    v-model="state.formData.placeholder[0]"
+                    class="f1"
+                    clearable
+                    placeholder="请输入提示-1"
+                  />
+                  <el-text style="padding: 0 6px;">-</el-text>
+                  <el-input
+                    v-model="state.formData.placeholder[1]"
+                    class="f1"
+                    clearable
+                    placeholder="请输入提示-2"
+                  />
+                </template>
+                <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
+              </template>
+              <template #defaultValue>
                 <el-input
-                  v-model="state.formData.placeholder[0]"
-                  class="f1"
+                  v-model="json.defaultValue"
+                  type="textarea"
                   clearable
-                  placeholder="请输入提示-1"
-                />
-                <el-text style="padding: 0 6px;">-</el-text>
-                <el-input
-                  v-model="state.formData.placeholder[1]"
-                  class="f1"
-                  clearable
-                  placeholder="请输入提示-2"
+                  placeholder="请输入JSON，值为 value"
+                  @blur="onDefaultValue()"
                 />
               </template>
-              <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
-            </el-form-item>
-            <el-form-item label="是否必填" prop="required">
-              <el-switch
-                v-model="state.formData.required"
-                inline-prompt
-                active-text="是"
-                inactive-text="否"
-              />
-            </el-form-item>
-            <el-form-item v-if="checkNumberFields.includes(state.formData.type)" label="绑定值为数字类型" key="is-number">
-              <el-switch
-                v-if="arrayFields.includes(state.formData.type)"
-                v-model="state.formData.valueType"
-                inline-prompt
-                active-text="是"
-                inactive-text="否"
-                active-value="array<number>"
-                inactive-value="array"
-              />
-              <el-switch
-                v-else
-                v-model="state.formData.valueType"
-                inline-prompt
-                active-text="是"
-                inactive-text="否"
-                active-value="number"
-                inactive-value="string"
-              />
-              <el-tooltip
-                v-if="hasOptions.includes(state.formData.type)"
-                effect="dark"
-                content="设为数字类型之后，将会在保存时校验选项数据"
-                placement="top"
-              >
-                <i class="el-icon-question the-tips-icon mgl-10" />
-              </el-tooltip>
-            </el-form-item>
-            <el-form-item v-if="state.formData.type !== 'date'" label="组件默认值" prop="defaultValue">
-              <el-input
-                v-model="json.defaultValue"
-                type="textarea"
-                clearable
-                placeholder="请输入JSON，值为 value"
-                @blur="onDefaultValue()"
-              />
-            </el-form-item>
-            <el-form-item v-if="state.formData.type === 'input-between'" label="串联符号" prop="separator">
-              <el-input
-                v-model="(state.formData as CurdType.InputBetween).separator"
-                clearable
-                :placeholder="formRules.separator.message"
-              />
-            </el-form-item>
-            <template v-if="hasOptions.includes(state.formData.type)">
-              <el-form-item label="选项数据" prop="options">
+              <template #options>
                 <el-input
                   v-model="json.options"
                   type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 10 }"
                   placeholder="请输入数组JSON"
                   style="margin-bottom: 4px;"
                   @blur="onOptions()"
@@ -190,98 +86,8 @@
                     JSON编辑工具
                   </a>
                 </el-button>
-              </el-form-item>
-              <el-form-item label="数据展示字段" prop="optionSetting.label">
-                <el-input
-                  v-model="(state.formData as CurdType.Select).optionSetting.label"
-                  clearable
-                  placeholder="不填则使用 label"
-                />
-              </el-form-item>
-              <el-form-item label="数据值字段" prop="optionSetting.value">
-                <el-input
-                  v-model="(state.formData as CurdType.Select).optionSetting.value"
-                  clearable
-                  placeholder="不填则使用 value"
-                />
-              </el-form-item>
-              <template v-if="state.formData.type === 'cascader'">
-                <el-form-item label="下级字段" prop="optionSetting.children">
-                  <el-input
-                    v-model="state.formData.optionSetting.children"
-                    clearable
-                    placeholder="不填则使用 children"
-                  />
-                </el-form-item>
-                <el-form-item label="是否多选" prop="multiple">
-                  <el-switch
-                    v-model="state.formData.multiple"
-                    inline-prompt
-                    active-text="是"
-                    inactive-text="否"
-                  />
-                </el-form-item>
-                <el-form-item label="允许只选中某一项" prop="checkStrictly">
-                  <el-switch
-                    v-model="state.formData.checkStrictly"
-                    inline-prompt
-                    active-text="是"
-                    inactive-text="否"
-                  />
-                </el-form-item>
               </template>
-              <el-form-item v-if="['select', 'select-multiple'].includes(state.formData.type)" label="串联显示名称" prop="joinShow">
-                <el-switch
-                  v-model="(state.formData as CurdType.Select).joinShow"
-                  inline-prompt
-                  active-text="是"
-                  inactive-text="否"
-                />
-                <span class="the-tag blue mgl-10">例如【英雄联盟-12】</span>
-              </el-form-item>
-            </template>
-            <template v-if="state.formData.type === 'date'">
-              <el-form-item label="日期类型" prop="dateType">
-                <el-select v-model="state.formData.dateType" class="w-full" @change="onDateType">
-                  <el-option
-                    v-for="item in dateTypeOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="日期默认值" prop="shortcutIndex">
-                <el-select v-model="state.formData.shortcutIndex" class="w-full" placeholder="请选择" clearable>
-                  <el-option
-                    v-for="item in shortcutOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="format">
-                <template #label>
-                  <LabelTips label="格式化规则" :tips="formatTips" />
-                </template>
-                <el-input
-                  v-model="state.formData.format"
-                  clearable
-                  :placeholder="formRules.format.message"
-                />
-              </el-form-item>
-            </template>
-            <el-form-item v-if="provideState.editor.type === 'table'" prop="show">
-              <template #label>
-                <LabelTips label="表单显示逻辑" :tips="showTips" />
-              </template>
-              <el-input
-                v-model="(state.formData.show as string)"
-                type="textarea"
-                placeholder="请输入条件代码，为空则默认展示"
-              />
-            </el-form-item>
+            </TheFields>
             <div class="f-right">
               <el-button @click="onClose()">关闭</el-button>
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">
@@ -315,7 +121,7 @@ import { checkType, isType } from "@/utils";
 import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
-import { LabelTips } from "@/components/TheFields";
+import { TheFields, type TheField } from "@/components/TheFields";
 
 const props = defineProps({
   show: {
@@ -379,6 +185,42 @@ const shortcutOptions = computed(() => {
   return option;
 });
 
+const searchConfigs: Array<TheField.Type<CurdType.Search>> = [
+  {
+    label: "整体文字宽度",
+    prop: "labelWidth",
+    type: "number",
+    placeholder: "例如：120(px)"
+  },
+  {
+    label: "文字靠右对齐",
+    prop: "labelRight",
+    type: "switch"
+  }
+];
+
+const formConfigs: Array<TheField.Type<CurdType.Table.From>> = [
+  {
+    label: "表单宽度",
+    prop: "width",
+    type: "number",
+    placeholder: "例如：500(px)"
+  },
+  {
+    label: "文字宽度",
+    prop: "labelWidth",
+    type: "number",
+    placeholder: "例如：140(px)"
+  },
+  {
+    label: "文字靠右排版",
+    prop: "labelPosition",
+    type: "switch",
+    inactiveValue: "left",
+    activeValue: "right"
+  },
+];
+
 const state = reactive({
   step: 0,
   formData: undefined as (CurdType.Field | undefined),
@@ -432,7 +274,191 @@ const formRules = {
       }
     }
   },
+  show: {
+    trigger: "blur",
+    validator(r: any, v: string, callback: (err?: Error) => void) {
+      if (v && !v.includes("return")) {
+        callback(new Error("逻辑代码必须包含 return 关键字"));
+        return;
+      }
+      callback();
+    }
+  },
 };
+
+const formItems = computed(() => {
+  const fieldType = state.formData ? state.formData.type : "";
+  const list: Array<TheField.Type<CurdType.Field>> = [
+    {
+      label: "组件标题",
+      prop: "label",
+      type: "input",
+      placeholder: formRules.label.message
+    },
+    {
+      label: "绑定的键值",
+      prop: "key",
+      type: "input",
+      placeholder: "请输入绑定的键值"
+    },
+    {
+      label: "标题宽度",
+      prop: "labelWidth",
+      type: "number",
+      placeholder: "例如：120(px)"
+    },
+    {
+      label: "组件宽度",
+      prop: "valueWidth",
+      type: "number",
+      placeholder: "例如：140(px)",
+      show: () => !noValueWidth.includes(fieldType)
+    },
+    {
+      label: "提示/规则文字",
+      prop: "placeholder",
+      type: "slot",
+      slotName: "ruleText"
+    },
+    {
+      label: "是否必填",
+      prop: "required",
+      type: "switch",
+    }
+  ];
+
+  if (checkNumberFields.includes(fieldType)) {
+    const isNumberItem: TheField.Type<CurdType.Field> = {
+      label: "绑定值为数字类型",
+      prop: "valueType",
+      type: "switch",
+      activeValue: "number",
+      inactiveValue: "string"
+    }
+    if (arrayFields.includes(fieldType)) {
+      isNumberItem.activeValue = "array<number>";
+      isNumberItem.inactiveValue = "array"
+    }
+    if (hasOptions.includes(fieldType)) {
+      isNumberItem.tips = "设为数字类型之后，将会在保存时校验选项数据";
+    }
+    list.push(isNumberItem);
+  }
+  
+  if (fieldType !== "date") {
+    list.push({
+      label: "组件默认值",
+      prop: "defaultValue" as any,
+      type: "slot",
+      slotName: "defaultValue"
+    });
+  }
+  
+  if (fieldType === "input-between") {
+    list.push({
+      label: "串联符号",
+      prop: "separator" as any,
+      type: "input",
+      placeholder: formRules.separator.message
+    });
+  }
+
+  if (hasOptions.includes(fieldType)) {
+    const optionItems: Array<TheField.Type<CurdType.Select>> = [
+      {
+        label: "选项数据",
+        prop: "options",
+        type: "slot",
+        slotName: "options"
+      },
+      {
+        label: "数据展示字段",
+        prop: "optionSetting.label",
+        type: "input",
+        placeholder: "不填则使用 label"
+      },
+      {
+        label: "数据值字段",
+        prop: "optionSetting.value",
+        type: "input",
+        placeholder: "不填则使用 value"
+      }
+    ];
+
+    if (fieldType === "cascader") {
+      const cascaderItems: Array<TheField.Type<CurdType.Cascader>> = [
+        {
+          label: "下级字段",
+          prop: "optionSetting.children",
+          type: "input",
+          placeholder: "不填则使用 children"
+        },
+        {
+          label: "是否多选",
+          prop: "multiple",
+          type: "switch"
+        },
+        {
+          label: "允许只选中某一项",
+          prop: "checkStrictly",
+          type: "switch"
+        }
+      ];
+      optionItems.push(...cascaderItems as any);
+    }
+
+    if (["select", "select-multiple"].includes(fieldType)) {
+      optionItems.push({
+        label: "串联显示名称",
+        prop: "joinShow",
+        type: "switch",
+        tips: "例如【英雄联盟-12】"
+      });
+    }
+
+    list.push(...optionItems as any);
+  }
+
+  if (fieldType === "date") {
+    const dateItems: Array<TheField.Type<CurdType.Date>> = [
+      {
+        label: "日期类型",
+        prop: "dateType",
+        type: "select",
+        options: dateTypeOptions,
+        noClear: true,
+        onChange: onDateType
+      },
+      {
+        label: "日期默认值",
+        prop: "shortcutIndex",
+        type: "select",
+        options: shortcutOptions.value,
+        placeholder: "请选择"
+      },
+      {
+        label: "格式化规则",
+        prop: "format",
+        type: "input",
+        tooltip: formatTips
+      }
+    ];
+
+    list.push(...dateItems as any);
+  }
+
+  if (provideState.editor.type === "table") {
+    list.push({
+      label: "表单显示逻辑",
+      prop: "show",
+      type: "textarea",
+      placeholder: "请输入条件代码，为空则默认展示",
+      tooltip: showTips
+    });
+  }
+
+  return list;
+});
 
 const formRef = ref<FormInstance>();
 
@@ -674,30 +700,33 @@ function updateKeyList(excludeKey?: string) {
   }
 }
 
-watch(() => props.show, function(show) {
-  if (!show) {
-    state.formData = undefined;
-    return;
-  }
-  const editor = provideState.editor;
-  if (editor.action === "add") {
-    state.step = 0;
-    state.formData = undefined;
-    updateKeyList();
-  } else {
-    const current = editor.index;
-    const actionMap = {
-      search() {
-        state.formData = JSON.parse(JSON.stringify(props.config.search.list[current]));
-      },
-      table() {
-        state.formData = JSON.parse(JSON.stringify(editor.form?.fields[current]));
-      }
+watch(
+  () => props.show,
+  function(show) {
+    if (!show) {
+      state.formData = undefined;
+      return;
     }
-    actionMap[editor.type!]();
-    setJson(state.formData!);
-    updateKeyList(state.formData!.key);
-    state.step = 1;
+    const editor = provideState.editor;
+    if (editor.action === "add") {
+      state.step = 0;
+      state.formData = undefined;
+      updateKeyList();
+    } else {
+      const current = editor.index;
+      const actionMap = {
+        search() {
+          state.formData = JSON.parse(JSON.stringify(props.config.search.list[current]));
+        },
+        table() {
+          state.formData = JSON.parse(JSON.stringify(editor.form?.fields[current]));
+        }
+      }
+      actionMap[editor.type!]();
+      setJson(state.formData!);
+      updateKeyList(state.formData!.key);
+      state.step = 1;
+    }
   }
-});
+);
 </script>

@@ -5,7 +5,7 @@
     :key="field.key || `${field.prop}-${fieldIndex}`"
     :label="field.label"
     :prop="field.prop"
-    class="the-base-field-item"
+    class="the-fields-item"
   >
     <template v-if="field.tooltip" #label>
       <LabelTips :label="field.label" :tips="field.tooltip" />
@@ -18,6 +18,7 @@
     <el-input
       v-if="field.type === 'textarea'"
       v-bind="getCommonProps(field)"
+      :rows="field.rows"
       show-word-limit
       type="textarea"
       @input="e => onChange(field, e)"
@@ -188,7 +189,7 @@ function getCommonProps(field: TheField.Type) {
     placeholder: (field as any).placeholder,
     disabled: isDisabled,
     class: getClassName(field),
-    clearable: field.type === "textarea" ? undefined : true,
+    clearable: field.type === "textarea" ? undefined : field.noClear ? false : true,
     modelValue: getFieldValue(field),
   }
 }
@@ -201,7 +202,7 @@ function getSelectProps(field: TheField.Select<any> | TheField.SelectMultiple<an
     placeholder: field.placeholder,
     disabled: isDisabled,
     multiple: isMultiple,
-    clearable: true,
+    clearable: field.noClear ? false : true,
     filterable: true,
     collapseTags: !showAll,
     class: getClassName(field),
@@ -234,7 +235,7 @@ function onDatePicker(field: TheField.Date<Record<string, any>>, value: any) {
 }
 </script>
 <style lang="scss">
-.the-base-field-item {
+.the-fields-item {
   .el-form-item__content {
     font-size: 0;
     line-height: 1;
