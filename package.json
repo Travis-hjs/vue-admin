@@ -4,7 +4,7 @@
   "version": "1.1.2",
   "private": false,
   "author": {
-    "name": "Hjs",
+    "name": "Travis-hjs",
     "email": "1141752341@qq.com",
     "url": "https://github.com/Travis-hjs/vue-admin"
   },
@@ -14,13 +14,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "js-cookie": "^3.0.5",
     "nprogress": "0.2.0",
     "vue": "3.4.21",
     "vue-router": "4.3.0"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.6",
     "@types/node": "20.11.28",
     "@types/nprogress": "0.2.0",
     "@vitejs/plugin-vue": "5.0.4",
