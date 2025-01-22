@@ -51,7 +51,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import Tree from "@/components/Tree";
+import { Tree, type TreeItem } from "@/components/Tree";
 import { ref } from "vue";
 
 const options = [
@@ -82,7 +82,7 @@ const options = [
   },
 ];
 
-const propSetting: CommonOption = {
+const propSetting: OptionSetting = {
   value: "id",
   label: "name",
   children: "list",
