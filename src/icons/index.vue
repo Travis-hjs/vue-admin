@@ -4,10 +4,13 @@
   </svg>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
+/**
+ * `svg`图标组件
+ * - 引用`src/icons/svg/*svg`目录下所有图标
+ */
+export default {
   name: "SvgIcon"
-})
+}
 </script>
 <script lang="ts" setup>
 import { computed } from "vue";

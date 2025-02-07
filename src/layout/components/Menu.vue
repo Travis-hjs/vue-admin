@@ -1,6 +1,12 @@
 <template>
   <MenuItem v-for="item in menuList" :key="item.key" :info="item" />
 </template>
+<script lang="ts">
+/** 侧边菜单组件 */
+export default {
+  name: "Menu"
+}
+</script>
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -8,8 +14,6 @@ import MenuItem from "./MenuItem.vue";
 import store from "@/store";
 import { filterHidden } from "@/router";
 import type { LayoutMenuItem, RouteItem } from "@/types";
-
-// ============= 侧边菜单组件 =============
 
 const props = defineProps({
   /** 是否合并只有一个子项 */

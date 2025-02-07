@@ -9,7 +9,7 @@
     <div class="options-box mgb-40">
       <CheckBox class="mgb-20" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
       <CheckBox class="mgb-20" label="显示历史记录标签" v-model="layoutInfo.showTagsView" />
-      <CheckBox class="mgb-20" label="侧边栏展开" v-model="layoutInfo.sidebarOpen" />
+      <CheckBox class="mgb-20" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
       <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
     </div>
     <h2 class="the-title is-line mgb-30">主题&样式</h2>

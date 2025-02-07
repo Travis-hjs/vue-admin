@@ -30,7 +30,7 @@ export default class ModuleLayout {
    */
   readonly info = reactive<LayoutInfo>({
     showTagsView: true,
-    sidebarOpen: true,
+    showSidebar: true,
     showSidebarLogo: true,
     historyViews: [],
     layoutMode: ""

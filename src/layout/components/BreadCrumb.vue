@@ -7,11 +7,15 @@
     </span>
   </transition-group>
 </template>
+<script lang="ts">
+/** 面包屑组件 */
+export default {
+  name: "BreadCrumb"
+}
+</script>
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
-
-// ============= 面包屑组件 =============
 
 const route = useRoute();
 

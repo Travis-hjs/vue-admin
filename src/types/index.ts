@@ -59,7 +59,7 @@ export interface LayoutInfo {
   /** 显示历史记录列表 */
   showTagsView: boolean
   /** 侧边栏展开 */
-  sidebarOpen: boolean
+  showSidebar: boolean
   /** 显示侧边栏`logo` */
   showSidebarLogo: boolean
   /** 历史记录列表 */
@@ -70,7 +70,7 @@ export interface LayoutInfo {
    * | 字段 | 描述 |
    * | --- | ----|
    * | "" | 默认 |
-   * | "full-header" | 顶部撑满  |
+   * | full-header | 顶部撑满  |
    */
   layoutMode: "" | "full-header"
 }

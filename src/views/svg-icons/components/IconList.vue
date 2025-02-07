@@ -15,19 +15,19 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, type PropType } from "vue";
+/** 图标列表 */
+export default {
+  name: "IconList"
+}
+</script>
+<script lang="ts" setup>
+import { type PropType } from "vue";
 import { copyText } from "@/utils";
 import { message } from "@/utils/message";
 
-/** 图标列表 */
-export default defineComponent({
-  name: "IconList"
-})
-</script>
-<script lang="ts" setup>
 const props = defineProps({
   type: {
-    type: String as PropType<"page"|"popup">,
+    type: String as PropType<"page" | "popup">,
     default: "page"
   }
 });
@@ -40,8 +40,8 @@ const svgFileReg = /(?<=(svg\/)).*?(?=(.svg))/;
 
 function getSvgNames() {
   const svgInfo = import.meta.glob("/src/icons/svg/*.svg");
-  const svgs = Object.keys(svgInfo);
-  const names = svgs.map(value => value.match(svgFileReg)![0]);
+  const svgList = Object.keys(svgInfo);
+  const names = svgList.map(value => value.match(svgFileReg)![0]);
   return names;
 }
 

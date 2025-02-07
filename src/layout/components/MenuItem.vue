@@ -36,12 +36,17 @@
     </div>
   </div>
 </template>
+<script lang="ts">
+/** 菜单`item`组件 */
+export default {
+  name: "MenuItem"
+}
+</script>
 <script lang="ts" setup>
 import { computed, onMounted, type PropType, reactive, ref } from "vue";
 import type { LayoutMenuItem } from "@/types";
 import store from "@/store";
 
-// ============= 菜单`item`组件 =============
 const props = defineProps({
   level: {
     type: Number,
@@ -88,7 +93,7 @@ const titleClass = computed(function () {
     "the-layout-menu-selected": item.isActive,
     "the-layout-menu-open": item.isOpen,
     "the-layout-menu-actived": item.hasActive,
-    "the-layout-menu-active-title": item.hasActive && props.level === 1
+    "the-layout-menu-actived-title": item.hasActive && props.level === 1
   }
 })
 

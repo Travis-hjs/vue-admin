@@ -1,10 +1,10 @@
 <template>
   <div class="the-layout-header">
     <div class="the-layout-navbar flex">
-      <div :class="['fvc hamburger', { 'hamburger-active': layoutInfo.sidebarOpen }]" @click="onSwitch()">
+      <div :class="['fvc hamburger', { 'hamburger-actived': layoutInfo.showSidebar }]" @click="onSwitch()">
         <svg-icon name="hamburger" />
       </div>
-      <Breadcrumb class="f1" />
+      <BreadCrumb class="f1" />
       <div class="user-info-box f-vertical">
         <img class="avatar" :src="userInfo.avatar || defaultAvatar">
         <span class="the-tag green mgr-10">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
@@ -31,10 +31,16 @@
     </div>
   </div>
 </template>
+<script lang="ts">
+/** 顶部栏组件 */
+export default {
+  name: "HeaderBar"
+}
+</script>
 <script lang="ts" setup>
 import { watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import Breadcrumb from "./Breadcrumb.vue";
+import BreadCrumb from "./BreadCrumb.vue";
 import { Scrollbar } from "@/components/Scrollbar";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
@@ -46,7 +52,7 @@ const layoutInfo = store.layout.info;
 const userInfo = store.user.info;
 
 function onSwitch() {
-  layoutInfo.sidebarOpen = !layoutInfo.sidebarOpen;
+  layoutInfo.showSidebar = !layoutInfo.showSidebar;
 }
 
 const defaultAvatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
