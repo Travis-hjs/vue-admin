@@ -4,11 +4,9 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-
-export default defineComponent({
+export default {
   name: "page-401",
-})
+}
 </script>
 <style lang="scss">
 .page-401 {

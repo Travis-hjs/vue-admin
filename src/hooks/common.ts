@@ -58,7 +58,7 @@ export function useLayoutContentSize(params: LayoutContentSize) {
 
   const layout = store.layout
 
-  watch(() => layout.info.sidebarOpen, function() {
+  watch(() => layout.info.showSidebar, function() {
     timer && clearTimeout(timer);
     timer = setTimeout(update, 300); // 300 是`--transition`的过渡时间
   })

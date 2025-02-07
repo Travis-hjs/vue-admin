@@ -14,7 +14,7 @@
         <el-switch v-model="layoutInfo.showTagsView" active-text="显示" inactive-text="隐藏" />
       </el-form-item>
       <el-form-item label="侧边栏展开">
-        <el-switch v-model="layoutInfo.sidebarOpen" active-text="展开" inactive-text="收起" />
+        <el-switch v-model="layoutInfo.showSidebar" active-text="展开" inactive-text="收起" />
       </el-form-item>
       <el-form-item label="布局模式">
         <el-radio-group v-model="layoutInfo.layoutMode">

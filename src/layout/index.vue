@@ -4,7 +4,7 @@
       'the-layout',
       layoutInfo.layoutMode,
       { 'has-tags-view': layoutInfo.showTagsView },
-      { 'collapsed-sidebar': !layoutInfo.sidebarOpen }
+      { 'collapsed-sidebar': !layoutInfo.showSidebar }
     ]"
   >
     <HeaderBar />
@@ -18,14 +18,14 @@
         </transition>
       </router-view>
     </div>
-    <button :class="['the-layout-totop', {'the-layout-totop-hide' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
+    <button :class="['the-layout-to-top', {'hidden' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
+/** 整体布局架子 */
+export default {
   name: "Layout"
-})
+}
 </script>
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";

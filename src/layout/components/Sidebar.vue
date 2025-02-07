@@ -13,6 +13,12 @@
     </Scrollbar>
   </div>
 </template>
+<script lang="ts">
+/** 侧边栏组件 */
+export default {
+  name: "Sidebar"
+}
+</script>
 <script lang="ts" setup>
 import Menu from "./Menu.vue";
 import { Scrollbar } from "@/components/Scrollbar";
