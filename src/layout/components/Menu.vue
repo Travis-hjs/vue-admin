@@ -162,7 +162,8 @@ onMounted(function () {
   function getElementHeight(name: string, defaultHeight = 0) {
     const el = document.querySelector(name) as HTMLElement;
     if (el) {
-      return el.clientHeight;
+      // return el.clientHeight; // 这个获取方式在原始隐藏的时候获取不到，改用 getComputedStyle 更优
+      return parseFloat(getComputedStyle(el).height);
     } else {
       console.log("%c 找不到节点 >>", "color: #ff4949", name, "已使用默认值 >>", defaultHeight);
       return defaultHeight;
