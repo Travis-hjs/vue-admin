@@ -21,7 +21,7 @@
             v-for="(item, itemIndex) in layoutInfo.historyViews"
             :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
             :key="item.path + itemIndex"
-            :to="{ path: item.path, query: item.query, params: item.params }"
+            :to="{ path: item.path, query: item.query, params: item.params } as any"
             @contextmenu.prevent="openTagMenu($event, item)"
           >
             <span>{{ item.meta.title }}</span>
