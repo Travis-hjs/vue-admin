@@ -18,16 +18,33 @@
       <Scrollbar>
         <div class="the-layout-tags">
           <router-link
-            v-for="(item, index) in layoutInfo.historyViews"
+            v-for="(item, itemIndex) in layoutInfo.historyViews"
             :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
-            :key="index + item.path"
-            :to="{ path: item.path, query: item.query, params: item.params } as any"
+            :key="item.path + itemIndex"
+            :to="{ path: item.path, query: item.query, params: item.params }"
+            @contextmenu.prevent="openTagMenu($event, item)"
           >
             <span>{{ item.meta.title }}</span>
-            <i class="close" @click.prevent.stop="onRemove(index)">-</i>
+            <i class="close" @click.prevent.stop="onRemove(itemIndex)">-</i>
           </router-link>
         </div>
       </Scrollbar>
+    </div>
+    <div
+      v-show="tagMenu.show"
+      ref="tagMenuRef"
+      class="the-layout-tag-menu"
+      :style="{ left: tagMenu.left }"
+    >
+      <div
+        v-for="opt in tagMenu.list"
+        v-show="opt.show ? opt.show() : true"
+        :key="opt.id"
+        class="the-layout-tag-menu-item"
+        @click="opt.click()"
+      >
+        {{ opt.label }}
+      </div>
     </div>
   </div>
 </template>
@@ -38,13 +55,15 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { watch } from "vue";
+import { nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import BreadCrumb from "./BreadCrumb.vue";
 import { Scrollbar } from "@/components/Scrollbar";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
 import type { HistoryViewsItem } from "@/types";
+import { copyText } from "@/utils";
+import { message } from "@/utils/message";
 
 const route = useRoute();
 const router = useRouter();
@@ -78,25 +97,112 @@ function isActive(item: HistoryViewsItem) {
 }
 
 function onRemove(index: number) {
+  if (isActive(layoutInfo.historyViews[index])) {
+    const target = index > 0 ? index - 1 : index + 1;
+    const tag = layoutInfo.historyViews[target];
+    router.push({
+      path: tag.path,
+      query: tag.query,
+      params: tag.params
+    } as any);
+  }
   layoutInfo.historyViews.splice(index, 1);
 }
 
 // layoutInfo.historyViews = [];
-watch(() => route.path, function () {
-  // console.log("route >>", route);
-  const hasItem = layoutInfo.historyViews.some(item => isActive(item))
-  if (!hasItem) {
-    layoutInfo.historyViews.push({
-      name: route.name as string,
-      path: route.path,
-      query: route.query,
-      params: route.params,
-      meta: route.meta as any
-    })
+watch(
+  () => route.path,
+  function () {
+    // console.log("route >>", route);
+    const hasItem = layoutInfo.historyViews.some(item => isActive(item))
+    if (!hasItem) {
+      layoutInfo.historyViews.push({
+        name: route.name as string,
+        path: route.path,
+        query: route.query,
+        params: route.params,
+        meta: route.meta as any
+      })
+    }
+  },
+  {
+    immediate: true
   }
-}, {
-  immediate: true
-})
+)
+
+const tagMenu = reactive({
+  show: false,
+  list: [
+    {
+      label: "关闭其他",
+      id: 1,
+      click() {
+        tagMenu.show = false;
+        const tag = tagMenu.current!;
+        if (!isActive(tag)) {
+          router.push(tag.path).then(() => {
+            layoutInfo.historyViews = [tag];
+          });
+        } else {
+          layoutInfo.historyViews = [tag];
+        }
+      },
+      show: () => layoutInfo.historyViews.length > 1
+    },
+    {
+      label: "在新标签打开",
+      id: 2,
+      click() {
+        tagMenu.show = false;
+        const link = location.href.split("#");
+        window.open(`${link[0]}#${tagMenu.current!.path}`, "_blank");
+      },
+    },
+    {
+      label: "复制当前信息",
+      id: 3,
+      click() {
+        tagMenu.show = false;
+        const tag = tagMenu.current;
+        copyText(JSON.stringify(tag, null, 4), () => message.success("复制成功！"));
+      },
+    }
+  ],
+  left: "",
+  current: undefined as undefined | HistoryViewsItem
+});
+
+const tagMenuRef = ref<HTMLElement>();
+
+function openTagMenu(e: PointerEvent, item: HistoryViewsItem) {
+  tagMenu.show = true;
+  tagMenu.current = item;
+  // nextTick 之后才能获取到真实的节点宽度
+  nextTick(() => {
+    let left = e.x;
+    const boxWidth = parseFloat(getComputedStyle(tagMenuRef.value!).width);
+    const maxWidth = document.body.clientWidth - boxWidth;
+    if (left > maxWidth) {
+      left = maxWidth;
+    }
+    tagMenu.left = `${left}px`;
+  });
+}
+
+function onTagMenuMask(e: MouseEvent) {
+  const node = e.target as HTMLElement;
+  if (tagMenu.show && !tagMenuRef.value!.contains(node)) {
+    tagMenu.show = false;
+  }
+}
+
+onMounted(function () {
+  document.addEventListener("click", onTagMenuMask);
+});
+
+onUnmounted(function () {
+  document.removeEventListener("click", onTagMenuMask);
+});
 </script>
 <style lang="scss">
 
