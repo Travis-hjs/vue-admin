@@ -517,3 +517,26 @@
     transform: scale(0);
   }
 }
+
+.the-layout-tag-menu {
+  position: fixed;
+  z-index: 2100;
+  top: calc(var(--navbar-height) + var(--tags-height) + 4px);
+  border-radius: var(--border-radius);
+  left: 0;
+  min-width: 120px;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+  background-color: #fff;
+}
+
+.the-layout-tag-menu-item {
+  font-size: 14px;
+  padding: 5px 16px;
+  color: #606266;
+  line-height: 22px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(235.9, 245.3, 255);
+    color: var(--blue);
+  }
+}
