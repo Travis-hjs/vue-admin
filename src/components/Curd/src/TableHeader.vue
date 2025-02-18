@@ -6,9 +6,10 @@
       <i class="el-icon--right el-icon-question the-tips-icon" />
     </el-tooltip>
     <div v-if="props.column.sort" class="f1 f-right">
-      <el-button link @click="onSwitch">
-        <i :class="['el-icon--right', map[props.column.sort.toString() as keyof typeof map].icon]" />
-      </el-button>
+      <div>
+        <div :class="['the-sort-icon top', { 'is-select': props.column.sort === 'asc' }]" @click="onSwitch('asc')"></div>
+        <div :class="['the-sort-icon bottom', { 'is-select': props.column.sort === 'desc' }]" @click="onSwitch('desc')"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +23,8 @@ export default {
 import { computed, type PropType } from "vue";
 import type { CurdType } from "./types";
 
+type SortType = CurdType.Table.Column["sort"];
+
 const props = defineProps({
   column: {
     type: Object as PropType<CurdType.Table.Column>,
@@ -30,36 +33,15 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "sort", key: string, action: CurdType.Table.Column["sort"]): void;
+  (event: "sort", key: string, action: SortType): void;
 }>();
 
 const isText = computed(() => !props.column.sort && !props.column.iconTips);
 
-const map = {
-  true: {
-    index: 0,
-    icon: "el-icon-sort"
-  },
-  asc: {
-    index: 1,
-    icon: "el-icon-sort-up"
-  },
-  desc: {
-    index: 2,
-    icon: "el-icon-sort-down"
+function onSwitch(type: SortType) {
+  if (props.column.sort === type) {
+    type = true;
   }
-};
-
-const actions = [true, "asc", "desc"] as const;
-
-function onSwitch() {
-  const key = props.column.sort.toString() as keyof typeof map;
-  let index = map[key].index;
-  index++;
-  if (index >= actions.length) {
-    index = 0;
-  }
-  const action = actions[index];
-  emit("sort", props.column.prop, action);
+  emit("sort", props.column.prop, type);
 }
 </script>
