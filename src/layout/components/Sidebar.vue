@@ -1,6 +1,6 @@
 <template>
   <div class="the-layout-sidebar">
-    <Scrollbar :clickUpdateDelay="300" :thumbSize="10">
+    <section class="the-layout-sidebar-content">
       <transition name="fade">
         <div class="the-logo-box" v-if="layoutInfo.showSidebarLogo">
           <router-link class="the-logo-link f-vertical" to="/">
@@ -9,8 +9,17 @@
           </router-link>
         </div>
       </transition>
-      <Menu :mergeOnlyOneChild="true" :onlyMergeFirst="true" />
-    </Scrollbar>
+      <div class="the-layout-search-box">
+        <input type="text" placeholder="请输入关键字检索">
+      </div>
+    </section>
+    <section class="f1">
+      <Scrollbar :clickUpdateDelay="300" :thumbSize="10">
+        <div class="the-layout-sidebar-content padding-full">
+          <Menu :mergeOnlyOneChild="true" :onlyMergeFirst="true" />
+        </div>
+      </Scrollbar>
+    </section>
   </div>
 </template>
 <script lang="ts">

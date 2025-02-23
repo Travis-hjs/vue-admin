@@ -3,7 +3,7 @@
     :class="[
       'the-layout',
       layoutInfo.layoutMode,
-      { 'has-tags-view': layoutInfo.showTagList },
+      { 'has-tag-list': layoutInfo.showTagList },
       { 'collapsed-sidebar': !layoutInfo.showSidebar }
     ]"
   >

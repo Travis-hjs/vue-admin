@@ -26,7 +26,7 @@
   // 整体背景颜色
   --whole-bg-color: #fff;
   // 侧边菜单栏宽度
-  --sidebar-width: 210px;
+  --sidebar-width: 260px;
   // 侧边菜单栏背景色
   --menu-bg-color: #001529;
   // 菜单`hover`状态的动画背景
@@ -145,16 +145,27 @@
 }
 
 .the-layout-sidebar {
+  display: flex;
+  flex-direction: column;
   width: var(--sidebar-width);
   height: 100vh;
   overflow: hidden;
-  background-color: var(--menu-bg-color);
+  background-color: #fff;
   position: fixed;
   left: 0;
   top: 0;
   z-index: calc(var(--z-index) + 1);
   transition: var(--transition);
   box-shadow: var(--sidebar-shadow);
+}
+
+.the-layout-sidebar-content {
+  width: 100%;
+  padding: 0 var(--page-padding);
+
+  &.padding-full {
+    padding: var(--page-padding);
+  }
 }
 
 .the-layout-content {
@@ -167,16 +178,22 @@
   --layout-content-height: calc(100vh - var(--navbar-height) - (var(--content-padding) * 2) - (var(--page-padding) * 2));
 }
 
-.the-layout.has-tags-view .the-layout-content {
-  padding-top: calc(var(--navbar-height) + var(--tags-height) + var(--content-padding));
-  // TODO: 设置一个内容区域高度变量给外面页面使用
-  --layout-content-height: calc(100vh - var(--navbar-height) - var(--tags-height) - (var(--content-padding) * 2) - (var(--page-padding) * 2));
-}
+.the-layout.has-tag-list {
+  &.full-header {
+    .the-layout-sidebar {
+      height: calc(100vh - var(--navbar-height) - var(--tags-height));
+      top: calc(var(--navbar-height) + var(--tags-height));
+    }
+  }
 
-.the-layout.has-tags-view.full-header {
-  .the-layout-sidebar {
-    height: calc(100vh - var(--navbar-height) - var(--tags-height));
-    top: calc(var(--navbar-height) + var(--tags-height));
+  .the-layout-content {
+    padding-top: calc(var(--navbar-height) + var(--tags-height) + var(--content-padding));
+    // TODO: 设置一个内容区域高度变量给外面页面使用
+    --layout-content-height: calc(100vh - var(--navbar-height) - var(--tags-height) - (var(--content-padding) * 2) - (var(--page-padding) * 2));
+  }
+
+  .the-logo-box {
+    height: calc(var(--navbar-height) + var(--tags-height));
   }
 }
 
@@ -456,8 +473,7 @@
 
 .the-logo-box {
   width: 100%;
-  height: 50px;
-  background-color: var(--menu-item-bg-color);
+  height: var(--navbar-height);
   padding: 0 10px;
 }
 
@@ -474,9 +490,31 @@
 }
 
 .the-logo-title {
-  color: var(--menu-text-actived-color);
+  color: #333;
   font-weight: 600;
   font-size: 14px;
+}
+
+.the-layout-search-box {
+  width: 100%;
+  padding-bottom: var(--page-padding);
+  border-bottom: solid 1px #d8dce5;
+  position: relative;
+
+  input {
+    width: 100%;
+    height: 36px;
+    padding: 0 var(--page-padding);
+    border: 1px solid #d8dce5;
+    border-radius: var(--border-radius);
+    font-size: 15px;
+    color: #495060;
+    transition: var(--transition);
+
+    &:focus {
+      border-color: var(--blue);
+    }
+  }
 }
 
 .the-layout-to-top {
