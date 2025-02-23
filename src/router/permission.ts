@@ -2,8 +2,8 @@ import store from "../store";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import type { Router } from "vue-router";
-import type { RouteItem } from "@/types";
 import { dynamicRouters } from "./dynamic";
+import type { RouteItem } from "./types";
 
 // NProgress.configure({ showSpinner: false });
 

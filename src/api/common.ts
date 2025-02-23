@@ -1,6 +1,6 @@
 import request from "../utils/request";
 import store from "../store";
-import type { LoginParams, UserInfo } from "../types/user";
+import type { UserInfo } from "@/store/types";
 import { randomText, ranInt } from "@/utils";
 
 /**
@@ -69,7 +69,7 @@ export function getWeather(city: string) {
  * 登录
  * @param params 登录信息
  */
-export async function login(params: LoginParams) {
+export async function login(params: { account: string, password: string }) {
   // 模拟登录
   return new Promise<Api.Result>(function (resolve) {
     const info: UserInfo = {

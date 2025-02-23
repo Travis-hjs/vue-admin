@@ -11,7 +11,7 @@
         <el-switch v-model="layoutInfo.showSidebarLogo" active-text="显示" inactive-text="隐藏" />
       </el-form-item>
       <el-form-item label="显示历史记录标签">
-        <el-switch v-model="layoutInfo.showTagsView" active-text="显示" inactive-text="隐藏" />
+        <el-switch v-model="layoutInfo.showTagList" active-text="显示" inactive-text="隐藏" />
       </el-form-item>
       <el-form-item label="侧边栏展开">
         <el-switch v-model="layoutInfo.showSidebar" active-text="展开" inactive-text="收起" />
@@ -120,7 +120,7 @@
 import store from "@/store";
 import { copyText, inputOnlyNumber, jsonParse, modifyData } from "@/utils";
 import { message, messageBox } from "@/utils/message";
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { reactive, onMounted, onUnmounted } from "vue";
 
 const layoutInfo = store.layout.info;
 

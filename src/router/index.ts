@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import type { RouteItem } from "@/types";
 import { initPermission } from "./permission";
 import Page404 from "@/views/page-404.vue";
+import type { RouteItem } from "./types";
 
 /**
  * 基础路由

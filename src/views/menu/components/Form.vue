@@ -75,11 +75,11 @@ export default {
 import { ref, reactive, watch, type PropType } from "vue";
 import { ElMessage, type FormInstance } from "element-plus"
 import { validateEX } from "@/utils/dom";
-import type { MenuForm } from "@/types";
 import IconList from "./IconList.vue";
 import { Drawer } from "@/components/Drawer";
 import { getBoldLabel } from "@/components/Curd";
 import { type TheField, TheFields } from "@/components/TheFields";
+import type { MenuForm } from "@/router/types";
 
 const props = defineProps({
   show: {

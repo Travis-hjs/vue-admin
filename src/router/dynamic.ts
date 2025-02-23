@@ -1,7 +1,7 @@
-import type { RouteItem } from "@/types";
 import Layout from "@/layout/index.vue";
 import store from "@/store";
 import Page404 from "@/views/page-404.vue";
+import type { RouteItem } from "./types";
 
 /**
  * 动态路由

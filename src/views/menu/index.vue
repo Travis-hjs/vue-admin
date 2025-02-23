@@ -57,12 +57,12 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import Form from "./components/Form.vue";
-import type { MenuForm } from "@/types";
 import {
   type Column,
   TableV2FixedDir,
 } from "element-plus";
 import { useLayoutContentSize } from "@/hooks/common";
+import type { MenuForm } from "@/router/types";
 
 interface Row extends Omit<MenuForm, "id" | "parentId" | "children"> {
   /** 原来数据数据`id` */

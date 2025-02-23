@@ -3,7 +3,7 @@
     :class="[
       'the-layout',
       layoutInfo.layoutMode,
-      { 'has-tags-view': layoutInfo.showTagsView },
+      { 'has-tags-view': layoutInfo.showTagList },
       { 'collapsed-sidebar': !layoutInfo.showSidebar }
     ]"
   >
@@ -32,7 +32,7 @@ import { onMounted, ref } from "vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import Sidebar from "./components/Sidebar.vue";
 import store from "@/store";
-import type { RouteItem } from "@/types";
+import type { RouteItem } from "@/router/types";
 
 const layoutInfo = store.layout.info;
 
