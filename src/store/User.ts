@@ -1,7 +1,7 @@
 import { reactive } from "vue";
-import type { UserInfo } from "../types/user";
 import { jsonParse, modifyData } from "../utils";
 import { getCookie, removeCookie, setCookie } from "@/utils/cookie";
+import type { UserInfo } from "./types";
 
 const cacheName = "ModuleUser";
 

@@ -13,7 +13,8 @@ import { useRoute } from "vue-router";
 import MenuItem from "./MenuItem.vue";
 import store from "@/store";
 import { filterHidden } from "@/router";
-import type { LayoutMenuItem, RouteItem } from "@/types";
+import type { LayoutType } from "@/store/types";
+import type { RouteItem } from "@/router/types";
 
 const props = defineProps({
   /** 是否合并只有一个子项 */
@@ -37,10 +38,10 @@ const route = useRoute();
  */
 function formatMenuList(list: Array<RouteItem>, parentKey?: string) {
   list = JSON.parse(JSON.stringify(list));
-  const result: Array<LayoutMenuItem> = [];
+  const result: Array<LayoutType.Menu> = [];
   for (let i = 0; i < list.length; i++) {
     const routeItem = list[i];
-    const item: LayoutMenuItem = {
+    const item: LayoutType.Menu = {
       key: parentKey ? `${parentKey}-${i}` : i.toString(),
       isOpen: false,
       isActive: false,
@@ -64,9 +65,9 @@ function formatMenuList(list: Array<RouteItem>, parentKey?: string) {
  * 处理合并只有一条子菜单的列表数据
  * @param list
  */
-function handleMerge(list: Array<LayoutMenuItem>) {
+function handleMerge(list: Array<LayoutType.Menu>) {
   list = JSON.parse(JSON.stringify(list));
-  const result: Array<LayoutMenuItem> = [];
+  const result: Array<LayoutType.Menu> = [];
   for (let i = 0; i < list.length; i++) {
     const item = list[i];
     const child = item.children;
@@ -111,7 +112,7 @@ let activeList: Array<number> = [];
  * 更新菜单列表激活状态
  * @param list
  */
-function updateActive(list: Array<LayoutMenuItem>) {
+function updateActive(list: Array<LayoutType.Menu>) {
   for (let index = 0; index < list.length; index++) {
     const item = list[index];
     // 这里要先重置一下
@@ -135,7 +136,7 @@ function updateActive(list: Array<LayoutMenuItem>) {
  * @param list
  * @param level 层级
  */
-function setItem(list: Array<LayoutMenuItem>, level = 0) {
+function setItem(list: Array<LayoutType.Menu>, level = 0) {
   const index = activeList[level];
   const item = list[index];
   item.hasActive = item.isOpen = true;

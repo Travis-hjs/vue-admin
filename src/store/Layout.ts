@@ -1,6 +1,7 @@
 import { reactive, watch } from "vue";
 import { modifyData } from "@/utils";
-import type { LayoutInfo, RouteItem } from "@/types";
+import type { RouteItem } from "@/router/types";
+import type { LayoutType } from "./types";
 
 const cacheName = "ModuleLayout";
 
@@ -28,11 +29,11 @@ export default class ModuleLayout {
   /** 
    * `layout`布局信息
    */
-  readonly info = reactive<LayoutInfo>({
-    showTagsView: true,
+  readonly info = reactive<LayoutType.Info>({
+    showTagList: true,
     showSidebar: true,
     showSidebarLogo: true,
-    historyViews: [],
+    tagList: [],
     layoutMode: ""
   })
 

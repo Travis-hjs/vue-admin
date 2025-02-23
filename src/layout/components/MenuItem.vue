@@ -44,8 +44,8 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, onMounted, type PropType, reactive, ref } from "vue";
-import type { LayoutMenuItem } from "@/types";
 import store from "@/store";
+import type { LayoutType } from "@/store/types";
 
 const props = defineProps({
   level: {
@@ -53,7 +53,7 @@ const props = defineProps({
     default: 1
   },
   info: {
-    type: Object as PropType<LayoutMenuItem>,
+    type: Object as PropType<LayoutType.Menu>,
     default: () => ({
       title: "-"
     })
@@ -64,7 +64,7 @@ const props = defineProps({
  * 是否有下级菜单
  * @param item
  */
-function hasChildren(item: LayoutMenuItem) {
+function hasChildren(item: LayoutType.Menu) {
   return item.children && item.children.length > 0 ? true : false;
 }
 
@@ -72,7 +72,7 @@ function hasChildren(item: LayoutMenuItem) {
  * 获取列表高度
  * @param item 列表单个对象
  */
-function getListHeight(item: LayoutMenuItem) {
+function getListHeight(item: LayoutType.Menu) {
   let result = 0;
   const child = item.children;
   const size = store.layout.menuSizeInfo;
@@ -97,7 +97,7 @@ const titleClass = computed(function () {
   }
 })
 
-function getItemClass(item: LayoutMenuItem) {
+function getItemClass(item: LayoutType.Menu) {
   return {
     "the-layout-menu-item f-vertical": true,
     "the-layout-menu-selected": item.isActive

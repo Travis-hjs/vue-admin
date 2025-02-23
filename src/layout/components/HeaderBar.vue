@@ -14,11 +14,11 @@
         </button>
       </div>
     </div>
-    <div class="the-layout-tag-box" v-if="layoutInfo.showTagsView">
+    <div class="the-layout-tag-box" v-if="layoutInfo.showTagList">
       <Scrollbar>
         <div class="the-layout-tags">
           <router-link
-            v-for="(item, itemIndex) in layoutInfo.historyViews"
+            v-for="(item, itemIndex) in layoutInfo.tagList"
             :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
             :key="item.path + itemIndex"
             :to="{ path: item.path, query: item.query, params: item.params } as any"
@@ -61,9 +61,9 @@ import BreadCrumb from "./BreadCrumb.vue";
 import { Scrollbar } from "@/components/Scrollbar";
 import store from "@/store";
 import { removeRoutes } from "@/router/permission";
-import type { HistoryViewsItem } from "@/types";
 import { copyText } from "@/utils";
 import { message } from "@/utils/message";
+import type { LayoutType } from "@/store/types";
 
 const route = useRoute();
 const router = useRouter();
@@ -80,7 +80,7 @@ function onLogout() {
   store.user.reset();
   router.push("/login").then(() => {
     // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
-    layoutInfo.historyViews = [];
+    layoutInfo.tagList = [];
 
     // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
     // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
@@ -92,31 +92,31 @@ function onLogout() {
   })
 }
 
-function isActive(item: HistoryViewsItem) {
+function isActive(item: LayoutType.Tag) {
   return item.path === route.path && JSON.stringify(item.query) === JSON.stringify(route.query) && JSON.stringify(item.params) === JSON.stringify(route.params);
 }
 
 function onRemove(index: number) {
-  if (isActive(layoutInfo.historyViews[index])) {
+  if (isActive(layoutInfo.tagList[index])) {
     const target = index > 0 ? index - 1 : index + 1;
-    const tag = layoutInfo.historyViews[target];
+    const tag = layoutInfo.tagList[target];
     router.push({
       path: tag.path,
       query: tag.query,
       params: tag.params
     } as any);
   }
-  layoutInfo.historyViews.splice(index, 1);
+  layoutInfo.tagList.splice(index, 1);
 }
 
-// layoutInfo.historyViews = [];
+// layoutInfo.tagList = [];
 watch(
   () => route.path,
   function () {
     // console.log("route >>", route);
-    const hasItem = layoutInfo.historyViews.some(item => isActive(item))
+    const hasItem = layoutInfo.tagList.some(item => isActive(item))
     if (!hasItem) {
-      layoutInfo.historyViews.push({
+      layoutInfo.tagList.push({
         name: route.name as string,
         path: route.path,
         query: route.query,
@@ -141,13 +141,13 @@ const tagMenu = reactive({
         const tag = tagMenu.current!;
         if (!isActive(tag)) {
           router.push(tag.path).then(() => {
-            layoutInfo.historyViews = [tag];
+            layoutInfo.tagList = [tag];
           });
         } else {
-          layoutInfo.historyViews = [tag];
+          layoutInfo.tagList = [tag];
         }
       },
-      show: () => layoutInfo.historyViews.length > 1
+      show: () => layoutInfo.tagList.length > 1
     },
     {
       label: "在新标签打开",
@@ -169,12 +169,12 @@ const tagMenu = reactive({
     }
   ],
   left: "",
-  current: undefined as undefined | HistoryViewsItem
+  current: undefined as undefined | LayoutType.Tag
 });
 
 const tagMenuRef = ref<HTMLElement>();
 
-function openTagMenu(e: PointerEvent, item: HistoryViewsItem) {
+function openTagMenu(e: PointerEvent, item: LayoutType.Tag) {
   tagMenu.show = true;
   tagMenu.current = item;
   // nextTick 之后才能获取到真实的节点宽度
