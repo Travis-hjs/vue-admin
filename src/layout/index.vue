@@ -13,7 +13,7 @@
       <router-view class="the-layout-page" v-slot="{ Component, route }">
         <transition name="page-y" mode="out-in">
           <keep-alive :include="cacheList">
-            <component :is="Component" :key="route.path" />
+            <component :is="Component" :key="route.fullPath" />
           </keep-alive>
         </transition>
       </router-view>
