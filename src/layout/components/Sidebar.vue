@@ -10,13 +10,15 @@
         </div>
       </transition>
       <div class="the-layout-search-box">
-        <input type="text" placeholder="请输入关键字检索">
+        <input v-model="layoutInfo.keyword" type="text" placeholder="请输入关键字检索菜单">
+        <svg-icon v-if="layoutInfo.keyword" class-name="the-layout-search-icon" name="circle-close" @click="onClear()" />
+        <svg-icon v-else class-name="the-layout-search-icon" name="search" />
       </div>
     </section>
     <section class="f1">
-      <Scrollbar :clickUpdateDelay="300" :thumbSize="10">
+      <Scrollbar :click-update-delay="300">
         <div class="the-layout-sidebar-content padding-full">
-          <Menu :mergeOnlyOneChild="true" :onlyMergeFirst="true" />
+          <Menu :mergeOnlyOneChild="1" />
         </div>
       </Scrollbar>
     </section>
@@ -37,4 +39,7 @@ const layoutInfo = store.layout.info;
 
 const info = store.projectInfo;
 
+function onClear() {
+  layoutInfo.keyword = "";
+}
 </script>
