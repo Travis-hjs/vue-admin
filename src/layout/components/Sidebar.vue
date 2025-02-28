@@ -1,16 +1,28 @@
 <template>
   <div class="the-layout-sidebar">
-    <Scrollbar :clickUpdateDelay="300" :thumbSize="10">
-      <transition name="fade">
+    <section class="the-layout-sidebar-content">
+      <transition name="fade" mode="out-in">
         <div class="the-logo-box" v-if="layoutInfo.showSidebarLogo">
           <router-link class="the-logo-link f-vertical" to="/">
             <img class="the-logo" :src="info.logo" />
             <h1 class="the-logo-title ellipsis" :title="info.title">{{ info.title }}</h1>
           </router-link>
         </div>
+        <div v-else style="height: var(--page-padding);"></div>
       </transition>
-      <Menu :mergeOnlyOneChild="true" :onlyMergeFirst="true" />
-    </Scrollbar>
+      <div class="the-layout-search-box">
+        <input v-model="layoutInfo.keyword" type="text" placeholder="请输入关键字检索菜单">
+        <svg-icon v-if="layoutInfo.keyword" class="the-layout-search-icon" name="circle-close" @click="onClear()" />
+        <svg-icon v-else class="the-layout-search-icon" name="search" />
+      </div>
+    </section>
+    <section class="f1">
+      <Scrollbar :click-update-delay="300">
+        <div class="the-layout-sidebar-content padding-full">
+          <Menu :mergeOnlyOneChild="1" />
+        </div>
+      </Scrollbar>
+    </section>
   </div>
 </template>
 <script lang="ts">
@@ -28,4 +40,7 @@ const layoutInfo = store.layout.info;
 
 const info = store.projectInfo;
 
+function onClear() {
+  layoutInfo.keyword = "";
+}
 </script>

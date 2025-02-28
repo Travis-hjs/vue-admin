@@ -4,7 +4,7 @@
       <div class="the-layout-tags">
         <router-link
           v-for="(item, itemIndex) in layoutInfo.tagList"
-          :class="['the-layout-tag', {'the-layout-tag-on': isActive(item)}]"
+          :class="['the-layout-tag', {'is-active': isActive(item)}]"
           :key="item.path + itemIndex"
           :to="({ path: item.path, query: item.query, params: item.params } as any)"
           @contextmenu.prevent="openTagMenu($event, item)"

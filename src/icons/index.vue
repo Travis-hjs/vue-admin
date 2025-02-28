@@ -1,6 +1,6 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true">
-    <use :xlink:href="iconName"></use>
+  <svg class="svg-icon" aria-hidden="true">
+    <use :xlink:href="`#icon-${name}`"></use>
   </svg>
 </template>
 <script lang="ts">
@@ -9,33 +9,15 @@
  * - 引用`src/icons/svg/*svg`目录下所有图标
  */
 export default {
-  name: "SvgIcon"
-}
-</script>
-<script lang="ts" setup>
-import { computed } from "vue";
-
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-    default: "",
-  },
-  className: {
-    type: String,
-    default: "",
-  },
-})
-
-const iconName = computed(() => `#icon-${props.name}`);
-
-const svgClass = computed(function () {
-  if (props.className) {
-    return "svg-icon " + props.className;
-  } else {
-    return "svg-icon";
+  name: "SvgIcon",
+  props: {
+    name: {
+      type: String,
+      required: true,
+      default: "",
+    }
   }
-});
+}
 </script>
 
 <style lang="scss">

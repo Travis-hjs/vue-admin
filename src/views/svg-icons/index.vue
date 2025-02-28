@@ -11,6 +11,3 @@
 import IconList from "./components/IconList.vue";
 
 </script>
-<style lang="scss">
-
-</style>

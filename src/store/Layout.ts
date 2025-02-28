@@ -10,8 +10,22 @@ const cacheName = "ModuleLayout";
 */
 export default class ModuleLayout {
   constructor() {
-    this.init();
-    watch(this.info, this.saveInfo.bind(this));
+    const value = sessionStorage.getItem(cacheName);
+
+    try {
+      if (value) {
+        modifyData(this.info, JSON.parse(value));
+      }
+    } catch (error) {
+      console.log("ModuleLayout init fail >>", error);
+    }
+
+    watch(
+      () => this.info, 
+      () => {
+        sessionStorage.setItem(cacheName, JSON.stringify(this.info));
+      }
+    );
   }
 
   /**
@@ -34,34 +48,8 @@ export default class ModuleLayout {
     showSidebar: true,
     showSidebarLogo: true,
     tagList: [],
-    layoutMode: ""
-  })
+    layoutMode: "",
+    keyword: "",
+  });
 
-  private init() {
-    const value = sessionStorage.getItem(cacheName);
-    try {
-      if (value) {
-        modifyData(this.info, JSON.parse(value));
-      }
-    } catch (error) {
-      console.log("ModuleLayout init fail >>", error);
-    }
-  }
-
-  /**
-   * 保存`layout`操作状
-   */
-  private saveInfo() {
-    sessionStorage.setItem(cacheName, JSON.stringify(this.info));
-  }
-
-  /** 
-   * 菜单组件尺寸对象
-   */
-  menuSizeInfo = reactive({
-    /** `the-layout-menu-title`实际高度 */
-    titleHeight: 0,
-    /** `the-layout-menu-item`实际高度 */
-    itemHeight: 0
-  })
 }

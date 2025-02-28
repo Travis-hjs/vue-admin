@@ -3,7 +3,7 @@
     :class="[
       'the-layout',
       layoutInfo.layoutMode,
-      { 'has-tags-view': layoutInfo.showTagList },
+      { 'has-tag-list': layoutInfo.showTagList },
       { 'collapsed-sidebar': !layoutInfo.showSidebar }
     ]"
   >
@@ -13,7 +13,7 @@
       <router-view class="the-layout-page" v-slot="{ Component, route }">
         <transition name="page-y" mode="out-in">
           <keep-alive :include="cacheList">
-            <component :is="Component" :key="route.path" />
+            <component :is="Component" :key="route.fullPath" />
           </keep-alive>
         </transition>
       </router-view>

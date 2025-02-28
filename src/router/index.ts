@@ -30,32 +30,13 @@ const base: Array<RouteItem> = [
 ];
 
 /**
- * 过滤掉侧边导航栏不显示的路由
- * @param array 路由列表
- */
-export function filterHidden(array: Array<RouteItem>) {
-  array = JSON.parse(JSON.stringify(array));
-  const result: Array<RouteItem> = [];
-  for (let i = 0; i < array.length; i++) {
-    const item = array[i];
-    if (!item.meta || (item.meta && !item.meta.hidden)) {
-      result.push(item);
-      if (item.children && item.children.length > 0) {
-        item.children = filterHidden(item.children);
-      }
-    }
-  }
-  return result;
-}
-
-/**
  * 路由实例 
  * [文档地址](https://next.router.vuejs.org/introduction.html)
 */
 const router = createRouter({
   history: createWebHashHistory(),
   routes: base
-})
+});
 
 initPermission(router, base);
 

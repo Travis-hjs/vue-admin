@@ -12,108 +12,30 @@
       <CheckBox class="mgb-20" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
       <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
     </div>
-    <h2 class="the-title is-line mgb-30">主题&样式</h2>
-    <div class="form-item f-vertical">
-      <span class="form-label">整体背景颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.wholeBgColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.wholeBgColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">侧边菜单栏宽度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.sidebarWidth" @input="e => onInput(e, 'sidebarWidth')">
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">侧边菜单栏背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuBgColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuBgColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单hover状态的动画背景</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuHoverBgColor">
-      <span class="the-tag blue">只支持rgba</span>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单选项背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemBgColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单选项激活状态背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemBgActivedColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemBgActivedColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单选项激活伪类颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemTagColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuItemTagColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单左右间距（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuPadding" @input="e => onInput(e, 'menuPadding')">
-      <span class="the-tag blue">修改此值需要手动刷新页面</span>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单字体大小（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuFontSize" @input="e => onInput(e, 'menuFontSize')">
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单标题高度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuTitleHeight" @input="e => onInput(e, 'menuTitleHeight')">
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">菜单栏目高度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuItemHeight" @input="e => onInput(e, 'menuItemHeight')">
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">侧边菜单栏文字默认颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuTextColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">侧边菜单栏文字激活颜色</span>
-      <input class="the-input" type="text" v-model="styleVariable.menuTextActivedColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.menuTextActivedColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">顶部导航栏高度（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.navbarHeight" @input="e => onInput(e, 'navbarHeight')">
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">主容器内边距（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.contentPadding" @input="e => onInput(e, 'contentPadding')">
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">主容器背景色</span>
-      <input class="the-input" type="text" v-model="styleVariable.contentBgColor">
-      <div class="color-box">
-        <input class="color-input" type="color" @change="onColor()" v-model="styleVariable.contentBgColor">
-      </div>
-    </div>
-    <div class="form-item f-vertical">
-      <span class="form-label">页面内边距（px）</span>
-      <input class="the-input" type="text" v-model="styleVariable.pagePadding" @input="e => onInput(e, 'pagePadding')">
+    <div v-for="item in settingList" :key="item.label + item.key" class="form-item f-vertical">
+      <h2 v-if="item.type === 'title'" class="the-title is-line">{{ item.label }}</h2>
+      <template v-else>
+        <span class="form-label">{{ item.label }}</span>
+        <template v-if="item.type === 'color'">
+          <input class="the-input" type="text" v-model="styleVariable[item.key]">
+          <div class="color-box">
+            <input class="color-input" type="color" @change="onColor()" v-model="styleVariable[item.key]">
+          </div>
+        </template>
+        <template v-else>
+          <input class="the-input" type="text" v-model="styleVariable[item.key]" @input="e => onInput(e, item.key as Numbers)">
+          <span class="form-unit">px</span>
+        </template>
+      </template>
     </div>
     <div class="pdt-20 mgb-30">
-      <button class="the-btn blue mini" v-ripple @click="setStyle()">应用当前配置</button>
       <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
       <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset()">应用预设配置</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('black')">应用预设配置-黑色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('orange')">应用预设配置-橙色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('purple')">应用预设配置-紫色</button>
     </div>
-
     <h2 class="the-title is-line mgb-30">打赏一下</h2>
     <div class="code-box">
       <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
@@ -121,12 +43,11 @@
     </div>
   </div>
 </template>
-
 <script lang="ts" setup>
 import store from "@/store";
 import { copyText, inputOnlyNumber, jsonParse, modifyData } from "@/utils";
 import { message, messageBox } from "@/utils/message";
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { reactive, onMounted, onUnmounted } from "vue";
 import { CheckBox } from "@/components/CheckBox";
 
 const layoutInfo = store.layout.info;
@@ -139,40 +60,44 @@ function onMode() {
 
 function useDefaultStyle() {
   return {
+    /** layout 主题色 */
+    themeColor: "#1890FF",
+    /** 边框颜色 */
+    borderColor: "#d8dce5",
     /** 整体背景颜色 */
-    wholeBgColor: "#ffffff",
+    wholeBgColor: "#fff",
     /** 侧边菜单栏宽度 */
-    sidebarWidth: 210,
-    /** 侧边菜单栏背景色 */
-    menuBgColor: "#001529",
-    /** 菜单`hover`状态的动画背景 */
-    menuHoverBgColor: "rgba(255, 255, 255, 0.1)",
-    /** 菜单选项背景色 */
-    menuItemBgColor: "#000c17",
-    /** 菜单选项激活状态背景色 */
-    menuItemBgActivedColor: "#1890FF",
-    /** 菜单选项激活伪类颜色，靠左边的蓝色小矩形 */
-    menuItemTagColor: "#1890FF",
-    /** 菜单左右间距 */
-    menuPadding: 20,
-    /** 菜单字体大小 */
-    menuFontSize: 14,
-    /** 菜单标题高度 */
-    menuTitleHeight: 50,
-    /** 菜单栏目高度 */
-    menuItemHeight: 44,
-    /** 侧边菜单栏文字默认颜色 */
-    menuTextColor: "#ffffffa6",
-    /** 侧边菜单栏文字激活颜色 */
-    menuTextActivedColor: "#ffffff",
+    sidebarWidth: 260,
     /** 顶部导航栏高度 */
     navbarHeight: 50,
+    /** 页面标签栏高度 */
+    tagsHeight: 34,
     /** 主容器内边距 */
     contentPadding: 12,
     /** 主容器背景色 */
-    contentBgColor: "#eeeeee",
+    contentBgColor: "#eee",
     /** 页面内边距 */
     pagePadding: 14,
+    /** 菜单之间的间隔，上下 */
+    menuGap: 4,
+    /** 菜单缩进，递增 */
+    menuIndent: 22,
+    /** 菜单标题字体大小 */
+    menuTitleSize: 15,
+    /** 菜单标题高度 */
+    menuTitleHeight: 44,
+    /** 菜单 item 字体大小 */
+    menuItemSize: 14,
+    /** 菜单 item 高度 */
+    menuItemHeight: 38,
+    /** 菜单 hover 背景颜色 */
+    menuItemHoverBg: "#ecf5ff",
+    /** 菜单标题颜色 */
+    menuTitleColor: "#555",
+    /** 菜单文字颜色 */
+    menuTextColor: "#606266",
+    /** 菜单左右边距 */
+    menuPadding: 16,
   }
 }
 
@@ -180,27 +105,148 @@ const styleVariable = reactive(useDefaultStyle());
 
 const getStyleText = () => `
 .the-layout {
+  --theme-color: ${styleVariable.themeColor};
+  --border-color: ${styleVariable.borderColor};
   --whole-bg-color: ${styleVariable.wholeBgColor};
   --sidebar-width: ${styleVariable.sidebarWidth}px;
-  --menu-bg-color: ${styleVariable.menuBgColor};
-  --menu-hover-bg-color: ${styleVariable.menuHoverBgColor};
-  --menu-item-bg-color: ${styleVariable.menuItemBgColor};
-  --menu-item-bg-actived-color: ${styleVariable.menuItemBgActivedColor};
-  --menu-item-tag-color: ${styleVariable.menuItemTagColor};
-  --menu-padding: ${styleVariable.menuPadding}px;
-  --menu-font-size: ${styleVariable.menuFontSize}px;
-  --menu-title-height: ${styleVariable.menuTitleHeight}px;
-  --menu-item-height: ${styleVariable.menuItemHeight}px;
-  --menu-text-color: ${styleVariable.menuTextColor};
-  --menu-text-actived-color: ${styleVariable.menuTextActivedColor};
   --navbar-height: ${styleVariable.navbarHeight}px;
+  --tags-height: ${styleVariable.tagsHeight}px;
   --content-padding: ${styleVariable.contentPadding}px;
   --content-bg-color: ${styleVariable.contentBgColor};
   --page-padding: ${styleVariable.pagePadding}px;
+  --menu-gap: ${styleVariable.menuGap}px;
+  --menu-indent: ${styleVariable.menuIndent}px;
+  --menu-title-size: ${styleVariable.menuTitleSize}px;
+  --menu-title-height: ${styleVariable.menuTitleHeight}px;
+  --menu-item-size: ${styleVariable.menuItemSize}px;
+  --menu-item-height: ${styleVariable.menuItemHeight}px;
+  --menu-item-hover-bg: ${styleVariable.menuItemHoverBg};
+  --menu-title-color: ${styleVariable.menuTitleColor};
+  --menu-text-color: ${styleVariable.menuTextColor};
+  --menu-padding: ${styleVariable.menuPadding}px;
 }
 `;
 
 const id = "theme-diy-style";
+
+interface Setting {
+  label: string;
+  type: "title" | "color" | "number";
+  key: keyof typeof styleVariable;
+}
+
+const settingList: Array<Setting> = [
+  {
+    label: "布局颜色配置",
+    type: "title",
+    key: "themeColor",
+  },
+  {
+    label: "主题色",
+    type: "color",
+    key: "themeColor",
+  },
+  {
+    label: "边框颜色",
+    type: "color",
+    key: "borderColor",
+  },
+  {
+    label: "整体背景颜色",
+    type: "color",
+    key: "wholeBgColor",
+  },
+  {
+    label: "主容器背景色",
+    type: "color",
+    key: "contentBgColor",
+  },
+  {
+    label: "布局尺寸配置",
+    type: "title",
+    key: "contentPadding",
+  },
+  {
+    label: "主容器内边距",
+    type: "number",
+    key: "contentPadding",
+  },
+  {
+    label: "侧边菜单栏宽度",
+    type: "number",
+    key: "sidebarWidth",
+  },
+  {
+    label: "顶部导航栏高度",
+    type: "number",
+    key: "navbarHeight",
+  },
+  {
+    label: "页面标签栏高度",
+    type: "number",
+    key: "tagsHeight",
+  },
+  {
+    label: "页面内边距",
+    type: "number",
+    key: "pagePadding",
+  },
+  {
+    label: "菜单配置",
+    type: "title",
+    key: "menuGap",
+  },
+  {
+    label: "菜单上下之间的间隔",
+    type: "number",
+    key: "menuGap",
+  },
+  {
+    label: "菜单缩进",
+    type: "number",
+    key: "menuIndent",
+  },
+  {
+    label: "菜单标题字体大小",
+    type: "number",
+    key: "menuTitleSize",
+  },
+  {
+    label: "菜单标题高度",
+    type: "number",
+    key: "menuTitleHeight",
+  },
+  {
+    label: "菜单 item 字体大小",
+    type: "number",
+    key: "menuItemSize",
+  },
+  {
+    label: "菜单 item 高度",
+    type: "number",
+    key: "menuItemHeight",
+  },
+  {
+    label: "菜单左右边距",
+    type: "number",
+    key: "menuPadding",
+  },
+  {
+    label: "菜单 hover 背景颜色",
+    type: "color",
+    key: "menuItemHoverBg",
+  },
+  {
+    label: "菜单标题颜色",
+    type: "color",
+    key: "menuTitleColor",
+  },
+  {
+    label: "菜单文字颜色",
+    type: "color",
+    key: "menuTextColor",
+  },
+];
 
 function setStyle(isInit = false) {
   let label = document.getElementById(id) as HTMLStyleElement;
@@ -210,8 +256,6 @@ function setStyle(isInit = false) {
     document.head.appendChild(label);
   }
   label.textContent = getStyleText();
-  store.layout.menuSizeInfo.titleHeight = styleVariable.menuTitleHeight;
-  store.layout.menuSizeInfo.itemHeight = styleVariable.menuItemHeight;
   if (!isInit) {
     message.success("应用成功！");
     sessionStorage.setItem(id, JSON.stringify(styleVariable));
@@ -222,7 +266,7 @@ function copyStyle() {
   copyText(getStyleText(), function() {
     messageBox({
       title: "复制成功！",
-      content: "请将代码复制在`src/styles/layout.scss`中即可"
+      content: `<div>请将代码复制在<span class="the-tag blue" style="padding: 6px 8px;">src/styles/layout.scss</span>中即可</div>`
     })
   })
 }
@@ -230,42 +274,66 @@ function copyStyle() {
 function resetStyle() {  
   modifyData(styleVariable, useDefaultStyle());
   sessionStorage.removeItem(id);
-  store.layout.menuSizeInfo.titleHeight = styleVariable.menuTitleHeight;
-  store.layout.menuSizeInfo.itemHeight = styleVariable.menuItemHeight;
   const label = document.getElementById(id);
   if (label) {
     label.remove();
   }
 }
 
-function onPreset() {
-  const defaultStyle = useDefaultStyle();
-  modifyData(defaultStyle, {
-    menuBgColor: "#ffffff",
-    menuHoverBgColor: "rgba(214, 231, 255, 0.2)",
-    menuItemBgColor: "#ffffff",
-    menuItemBgActivedColor: "#ecf5ff",
-    menuTextColor: "#545454",
-    menuTextActivedColor: "#1388f6"
-  });
-  modifyData(styleVariable, defaultStyle);
+function onPreset(theme: "green" | "black" | "orange" | "purple") {
+  switch (theme) {
+    case "green":
+      modifyData(styleVariable, {
+        themeColor: "#42b983",
+        menuItemHoverBg: "#e9f7f2"
+      });
+      break;
+    
+    case "black":
+      modifyData(styleVariable, {
+        themeColor: "#1a1a1a",
+        menuItemHoverBg: "#f5f5f5"
+      });
+      break;
+
+    case "orange":
+      modifyData(styleVariable, {
+        themeColor: "#ff9317",
+        menuItemHoverBg: "#faf4ed"
+      });
+      break;
+    
+    case "purple":
+      modifyData(styleVariable, {
+        themeColor: "#6122c7",
+        menuItemHoverBg: "#f4ecff"
+      });
+      break;
+
+    default:
+      break;
+  }
   setStyle();
 }
 
-type Colors = "wholeBgColor"|"menuBgColor"|"menuHoverBgColor"|"menuItemBgColor"|"menuItemBgActivedColor"|"menuItemTagColor"|"menuTextColor"|"menuTextActivedColor"|"contentBgColor";
+type Colors = "themeColor" | "borderColor" | "wholeBgColor" | "contentBgColor" | "menuItemHoverBg" | "menuTitleColor" | "menuTextColor";
 
 type Numbers = keyof Omit<typeof styleVariable, Colors>
 
 /** 最小值限制 */
 const minValue: Record<Numbers, number> = {
-  sidebarWidth: 100,
-  menuPadding: 0,
-  menuFontSize: 10,
-  menuTitleHeight: 20,
-  menuItemHeight: 20,
-  navbarHeight: 38,
+  sidebarWidth: 160,
+  navbarHeight: 28,
+  tagsHeight: 28,
   contentPadding: 0,
-  pagePadding: 0
+  pagePadding: 0,
+  menuGap: 0,
+  menuIndent: 10,
+  menuTitleSize: 12,
+  menuTitleHeight: 24,
+  menuItemSize: 12,
+  menuItemHeight: 24,
+  menuPadding: 6,
 }
 
 let timer: number;
@@ -296,13 +364,11 @@ onMounted(function() {
     modifyData(styleVariable, cacheValue);
     setStyle(true);
   }
-
 });
 
 onUnmounted(function() {
   clearTimeout(timer);
-})
-
+});
 </script>
 <style lang="scss">
 .page-home {
@@ -335,16 +401,29 @@ onUnmounted(function() {
   }
   .form-item {
     height: 44px;
+    width: fit-content;
+    position: relative;
+
     .form-label {
       min-width: 180px;
       font-size: 14px;
       color: #555;
       font-weight: bold;
     }
+
+    .form-unit {
+      font-size: 14px;
+      color: #999;
+      position: absolute;
+      right: 22px;
+      top: 10px;
+    }
+
     .the-input {
       width: 200px;
       margin: 0 12px;
     }
+
     .color-box {
       border: solid 1px #dcdfe6;
       width: 100px;
