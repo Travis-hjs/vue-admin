@@ -52,13 +52,4 @@ export default class ModuleLayout {
     keyword: "",
   });
 
-  /** 
-   * 菜单组件尺寸对象
-   */
-  menuSizeInfo = reactive({
-    /** `the-layout-menu-title`实际高度 */
-    titleHeight: 0,
-    /** `the-layout-menu-item`实际高度 */
-    itemHeight: 0
-  })
 }
