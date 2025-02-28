@@ -5,6 +5,7 @@
     :key="menu.menuId"
     :style="menuIndex ? undefined : { 'margin-top': '0' }"
   />
+  <Empty v-if="!menuList.length" style="height: 140px;" text="没有匹配到任何菜单" />
 </template>
 <script lang="ts">
 /** 侧边菜单组件 */
@@ -19,6 +20,7 @@ import { ref, watch } from "vue";
 import type { RouteItem } from "@/router/types";
 import type { LayoutType } from "@/store/types";
 import { getMenuId, useLayoutRoute } from "./hooks";
+import { Empty } from "@/components/Empty";
 
 const props = defineProps({
   /**

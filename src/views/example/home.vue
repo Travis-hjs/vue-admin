@@ -29,10 +29,12 @@
       </template>
     </div>
     <div class="pdt-20 mgb-30">
-      <button class="the-btn blue mini" v-ripple @click="setStyle()">应用当前配置</button>
       <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
       <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset()">应用预设配置</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('black')">应用预设配置-黑色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('orange')">应用预设配置-橙色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('purple')">应用预设配置-紫色</button>
     </div>
     <h2 class="the-title is-line mgb-30">打赏一下</h2>
     <div class="code-box">
@@ -137,6 +139,11 @@ const settingList: Array<Setting> = [
   {
     label: "布局颜色配置",
     type: "title",
+    key: "themeColor",
+  },
+  {
+    label: "主题色",
+    type: "color",
     key: "themeColor",
   },
   {
@@ -249,8 +256,6 @@ function setStyle(isInit = false) {
     document.head.appendChild(label);
   }
   label.textContent = getStyleText();
-  store.layout.menuSizeInfo.titleHeight = styleVariable.menuTitleHeight;
-  store.layout.menuSizeInfo.itemHeight = styleVariable.menuItemHeight;
   if (!isInit) {
     message.success("应用成功！");
     sessionStorage.setItem(id, JSON.stringify(styleVariable));
@@ -261,7 +266,7 @@ function copyStyle() {
   copyText(getStyleText(), function() {
     messageBox({
       title: "复制成功！",
-      content: "请将代码复制在`src/styles/layout.scss`中即可"
+      content: `<div>请将代码复制在<span class="the-tag blue" style="padding: 6px 8px;">src/styles/layout.scss</span>中即可</div>`
     })
   })
 }
@@ -269,25 +274,45 @@ function copyStyle() {
 function resetStyle() {  
   modifyData(styleVariable, useDefaultStyle());
   sessionStorage.removeItem(id);
-  store.layout.menuSizeInfo.titleHeight = styleVariable.menuTitleHeight;
-  store.layout.menuSizeInfo.itemHeight = styleVariable.menuItemHeight;
   const label = document.getElementById(id);
   if (label) {
     label.remove();
   }
 }
 
-function onPreset() {
-  const defaultStyle = useDefaultStyle();
-  // modifyData(defaultStyle, {
-  //   menuBgColor: "#ffffff",
-  //   menuHoverBgColor: "rgba(214, 231, 255, 0.2)",
-  //   menuItemBgColor: "#ffffff",
-  //   menuItemBgActivedColor: "#ecf5ff",
-  //   menuTextColor: "#545454",
-  //   menuTextActivedColor: "#1388f6"
-  // });
-  modifyData(styleVariable, defaultStyle);
+function onPreset(theme: "green" | "black" | "orange" | "purple") {
+  switch (theme) {
+    case "green":
+      modifyData(styleVariable, {
+        themeColor: "#42b983",
+        menuItemHoverBg: "#e9f7f2"
+      });
+      break;
+    
+    case "black":
+      modifyData(styleVariable, {
+        themeColor: "#1a1a1a",
+        menuItemHoverBg: "#f5f5f5"
+      });
+      break;
+
+    case "orange":
+      modifyData(styleVariable, {
+        themeColor: "#ff9317",
+        menuItemHoverBg: "#faf4ed"
+      });
+      break;
+    
+    case "purple":
+      modifyData(styleVariable, {
+        themeColor: "#6122c7",
+        menuItemHoverBg: "#f4ecff"
+      });
+      break;
+
+    default:
+      break;
+  }
   setStyle();
 }
 
@@ -333,12 +358,12 @@ function onColor() {
 }
 
 onMounted(function() {
-  // const cacheValue = jsonParse(sessionStorage.getItem(id), undefined);
+  const cacheValue = jsonParse(sessionStorage.getItem(id), undefined);
 
-  // if (cacheValue) {
-  //   modifyData(styleVariable, cacheValue);
-  //   setStyle(true);
-  // }
+  if (cacheValue) {
+    modifyData(styleVariable, cacheValue);
+    setStyle(true);
+  }
 });
 
 onUnmounted(function() {
