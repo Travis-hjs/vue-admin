@@ -11,8 +11,7 @@ const TsxCard = defineComponent({
     title: String,
     change: Function as PropType<(res: number) => void>
   },
-  setup(props, context) {
-    // console.log(props.images);
+  setup(props) {
     const index = ref(0);
 
     const listStyle = computed(function () {
@@ -21,7 +20,7 @@ const TsxCard = defineComponent({
         width: length * 100 + "%",
         transform: `translate3d(-${index.value * (100 / length)}%, 0px, 0px)`
       }
-    })
+    });
 
     /**
      * 切换图片
@@ -37,7 +36,6 @@ const TsxCard = defineComponent({
           index.value--;
         }
       }
-      // context.emit("change", index.value);
       props.change && props.change(index.value);
     }
 

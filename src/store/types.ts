@@ -34,21 +34,19 @@ export namespace LayoutType {
      * | full-header | 顶部撑满  |
      */
     layoutMode: "" | "full-header";
+    /** 检索菜单关键字 */
+    keyword: string;
   }
 
   export interface Menu extends RouteMeta {
+    /** 唯一标识 */
+    menuId: string;
     /** 当前下级菜单是否展开 */
     isOpen: boolean;
-    /** 当前菜单是否处于激活状态 */
-    isActive: boolean;
-    /** 当前有子菜单路由的同时，是否有子菜单的某个处于激活状态 */
-    hasActive: boolean;
-    /** 唯一索引`key`，层数用`-`隔开 */
-    key: string;
-    /** 菜单子路由 */
-    children?: Array<Menu>;
     /** 路由路径 */
     path: string;
+    /** 菜单子路由 */
+    children?: Array<Menu>;
   }
 }
 

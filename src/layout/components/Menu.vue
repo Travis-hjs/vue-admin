@@ -1,5 +1,11 @@
 <template>
-  <MenuItem v-for="item in menuList" :key="item.key" :info="item" />
+  <MenuItem
+    v-for="(menu, menuIndex) in menuList"
+    :menu="menu"
+    :key="menu.menuId"
+    :style="menuIndex ? undefined : { 'margin-top': '0' }"
+  />
+  <Empty v-if="!menuList.length" style="height: 140px;" text="没有匹配到任何菜单" />
 </template>
 <script lang="ts">
 /** 侧边菜单组件 */
@@ -8,80 +14,80 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
-import MenuItem from "./MenuItem.vue";
 import store from "@/store";
-import { filterHidden } from "@/router";
-import type { LayoutType } from "@/store/types";
+import MenuItem from "./MenuItem.vue";
+import { ref, watch } from "vue";
 import type { RouteItem } from "@/router/types";
+import type { LayoutType } from "@/store/types";
+import { getMenuId, useLayoutRoute } from "./hooks";
+import { Empty } from "@/components/Empty";
 
 const props = defineProps({
-  /** 是否合并只有一个子项 */
+  /**
+   * 是否合并只有一个子项的菜单
+   * - 传`1`则合并到第一层，传`2`则合并到第二层，以此类推
+   * - 不传则不做合并操作
+   */
   mergeOnlyOneChild: {
-    type: Boolean,
-    default: false
-  },
-  /** 是否只合并第一层路由列表 */
-  onlyMergeFirst: {
-    type: Boolean,
-    default: false
+    type: Number,
+    default: 0,
   }
 });
 
-const route = useRoute();
+const layoutInfo = store.layout.info;
 
 /**
- * 格式化菜单列表
+ * 组装菜单数据
  * @param list 
- * @param parentKey 上层`key`
  */
-function formatMenuList(list: Array<RouteItem>, parentKey?: string) {
-  list = JSON.parse(JSON.stringify(list));
-  const result: Array<LayoutType.Menu> = [];
+function formatMenuList(list: Array<RouteItem>) {
+  const menus: Array<LayoutType.Menu> = [];
   for (let i = 0; i < list.length; i++) {
-    const routeItem = list[i];
-    const item: LayoutType.Menu = {
-      key: parentKey ? `${parentKey}-${i}` : i.toString(),
+    const item = list[i];
+    // 过滤掉隐藏的菜单
+    if (item.meta && item.meta.hidden) {
+      continue;
+    }
+    // 组装数据结构
+    const menu: LayoutType.Menu = {
+      menuId: getMenuId(),
+      path: item.path,
       isOpen: false,
-      isActive: false,
-      hasActive: false,
-      children: [],
-      path: routeItem.path,
-      ...routeItem.meta
+      title: item.meta.title,
+      icon: item.meta.icon,
+      link: item.meta.link,
     }
-    if (!item.hidden) {
-      result.push(item);
-      const child = routeItem.children;
-      if (child && child.length > 0) {
-        item.children = formatMenuList(child, item.key);
-      }
+    // 递归下级列表
+    if (item.children && item.children.length) {
+      menu.children = formatMenuList(item.children);
     }
+    menus.push(menu);
   }
-  return result;
+  return menus;
 }
 
 /**
  * 处理合并只有一条子菜单的列表数据
  * @param list
+ * @param level 合并的最大层数
  */
-function handleMerge(list: Array<LayoutType.Menu>) {
-  list = JSON.parse(JSON.stringify(list));
+function handleMerge(list: Array<LayoutType.Menu>, level = 1) {
   const result: Array<LayoutType.Menu> = [];
+  const keep = level < props.mergeOnlyOneChild;
+  const next = level + 1;
   for (let i = 0; i < list.length; i++) {
     const item = list[i];
-    const child = item.children;
-    if (child && child.length > 0) {
-      if (child.length === 1) {
-        child[0].key = item.key;
-        result.push(child[0]);
-        if (child[0].children && child[0].children.length > 0 && !props.onlyMergeFirst) {
-          child[0].children = handleMerge(child[0].children);
+    const sub = item.children;
+    if (sub && sub.length > 0) {
+      if (sub.length === 1) {
+        result.push(sub[0]);
+        if (sub[0].children && sub[0].children.length > 0 && keep) {
+          sub[0].children = handleMerge(sub[0].children, next);
         }
       } else {
         result.push(item);
-        if (!props.onlyMergeFirst) {
-          item.children = handleMerge(child);
+        if (keep) {
+          item.children = handleMerge(sub, next);
         }
       }
     } else {
@@ -91,86 +97,98 @@ function handleMerge(list: Array<LayoutType.Menu>) {
   return result;
 }
 
-let list = formatMenuList(filterHidden(store.layout.completeRouters));
+/**
+ * 处理是否有关键字搜索的列表
+ * @param menus 
+ */
+function hasKeyword(menus: Array<LayoutType.Menu>) {
+  const value = layoutInfo.keyword;
+  return menus.filter((menu) => {
+    if (menu.children) {
+      menu.children = hasKeyword(menu.children);
+      if (menu.children.length > 0) {
+        menu.isOpen = true;
+        return true;
+      }
+    }
+    if (menu.title.includes(value)) {
+      return true;
+    }
+    return false;
+  });
+}
+
+let formatList = formatMenuList(store.layout.completeRouters);
 
 if (props.mergeOnlyOneChild) {
-  list = handleMerge(list);
-  // console.log("处理合并只有一条子菜单的列表数据 >>", list);
+  formatList = handleMerge(formatList);
 }
 
-/**
- * 菜单数据列表
- */
-const menuList = ref(list);
+const menuList = ref(formatList);
+
+const { route, isActive } = useLayoutRoute();
 
 /**
- * 激活的索引列表
+ * 通过传入`menuId`找到整个父级列表
+ * @param ls
+ * @param menuId
  */
-let activeList: Array<number> = [];
+function findParentList(ls: Array<LayoutType.Menu>) {
+  const parents: Array<LayoutType.Menu> = [];
 
-/**
- * 更新菜单列表激活状态
- * @param list
- */
-function updateActive(list: Array<LayoutType.Menu>) {
-  for (let index = 0; index < list.length; index++) {
-    const item = list[index];
-    // 这里要先重置一下
-    item.hasActive = false;
-    // 设置 mergeOnlyOneChild 时的判断，并初始化值
-    if (item.isOpen && (!item.children || (item.children && item.children.length === 0))) {
-      item.isOpen = false;
+  function each(menus: Array<LayoutType.Menu>, parentList: Array<LayoutType.Menu>) {
+    for (let i = 0; i < menus.length; i++) {
+      const menu = menus[i];
+
+      if (isActive(menu)) {
+        parents.push(...parentList);
+        return true;
+      }
+
+      if (menu.children && menu.children.length) {
+        const found = each(menu.children, [...parentList, menu]);
+        if (found) {
+          return true;
+        }
+      }
     }
-    item.isActive = item.path === route.path;
-    if (item.isActive) {
-      activeList = item.key.split("-").map(val => Number(val));
-    }
-    if (item.children && item.children.length > 0) {
-      updateActive(item.children);
-    }
+    return false;
   }
+
+  each(ls, []);
+
+  return parents;
 }
 
-/**
- * 设置激活`item`状态
- * @param list
- * @param level 层级
- */
-function setItem(list: Array<LayoutType.Menu>, level = 0) {
-  const index = activeList[level];
-  const item = list[index];
-  item.hasActive = item.isOpen = true;
-  if (level < activeList.length - 1) {
-    setItem(item.children!, level + 1);
-  }
+/** 更新激活的菜单操作 */
+function updateActive() {
+  const activeMenus = findParentList(menuList.value);
+  activeMenus.forEach((item) => {
+    item.isOpen = true;
+  });
 }
 
-function update() {
-  activeList = [];
-  updateActive(menuList.value);
-  if (activeList.length > 0) {
-    setItem(menuList.value);
-  }
-  // console.log("menuList >>", menuList.value);
-}
-
-watch(() => route.path, function () {
-  update();
-})
-
-onMounted(function () {
-  update();
-  function getElementHeight(name: string, defaultHeight = 0) {
-    const el = document.querySelector(name) as HTMLElement;
-    if (el) {
-      // return el.clientHeight; // 这个获取方式在原始隐藏的时候获取不到，改用 getComputedStyle 更优
-      return parseFloat(getComputedStyle(el).height);
+watch(
+  () => layoutInfo.keyword,
+  function (val) {
+    const list = JSON.parse(JSON.stringify(formatList));
+    if (val) {
+      const filterList = hasKeyword(list);
+      menuList.value = filterList;
     } else {
-      console.log("%c 找不到节点 >>", "color: #ff4949", name, "已使用默认值 >>", defaultHeight);
-      return defaultHeight;
+      menuList.value = list;
+      updateActive();
     }
-  }
-  store.layout.menuSizeInfo.titleHeight = getElementHeight(".the-layout-menu .the-layout-menu-title", 50);
-  store.layout.menuSizeInfo.itemHeight = getElementHeight(".the-layout-menu .the-layout-menu-item", 44);
-})
+  },
+);
+
+watch(
+  () => route.path,
+  function () {
+    updateActive();
+  },
+  {
+    immediate: true,
+  },
+);
 </script>

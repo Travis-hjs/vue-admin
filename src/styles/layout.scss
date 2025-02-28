@@ -1,54 +1,62 @@
 @import "./mixins.scss";
 
-@mixin menuHover {
+@mixin menu-block($height, $color) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: $height;
+  line-height: 1;
+  transition: var(--transition);
+  border-radius: var(--border-radius);
+  color: $color;
+  padding: 0 var(--menu-padding);
   position: relative;
+  text-decoration: inherit;
+  cursor: pointer;
+  user-select: none;
 
-  &::after {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--menu-hover-bg-color);
-    transform: translate3d(-100%, 0, 0);
+  .menu-icon {
+    font-size: var(--menu-title-size);
+    margin-right: 8px;
     transition: var(--transition);
+    color: $color;
   }
 
   &:hover {
-    &::after {
-      transform: translate3d(0, 0, 0);
+    background-color: var(--menu-item-hover-bg);
+    color: var(--theme-color);
+
+    .the-layout-menu-arrow::after,
+    .the-layout-menu-arrow::before {
+      background-color: var(--theme-color);
+    }
+
+    .menu-icon {
+      color: var(--theme-color);
+    }
+  }
+
+  &.is-active {
+    background-color: var(--theme-color);
+    color: var(--whole-bg-color);
+
+    .menu-icon {
+      color: var(--whole-bg-color);
     }
   }
 }
 
 .the-layout {
+  // layout 主题色
+  --theme-color: var(--blue);
+  // 边框颜色
+  --border-color: #d8dce5;
   // 整体背景颜色
   --whole-bg-color: #fff;
+  // 基础定位层级
+  --z-index: 100;
   // 侧边菜单栏宽度
-  --sidebar-width: 210px;
-  // 侧边菜单栏背景色
-  --menu-bg-color: #001529;
-  // 菜单`hover`状态的动画背景
-  --menu-hover-bg-color: rgba(255, 255, 255, 0.1);
-  // 菜单选项背景色
-  --menu-item-bg-color: #000c17;
-  // 菜单选项激活状态背景色
-  --menu-item-bg-actived-color: var(--blue);
-  // 菜单选项激活伪类颜色，靠左边的蓝色小矩形
-  --menu-item-tag-color: var(--blue);
-  // 菜单左右间距
-  --menu-padding: 20px;
-  // 菜单字体大小
-  --menu-font-size: 14px;
-  // 菜单标题高度
-  --menu-title-height: 50px;
-  // 菜单栏目高度
-  --menu-item-height: 44px;
-  // 侧边菜单栏文字默认颜色
-  --menu-text-color: #ffffffa6;
-  // 侧边菜单栏文字激活颜色
-  --menu-text-actived-color: #fff;
+  --sidebar-width: 260px;
   // 顶部导航栏高度
   --navbar-height: 50px;
   // 页面标签栏高度
@@ -59,12 +67,30 @@
   --content-bg-color: #eee;
   // 页面内边距
   --page-padding: 14px;
-  // 基础定位层级
-  --z-index: 100;
   // 顶部阴影
   --header-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   // 侧边栏阴影
   --sidebar-shadow: 1px 0 4px rgba(0, 21, 41, 0.08);
+  // 菜单之间的间隔，上下
+  --menu-gap: 4px;
+  // 菜单缩进，递增
+  --menu-indent: 22px;
+  // 菜单标题字体大小
+  --menu-title-size: 15px;
+  // 菜单标题高度
+  --menu-title-height: 44px;
+  // 菜单 item 字体大小
+  --menu-item-size: 14px;
+  // 菜单 item 高度
+  --menu-item-height: 38px;
+  // 菜单 hover 背景颜色
+  --menu-item-hover-bg: #ecf5ff;
+  // 菜单标题颜色
+  --menu-title-color: #555;
+  // 菜单文字颜色
+  --menu-text-color: #606266;
+  // 菜单左右边距
+  --menu-padding: 16px;
 
   width: 100%;
   height: 100%;
@@ -145,16 +171,27 @@
 }
 
 .the-layout-sidebar {
+  display: flex;
+  flex-direction: column;
   width: var(--sidebar-width);
   height: 100vh;
   overflow: hidden;
-  background-color: var(--menu-bg-color);
+  background-color: var(--whole-bg-color);
   position: fixed;
   left: 0;
   top: 0;
   z-index: calc(var(--z-index) + 1);
   transition: var(--transition);
   box-shadow: var(--sidebar-shadow);
+}
+
+.the-layout-sidebar-content {
+  width: 100%;
+  padding: 0 var(--page-padding);
+
+  &.padding-full {
+    padding: var(--page-padding);
+  }
 }
 
 .the-layout-content {
@@ -167,16 +204,18 @@
   --layout-content-height: calc(100vh - var(--navbar-height) - (var(--content-padding) * 2) - (var(--page-padding) * 2));
 }
 
-.the-layout.has-tags-view .the-layout-content {
-  padding-top: calc(var(--navbar-height) + var(--tags-height) + var(--content-padding));
-  // TODO: 设置一个内容区域高度变量给外面页面使用
-  --layout-content-height: calc(100vh - var(--navbar-height) - var(--tags-height) - (var(--content-padding) * 2) - (var(--page-padding) * 2));
-}
+.the-layout.has-tag-list {
+  &.full-header {
+    .the-layout-sidebar {
+      height: calc(100vh - var(--navbar-height) - var(--tags-height));
+      top: calc(var(--navbar-height) + var(--tags-height));
+    }
+  }
 
-.the-layout.has-tags-view.full-header {
-  .the-layout-sidebar {
-    height: calc(100vh - var(--navbar-height) - var(--tags-height));
-    top: calc(var(--navbar-height) + var(--tags-height));
+  .the-layout-content {
+    padding-top: calc(var(--navbar-height) + var(--tags-height) + var(--content-padding));
+    // TODO: 设置一个内容区域高度变量给外面页面使用
+    --layout-content-height: calc(100vh - var(--navbar-height) - var(--tags-height) - (var(--content-padding) * 2) - (var(--page-padding) * 2));
   }
 }
 
@@ -188,146 +227,98 @@
 }
 
 .the-layout-menu {
+  --level: 0;
+
   width: 100%;
-  background-color: var(--menu-bg-color);
-
-  .svg-icon {
-    width: 14px;
-    height: 14px;
-    margin-right: 8px;
-  }
-
-  .the-layout-menu-title {
-    width: 100%;
-    height: var(--menu-title-height);
-    padding: 0 var(--menu-padding);
-    text-align: left;
-    font-size: var(--menu-font-size);
-    color: var(--menu-text-color);
-    outline: none;
-    border: none;
-    background-color: transparent;
-    overflow: hidden;
-    transition: var(--transition);
-    @include menuHover();
-
-    &:hover {
-      color: var(--menu-text-actived-color);
-
-      .the-layout-menu-arrow::before {
-        background-color: var(--menu-text-actived-color);
-      }
-
-      .the-layout-menu-arrow::after {
-        background-color: var(--menu-text-actived-color);
-      }
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      width: 4px;
-      left: 0;
-      background-color: var(--menu-item-tag-color);
-      height: calc(var(--menu-title-height) / 2);
-      top: calc(var(--menu-title-height) / 4);
-      transform: scaleY(0);
-      transition: var(--transition);
-    }
-  }
-
-  .the-layout-menu-list {
-    width: 100%;
-    background-color: var(--menu-item-bg-color);
-    overflow: hidden;
-    transition: var(--transition);
-
-    .the-layout-menu-title {
-      background-color: var(--menu-item-bg-color);
-    }
-
-    .the-layout-menu-item {
-      padding: 0 var(--menu-padding);
-      height: var(--menu-item-height);
-      font-size: var(--menu-font-size);
-      color: var(--menu-text-color);
-      overflow: hidden;
-      transition: var(--transition);
-      @include menuHover();
-
-      &:hover {
-        color: var(--menu-text-actived-color);
-      }
-    }
-  }
-
-  .the-layout-menu-selected {
-    background-color: var(--menu-item-bg-actived-color) !important;
-    color: var(--menu-text-actived-color) !important;
-  }
-
-  .the-layout-menu-open {
-    color: var(--menu-text-actived-color);
-
-    .the-layout-menu-arrow {
-      &::before {
-        background-color: var(--menu-text-actived-color);
-        transform: rotate(45deg) translate(2.5px);
-      }
-
-      &::after {
-        background-color: var(--menu-text-actived-color);
-        transform: rotate(-45deg) translate(-2.5px);
-      }
-    }
-  }
+  margin-top: var(--menu-gap);
 
   .the-layout-menu-arrow {
     position: relative;
-
+  
+    &::after,
     &::before {
-      background-color: var(--menu-text-color);
       content: "";
       position: absolute;
       width: 6px;
       height: 1.5px;
+      transition: var(--transition);
       border-radius: 2px;
+      background-color: var(--menu-title-color);
+    }
+
+    &::before {
       transform: rotate(-45deg) translate(2.5px);
-      transition: var(--transition);
     }
-
+  
     &::after {
-      background-color: var(--menu-text-color);
-      ;
-      content: "";
-      position: absolute;
-      width: 6px;
-      height: 1.5px;
-      border-radius: 2px;
       transform: rotate(45deg) translate(-2.5px);
+      
+    }
+  }
+  
+  .the-layout-menu-title {
+    @include menu-block(var(--menu-title-height), var(--menu-title-color));
+    padding-left: calc(var(--menu-padding) + var(--menu-indent) * var(--level));
+    font-size: var(--menu-title-size);
+    font-weight: 500;
+  
+    &.is-open {
+      .the-layout-menu-arrow {
+        &::before {
+          transform: rotate(45deg) translate(2.5px);
+        }
+  
+        &::after {
+          transform: rotate(-45deg) translate(-2.5px);
+        }
+      }
+    }
+  
+    &::after {
+      content: '';
+      position: absolute;
+      top: 16%;
+      left: 0;
+      width: 4px;
+      height: 68%;
       transition: var(--transition);
+      background-color: transparent;
     }
-  }
-
-  .the-layout-menu-actived {
-    color: var(--menu-text-actived-color) !important;
-
-    .the-layout-menu-arrow {
-      &::before {
-        background-color: var(--menu-text-actived-color) !important;
-      }
-
+  
+    &.is-current {
+      color: var(--theme-color);
+      
       &::after {
-        background-color: var(--menu-text-actived-color) !important;
+        background-color: var(--theme-color);
+      }
+  
+      .the-layout-menu-arrow::after,
+      .the-layout-menu-arrow::before {
+        background-color: var(--theme-color);
+      }
+      
+      .menu-icon {
+        color: var(--theme-color);
       }
     }
   }
+  
+  .the-layout-menu-list {
+    width: 100%;
+    overflow: hidden;
+    // padding-left: var(--menu-indent);
+    transition: var(--transition);
 
-  // 首个激活的菜单栏
-  .the-layout-menu-actived-title {
-    &::before {
-      transform: scaleY(1);
+    .is-current::after {
+      background-color: transparent;
     }
+  }
+  
+  .the-layout-menu-link {
+    @include menu-block(var(--menu-item-height), var(--menu-text-color));
+    padding-left: calc(var(--menu-padding) + var(--menu-indent) * (var(--level) + 1));
+    margin-top: var(--menu-gap);
+    font-size: var(--menu-item-size);
   }
 }
 
@@ -348,7 +339,7 @@
 
   &:hover {
     a {
-      color: var(--blue);
+      color: var(--theme-color);
     }
   }
 
@@ -399,13 +390,30 @@
   height: 100%;
   padding: 0 6px 0 8px;
   margin-right: 8px;
-  border: 1px solid #d8dce5;
-  color: #495060;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: var(--menu-text-color);
   background-color: var(--whole-bg-color);
   transition: var(--transition);
 
   &:visited {
-    color: #495060;
+    color: var(--menu-text-color);
+  }
+
+  &.is-active {
+    border-color: var(--theme-color);
+    border-style: dashed;
+    color: var(--theme-color);
+  
+    .close {
+      &::after {
+        background-color: var(--theme-color);
+      }
+  
+      &::before {
+        background-color: var(--theme-color);
+      }
+    }
   }
 
   .close {
@@ -418,7 +426,7 @@
     color: transparent;
     margin-left: 4px;
     transition: var(--transition);
-    @include closeIcon(#495060, 8px);
+    @include closeIcon(var(--menu-text-color), 8px);
 
     &:hover {
       background-color: #b4bccc;
@@ -434,30 +442,32 @@
   }
 }
 
-.the-layout-tag-on {
-  background-color: var(--light-green);
-  border-color: var(--light-green);
-  color: #fff;
+.the-layout-tag-menu {
+  position: fixed;
+  z-index: 2100;
+  top: calc(var(--navbar-height) + var(--tags-height) + 4px);
+  border-radius: var(--border-radius);
+  left: 0;
+  min-width: 120px;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+  background-color: #fff;
+}
 
-  &:visited, &:focus, &:hover, &:link, &:active {
-    color: #fff;
-  }
-
-  .close {
-    &::after {
-      background-color: #fff;
-    }
-
-    &::before {
-      background-color: #fff;
-    }
+.the-layout-tag-menu-item {
+  font-size: 14px;
+  padding: 5px 16px;
+  color: var(--menu-text-color);
+  line-height: 22px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--menu-item-hover-bg);
+    color: var(--theme-color);
   }
 }
 
 .the-logo-box {
   width: 100%;
-  height: 50px;
-  background-color: var(--menu-item-bg-color);
+  height: var(--navbar-height);
   padding: 0 10px;
 }
 
@@ -474,9 +484,45 @@
 }
 
 .the-logo-title {
-  color: var(--menu-text-actived-color);
+  color: var(--menu-title-color);
   font-weight: 600;
   font-size: 14px;
+}
+
+.the-layout-search-box {
+  width: 100%;
+  padding-bottom: var(--page-padding);
+  border-bottom: solid 1px var(--border-color);
+  position: relative;
+
+  input {
+    width: 100%;
+    height: 36px;
+    padding: 0 var(--page-padding);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 15px;
+    line-height: 1;
+    color: var(--menu-text-color);
+    transition: var(--transition);
+
+    &::placeholder {
+      color: #999;
+    }
+
+    &:focus {
+      border-color: var(--theme-color);
+    }
+  }
+
+  .the-layout-search-icon {
+    position: absolute;
+    top: 10px;
+    right: var(--page-padding);
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--menu-text-color);
+  }
 }
 
 .the-layout-to-top {
@@ -486,7 +532,7 @@
   position: fixed;
   right: 30px;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  background-color: var(--blue);
+  background-color: var(--theme-color);
   bottom: var(--page-padding);
   z-index: calc(var(--z-index) - 1);
   transition: var(--transition);
@@ -515,28 +561,5 @@
     visibility: hidden;
     opacity: 0;
     transform: scale(0);
-  }
-}
-
-.the-layout-tag-menu {
-  position: fixed;
-  z-index: 2100;
-  top: calc(var(--navbar-height) + var(--tags-height) + 4px);
-  border-radius: var(--border-radius);
-  left: 0;
-  min-width: 120px;
-  box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
-  background-color: #fff;
-}
-
-.the-layout-tag-menu-item {
-  font-size: 14px;
-  padding: 5px 16px;
-  color: #606266;
-  line-height: 22px;
-  cursor: pointer;
-  &:hover {
-    background-color: rgb(235.9, 245.3, 255);
-    color: var(--blue);
   }
 }

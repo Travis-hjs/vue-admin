@@ -1,64 +1,102 @@
 <template>
-  <div class="the-layout-menu" ref="menuBox">
-    <button :class="titleClass" :style="titleStyle" @click="switchOpen()" v-if="hasChildren(info)">
-      <svg-icon v-if="info.icon" :name="info.icon" />
-      <span class="f1">{{ info.title }}</span>
+  <section class="the-layout-menu" :style="{ '--level': props.level }">
+    <div v-if="hasChildren(props.menu)" :class="titleClass" @click="switchMenu()">
+      <svg-icon v-if="props.menu.icon" :name="props.menu.icon" class="menu-icon" />
+      <span class="f1">{{ props.menu.title }}</span>
       <i class="the-layout-menu-arrow"></i>
-    </button>
+    </div>
     <template v-else>
       <!-- 外链 -->
-      <a :class="titleClass" :style="titleStyle" :href="info.link" target="_blank" v-if="info.link">
-        <svg-icon v-if="info.icon" :name="info.icon" />
-        <span class="f1">{{ info.title }}</span>
+      <a v-if="props.menu.link" :href="props.menu.link" :class="titleClass" target="_blank">
+        <svg-icon v-if="props.menu.icon" :name="props.menu.icon" class="menu-icon" />
+        <span class="f1">{{ props.menu.title }}</span>
       </a>
       <!-- 单个菜单 -->
-      <router-link :class="titleClass" :style="titleStyle" :to="info.path" v-else>
-        <svg-icon v-if="info.icon" :name="info.icon" />
-        <span class="f1">{{ info.title }}</span>
+      <router-link v-else :to="props.menu.path" :class="titleClass">
+        <svg-icon v-if="props.menu.icon" :name="props.menu.icon" class="menu-icon" />
+        <span class="f1">{{ props.menu.title }}</span>
       </router-link>
     </template>
-    <div class="the-layout-menu-list" :style="listStyle" v-if="info.children && info.children.length > 0">
-      <div v-for="(item) in info.children" :key="item.key">
-        <MenuItem v-if="hasChildren(item)" :info="item" :level="level + 1" />
-        <template v-else>
-          <!-- 外链 -->
-          <a :class="getItemClass(item)" :style="itemStyle" :href="item.link" target="_blank" v-if="item.link">
-            <svg-icon v-if="item.icon" :name="item.icon" />
-            <span>{{ item.title }}</span>
-          </a>
-          <!-- 单个菜单 -->
-          <router-link :class="getItemClass(item)" :style="itemStyle" :to="item.path" v-else>
-            <svg-icon v-if="item.icon" :name="item.icon" />
-            <span>{{ item.title }}</span>
-          </router-link>
+    <transition
+      @before-enter="onBeforeEnter"
+      @enter="onEnter"
+      @after-enter="onAfterEnter"
+      @before-leave="onBeforeLeave"
+      @leave="onLeave"
+      @after-leave="onAfterLeave"
+      v-if="hasChildren(props.menu)"
+    >
+      <div v-show="props.menu.isOpen" :class="listClass">
+        <template v-for="sub in props.menu.children" :key="sub.menuId">
+          <MenuItem v-if="hasChildren(sub)" :menu="sub" :level="props.level + 1" />
+          <template v-else>
+            <!-- 外链 -->
+            <a v-if="sub.link" :href="sub.link" :class="linkClass(sub)" target="_blank">
+              <svg-icon v-if="sub.icon" :name="sub.icon" class="menu-icon" />
+              <span>{{ sub.title }}</span>
+            </a>
+            <!-- 单个菜单 -->
+            <router-link v-else :to="sub.path" :class="linkClass(sub)">
+              <svg-icon v-if="sub.icon" :name="sub.icon" class="menu-icon" />
+              <span>{{ sub.title }}</span>
+            </router-link>
+          </template>
         </template>
       </div>
-    </div>
-  </div>
+    </transition>
+  </section>
 </template>
-<script lang="ts">
-/** 菜单`item`组件 */
-export default {
-  name: "MenuItem"
-}
-</script>
 <script lang="ts" setup>
-import { computed, onMounted, type PropType, reactive, ref } from "vue";
-import store from "@/store";
+import { type PropType, computed } from "vue";
 import type { LayoutType } from "@/store/types";
+import { useCollapseHeight, useLayoutRoute } from "./hooks";
 
 const props = defineProps({
+  menu: {
+    type: Object as PropType<LayoutType.Menu>,
+    required: true,
+  },
   level: {
     type: Number,
-    default: 1
+    default: 0,
   },
-  info: {
-    type: Object as PropType<LayoutType.Menu>,
-    default: () => ({
-      title: "-"
-    })
-  }
 });
+
+const {
+  onBeforeEnter,
+  onEnter,
+  onAfterEnter,
+  onBeforeLeave,
+  onLeave,
+  onAfterLeave
+} = useCollapseHeight();
+
+const { isActive, hasActive } = useLayoutRoute();
+
+const titleClass = computed(function() {
+  const actived = isActive(props.menu);
+  return {
+    "the-layout-menu-title": true,
+    // "is-current": props.level === 0 ? hasActive(props.menu) : false,
+    "is-current": hasActive(props.menu) && !actived,
+    "is-open": props.menu.isOpen,
+    "is-active": actived,
+  };
+});
+
+const listClass = computed(function() {
+  return {
+    "the-layout-menu-list": true,
+    "is-open": props.menu.isOpen,
+  };
+});
+
+function linkClass(link: LayoutType.Menu) {
+  return {
+    "the-layout-menu-link": true,
+    "is-active": isActive(link),
+  };
+}
 
 /**
  * 是否有下级菜单
@@ -68,78 +106,8 @@ function hasChildren(item: LayoutType.Menu) {
   return item.children && item.children.length > 0 ? true : false;
 }
 
-/**
- * 获取列表高度
- * @param item 列表单个对象
- */
-function getListHeight(item: LayoutType.Menu) {
-  let result = 0;
-  const child = item.children;
-  const size = store.layout.menuSizeInfo;
-  if (item.isOpen && child && child.length > 0) {
-    child.forEach(menuItem => {
-      const height = hasChildren(menuItem) ? size.titleHeight : size.itemHeight;
-      result += height;
-      result += getListHeight(menuItem);
-    })
-  }
-  return result;
+function switchMenu() {
+  const current = props.menu;
+  current.isOpen = !current.isOpen;
 }
-
-const titleClass = computed(function () {
-  const item = props.info;
-  return {
-    "the-layout-menu-title f-vertical": true,
-    "the-layout-menu-selected": item.isActive,
-    "the-layout-menu-open": item.isOpen,
-    "the-layout-menu-actived": item.hasActive,
-    "the-layout-menu-actived-title": item.hasActive && props.level === 1
-  }
-})
-
-function getItemClass(item: LayoutType.Menu) {
-  return {
-    "the-layout-menu-item f-vertical": true,
-    "the-layout-menu-selected": item.isActive
-  }
-}
-
-const titleStyle = reactive({
-  paddingLeft: ""
-})
-
-const itemStyle = reactive({
-  paddingLeft: ""
-})
-
-/**
- * 菜单列表样式
- */
-const listStyle = computed(function () {
-  let height = getListHeight(props.info);
-  // console.log("height >>", height);
-  return {
-    height: height + "px"
-  }
-})
-
-/** 当前整体节点 */
-const menuBox = ref<HTMLElement>();
-
-function switchOpen() {
-  props.info.isOpen = !props.info.isOpen;
-}
-
-onMounted(function () {
-  const el = menuBox.value!;
-
-  // 设置左边距
-  if (props.level >= 1) {
-    const style = getComputedStyle(el.children[0] as HTMLElement);
-    const value = parseFloat(style.paddingLeft);
-    if (isNaN(value)) return;
-    titleStyle.paddingLeft = value * props.level + "px";
-    itemStyle.paddingLeft = value * (props.level + 1) + "px";
-  }
-})
 </script>
