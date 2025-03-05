@@ -17,7 +17,7 @@
       </div>
     </section>
     <section class="f1">
-      <Scrollbar :click-update-delay="300">
+      <Scrollbar>
         <div class="the-layout-sidebar-content padding-full">
           <Menu :mergeOnlyOneChild="1" />
         </div>
