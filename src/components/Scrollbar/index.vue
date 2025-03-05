@@ -1,7 +1,9 @@
 <template>
   <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
     <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
-      <slot></slot>
+      <div ref="view">
+        <slot></slot>
+      </div>
     </div>
     <transition name="fade">
       <button class="the-scrollbar-thumb" ref="thumbY" title="滚动条-摁住拖拽Y轴" :style="thumbStyle.y" v-show="showThumb"></button>
@@ -44,14 +46,6 @@ const props = defineProps({
   thumbSize: {
     type: Number,
     default: 8
-  },
-  /**
-   * 内部有点击事件时，延时更新滚动条的时间，0为不执行，单位毫秒
-   * - 使用场景：内部有子节点尺寸变动撑开包裹器的滚动尺寸时，并且带有动画的情况，这时设置的延迟就为动画持续时间
-   */
-  clickUpdateDelay: {
-    type: Number,
-    default: 0
   },
 });
 
@@ -150,8 +144,6 @@ let isDrag = false;
 let vertical = false;
 /** 摁下滚动条时的偏移量 */
 let deviation = 0;
-/** 更新延时器 */
-let timer: number;
 
 function onDragStart(event: MouseEvent) {
   // console.log("摁下 >>", event);
@@ -190,20 +182,13 @@ function onDragMove(event: MouseEvent) {
 function onDragEnd(event: MouseEvent) {
   // console.log("抬起");
   isDrag = false;
-  if (el.value!.contains(event.target as HTMLElement)) {
-    if (props.clickUpdateDelay > 0) {
-      // console.log("执行");
-      timer && clearTimeout(timer);
-      timer = setTimeout(updateThumbStyle, props.clickUpdateDelay);
-    }
-  } else {
+  if (!el.value!.contains(event.target as HTMLElement)) {
     showThumb.value = false;
   }
 }
 
 function onEnter() {
   showThumb.value = true;
-  updateThumbStyle();
 }
 
 function onLeave() {
@@ -212,23 +197,31 @@ function onLeave() {
   }
 }
 
+let observer: ResizeObserver;
+
+const view = ref<HTMLElement>();
+
 onMounted(function () {
   // console.log("onMounted >>", el.value!.clientHeight);
   // console.log("scrollbarSize >>", scrollbarSize);
   updateWrapStyle();
   initThumbStyle();
-  wrap.value && wrap.value.addEventListener("scroll", updateThumbStyle);
   document.addEventListener("mousedown", onDragStart);
   document.addEventListener("mousemove", onDragMove);
   document.addEventListener("mouseup", onDragEnd);
+  wrap.value && wrap.value.addEventListener("scroll", updateThumbStyle);
+  observer = new ResizeObserver(function() {
+    updateThumbStyle();
+  });
+  view.value && observer.observe(view.value);
 });
 
 onUnmounted(function () {
-  wrap.value && wrap.value.removeEventListener("scroll", updateThumbStyle);
   document.removeEventListener("mousedown", onDragStart);
   document.removeEventListener("mousemove", onDragMove);
   document.removeEventListener("mouseup", onDragEnd);
-  timer && clearTimeout(timer);
+  wrap.value && wrap.value.removeEventListener("scroll", updateThumbStyle);
+  observer.disconnect();
 });
 
 defineExpose({
