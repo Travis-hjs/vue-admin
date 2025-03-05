@@ -21,7 +21,7 @@ export default class ModuleLayout {
     }
 
     watch(
-      () => this.info, 
+      this.info, 
       () => {
         sessionStorage.setItem(cacheName, JSON.stringify(this.info));
       }

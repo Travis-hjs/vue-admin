@@ -189,6 +189,7 @@ function onDragEnd(event: MouseEvent) {
 
 function onEnter() {
   showThumb.value = true;
+  updateThumbStyle();
 }
 
 function onLeave() {
