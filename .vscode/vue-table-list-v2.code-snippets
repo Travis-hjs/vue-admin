@@ -1,10 +1,10 @@
 {
-  "vue-3 自定义表格列表页面模板-v2版本": {
+  "自定义表格列表页面模板-v2版本": {
     "scope": "vue",
-    "prefix": "vue3-table-list-v2",
+    "prefix": "el-table-list-v2",
     "body": [
       "<template>",
-      "  <div>",
+      "  <div class=\"the-common-table-page\">",
       "    <SearchHeader",
       "      :search-info=\"state.searchInfo\"",
       "      :list=\"state.searchFields\"",
@@ -13,6 +13,7 @@
       "    />",
       "",
       "    <base-table",
+      "      class=\"f1\"",
       "      :columns=\"tableColumns\"",
       "      :data=\"state.data\"",
       "      :actions=\"tableActions\"",
@@ -20,7 +21,6 @@
       "    ></base-table>",
       "",
       "    <base-pagination :disabled=\"state.loading\" :page-info=\"state.pageInfo\" @change=\"getTableData\" />",
-      "",
       "  </div>",
       "</template>",
       "<script lang=\"ts\" setup>",
@@ -95,6 +95,6 @@
       "</script>",
       "",
     ],
-    "description": "vue-3 自定义表格列表页面模板-v2版本"
+    "description": "自定义表格列表页面模板-v2版本"
   }
 }

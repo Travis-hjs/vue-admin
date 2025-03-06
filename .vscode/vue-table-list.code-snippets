@@ -1,10 +1,10 @@
 {
-  "vue-3 自定义表格列表页面模板": {
+  "自定义表格列表页面模板": {
     "scope": "vue",
-    "prefix": "vue3-table-list",
+    "prefix": "el-table-list",
     "body": [
       "<template>",
-      "  <div class=\"$name\">",
+      "  <div class=\"the-common-table-page\">",
       "    <FilterWrap>",
       "      <FilterItem label=\"查询名称\">",
       "        <el-input v-model=\"state.searchInfo.keyword\" clearable placeholder=\"请输入查询关键字\" />",
@@ -15,6 +15,7 @@
       "    </FilterWrap>",
       "",
       "    <base-table",
+      "      class=\"f1\"",
       "      :columns=\"tableColumns\"",
       "      :data=\"state.data\"",
       "      :actions=\"tableActions\"",
@@ -22,7 +23,6 @@
       "    ></base-table>",
       "",
       "    <base-pagination :disabled=\"state.loading\" :page-info=\"state.pageInfo\" @change=\"getTableData\" />",
-      "",
       "  </div>",
       "</template>",
       "<script lang=\"ts\" setup>",
@@ -79,13 +79,8 @@
       "",
       "// onSearch();",
       "</script>",
-      "<style lang=\"scss\">",
-      ".$name {",
-      "  width: 100%;",
-      "}",
-      "</style>",
       "",
     ],
-    "description": "vue-3 自定义表格列表页面模板"
+    "description": "自定义表格列表页面模板"
   }
 }

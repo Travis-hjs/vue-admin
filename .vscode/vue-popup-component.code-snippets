@@ -1,7 +1,7 @@
 {
-  "vue-3 自定义弹框组件模板": {
+  "自定义弹框组件模板": {
     "scope": "vue",
-    "prefix": "vue3-popup-component",
+    "prefix": "el-popup-component",
     "body": [
       "<template>",
       "  <base-dialog",
@@ -101,6 +101,6 @@
       "<style lang=\"scss\"></style>",
       "",
     ],
-    "description": "vue-3 自定义弹框组件模板"
+    "description": "自定义弹框组件模板"
   }
 }
