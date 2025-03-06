@@ -15,6 +15,17 @@ export function useZIndex() {
   return val;
 }
 
+let countId = 0;
+
+/**
+ * 每调用一次就自动累加的`id`
+ * - 用于唯一值
+ */
+export function getCountId() {
+  countId++;
+  return `${Math.random().toString(36).slice(2)}-${Date.now()}-${countId}`;
+}
+
 /**
  * 页码数据
  * @param size 条数（默认10条）
