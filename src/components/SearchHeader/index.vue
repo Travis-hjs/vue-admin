@@ -1,6 +1,10 @@
 <template>
   <FilterWrap :label-width="props.labelWidth">
-    <TheFields type="search" :data="props.searchInfo" :list="props.list" />
+    <TheFields type="search" :data="props.searchInfo" :list="props.list">
+      <template v-for="slot in slotList" :key="slot" #[slot]="field">
+        <slot :name="slot" v-bind="field"></slot>
+      </template>
+    </TheFields>
     <template #right>
       <SearchBtn :loading="props.loading" @search="onSearch" />
     </template>
@@ -16,7 +20,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import { type PropType } from "vue";
+import { computed, type PropType } from "vue";
 import { type TheField, TheFields } from "../TheFields";
 import { FilterWrap, SearchBtn } from "../FilterBox";
 
@@ -39,6 +43,8 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: "search", reset: boolean): void;
 }>();
+
+const slotList = computed(() => props.list.filter(item => item.type === "slot").map(item => item.slotName));
 
 function onSearch(reset: boolean) {
   emit("search", reset);
