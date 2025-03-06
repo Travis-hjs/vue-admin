@@ -1,10 +1,10 @@
 <template>
-  <div class="base-table" v-loading="loading">
+  <div class="base-table" :id="adaptive.id" v-loading="loading">
     <el-table
       ref="the-table"
       stripe
       border
-      :max-height="props.maxHeight"
+      :max-height="props.maxHeight || adaptive.height"
       :data="props.data"
       @row-click="rowClick"
       @selection-change="onSelect"
@@ -64,9 +64,10 @@ export default {
 }
 </script>
 <script lang="ts" generic="T extends BaseObj<any>" setup>
-import { type PropType, ref, onBeforeUpdate, computed } from "vue";
+import { type PropType, ref, computed, onUpdated } from "vue";
 import { ElTable, type Column } from "element-plus";
 import { filterRepeat, isType } from "@/utils";
+import { useAdaptiveTable } from "./index";
 
 interface SlotType {
   /** 表格行数据 */
@@ -139,8 +140,11 @@ const emit = defineEmits<{
 
 const theTable = ref<InstanceType<typeof ElTable>>();
 
-onBeforeUpdate(function() {
+const { adaptive, update } = useAdaptiveTable();
+
+onUpdated(function() {
   theTable.value?.doLayout();
+  update();
 });
 
 function rowClick(row: any, col: any, e: Event) {

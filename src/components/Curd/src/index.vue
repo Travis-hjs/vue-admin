@@ -1,11 +1,11 @@
 <template>
   <div class="the-curd-main-page">
-    <section :class="[state.editor.show ? 'f1' : 'w-full']">
+    <section :class="[state.editor.show ? 'f1' : 'the-curd-content']">
       <Search v-if="showSearch" :data="props.data.search" @search="onSearch" />
       <TableModel v-if="state.editor.type === 'table'" :config="tableConfig" @action="onEditChange" />
-      <template v-else-if="state.editor.type === 'search'">
+      <div v-else-if="state.editor.type === 'search'">
         <EditBtn @action="onEditChange" />
-      </template>
+      </div>
       <template v-else>
         <template v-if="tableConfig.columns.length > 0">
           <TableOperation
@@ -20,6 +20,7 @@
             </template>
           </TableOperation>
           <base-table
+            class="f1"
             v-model:select-list="tableState.selectList"
             :data="tableState.data"
             :columns="tableColumns"

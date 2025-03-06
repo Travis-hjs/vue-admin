@@ -86,7 +86,7 @@
             <i class="el-icon-delete" />
           </el-button>
         </div>
-        <div class="fake-table-cell">
+        <div class="fake-table-cell disabled">
           <base-table-actions
             v-if="props.config.actions.length"
             :row="{}"

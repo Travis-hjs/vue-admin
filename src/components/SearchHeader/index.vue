@@ -44,7 +44,7 @@ const emit = defineEmits<{
   (event: "search", reset: boolean): void;
 }>();
 
-const slotList = computed(() => props.list.filter(item => item.type === "slot").map(item => item.slotName));
+const slotList = computed(() => props.list.filter(item => item.type === "slot").map((item: any) => item.slotName));
 
 function onSearch(reset: boolean) {
   emit("search", reset);
