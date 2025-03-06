@@ -151,6 +151,12 @@ export const dynamicRouters: Array<RouteItem> = [
         name: "example-curd-config",
         meta: { title: "curd 低代码配置" },
         component: () => import("../views/example/curd-config.vue")
+      },
+      {
+        path: "/example/table-page",
+        name: "example-table-page",
+        meta: { title: "通用表格页" },
+        component: () => import("../views/example/table-page.vue")
       }
     ]
   },
