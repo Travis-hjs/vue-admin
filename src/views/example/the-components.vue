@@ -83,7 +83,10 @@
         <base-dialog title="第三个 dialog" v-model:show="dialogInfo.third.show" append-to-body>
           <div>
             <p class="mgb-10">出现次数：{{ dialogInfo.third.count }}</p>
-            <ul class="dialog-list">
+            <div>
+              <button class="the-btn blue" @click="list.splice(0, 1)">移除第一项</button>
+            </div>
+            <ul class="dialog-list mgt-10">
               <li class="dialog-item f-vertical" v-for="(item) in list" :key="item">{{ item }}</li>
             </ul>
           </div>

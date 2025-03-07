@@ -16,7 +16,9 @@
                 <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>
               </div>
               <div class="base-dialog-body">
-                <slot></slot>
+                <Scrollbar maxHeight="76vh">
+                  <slot></slot>
+                </Scrollbar>
               </div>
               <div class="base-dialog-footer" v-if="$slots.footer">
                 <slot name="footer"></slot>
@@ -37,6 +39,7 @@ export default {
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useZIndex } from "@/hooks/common";
+import { Scrollbar } from "../Scrollbar";
 
 const props = defineProps({
   title: {
@@ -174,7 +177,7 @@ onUnmounted(function () {
   background-color: #fff;
   overflow: hidden;
   flex-direction: column;
-  max-height: 90vh;
+  // max-height: 90vh;
 }
 
 .dialog-move-enter-active, .dialog-move-leave-active {
@@ -213,7 +216,7 @@ onUnmounted(function () {
 .base-dialog-body {
   padding: 12px 15px;
   min-height: 0px;
-  overflow: auto;
+  // overflow: auto;
 }
 
 .base-dialog-footer {
