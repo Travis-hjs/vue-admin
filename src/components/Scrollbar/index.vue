@@ -1,31 +1,36 @@
 <template>
   <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
-    <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
+    <div
+      ref="wrap"
+      class="the-scrollbar-wrap"
+      :style="{ 'max-height': maxHeight, 'max-width': maxWidth }"
+      @scroll="updateThumbStyle()"
+    >
       <div ref="view">
         <slot></slot>
       </div>
     </div>
     <transition name="fade">
-      <button class="the-scrollbar-thumb" ref="thumbY" title="滚动条-摁住拖拽Y轴" :style="thumbStyle.y" v-show="showThumb"></button>
+      <button
+        class="the-scrollbar-thumb"
+        ref="thumbY"
+        title="滚动条-摁住拖拽Y轴"
+        :style="thumbStyle.y"
+        v-show="showThumb"
+      ></button>
     </transition>
     <transition name="fade">
-      <button class="the-scrollbar-thumb" ref="thumbX" title="滚动条-摁住拖拽X轴" :style="thumbStyle.x" v-show="showThumb"></button>
+      <button
+        class="the-scrollbar-thumb"
+        ref="thumbX"
+        title="滚动条-摁住拖拽X轴"
+        :style="thumbStyle.x"
+        v-show="showThumb"
+      ></button>
     </transition>
   </div>
 </template>
 <script lang="ts">
-/** 滚动条的厚度 */
-const scrollbarSize = (function () {
-  const el = document.createElement("div");
-  el.style.width = "100px";
-  el.style.height = "100px";
-  el.style.overflow = "scroll";
-  document.body.appendChild(el);
-  const width = el.offsetWidth - el.clientWidth;
-  el.remove();
-  return width;
-})();
-
 /**
  * 滚动条组件
  */
@@ -47,6 +52,14 @@ const props = defineProps({
     type: Number,
     default: 8
   },
+  /** 超出最大高度滚动 */
+  maxHeight: {
+    type: String
+  },
+  /** 超出最大宽度滚动 */
+  maxWidth: {
+    type: String
+  }
 });
 
 /** 组件整体节点 */
@@ -57,11 +70,6 @@ const wrap = ref<HTMLElement>();
 const thumbX = ref<HTMLElement>();
 /** 滚动条节点Y */
 const thumbY = ref<HTMLElement>();
-/** 包围器节点样式 */
-const wrapStyle = reactive({
-  height: "",
-  width: ""
-});
 /** 滚动条节点样式 */
 const thumbStyle = reactive({
   x: {
@@ -95,10 +103,6 @@ const showThumb = ref(false);
 function updateWrapStyle() {
   const parent = el.value!.parentElement!;
   parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
-  const css = getComputedStyle(parent);
-  // console.log("父元素边框尺寸 >>", css.borderLeftWidth, css.borderRightWidth, css.borderTopWidth, css.borderBottomWidth);
-  wrapStyle.width = `calc(100% + ${scrollbarSize}px + ${css.borderLeftWidth} + ${css.borderRightWidth})`;
-  wrapStyle.height = `calc(100% + ${scrollbarSize}px + ${css.borderTopWidth} + ${css.borderBottomWidth})`;
 }
 
 /** 初始化滚动指示器样式 */
@@ -210,7 +214,6 @@ onMounted(function () {
   document.addEventListener("mousedown", onDragStart);
   document.addEventListener("mousemove", onDragMove);
   document.addEventListener("mouseup", onDragEnd);
-  wrap.value && wrap.value.addEventListener("scroll", updateThumbStyle);
   observer = new ResizeObserver(function() {
     updateThumbStyle();
   });
@@ -221,7 +224,6 @@ onUnmounted(function () {
   document.removeEventListener("mousedown", onDragStart);
   document.removeEventListener("mousemove", onDragMove);
   document.removeEventListener("mouseup", onDragEnd);
-  wrap.value && wrap.value.removeEventListener("scroll", updateThumbStyle);
   observer.disconnect();
 });
 
@@ -232,13 +234,22 @@ defineExpose({
 </script>
 <style lang="scss">
 .the-scrollbar {
-  width: 100%;
+  // width: 100%;
   height: 100%;
   overflow: hidden;
   position: relative;
+
   .the-scrollbar-wrap {
-    overflow: scroll;
+    // width: 100%;
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
+
   .the-scrollbar-thumb {
     position: absolute;
     z-index: 10;

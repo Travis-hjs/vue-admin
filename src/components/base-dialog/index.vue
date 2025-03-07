@@ -39,6 +39,7 @@ export default {
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useZIndex } from "@/hooks/common";
+import { Scrollbar } from "../Scrollbar";
 
 const props = defineProps({
   title: {
