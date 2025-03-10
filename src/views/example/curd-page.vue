@@ -86,6 +86,7 @@ const data = reactive<CurdType.Config>({
         ...getColumnData("num", "游戏编号"),
         width: 140,
         cellType: "js",
+        tooltip: false,
         jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;'
       },
       {

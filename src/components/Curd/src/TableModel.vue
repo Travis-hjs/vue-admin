@@ -32,11 +32,11 @@
         @dragover="onDragMove($event, columnIndex)"
         @drop="onDropEnd()"
       >
-        <div class="fake-table-head f-vertical" :data-head="column.prop">
+        <div class="fake-table-head f-vertical" :style="{ 'text-align': column.align }">
           <i class="el-icon-rank el-icon--left"></i>
           <TableHeader :column="column" />
         </div>
-        <div class="fake-table-cell operation f-vertical">
+        <div class="fake-table-cell operation f-vertical" :class="[column.align ? `f-${column.align}` : undefined]">
           <el-dropdown trigger="click">
             <el-button link type="primary">
               配置列
@@ -56,7 +56,7 @@
             </template>
           </el-dropdown>
         </div>
-        <div class="fake-table-cell f-vertical">
+        <div class="fake-table-cell f-vertical" :class="[column.align ? `f-${column.align}` : undefined]">
           <template v-if="column.cellType === 'text'">文本内容</template>
           <span v-else-if="column.cellType === 'js'" class="the-tag blue">自定义代码</span>
           <TableImage :column="column" :src="demoUrl" />

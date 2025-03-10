@@ -1,15 +1,13 @@
 <template>
   <template v-if="isText">{{ props.column.title }}</template>
-  <div v-else class="f-vertical w-full">
-    <span>{{ props.column.title }}</span>
+  <div v-else class="the-curd-table-header f-vertical w-full">
     <el-tooltip v-if="props.column.iconTips" effect="dark" :content="props.column.iconTips" placement="top">
-      <i class="el-icon--right el-icon-question the-tips-icon" />
+      <span class="the-curd-table-header-title">{{ props.column.title }}</span>
     </el-tooltip>
-    <div v-if="props.column.sort" class="f1 f-right">
-      <div>
-        <div :class="['the-sort-icon top', { 'is-select': props.column.sort === 'asc' }]" @click="onSwitch('asc')"></div>
-        <div :class="['the-sort-icon bottom', { 'is-select': props.column.sort === 'desc' }]" @click="onSwitch('desc')"></div>
-      </div>
+    <span v-else class="the-curd-table-header-title">{{ props.column.title }}</span>
+    <div v-if="props.column.sort" style="padding-left: 6px;">
+      <div :class="['the-sort-icon top', { 'is-select': props.column.sort === 'asc' }]" @click="onSwitch('asc')"></div>
+      <div :class="['the-sort-icon bottom', { 'is-select': props.column.sort === 'desc' }]" @click="onSwitch('desc')"></div>
     </div>
   </div>
 </template>
@@ -45,3 +43,13 @@ function onSwitch(type: SortType) {
   emit("sort", props.column.prop, type);
 }
 </script>
+<style lang="scss">
+.the-curd-table-header-title {
+  flex: 1;
+  line-height: 1;
+
+  &.el-tooltip__trigger {
+    cursor: help;
+  }
+}
+</style>
