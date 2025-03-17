@@ -94,12 +94,7 @@ const thumbStyle = reactive({
 
 const showThumb = ref(false);
 
-/**
- * 更新包裹容器样式
- * - ！！！注意：如果是动态设置组件父容器的边框时，需要手动执行该方法，
- * 原因是父容器的边框会影响当前设置的包围盒宽度，导致滚动条的高度有所变化，也就是跟`css`中设置
- * `box-sizing: border-box;`的原理一样
- */
+/** 更新包裹容器样式 */
 function updateWrapStyle() {
   const parent = el.value!.parentElement!;
   parent.style.overflow = "hidden"; // 这里一定要将父元素设置超出隐藏，不然弹性盒子布局时会撑开宽高
@@ -228,7 +223,6 @@ onUnmounted(function () {
 });
 
 defineExpose({
-  updateWrapStyle,
   updateThumbStyle
 });
 </script>
