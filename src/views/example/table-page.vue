@@ -34,12 +34,18 @@ type TableRow = {
 type SearchInfo = {
   keyword: string;
   status: string;
+  date: string[];
+  start: string;
+  end: string;
 };
 
 function getSearchInfo(): SearchInfo {
   return {
     keyword: "",
     status: "",
+    date: [],
+    start: "",
+    end: "",
   }
 }
 
@@ -49,6 +55,15 @@ const searchFields: Array<TheField.Type<SearchInfo>> = [
     prop: "keyword",
     type: "input",
     placeholder: "请输入查询关键字",
+  },
+  {
+    label: "日期",
+    prop: "date",
+    type: "date",
+    dateType: "daterange",
+    bind: ["start", "end"],
+    placeholder: "请选择日期",
+    class: "w-date"
   }
 ];
 
@@ -100,3 +115,8 @@ function onSearch(reset?: boolean) {
 
 onSearch();
 </script>
+<style>
+.w-date {
+  width: 380px;
+}
+</style>

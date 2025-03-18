@@ -35,28 +35,13 @@
         @blur="onBlurBetween(1)"
       />
     </template>
-    <template v-if="data.type === 'select' || data.type === 'select-multiple'">
-      <el-select-v2
-        v-if="data.options.length > 50"
-        v-model="data.value"
-        :options="data.options"
-        :props="optionSetting"
-        v-bind="getSelectProps(data)"
-        @change="onChange()"
-      >
-        <template #default="{ item }">
-          <span :title="getSelectLabel(data, item)">{{ getSelectLabel(data, item) }}</span>
-        </template>
-      </el-select-v2>
-      <el-select v-else v-model="data.value" v-bind="getSelectProps(data)" @change="onChange()">
-        <el-option
-          v-for="item in data.options"
-          :key="item[optionSetting.value]"
-          :value="item[optionSetting.value]"
-          :label="getSelectLabel(data, item)"
-        />
-      </el-select>
-    </template>
+    <SelectField
+      v-if="data.type === 'select' || data.type === 'select-multiple'"
+      :config="data"
+      :setting="optionSetting"
+      :disabled="props.disabled"
+      @change="onChange()"
+    />
     <template v-if="data.type === 'checkbox'">
       <el-checkbox-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
         <el-checkbox
@@ -107,20 +92,11 @@
       class="the-curd-field"
       @change="onChange()"
     />
-    <el-date-picker
-      v-if="data.type === 'date'"
-      v-model="(data.value as any)"
-      :placeholder="data.placeholder"
-      :type="data.dateType"
-      :format="data.formatShow"
-      :shortcuts="shortcutMap[data.dateType]"
+    <DatePicker
+      v-if="props.fieldData.type === 'date'"
+      :config="props.fieldData"
       :disabled="props.disabled"
-      :popper-class="data.id.toString()"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      class="the-curd-field"
-      @change="resetPanelBtn"
+      @change="onChange()"
     />
   </div>
 </template>
@@ -131,10 +107,11 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, onMounted, type PropType } from "vue";
-import { convertPx, fieldTitleMap, initFieldValue, shortcutMap } from "./data";
+import { computed, type PropType } from "vue";
+import { convertPx, fieldTitleMap, initFieldValue } from "./data";
 import type { CurdType } from "./types";
 import { deepClone, inputOnlyNumber, isType } from "@/utils";
+import { DatePicker, SelectField } from "./part";
 
 const props = defineProps({
   fieldData: {
@@ -243,61 +220,6 @@ function onBlurBetween(index: number) {
     }
   }
 }
-
-function getSelectProps(field: CurdType.SelectMultiple | CurdType.Select) {
-  const isMultiple = field.type === "select-multiple";
-  return {
-    placeholder: field.placeholder,
-    disabled: props.disabled,
-    multiple: field.type === "select-multiple",
-    clearable: true,
-    filterable: true,
-    collapseTags: true,
-    class: `field-item${isMultiple ? " is-multiple-select" : ""}`
-  }
-}
-
-function getSelectLabel(field: CurdType.SelectMultiple | CurdType.Select, option: BaseObj<string | number>) {
-  const setting = optionSetting.value;
-  if (field.joinShow) {
-    return `${option[setting.label]}-${option[setting.value]}`;
-  }
-  return `${option[setting.label]}`;
-}
-// --------------------------------- 处理日期组件的快捷栏交互细节 ---------------------------------
-/** 日期侧边栏按钮列表 */
-let shortcutBtnList: Array<HTMLElement> = [];
-
-const className = "the-date-shortcut-selected";
-
-function resetPanelBtn() {
-  const selected = document.querySelector(`.${className}`);
-  selected && selected.classList.remove(className);
-  onChange();
-}
-
-function selectPanelBtn(el: HTMLElement) {
-  // resetPanelBtn(); // TODO: 因为日期组件的 change 事件会先触发，所以这里不需要再执行多一次了
-  el.classList.add(className);
-}
-
-onMounted(function () {
-  const field = props.fieldData;
-  if (field.type === "date") {
-    const className = `.${field.id} .el-picker-panel__sidebar`;
-    const panel = document.querySelector(className);
-    if (!panel) return console.warn("找不到日期快捷面板节点！");
-    shortcutBtnList = Array.from(panel.children) as Array<HTMLElement>;
-    shortcutBtnList.forEach(btn => {
-      btn.addEventListener("click", () => selectPanelBtn(btn));
-    });
-    const index = field.shortcutIndex;
-    if (isType(index, "number") && index >= 0) {
-      selectPanelBtn(shortcutBtnList[index]);
-    }
-  }
-});
-
 </script>
 <style lang="scss">
 .the-curd-form-field {

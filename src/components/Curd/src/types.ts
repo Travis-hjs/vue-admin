@@ -111,7 +111,7 @@ export namespace CurdType {
      * 日期选择类型
      * - [参考](https://element-plus.org/zh-CN/component/datetime-picker.html#attributes)
      */
-    dateType: "year" | "month" | "week" | "date" | "datetime" | "datetimerange" | "daterange";
+    dateType: "year" | "month" | "week" | "date" | "datetime" | "datetimerange" | "daterange" | "monthrange";
     /**
      * 组件展示格式化规则
      * - [参考](https://day.js.org/docs/zh-CN/display/format)

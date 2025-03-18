@@ -64,7 +64,7 @@ export function initFieldValue(field: CurdType.Field) {
       }
     } else {
       // 没有快捷日期则重置
-      field.value = ["daterange", "datetimerange"].includes(field.dateType) ? [] : "";
+      field.value = dataArrayTypes.includes(field.dateType) ? [] : "";
     }
   } else {
     if (["object", "array"].includes(checkType(field.defaultValue))) {
@@ -366,6 +366,10 @@ interface DateTypeOption extends Pick<CurdType.Date, "format" | "formatShow"> {
   value: DateType;
 }
 
+/** 数组日期组件 */
+export const dataArrayTypes = ["daterange", "datetimerange", "monthrange"];
+
+/** 日期配置选项 */
 export const dateTypeOptions: Array<DateTypeOption> = [
   {
     label: "选择年份",
@@ -404,7 +408,13 @@ export const dateTypeOptions: Array<DateTypeOption> = [
     format: "Y-M-D"
   },
   {
-    label: "选择日期-时间范围",
+    label: "选择月份范围",
+    value: "monthrange",
+    formatShow: "YYYY-MM",
+    format: "Y-M"
+  },
+  {
+    label: "选择日期+时间范围",
     value: "datetimerange",
     formatShow: "YYYY-MM-DD HH:mm:ss",
     format: "Y-M-D h:m:s"
@@ -538,7 +548,29 @@ export const shortcutMap: Record<DateType, Array<Shortcut>> = {
   date: commonShortcuts,
   datetime: commonShortcuts,
   daterange: commonRangeShortcuts,
-  datetimerange: commonRangeShortcuts
+  datetimerange: commonRangeShortcuts,
+  monthrange: [
+    {
+      text: "本月",
+      value: () => [new Date(), new Date()]
+    },
+    {
+      text: "本年",
+      value() {
+        const end = new Date();
+        const start = new Date(new Date().getFullYear(), 0);
+        return [start, end];
+      }
+    },
+    {
+      text: "过去3个月",
+      value: () => [new Date(), getLastMonth(3)]
+    },
+    {
+      text: "过去6个月",
+      value: () => [new Date(), getLastMonth(6)]
+    }
+  ]
 }
 
 /**

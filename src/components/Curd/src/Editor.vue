@@ -113,7 +113,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
-import { fieldTitleMap, getFieldData, useProvideState, dateTypeOptions, shortcutMap, getBoldLabel } from "./data";
+import { fieldTitleMap, getFieldData, useProvideState, dateTypeOptions, shortcutMap, getBoldLabel, dataArrayTypes } from "./data";
 import Example from "./Example.vue";
 import Field from "./Field.vue";
 import type { FormInstance } from "element-plus";
@@ -152,8 +152,6 @@ const stringAndNumber = ["input", "textarea", "select", "radio"];
 const arrayFields = ["input-between", "select-multiple", "checkbox", "cascader"];
 /** 允许为数字类型的组件 */
 const allowNumberFields = ["input", "select", "radio"];
-/** 数组日期组件 */
-const arrayDateFields = ["daterange", "datetimerange"];
 /** 需要校验为数字类型的组件 */
 const checkNumberFields = allowNumberFields.concat(arrayFields);
 
@@ -522,7 +520,7 @@ function checkDefaultValue() {
     }
     if (type === "date") {
       const field = state.formData as CurdType.Date;
-      if (arrayDateFields.includes(field.dateType)) {
+      if (dataArrayTypes.includes(field.dateType)) {
         if (!isType(obj.value, "array")) return "范围日期绑定值应该为 array 类型";
       }
       else {
@@ -590,7 +588,7 @@ function onDateType(type: CurdType.Date["dateType"]) {
   const item = dateTypeOptions.find(item => item.value === type)!;
   const dateField = state.formData as CurdType.Date;
   dateField.shortcutIndex = "";
-  if (arrayDateFields.includes(item.value)) {
+  if (dataArrayTypes.includes(item.value)) {
     dateField.value = [];
     dateField.valueType = "array";
   } else {
