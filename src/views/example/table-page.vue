@@ -4,7 +4,7 @@
       :search-info="state.searchInfo"
       :list="state.searchFields"
       :loading="state.loading"
-      @search="onSearch()"
+      @search="onSearch"
     />
 
     <base-table
@@ -39,14 +39,8 @@ type SearchInfo = {
   end: string;
 };
 
-function getSearchInfo(): SearchInfo {
-  return {
-    keyword: "",
-    status: "",
-    date: [],
-    start: "",
-    end: "",
-  }
+function getSearchInfo(): Partial<SearchInfo> {
+  return {}
 }
 
 const searchFields: Array<TheField.Type<SearchInfo>> = [
@@ -57,13 +51,13 @@ const searchFields: Array<TheField.Type<SearchInfo>> = [
     placeholder: "请输入查询关键字",
   },
   {
-    label: "日期",
+    label: "日期范围",
     prop: "date",
     type: "date",
-    dateType: "daterange",
+    dateType: "datetimerange",
     bind: ["start", "end"],
     placeholder: "请选择日期",
-    class: "w-date"
+    class: "date-input"
   }
 ];
 
@@ -116,7 +110,7 @@ function onSearch(reset?: boolean) {
 onSearch();
 </script>
 <style>
-.w-date {
+.the-common-table-page .date-input {
   width: 380px;
 }
 </style>
