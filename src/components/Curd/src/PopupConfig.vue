@@ -32,8 +32,11 @@
           </div>
         </section>
         <footer class="the-curd-popup-footer">
+          <el-button type="success" plain @click="onCopyJson()">
+            <i class="el-icon--left el-icon-document-copy"></i>
+            复制JSON
+          </el-button>
           <el-button :disabled="disabledSave" @click="onClose()">关闭</el-button>
-          <el-button type="success" plain @click="onCopyJson()">复制JSON</el-button>
           <el-button
             type="primary"
             :loading="state.loading"
