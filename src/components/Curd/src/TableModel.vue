@@ -1,13 +1,13 @@
 <template>
   <TableOperation
-    v-if="!tableForm.show"
+    v-if="!curdConfigState.editor.showForm"
     :editMode="true"
     :config="props.config"
     @action="onOption"
   />
   <div class="the-curd-table-model the-curd-scrollbar">
     <TableForm
-      v-if="tableForm.show"
+      v-if="curdConfigState.editor.showForm"
       :config="tableForm.form!"
       :type="tableForm.type"
       :editMode="true"
@@ -114,7 +114,7 @@
       </div>
     </transition-group>
   </div>
-  <div v-if="!tableForm.show && hasNotWidth">
+  <div v-if="!curdConfigState.editor.showForm && hasNotWidth">
     <el-button type="primary" @click="onSetWidth()">一键设置最小宽度</el-button>
     <span class="the-tag blue mgl-10">
       <i class="el-icon--left el-icon-info"></i>
@@ -161,6 +161,7 @@ import TableColumnConfig from "./TableColumnConfig.vue";
 import TableDeleteConfig from "./TableDeleteConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
+import { curdConfigState } from "./hooks";
 
 const props = defineProps({
   config: {
@@ -371,7 +372,6 @@ function onConfigAction(list: typeof props.config.actions, width?: number) {
 }
 
 const tableForm = reactive({
-  show: false,
   form: null as (CurdType.Table.From | null),
   type: "add" as "add" | "edit"
 });
@@ -384,7 +384,7 @@ function openTableForm(type: typeof tableForm.type) {
   if (type === "edit" && props.config.formEdit) {
     tableForm.form = props.config.formEdit;
   }
-  tableForm.show = true;
+  curdConfigState.editor.showForm = true;
 }
 
 /**
@@ -429,7 +429,7 @@ function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
       handleEditAction();
     }
   }
-  tableForm.show = false;
+  curdConfigState.editor.showForm = false;
   tableForm.form = null;
 }
 

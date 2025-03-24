@@ -347,6 +347,8 @@ export namespace CurdConfig {
   export interface Editor {
     /** 是否显示编辑器 */
     show: boolean;
+    /** 是否显示表单编辑 */
+    showForm: boolean;
     /** 编辑操作类型 */
     action: "add" | "edit";
     /** 编辑的索引 */

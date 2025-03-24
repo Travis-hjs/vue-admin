@@ -619,6 +619,7 @@ export function getCurdConfigDefault(): CurdType.Config {
 export function getCurdConfigEditor(): CurdConfig.Editor {
   return {
     show: false,
+    showForm: false,
     form: undefined,
     action: "add",
     index: -1

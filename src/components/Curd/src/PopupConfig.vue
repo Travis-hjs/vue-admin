@@ -77,9 +77,7 @@ const state = reactive({
   loading: false,
 });
 
-const disabledSave = computed(() => { 
-  return curdConfigState.editor.show;
-});
+const disabledSave = computed(() => curdConfigState.editor.show || curdConfigState.editor.showForm);
 
 function onClose() {
   curdConfigState.show = false;
