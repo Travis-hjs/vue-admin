@@ -20,11 +20,9 @@ export default {
 import { computed, type PropType } from "vue";
 import Field from "./Field.vue";
 import { fieldTitleMap, getFieldData } from "./data";
-import type { CurdType } from "./types";
+import type { CurdConfig, CurdType } from "./types";
 
 type FieldType = CurdType.Field["type"];
-
-type EditorType = CurdType.Editor["type"];
 
 const props = defineProps({
   /** 选中的类型 */
@@ -33,7 +31,7 @@ const props = defineProps({
   },
   /** 当前编辑的类型 */
   type: {
-    type: String as PropType<EditorType>
+    type: String as PropType<CurdConfig.Type>
   }
 });
 

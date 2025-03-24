@@ -1,25 +1,12 @@
 <template>
-  <Curd :data="data" :action="action" />
+  <Curd v-model:data="data" :action="action" />
 </template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
-import { Curd, type CurdType } from "@/components/Curd";
-import { reactive } from "vue";
+import { Curd, getCurdConfigDefault, type CurdType } from "@/components/Curd";
+import { ref } from "vue";
 
-const data = reactive<CurdType.Config>({
-  search: {
-    labelRight: false,
-    labelWidth: undefined,
-    list: [],
-  },
-  table: {
-    columns: [],
-    actions: [],
-    selectKey: undefined,
-    formAdd: undefined,
-    formEdit: undefined
-  }
-});
+const data = ref(getCurdConfigDefault());
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {

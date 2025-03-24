@@ -205,7 +205,8 @@ const itemList: Array<TheField.Type<CurdType.Table.Column>> = [
         label: "靠右对齐",
         value: "right"
       }
-    ]
+    ],
+    placeholder: "请选择"
   },
   {
     label: "表头提示文字",

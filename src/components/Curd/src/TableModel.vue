@@ -32,7 +32,7 @@
         @dragover="onDragMove($event, columnIndex)"
         @drop="onDropEnd()"
       >
-        <div class="fake-table-head f-vertical" :style="{ 'text-align': column.align }">
+        <div class="fake-table-head f-vertical" :style="{ 'text-align': column.align }" :data-head="column.prop">
           <i class="el-icon-rank el-icon--left"></i>
           <TableHeader :column="column" />
         </div>
@@ -114,11 +114,11 @@
       </div>
     </transition-group>
   </div>
-  <div v-if="!tableForm.show">
-    <EditBtn :type="tableForm.type" @action="onEdit" />
-    <span v-if="hasNotWidth" class="the-tag blue mgl-10">
+  <div v-if="!tableForm.show && hasNotWidth">
+    <el-button type="primary" @click="onSetWidth()">一键设置最小宽度</el-button>
+    <span class="the-tag blue mgl-10">
       <i class="el-icon--left el-icon-info"></i>
-      当前表格列配置中存在没配置【宽度/最小宽度】，保存时将自动设置最小宽度，提高表格美观性。
+      当前表格列配置中存在没配置【宽度/最小宽度】，建议一件设置最小宽度，提高表格美观性。
     </span>
   </div>
   <TableColumnConfig
@@ -152,8 +152,8 @@ import { computed, type PropType, reactive } from "vue";
 import { actionEditKey, columnActionProp, getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
-import type { CurdType, EditBtnType, TableOperationType } from "./types";
-import { EditBtn, TableImage } from "./part";
+import type { CurdType, TableOperationType } from "./types";
+import { TableImage } from "./part";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import TableHeader from "./TableHeader.vue";
@@ -168,10 +168,6 @@ const props = defineProps({
     required: true
   }
 });
-
-const emit = defineEmits<{
-  (event: "action", type: EditBtnType): void;
-}>();
 
 const demoUrl = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
 
@@ -247,7 +243,7 @@ function openConfigCol(type: typeof configCol.type, index?: number) {
     },
     copy() {
       const form = props.config.columns[index!];
-      // configCol.index = index!;
+      configCol.index = index!;
       configCol.form = form;
     }
   }
@@ -260,7 +256,11 @@ function onColSubmit(form: CurdType.Table.Column) {
   const config = props.config;
   if (["add", "copy"].includes(configCol.type)) {
     const drag = deepClone(columnInfo.value.drag);
-    drag.push(form);
+    if (configCol.type === "add") {
+      drag.push(form);
+    } else {
+      drag.splice(configCol.index + 1, 0, form);
+    }
     config.columns = drag.concat(columnInfo.value.action);
   } else {
     config.columns[configCol.index] = form;
@@ -452,23 +452,19 @@ function onOption(type: TableOperationType) {
 /** 是否有未设置宽度或最小宽度的列 */
 const hasNotWidth = computed(() => columnInfo.value.drag.some(col => !col.width && !col.minWidth));
 
-function onEdit(type: EditBtnType) {
-  // 自动设置最小宽度
-  if (type === "complete" && hasNotWidth.value) {
-    const heads: Array<HTMLElement> = Array.from(document.querySelectorAll(".fake-table-head"));
-    const domInfo: BaseObj<number> = {};
-    heads.forEach(el => {
-      const key = el.dataset.head || "";
-      if (key) {
-        domInfo[key] = Math.round(el.clientWidth);
-      }
-    });
-    props.config.columns.forEach(col => {
-      if (Object.prototype.hasOwnProperty.call(domInfo, col.prop)) {
-        col.minWidth = domInfo[col.prop];
-      }
-    });
-  }
-  emit("action", type);
+function onSetWidth() {
+  const heads: Array<HTMLElement> = Array.from(document.querySelectorAll(".fake-table-head"));
+  const domInfo: BaseObj<number> = {};
+  heads.forEach(el => {
+    const key = el.dataset.head || "";
+    if (key) {
+      domInfo[key] = Math.round(el.clientWidth);
+    }
+  });  
+  props.config.columns.forEach(col => {
+    if (Object.prototype.hasOwnProperty.call(domInfo, col.prop)) {
+      col.minWidth = domInfo[col.prop];
+    }
+  });
 }
 </script>

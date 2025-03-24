@@ -1,12 +1,7 @@
 import { inject, nextTick, onUnmounted } from "vue";
-import type { CurdType } from "./types";
+import type { CurdConfig, CurdType } from "./types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 // ----------------------- 数据相关 -----------------------
-
-export const provideKey = "the-curd-state";
-
-/** 父组件注入的对象 */
-export const useProvideState = () => inject(provideKey) as CurdType.State;
 
 /** 表格列操作栏的标记 */
 export const columnActionProp = "action-right";
@@ -600,4 +595,32 @@ export function exportPropToWindow<T extends object>(target: T) {
  */
 export function getBoldLabel(content: string) {
   return `<b style="color: var(--yellow)"> ${content} </b>`;
+}
+
+/** `curd`默认配置 */
+export function getCurdConfigDefault(): CurdType.Config {
+  return {
+    search: {
+      labelRight: false,
+      labelWidth: undefined,
+      list: [],
+    },
+    table: {
+      columns: [],
+      actions: [],
+      selectKey: undefined,
+      formAdd: undefined,
+      formEdit: undefined
+    }
+  }
+}
+
+/** 配置编辑器默认状态 */
+export function getCurdConfigEditor(): CurdConfig.Editor {
+  return {
+    show: false,
+    form: undefined,
+    action: "add",
+    index: -1
+  }
 }

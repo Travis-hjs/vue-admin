@@ -1,24 +1,58 @@
-.the-curd-main-page {
-  display: flex;
-  width: 100%;
+@import "@/styles/mixins.scss";
+
+.the-curd-popup-config {
+  --gap: 14px;
+  --border: solid 1px #eee;
   --border-color: #dcdfe6;
+
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
 
   .w-full {
     width: 100%;
   }
-
-  .the-curd-content {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    // min-height: 100%;
-    min-height: var(--layout-content-height);
+  
+  .h-full {
+    height: 100%;
   }
 
-  .the-table-image {
-    width: 80px;
-    height: 80px;
-    cursor: pointer;
+  .the-curd-popup-top {
+    min-height: 50px;
+    padding: 12px var(--gap);
+    border-bottom: var(--border);
+
+    .the-curd-popup-close {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      transform: rotate(0);
+      transition: var(--transition);
+      @include closeIcon(#666, 16px);
+  
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .the-curd-popup-footer {
+    text-align: right;
+    border-top: var(--border);
+    padding: 12px var(--gap);
+  }
+
+  .the-curd-popup-content {
+    padding: var(--gap);
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
   }
 
   .the-curd-edit-mask {
@@ -61,7 +95,7 @@
 
     &.is-show {
       border-left: solid var(--border-color) 1px;
-      padding-left: var(--page-padding);
+      padding-left: var(--gap);
       padding-right: 2px;
     }
 
@@ -80,10 +114,10 @@
     &::after {
       position: absolute;
       content: "组件预览区域";
-      font-size: var(--page-padding);
+      font-size: var(--gap);
       background-color: #fff;
       color: var(--purple);
-      padding: 0px var(--page-padding);
+      padding: 0px var(--gap);
       left: 24px;
       top: -10px;
       animation: curd-target-text-move 3s 3;
@@ -101,7 +135,7 @@
       position: relative;
       width: 100%;
       min-height: 60px;
-      padding: 8px var(--page-padding);
+      padding: 8px var(--gap);
       border-top: dashed 1px var(--border-color);
       cursor: pointer;
 
@@ -148,7 +182,7 @@
 
     .fake-table-head,
     .fake-table-cell {
-      padding: var(--page-padding);
+      padding: var(--gap);
       font-size: 14px;
       line-height: 1;
       color: var(--el-text-color-regular);
@@ -187,7 +221,7 @@
 
     .is-edit-form {
       box-sizing: content-box;
-      padding-right: var(--page-padding);
+      padding-right: var(--gap);
       border-right: var(--border);
       border-right-style: dashed;
 
@@ -202,18 +236,6 @@
       .el-form-item {
         position: relative;
       }
-    }
-  }
-
-  .the-curd-entrance {
-    position: fixed;
-    bottom: var(--page-padding);
-    right: 0;
-    z-index: 10;
-    padding: 5px 0;
-
-    &:hover {
-      padding: 5px 11px;
     }
   }
 
@@ -268,6 +290,38 @@
   }
 }
 
+.the-filter-mask {
+  position: relative;
+  &::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 5;
+    left: 0;
+    top: 0;
+  }
+
+  &::after {
+    position: absolute;
+    content: attr(data-tips);
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color: var(--blue);
+  }
+}
+
+.the-table-image {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+}
+
 .the-curd-scrollbar {
   &::-webkit-scrollbar {
     width: 6px;
@@ -281,36 +335,17 @@
   }
 }
 
-.the-curd-entrance-item {
-  border-radius: var(--border-radius);
-  border: dashed 1px #dcdfe6;
-  padding: 14px 20px;
-  transition: var(--transition);
-  font-size: 14px;
-  color: var(--el-text-color-regular);
-
-  &:hover {
-    border-color: var(--blue);
-    color: var(--blue);
-    cursor: pointer;
-  }
-}
-
-.the-curd-entrance-item+.the-curd-entrance-item {
-  margin-top: 16px;
-}
-
 .the-curd-option-list {
-  padding-left: var(--page-padding);
-  margin-left: var(--page-padding);
+  padding-left: var(--gap);
+  margin-left: var(--gap);
   border-left: 1px solid #ebeef5;
 }
 
 .the-curd-option-item {
   position: relative;
   height: 38px;
-  padding: 0 var(--page-padding);
-  margin-bottom: var(--page-padding);
+  padding: 0 var(--gap);
+  margin-bottom: var(--gap);
   font-size: var(--el-font-size-base);
   line-height: 34px;
   color: var(--el-text-color-regular);
@@ -355,47 +390,6 @@
   position: absolute;
 }
 
-.the-thumbnail-search {
-  border: #dcdfe6 solid 2px;
-  padding: 10px;
-  border-radius: var(--border-radius);
-  --item-height: 30px;
-
-  .the-thumbnail-search-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--page-padding);
-    .the-thumbnail-search-item {
-      background-color: #edeef1;
-      width: 168px;
-      height: var(--item-height);
-      border-radius: var(--border-radius);
-    }
-  }
-  .the-thumbnail-search-btn {
-    background-color: #9fceff;
-    width: 80px;
-    height: var(--item-height);
-    border-radius: 2px;
-    padding: 0 14px;
-    i {
-      font-size: 18px;
-      color: #fff;
-    }
-  }
-}
-
-.the-thumbnail-table {
-  width: 100%;
-  height: 210px;
-  overflow: hidden;
-  display: flex;
-  .the-thumbnail-table-svg {
-    margin: 0 auto;
-    transform: scale(2.4);
-  }
-}
-
 .the-sort-icon {
   display: flex;
   align-items: center;
@@ -429,34 +423,8 @@
   }
 }
 
-.the-filter-mask {
-  position: relative;
-  &::before {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 5;
-    left: 0;
-    top: 0;
-  }
-
-  &::after {
-    position: absolute;
-    content: attr(data-tips);
-    z-index: 5;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    color: var(--blue);
-  }
-}
-
 .the-curd-setting-list {
-  --page-padding: 14px;
+  --gap: 14px;
   width: 100%;
   max-height: 60vh;
   overflow-y: auto;

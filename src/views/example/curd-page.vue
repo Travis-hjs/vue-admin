@@ -1,5 +1,5 @@
 <template>
-  <Curd :data="data" :action="action" />
+  <Curd v-model:data="data" :action="action" />
 </template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
@@ -13,7 +13,7 @@ import {
 } from "@/components/Curd";
 import { formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
-import { reactive } from "vue";
+import { ref } from "vue";
 
 const option = {
   gameType: [
@@ -22,7 +22,7 @@ const option = {
   ]
 }
 
-const data = reactive<CurdType.Config>({
+const data = ref<CurdType.Config>({
   search: {
     labelRight: false,
     labelWidth: undefined,

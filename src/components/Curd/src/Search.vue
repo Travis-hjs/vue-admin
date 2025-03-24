@@ -1,30 +1,30 @@
 <template>
   <FilterWrap
     class="the-curd-search"
-    :label-right="props.data.labelRight"
-    :label-width="convertPx(props.data.labelWidth) || 'auto'"
+    :label-right="props.search.labelRight"
+    :label-width="convertPx(props.search.labelWidth) || 'auto'"
   >
     <template #content>
       <transition-group name="the-group" tag="div" class="the-filter-content f1">
         <FilterItem
-          v-for="(item, itemIndex) in props.data.list"
+          v-for="(item, itemIndex) in props.search.list"
           :key="item.id"
           :data-key="item.id"
           :class="[{ 'the-curd-selected': isEdit(itemIndex) }, item.id]"
           :label="item.label"
           :label-width="convertPx(item.labelWidth)"
           :required="item.required"
-          :draggable="isEditMode"
+          :draggable="props.editMode"
           @dragstart="onDragStart(itemIndex)"
           @dragover="onDragMove($event, itemIndex)"
           @drop="onDropEnd()"
         >
-          <template v-if="provideState.editor.type === 'search'" #label>
-            <i v-if="isEditMode" class="el-icon-rank el-icon--left" />
+          <template v-if="props.editMode" #label>
+            <i class="el-icon-rank el-icon--left" />
             <span style="line-height: 1;">{{ item.label }}</span>
           </template>
-          <Field :field-data="item" :disabled="provideState.loading"/>
-          <div v-if="isEditMode" class="the-curd-edit-mask f-vertical f-right">
+          <Field :field-data="item" :disabled="props.loading"/>
+          <div v-if="props.editMode" class="the-curd-edit-mask f-vertical f-right">
             <el-button link type="danger" @click="onDeleteItem(itemIndex)">
               <i class="el-icon-delete el-icon--left"></i>
               删除
@@ -35,8 +35,8 @@
             </el-button>
           </div>
         </FilterItem>
-        <FilterItem v-if="isEditMode">
-          <el-text v-if="!props.data.list.length" type="info" style="margin-right: 12px;">
+        <FilterItem v-if="props.editMode">
+          <el-text v-if="!props.search.list.length" type="info" style="margin-right: 12px;">
             请添加筛选条件~
           </el-text>
           <el-button type="primary" circle @click="onAddItem()">
@@ -45,8 +45,8 @@
         </FilterItem>
       </transition-group>
     </template>
-    <template v-if="!provideState.editor.type" #right>
-      <SearchBtn :loading="provideState.loading" @search="reset => emit('search', reset)" />
+    <template v-if="!props.editMode" #right>
+      <SearchBtn :loading="props.loading" @search="reset => emit('search', reset)" />
     </template>
   </FilterWrap>
 </template>
@@ -57,62 +57,66 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import { type PropType } from "vue";
 import { FilterWrap, FilterItem, SearchBtn } from "@/components/FilterBox";
 import Field from "./Field.vue";
-import { convertPx, useProvideState } from "./data";
+import { convertPx } from "./data";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
 import type { CurdType } from "./types";
+import { curdConfigState } from "./hooks";
 
 const props = defineProps({
-  data: {
+  search: {
     type: Object as PropType<CurdType.Search>,
     required: true
-  }
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  /** 是否编辑模式 */
+  editMode: {
+    type: Boolean,
+    default: false
+  },
 });
 
 const emit = defineEmits<{
   (event: "search", reset: boolean): void;
 }>();
 
-const provideState = useProvideState();
-
-/** 是否编辑模式 */
-const isEditMode = computed(() => provideState.editor.type === "search" && !provideState.editor.show);
-
 function onDeleteItem(index: number) {
-  const name = props.data.list[index].label || props.data.list[index].key;
+  const name = props.search.list[index].label || props.search.list[index].key;
   messageBox({
     title: "操作提示",
     content: `是否删除【${name}】？`,
     cancelText: "取消",
     confirm() {
-      props.data.list.splice(index, 1);
+      props.search.list.splice(index, 1);
     }
   });
 }
 
 function onEditItem(index: number) {
-  provideState.editor.index = index;
-  provideState.editor.action = "edit";
-  provideState.editor.show = true;
+  curdConfigState.editor.index = index;
+  curdConfigState.editor.action = "edit";
+  curdConfigState.editor.show = true;
 }
 
 function isEdit(index: number) {
-  return provideState.editor.index === index && provideState.editor.type === "search" && provideState.editor.show;
+  return curdConfigState.editor.index === index && curdConfigState.editor.show;
 }
 
 function onAddItem() {
-  provideState.editor.index = -1;
-  provideState.editor.action = "add";
-  provideState.editor.show = true;
+  curdConfigState.editor.index = -1;
+  curdConfigState.editor.action = "add";
+  curdConfigState.editor.show = true;
 }
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
-  list: () => props.data.list,
+  list: () => props.search.list,
   key: "id",
   findLevel: 5
 });
-
 </script>
