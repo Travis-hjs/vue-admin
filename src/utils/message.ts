@@ -239,17 +239,24 @@ function useMessage(params: Message.Option = {}) {
 }
 
 namespace Dialog {
+  /**
+   * 回调类型，支持回调和`Promise`两种处理方式
+   * - close 为`true`时为关闭
+   * - `Promise`返回值为`true`时亦是如此
+   */
+  export type Callback = ((callback?: (close: boolean) => void) => void) | (() => Promise<boolean>);
+
   export interface Show {
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
     title?: string;
     /** 提示内容（可传html） */
     content: string;
     /** 确认回调 */
-    confirm?: (() => void) | (() => Promise<any>);
+    confirm?: Callback;
     /** 确认按钮文字，默认为`"确认"` */
     confirmText?: string;
     /** 取消回调 */
-    cancel?: (() => void) | (() => Promise<any>);
+    cancel?: Callback;
     /** 取消按钮文字，不传则没有取消操作 */
     cancelText?: string;
   }
@@ -390,29 +397,59 @@ function useDialog() {
     el.addEventListener("transitionend", function(e) {
       e.target === el && el.classList.contains(className.hide) && el.remove();
     });
-    function hide() {
-      el.classList.add(className.hide);
-    }
     const confirm = el.querySelector(`.${className.confirm}`) as HTMLButtonElement;
     const cancel = el.querySelector(`.${className.cancel}`) as HTMLButtonElement;
     let pending = false;
-    async function handleAsync(fn?: (() => void) | (() => Promise<any>)) {
+    
+    function hide() {
+      el.classList.add(className.hide);
+    }
+
+    function showLoading() {
+      pending = true;
+      const icon = `<i class="el-icon-loading el-icon--left"></i>`;
+      confirm.innerHTML = icon + confirm.innerHTML;
+      confirm.classList.add("is-loading");
+      if (cancel) {
+        // cancel.innerHTML = icon + cancel.innerHTML;
+        cancel.classList.add("is-disabled");
+      }
+    }
+
+    function hideLoading() {
+      pending = false;
+      confirm.querySelector(".el-icon-loading")?.remove();
+      confirm.classList.remove("is-loading");
+      if (cancel) {
+        cancel.classList.remove("is-disabled");
+      }
+    }
+
+    async function handleAsync(cb?: Dialog.Callback) {
       if (pending) return;
-      if (isType(fn, "asyncfunction")) {
-        pending = true;
-        const icon = `<i class="el-icon-loading el-icon--left"></i>`;
-        confirm.innerHTML = icon + confirm.innerHTML;
-        confirm.classList.add("is-loading");
-        if (cancel) {
-          // cancel.innerHTML = icon + cancel.innerHTML;
-          cancel.classList.add("is-disabled");
+      if (!cb) return hide();
+      if (isType(cb, "asyncfunction")) {
+        showLoading();
+        const close = await cb();
+        hideLoading();
+        if (isType(close, "boolean")) {
+          close && hide();
+        } else {
+          hide();
         }
-        await fn();
-        pending = false;
+        return;
       }
-      if (isType(fn, "function")) {
-        fn();
+      // TODO: 严格模式下不允许使用 arguments，所以这里直接用长度来判断
+      // if (isType(cb.arguments[0], "function")) {
+      if (cb.length) {
+        showLoading();
+        cb(close => {
+          hideLoading();
+          close && hide();
+        });
+        return;
       }
+      cb();
       hide();
     }
     if (option.cancelText) {

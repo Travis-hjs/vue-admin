@@ -189,16 +189,44 @@ const itemList: Array<TheField.Type<CurdType.Table.Column>> = [
     options: sortOptions
   },
   {
-    label: "内容溢出截断",
-    prop: "tooltip",
-    type: "switch"
+    label: "表格列排版",
+    prop: "align",
+    type: "select",
+    options: [
+      {
+        label: "靠左对齐(默认)",
+        value: "left"
+      },
+      {
+        label: "居中对齐",
+        value: "center"
+      },
+      {
+        label: "靠右对齐",
+        value: "right"
+      }
+    ],
+    placeholder: "请选择"
   },
   {
     label: "表头提示文字",
     prop: "iconTips",
     type: "input",
-    placeholder: "请输入提示文字"
-  }
+    placeholder: "请输入提示文字",
+    tooltip: "鼠标放到表格头时出现提示文案"
+  },
+  {
+    label: "内容溢出截断",
+    prop: "tooltip",
+    type: "switch"
+  },
+  {
+    label: "表格列默认展示",
+    prop: "visible",
+    type: "switch",
+    inactiveText: "隐藏",
+    activeText: "显示"
+  },
 ];
 
 function onClose() {

@@ -1,12 +1,7 @@
 import { inject, nextTick, onUnmounted } from "vue";
-import type { CurdType } from "./types";
+import type { CurdConfig, CurdType } from "./types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 // ----------------------- 数据相关 -----------------------
-
-export const provideKey = "the-curd-state";
-
-/** 父组件注入的对象 */
-export const useProvideState = () => inject(provideKey) as CurdType.State;
 
 /** 表格列操作栏的标记 */
 export const columnActionProp = "action-right";
@@ -64,7 +59,7 @@ export function initFieldValue(field: CurdType.Field) {
       }
     } else {
       // 没有快捷日期则重置
-      field.value = ["daterange", "datetimerange"].includes(field.dateType) ? [] : "";
+      field.value = dataArrayTypes.includes(field.dateType) ? [] : "";
     }
   } else {
     if (["object", "array"].includes(checkType(field.defaultValue))) {
@@ -366,6 +361,10 @@ interface DateTypeOption extends Pick<CurdType.Date, "format" | "formatShow"> {
   value: DateType;
 }
 
+/** 数组日期组件 */
+export const dataArrayTypes = ["daterange", "datetimerange", "monthrange"];
+
+/** 日期配置选项 */
 export const dateTypeOptions: Array<DateTypeOption> = [
   {
     label: "选择年份",
@@ -404,7 +403,13 @@ export const dateTypeOptions: Array<DateTypeOption> = [
     format: "Y-M-D"
   },
   {
-    label: "选择日期-时间范围",
+    label: "选择月份范围",
+    value: "monthrange",
+    formatShow: "YYYY-MM",
+    format: "Y-M"
+  },
+  {
+    label: "选择日期+时间范围",
     value: "datetimerange",
     formatShow: "YYYY-MM-DD HH:mm:ss",
     format: "Y-M-D h:m:s"
@@ -538,7 +543,29 @@ export const shortcutMap: Record<DateType, Array<Shortcut>> = {
   date: commonShortcuts,
   datetime: commonShortcuts,
   daterange: commonRangeShortcuts,
-  datetimerange: commonRangeShortcuts
+  datetimerange: commonRangeShortcuts,
+  monthrange: [
+    {
+      text: "本月",
+      value: () => [new Date(), new Date()]
+    },
+    {
+      text: "本年",
+      value() {
+        const end = new Date();
+        const start = new Date(new Date().getFullYear(), 0);
+        return [start, end];
+      }
+    },
+    {
+      text: "过去3个月",
+      value: () => [new Date(), getLastMonth(3)]
+    },
+    {
+      text: "过去6个月",
+      value: () => [new Date(), getLastMonth(6)]
+    }
+  ]
 }
 
 /**
@@ -568,4 +595,33 @@ export function exportPropToWindow<T extends object>(target: T) {
  */
 export function getBoldLabel(content: string) {
   return `<b style="color: var(--yellow)"> ${content} </b>`;
+}
+
+/** `curd`默认配置 */
+export function getCurdConfigDefault(): CurdType.Config {
+  return {
+    search: {
+      labelRight: false,
+      labelWidth: undefined,
+      list: [],
+    },
+    table: {
+      columns: [],
+      actions: [],
+      selectKey: undefined,
+      formAdd: undefined,
+      formEdit: undefined
+    }
+  }
+}
+
+/** 配置编辑器默认状态 */
+export function getCurdConfigEditor(): CurdConfig.Editor {
+  return {
+    show: false,
+    showForm: false,
+    form: undefined,
+    action: "add",
+    index: -1
+  }
 }

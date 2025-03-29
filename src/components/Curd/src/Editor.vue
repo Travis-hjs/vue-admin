@@ -5,13 +5,13 @@
         <h2 class="the-title mgb-20">基础设置</h2>
         <el-form label-position="right" label-width="120px">
           <TheFields
-            v-if="provideState.editor.type === 'search'"
+            v-if="curdConfigState.type === 'search'"
             :data="props.config.search"
             :list="searchConfigs"
           />
           <TheFields
-            v-if="provideState.editor.type === 'table' && provideState.editor.form"
-            :data="provideState.editor.form"
+            v-if="curdConfigState.type === 'table' && curdConfigState.editor.form"
+            :data="curdConfigState.editor.form"
             :list="formConfigs"
           />
         </el-form>
@@ -22,7 +22,7 @@
           </div>
           <Example
             :selected="state.formData?.type"
-            :type="provideState.editor.type"
+            :type="curdConfigState.type"
             @choose="chooseField"
           />
         </template>
@@ -113,7 +113,14 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
-import { fieldTitleMap, getFieldData, useProvideState, dateTypeOptions, shortcutMap, getBoldLabel } from "./data";
+import {
+  fieldTitleMap,
+  getFieldData,
+  dateTypeOptions,
+  shortcutMap,
+  getBoldLabel,
+  dataArrayTypes
+} from "./data";
 import Example from "./Example.vue";
 import Field from "./Field.vue";
 import type { FormInstance } from "element-plus";
@@ -122,6 +129,7 @@ import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
 import { TheFields, type TheField } from "@/components/TheFields";
+import { curdConfigState } from "./hooks";
 
 const props = defineProps({
   show: {
@@ -152,8 +160,6 @@ const stringAndNumber = ["input", "textarea", "select", "radio"];
 const arrayFields = ["input-between", "select-multiple", "checkbox", "cascader"];
 /** 允许为数字类型的组件 */
 const allowNumberFields = ["input", "select", "radio"];
-/** 数组日期组件 */
-const arrayDateFields = ["daterange", "datetimerange"];
 /** 需要校验为数字类型的组件 */
 const checkNumberFields = allowNumberFields.concat(arrayFields);
 
@@ -167,10 +173,7 @@ const showTips = `
 <p>例如：${getBoldLabel("return formData.type !== 2")}</p>
 `;
 
-/** 父组件注入的对象 */
-const provideState = useProvideState();
-
-const isAdd = computed(() => provideState.editor.action === "add");
+const isAdd = computed(() => curdConfigState.editor.action === "add");
 
 const shortcutOptions = computed(() => {
   let option: Array<{ label: string; value: number }> = [];
@@ -447,7 +450,7 @@ const formItems = computed(() => {
     list.push(...dateItems as any);
   }
 
-  if (provideState.editor.type === "table") {
+  if (curdConfigState.type === "table") {
     list.push({
       label: "表单显示逻辑",
       prop: "show",
@@ -491,8 +494,7 @@ function setJson(field: CurdType.Field) {
  * @param type
  */
 function chooseField(type: CurdType.Field["type"]) {
-  const editor = provideState.editor;
-  const field = getFieldData(type, "", editor.type === "search");
+  const field = getFieldData(type, "", curdConfigState.type === "search");
   state.formData = field;
   setJson(field);
   formRef.value?.clearValidate();
@@ -522,7 +524,7 @@ function checkDefaultValue() {
     }
     if (type === "date") {
       const field = state.formData as CurdType.Date;
-      if (arrayDateFields.includes(field.dateType)) {
+      if (dataArrayTypes.includes(field.dateType)) {
         if (!isType(obj.value, "array")) return "范围日期绑定值应该为 array 类型";
       }
       else {
@@ -590,7 +592,7 @@ function onDateType(type: CurdType.Date["dateType"]) {
   const item = dateTypeOptions.find(item => item.value === type)!;
   const dateField = state.formData as CurdType.Date;
   dateField.shortcutIndex = "";
-  if (arrayDateFields.includes(item.value)) {
+  if (dataArrayTypes.includes(item.value)) {
     dateField.value = [];
     dateField.valueType = "array";
   } else {
@@ -611,7 +613,7 @@ function onSubmit() {
     if (!valid) return
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
-    const editor = provideState.editor;
+    const editor = curdConfigState.editor;
     const form = JSON.parse(JSON.stringify(state.formData));
     hasOptions.includes(form.type) && onOptions();
     // TODO: 处理空类型
@@ -672,7 +674,7 @@ function onSubmit() {
         }
       }
     }
-    actionMap[editor.type!](isAdd.value);
+    actionMap[curdConfigState.type!](isAdd.value);
     onClose();
   });
 }
@@ -684,7 +686,7 @@ let keyList: Array<string> = [];
  * @param excludeKey 需要排除的值
  */
 function updateKeyList(excludeKey?: string) {
-  const editor = provideState.editor;
+  const editor = curdConfigState.editor;
   keyList = [];
   const actionMap = {
     search() {
@@ -694,7 +696,7 @@ function updateKeyList(excludeKey?: string) {
       keyList = editor.form!.fields.map(item => item.key);
     }
   }
-  actionMap[editor.type!]();
+  actionMap[curdConfigState.type!]();
   if (excludeKey) {
     keyList = keyList.filter(val => val !== excludeKey);
   }
@@ -707,7 +709,7 @@ watch(
       state.formData = undefined;
       return;
     }
-    const editor = provideState.editor;
+    const editor = curdConfigState.editor;
     if (editor.action === "add") {
       state.step = 0;
       state.formData = undefined;
@@ -722,7 +724,7 @@ watch(
           state.formData = JSON.parse(JSON.stringify(editor.form?.fields[current]));
         }
       }
-      actionMap[editor.type!]();
+      actionMap[curdConfigState.type!]();
       setJson(state.formData!);
       updateKeyList(state.formData!.key);
       state.step = 1;

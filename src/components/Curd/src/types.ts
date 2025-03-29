@@ -111,7 +111,7 @@ export namespace CurdType {
      * 日期选择类型
      * - [参考](https://element-plus.org/zh-CN/component/datetime-picker.html#attributes)
      */
-    dateType: "year" | "month" | "week" | "date" | "datetime" | "datetimerange" | "daterange";
+    dateType: "year" | "month" | "week" | "date" | "datetime" | "datetimerange" | "daterange" | "monthrange";
     /**
      * 组件展示格式化规则
      * - [参考](https://day.js.org/docs/zh-CN/display/format)
@@ -276,35 +276,6 @@ export namespace CurdType {
     table: Table.Config<T>;
   }
 
-  export interface Editor {
-    /** 是否显示编辑器 */
-    show: boolean;
-    /** 编辑器类型 */
-    type?: keyof Config;
-    /** 编辑操作类型 */
-    action: "add" | "edit";
-    /** 编辑的索引 */
-    index: number;
-    /**
-     * 正在编辑的表单
-     * - 注意该值在赋值时不能克隆，不然`<Editor />`里面无法进行数据修改处理
-     */
-    form?: Table.From;
-  }
-
-  /**
-   * 内部状态数据，会注入到各个组件中
-   * - 为什么不用`props`的方式传递进组件内使用？
-   * 理由是当组件内要做一些递归组件和修改数据时可以非常方便地进行，如果是`props`方式则非常麻烦，要写很多代码
-   */
-  export interface State {
-    loading: boolean;
-    /** 编辑器信息 */
-    editor: Editor;
-    /** 是否显示编辑入口弹框 */
-    showEntrance: boolean;
-  }
-
   /** `curd`操作配置，不需要为响应式 */
   export interface Action {
     /**
@@ -351,8 +322,6 @@ export namespace CurdType {
   
 }
 
-/** 页面编辑按钮类型 */
-export type EditBtnType = "exit" | "copy" | "complete";
 /** 表格操作类型 */
 export type TableOperationType = "delete" | "add" | "export" | "edit";
 
@@ -368,3 +337,44 @@ interface GetDataPage extends PaginationChange {
 
 /** `index.vue`中`getData`方法传参对象 */
 export type GetDataParams = GetDataSort | GetDataPage;
+
+/** `curd`弹框配置 */
+export namespace CurdConfig {
+  /** 编辑类型 */
+  export type Type = "search" | "table";
+
+  /** 表单配置器类型 */
+  export interface Editor {
+    /** 是否显示编辑器 */
+    show: boolean;
+    /** 是否显示表单编辑 */
+    showForm: boolean;
+    /** 编辑操作类型 */
+    action: "add" | "edit";
+    /** 编辑的索引 */
+    index: number;
+    /**
+     * 正在编辑的表单
+     * - 注意该值在赋值时不能克隆，不然`<Editor />`里面无法进行数据修改处理
+     */
+    form?: CurdType.Table.From;
+  }
+
+  /** `curd`弹框功能状态 */
+  export interface State {
+    show: boolean;
+    /** 弹框标题 */
+    title: string;
+    /** 传入需要修改的`curd`配置 */
+    config: CurdType.Config;
+    /** 编辑配置类型 */
+    type: Type;
+    /** 编辑器信息 */
+    editor: Editor;
+    /**
+     * 保存回调
+     * @param newConfig 修改后新的配置
+     */
+    callback(newConfig: CurdType.Config): void;
+  }
+}

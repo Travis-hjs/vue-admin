@@ -9,7 +9,7 @@
       "      :search-info=\"state.searchInfo\"",
       "      :list=\"state.searchFields\"",
       "      :loading=\"state.loading\"",
-      "      @search=\"onSearch()\"",
+      "      @search=\"onSearch\"",
       "    />",
       "",
       "    <base-table",

@@ -1,4 +1,4 @@
-import { isType } from "@/utils";
+import { formatDate, isType } from "@/utils";
 import {
   computed,
   defineComponent,
@@ -60,7 +60,14 @@ export const TheDatePicker = defineComponent({
         return value;
       },
       set(val) {
-        emit("change", val);
+        const list = val as Array<Date>;
+        // 处理两个相同的范围日期
+        if (["daterange", "datetimerange"].includes(props.attrs.type)) {
+          if (list && new Date(list[0]).getTime() === new Date(list[1]).getTime()) {
+            list[1] = new Date(formatDate(list[1], "Y-M-D 23:59:59"));
+          }
+        }
+        emit("change", list);
       }
     });
     return () => (

@@ -13,18 +13,18 @@
       <transition-group name="the-group" tag="div">
         <el-form-item
           v-for="(field, fieldIndex) in state.config.fields"
-          :class="[{'the-curd-selected': provideState.editor.index === fieldIndex && isEdit}]"
+          :class="[{'the-curd-selected': curdConfigState.editor.index === fieldIndex && isEdit}]"
           :prop="field.key"
           :key="field.id"
           :data-key="field.id"
-          :draggable="state.config.fields.length > 1 && !provideState.editor.show ? true : null"
+          :draggable="state.config.fields.length > 1 && props.editMode ? true : null"
           @dragstart="onDragStart(fieldIndex)"
           @dragover="e => onDragMove(e, fieldIndex)"
           @drop="onDropEnd"
         >
           <template #label>
             <i
-              v-if="state.config.fields.length > 1 && !provideState.editor.show"
+              v-if="state.config.fields.length > 1 && props.editMode"
               class="el-icon-rank el-icon--left"
               style="line-height: 32px"
             ></i>
@@ -92,12 +92,13 @@ export default {
 import { computed, reactive, ref, type PropType } from "vue";
 import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { convertPx, getFieldValue, getFormConfig, initFieldValue, useProvideState } from "./data";
+import { convertPx, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { watch } from "vue";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
 import Field from "./Field.vue";
 import { deepClone, isType } from "@/utils";
+import { curdConfigState } from "./hooks";
 
 const props = defineProps({
   /** 表单配置 */
@@ -129,19 +130,18 @@ const state = reactive({
   form: {} as BaseObj<any>,
   rules: {} as BaseObj<any>
 });
-/** 父组件注入的对象 */
-const provideState = useProvideState();
+
 /** 当前表单操作名 */
 const currentName = computed(() => props.type === "add" ? "新增" : "编辑");
 
-const isEdit = computed(() => provideState.editor.show);
+const isEdit = computed(() => curdConfigState.editor.show);
 
 function openEditor(index: number) {
   clear();
-  provideState.editor.action = index >= 0 ? "edit" : "add";
-  provideState.editor.form = state.config;
-  provideState.editor.index = index;
-  provideState.editor.show = true;
+  curdConfigState.editor.action = index >= 0 ? "edit" : "add";
+  curdConfigState.editor.form = state.config;
+  curdConfigState.editor.index = index;
+  curdConfigState.editor.show = true;
 }
 
 function onDelete(index: number) {

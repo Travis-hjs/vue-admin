@@ -1,61 +1,67 @@
 <template>
   <div class="the-curd-main-page">
-    <section :class="[state.editor.show ? 'f1' : 'the-curd-content']">
-      <Search v-if="showSearch" :data="props.data.search" @search="onSearch" />
-      <TableModel v-if="state.editor.type === 'table'" :config="tableConfig" @action="onEditChange" />
-      <div v-else-if="state.editor.type === 'search'">
-        <EditBtn @action="onEditChange" />
-      </div>
-      <template v-else>
-        <template v-if="tableConfig.columns.length > 0">
-          <TableOperation
-            :config="tableConfig"
-            :disabled="state.loading"
-            @action="onTableOperation"
-          >
-            <template #left>
-              <span v-if="tableConfig.selectKey" class="the-tag blue">
-                已选择 {{ tableState.selectList.length }} 条数据
-              </span>
-            </template>
-          </TableOperation>
-          <base-table
-            class="f1"
-            v-model:select-list="tableState.selectList"
-            :data="tableState.data"
-            :columns="tableColumns"
-            :actions="actionList"
-            :actionMax="tableConfig.actionMax"
-            :loading="state.loading"
-            :select-key="tableConfig.selectKey!"
-          >
-            <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
-              <TableHeader
-                :column="tableColumns[tableConfig.selectKey ? $index - 1 : $index]"
-                @sort="(prop, action) => getData({ key: 'sort', prop, action })"
-              />
-            </template>
-            <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
-              <!-- TODO: 因为插槽中只有图片这个功能，所以不需要做条件判断 -->
-              <TableImage
-                :column="getColumnByProp(cell)"
-                :src="(row[cell] as string)"
-                :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
-              />
-            </template>
-          </base-table>
-          <base-pagination
-            :disabled="state.loading"
-            :pageInfo="tableState.pageInfo"
-            @change="info => getData({ key: 'page', ...info })"
+    <Search
+      v-if="props.data.search.list.length"
+      :search="props.data.search"
+      :loading="state.loading"
+      @search="onSearch"
+    />
+    <template v-if="tableConfig.columns.length > 0">
+      <TableOperation
+        :config="tableConfig"
+        :disabled="state.loading"
+        @action="onTableOperation"
+      >
+        <template #left>
+          <span v-if="tableConfig.selectKey" class="the-tag blue">
+            已选择 {{ tableState.selectList.length }} 条数据
+          </span>
+        </template>
+      </TableOperation>
+      <base-table
+        class="f1"
+        v-model:select-list="tableState.selectList"
+        :data="tableState.data"
+        :columns="tableColumns"
+        :actions="actionList"
+        :actionMax="tableConfig.actionMax"
+        :loading="state.loading"
+        :select-key="tableConfig.selectKey!"
+      >
+        <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
+          <TableHeader
+            :column="tableColumns[tableConfig.selectKey ? $index - 1 : $index]"
+            @sort="(prop, action) => getData({ key: 'sort', prop, action })"
           />
         </template>
-        <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
-          <el-button type="primary" @click="onEditor('table')">去配置</el-button>
-        </el-empty>
-      </template>
-    </section>
-    <Editor v-model:show="state.editor.show" :config="props.data" />
+        <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
+          <!-- TODO: 因为插槽中只有图片这个功能，所以不需要做条件判断 -->
+          <TableImage
+            :column="getColumnByProp(cell)"
+            :src="(row[cell] as string)"
+            :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
+          />
+        </template>
+      </base-table>
+      <base-pagination
+        :disabled="state.loading"
+        :pageInfo="tableState.pageInfo"
+        @change="info => getData({ key: 'page', ...info })"
+      />
+    </template>
+    <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
+      <el-button type="primary" @click="openConfig('table')">去配置</el-button>
+    </el-empty>
+
+    <el-button
+      class="the-curd-entrance"
+      type="primary"
+      size="small"
+      @click="openConfig()"
+    >
+      <i class="el-icon-arrow-left" />
+    </el-button>
+
     <base-dialog
       v-model:show="tableState.formShow"
       :title="formInfo.title"
@@ -72,28 +78,6 @@
         <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
       </template>
     </base-dialog>
-    <el-button
-      v-if="!state.showEntrance && !state.editor.type"
-      class="the-curd-entrance"
-      type="primary"
-      size="small"
-      @click="state.showEntrance = true"
-    >
-      <i class="el-icon-arrow-left" />
-    </el-button>
-    <base-dialog v-model:show="state.showEntrance" title="请选择配置操作" width="600px">
-      <div class="the-curd-entrance-item" @click="onEditor('search')">
-        <p class="mgb-10">配置筛选相关功能</p>
-        <ThumbnailSearch />
-      </div>
-      <div class="the-curd-entrance-item" @click="onEditor('table')">
-        <p>配置表格相关功能</p>
-        <ThumbnailTable />
-      </div>
-      <template #footer>
-        <el-button @click="state.showEntrance = false">关 闭</el-button>
-      </template>
-    </base-dialog>
   </div>
 </template>
 <script lang="ts">
@@ -103,21 +87,20 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, provide, reactive, ref, type PropType } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
-import TableModel from "./TableModel.vue";
-import Editor from "./Editor.vue";
 import TableHeader from "./TableHeader.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
-import { EditBtn, FooterBtn, TableImage, ThumbnailSearch, ThumbnailTable } from "./part";
-import type { CurdType, EditBtnType, GetDataParams, TableOperationType } from "./types";
-import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, provideKey, initFieldValue } from "./data";
+import { FooterBtn, TableImage } from "./part";
+import type { CurdConfig, CurdType, GetDataParams, TableOperationType } from "./types";
+import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getPageInfo } from "@/hooks/common";
-import { copyText, deepClone, formatDate, isType, jsonToPath } from "@/utils";
+import { copyText, formatDate, isType, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
+import { openCurdConfig } from "./hooks";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */
@@ -132,70 +115,24 @@ const props = defineProps({
   }
 });
 
-const state = reactive<CurdType.State>({
+const emit = defineEmits<{
+  (event: "update:data", value: typeof props.data): void;
+}>();
+
+const state = reactive({
   loading: false,
-  editor: {
-    show: false,
-    type: undefined,
-    form: undefined,
-    action: "add",
-    index: -1
-  },
-  showEntrance: false,
 });
 
-const showSearch = computed(() => {
-  const editorType = state.editor.type;
-  if (editorType === "search") {
-    return true;
-  }
-  if (!editorType && props.data.search.list.length > 0) {
-    return true;
-  }
-  return false;
-});
-
-provide(provideKey, state);
-
-/** 备份编辑之前的数据 */
-let backupsConfig: Partial<CurdType.Config> | undefined = undefined;
-
-/**
- * 开始进入编辑模式
- * @param type 
- */
-function onEditor(type: keyof CurdType.Config) {
-  state.editor.type = type;
-  state.editor.show = false;
-  state.editor.index = -1;
-  state.showEntrance = false;
-  backupsConfig = {
-    [type]: deepClone(props.data[type]),
-  }
-}
-
-/**
- * 退出编辑
- * @param cancel 是否取消编辑，取消则还原编辑之前的数据
- */
-function onExit(cancel?: boolean) {
-  const type = state.editor.type!;
-  if (cancel && backupsConfig) {
-    props.data[type] = backupsConfig[type] as any;
-  }
-  state.editor.index = -1;
-  state.editor.show = false;
-  state.editor.type = undefined;
-  state.editor.form = undefined;
-  backupsConfig = undefined;
-}
-
-function onComplete() {
-  onExit();
-}
-
-function onCopy() {
-  copyText(JSON.stringify(props.data), () => message.success("复制成功！"));
+function openConfig(type?: CurdConfig.Type) {
+  openCurdConfig({
+    title: "低代码配置",
+    config: props.data,
+    type: type,
+    callback(newConfig) {
+      // console.log("保存的新配置 >>", newConfig);
+      emit("update:data", newConfig);
+    },
+  });
 }
 
 function onSearch(reset: boolean) {
@@ -467,15 +404,6 @@ function onTableOperation(type: TableOperationType) {
   }
 }
 
-function onEditChange(type: EditBtnType) {
-  const actionMap = {
-    exit: () => onExit(true),
-    copy: onCopy,
-    complete: onComplete
-  };
-  actionMap[type]();
-}
-
 function setLoading(val: boolean) {
   state.loading = val;
 }
@@ -498,5 +426,5 @@ onMounted(function() {
 });
 </script>
 <style lang="scss">
-@import url("./index.scss");
+@import url("./styles/index.scss");
 </style>
