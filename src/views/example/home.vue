@@ -39,7 +39,7 @@
         <el-button type="info" v-ripple @click="resetStyle()">重置默认样式</el-button>
         <el-button type="primary" v-ripple @click="onPreset('green')">应用预设配置-绿色</el-button>
         <el-button type="primary" v-ripple @click="onPreset('black')">应用预设配置-黑色</el-button>
-        <el-button type="primary" v-ripple @click="onPreset('orange')">应用预设配置-橙色</el-button>
+        <el-button type="primary" v-ripple @click="onPreset('red')">应用预设配置-红色</el-button>
         <el-button type="primary" v-ripple @click="onPreset('purple')">应用预设配置-紫色</el-button>
       </el-form-item>
     </el-form>
@@ -299,7 +299,7 @@ function resetStyle() {
   }
 }
 
-function onPreset(theme: "green" | "black" | "orange" | "purple") {
+function onPreset(theme: "green" | "black" | "red" | "purple") {
   switch (theme) {
     case "green":
       modifyData(styleVariable, {
@@ -315,10 +315,10 @@ function onPreset(theme: "green" | "black" | "orange" | "purple") {
       });
       break;
 
-    case "orange":
+    case "red":
       modifyData(styleVariable, {
-        themeColor: "#ff9317",
-        menuItemHoverBg: "#faf4ed"
+        themeColor: "#fc3d4c",
+        menuItemHoverBg: "#fff0f2"
       });
       break;
     

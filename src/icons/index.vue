@@ -29,11 +29,5 @@ export default {
   overflow: hidden;
   vertical-align: middle;
   fill: currentColor;
-  stroke: currentColor;
-}
-
-.svg-fill {
-  fill: currentColor;
-  stroke: none;
 }
 </style>

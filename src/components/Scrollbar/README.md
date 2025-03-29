@@ -82,14 +82,15 @@ const list = new Array(10).fill(0).map((_, index) => index);
 | --- | --- | --- | --- |
 | thumbColor | string | 否 | 滚动条颜色 |
 | thumbSize | string | 否 | 滚动条厚度 |
+| maxHeight | string | 否 | 超出最大高度滚动（css原理） |
+| maxWidth | string | 否 | 超出最大宽度滚动（css原理） |
 
 ## 事件说明
 
-当前组件对外暴露了两个方法，用于特殊场景需要手动更新界面用。
+- 用于特殊场景需要手动更新界面用。
 
 | 事件名 | 说明 |
 | --- | --- |
-| updateWrapStyle | 更新滚动包裹器样式 |
 | updateThumbStyle | 更新滚动指示器样式 |
 
 例如：
@@ -105,7 +106,7 @@ function onUpdate() {
 }
 ```
 
-## 备份旧实现方式
+## 旧实现方式
 
 ```html
 <template>
