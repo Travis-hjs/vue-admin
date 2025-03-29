@@ -33,7 +33,7 @@
       <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset('black')">应用预设配置-黑色</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset('orange')">应用预设配置-橙色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('red')">应用预设配置-红色</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset('purple')">应用预设配置-紫色</button>
     </div>
     <h2 class="the-title is-line mgb-30">打赏一下</h2>
@@ -280,7 +280,7 @@ function resetStyle() {
   }
 }
 
-function onPreset(theme: "green" | "black" | "orange" | "purple") {
+function onPreset(theme: "green" | "black" | "red" | "purple") {
   switch (theme) {
     case "green":
       modifyData(styleVariable, {
@@ -296,10 +296,10 @@ function onPreset(theme: "green" | "black" | "orange" | "purple") {
       });
       break;
 
-    case "orange":
+    case "red":
       modifyData(styleVariable, {
-        themeColor: "#ff9317",
-        menuItemHoverBg: "#faf4ed"
+        themeColor: "#fc3d4c",
+        menuItemHoverBg: "#fff0f2"
       });
       break;
     
