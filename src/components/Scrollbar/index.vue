@@ -11,22 +11,22 @@
       </div>
     </div>
     <transition name="fade">
-      <button
+      <div
         class="the-scrollbar-thumb"
         ref="thumbY"
         title="滚动条-摁住拖拽Y轴"
         :style="thumbStyle.y"
         v-show="showThumb"
-      ></button>
+      ></div>
     </transition>
     <transition name="fade">
-      <button
+      <div
         class="the-scrollbar-thumb"
         ref="thumbX"
         title="滚动条-摁住拖拽X轴"
         :style="thumbStyle.x"
         v-show="showThumb"
-      ></button>
+      ></div>
     </transition>
   </div>
 </template>
@@ -247,8 +247,7 @@ defineExpose({
   .the-scrollbar-thumb {
     position: absolute;
     z-index: 10;
-    outline: none;
-    border: none;
+    cursor: pointer;
   }
 }
 </style>
