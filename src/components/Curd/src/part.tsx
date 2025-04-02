@@ -104,7 +104,7 @@ export const IconInput = defineComponent({
         <el-input
           v-model={iconClass.value}
           placeholder="请输入图标 class"
-          class="mr-[10px]-10"
+          class="mr-[10px]"
           clearable
         />
         <el-button type="primary" link>

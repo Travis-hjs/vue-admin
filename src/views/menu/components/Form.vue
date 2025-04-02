@@ -37,12 +37,12 @@
         <TheFields :data="state.formData" :list="baseConfigs" />
         <el-form-item label="菜单图标" prop="meta.icon">
           <el-input
-            class="f1 mr-[10px]-10"
+            class="f1 mr-[10px]"
             v-model="state.formData.meta.icon"
             clearable
             placeholder="请选择或者输入图标"
           ></el-input>
-          <div class="fvc mr-[10px]-10" v-if="state.formData.meta.icon">
+          <div class="fvc mr-[10px]" v-if="state.formData.meta.icon">
             <el-icon :size="20" style="color: var(--el-color-primary);">
               <svg-icon :name="state.formData.meta.icon" />
             </el-icon>

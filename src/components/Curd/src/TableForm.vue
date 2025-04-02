@@ -31,7 +31,7 @@
             <span>{{ field.label }}</span>
           </template>
           <div class="f-vertical w-full">
-            <Field class="mr-[10px]-10" :fieldData="field" editMode />
+            <Field class="mr-[10px]" :fieldData="field" editMode />
             <el-button link type="success" :disabled="isEdit" @click="openEditor(fieldIndex)">
               <i class="el-icon-edit"></i>
             </el-button>

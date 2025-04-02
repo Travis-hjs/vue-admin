@@ -8,7 +8,7 @@
       <UploadImage uploadId="banner" :src="formData.banner" tip="高度自适应" :autoHeight="true" @change="onUpload" />
     </div>
     <div class="mb-[30px]">
-      <h2 class="the-title is-line mr-[10px]-40">滚动条组件</h2>
+      <h2 class="the-title is-line mr-[40px]">滚动条组件</h2>
       <el-button type="success" @click="() => list.push(list.length + 1)">添加一个列表 item</el-button>
       <el-button type="primary" @click="openDialog('first')">打开弹出层-1</el-button>
     </div>

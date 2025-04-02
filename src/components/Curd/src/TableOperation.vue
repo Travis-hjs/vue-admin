@@ -50,7 +50,7 @@
           >
             <i v-if="item.prop !== columnActionProp" class="el-icon--left el-icon-rank"></i>
             <span class="f1">{{ item.title }}</span>
-            <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mr-[10px]-10">
+            <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mr-[10px]">
               <el-radio-button
                 v-for="opt in fixedOptions"
                 :key="opt.value.toString()"
