@@ -47,15 +47,15 @@ export default defineConfig({
          * @param target 
          */
         assetFileNames(target) {
-          const name = target.name || target.names[0];
+          const fileName = target.name || target.names[0];
           
-          if (name?.endsWith(".css")) {
+          if (fileName?.endsWith(".css")) {
             return "css/[name]-[hash].css";
           }
 
           const imageTypes = [".png", "jpg", "jpeg", ".webp", ".gif"];
 
-          if (name && imageTypes.some(type => name.endsWith(type))) {
+          if (fileName && imageTypes.some(type => fileName.endsWith(type))) {
             return "image/[name]-[hash].[ext]";
           }
 
