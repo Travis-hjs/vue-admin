@@ -34,7 +34,7 @@
       cursor: pointer;
       transform: rotate(0);
       transition: var(--transition);
-      @include closeIcon(#666, 16px);
+      @include close-icon(#666, 16px);
   
       &:hover {
         transform: rotate(180deg);

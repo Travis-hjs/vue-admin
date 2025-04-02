@@ -1,6 +1,6 @@
 <template>
   <div class="menu-2">
-    <span class="the-tag green mgb-20">表单验证操作</span>
+    <span class="the-tag green mb-[20px]">表单验证操作</span>
     <el-form style="width: 600px;" id="the-form" ref="formRef" :model="form.data" :rules="form.rules" label-width="120px">
       <el-form-item label="活动名称" prop="name">
         <el-input v-model="form.data.name" :placeholder="form.rules.name[0].message" />

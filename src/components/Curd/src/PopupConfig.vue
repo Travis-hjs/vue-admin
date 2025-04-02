@@ -4,7 +4,7 @@
       <div v-if="curdConfigState.show" class="the-curd-popup-config" :style="{ 'z-index': currentZIndex }">
         <nav class="the-curd-popup-top f-vertical">
           <h2 class="the-title">{{ curdConfigState.title }}</h2>
-          <el-radio-group v-model="curdConfigState.type" class="mgl-20" @change="onTab">
+          <el-radio-group v-model="curdConfigState.type" class="ml-[20px]" @change="onTab">
             <el-radio-button
               v-for="item in tabList"
               :label="item.label"

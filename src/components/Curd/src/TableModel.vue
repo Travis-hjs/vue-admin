@@ -116,7 +116,7 @@
   </div>
   <div v-if="!curdConfigState.editor.showForm && hasNotWidth">
     <el-button type="primary" @click="onSetWidth()">一键设置最小宽度</el-button>
-    <span class="the-tag blue mgl-10">
+    <span class="the-tag blue ml-[10px]">
       <i class="el-icon--left el-icon-info"></i>
       当前表格列配置中存在没配置【宽度/最小宽度】，建议一件设置最小宽度，提高表格美观性。
     </span>

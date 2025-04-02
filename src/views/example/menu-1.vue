@@ -1,6 +1,6 @@
 <template>
   <div class="menu-1">
-    <span class="the-tag blue mgb-20">通用表格展示模板页</span>
+    <span class="the-tag blue mb-[20px]">通用表格展示模板页</span>
     <FilterWrap>
       <FilterItem>
         <el-input placeholder="请输入关键字">

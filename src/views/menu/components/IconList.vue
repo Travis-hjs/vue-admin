@@ -29,7 +29,7 @@
           @click="onSelect(icon)"
         >
           <el-icon :size="28">
-            <svg-icon class="mgb-10" :name="icon" />
+            <svg-icon class="mb-[10px]" :name="icon" />
           </el-icon>
           <el-text size="small">{{ icon }}</el-text>
         </div>

@@ -4,34 +4,6 @@
 @import "./ripple.scss";
 @import "./element-icons/index.css";
 
-/* 上下左右边距 */
-@for $index from 1 through 5 {
-  .mgl-#{$index}0 {
-    margin-left: 10px * $index;
-  }
-  .mgr-#{$index}0 {
-    margin-right: 10px * $index;
-  }
-  .mgt-#{$index}0 {
-    margin-top: 10px * $index;
-  }
-  .mgb-#{$index}0 {
-    margin-bottom: 10px * $index;
-  }
-  .pdl-#{$index}0 {
-    padding-left: 10px * $index;
-  }
-  .pdr-#{$index}0 {
-    padding-right: 10px * $index;
-  }
-  .pdt-#{$index}0 {
-    padding-top: 10px * $index;
-  }
-  .pdb-#{$index}0 {
-    padding-bottom: 10px * $index;
-  }
-}
-
 // ===================== 全局动画 =====================
 // 页面 X 平移动画
 .page-x-enter-active, .page-x-leave-active {
@@ -116,13 +88,13 @@
   margin-left: 10px;
 }
 
-.the-tag.green { @include tagColor(#e7faf0, var(--green)); }
-.the-tag.blue { @include tagColor(#e8f3ff, var(--blue)); }
-.the-tag.gray { @include tagColor(#efefef, var(--gray)); }
-.the-tag.red { @include tagColor(#ffeded, var(--red)); }
-.the-tag.orange { @include tagColor(#fff7e6, var(--orange)); }
-.the-tag.purple { @include tagColor(#f9f0ff, var(--purple)); }
-.the-tag.cyan { @include tagColor(#e6fffb, var(--cyan)); }
+.the-tag.green { @include tag-color(#e7faf0, var(--green)); }
+.the-tag.blue { @include tag-color(#e8f3ff, var(--blue)); }
+.the-tag.gray { @include tag-color(#efefef, var(--gray)); }
+.the-tag.red { @include tag-color(#ffeded, var(--red)); }
+.the-tag.orange { @include tag-color(#fff7e6, var(--orange)); }
+.the-tag.purple { @include tag-color(#f9f0ff, var(--purple)); }
+.the-tag.cyan { @include tag-color(#e6fffb, var(--cyan)); }
 
 .the-title {
   letter-spacing: 3px;

@@ -2,7 +2,7 @@
   <section :class="['the-curd-editor the-curd-scrollbar', { 'is-show': props.show }]">
     <transition name="the-curd-editor-move">
       <div v-if="props.show" class="the-curd-editor-content">
-        <h2 class="the-title mgb-20">基础设置</h2>
+        <h2 class="the-title mb-[20px]">基础设置</h2>
         <el-form label-position="right" label-width="120px">
           <TheFields
             v-if="curdConfigState.type === 'search'"
@@ -16,7 +16,7 @@
           />
         </el-form>
         <template v-if="state.step === 0">
-          <div class="f-vertical f-between mgb-20">
+          <div class="f-vertical f-between mb-[20px]">
             <h2 class="the-title">第1步：点击选取组件</h2>
             <el-button link type="primary" @click="onClose()">退出编辑</el-button>
           </div>
@@ -27,7 +27,7 @@
           />
         </template>
         <template v-if="state.step === 1">
-          <div class="f-vertical mgb-20">
+          <div class="f-vertical mb-[20px]">
             <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
             <div class="f1"></div>
             <el-button link type="success" @click="onStep(0)">上一步</el-button>

@@ -138,7 +138,7 @@ async function onUpload() {
   transition: 0.2s all;
 }
 
-@mixin addIcon() {
+@mixin add-icon() {
   content: "";
   position: absolute;
   background-color: #999;
@@ -223,7 +223,7 @@ async function onUpload() {
         height: 30px;
 
         &::after {
-          @include addIcon();
+          @include add-icon();
           top: 0;
           left: 50%;
           width: 2px;
@@ -232,7 +232,7 @@ async function onUpload() {
         }
 
         &::before {
-          @include addIcon();
+          @include add-icon();
           top: 50%;
           left: 0;
           width: 100%;

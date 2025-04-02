@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full f-vertical mgb-10">
+  <div class="w-full f-vertical mb-[10px]">
     <template v-if="props.editMode">
       <el-button
         v-for="btn in formActions"
@@ -35,7 +35,7 @@
             表格列设置
           </el-button>
         </template>
-        <div class="f-vertical f-between mgb-10">
+        <div class="f-vertical f-between mb-[10px]">
           <el-checkbox v-model="setting.showFixed" label="配置固定列" />
           <el-button type="primary" link @click="onReset()">
             <i class="el-icon--left el-icon-refresh-left"></i>
@@ -50,7 +50,7 @@
           >
             <i v-if="item.prop !== columnActionProp" class="el-icon--left el-icon-rank"></i>
             <span class="f1">{{ item.title }}</span>
-            <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mgr-10">
+            <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mr-[10px]-10">
               <el-radio-button
                 v-for="opt in fixedOptions"
                 :key="opt.value.toString()"
