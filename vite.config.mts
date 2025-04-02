@@ -42,14 +42,23 @@ export default defineConfig({
         },
         entryFileNames: "js/[name]-[hash].js",
         chunkFileNames: "js/[name]-[hash].js",
+        /**
+         * 处理资源目录结构
+         * @param target 
+         */
         assetFileNames(target) {
-          if (target.name?.endsWith(".css")) {
+          const name = target.name || target.names[0];
+          
+          if (name?.endsWith(".css")) {
             return "css/[name]-[hash].css";
           }
+
           const imageTypes = [".png", "jpg", "jpeg", ".webp", ".gif"];
-          if (target.name && imageTypes.some(type => target.name!.endsWith(type))) {
+
+          if (name && imageTypes.some(type => name.endsWith(type))) {
             return "image/[name]-[hash].[ext]";
           }
+
           return "assets/[name]-[hash].[ext]";
         }
       }
