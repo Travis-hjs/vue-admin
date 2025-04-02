@@ -7,10 +7,10 @@
       <div class="form-box">
         <div class="login-form">
           <div class="login-title">平台登录</div>
-          <input class="the-input mgb-20" type="text" v-model="formData.account" placeholder="请输入账号">
-          <input class="the-input mgb-20" type="password" v-model="formData.password" placeholder="请输入密码">
-          <button class="the-btn blue mgb-20" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
-          <CheckBox class="mgb-20" v-model="remember" label="记住账号/密码" />
+          <input class="the-input mb-[20px]" type="text" v-model="formData.account" placeholder="请输入账号">
+          <input class="the-input mb-[20px]" type="password" v-model="formData.password" placeholder="请输入密码">
+          <button class="the-btn blue mb-[20px]" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
+          <CheckBox class="mb-[20px]" v-model="remember" label="记住账号/密码" />
           <div class="tips f-vertical" v-for="(item, index) in tipList" :key="index">
             <button class="the-btn mini green" v-ripple v-copy="item" :disabled="loading">点击复制</button>
             <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>

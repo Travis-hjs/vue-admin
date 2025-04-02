@@ -143,7 +143,7 @@ function removeImg() {
       .the-upload-add-icon {
         position: relative; width: 30px; height: 30px;
         transform: rotate(-45deg);
-        @include closeIcon(#999, 100%, 2px);
+        @include close-icon(#999, 100%, 2px);
       }
     }
   }

@@ -204,7 +204,7 @@ onUnmounted(function () {
     height: 28px;
     cursor: pointer;
     transform: rotate(0);
-    @include closeIcon(#666, 16px);
+    @include close-icon(#666, 16px);
     transition: var(--transition);
 
     &:hover {

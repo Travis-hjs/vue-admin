@@ -1,4 +1,4 @@
-@mixin closeIcon($color, $size, $land: 1px) {
+@mixin close-icon($color, $size, $land: 1px) {
   position: relative;
 
   &::before {
@@ -26,7 +26,7 @@
   }
 }
 
-@mixin tagColor ($bg, $color) {
+@mixin tag-color ($bg, $color) {
   background-color: $bg;
   color: $color;
 

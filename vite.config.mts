@@ -6,7 +6,11 @@ import { svgBuilder } from "./src/icons/loader";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx(), svgBuilder("./src/icons/svg/")],
+  plugins: [
+    vue(),
+    vueJsx(),
+    svgBuilder("./src/icons/svg/"),
+  ],
   base: "./",
   resolve: {
     alias: {

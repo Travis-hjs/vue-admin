@@ -425,7 +425,7 @@
     color: transparent;
     margin-left: 4px;
     transition: var(--transition);
-    @include closeIcon(var(--menu-text-color), 8px);
+    @include close-icon(var(--menu-text-color), 8px);
 
     &:hover {
       background-color: #b4bccc;

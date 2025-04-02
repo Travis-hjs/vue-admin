@@ -7,8 +7,8 @@
 
 *, *:before, *:after {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  // padding: 0;
+  // margin: 0;
 }
   
 body {
@@ -48,6 +48,29 @@ ul, li, ol {
 
 div:focus {
   outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 8px
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  transition: all .2s ease-in-out
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.302)
 }
 
 // ======================= flex全局样式 =======================

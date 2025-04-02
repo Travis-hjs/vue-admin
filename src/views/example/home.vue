@@ -1,15 +1,15 @@
 <template>
   <div class="page-home">
-    <h2 class="the-title is-line mgb-30">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mgb-40">
+    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mb-[40px]">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
     </div>
-    <h2 class="the-title is-line mgb-30">布局操作开关</h2>
-    <div class="options-box mgb-40">
-      <CheckBox class="mgb-20" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
-      <CheckBox class="mgb-20" label="显示历史记录标签" v-model="layoutInfo.showTagList" />
-      <CheckBox class="mgb-20" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
+    <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
+    <div class="options-box mb-[40px]">
+      <CheckBox class="mb-[20px]" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
+      <CheckBox class="mb-[20px]" label="显示历史记录标签" v-model="layoutInfo.showTagList" />
+      <CheckBox class="mb-[20px]" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
       <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
     </div>
     <div v-for="item in settingList" :key="item.label + item.key" class="form-item f-vertical">
@@ -28,7 +28,7 @@
         </template>
       </template>
     </div>
-    <div class="pdt-20 mgb-30">
+    <div class="pt-[20px] mb-[30px]">
       <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
       <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
@@ -36,7 +36,7 @@
       <button class="the-btn blue mini" v-ripple @click="onPreset('red')">应用预设配置-红色</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset('purple')">应用预设配置-紫色</button>
     </div>
-    <h2 class="the-title is-line mgb-30">打赏一下</h2>
+    <h2 class="the-title is-line mb-[30px]">打赏一下</h2>
     <div class="code-box">
       <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
       <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">

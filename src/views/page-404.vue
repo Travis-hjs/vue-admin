@@ -2,23 +2,23 @@
   <div class="page-404 fvc">
     <section>
       <div class="from-top-box f-vertical">
-        <div class="mgr-30">
-          <div class="point-icon mgb-50"></div>
+        <div class="mr-[30px]">
+          <div class="point-icon mb-[50px]"></div>
           <div class="point-icon"></div>
         </div>
         <div class="radius-icon"></div>
         <div class="code-value">404</div>
       </div>
-      <div class="from-right-box mgb-40">
+      <div class="from-right-box mb-[40px]">
         <p class="text">你访问的页面不存在，请确认页面路径是否正确。</p>
         <p class="text">我们只收集某些错误信息，然后需要你重新点击返回首页或返回上一页。</p>
-        <div class="pdt-40">
+        <div class="pt-[40px]">
           <router-link class="go-back fvc" to="/">返回首页</router-link>
         </div>
       </div>
       <div class="from-bottom-box flex">
         <img class="qrcode-box" src="https://travis-hjs.github.io/images/reward-code.jpg" alt="谢谢打赏！">
-        <div class="pdt-20">
+        <div class="pt-[20px]">
           <p class="desc">如需技术支持，请扫码联系作者。</p>
           <p class="desc">邮箱地址：{{ project.email }}</p>
           <p class="desc">项目地址：{{ project.link }}</p>

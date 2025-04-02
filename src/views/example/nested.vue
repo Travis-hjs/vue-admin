@@ -1,6 +1,6 @@
 <template>
   <div class="nested">
-    <p class="the-title is-line mgb-20">多级嵌套菜单</p>
+    <p class="the-title is-line mb-[20px]">多级嵌套菜单</p>
     <router-view v-slot="{ Component, route }">
       <!-- <transition name="page-x" mode="out-in"> -->
       <!-- 需要保持缓存时开启 -->

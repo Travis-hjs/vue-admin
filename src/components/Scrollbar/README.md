@@ -22,7 +22,7 @@
       </Scrollbar>
     </div>
     <p class="tips">宽高超出滚动</p>
-    <div style="width: 300px; height: 140px;" class="mgb-30">
+    <div style="width: 300px; height: 140px;" class="mb-[30px]">
       <Scrollbar>
         <div style="width: 500px; height: 300px; background-color: yellow; color: #555; line-height: 28px">
           <p>内容内容内容内容内容内容内容</p>
