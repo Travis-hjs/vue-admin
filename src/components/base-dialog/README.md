@@ -7,6 +7,11 @@
 已注册为全局组件
 
 ```html
+<script lang="ts" setup>
+import { ref } from "vue";
+
+const show = ref(false);
+</script>
 <template>
   <div>
     <button @click="show = true">打开弹出层</button>

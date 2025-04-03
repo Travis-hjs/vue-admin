@@ -1,22 +1,3 @@
-<template>
-  <div class="the-layout-header">
-    <div class="the-layout-navbar flex">
-      <div :class="['fvc hamburger', { 'hamburger-actived': layoutInfo.showSidebar }]" @click="onSwitch()">
-        <svg-icon name="hamburger" />
-      </div>
-      <BreadCrumb class="f1" />
-      <div class="user-info-box f-vertical">
-        <img class="avatar" :src="userInfo.avatar || defaultAvatar">
-        <span class="the-tag green mr-[10px]">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
-        <button class="logout f-vertical" @click="onLogout()">
-          <svg-icon name="exit" />
-          <span>退出登录</span>
-        </button>
-      </div>
-    </div>
-    <TagList v-if="layoutInfo.showTagList" />
-  </div>
-</template>
 <script lang="ts">
 /** 顶部栏组件 */
 export default {
@@ -90,3 +71,22 @@ function onLogout() {
   }
 }
 </style>
+<template>
+  <div class="the-layout-header">
+    <div class="the-layout-navbar flex">
+      <div :class="['fvc hamburger', { 'hamburger-actived': layoutInfo.showSidebar }]" @click="onSwitch()">
+        <svg-icon name="hamburger" />
+      </div>
+      <BreadCrumb class="f1" />
+      <div class="user-info-box f-vertical">
+        <img class="avatar" :src="userInfo.avatar || defaultAvatar">
+        <span class="the-tag green mr-[10px]">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
+        <button class="logout f-vertical" @click="onLogout()">
+          <svg-icon name="exit" />
+          <span>退出登录</span>
+        </button>
+      </div>
+    </div>
+    <TagList v-if="layoutInfo.showTagList" />
+  </div>
+</template>

@@ -1,35 +1,3 @@
-<template>
-  <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
-    <div
-      ref="wrap"
-      class="the-scrollbar-wrap"
-      :style="{ 'max-height': maxHeight, 'max-width': maxWidth }"
-      @scroll="updateThumbStyle()"
-    >
-      <div ref="view">
-        <slot></slot>
-      </div>
-    </div>
-    <transition name="fade">
-      <div
-        class="the-scrollbar-thumb"
-        ref="thumbY"
-        title="滚动条-摁住拖拽Y轴"
-        :style="thumbStyle.y"
-        v-show="showThumb"
-      ></div>
-    </transition>
-    <transition name="fade">
-      <div
-        class="the-scrollbar-thumb"
-        ref="thumbX"
-        title="滚动条-摁住拖拽X轴"
-        :style="thumbStyle.x"
-        v-show="showThumb"
-      ></div>
-    </transition>
-  </div>
-</template>
 <script lang="ts">
 /**
  * 滚动条组件
@@ -223,9 +191,41 @@ onUnmounted(function () {
 });
 
 defineExpose({
-  updateThumbStyle
+  updateThumbStyle,
 });
 </script>
+<template>
+  <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
+    <div
+      ref="wrap"
+      class="the-scrollbar-wrap"
+      :style="{ 'max-height': maxHeight, 'max-width': maxWidth }"
+      @scroll="updateThumbStyle()"
+    >
+      <div ref="view">
+        <slot></slot>
+      </div>
+    </div>
+    <transition name="fade">
+      <div
+        class="the-scrollbar-thumb"
+        ref="thumbY"
+        title="滚动条-摁住拖拽Y轴"
+        :style="thumbStyle.y"
+        v-show="showThumb"
+      ></div>
+    </transition>
+    <transition name="fade">
+      <div
+        class="the-scrollbar-thumb"
+        ref="thumbX"
+        title="滚动条-摁住拖拽X轴"
+        :style="thumbStyle.x"
+        v-show="showThumb"
+      ></div>
+    </transition>
+  </div>
+</template>
 <style lang="scss">
 .the-scrollbar {
   // width: 100%;

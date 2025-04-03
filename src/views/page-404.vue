@@ -1,3 +1,15 @@
+<script lang="ts">
+import store from "@/store";
+
+export default {
+  name: "page-404",
+  data() {
+    return {
+      project: store.projectInfo
+    }
+  }
+}
+</script>
 <template>
   <div class="page-404 fvc">
     <section>
@@ -27,18 +39,6 @@
     </section>
   </div>
 </template>
-<script lang="ts">
-import store from '@/store';
-
-export default {
-  name: "page-404",
-  data() {
-    return {
-      project: store.projectInfo
-    }
-  }
-}
-</script>
 <style lang="scss" scoped>
 .page-404 {
   width: 100%;

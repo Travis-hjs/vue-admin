@@ -5,6 +5,12 @@
 ## 单个过渡
 
 ```html
+<script lang="ts" setup>
+import { ref } from "vue";
+import { CollapseHeight } from "@/components/CollapseHeight";
+
+const switchBox = ref(false);
+</script>
 <template>
   <div class="demo">
     <button @click="switchBox = !switchBox">switch the `div` show or hide</button>
@@ -19,12 +25,6 @@
     </CollapseHeight>
   </div>
 </template>
-<script lang="ts" setup>
-import { ref } from "vue";
-import { CollapseHeight } from "@/components/CollapseHeight";
-
-const switchBox = ref(false);
-</script>
 <style>
 .demo .box {
   width: 100px;

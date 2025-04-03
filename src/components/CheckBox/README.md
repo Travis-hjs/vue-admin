@@ -3,12 +3,6 @@
 ## 使用示例
 
 ```html
-<template>
-  <div>
-    <CheckBox v-model="state.check1" label="带label的复选框" />
-    <CheckBox v-model="state.check2" />
-  </div>
-</template>
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { CheckBox } from "@/components/CheckBox";
@@ -19,6 +13,12 @@ const state = reactive({
 })
 
 </script>
+<template>
+  <div>
+    <CheckBox v-model="state.check1" label="带label的复选框" />
+    <CheckBox v-model="state.check2" />
+  </div>
+</template>
 ```
 
 ## 参数

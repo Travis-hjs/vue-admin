@@ -7,6 +7,11 @@
 ## 使用示例
 
 ```html
+<script lang="ts" setup>
+import { Scrollbar } from "@/components/Scrollbar";
+
+const list = new Array(10).fill(0).map((_, index) => index);
+</script>
 <template>
   <div class="example-page">
     <p class="tips">横向滚动</p>
@@ -33,11 +38,6 @@
     </div>
   </div>
 </template>
-<script lang="ts" setup>
-import { Scrollbar } from "@/components/Scrollbar";
-
-const list = new Array(10).fill(0).map((_, index) => index);
-</script>
 <style lang="scss">
 .example-page {
   width: 100%;
@@ -109,21 +109,6 @@ function onUpdate() {
 ## 旧实现方式
 
 ```html
-<template>
-  <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
-    <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
-      <div ref="view">
-        <slot></slot>
-      </div>
-    </div>
-    <transition name="fade">
-      <button class="the-scrollbar-thumb" ref="thumbY" title="滚动条-摁住拖拽Y轴" :style="thumbStyle.y" v-show="showThumb"></button>
-    </transition>
-    <transition name="fade">
-      <button class="the-scrollbar-thumb" ref="thumbX" title="滚动条-摁住拖拽X轴" :style="thumbStyle.x" v-show="showThumb"></button>
-    </transition>
-  </div>
-</template>
 <script lang="ts">
 /** 滚动条的厚度 */
 const scrollbarSize = (function () {
@@ -341,6 +326,21 @@ defineExpose({
   updateThumbStyle
 });
 </script>
+<template>
+  <div class="the-scrollbar" ref="el" @mouseenter="onEnter()" @mouseleave="onLeave()">
+    <div ref="wrap" class="the-scrollbar-wrap" :style="wrapStyle">
+      <div ref="view">
+        <slot></slot>
+      </div>
+    </div>
+    <transition name="fade">
+      <button class="the-scrollbar-thumb" ref="thumbY" title="滚动条-摁住拖拽Y轴" :style="thumbStyle.y" v-show="showThumb"></button>
+    </transition>
+    <transition name="fade">
+      <button class="the-scrollbar-thumb" ref="thumbX" title="滚动条-摁住拖拽X轴" :style="thumbStyle.x" v-show="showThumb"></button>
+    </transition>
+  </div>
+</template>
 <style lang="scss">
 .the-scrollbar {
   width: 100%;

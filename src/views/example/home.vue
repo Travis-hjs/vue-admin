@@ -1,48 +1,3 @@
-<template>
-  <div class="page-home">
-    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mb-[40px]">
-      <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
-      <a class="the-tag green" :href="project" target="_blank">项目地址</a>
-    </div>
-    <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
-    <div class="options-box mb-[40px]">
-      <CheckBox class="mb-[20px]" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
-      <CheckBox class="mb-[20px]" label="显示历史记录标签" v-model="layoutInfo.showTagList" />
-      <CheckBox class="mb-[20px]" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
-      <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
-    </div>
-    <div v-for="item in settingList" :key="item.label + item.key" class="form-item f-vertical">
-      <h2 v-if="item.type === 'title'" class="the-title is-line">{{ item.label }}</h2>
-      <template v-else>
-        <span class="form-label">{{ item.label }}</span>
-        <template v-if="item.type === 'color'">
-          <input class="the-input" type="text" v-model="styleVariable[item.key]">
-          <div class="color-box">
-            <input class="color-input" type="color" @change="onColor()" v-model="styleVariable[item.key]">
-          </div>
-        </template>
-        <template v-else>
-          <input class="the-input" type="text" v-model="styleVariable[item.key]" @input="e => onInput(e, item.key as Numbers)">
-          <span class="form-unit">px</span>
-        </template>
-      </template>
-    </div>
-    <div class="pt-[20px] mb-[30px]">
-      <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
-      <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset('black')">应用预设配置-黑色</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset('red')">应用预设配置-红色</button>
-      <button class="the-btn blue mini" v-ripple @click="onPreset('purple')">应用预设配置-紫色</button>
-    </div>
-    <h2 class="the-title is-line mb-[30px]">打赏一下</h2>
-    <div class="code-box">
-      <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
-      <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">
-    </div>
-  </div>
-</template>
 <script lang="ts" setup>
 import store from "@/store";
 import { copyText, inputOnlyNumber, jsonParse, modifyData } from "@/utils";
@@ -370,6 +325,51 @@ onUnmounted(function() {
   clearTimeout(timer);
 });
 </script>
+<template>
+  <div class="page-home">
+    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mb-[40px]">
+      <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
+      <a class="the-tag green" :href="project" target="_blank">项目地址</a>
+    </div>
+    <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
+    <div class="options-box mb-[40px]">
+      <CheckBox class="mb-[20px]" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
+      <CheckBox class="mb-[20px]" label="显示历史记录标签" v-model="layoutInfo.showTagList" />
+      <CheckBox class="mb-[20px]" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
+      <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
+    </div>
+    <div v-for="item in settingList" :key="item.label + item.key" class="form-item f-vertical">
+      <h2 v-if="item.type === 'title'" class="the-title is-line">{{ item.label }}</h2>
+      <template v-else>
+        <span class="form-label">{{ item.label }}</span>
+        <template v-if="item.type === 'color'">
+          <input class="the-input" type="text" v-model="styleVariable[item.key]">
+          <div class="color-box">
+            <input class="color-input" type="color" @change="onColor()" v-model="styleVariable[item.key]">
+          </div>
+        </template>
+        <template v-else>
+          <input class="the-input" type="text" v-model="styleVariable[item.key]" @input="e => onInput(e, item.key as Numbers)">
+          <span class="form-unit">px</span>
+        </template>
+      </template>
+    </div>
+    <div class="pt-[20px] mb-[30px]">
+      <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
+      <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('black')">应用预设配置-黑色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('red')">应用预设配置-红色</button>
+      <button class="the-btn blue mini" v-ripple @click="onPreset('purple')">应用预设配置-紫色</button>
+    </div>
+    <h2 class="the-title is-line mb-[30px]">打赏一下</h2>
+    <div class="code-box">
+      <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
+      <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">
+    </div>
+  </div>
+</template>
 <style lang="scss">
 .page-home {
   width: 100%;

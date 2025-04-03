@@ -1,13 +1,3 @@
-<template>
-  <div class="menu-4">
-    <div class="mb-[20px]">
-      <span class="the-tag cyan">menu-4</span>
-    </div>
-    <GoodsForm class="mb-[20px]" :form="goods.info" />
-    <button class="the-btn blue" @click="onChange()">修改商品信息</button>
-    <button class="the-btn red" @click="onClear()">重置商品信息</button>
-  </div>
-</template>
 <script lang="ts" setup>
 import store from '@/store';
 import GoodsForm from './components/GoodsForm.vue'
@@ -60,6 +50,16 @@ function onClear() {
 }
 
 </script>
+<template>
+  <div class="menu-4">
+    <div class="mb-[20px]">
+      <span class="the-tag cyan">menu-4</span>
+    </div>
+    <GoodsForm class="mb-[20px]" :form="goods.info" />
+    <button class="the-btn blue" @click="onChange()">修改商品信息</button>
+    <button class="the-btn red" @click="onClear()">重置商品信息</button>
+  </div>
+</template>
 <style lang="scss">
 .menu-4 {
   width: 100%;

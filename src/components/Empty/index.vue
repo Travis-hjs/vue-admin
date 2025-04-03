@@ -1,9 +1,3 @@
-<template>
-  <div class="empty">
-    <img class="icon" :style="{ width: size ? `${size}px`: undefined }" src="./icon.svg" alt="">
-    <span class="text">{{ text }}</span>
-  </div>
-</template>
 <script lang="ts">
 /** 空状态组件 */
 export default {
@@ -19,6 +13,12 @@ export default {
   }
 }
 </script>
+<template>
+  <div class="empty">
+    <img class="icon" :style="{ width: size ? `${size}px`: undefined }" src="./icon.svg" alt="">
+    <span class="text">{{ text }}</span>
+  </div>
+</template>
 <style lang="scss" scoped>
 .empty {
   width: 100%;
