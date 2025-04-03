@@ -57,16 +57,6 @@ function onUpload(info: UploadChange<"banner"|"logo">) {
 - 使用示例
 
 ```html
-<template>
-  <div>
-    <!-- 默认使用方式 -->
-    <UploadWrap @change="onUpload">
-      <el-button>点击上传</el-button>
-      <el-tag>上传文件：{{ formData.file }}</el-tag>
-    </UploadWrap>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { UploadWrap, type UploadChange } from "@/components/Upload";
@@ -83,6 +73,15 @@ function onUpload(info: UploadChange) {
   formData.file = info.src;
 }
 </script>
+<template>
+  <div>
+    <!-- 默认使用方式 -->
+    <UploadWrap @change="onUpload">
+      <el-button>点击上传</el-button>
+      <el-tag>上传文件：{{ formData.file }}</el-tag>
+    </UploadWrap>
+  </div>
+</template>
 ```
 
 ## 上传视频组件

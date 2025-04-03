@@ -34,9 +34,6 @@
 > 代码配置中，注意看 jsDoc 的注解提示，有些特殊字段会说明原因
 
 ```html
-<template>
-  <Curd :data="data" :action="action" />
-</template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
 import { Curd, type CurdType } from "@/components/Curd";
@@ -76,6 +73,9 @@ const action: CurdType.Action = {
   },
 }
 </script>
+<template>
+  <Curd :data="data" :action="action" />
+</template>
 ```
 
 ## 使用说明-可视化配置
@@ -232,9 +232,6 @@ exportPropToWindow({
 在设计数据结构时，为了更好的区分数据结构和类型检查，这里每一个表单项对象`Field`都是不同的属性，所以在使用时，要先输入`type: xxx`的类型，之后才会做对应的类型检查，在`getFieldData`方法中第一个参数就是`type`，传入对应的组件类型时就能获取对应的返回类型。
 
 ```html
-<template>
-  <Curd :data="data" :action="action" />
-</template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
@@ -469,6 +466,9 @@ const action: CurdType.Action = {
   },
 }
 </script>
+<template>
+  <Curd :data="data" :action="action" />
+</template>
 ```
 
 ## 如何拓展表单项自定义组件
@@ -524,6 +524,10 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
 > 最后在 `Curd/src/Field.vue` 中引入上传组件即可
 
 ```html
+<script lang="ts" setup>
+import TheUpload from "@/components/Upload";
+
+</script>
 <template>
   <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
     <TheUpload
@@ -533,9 +537,6 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
     />
   </div>
 </template>
-<script lang="ts" setup>
-import TheUpload from "@/components/Upload";
-</script>
 ```
 
 如果自定义的组件需要处理默认值和最终获取的值处理时，需要在 [data.ts](./src/data.ts) 中同步修改`getFieldValue`和`initFieldValue`这两个方法。当前程序在做其他操作时会统一调用这两个函数。
@@ -571,13 +572,6 @@ vue3-popup-component
 在拓展或使用`<Field>`组件时，其内部会执行`initFieldValue()`方法，在做数据修改导致组件重新渲染时，每次都会初始化绑定值，这就导致了上一次修改的值会被`defaultValue`冲掉（这个行为是有意为之的，在做数据处理时更好的区分和操作状态），如果需要保持交互上的操作不被重置，只需要在`<Field>`绑定一个`change`事件，然后在组件外进行处理，像这样：
 
 ```html
-<template>
-  <Field
-    v-if="showField"
-    :field-data="data"
-    @change="val => onField(data, val)"
-  />
-</template>
 <script lang="ts" setup>
 // 省略前置代码
 
@@ -593,6 +587,13 @@ function onField<T>(field: CurdType.Field, value: T) {
   }
 }
 </script>
+<template>
+  <Field
+    v-if="showField"
+    :field-data="data"
+    @change="val => onField(data, val)"
+  />
+</template>
 ```
 
 同理，日期类型如果不需要重置默认选中的日期，那么就需要修改`shortcutIndex`。

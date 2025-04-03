@@ -16,20 +16,6 @@
 当按钮状态需要根据变量动态改变值时，需要写在`computed`里引用
 
 ```html
-<template>
-  <div>
-    <el-table stripe border :data="state.data">
-      <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
-      <el-table-column prop="name" label="名称" width="180" align="center"></el-table-column>
-      <el-table-column prop="address" label="地址" min-width="180" align="center"></el-table-column>
-      <el-table-column prop="option" label="操作" width="200" align="center" fixed="right">
-        <template slot-scope="{ row }">
-          <base-table-actions :row="row" :list="btnList"></base-table-actions>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
-</template>
 <script lang="ts" setup>
 import { reactive, ref } from "vue"
 import { randomText } from "@/utils";
@@ -79,4 +65,18 @@ const btnList: Array<BaseTableAction<TableRow>> = [
   },
 ]
 </script>
+<template>
+  <div>
+    <el-table stripe border :data="state.data">
+      <el-table-column prop="id" label="ID" width="80" align="center"></el-table-column>
+      <el-table-column prop="name" label="名称" width="180" align="center"></el-table-column>
+      <el-table-column prop="address" label="地址" min-width="180" align="center"></el-table-column>
+      <el-table-column prop="option" label="操作" width="200" align="center" fixed="right">
+        <template slot-scope="{ row }">
+          <base-table-actions :row="row" :list="btnList"></base-table-actions>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
 ```

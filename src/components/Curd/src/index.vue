@@ -1,85 +1,3 @@
-<template>
-  <div class="the-curd-main-page">
-    <Search
-      v-if="props.data.search.list.length"
-      :search="props.data.search"
-      :loading="state.loading"
-      @search="onSearch"
-    />
-    <template v-if="tableConfig.columns.length > 0">
-      <TableOperation
-        :config="tableConfig"
-        :disabled="state.loading"
-        @action="onTableOperation"
-      >
-        <template #left>
-          <span v-if="tableConfig.selectKey" class="the-tag blue">
-            已选择 {{ tableState.selectList.length }} 条数据
-          </span>
-        </template>
-      </TableOperation>
-      <base-table
-        class="f1"
-        v-model:select-list="tableState.selectList"
-        :data="tableState.data"
-        :columns="tableColumns"
-        :actions="actionList"
-        :actionMax="tableConfig.actionMax"
-        :loading="state.loading"
-        :select-key="tableConfig.selectKey!"
-      >
-        <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
-          <TableHeader
-            :column="tableColumns[tableConfig.selectKey ? $index - 1 : $index]"
-            @sort="(prop, action) => getData({ key: 'sort', prop, action })"
-          />
-        </template>
-        <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
-          <!-- TODO: 因为插槽中只有图片这个功能，所以不需要做条件判断 -->
-          <TableImage
-            :column="getColumnByProp(cell)"
-            :src="(row[cell] as string)"
-            :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
-          />
-        </template>
-      </base-table>
-      <base-pagination
-        :disabled="state.loading"
-        :pageInfo="tableState.pageInfo"
-        @change="info => getData({ key: 'page', ...info })"
-      />
-    </template>
-    <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
-      <el-button type="primary" @click="openConfig('table')">去配置</el-button>
-    </el-empty>
-
-    <el-button
-      class="the-curd-entrance"
-      type="primary"
-      size="small"
-      @click="openConfig()"
-    >
-      <i class="el-icon-arrow-left" />
-    </el-button>
-
-    <base-dialog
-      v-model:show="tableState.formShow"
-      :title="formInfo.title"
-      :width="convertPx(formInfo.config.width)"
-      @close="onCloseForm()"
-    >
-      <TableForm
-        ref="formRef"
-        :config="formInfo.config"
-        :type="tableState.formType"
-        :disabled="tableState.formLoading"
-      />
-      <template #footer>
-        <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
-      </template>
-    </base-dialog>
-  </div>
-</template>
 <script lang="ts">
 /** 增删改查低代码组件 */
 export default {
@@ -425,6 +343,88 @@ onMounted(function() {
   }
 });
 </script>
+<template>
+  <div class="the-curd-main-page">
+    <Search
+      v-if="props.data.search.list.length"
+      :search="props.data.search"
+      :loading="state.loading"
+      @search="onSearch"
+    />
+    <template v-if="tableConfig.columns.length > 0">
+      <TableOperation
+        :config="tableConfig"
+        :disabled="state.loading"
+        @action="onTableOperation"
+      >
+        <template #left>
+          <span v-if="tableConfig.selectKey" class="the-tag blue">
+            已选择 {{ tableState.selectList.length }} 条数据
+          </span>
+        </template>
+      </TableOperation>
+      <base-table
+        class="f1"
+        v-model:select-list="tableState.selectList"
+        :data="tableState.data"
+        :columns="tableColumns"
+        :actions="actionList"
+        :actionMax="tableConfig.actionMax"
+        :loading="state.loading"
+        :select-key="tableConfig.selectKey!"
+      >
+        <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
+          <TableHeader
+            :column="tableColumns[tableConfig.selectKey ? $index - 1 : $index]"
+            @sort="(prop, action) => getData({ key: 'sort', prop, action })"
+          />
+        </template>
+        <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
+          <!-- TODO: 因为插槽中只有图片这个功能，所以不需要做条件判断 -->
+          <TableImage
+            :column="getColumnByProp(cell)"
+            :src="(row[cell] as string)"
+            :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
+          />
+        </template>
+      </base-table>
+      <base-pagination
+        :disabled="state.loading"
+        :pageInfo="tableState.pageInfo"
+        @change="info => getData({ key: 'page', ...info })"
+      />
+    </template>
+    <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
+      <el-button type="primary" @click="openConfig('table')">去配置</el-button>
+    </el-empty>
+
+    <el-button
+      class="the-curd-entrance"
+      type="primary"
+      size="small"
+      @click="openConfig()"
+    >
+      <i class="el-icon-arrow-left" />
+    </el-button>
+
+    <base-dialog
+      v-model:show="tableState.formShow"
+      :title="formInfo.title"
+      :width="convertPx(formInfo.config.width)"
+      @close="onCloseForm()"
+    >
+      <TableForm
+        ref="formRef"
+        :config="formInfo.config"
+        :type="tableState.formType"
+        :disabled="tableState.formLoading"
+      />
+      <template #footer>
+        <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
+      </template>
+    </base-dialog>
+  </div>
+</template>
 <style lang="scss">
 @import url("./styles/index.scss");
 </style>

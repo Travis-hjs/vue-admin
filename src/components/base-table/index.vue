@@ -1,62 +1,3 @@
-<template>
-  <div class="base-table" :id="adaptive.id" v-loading="loading">
-    <el-table
-      ref="the-table"
-      stripe
-      border
-      :max-height="props.maxHeight || adaptive.height"
-      :data="props.data"
-      @row-click="rowClick"
-      @selection-change="onSelect"
-    >
-      <el-table-column v-if="props.selectKey" :resizable="false" width="55" align="center" fixed="left">
-        <template #header>
-          <el-checkbox
-            :indeterminate="isIndeterminate"
-            :model-value="selectedAll"
-            :disabled="disabledAll"
-            @change="onSelectAll"
-          />
-        </template>
-        <template #default="{ row, $index }: SlotType">
-          <el-checkbox
-            :model-value="selected(row)"
-            :disabled="!canSelect(row, $index)"
-            @change="onSelect(row)"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-for="item in props.columns"
-        :key="item.prop"
-        :prop="(item.prop as string)"
-        :label="item.title"
-        :min-width="item.minWidth"
-        :width="item.width"
-        :show-overflow-tooltip="hasTooltip(item)"
-        :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
-        :align="item.prop === 'action-right' ? 'center' : item.align"
-        :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
-      >
-        <template #header="scope">
-          <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
-        </template>
-        <template #default="scope: SlotType">
-          <slot :name="item.slot" v-bind="scope" v-if="item.slot"></slot>
-          <base-table-actions
-            v-else-if="item.prop === 'action-right'"
-            :row="scope.row"
-            :index="scope.$index"
-            :actions="(props.actions as any)"
-            :clickStop="props.isRowClick"
-          />
-          <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.prop], scope.row)"></div>
-          <template v-else>{{ setTableDefaultContent(scope.row, item.prop as string, item) }}</template>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
-</template>
 <script lang="ts">
 /** 全局表格组件 */
 export default {
@@ -249,6 +190,65 @@ function onSelect(item: any) {
   emit("update:selectList", list);
 }
 </script>
+<template>
+  <div class="base-table" :id="adaptive.id" v-loading="loading">
+    <el-table
+      ref="the-table"
+      stripe
+      border
+      :max-height="props.maxHeight || adaptive.height"
+      :data="props.data"
+      @row-click="rowClick"
+      @selection-change="onSelect"
+    >
+      <el-table-column v-if="props.selectKey" :resizable="false" width="55" align="center" fixed="left">
+        <template #header>
+          <el-checkbox
+            :indeterminate="isIndeterminate"
+            :model-value="selectedAll"
+            :disabled="disabledAll"
+            @change="onSelectAll"
+          />
+        </template>
+        <template #default="{ row, $index }: SlotType">
+          <el-checkbox
+            :model-value="selected(row)"
+            :disabled="!canSelect(row, $index)"
+            @change="onSelect(row)"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column
+        v-for="item in props.columns"
+        :key="item.prop"
+        :prop="(item.prop as string)"
+        :label="item.title"
+        :min-width="item.minWidth"
+        :width="item.width"
+        :show-overflow-tooltip="hasTooltip(item)"
+        :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
+        :align="item.prop === 'action-right' ? 'center' : item.align"
+        :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
+      >
+        <template #header="scope">
+          <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
+        </template>
+        <template #default="scope: SlotType">
+          <slot :name="item.slot" v-bind="scope" v-if="item.slot"></slot>
+          <base-table-actions
+            v-else-if="item.prop === 'action-right'"
+            :row="scope.row"
+            :index="scope.$index"
+            :actions="(props.actions as any)"
+            :clickStop="props.isRowClick"
+          />
+          <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.prop], scope.row)"></div>
+          <template v-else>{{ setTableDefaultContent(scope.row, item.prop as string, item) }}</template>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
 <style lang="scss">
 .base-table {
   width: 100%;

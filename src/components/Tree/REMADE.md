@@ -23,33 +23,6 @@
 ## 使用示例
 
 ```html
-<template>
-  <div class="demo">
-    <h2 class="the-title">默认用法</h2>
-    <Tree
-      ref="theTree"
-      :list="options"
-      :setting="propSetting"
-      checkbox
-      @nodeChange="onChange"
-      @nodeClick="onChange"
-    />
-
-    <h2 class="the-title">选择父节点时，也把其子节点也勾选上</h2>
-    <Tree :list="options" :setting="propSetting" checkbox checkChild />
-
-    <h2 class="the-title">插槽用法</h2>
-    <Tree :list="options" :setting="propSetting" checkbox>
-      <template #default="item">
-        <span>{{ item.label }}</span>
-        <!-- original 为原始数据 -->
-        <span>ID: {{ item.original.id }}</span>
-      </template>
-    </Tree>
-    <el-button @click="getValues()">获取选中值</el-button>
-    <el-button type="success" @click="setValues()">设置选中值</el-button>
-  </div>
-</template>
 <script lang="ts" setup>
 import { Tree, type TreeItem } from "@/components/Tree";
 import { ref } from "vue";
@@ -107,6 +80,33 @@ function onChange(item: TreeItem) {
 }
 
 </script>
+<template>
+  <div class="demo">
+    <h2 class="the-title">默认用法</h2>
+    <Tree
+      ref="theTree"
+      :list="options"
+      :setting="propSetting"
+      checkbox
+      @nodeChange="onChange"
+      @nodeClick="onChange"
+    />
+
+    <h2 class="the-title">选择父节点时，也把其子节点也勾选上</h2>
+    <Tree :list="options" :setting="propSetting" checkbox checkChild />
+
+    <h2 class="the-title">插槽用法</h2>
+    <Tree :list="options" :setting="propSetting" checkbox>
+      <template #default="item">
+        <span>{{ item.label }}</span>
+        <!-- original 为原始数据 -->
+        <span>ID: {{ item.original.id }}</span>
+      </template>
+    </Tree>
+    <el-button @click="getValues()">获取选中值</el-button>
+    <el-button type="success" @click="setValues()">设置选中值</el-button>
+  </div>
+</template>
 ```
 
 ## 备份文件
@@ -215,5 +215,4 @@ const TreeLevel = defineComponent({
 });
 
 export default TreeLevel;
-
 ```

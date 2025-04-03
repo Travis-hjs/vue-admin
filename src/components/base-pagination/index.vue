@@ -1,18 +1,3 @@
-<template>
-  <div :class="['base-pagination', position]">
-    <el-pagination
-      v-if="props.pageInfo.total"
-      background
-      :disabled="props.disabled"
-      :layout="props.layout"
-      :total="props.pageInfo.total"
-      :current-page="props.pageInfo.currentPage"
-      :page-sizes="props.pageSizes"
-      @size-change="onSizeChange"
-      @current-change="onCurrentChange"
-    ></el-pagination>
-  </div>
-</template>
 <script lang="ts">
 /** 通用分页组件 */
 export default {
@@ -63,6 +48,21 @@ function onCurrentChange(n: number) {
   emit("change", { type: "currentPage", value: n, before });
 }
 </script>
+<template>
+  <div :class="['base-pagination', position]">
+    <el-pagination
+      v-if="props.pageInfo.total"
+      background
+      :disabled="props.disabled"
+      :layout="props.layout"
+      :total="props.pageInfo.total"
+      :current-page="props.pageInfo.currentPage"
+      :page-sizes="props.pageSizes"
+      @size-change="onSizeChange"
+      @current-change="onCurrentChange"
+    ></el-pagination>
+  </div>
+</template>
 <style lang="scss">
 .base-pagination {
   width: 100%;

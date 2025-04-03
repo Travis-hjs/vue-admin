@@ -1,24 +1,3 @@
-<template>
-  <base-dialog
-    v-model:show="state.show"
-    :title="title"
-    width="580px"
-    @close="onClose"
-  >
-    <el-form
-      ref="formRef"
-      :model="state.form"
-      :rules="formRules"
-      label-position="right"
-      label-width="130px"
-    >
-      <TheFields :data="state.form" :list="itemList" />
-    </el-form>
-    <template #footer>
-      <FooterBtn @close="onClose" @submit="onSubmit" />
-    </template>
-  </base-dialog>
-</template>
 <script lang="ts">
 /** 表格列配置弹框 */
 export default {
@@ -279,3 +258,24 @@ watch(
   { immediate: true }
 );
 </script>
+<template>
+  <base-dialog
+    v-model:show="state.show"
+    :title="title"
+    width="580px"
+    @close="onClose"
+  >
+    <el-form
+      ref="formRef"
+      :model="state.form"
+      :rules="formRules"
+      label-position="right"
+      label-width="130px"
+    >
+      <TheFields :data="state.form" :list="itemList" />
+    </el-form>
+    <template #footer>
+      <FooterBtn @close="onClose" @submit="onSubmit" />
+    </template>
+  </base-dialog>
+</template>

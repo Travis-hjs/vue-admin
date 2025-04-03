@@ -5,6 +5,13 @@
 使用示例
 
 ```html
+<script lang="ts" setup>
+import { ref } from "vue";
+import { Drawer } from "@/components/Drawer";
+
+const showDrawer = ref(false);
+
+</script>
 <template>
   <div class="demo">
     <Drawer v-model:show="showDrawer" title="测试抽屉盒子">
@@ -15,11 +22,4 @@
     </Drawer>
   </div>
 </template>
-<script lang="ts" setup>
-import { ref } from "vue";
-import { Drawer } from "@/components/Drawer";
-
-const showDrawer = ref(false);
-
-</script>
 ```

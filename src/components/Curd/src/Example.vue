@@ -1,15 +1,3 @@
-<template>
-  <div class="the-curd-example">
-    <Field
-      v-for="item in fieldList"
-      :key="item.type"
-      :field-data="item"
-      :class="['the-curd-example-item fvc', { 'the-curd-selected': props.selected === item.type }]"
-      readonly
-      @click="emit('choose', item.type)"
-    />
-  </div>
-</template>
 <script lang="ts">
 /** 表单组件示例组件 */
 export default {
@@ -99,3 +87,15 @@ const fieldList = computed(() => {
   return example;
 });
 </script>
+<template>
+  <div class="the-curd-example">
+    <Field
+      v-for="item in fieldList"
+      :key="item.type"
+      :field-data="item"
+      :class="['the-curd-example-item fvc', { 'the-curd-selected': props.selected === item.type }]"
+      readonly
+      @click="emit('choose', item.type)"
+    />
+  </div>
+</template>

@@ -1,146 +1,3 @@
-<template>
-  <TableOperation
-    v-if="!curdConfigState.editor.showForm"
-    :editMode="true"
-    :config="props.config"
-    @action="onOption"
-  />
-  <div class="the-curd-table-model the-curd-scrollbar">
-    <TableForm
-      v-if="curdConfigState.editor.showForm"
-      :config="tableForm.form!"
-      :type="tableForm.type"
-      :editMode="true"
-      @change="onFormEdit"
-    />
-    <transition-group v-else name="the-group" tag="div" class="fake-table">
-      <el-empty
-        v-if="!props.config.columns.length"
-        key="empty"
-        style="padding: 10px 40px"
-        :image-size="120"
-        description="请添加表格列"
-      />
-      <div
-        v-for="(column, columnIndex) in columnInfo.drag"
-        :key="column.prop"
-        :data-key="column.prop"
-        class="fake-table-item"
-        :draggable="columnInfo.drag.length > 1"
-        :style="getColumnWidth(column)"
-        @dragstart="onDragStart(columnIndex)"
-        @dragover="onDragMove($event, columnIndex)"
-        @drop="onDropEnd()"
-      >
-        <div class="fake-table-head f-vertical" :style="{ 'text-align': column.align }" :data-head="column.prop">
-          <i class="el-icon-rank el-icon--left"></i>
-          <TableHeader :column="column" />
-        </div>
-        <div class="fake-table-cell operation f-vertical" :class="[column.align ? `f-${column.align}` : undefined]">
-          <el-dropdown trigger="click">
-            <el-button link type="primary">
-              配置列
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  v-for="menu in columnMenus"
-                  :key="menu.key"
-                  @click="menu.click(columnIndex)"
-                >
-                  <i :class="['el-icon--left', menu.icon]"></i>
-                  {{ menu.label }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
-        <div class="fake-table-cell f-vertical" :class="[column.align ? `f-${column.align}` : undefined]">
-          <template v-if="column.cellType === 'text'">文本内容</template>
-          <span v-else-if="column.cellType === 'js'" class="the-tag blue">自定义代码</span>
-          <TableImage :column="column" :src="demoUrl" />
-        </div>
-      </div>
-      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="columnActionProp" class="fake-table-item">
-        <div class="fake-table-head fvc">操作</div>
-        <div class="fake-table-cell operation fvc">
-          <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
-            <el-button 
-              circle
-              plain
-              type="primary"
-              size="small"
-              @click="openConfigAction()"
-            >
-              <i class="el-icon-setting" />
-            </el-button>
-          </el-tooltip>
-          <el-button 
-            circle
-            plain
-            type="danger"
-            size="small"
-            @click="deleteActionColumn()"
-          >
-            <i class="el-icon-delete" />
-          </el-button>
-        </div>
-        <div class="fake-table-cell disabled">
-          <base-table-actions
-            v-if="props.config.actions.length"
-            :row="{}"
-            :index="1"
-            :actions="props.config.actions"
-          />
-          <el-text v-else type="info">待添加操作~</el-text>
-        </div>
-      </div>
-      <div class="f-vertical" key="right-setting">
-        <div>
-          <p>
-            <el-button type="primary" text @click="openConfigCol('add')">
-              <i class="el-icon-plus el-icon--left" />
-              添加内容列
-            </el-button>
-          </p>
-          <p v-if="!actionColumn">
-            <el-button type="primary" text @click="addActionColumn()">
-              <i class="el-icon-plus el-icon--left" />
-              添加操作列
-            </el-button>
-          </p>
-        </div>
-      </div>
-    </transition-group>
-  </div>
-  <div v-if="!curdConfigState.editor.showForm && hasNotWidth">
-    <el-button type="primary" @click="onSetWidth()">一键设置最小宽度</el-button>
-    <span class="the-tag blue ml-[10px]">
-      <i class="el-icon--left el-icon-info"></i>
-      当前表格列配置中存在没配置【宽度/最小宽度】，建议一件设置最小宽度，提高表格美观性。
-    </span>
-  </div>
-  <TableColumnConfig
-    v-model:show="configCol.show"
-    :type="configCol.type"
-    :keys="configCol.keys"
-    :form="configCol.form"
-    @submit="onColSubmit"
-  />
-  <TableDeleteConfig
-    v-model:show="configDele.show"
-    :select-key="configDele.keyword"
-    @submit="onConfigDele"
-  />
-  <TableActionConfig
-    v-model:show="configAction.show"
-    :columnWidth="configAction.columnWidth"
-    :actionMax="configAction.actionMax"
-    :list="props.config.actions"
-    @submit="onConfigAction"
-  />
-</template>
 <script lang="ts">
 /** 表格配置模型组件 */
 export default {
@@ -468,3 +325,147 @@ function onSetWidth() {
   });
 }
 </script>
+<template>
+  <TableOperation
+    v-if="!curdConfigState.editor.showForm"
+    :editMode="true"
+    :config="props.config"
+    @action="onOption"
+  />
+  <div class="the-curd-table-model the-curd-scrollbar">
+    <TableForm
+      v-if="curdConfigState.editor.showForm"
+      :config="tableForm.form!"
+      :type="tableForm.type"
+      :editMode="true"
+      @change="onFormEdit"
+    />
+    <transition-group v-else name="the-group" tag="div" class="fake-table">
+      <el-empty
+        v-if="!props.config.columns.length"
+        key="empty"
+        style="padding: 10px 40px"
+        :image-size="120"
+        description="请添加表格列"
+      />
+      <div
+        v-for="(column, columnIndex) in columnInfo.drag"
+        :key="column.prop"
+        :data-key="column.prop"
+        class="fake-table-item"
+        :draggable="columnInfo.drag.length > 1"
+        :style="getColumnWidth(column)"
+        @dragstart="onDragStart(columnIndex)"
+        @dragover="onDragMove($event, columnIndex)"
+        @drop="onDropEnd()"
+      >
+        <div class="fake-table-head f-vertical" :style="{ 'text-align': column.align }" :data-head="column.prop">
+          <i class="el-icon-rank el-icon--left"></i>
+          <TableHeader :column="column" />
+        </div>
+        <div class="fake-table-cell operation f-vertical" :class="[column.align ? `f-${column.align}` : undefined]">
+          <el-dropdown trigger="click">
+            <el-button link type="primary">
+              配置列
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="menu in columnMenus"
+                  :key="menu.key"
+                  @click="menu.click(columnIndex)"
+                >
+                  <i :class="['el-icon--left', menu.icon]"></i>
+                  {{ menu.label }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div class="fake-table-cell f-vertical" :class="[column.align ? `f-${column.align}` : undefined]">
+          <template v-if="column.cellType === 'text'">文本内容</template>
+          <span v-else-if="column.cellType === 'js'" class="the-tag blue">自定义代码</span>
+          <TableImage :column="column" :src="demoUrl" />
+        </div>
+      </div>
+      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="columnActionProp" class="fake-table-item">
+        <div class="fake-table-head fvc">操作</div>
+        <div class="fake-table-cell operation fvc">
+          <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
+            <el-button 
+              circle
+              plain
+              type="primary"
+              size="small"
+              @click="openConfigAction()"
+            >
+              <i class="el-icon-setting" />
+            </el-button>
+          </el-tooltip>
+          <el-button 
+            circle
+            plain
+            type="danger"
+            size="small"
+            @click="deleteActionColumn()"
+          >
+            <i class="el-icon-delete" />
+          </el-button>
+        </div>
+        <div class="fake-table-cell disabled">
+          <base-table-actions
+            v-if="props.config.actions.length"
+            :row="{}"
+            :index="1"
+            :actions="props.config.actions"
+          />
+          <el-text v-else type="info">待添加操作~</el-text>
+        </div>
+      </div>
+      <div class="f-vertical" key="right-setting">
+        <div>
+          <p>
+            <el-button type="primary" text @click="openConfigCol('add')">
+              <i class="el-icon-plus el-icon--left" />
+              添加内容列
+            </el-button>
+          </p>
+          <p v-if="!actionColumn">
+            <el-button type="primary" text @click="addActionColumn()">
+              <i class="el-icon-plus el-icon--left" />
+              添加操作列
+            </el-button>
+          </p>
+        </div>
+      </div>
+    </transition-group>
+  </div>
+  <div v-if="!curdConfigState.editor.showForm && hasNotWidth">
+    <el-button type="primary" @click="onSetWidth()">一键设置最小宽度</el-button>
+    <span class="the-tag blue ml-[10px]">
+      <i class="el-icon--left el-icon-info"></i>
+      当前表格列配置中存在没配置【宽度/最小宽度】，建议一件设置最小宽度，提高表格美观性。
+    </span>
+  </div>
+  <TableColumnConfig
+    v-model:show="configCol.show"
+    :type="configCol.type"
+    :keys="configCol.keys"
+    :form="configCol.form"
+    @submit="onColSubmit"
+  />
+  <TableDeleteConfig
+    v-model:show="configDele.show"
+    :select-key="configDele.keyword"
+    @submit="onConfigDele"
+  />
+  <TableActionConfig
+    v-model:show="configAction.show"
+    :columnWidth="configAction.columnWidth"
+    :actionMax="configAction.actionMax"
+    :list="props.config.actions"
+    @submit="onConfigAction"
+  />
+</template>
+

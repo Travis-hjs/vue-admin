@@ -1,40 +1,14 @@
-<template>
-  <el-select
-    v-model="useValue"
-    :placeholder="placeholder.toString()"
-    :disabled="disabled || requesting"
-    :multiple="multiple"
-    clearable
-    @change="onSelect"
-    popper-class="base-input-select-popper"
-  >
-    <el-option
-      v-for="item in options"
-      :key="item[useSetting.key]"
-      :label="item[useSetting.label]"
-      :value="item[useSetting.value]"
-    >
-      <slot v-bind="item"></slot>
-    </el-option>
-    <div :class="['btn-bottom-box flex', { 'pr-[10px]-10': isNoMore }]">
-      <el-button text type="primary" class="f1" :loading="loading || requesting" :disabled="isNoMore" @click="getData()">{{ isNoMore ? '数据已加载完' : '加载更多' }}</el-button>
-      <el-button text type="success" @click="getData(true)" v-if="isNoMore">重新加载数据</el-button>
-    </div>
-  </el-select>
-</template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { jsonParse, modifyData } from "@/utils";
-
 /** 分页加载选择框 */
-export default defineComponent({
+export default {
   name: "InputSelect"
-});
+};
 </script>
 <script lang="ts" setup>
 import { getPageInfo } from "@/hooks/common";
 import { ref, reactive, computed, type PropType } from "vue";
 import { useProps, useSettingComputed } from "./index";
+import { jsonParse, modifyData } from "@/utils";
 
 const props = defineProps({
   modelValue: {
@@ -135,6 +109,30 @@ if (props.cacheName) {
 }
 
 </script>
+<template>
+  <el-select
+    v-model="useValue"
+    :placeholder="placeholder.toString()"
+    :disabled="disabled || requesting"
+    :multiple="multiple"
+    clearable
+    @change="onSelect"
+    popper-class="base-input-select-popper"
+  >
+    <el-option
+      v-for="item in options"
+      :key="item[useSetting.key]"
+      :label="item[useSetting.label]"
+      :value="item[useSetting.value]"
+    >
+      <slot v-bind="item"></slot>
+    </el-option>
+    <div :class="['btn-bottom-box flex', { 'pr-[10px]-10': isNoMore }]">
+      <el-button text type="primary" class="f1" :loading="loading || requesting" :disabled="isNoMore" @click="getData()">{{ isNoMore ? '数据已加载完' : '加载更多' }}</el-button>
+      <el-button text type="success" @click="getData(true)" v-if="isNoMore">重新加载数据</el-button>
+    </div>
+  </el-select>
+</template>
 <style lang="scss">
 .base-input-select-popper {
   // width: 100%;

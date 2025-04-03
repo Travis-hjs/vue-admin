@@ -1,17 +1,3 @@
-<template>
-  <div class="base-tree">
-    <Level
-      :level="0"
-      :options="options"
-      :checkChild="checkChild"
-      :checkbox="checkbox"
-    >
-      <template #treeitem="slotProps" v-if="$slots.default">
-        <slot v-bind="slotProps"></slot>
-      </template>
-    </Level>
-  </div>
-</template>
 <script lang="ts">
 /** 一直累加的`id` */
 let treeId = 1;
@@ -331,17 +317,30 @@ onUnmounted(function() {
 });
 
 provide("treeParent", {
-  eventMap
+  eventMap,
 });
 
 defineExpose({
   eventMap,
   getCheckedValues,
   setCheckedValues,
-  filter
-})
-
+  filter,
+});
 </script>
+<template>
+  <div class="base-tree">
+    <Level
+      :level="0"
+      :options="options"
+      :checkChild="checkChild"
+      :checkbox="checkbox"
+    >
+      <template #treeitem="slotProps" v-if="$slots.default">
+        <slot v-bind="slotProps"></slot>
+      </template>
+    </Level>
+  </div>
+</template>
 <style lang="scss">
 .base-tree {
   width: 100%;

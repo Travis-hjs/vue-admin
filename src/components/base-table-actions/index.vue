@@ -1,37 +1,3 @@
-<template>
-  <div class="base-table-actions fvc" @click="onBoxClick">
-    <span v-if="!useList.btn.length">-</span>
-    <el-button
-      text
-      :type="btn.type || 'primary'"
-      v-for="(btn, index) in useList.btn"
-      :key="'btn-' + index"
-      :loading="getBoolean(btn, 'loading')"
-      :disabled="getBoolean(btn, 'disabled')"
-      @click="onBtnClick(btn)"
-    >
-      <i :class="['base-table-actions-icon', getString(btn, 'icon')]" v-if="btn.icon && !getBoolean(btn, 'loading')"></i>
-      {{ getString(btn, 'text') }}
-    </el-button>
-    <el-dropdown v-if="useList.dropdown.length" trigger="click">
-      <el-button text type="primary">更多<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item
-            v-for="(drop, index) in useList.dropdown"
-            :key="'drop-' + index"
-            :disabled="getBoolean(drop, 'disabled') || getBoolean(drop, 'loading')"
-            @click="onBtnClick(drop)"
-          >
-            <i class="el-icon-loading" v-if="getBoolean(drop, 'loading')"></i>
-            <i :class="['base-table-actions-icon', getString(drop, 'icon')]" v-else-if="drop.icon && !getBoolean(drop, 'loading')"></i>
-            {{ getString(drop, 'text') }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </div>
-</template>
 <script lang="ts">
 /** 全局表格操作组件 */
 export default {
@@ -163,6 +129,40 @@ function onBoxClick(e: MouseEvent) {
   }
 }
 </script>
+<template>
+  <div class="base-table-actions fvc" @click="onBoxClick">
+    <span v-if="!useList.btn.length">-</span>
+    <el-button
+      text
+      :type="btn.type || 'primary'"
+      v-for="(btn, index) in useList.btn"
+      :key="'btn-' + index"
+      :loading="getBoolean(btn, 'loading')"
+      :disabled="getBoolean(btn, 'disabled')"
+      @click="onBtnClick(btn)"
+    >
+      <i :class="['base-table-actions-icon', getString(btn, 'icon')]" v-if="btn.icon && !getBoolean(btn, 'loading')"></i>
+      {{ getString(btn, 'text') }}
+    </el-button>
+    <el-dropdown v-if="useList.dropdown.length" trigger="click">
+      <el-button text type="primary">更多<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item
+            v-for="(drop, index) in useList.dropdown"
+            :key="'drop-' + index"
+            :disabled="getBoolean(drop, 'disabled') || getBoolean(drop, 'loading')"
+            @click="onBtnClick(drop)"
+          >
+            <i class="el-icon-loading" v-if="getBoolean(drop, 'loading')"></i>
+            <i :class="['base-table-actions-icon', getString(drop, 'icon')]" v-else-if="drop.icon && !getBoolean(drop, 'loading')"></i>
+            {{ getString(drop, 'text') }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
+</template>
 <style lang="scss">
 .base-table-actions {
   line-height: 1;

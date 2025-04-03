@@ -7,9 +7,6 @@
 ## 使用方式
 
 ```html
-<template>
-  <el-button @click="onPreview()">预览图片</el-button>
-</template>
 <script lang="ts" setup>
 import { openPreview } from "@/components/ImageViewer";
 
@@ -21,4 +18,7 @@ function onPreview() {
   });
 }
 </script>
+<template>
+  <el-button @click="onPreview()">预览图片</el-button>
+</template>
 ```

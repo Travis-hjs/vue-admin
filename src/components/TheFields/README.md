@@ -7,20 +7,6 @@
 ## 使用示例
 
 ```html
-<template>
-  <el-form
-    ref="formRef"
-    label-width="120px"
-    label-position="left"
-    :model="state.formData"
-  >
-    <TheFields :data="state.formData" :list="state.fields" @change="onFields" />
-  </el-form>
-  <!-- 筛选组件中也可以使用 -->
-  <FilterWrap>
-    <TheFields type="search" :data="state.formData" :list="state.fields" @change="onFields" />
-  </FilterWrap>
-</template>
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { TheFields, type TheField } from "@/components/TheFields";
@@ -63,4 +49,18 @@ function onFields(prop: string, value: any) {
   console.log(prop, value);
 }
 </script>
+<template>
+  <el-form
+    ref="formRef"
+    label-width="120px"
+    label-position="left"
+    :model="state.formData"
+  >
+    <TheFields :data="state.formData" :list="state.fields" @change="onFields" />
+  </el-form>
+  <!-- 筛选组件中也可以使用 -->
+  <FilterWrap>
+    <TheFields type="search" :data="state.formData" :list="state.fields" @change="onFields" />
+  </FilterWrap>
+</template>
 ```

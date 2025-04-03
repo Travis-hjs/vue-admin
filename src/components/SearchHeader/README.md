@@ -7,14 +7,6 @@
 ## 使用示例
 
 ```html
-<template>
-  <SearchHeader
-    :search-info="state.searchInfo"
-    :list="state.searchFields"
-    :loading="state.loading"
-    @search="onSearch"
-  />
-</template>
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { SearchHeader } from "@/components/SearchHeader";
@@ -81,4 +73,12 @@ async function getOptions() {
   setFieldOptions(state.searchFields, "appId", options);
 }
 </script>
+<template>
+  <SearchHeader
+    :search-info="state.searchInfo"
+    :list="state.searchFields"
+    :loading="state.loading"
+    @search="onSearch"
+  />
+</template>
 ```

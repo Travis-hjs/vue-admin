@@ -1,110 +1,3 @@
-<template>
-  <section :class="['the-curd-editor the-curd-scrollbar', { 'is-show': props.show }]">
-    <transition name="the-curd-editor-move">
-      <div v-if="props.show" class="the-curd-editor-content">
-        <h2 class="the-title mb-[20px]">基础设置</h2>
-        <el-form label-position="right" label-width="120px">
-          <TheFields
-            v-if="curdConfigState.type === 'search'"
-            :data="props.config.search"
-            :list="searchConfigs"
-          />
-          <TheFields
-            v-if="curdConfigState.type === 'table' && curdConfigState.editor.form"
-            :data="curdConfigState.editor.form"
-            :list="formConfigs"
-          />
-        </el-form>
-        <template v-if="state.step === 0">
-          <div class="f-vertical f-between mb-[20px]">
-            <h2 class="the-title">第1步：点击选取组件</h2>
-            <el-button link type="primary" @click="onClose()">退出编辑</el-button>
-          </div>
-          <Example
-            :selected="state.formData?.type"
-            :type="curdConfigState.type"
-            @choose="chooseField"
-          />
-        </template>
-        <template v-if="state.step === 1">
-          <div class="f-vertical mb-[20px]">
-            <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
-            <div class="f1"></div>
-            <el-button link type="success" @click="onStep(0)">上一步</el-button>
-            <el-button link type="primary" @click="onClose()">退出编辑</el-button>
-          </div>
-          <div v-if="state.formData" class="the-curd-target-box">
-            <Field :field-data="state.formData" edit-mode />
-          </div>
-          <el-form
-            v-if="state.formData"
-            id="the-editor-form"
-            ref="formRef"
-            :model="state.formData"
-            :rules="formRules"
-            label-position="right"
-            label-width="128px"
-          >
-            <TheFields :data="state.formData" :list="formItems">
-              <template #ruleText>
-                <template v-if="state.formData.type === 'input-between'">
-                  <el-input
-                    v-model="state.formData.placeholder[0]"
-                    class="f1"
-                    clearable
-                    placeholder="请输入提示-1"
-                  />
-                  <el-text style="padding: 0 6px;">-</el-text>
-                  <el-input
-                    v-model="state.formData.placeholder[1]"
-                    class="f1"
-                    clearable
-                    placeholder="请输入提示-2"
-                  />
-                </template>
-                <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
-              </template>
-              <template #defaultValue>
-                <el-input
-                  v-model="json.defaultValue"
-                  type="textarea"
-                  clearable
-                  placeholder="请输入JSON，值为 value"
-                  @blur="onDefaultValue()"
-                />
-              </template>
-              <template #options>
-                <el-input
-                  v-model="json.options"
-                  type="textarea"
-                  placeholder="请输入数组JSON"
-                  style="margin-bottom: 4px;"
-                  @blur="onOptions()"
-                />
-                <el-button link type="primary">
-                  <a href="https://www.json.cn/" target="_blank">
-                    JSON编辑工具
-                  </a>
-                </el-button>
-              </template>
-            </TheFields>
-            <div class="f-right">
-              <el-button @click="onClose()">关闭</el-button>
-              <el-button v-if="isAdd" type="primary" @click="onSubmit()">
-                <i class="el-icon--left el-icon-plus"></i>
-                新增
-              </el-button>
-              <el-button v-else type="success" @click="onSubmit()">
-                <i class="el-icon--left el-icon-edit"></i>
-                确认
-              </el-button>
-            </div>
-          </el-form>
-        </template>
-      </div>
-    </transition>
-  </section>
-</template>
 <script lang="ts">
 /** 表单项编辑器组件 */
 export default {
@@ -732,3 +625,110 @@ watch(
   }
 );
 </script>
+<template>
+  <section :class="['the-curd-editor the-curd-scrollbar', { 'is-show': props.show }]">
+    <transition name="the-curd-editor-move">
+      <div v-if="props.show" class="the-curd-editor-content">
+        <h2 class="the-title mb-[20px]">基础设置</h2>
+        <el-form label-position="right" label-width="120px">
+          <TheFields
+            v-if="curdConfigState.type === 'search'"
+            :data="props.config.search"
+            :list="searchConfigs"
+          />
+          <TheFields
+            v-if="curdConfigState.type === 'table' && curdConfigState.editor.form"
+            :data="curdConfigState.editor.form"
+            :list="formConfigs"
+          />
+        </el-form>
+        <template v-if="state.step === 0">
+          <div class="f-vertical f-between mb-[20px]">
+            <h2 class="the-title">第1步：点击选取组件</h2>
+            <el-button link type="primary" @click="onClose()">退出编辑</el-button>
+          </div>
+          <Example
+            :selected="state.formData?.type"
+            :type="curdConfigState.type"
+            @choose="chooseField"
+          />
+        </template>
+        <template v-if="state.step === 1">
+          <div class="f-vertical mb-[20px]">
+            <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
+            <div class="f1"></div>
+            <el-button link type="success" @click="onStep(0)">上一步</el-button>
+            <el-button link type="primary" @click="onClose()">退出编辑</el-button>
+          </div>
+          <div v-if="state.formData" class="the-curd-target-box">
+            <Field :field-data="state.formData" edit-mode />
+          </div>
+          <el-form
+            v-if="state.formData"
+            id="the-editor-form"
+            ref="formRef"
+            :model="state.formData"
+            :rules="formRules"
+            label-position="right"
+            label-width="128px"
+          >
+            <TheFields :data="state.formData" :list="formItems">
+              <template #ruleText>
+                <template v-if="state.formData.type === 'input-between'">
+                  <el-input
+                    v-model="state.formData.placeholder[0]"
+                    class="f1"
+                    clearable
+                    placeholder="请输入提示-1"
+                  />
+                  <el-text style="padding: 0 6px;">-</el-text>
+                  <el-input
+                    v-model="state.formData.placeholder[1]"
+                    class="f1"
+                    clearable
+                    placeholder="请输入提示-2"
+                  />
+                </template>
+                <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
+              </template>
+              <template #defaultValue>
+                <el-input
+                  v-model="json.defaultValue"
+                  type="textarea"
+                  clearable
+                  placeholder="请输入JSON，值为 value"
+                  @blur="onDefaultValue()"
+                />
+              </template>
+              <template #options>
+                <el-input
+                  v-model="json.options"
+                  type="textarea"
+                  placeholder="请输入数组JSON"
+                  style="margin-bottom: 4px;"
+                  @blur="onOptions()"
+                />
+                <el-button link type="primary">
+                  <a href="https://www.json.cn/" target="_blank">
+                    JSON编辑工具
+                  </a>
+                </el-button>
+              </template>
+            </TheFields>
+            <div class="f-right">
+              <el-button @click="onClose()">关闭</el-button>
+              <el-button v-if="isAdd" type="primary" @click="onSubmit()">
+                <i class="el-icon--left el-icon-plus"></i>
+                新增
+              </el-button>
+              <el-button v-else type="success" @click="onSubmit()">
+                <i class="el-icon--left el-icon-edit"></i>
+                确认
+              </el-button>
+            </div>
+          </el-form>
+        </template>
+      </div>
+    </transition>
+  </section>
+</template>

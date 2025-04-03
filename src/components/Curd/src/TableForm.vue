@@ -1,87 +1,3 @@
-<template>
-  <el-form
-    ref="formRef"
-    :model="state.form"
-    :rules="state.rules"
-    :labelWidth="convertPx(state.config.labelWidth)"
-    :labelPosition="state.config.labelPosition"
-    :disabled="props.disabled"
-    :style="props.editMode ? { width: convertPx(state.config.width) } : null"
-    :class="[{'is-edit-form': props.editMode}]"
-  >
-    <template v-if="props.editMode">
-      <transition-group name="the-group" tag="div">
-        <el-form-item
-          v-for="(field, fieldIndex) in state.config.fields"
-          :class="[{'the-curd-selected': curdConfigState.editor.index === fieldIndex && isEdit}]"
-          :prop="field.key"
-          :key="field.id"
-          :data-key="field.id"
-          :draggable="state.config.fields.length > 1 && props.editMode ? true : null"
-          @dragstart="onDragStart(fieldIndex)"
-          @dragover="e => onDragMove(e, fieldIndex)"
-          @drop="onDropEnd"
-        >
-          <template #label>
-            <i
-              v-if="state.config.fields.length > 1 && props.editMode"
-              class="el-icon-rank el-icon--left"
-              style="line-height: 32px"
-            ></i>
-            <span>{{ field.label }}</span>
-          </template>
-          <div class="f-vertical w-full">
-            <Field class="mr-[10px]" :fieldData="field" editMode />
-            <el-button link type="success" :disabled="isEdit" @click="openEditor(fieldIndex)">
-              <i class="el-icon-edit"></i>
-            </el-button>
-            <el-button link type="danger" :disabled="isEdit" @click="onDelete(fieldIndex)">
-              <i class="el-icon-delete"></i>
-            </el-button>
-          </div>
-        </el-form-item>
-      </transition-group>
-      <el-empty v-if="!state.config.fields.length" :description="`当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`">
-        <el-button v-if="!isEdit" type="primary" @click="openEditor(-1)">
-          <i class="el-icon--left el-icon-plus"></i>
-          添加表单项
-        </el-button>
-      </el-empty>
-      <template v-if="!isEdit">
-        <el-form-item v-if="state.config.fields.length" key="bottom-add">
-          <el-button type="primary" @click="openEditor(-1)">
-            <i class="el-icon--left el-icon-plus"></i>
-            继续添加
-          </el-button>
-          <!-- <el-button @click="validate()">调试验证</el-button> -->
-        </el-form-item>
-        <div key="bottom-setting">
-          <el-button link @click="onExit()">
-            退出编辑
-          </el-button>
-          <el-button type="danger" link :disabled="!state.config.fields.length" @click="onDeleteAll()">
-            <i class="el-icon--left el-icon-delete"></i>
-            清空表单
-          </el-button>
-          <el-button type="success" link @click="onComplete()">
-            <i class="el-icon--left el-icon-check"></i>
-            保存表单
-          </el-button>
-        </div>
-      </template>
-    </template>
-    <template v-if="!props.editMode && state.config && state.config.fields">
-      <el-form-item
-        v-for="field in usableFields"
-        :label="field.label"
-        :prop="field.key"
-        :key="field.id"
-      >
-        <Field :fieldData="field" />
-      </el-form-item>
-    </template>
-  </el-form>
-</template>
 <script lang="ts">
 /** 表格新增 or 编辑表单 */
 export default {
@@ -338,3 +254,87 @@ defineExpose({
   setFormData,
 });
 </script>
+<template>
+  <el-form
+    ref="formRef"
+    :model="state.form"
+    :rules="state.rules"
+    :labelWidth="convertPx(state.config.labelWidth)"
+    :labelPosition="state.config.labelPosition"
+    :disabled="props.disabled"
+    :style="props.editMode ? { width: convertPx(state.config.width) } : null"
+    :class="[{'is-edit-form': props.editMode}]"
+  >
+    <template v-if="props.editMode">
+      <transition-group name="the-group" tag="div">
+        <el-form-item
+          v-for="(field, fieldIndex) in state.config.fields"
+          :class="[{'the-curd-selected': curdConfigState.editor.index === fieldIndex && isEdit}]"
+          :prop="field.key"
+          :key="field.id"
+          :data-key="field.id"
+          :draggable="state.config.fields.length > 1 && props.editMode ? true : null"
+          @dragstart="onDragStart(fieldIndex)"
+          @dragover="e => onDragMove(e, fieldIndex)"
+          @drop="onDropEnd"
+        >
+          <template #label>
+            <i
+              v-if="state.config.fields.length > 1 && props.editMode"
+              class="el-icon-rank el-icon--left"
+              style="line-height: 32px"
+            ></i>
+            <span>{{ field.label }}</span>
+          </template>
+          <div class="f-vertical w-full">
+            <Field class="mr-[10px]" :fieldData="field" editMode />
+            <el-button link type="success" :disabled="isEdit" @click="openEditor(fieldIndex)">
+              <i class="el-icon-edit"></i>
+            </el-button>
+            <el-button link type="danger" :disabled="isEdit" @click="onDelete(fieldIndex)">
+              <i class="el-icon-delete"></i>
+            </el-button>
+          </div>
+        </el-form-item>
+      </transition-group>
+      <el-empty v-if="!state.config.fields.length" :description="`当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`">
+        <el-button v-if="!isEdit" type="primary" @click="openEditor(-1)">
+          <i class="el-icon--left el-icon-plus"></i>
+          添加表单项
+        </el-button>
+      </el-empty>
+      <template v-if="!isEdit">
+        <el-form-item v-if="state.config.fields.length" key="bottom-add">
+          <el-button type="primary" @click="openEditor(-1)">
+            <i class="el-icon--left el-icon-plus"></i>
+            继续添加
+          </el-button>
+          <!-- <el-button @click="validate()">调试验证</el-button> -->
+        </el-form-item>
+        <div key="bottom-setting">
+          <el-button link @click="onExit()">
+            退出编辑
+          </el-button>
+          <el-button type="danger" link :disabled="!state.config.fields.length" @click="onDeleteAll()">
+            <i class="el-icon--left el-icon-delete"></i>
+            清空表单
+          </el-button>
+          <el-button type="success" link @click="onComplete()">
+            <i class="el-icon--left el-icon-check"></i>
+            保存表单
+          </el-button>
+        </div>
+      </template>
+    </template>
+    <template v-if="!props.editMode && state.config && state.config.fields">
+      <el-form-item
+        v-for="field in usableFields"
+        :label="field.label"
+        :prop="field.key"
+        :key="field.id"
+      >
+        <Field :fieldData="field" />
+      </el-form-item>
+    </template>
+  </el-form>
+</template>

@@ -1,105 +1,3 @@
-<template>
-  <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
-    <el-input
-      v-if="data.type === 'input'"
-      :model-value="data.value"
-      v-bind="getInputProps()"
-      class="the-curd-field"
-      @input="onInput"
-      @blur="onBlur"
-    />
-    <el-input
-      v-if="data.type === 'textarea'"
-      v-model="data.value"
-      :readonly="props.readonly"
-      :disabled="props.disabled"
-      :placeholder="data.placeholder"
-      type="textarea"
-      class="the-curd-field"
-      @input="onChange()"
-    />
-    <template v-if="data.type === 'input-between'">
-      <el-input
-        :model-value="data.value[0]"
-        v-bind="getInputProps(0)"
-        class="f1"
-        @input="e => onInputBetween(e, 0)"
-        @blur="onBlurBetween(0)"
-      />
-      <el-text style="padding: 0 6px;">{{ data.separator }}</el-text>
-      <el-input
-        :model-value="data.value[1]"
-        v-bind="getInputProps(1)"
-        class="f1"
-        @input="e => onInputBetween(e, 1)"
-        @blur="onBlurBetween(1)"
-      />
-    </template>
-    <SelectField
-      v-if="data.type === 'select' || data.type === 'select-multiple'"
-      :config="data"
-      :setting="optionSetting"
-      :disabled="props.disabled"
-      @change="onChange()"
-    />
-    <template v-if="data.type === 'checkbox'">
-      <el-checkbox-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
-        <el-checkbox
-          v-for="item in data.options"
-          :key="item[optionSetting.value]"
-          :value="item[optionSetting.value]"
-        >
-          {{ item[optionSetting.label] }}
-        </el-checkbox>
-      </el-checkbox-group>
-      <el-text v-if="props.editMode && !data.options.length" type="primary">
-        {{ fieldTitleMap.checkbox }}（空数据）
-      </el-text>
-    </template>
-    <template v-if="data.type === 'radio'">
-      <el-radio-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
-        <el-radio
-          v-for="item in data.options"
-          :key="item[optionSetting.value]"
-          :value="item[optionSetting.value]"
-        >
-          {{ item[optionSetting.label] }}
-        </el-radio>
-      </el-radio-group>
-      <el-text v-if="props.editMode && !data.options.length" type="primary">
-        {{ fieldTitleMap.radio }}（空数据）
-      </el-text>
-    </template>
-    <el-switch
-      v-if="data.type === 'switch'"
-      v-model="data.value"
-      inline-prompt
-      active-text="是"
-      inactive-text="否"
-      @change="onChange()"
-    />
-    <el-cascader
-      v-if="data.type === 'cascader'"
-      v-model="data.value"
-      :options="data.options"
-      :props="cascaderProps"
-      :placeholder="data.placeholder"
-      :disabled="props.disabled"
-      clearable
-      collapse-tags
-      collapse-tags-tooltip
-      filterable
-      class="the-curd-field"
-      @change="onChange()"
-    />
-    <DatePicker
-      v-if="props.fieldData.type === 'date'"
-      :config="props.fieldData"
-      :disabled="props.disabled"
-      @change="onChange()"
-    />
-  </div>
-</template>
 <script lang="ts">
 /** 表单相关功能组件 */
 export default {
@@ -221,6 +119,108 @@ function onBlurBetween(index: number) {
   }
 }
 </script>
+<template>
+  <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
+    <el-input
+      v-if="data.type === 'input'"
+      :model-value="data.value"
+      v-bind="getInputProps()"
+      class="the-curd-field"
+      @input="onInput"
+      @blur="onBlur"
+    />
+    <el-input
+      v-if="data.type === 'textarea'"
+      v-model="data.value"
+      :readonly="props.readonly"
+      :disabled="props.disabled"
+      :placeholder="data.placeholder"
+      type="textarea"
+      class="the-curd-field"
+      @input="onChange()"
+    />
+    <template v-if="data.type === 'input-between'">
+      <el-input
+        :model-value="data.value[0]"
+        v-bind="getInputProps(0)"
+        class="f1"
+        @input="e => onInputBetween(e, 0)"
+        @blur="onBlurBetween(0)"
+      />
+      <el-text style="padding: 0 6px;">{{ data.separator }}</el-text>
+      <el-input
+        :model-value="data.value[1]"
+        v-bind="getInputProps(1)"
+        class="f1"
+        @input="e => onInputBetween(e, 1)"
+        @blur="onBlurBetween(1)"
+      />
+    </template>
+    <SelectField
+      v-if="data.type === 'select' || data.type === 'select-multiple'"
+      :config="data"
+      :setting="optionSetting"
+      :disabled="props.disabled"
+      @change="onChange()"
+    />
+    <template v-if="data.type === 'checkbox'">
+      <el-checkbox-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
+        <el-checkbox
+          v-for="item in data.options"
+          :key="item[optionSetting.value]"
+          :value="item[optionSetting.value]"
+        >
+          {{ item[optionSetting.label] }}
+        </el-checkbox>
+      </el-checkbox-group>
+      <el-text v-if="props.editMode && !data.options.length" type="primary">
+        {{ fieldTitleMap.checkbox }}（空数据）
+      </el-text>
+    </template>
+    <template v-if="data.type === 'radio'">
+      <el-radio-group v-model="data.value" :disabled="props.disabled" @change="onChange()">
+        <el-radio
+          v-for="item in data.options"
+          :key="item[optionSetting.value]"
+          :value="item[optionSetting.value]"
+        >
+          {{ item[optionSetting.label] }}
+        </el-radio>
+      </el-radio-group>
+      <el-text v-if="props.editMode && !data.options.length" type="primary">
+        {{ fieldTitleMap.radio }}（空数据）
+      </el-text>
+    </template>
+    <el-switch
+      v-if="data.type === 'switch'"
+      v-model="data.value"
+      inline-prompt
+      active-text="是"
+      inactive-text="否"
+      @change="onChange()"
+    />
+    <el-cascader
+      v-if="data.type === 'cascader'"
+      v-model="data.value"
+      :options="data.options"
+      :props="cascaderProps"
+      :placeholder="data.placeholder"
+      :disabled="props.disabled"
+      clearable
+      collapse-tags
+      collapse-tags-tooltip
+      filterable
+      class="the-curd-field"
+      @change="onChange()"
+    />
+    <DatePicker
+      v-if="props.fieldData.type === 'date'"
+      :config="props.fieldData"
+      :disabled="props.disabled"
+      @change="onChange()"
+    />
+  </div>
+</template>
 <style lang="scss">
 .the-curd-form-field {
   width: 100%;

@@ -1,17 +1,3 @@
-<template>
-  <div class="upload-wrap" v-loading="showLoading && loading">
-    <slot></slot>
-    <div class="upload-input" @click="checkUpload"></div>
-    <input
-      v-show="false"
-      type="file"
-      ref="uploadInput"
-      :accept="accept.toString()"
-      @click="beforeUpload"
-      @change="onUpload()"
-    >
-  </div>
-</template>
 <script lang="ts">
 /** 上传包裹组件 */
 export default {
@@ -134,6 +120,20 @@ async function onUpload() {
   }
 };
 </script>
+<template>
+  <div class="upload-wrap" v-loading="showLoading && loading">
+    <slot></slot>
+    <div class="upload-input" @click="checkUpload"></div>
+    <input
+      v-show="false"
+      type="file"
+      ref="uploadInput"
+      :accept="accept.toString()"
+      @click="beforeUpload"
+      @change="onUpload()"
+    >
+  </div>
+</template>
 <style lang="scss">
 .upload-wrap {
   // width: 100%;

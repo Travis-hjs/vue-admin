@@ -1,38 +1,3 @@
-<template>
-  <div :style="{ 'padding-left': level > 0 ? '15px' : '0px' }">
-    <div
-      class="base-tree-level"
-      v-for="item in options"
-      :style="{ 'height': item.height + 'px' }"
-      :key="item.key"
-      :data-key="item.key"
-      :data-level="level"
-    >
-      <div class="base-tree-item f-vertical" @click="onOpen(item)">
-        <i :class="['base-tree-icon el-icon-caret-right', { 'hidden-icon': !item.children.length }, { 'expanded': item.open }]"></i>
-        <span
-          v-if="checkbox"
-          @click.stop="onChecked(item)"
-          :class="['el-checkbox el-checkbox__input', { 'is-checked': item.checked, 'is-disabled': item.disabled }]"
-        >
-          <span class="el-checkbox__inner"></span>
-        </span>
-        <slot name="treeitem" v-bind="item">{{ item.label }}</slot>
-      </div>
-      <Level
-        v-if="item.children.length"
-        :options="item.children"
-        :level="level + 1"
-        :checkChild="checkChild"
-        :checkbox="checkbox"
-      >
-        <template #treeitem="slotProps: TreeItem">
-          <slot name="treeitem" v-bind="slotProps"></slot>
-        </template>
-      </Level>
-    </div>
-  </div>
-</template>
 <script lang="ts">
 /** 递归树层级组件 */
 export default {
@@ -89,3 +54,38 @@ function onOpen(item: TreeItem) {
 }
 
 </script>
+<template>
+  <div :style="{ 'padding-left': level > 0 ? '15px' : '0px' }">
+    <div
+      class="base-tree-level"
+      v-for="item in options"
+      :style="{ 'height': item.height + 'px' }"
+      :key="item.key"
+      :data-key="item.key"
+      :data-level="level"
+    >
+      <div class="base-tree-item f-vertical" @click="onOpen(item)">
+        <i :class="['base-tree-icon el-icon-caret-right', { 'hidden-icon': !item.children.length }, { 'expanded': item.open }]"></i>
+        <span
+          v-if="checkbox"
+          @click.stop="onChecked(item)"
+          :class="['el-checkbox el-checkbox__input', { 'is-checked': item.checked, 'is-disabled': item.disabled }]"
+        >
+          <span class="el-checkbox__inner"></span>
+        </span>
+        <slot name="treeitem" v-bind="item">{{ item.label }}</slot>
+      </div>
+      <Level
+        v-if="item.children.length"
+        :options="item.children"
+        :level="level + 1"
+        :checkChild="checkChild"
+        :checkbox="checkbox"
+      >
+        <template #treeitem="slotProps: TreeItem">
+          <slot name="treeitem" v-bind="slotProps"></slot>
+        </template>
+      </Level>
+    </div>
+  </div>
+</template>

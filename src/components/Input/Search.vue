@@ -1,51 +1,8 @@
-<template>
-  <div class="base-input-search type-1">
-    <el-input
-      v-model="keyword"
-      :placeholder="placeholder.toString()"
-      :disabled="disabled || loading"
-      clearable
-      @clear="onSearch()"
-      @focus="onFocus()"
-      @blur="onBlur()"
-      @keyup.native.enter="onSearch()"
-    >
-      <template #prepend v-if="prepends">
-        <button class="base-input-prepend" :style="{ width: prependWidth }" type="button" ref="prependBtn" :disabled="disabled || loading">
-          <span>{{ selectItem ? selectItem[useSetting.label] : '请选择' }}</span>
-          <i :class="['icon el-icon-arrow-down', { 'opened': showPrepend }]"></i>
-        </button>
-      </template>
-      <template #append>
-        <el-button class="fcc" @click="onSearch()" :disabled="disabled || loading">
-          <i class="el-icon-search" v-show="!loading"></i>
-          <i class="el-icon-loading" v-show="loading"></i>
-        </el-button>
-      </template>
-    </el-input>
-    <transition name="fade-slide-y">
-      <div class="base-input-search-select-list" :style="{ '--slide-y':  '20px', width: prependWidth }" v-show="showPrepend">
-        <button
-          type="button"
-          v-for="(pre, index) in prepends"
-          :class="['input-search-select-item f-vertical', {'actived': prependValue === pre[useSetting.value]}]"
-          :key="pre[useSetting.key] || ('pre-' + index)"
-          :disabled="!!pre[useSetting.disabled]"
-          @click="onSelect(pre)"
-        >
-          {{ pre[useSetting.label] }}
-        </button>
-      </div>
-    </transition>
-  </div>
-</template>
 <script lang="ts">
-import { defineComponent } from "vue";
-
 /** 搜索输入框 */
-export default defineComponent({
+export default {
   name: "InputSearch"
-});
+};
 </script>
 <script lang="ts" setup>
 import { computed, ref, type PropType, onMounted, onUnmounted } from "vue";
@@ -148,6 +105,47 @@ onUnmounted(function() {
 });
 
 </script>
+<template>
+  <div class="base-input-search type-1">
+    <el-input
+      v-model="keyword"
+      :placeholder="placeholder.toString()"
+      :disabled="disabled || loading"
+      clearable
+      @clear="onSearch()"
+      @focus="onFocus()"
+      @blur="onBlur()"
+      @keyup.native.enter="onSearch()"
+    >
+      <template #prepend v-if="prepends">
+        <button class="base-input-prepend" :style="{ width: prependWidth }" type="button" ref="prependBtn" :disabled="disabled || loading">
+          <span>{{ selectItem ? selectItem[useSetting.label] : '请选择' }}</span>
+          <i :class="['icon el-icon-arrow-down', { 'opened': showPrepend }]"></i>
+        </button>
+      </template>
+      <template #append>
+        <el-button class="fcc" @click="onSearch()" :disabled="disabled || loading">
+          <i class="el-icon-search" v-show="!loading"></i>
+          <i class="el-icon-loading" v-show="loading"></i>
+        </el-button>
+      </template>
+    </el-input>
+    <transition name="fade-slide-y">
+      <div class="base-input-search-select-list" :style="{ '--slide-y':  '20px', width: prependWidth }" v-show="showPrepend">
+        <button
+          type="button"
+          v-for="(pre, index) in prepends"
+          :class="['input-search-select-item f-vertical', {'actived': prependValue === pre[useSetting.value]}]"
+          :key="pre[useSetting.key] || ('pre-' + index)"
+          :disabled="!!pre[useSetting.disabled]"
+          @click="onSelect(pre)"
+        >
+          {{ pre[useSetting.label] }}
+        </button>
+      </div>
+    </transition>
+  </div>
+</template>
 <style lang="scss">
 @import url("./search.scss");
 </style>

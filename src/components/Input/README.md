@@ -3,14 +3,6 @@
 ## 输入搜索框
 
 ```html
-<template>
-  <InputSearch
-    placeholder="请输入内容搜索"
-    v-model="keyword"
-    :loading="loading"
-    @search="onSearch()"
-  />
-</template>
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { InputSearch } from "@/components/Input";
@@ -24,21 +16,19 @@ function onSearch() {
 }
 
 </script>
+<template>
+  <InputSearch
+    placeholder="请输入内容搜索"
+    v-model="keyword"
+    :loading="loading"
+    @search="onSearch()"
+  />
+</template>
 ```
 
 ## 加载更多下拉选择框
 
 ```html
-<template>
-  <InputSelect
-    placeholder="请选择xxx"
-    v-model="selectValue"
-    :request="getList"
-    :option-setting="optSetting"
-    :request-params="apiParams"
-    @change="onSelect"
-  />
-</template>
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import { getList } from "@/api/xxx";
@@ -63,4 +53,14 @@ function onSelect() {
 }
 
 </script>
+<template>
+  <InputSelect
+    placeholder="请选择xxx"
+    v-model="selectValue"
+    :request="getList"
+    :option-setting="optSetting"
+    :request-params="apiParams"
+    @change="onSelect"
+  />
+</template>
 ```

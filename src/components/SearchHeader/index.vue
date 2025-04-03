@@ -1,15 +1,3 @@
-<template>
-  <FilterWrap :label-width="props.labelWidth">
-    <TheFields type="search" :data="props.searchInfo" :list="props.list">
-      <template v-for="slot in slotList" :key="slot" #[slot]="field">
-        <slot :name="slot" v-bind="field"></slot>
-      </template>
-    </TheFields>
-    <template #right>
-      <SearchBtn :loading="props.loading" @search="onSearch" />
-    </template>
-  </FilterWrap>
-</template>
 <script lang="ts">
 /**
  * 基础通用搜索头部
@@ -50,3 +38,15 @@ function onSearch(reset: boolean) {
   emit("search", reset);
 }
 </script>
+<template>
+  <FilterWrap :label-width="props.labelWidth">
+    <TheFields type="search" :data="props.searchInfo" :list="props.list">
+      <template v-for="slot in slotList" :key="slot" #[slot]="field">
+        <slot :name="slot" v-bind="field"></slot>
+      </template>
+    </TheFields>
+    <template #right>
+      <SearchBtn :loading="props.loading" @search="onSearch" />
+    </template>
+  </FilterWrap>
+</template>

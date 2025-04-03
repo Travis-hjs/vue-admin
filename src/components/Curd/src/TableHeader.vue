@@ -1,16 +1,3 @@
-<template>
-  <template v-if="isText">{{ props.column.title }}</template>
-  <div v-else class="the-curd-table-header f-vertical w-full">
-    <el-tooltip v-if="props.column.iconTips" effect="dark" :content="props.column.iconTips" placement="top">
-      <span class="the-curd-table-header-title">{{ props.column.title }}</span>
-    </el-tooltip>
-    <span v-else class="the-curd-table-header-title">{{ props.column.title }}</span>
-    <div v-if="props.column.sort" style="padding-left: 6px;">
-      <div :class="['the-sort-icon top', { 'is-select': props.column.sort === 'asc' }]" @click="onSwitch('asc')"></div>
-      <div :class="['the-sort-icon bottom', { 'is-select': props.column.sort === 'desc' }]" @click="onSwitch('desc')"></div>
-    </div>
-  </div>
-</template>
 <script lang="ts">
 /** 表格自定义表头组件 */
 export default {
@@ -43,6 +30,19 @@ function onSwitch(type: SortType) {
   emit("sort", props.column.prop, type);
 }
 </script>
+<template>
+  <template v-if="isText">{{ props.column.title }}</template>
+  <div v-else class="the-curd-table-header f-vertical w-full">
+    <el-tooltip v-if="props.column.iconTips" effect="dark" :content="props.column.iconTips" placement="top">
+      <span class="the-curd-table-header-title">{{ props.column.title }}</span>
+    </el-tooltip>
+    <span v-else class="the-curd-table-header-title">{{ props.column.title }}</span>
+    <div v-if="props.column.sort" style="padding-left: 6px;">
+      <div :class="['the-sort-icon top', { 'is-select': props.column.sort === 'asc' }]" @click="onSwitch('asc')"></div>
+      <div :class="['the-sort-icon bottom', { 'is-select': props.column.sort === 'desc' }]" @click="onSwitch('desc')"></div>
+    </div>
+  </div>
+</template>
 <style lang="scss">
 .the-curd-table-header-title {
   flex: 1;

@@ -1,73 +1,3 @@
-<template>
-  <component
-    :is="props.type === 'form' ? ElFormItem : FilterItem"
-    v-for="(field, fieldIndex) in fields"
-    :key="field.key || `${field.prop}-${fieldIndex}`"
-    :label="field.label"
-    :prop="field.prop"
-    class="the-fields-item"
-  >
-    <template v-if="field.tooltip" #label>
-      <LabelTips :label="field.label" :tips="field.tooltip" />
-    </template>
-    <el-input
-      v-if="field.type === 'input'"
-      v-bind="getCommonProps(field)"
-      @input="e => onChange(field, e)"
-    />
-    <el-input
-      v-if="field.type === 'textarea'"
-      v-bind="getCommonProps(field)"
-      :rows="field.rows"
-      show-word-limit
-      type="textarea"
-      @input="e => onChange(field, e)"
-    />
-    <el-input-number
-      v-if="field.type === 'number'"
-      v-bind="getCommonProps(field)"
-      :min="field.min"
-      :max="field.max"
-      controls-position="right"
-      @input="e => onChange(field, e)"
-    />
-    <TheSelect
-      v-if="field.type === 'select' || field.type === 'select-multiple'"
-      :attrs="getSelectProps(field)"
-      :field="field"
-      @change="e => onChange(field, e)"
-    />
-    <TheDatePicker
-      v-if="field.type === 'date'"
-      :attrs="{
-        type: field.dateType,
-        format: field.formatShow,
-        ...getCommonProps(field),
-      }"
-      @change="(e: any) => onDatePicker(field, e)"
-    />
-    <el-switch
-      v-if="field.type === 'switch'"
-      :model-value="getFieldValue(field)"
-      inline-prompt
-      :active-text="field.activeText || '是'"
-      :inactive-text="field.inactiveText || '否'"
-      :active-value="field.activeValue"
-      :inactive-value="field.inactiveValue"
-      @change="e => onChange(field, e)"
-    />
-    <div v-if="field.type === 'text'" :class="['text-box', field.class || 'w-full'] ">
-      <el-text>{{ getTextContent(field) }}</el-text>
-    </div>
-    <slot v-if="field.type === 'slot' && field.slotName" :name="field.slotName" v-bind="field"></slot>
-    <div v-if="field.tips" class="tips-box">
-      <span class="the-tag blue">
-        <i class="el-icon--left el-icon-info"></i>
-        {{ field.tips }}
-      </span>
-    </div>
-  </component>
-</template>
 <script lang="ts">
 /** 基础通用表单项列表 */
 export default {
@@ -234,6 +164,76 @@ function onDatePicker(field: TheField.Date<Record<string, any>>, value: any) {
   onChange(field, value);
 }
 </script>
+<template>
+  <component
+    :is="props.type === 'form' ? ElFormItem : FilterItem"
+    v-for="(field, fieldIndex) in fields"
+    :key="field.key || `${field.prop}-${fieldIndex}`"
+    :label="field.label"
+    :prop="field.prop"
+    class="the-fields-item"
+  >
+    <template v-if="field.tooltip" #label>
+      <LabelTips :label="field.label" :tips="field.tooltip" />
+    </template>
+    <el-input
+      v-if="field.type === 'input'"
+      v-bind="getCommonProps(field)"
+      @input="e => onChange(field, e)"
+    />
+    <el-input
+      v-if="field.type === 'textarea'"
+      v-bind="getCommonProps(field)"
+      :rows="field.rows"
+      show-word-limit
+      type="textarea"
+      @input="e => onChange(field, e)"
+    />
+    <el-input-number
+      v-if="field.type === 'number'"
+      v-bind="getCommonProps(field)"
+      :min="field.min"
+      :max="field.max"
+      controls-position="right"
+      @input="e => onChange(field, e)"
+    />
+    <TheSelect
+      v-if="field.type === 'select' || field.type === 'select-multiple'"
+      :attrs="getSelectProps(field)"
+      :field="field"
+      @change="e => onChange(field, e)"
+    />
+    <TheDatePicker
+      v-if="field.type === 'date'"
+      :attrs="{
+        type: field.dateType,
+        format: field.formatShow,
+        ...getCommonProps(field),
+      }"
+      @change="(e: any) => onDatePicker(field, e)"
+    />
+    <el-switch
+      v-if="field.type === 'switch'"
+      :model-value="getFieldValue(field)"
+      inline-prompt
+      :active-text="field.activeText || '是'"
+      :inactive-text="field.inactiveText || '否'"
+      :active-value="field.activeValue"
+      :inactive-value="field.inactiveValue"
+      @change="e => onChange(field, e)"
+    />
+    <div v-if="field.type === 'text'" :class="['text-box', field.class || 'w-full'] ">
+      <el-text>{{ getTextContent(field) }}</el-text>
+    </div>
+    <slot v-if="field.type === 'slot' && field.slotName" :name="field.slotName" v-bind="field"></slot>
+    <div v-if="field.tips" class="tips-box">
+      <span class="the-tag blue">
+        <i class="el-icon--left el-icon-info"></i>
+        {{ field.tips }}
+      </span>
+    </div>
+  </component>
+</template>
 <style lang="scss">
 .the-fields-item {
   .el-form-item__content {

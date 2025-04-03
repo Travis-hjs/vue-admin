@@ -32,23 +32,6 @@
 ## 使用示例-基础模式
 
 ```html
-<template>
-  <div class="demo">
-    <base-table
-      :data="state.data"
-      :columns="tableColumns"
-      :actions="tableActions"
-      :loading="state.loading"
-    >
-      <template #status="{ row }">
-        <span class="the-tag blue" v-if="row.status === 0">未开始</span>
-        <span class="the-tag green" v-if="row.status === 1">进行中</span>
-        <span class="the-tag gray" v-if="row.status === 2">已结束</span>
-        <span class="the-tag red" v-if="row.status === 3">已终止</span>
-      </template>
-    </base-table>
-  </div>
-</template>
 <script lang="ts" setup>
 import { reactive } from "vue";
 
@@ -89,25 +72,28 @@ const tableActions: Array<BaseTableAction<TableRow>> = [
   }
 ];
 </script>
-```
-
-## 使用示例-带选择操作
-
-```html
 <template>
   <div class="demo">
-    <el-button @click="onSearch()">搜索</el-button>
     <base-table
       :data="state.data"
       :columns="tableColumns"
       :actions="tableActions"
       :loading="state.loading"
-      select-key="id"
-      v-model:select-list="state.selected"
-      :select-disabled="(row) => (row.id % 4) === 0"
-    ></base-table>
+    >
+      <template #status="{ row }">
+        <span class="the-tag blue" v-if="row.status === 0">未开始</span>
+        <span class="the-tag green" v-if="row.status === 1">进行中</span>
+        <span class="the-tag gray" v-if="row.status === 2">已结束</span>
+        <span class="the-tag red" v-if="row.status === 3">已终止</span>
+      </template>
+    </base-table>
   </div>
 </template>
+```
+
+## 使用示例-带选择操作
+
+```html
 <script lang="ts" setup>
 import { reactive } from "vue";
 
@@ -169,4 +155,18 @@ function onSearch() {
   // 再去进行列表查询请求操作
 }
 </script>
+<template>
+  <div class="demo">
+    <el-button @click="onSearch()">搜索</el-button>
+    <base-table
+      :data="state.data"
+      :columns="tableColumns"
+      :actions="tableActions"
+      :loading="state.loading"
+      select-key="id"
+      v-model:select-list="state.selected"
+      :select-disabled="(row) => (row.id % 4) === 0"
+    ></base-table>
+  </div>
+</template>
 ```

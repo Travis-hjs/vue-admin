@@ -3,6 +3,19 @@
 使用示例
 
 ```html
+<script lang="ts" setup>
+import { ref } from "vue";
+import { FilterWrap, FilterItem  } from "@/components/FilterBox";
+
+const dateValue = ref([]);
+
+const searchInfo = ref({
+  value: ""
+})
+
+const options = [{ label: "xxx", value: 1 }]
+
+</script>
 <template>
   <div class="demo">
     <FilterWrap>
@@ -29,21 +42,6 @@
         <el-button type="primary"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
       </template>
     </FilterWrap>
-
   </div>
 </template>
-<script lang="ts" setup>
-import { ref } from "vue";
-import { FilterWrap, FilterItem  } from "@/components/FilterBox";
-
-const dateValue = ref([]);
-
-const searchInfo = ref({
-  value: ""
-})
-
-const options = [{ label: "xxx", value: 1 }]
-
-</script>
-
 ```

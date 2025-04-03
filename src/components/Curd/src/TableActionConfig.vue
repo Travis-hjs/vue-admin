@@ -1,105 +1,3 @@
-<template>
-  <base-dialog
-    v-model:show="state.show"
-    title="配置操作列按钮功能"
-    width="880px"
-    @close="onClose"
-  >
-    <div class="flex">
-      <section class="f1">
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">操作列配置</el-text>
-        </el-divider>
-        <el-form
-          ref="formColumn"
-          :model="form.column"
-          :rules="columnRules"
-          labelPosition="right"
-          labelWidth="128px"
-        >
-          <TheFields :data="form.column" :list="columnItems" />
-        </el-form>
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">操作按钮配置</el-text>
-        </el-divider>
-        <el-form
-          ref="formBtn"
-          :model="form.btn"
-          :rules="btnRules"
-          labelPosition="right"
-          labelWidth="128px"
-          :class="{'the-filter-mask': !state.formEdit}"
-          data-tips="待新增或编辑操作"
-        >
-          <TheFields :data="form.btn" :list="btnItems">
-            <template #iconInput>
-              <IconInput v-model:value="form.btn.icon" />
-            </template>
-          </TheFields>
-          <el-form-item>
-            <div class="f-right w-full">
-              <el-button @click="onRestBtn()">取 消</el-button>
-              <el-button v-if="state.index > -1" type="primary" plain @click="onSubmitBtn('edit')">
-                <i class="el-icon--left el-icon-finished"></i>
-                确认修改
-              </el-button>
-              <el-button v-else type="primary" plain @click="onSubmitBtn('add')">
-                <i class="el-icon--left el-icon-plus"></i>
-                确认新增
-              </el-button>
-            </div>
-          </el-form-item>
-        </el-form>
-      </section>
-      <transition-group name="the-group" tag="div" class="the-curd-option-list f1">
-        <div
-          v-for="(item, itemIndex) in state.list"
-          :class="['the-curd-option-item f-vertical', {'the-curd-selected': itemIndex === state.index}]"
-          :key="item.key"
-          :data-key="item.key !== actionEditKey ? item.key : null"
-          :draggable="canDraggable(item)"
-          @dragstart="onDragStart(itemIndex)"
-          @dragover="e => onDragMove(e, itemIndex)"
-          @drop="onDropEnd"
-        >
-          <i v-if="state.index === -1 && item.key !== actionEditKey" class="el-icon--left el-icon-rank"></i>
-          <el-button :type="item.type" link>
-            <i v-if="item.icon" :class="['el-icon--left', item.icon]"></i>
-            {{ getBtnText(item) }}
-          </el-button>
-          <div class="f1"></div>
-          <el-text v-if="item.key === actionEditKey" type="info" size="small">编辑按钮不可删除、拖拽等操作，且处于首位</el-text>
-          <template v-else>
-            <el-popconfirm
-              width="186px"
-              title="是否删除该按钮功能？"
-              @confirm="onDelete(itemIndex)"
-            >
-              <template #reference>
-                <el-button link type="danger" :disabled="state.index > -1">
-                  <i class="el-icon-delete" />
-                </el-button>
-              </template>
-            </el-popconfirm>
-            <el-button link type="success" @click="onEdit(itemIndex)">
-              <i class="el-icon-edit"></i>
-            </el-button>
-          </template>
-        </div>
-        <el-empty v-if="!state.list.length" key="empty" :image-size="120" description="请添加操作列功能按钮" />
-        <div v-if="!state.formEdit" class="w-full f-right">
-          <el-button v-if="!state.formEdit" type="primary" plain @click="state.formEdit = true">
-            <i class="el-icon--left el-icon-plus"></i>
-            新增功能按钮
-          </el-button>
-        </div>
-      </transition-group>
-    </div>
-    <template #footer>
-      <FooterBtn :disabledSubmit="state.formEdit" @close="onClose" @submit="onSubmit" />
-    </template>
-  </base-dialog>
-</template>
 <script lang="ts">
 /** 表格操作列配置弹框 */
 export default {
@@ -384,3 +282,106 @@ function getBtnText(action: CurdType.Table.Action) {
   return "未设置按钮";
 }
 </script>
+<template>
+  <base-dialog
+    v-model:show="state.show"
+    title="配置操作列按钮功能"
+    width="880px"
+    @close="onClose"
+  >
+    <div class="flex">
+      <section class="f1">
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">操作列配置</el-text>
+        </el-divider>
+        <el-form
+          ref="formColumn"
+          :model="form.column"
+          :rules="columnRules"
+          labelPosition="right"
+          labelWidth="128px"
+        >
+          <TheFields :data="form.column" :list="columnItems" />
+        </el-form>
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">操作按钮配置</el-text>
+        </el-divider>
+        <el-form
+          ref="formBtn"
+          :model="form.btn"
+          :rules="btnRules"
+          labelPosition="right"
+          labelWidth="128px"
+          :class="{'the-filter-mask': !state.formEdit}"
+          data-tips="待新增或编辑操作"
+        >
+          <TheFields :data="form.btn" :list="btnItems">
+            <template #iconInput>
+              <IconInput v-model:value="form.btn.icon" />
+            </template>
+          </TheFields>
+          <el-form-item>
+            <div class="f-right w-full">
+              <el-button @click="onRestBtn()">取 消</el-button>
+              <el-button v-if="state.index > -1" type="primary" plain @click="onSubmitBtn('edit')">
+                <i class="el-icon--left el-icon-finished"></i>
+                确认修改
+              </el-button>
+              <el-button v-else type="primary" plain @click="onSubmitBtn('add')">
+                <i class="el-icon--left el-icon-plus"></i>
+                确认新增
+              </el-button>
+            </div>
+          </el-form-item>
+        </el-form>
+      </section>
+      <transition-group name="the-group" tag="div" class="the-curd-option-list f1">
+        <div
+          v-for="(item, itemIndex) in state.list"
+          :class="['the-curd-option-item f-vertical', {'the-curd-selected': itemIndex === state.index}]"
+          :key="item.key"
+          :data-key="item.key !== actionEditKey ? item.key : null"
+          :draggable="canDraggable(item)"
+          @dragstart="onDragStart(itemIndex)"
+          @dragover="e => onDragMove(e, itemIndex)"
+          @drop="onDropEnd"
+        >
+          <i v-if="state.index === -1 && item.key !== actionEditKey" class="el-icon--left el-icon-rank"></i>
+          <el-button :type="item.type" link>
+            <i v-if="item.icon" :class="['el-icon--left', item.icon]"></i>
+            {{ getBtnText(item) }}
+          </el-button>
+          <div class="f1"></div>
+          <el-text v-if="item.key === actionEditKey" type="info" size="small">编辑按钮不可删除、拖拽等操作，且处于首位</el-text>
+          <template v-else>
+            <el-popconfirm
+              width="186px"
+              title="是否删除该按钮功能？"
+              @confirm="onDelete(itemIndex)"
+            >
+              <template #reference>
+                <el-button link type="danger" :disabled="state.index > -1">
+                  <i class="el-icon-delete" />
+                </el-button>
+              </template>
+            </el-popconfirm>
+            <el-button link type="success" @click="onEdit(itemIndex)">
+              <i class="el-icon-edit"></i>
+            </el-button>
+          </template>
+        </div>
+        <el-empty v-if="!state.list.length" key="empty" :image-size="120" description="请添加操作列功能按钮" />
+        <div v-if="!state.formEdit" class="w-full f-right">
+          <el-button v-if="!state.formEdit" type="primary" plain @click="state.formEdit = true">
+            <i class="el-icon--left el-icon-plus"></i>
+            新增功能按钮
+          </el-button>
+        </div>
+      </transition-group>
+    </div>
+    <template #footer>
+      <FooterBtn :disabledSubmit="state.formEdit" @close="onClose" @submit="onSubmit" />
+    </template>
+  </base-dialog>
+</template>
+
