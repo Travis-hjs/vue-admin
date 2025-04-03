@@ -298,8 +298,6 @@ function useDialog() {
     animation: ${className.fade} var(--time);
   }
   .${className.mask} * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
   }
   .${className.popup} {
