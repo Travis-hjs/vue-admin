@@ -1,61 +1,3 @@
-<template>
-  <div class="login-page">
-    <div class="content">
-      <div class="title">
-        <span>{{ info.name }}</span>
-      </div>
-      <div class="form-box">
-        <div class="login-form">
-          <div class="login-title">平台登录</div>
-          <el-form
-            ref="theForm"
-            id="the-form"
-            size="large"
-            :model="formData"
-            :rules="formRules"
-            status-icon
-          >
-            <el-form-item prop="account">
-              <el-input
-                v-model="formData.account"
-                :placeholder="formRules.account[0].message"
-                clearable
-                type="text"
-                @keyup.enter.native="onLogin"
-              >
-                <template #prefix><i class="el-icon-user"></i></template>
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input
-                v-model="formData.password"
-                :placeholder="formRules.password[0].message"
-                clearable
-                type="password"
-                :show-password="true"
-                @keyup.enter.native="onLogin"
-              >
-                <template #prefix><i class="el-icon-key"></i></template>
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="">
-              <div class="w100">
-                <el-button type="primary" class="w100" :loading="loading" @click="onLogin">立即登录</el-button>
-              </div>
-              <el-checkbox v-model="remember" size="large">记住账号/密码</el-checkbox>
-            </el-form-item>
-          </el-form>
-          <div class="mb-[10px] w100 f-vertical" v-for="(item, index) in tipList" :key="index">
-            <div class="f1"><span class="the-tag gray">账号: {{ item }}; 密码: 随便填</span></div>
-            <el-button type="primary" plain :disabled="loading" @click="setLoginInfo(item)">一键登录</el-button>
-          </div>
-        </div>
-      </div>
-      <div class="bottom-text">{{ copyRight }}</div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import store from "@/store";
@@ -135,9 +77,64 @@ function getLoginInfo() {
 
 getLoginInfo();
 </script>
-
+<template>
+  <div class="login-page">
+    <div class="content">
+      <div class="title">
+        <span>{{ info.name }}</span>
+      </div>
+      <div class="form-box">
+        <div class="login-form">
+          <div class="login-title">平台登录</div>
+          <el-form
+            ref="theForm"
+            id="the-form"
+            size="large"
+            :model="formData"
+            :rules="formRules"
+            status-icon
+          >
+            <el-form-item prop="account">
+              <el-input
+                v-model="formData.account"
+                :placeholder="formRules.account[0].message"
+                clearable
+                type="text"
+                @keyup.enter.native="onLogin"
+              >
+                <template #prefix><i class="el-icon-user"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input
+                v-model="formData.password"
+                :placeholder="formRules.password[0].message"
+                clearable
+                type="password"
+                :show-password="true"
+                @keyup.enter.native="onLogin"
+              >
+                <template #prefix><i class="el-icon-key"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="">
+              <div class="w100">
+                <el-button type="primary" class="w100" :loading="loading" @click="onLogin">立即登录</el-button>
+              </div>
+              <el-checkbox v-model="remember" size="large">记住账号/密码</el-checkbox>
+            </el-form-item>
+          </el-form>
+          <div class="mb-[10px] w100 f-vertical" v-for="(item, index) in tipList" :key="index">
+            <div class="f1"><span class="the-tag gray">账号: {{ item }}; 密码: 随便填</span></div>
+            <el-button type="primary" plain :disabled="loading" @click="setLoginInfo(item)">一键登录</el-button>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-text">{{ copyRight }}</div>
+    </div>
+  </div>
+</template>
 <style lang="scss">
-
 .login-page {
   width: 100%;
   min-height: 100vh;

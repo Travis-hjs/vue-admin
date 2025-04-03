@@ -1,52 +1,5 @@
-<template>
-  <div class="menu-1">
-    <span class="the-tag blue mb-[20px]">通用表格展示模板页</span>
-    <FilterWrap>
-      <FilterItem>
-        <el-input placeholder="请输入关键字">
-          <template #suffix>
-            <i class="el-icon-search"></i>
-          </template>
-        </el-input>
-      </FilterItem>
-      <FilterItem label="选项一">
-        <el-select class="short-value" v-model="state.searchInfo.type" placeholder="请选择" @change="onSearch">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </FilterItem>
-      <FilterItem label="日期">
-        <el-date-picker v-model="state.searchInfo.date" type="datetime" placeholder="请选择日期" @change="onSearch" />
-      </FilterItem>
-      <template #right>
-        <el-button type="primary"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
-      </template>
-    </FilterWrap>
-
-    <base-table
-      :columns="tableColumns"
-      :data="state.data"
-      :actions="tableActions"
-      :loading="state.loading"
-      select-key="id"
-      v-model:select-list="state.selectList"
-      :select-disabled="(row) => (row.id % 4) === 0"
-    >
-      <template #fuck="{ row, $index }">
-        {{ $index + 1 }}、{{ row.name }}
-      </template>
-    </base-table>
-
-    <div class="f-vertical">
-      <div style="width: 200px;" v-if="state.selectList.length > 0">
-        <span class="the-tag blue">已选择：{{ state.selectList.length }} 条数据</span>
-      </div>
-      <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
-    </div>
-
-  </div>
-</template>
 <script lang="ts" setup>
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 import { getPageInfo } from "@/hooks/common";
 import { FilterWrap, FilterItem  } from "@/components/FilterBox";
 import { formatDate, randomText } from "@/utils";
@@ -131,6 +84,53 @@ function onSearch() {
 }
 
 </script>
+<template>
+  <div class="menu-1">
+    <span class="the-tag blue mb-[20px]">通用表格展示模板页</span>
+    <FilterWrap>
+      <FilterItem>
+        <el-input placeholder="请输入关键字">
+          <template #suffix>
+            <i class="el-icon-search"></i>
+          </template>
+        </el-input>
+      </FilterItem>
+      <FilterItem label="选项一">
+        <el-select class="short-value" v-model="state.searchInfo.type" placeholder="请选择" @change="onSearch">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </FilterItem>
+      <FilterItem label="日期">
+        <el-date-picker v-model="state.searchInfo.date" type="datetime" placeholder="请选择日期" @change="onSearch" />
+      </FilterItem>
+      <template #right>
+        <el-button type="primary"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
+      </template>
+    </FilterWrap>
+
+    <base-table
+      :columns="tableColumns"
+      :data="state.data"
+      :actions="tableActions"
+      :loading="state.loading"
+      select-key="id"
+      v-model:select-list="state.selectList"
+      :select-disabled="(row) => (row.id % 4) === 0"
+    >
+      <template #fuck="{ row, $index }">
+        {{ $index + 1 }}、{{ row.name }}
+      </template>
+    </base-table>
+
+    <div class="f-vertical">
+      <div style="width: 200px;" v-if="state.selectList.length > 0">
+        <span class="the-tag blue">已选择：{{ state.selectList.length }} 条数据</span>
+      </div>
+      <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
+    </div>
+
+  </div>
+</template>
 <style lang="scss">
 .menu-1 {
   width: 100%;

@@ -1,12 +1,3 @@
-<template>
-  <MenuItem
-    v-for="(menu, menuIndex) in menuList"
-    :menu="menu"
-    :key="menu.menuId"
-    :style="menuIndex ? undefined : { 'margin-top': '0' }"
-  />
-  <Empty v-if="!menuList.length" style="height: 140px;" text="没有匹配到任何菜单" />
-</template>
 <script lang="ts">
 /** 侧边菜单组件 */
 export default {
@@ -163,7 +154,7 @@ function findParentList(ls: Array<LayoutType.Menu>) {
 /** 更新激活的菜单操作 */
 function updateActive() {
   const activeMenus = findParentList(menuList.value);
-  activeMenus.forEach((item) => {
+  activeMenus.forEach(item => {
     item.isOpen = true;
   });
 }
@@ -192,3 +183,12 @@ watch(
   },
 );
 </script>
+<template>
+  <MenuItem
+    v-for="(menu, menuIndex) in menuList"
+    :menu="menu"
+    :key="menu.menuId"
+    :style="menuIndex ? undefined : { 'margin-top': '0' }"
+  />
+  <Empty v-if="!menuList.length" style="height: 140px;" text="没有匹配到任何菜单" />
+</template>

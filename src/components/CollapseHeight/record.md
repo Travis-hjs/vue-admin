@@ -3,21 +3,6 @@
 当前操代码实现方式有一个问题，就是在展开后，节点的高度是固定的（`onAfterEnter`并没有执行），也就意味着需要动态对节点内容操作时，因为高度被固定的原因而产生意想不到的预期，所以换了另外一种方式实现。
 
 ```html
-<template>
-  <component
-    appear
-    :is="type === 'list' ? 'TransitionGroup' : 'Transition'"
-    :tag="type === 'list' ? 'section' : undefined"
-    @before-enter="onBeforeEnter"
-    @enter="onEnter"
-    @after-enter="onAfterEnter"
-    @before-leave="onBeforeLeave"
-    @leave="onLeave"
-    @after-leave="onAfterLeave"
-  >
-    <slot></slot>
-  </component >
-</template>
 <script lang="ts">
 import { defineComponent, PropType, Transition, TransitionGroup } from "vue";
 const transitionStyle = "0.3s height";
@@ -34,6 +19,21 @@ export default defineComponent({
   }
 })
 </script>
+<template>
+  <component
+    appear
+    :is="type === 'list' ? 'TransitionGroup' : 'Transition'"
+    :tag="type === 'list' ? 'section' : undefined"
+    @before-enter="onBeforeEnter"
+    @enter="onEnter"
+    @after-enter="onAfterEnter"
+    @before-leave="onBeforeLeave"
+    @leave="onLeave"
+    @after-leave="onAfterLeave"
+  >
+    <slot></slot>
+  </component >
+</template>
 <script lang="ts" setup>
 defineProps({
   /** 是单个过渡还是列表过渡 */
@@ -119,6 +119,12 @@ function onAfterLeave(el: HTMLElement) {
 ## 单个过渡
 
 ```html
+<script lang="ts" setup>
+import { ref } from "vue";
+import CollapseHeight from "@/components/CollapseHeight/index.vue";
+
+const switchBox = ref(false);
+</script>
 <template>
   <div class="demo">
     <button @click="switchBox = !switchBox">switch the `div` show or hide</button>
@@ -133,12 +139,6 @@ function onAfterLeave(el: HTMLElement) {
     </CollapseHeight>
   </div>
 </template>
-<script lang="ts" setup>
-import { ref } from "vue";
-import CollapseHeight from "@/components/CollapseHeight/index.vue";
-
-const switchBox = ref(false);
-</script>
 <style>
 .demo .box {
   width: 100px;
@@ -150,6 +150,12 @@ const switchBox = ref(false);
 ## 多个过渡
 
 ```html
+<script lang="ts" setup>
+import { ref } from "vue";
+import CollapseHeight from "@/components/CollapseHeight/index.vue";
+
+const count = ref(1);
+</script>
 <template>
   <div class="demo">
     <button @click="count++">add count</button>
@@ -163,12 +169,6 @@ const switchBox = ref(false);
     </CollapseHeight>
   </div>
 </template>
-<script lang="ts" setup>
-import { ref } from "vue";
-import CollapseHeight from "@/components/CollapseHeight/index.vue";
-
-const count = ref(1);
-</script>
 <style>
 .test-box {
   width: 100px;

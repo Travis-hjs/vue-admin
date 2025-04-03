@@ -1,8 +1,3 @@
-<template>
-  <svg class="svg-icon" aria-hidden="true">
-    <use :xlink:href="`#icon-${name}`"></use>
-  </svg>
-</template>
 <script lang="ts">
 /**
  * `svg`图标组件
@@ -19,7 +14,11 @@ export default {
   }
 }
 </script>
-
+<template>
+  <svg class="svg-icon" aria-hidden="true">
+    <use :xlink:href="`#icon-${name}`"></use>
+  </svg>
+</template>
 <style lang="scss">
 .svg-icon {
   display: inline-block;

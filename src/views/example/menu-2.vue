@@ -1,3 +1,64 @@
+<script lang="ts" setup>
+import { message } from "@/utils/message";
+import { type FormInstance } from "element-plus";
+import { reactive, ref } from "vue";
+import { validateEX } from "@/utils/dom";
+
+const formRef = ref<FormInstance>();
+
+function useFormData() {
+  return {
+    name: "",
+    region: "",
+    count: "",
+    startDate: "",
+    endDate: "",
+    delivery: false,
+    type: [] as Array<string>,
+    resource: "",
+    desc: ""
+  }
+}
+
+const form = reactive({
+  data: useFormData(),
+  rules: {
+    name: [
+      { required: true, message: "请输入活动名称", trigger: "blur" },
+      { min: 3, max: 20, message: "长度为3到20个字符", trigger: "blur" },
+    ],
+    region: [{ required: true, message: "请选择活动地区", trigger: "change" }],
+    count: [{ required: true, message: "请选择活动次数", trigger: "change" }],
+    startDate: [{ required: true, message: "请选择活动开始时间", trigger: "change" }],
+    endDate: [{ required: true, message: "请选择活动结束时间", trigger: "change" }],
+    type: [{ required: true, message: "请选择活动类型", trigger: "change" }],
+    resource: [{ required: true, message: "请选择活动来源", trigger: "change" }],
+    desc: [{ required: false, message: "请输入活动描述", trigger: "blur" }],
+  }
+  // } as FormRules
+});
+
+const options = Array.from({ length: 10000 }).map((_, index) => ({
+  value: index + 1,
+  label: `最多${index + 1}次`,
+}))
+
+function onSubmit() {
+  formRef.value!.validate(valid => {
+    validateEX("#the-form", valid);
+    if (valid) {
+      message.success("验证成功，表单数据已打印至控制台");
+      console.log("form.data >>", JSON.parse(JSON.stringify(form.data)));
+    }
+  })
+}
+
+function onReset() {
+  form.data = useFormData();
+  setTimeout(() => formRef.value!.clearValidate());
+}
+
+</script>
 <template>
   <div class="menu-2">
     <span class="the-tag green mb-[20px]">表单验证操作</span>
@@ -63,67 +124,6 @@
     </el-form>
   </div>
 </template>
-<script lang="ts" setup>
-import { message } from "@/utils/message";
-import { type FormInstance } from "element-plus";
-import { reactive, ref } from "vue";
-import { validateEX } from "@/utils/dom";
-
-const formRef = ref<FormInstance>();
-
-function useFormData() {
-  return {
-    name: "",
-    region: "",
-    count: "",
-    startDate: "",
-    endDate: "",
-    delivery: false,
-    type: [] as Array<string>,
-    resource: "",
-    desc: ""
-  }
-}
-
-const form = reactive({
-  data: useFormData(),
-  rules: {
-    name: [
-      { required: true, message: "请输入活动名称", trigger: "blur" },
-      { min: 3, max: 20, message: "长度为3到20个字符", trigger: "blur" },
-    ],
-    region: [{ required: true, message: "请选择活动地区", trigger: "change" }],
-    count: [{ required: true, message: "请选择活动次数", trigger: "change" }],
-    startDate: [{ required: true, message: "请选择活动开始时间", trigger: "change" }],
-    endDate: [{ required: true, message: "请选择活动结束时间", trigger: "change" }],
-    type: [{ required: true, message: "请选择活动类型", trigger: "change" }],
-    resource: [{ required: true, message: "请选择活动来源", trigger: "change" }],
-    desc: [{ required: false, message: "请输入活动描述", trigger: "blur" }],
-  }
-  // } as FormRules
-});
-
-const options = Array.from({ length: 10000 }).map((_, index) => ({
-  value: index + 1,
-  label: `最多${index + 1}次`,
-}))
-
-function onSubmit() {
-  formRef.value!.validate(valid => {
-    validateEX("#the-form", valid);
-    if (valid) {
-      message.success("验证成功，表单数据已打印至控制台");
-      console.log("form.data >>", JSON.parse(JSON.stringify(form.data)));
-    }
-  })
-}
-
-function onReset() {
-  form.data = useFormData();
-  setTimeout(() => formRef.value!.clearValidate());
-}
-
-</script>
 <style lang="scss">
 .menu-2 {
   width: 100%;

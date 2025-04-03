@@ -1,26 +1,3 @@
-<template>
-  <div
-    :class="[
-      'the-layout',
-      layoutInfo.layoutMode,
-      { 'has-tag-list': layoutInfo.showTagList },
-      { 'collapsed-sidebar': !layoutInfo.showSidebar }
-    ]"
-  >
-    <HeaderBar />
-    <Sidebar />
-    <div class="the-layout-content" ref="contentBox">
-      <router-view class="the-layout-page" v-slot="{ Component, route }">
-        <transition name="page-y" mode="out-in">
-          <keep-alive :include="cacheList">
-            <component :is="Component" :key="route.fullPath" />
-          </keep-alive>
-        </transition>
-      </router-view>
-    </div>
-    <button :class="['the-layout-to-top', {'hidden' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
-  </div>
-</template>
 <script lang="ts">
 /** 整体布局架子 */
 export default {
@@ -80,3 +57,26 @@ onMounted(function () {
   onScroll(); // 一开始要先执行，因为有可能一开始就处于页面非顶部
 });
 </script>
+<template>
+  <div
+    :class="[
+      'the-layout',
+      layoutInfo.layoutMode,
+      { 'has-tag-list': layoutInfo.showTagList },
+      { 'collapsed-sidebar': !layoutInfo.showSidebar }
+    ]"
+  >
+    <HeaderBar />
+    <Sidebar />
+    <div class="the-layout-content" ref="contentBox">
+      <router-view class="the-layout-page" v-slot="{ Component, route }">
+        <transition name="page-y" mode="out-in">
+          <keep-alive :include="cacheList">
+            <component :is="Component" :key="route.fullPath" />
+          </keep-alive>
+        </transition>
+      </router-view>
+    </div>
+    <button :class="['the-layout-to-top', {'hidden' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
+  </div>
+</template>

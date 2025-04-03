@@ -1,10 +1,3 @@
-<template>
-  <el-config-provider :locale="zhCn">
-    <router-view />
-    <ImageViewer />
-    <CurdPopupConfig />
-  </el-config-provider>
-</template>
 <script lang="ts">
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { ImageViewer } from "./components/ImageViewer";
@@ -23,7 +16,14 @@ export default {
   }
 }
 </script>
+<template>
+  <el-config-provider :locale="zhCn">
+    <router-view />
+    <ImageViewer />
+    <CurdPopupConfig />
+  </el-config-provider>
+</template>
 <style lang="scss">
-@import "@/styles/index.scss";
-@import "@/styles/layout.scss";
+@import url("./styles/index.scss");
+@import url("./styles/layout.scss");
 </style>

@@ -1,35 +1,3 @@
-<template>
-  <section>
-    <teleport to="body" :disabled="!props.appendToBody">
-      <transition name="fade">
-        <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="props.show" @click="onClose">
-          <transition name="dialog-move" @after-leave="onAfterLeave" @after-enter="onAfterEnter">
-            <div
-              ref="contentBox"
-              class="base-dialog-content flex"
-              :style="{ 'width': props.width }"
-              v-show="contentShow"
-            >
-              <div class="base-dialog-title f-between f-vertical">
-                <h2 class="base-dialog-text" v-if="!$slots.header">{{ title }}</h2>
-                <slot name="header"></slot>
-                <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>
-              </div>
-              <div class="base-dialog-body">
-                <el-scrollbar max-height="76vh">
-                  <slot></slot>
-                </el-scrollbar>
-              </div>
-              <div class="base-dialog-footer" v-if="$slots.footer">
-                <slot name="footer"></slot>
-              </div>
-            </div>
-          </transition>
-        </div>
-      </transition>
-    </teleport>
-  </section>
-</template>
 <script lang="ts">
 /** 基础弹出框组件 */
 export default {
@@ -158,6 +126,38 @@ onUnmounted(function () {
   document.removeEventListener("click", setContentPosition);
 });
 </script>
+<template>
+  <section>
+    <teleport to="body" :disabled="!props.appendToBody">
+      <transition name="fade">
+        <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="props.show" @click="onClose">
+          <transition name="dialog-move" @after-leave="onAfterLeave" @after-enter="onAfterEnter">
+            <div
+              ref="contentBox"
+              class="base-dialog-content flex"
+              :style="{ 'width': props.width }"
+              v-show="contentShow"
+            >
+              <div class="base-dialog-title f-between f-vertical">
+                <h2 class="base-dialog-text" v-if="!$slots.header">{{ title }}</h2>
+                <slot name="header"></slot>
+                <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>
+              </div>
+              <div class="base-dialog-body">
+                <el-scrollbar max-height="76vh">
+                  <slot></slot>
+                </el-scrollbar>
+              </div>
+              <div class="base-dialog-footer" v-if="$slots.footer">
+                <slot name="footer"></slot>
+              </div>
+            </div>
+          </transition>
+        </div>
+      </transition>
+    </teleport>
+  </section>
+</template>
 <style lang="scss">
 @import "@/styles/mixins.scss";
 

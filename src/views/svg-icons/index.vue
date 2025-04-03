@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import IconList from "./components/IconList.vue";
+
+</script>
 <template>
   <div>
     <div class="mb-[30px]">
@@ -7,7 +11,3 @@
     <IconList />
   </div>
 </template>
-<script lang="ts" setup>
-import IconList from "./components/IconList.vue";
-
-</script>

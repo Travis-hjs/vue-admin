@@ -106,15 +106,6 @@ export default store;
 页面应用 `/views/demo.vue`
 
 ```html
-<template>
-  <div>
-    <div>{{ userInfo.name }}</div>
-    <span class="the-tag cyan">商品名称：{{ orderInfo.goods.name }}</span>
-    <span class="the-tag red">${{ orderInfo.goods.price / 100 }}</span>
-    <button @click="onEditPrice()">修改价格</button>
-    <button @click="onSubmit()">发起支付</button>
-  </div>
-</template>
 <script lang="ts" setup>
 import store from "@/store";
 
@@ -138,4 +129,13 @@ function onSubmit() {
   }
 }
 </script>
+<template>
+  <div>
+    <div>{{ userInfo.name }}</div>
+    <span class="the-tag cyan">商品名称：{{ orderInfo.goods.name }}</span>
+    <span class="the-tag red">${{ orderInfo.goods.price / 100 }}</span>
+    <button @click="onEditPrice()">修改价格</button>
+    <button @click="onSubmit()">发起支付</button>
+  </div>
+</template>
 ```

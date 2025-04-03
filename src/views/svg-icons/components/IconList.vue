@@ -1,19 +1,3 @@
-<template>
-  <div class="svg-icon-list">
-    <div
-      v-for="(item) in list"
-      class="icon-item"
-      v-ripple
-      color="rgba(0,0,0,0.14)"
-      :key="item"
-      @click="onClickIcon(item)"
-      :title="getSvgIconCode(item)"
-    >
-      <svg-icon :name="item" />
-      <p>{{ item }}</p>
-    </div>
-  </div>
-</template>
 <script lang="ts">
 /** 图标列表 */
 export default {
@@ -63,6 +47,22 @@ function onClickIcon(name: string) {
 
 // console.log("svg-list >>", list);
 </script>
+<template>
+  <div class="svg-icon-list">
+    <div
+      v-for="(item) in list"
+      class="icon-item"
+      v-ripple
+      color="rgba(0,0,0,0.14)"
+      :key="item"
+      @click="onClickIcon(item)"
+      :title="getSvgIconCode(item)"
+    >
+      <svg-icon :name="item" />
+      <p>{{ item }}</p>
+    </div>
+  </div>
+</template>
 <style lang="scss">
 .svg-icon-list {
   width: 100%;

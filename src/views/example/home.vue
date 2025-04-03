@@ -1,55 +1,3 @@
-<template>
-  <div class="page-home">
-    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mb-[40px]">
-      <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
-      <a class="the-tag green" :href="project" target="_blank">项目地址</a>
-    </div>
-    <el-form class="the-form mb-[30px]" label-width="160px" size="small">
-      <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
-      <el-form-item label="显示侧边栏logo">
-        <el-switch v-model="layoutInfo.showSidebarLogo" active-text="显示" inactive-text="隐藏" />
-      </el-form-item>
-      <el-form-item label="显示历史记录标签">
-        <el-switch v-model="layoutInfo.showTagList" active-text="显示" inactive-text="隐藏" />
-      </el-form-item>
-      <el-form-item label="侧边栏展开">
-        <el-switch v-model="layoutInfo.showSidebar" active-text="展开" inactive-text="收起" />
-      </el-form-item>
-      <el-form-item label="布局模式">
-        <el-radio-group v-model="layoutInfo.layoutMode">
-          <el-radio-button value="">默认布局</el-radio-button>
-          <el-radio-button value="full-header">顶部撑满</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item v-for="item in settingList" :key="item.label + item.key" :label="item.type !== 'title' ? item.label : undefined">
-        <template v-if="item.type === 'color'">
-          <el-input v-model="styleVariable[item.key]"></el-input>
-          <el-color-picker v-model="(styleVariable[item.key] as string)" show-alpha :predefine="predefineColors" @change="onColor()" />
-        </template>
-        <template v-else-if="item.type === 'number'">
-          <el-input v-model="styleVariable[item.key]" @input="e => onInput(e, item.key as Numbers)">
-            <template #suffix>px</template>
-          </el-input>
-        </template>
-        <h2 v-else class="the-title">{{ item.label }}</h2>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="success" @click="copyStyle()">复制当前配置</el-button>
-        <el-button type="info" v-ripple @click="resetStyle()">重置默认样式</el-button>
-        <el-button type="primary" v-ripple @click="onPreset('green')">应用预设配置-绿色</el-button>
-        <el-button type="primary" v-ripple @click="onPreset('black')">应用预设配置-黑色</el-button>
-        <el-button type="primary" v-ripple @click="onPreset('red')">应用预设配置-红色</el-button>
-        <el-button type="primary" v-ripple @click="onPreset('purple')">应用预设配置-紫色</el-button>
-      </el-form-item>
-    </el-form>
-    <h2 class="the-title is-line mb-[30px]">打赏一下</h2>
-    <div class="code-box">
-      <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
-      <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">
-    </div>
-  </div>
-</template>
 <script lang="ts" setup>
 import store from "@/store";
 import { copyText, inputOnlyNumber, jsonParse, modifyData } from "@/utils";
@@ -388,6 +336,58 @@ onUnmounted(function() {
   clearTimeout(timer);
 });
 </script>
+<template>
+  <div class="page-home">
+    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mb-[40px]">
+      <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
+      <a class="the-tag green" :href="project" target="_blank">项目地址</a>
+    </div>
+    <el-form class="the-form mb-[30px]" label-width="160px" size="small">
+      <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
+      <el-form-item label="显示侧边栏logo">
+        <el-switch v-model="layoutInfo.showSidebarLogo" active-text="显示" inactive-text="隐藏" />
+      </el-form-item>
+      <el-form-item label="显示历史记录标签">
+        <el-switch v-model="layoutInfo.showTagList" active-text="显示" inactive-text="隐藏" />
+      </el-form-item>
+      <el-form-item label="侧边栏展开">
+        <el-switch v-model="layoutInfo.showSidebar" active-text="展开" inactive-text="收起" />
+      </el-form-item>
+      <el-form-item label="布局模式">
+        <el-radio-group v-model="layoutInfo.layoutMode">
+          <el-radio-button value="">默认布局</el-radio-button>
+          <el-radio-button value="full-header">顶部撑满</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item v-for="item in settingList" :key="item.label + item.key" :label="item.type !== 'title' ? item.label : undefined">
+        <template v-if="item.type === 'color'">
+          <el-input v-model="styleVariable[item.key]"></el-input>
+          <el-color-picker v-model="(styleVariable[item.key] as string)" show-alpha :predefine="predefineColors" @change="onColor()" />
+        </template>
+        <template v-else-if="item.type === 'number'">
+          <el-input v-model="styleVariable[item.key]" @input="e => onInput(e, item.key as Numbers)">
+            <template #suffix>px</template>
+          </el-input>
+        </template>
+        <h2 v-else class="the-title">{{ item.label }}</h2>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="success" @click="copyStyle()">复制当前配置</el-button>
+        <el-button type="info" v-ripple @click="resetStyle()">重置默认样式</el-button>
+        <el-button type="primary" v-ripple @click="onPreset('green')">应用预设配置-绿色</el-button>
+        <el-button type="primary" v-ripple @click="onPreset('black')">应用预设配置-黑色</el-button>
+        <el-button type="primary" v-ripple @click="onPreset('red')">应用预设配置-红色</el-button>
+        <el-button type="primary" v-ripple @click="onPreset('purple')">应用预设配置-紫色</el-button>
+      </el-form-item>
+    </el-form>
+    <h2 class="the-title is-line mb-[30px]">打赏一下</h2>
+    <div class="code-box">
+      <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
+      <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">
+    </div>
+  </div>
+</template>
 <style lang="scss">
 .page-home {
   width: 100%;

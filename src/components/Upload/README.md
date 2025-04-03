@@ -5,15 +5,6 @@
 - 使用示例
 
 ```html
-<template>
-  <div>
-    <!-- 默认使用方式 -->
-    <UploadImage uploadId="logo" :src="formData.logo" @change="onUpload" />
-    <!-- 自定义提示、尺寸等参数，更多配置请看组件代码 -->
-    <UploadImage uploadId="banner" :src="formData.banner" @change="onUpload" tip="尺寸规格：750px * 391px" width="375px" height="195px" :maxSize="5" :autoHeight="true" />
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { UploadImage, type UploadChange } from "@/components/Upload";
@@ -32,6 +23,14 @@ function onUpload(info: UploadChange<"banner"|"logo">) {
   formData[info.id] = info.src;
 }
 </script>
+<template>
+  <div>
+    <!-- 默认使用方式 -->
+    <UploadImage uploadId="logo" :src="formData.logo" @change="onUpload" />
+    <!-- 自定义提示、尺寸等参数，更多配置请看组件代码 -->
+    <UploadImage uploadId="banner" :src="formData.banner" @change="onUpload" tip="尺寸规格：750px * 391px" width="375px" height="195px" :maxSize="5" :autoHeight="true" />
+  </div>
+</template>
 ```
 
 - 参数说明

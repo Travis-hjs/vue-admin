@@ -1,3 +1,22 @@
+<script lang="ts">
+/** 侧边栏组件 */
+export default {
+  name: "Sidebar"
+}
+</script>
+<script lang="ts" setup>
+import Menu from "./Menu.vue";
+import { Scrollbar } from "@/components/Scrollbar";
+import store from "@/store";
+
+const layoutInfo = store.layout.info;
+
+const info = store.projectInfo;
+
+function onClear() {
+  layoutInfo.keyword = "";
+}
+</script>
 <template>
   <div class="the-layout-sidebar">
     <section class="the-layout-sidebar-content">
@@ -25,22 +44,3 @@
     </section>
   </div>
 </template>
-<script lang="ts">
-/** 侧边栏组件 */
-export default {
-  name: "Sidebar"
-}
-</script>
-<script lang="ts" setup>
-import Menu from "./Menu.vue";
-import { Scrollbar } from "@/components/Scrollbar";
-import store from "@/store";
-
-const layoutInfo = store.layout.info;
-
-const info = store.projectInfo;
-
-function onClear() {
-  layoutInfo.keyword = "";
-}
-</script>

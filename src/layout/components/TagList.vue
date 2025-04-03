@@ -1,37 +1,3 @@
-<template>
-  <div class="the-layout-tag-box">
-    <Scrollbar>
-      <div class="the-layout-tags">
-        <router-link
-          v-for="(item, itemIndex) in layoutInfo.tagList"
-          :class="['the-layout-tag', {'is-active': isActive(item)}]"
-          :key="item.path + itemIndex"
-          :to="({ path: item.path, query: item.query, params: item.params } as any)"
-          @contextmenu.prevent="openTagMenu($event, item)"
-        >
-          <span>{{ item.meta.title }}</span>
-          <i class="close" @click.prevent.stop="onRemove(itemIndex)">-</i>
-        </router-link>
-      </div>
-    </Scrollbar>
-  </div>
-  <div
-    v-show="tagMenu.show"
-    ref="tagMenuRef"
-    class="the-layout-tag-menu"
-    :style="{ left: tagMenu.left }"
-  >
-    <div
-      v-for="opt in tagData.list"
-      v-show="opt.show ? opt.show() : true"
-      :key="opt.id"
-      class="the-layout-tag-menu-item"
-      @click="opt.click()"
-    >
-      {{ opt.label }}
-    </div>
-  </div>
-</template>
 <script lang="ts">
 /** 历史记录标签 */
 export default {
@@ -161,3 +127,37 @@ onUnmounted(function () {
   document.removeEventListener("click", onTagMenuMask);
 });
 </script>
+<template>
+  <div class="the-layout-tag-box">
+    <Scrollbar>
+      <div class="the-layout-tags">
+        <router-link
+          v-for="(item, itemIndex) in layoutInfo.tagList"
+          :class="['the-layout-tag', {'is-active': isActive(item)}]"
+          :key="item.path + itemIndex"
+          :to="({ path: item.path, query: item.query, params: item.params } as any)"
+          @contextmenu.prevent="openTagMenu($event, item)"
+        >
+          <span>{{ item.meta.title }}</span>
+          <i class="close" @click.prevent.stop="onRemove(itemIndex)">-</i>
+        </router-link>
+      </div>
+    </Scrollbar>
+  </div>
+  <div
+    v-show="tagMenu.show"
+    ref="tagMenuRef"
+    class="the-layout-tag-menu"
+    :style="{ left: tagMenu.left }"
+  >
+    <div
+      v-for="opt in tagData.list"
+      v-show="opt.show ? opt.show() : true"
+      :key="opt.id"
+      class="the-layout-tag-menu-item"
+      @click="opt.click()"
+    >
+      {{ opt.label }}
+    </div>
+  </div>
+</template>

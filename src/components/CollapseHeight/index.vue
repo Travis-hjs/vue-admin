@@ -1,8 +1,3 @@
-<template>
-  <section class="collapse-height" ref="collapseBox">
-    <slot></slot>
-  </section>
-</template>
 <script lang="ts">
 /** 高度折叠过渡组件 */
 export default {
@@ -41,6 +36,11 @@ onMounted(function() {
 });
 
 </script>
+<template>
+  <section class="collapse-height" ref="collapseBox">
+    <slot></slot>
+  </section>
+</template>
 <style lang="scss">
 .collapse-height {
   transition: .3s height;

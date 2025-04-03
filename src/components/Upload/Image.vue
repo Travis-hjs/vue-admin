@@ -1,22 +1,3 @@
-<template>
-  <div class="base-upload-image">
-    <div class="base-upload-content" :style="{ 'width': width }" v-loading="loading">
-      <div v-if="src" class="image-box">
-        <img class="image" :src="src" :style="{ 'height': autoHeight ? '' : height }">
-        <div class="remove fvc">
-          <i class="upload-icon el-icon-delete" title="移除图片" @click="removeImg()"></i>
-          <i class="upload-icon el-icon-document-copy" title="复制图片地址" @click="onCopy()"></i>
-          <i class="upload-icon el-icon-search" title="查看大图" @click="onPreview()"></i>
-        </div>
-      </div>
-      <div v-else class="upload-box fvc" :style="{ 'height': height }">
-        <div class="add-icon"></div>
-        <input class="upload-input" type="file" name="picture" ref="uploadInput" :accept="accept.toString()" @change="onUpload()">
-      </div>
-    </div>
-    <p class="upload-tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
-  </div>
-</template>
 <script lang="ts">
 /** 单个上传图片组件 */
 export default {
@@ -133,6 +114,32 @@ async function onUpload() {
   }
 }
 </script>
+<template>
+  <div class="base-upload-image">
+    <div class="base-upload-content" :style="{ 'width': width }" v-loading="loading">
+      <div v-if="src" class="image-box">
+        <img class="image" :src="src" :style="{ 'height': autoHeight ? '' : height }">
+        <div class="remove fvc">
+          <i class="upload-icon el-icon-delete" title="移除图片" @click="removeImg()"></i>
+          <i class="upload-icon el-icon-document-copy" title="复制图片地址" @click="onCopy()"></i>
+          <i class="upload-icon el-icon-search" title="查看大图" @click="onPreview()"></i>
+        </div>
+      </div>
+      <div v-else class="upload-box fvc" :style="{ 'height': height }">
+        <div class="add-icon"></div>
+        <input
+          class="upload-input"
+          type="file"
+          name="picture"
+          ref="uploadInput"
+          :accept="accept.toString()"
+          @change="onUpload()"
+        >
+      </div>
+    </div>
+    <p class="upload-tip" v-if="tip">{{ loading ? "上传中..." : tip }}</p>
+  </div>
+</template>
 <style lang="scss">
 @mixin time() {
   transition: 0.2s all;
@@ -182,11 +189,13 @@ async function onUpload() {
         &:hover {
           opacity: 1;
         }
+
         .upload-icon {
           font-size: 20px;
           cursor: pointer;
         }
-        .upload-icon + .upload-icon {
+
+        .upload-icon+.upload-icon {
           margin-left: 6px;
         }
       }

@@ -1,3 +1,4 @@
+<script lang="ts" setup></script>
 <template>
   <div class="nested">
     <p class="the-title is-line mb-[20px]">多级嵌套菜单</p>
@@ -11,9 +12,6 @@
     </router-view>
   </div>
 </template>
-<script lang="ts" setup>
-
-</script>
 <style lang="scss">
 .nested {
   width: 100%;

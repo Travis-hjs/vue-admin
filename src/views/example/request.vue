@@ -1,16 +1,3 @@
-<template>
-  <div class="page-request">
-    <h2 class="the-title is-line mb-[30px]">Http 请求示例，当前页面配置路由缓存</h2>
-    <div class="flex">
-      <el-input class="mb-[20px] short-input" v-model="pageData.city" placeholder="请输入城市名"></el-input>
-      <el-button type="primary" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</el-button>
-    </div>
-    <div class="mb-[20px]" v-if="pageData.desc">
-      <span :class="['the-tag', pageData.error ? 'red' : 'green']">{{ pageData.desc }}</span>
-    </div>
-    <textarea cols="60" rows="30" :value="pageData.content"></textarea>
-  </div>
-</template>
 <script lang="ts">
 export default {
   // TODO: 设置路由缓存 keepAlive 时，这里必须要设置对应的 name 值
@@ -59,6 +46,19 @@ async function getData() {
 }
 
 </script>
+<template>
+  <div class="page-request">
+    <h2 class="the-title is-line mb-[30px]">Http 请求示例，当前页面配置路由缓存</h2>
+    <div class="flex">
+      <el-input class="mb-[20px] short-input" v-model="pageData.city" placeholder="请输入城市名"></el-input>
+      <el-button type="primary" v-ripple @click="getData()" :disabled="pageData.loading">获取天气数据</el-button>
+    </div>
+    <div class="mb-[20px]" v-if="pageData.desc">
+      <span :class="['the-tag', pageData.error ? 'red' : 'green']">{{ pageData.desc }}</span>
+    </div>
+    <textarea cols="60" rows="30" :value="pageData.content"></textarea>
+  </div>
+</template>
 <style lang="scss">
 .page-request {
   width: 100%;

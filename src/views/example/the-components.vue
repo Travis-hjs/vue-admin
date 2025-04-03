@@ -1,3 +1,93 @@
+<script lang="ts" setup>
+import { reactive, ref } from "vue";
+import { Scrollbar } from "@/components/Scrollbar";
+import { UploadImage, type UploadChange } from "@/components/Upload";
+import { CollapseHeight } from "@/components/CollapseHeight";
+import { type Message, message, messageBox } from "@/utils/message";
+
+const formData = reactive({
+  banner: "",
+  logo: ""
+})
+
+const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
+
+/**
+ * 监听上传图片
+ * @param info 回调数据
+ */
+function onUpload(info: UploadChange<"banner" | "logo">) {
+  // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
+  formData[info.id] = info.src;
+}
+
+const dialogInfo = reactive({
+  first: {
+    show: false,
+    count: 0,
+  },
+  second: {
+    show: false,
+    count: 0
+  },
+  third: {
+    show: false,
+    count: 0
+  }
+})
+
+const delayShow = ref(false);
+
+let delayTimer: number;
+
+function openDialog(type: "first" | "second" | "third") {
+  dialogInfo[type].count++;
+  dialogInfo[type].show = true;
+  delayTimer = setTimeout(() => {
+    delayShow.value = true;
+  }, 2000);
+}
+
+function closeDialog(type: "first" | "second" | "third") {
+  dialogInfo[type].show = false;
+  clearTimer();
+}
+
+function clearTimer() {
+  delayShow.value = false;
+  clearTimeout(delayTimer);
+}
+
+interface MessageBtn {
+  label: string
+  type: Message.Type
+  btnType: "primary" | "success" | "warning" | "danger"
+}
+
+const messageBtns: Array<MessageBtn> = [
+  { label: "message-info", type: "info", btnType: "primary" },
+  { label: "message-success", type: "success", btnType: "success" },
+  { label: "message-warning", type: "warning", btnType: "warning" },
+  { label: "message-error", type: "error", btnType: "danger" },
+];
+
+function openMessage(item: MessageBtn) {
+  message.show(`This is a prompt message for ${item.type}`, item.type);
+}
+
+function openMessageBox(isConfirm = false) {
+  messageBox({
+    content: isConfirm ? "确认取消框" : "确认框",
+    cancelText: isConfirm ? "取消" : undefined
+  });
+}
+
+const collapse = reactive({
+  showOne: true,
+  showTwo: true
+});
+
+</script>
 <template>
   <div class="the-components">
     <div class="mb-[30px]">
@@ -120,96 +210,6 @@
 
   </div>
 </template>
-<script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { Scrollbar } from "@/components/Scrollbar";
-import { UploadImage, type UploadChange } from "@/components/Upload";
-import { CollapseHeight } from "@/components/CollapseHeight";
-import { type Message, message, messageBox } from "@/utils/message";
-
-const formData = reactive({
-  banner: "",
-  logo: ""
-})
-
-const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
-
-/**
- * 监听上传图片
- * @param info 回调数据
- */
-function onUpload(info: UploadChange<"banner" | "logo">) {
-  // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
-  formData[info.id] = info.src;
-}
-
-const dialogInfo = reactive({
-  first: {
-    show: false,
-    count: 0,
-  },
-  second: {
-    show: false,
-    count: 0
-  },
-  third: {
-    show: false,
-    count: 0
-  }
-})
-
-const delayShow = ref(false);
-
-let delayTimer: number;
-
-function openDialog(type: "first" | "second" | "third") {
-  dialogInfo[type].count++;
-  dialogInfo[type].show = true;
-  delayTimer = setTimeout(() => {
-    delayShow.value = true;
-  }, 2000);
-}
-
-function closeDialog(type: "first" | "second" | "third") {
-  dialogInfo[type].show = false;
-  clearTimer();
-}
-
-function clearTimer() {
-  delayShow.value = false;
-  clearTimeout(delayTimer);
-}
-
-interface MessageBtn {
-  label: string
-  type: Message.Type
-  btnType: "primary"|"success"|"warning"|"danger"
-}
-
-const messageBtns: Array<MessageBtn> = [
-  { label: "message-info", type: "info", btnType: "primary" },
-  { label: "message-success", type: "success", btnType: "success" },
-  { label: "message-warning", type: "warning", btnType: "warning" },
-  { label: "message-error", type: "error", btnType: "danger" },
-];
-
-function openMessage(item: MessageBtn) {
-  message.show(`This is a prompt message for ${item.type}`, item.type);
-}
-
-function openMessageBox(isConfirm = false) {
-  messageBox({
-    content: isConfirm ? "确认取消框" : "确认框",
-    cancelText: isConfirm ? "取消" : undefined
-  });
-}
-
-const collapse = reactive({
-  showOne: true,
-  showTwo: true
-});
-
-</script>
 <style lang="scss">
 .the-components {
   width: 100%;
