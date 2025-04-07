@@ -1,6 +1,7 @@
-import { inject, nextTick, onUnmounted } from "vue";
+import { nextTick, onUnmounted } from "vue";
 import type { CurdConfig, CurdType } from "./types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
+import { getCountId } from "@/hooks/common";
 // ----------------------- 数据相关 -----------------------
 
 /** 表格列操作栏的标记 */
@@ -21,15 +22,6 @@ export const fieldTitleMap = {
   date: "日期选择器",
   cascader: "级联选择器"
 };
-
-/** 递增`ID` */
-let incrementId = 0;
-
-/** 获取递增`id`每调用一次都会自动递增 */
-function getIncrementId() {
-  incrementId++;
-  return incrementId;
-}
 
 /**
  * 初始化设置表单绑定值
@@ -90,11 +82,9 @@ interface FieldMap {
  * @param isSearch 是否为搜索数据使用，可以为表单和搜索数据做字段区分（预留参数，目前暂无区分）
  */
 export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSearch?: boolean): FieldMap[T] {
-  const fieldId = getIncrementId();
-  const time = Date.now();
   const tipsInput = "请输入";
   const tipsChange = "请选择";
-  const id = `field-${type}-${fieldId}-${time}`;
+  const id = getCountId(`field-${type}`);
   const map: FieldMap = {
     input: {
       key,
@@ -264,7 +254,7 @@ export function getFormConfig(): CurdType.Table.From {
 /** 默认表单操作按钮数据 */
 export function getActionData(): CurdType.Table.Action {
   return {
-    key: `action-${getIncrementId()}-${Date.now()}`,
+    key: getCountId("action"),
     text: "",
     icon: "",
     click: "",
