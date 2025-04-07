@@ -51,26 +51,26 @@ div:focus {
 }
 
 ::-webkit-scrollbar {
-  width: 8px
+  width: 8px;
 }
 
 ::-webkit-scrollbar:horizontal {
-  height: 8px
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 10px
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  transition: all .2s ease-in-out
+  transition: all .2s ease-in-out;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.302)
+  background-color: rgba(0, 0, 0, 0.302);
 }
 
 // ======================= flex全局样式 =======================
