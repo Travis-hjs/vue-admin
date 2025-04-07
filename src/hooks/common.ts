@@ -20,10 +20,12 @@ let countId = 0;
 /**
  * 每调用一次就自动累加的`id`
  * - 用于唯一值
+ * @param prefix 添加标识前缀，在归类唯一值时非常有用
  */
-export function getCountId() {
+export function getCountId(prefix?: string) {
   countId++;
-  return `${Math.random().toString(36).slice(2)}-${Date.now()}-${countId}`;
+  prefix = prefix ? `${prefix}-` : "";
+  return `${prefix}${Math.random().toString(36).slice(2)}-${Date.now()}-${countId}`;
 }
 
 /**
