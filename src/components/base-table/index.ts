@@ -9,7 +9,7 @@ export { default } from "./index.vue";
 export function useAdaptiveTable() {
   const adaptive = reactive({
     height: undefined as number | undefined,
-    id: getCountId()
+    id: getCountId("table"),
   });
 
   let tableElement: HTMLElement;
