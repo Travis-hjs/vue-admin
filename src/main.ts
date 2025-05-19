@@ -10,8 +10,11 @@ import { version } from "../package.json";
 import ripple from "./utils/ripple";
 import { message } from "./utils/message";
 
+import "./styles/tailwind.css";
+import "./styles/index.scss";
 import "element-plus/dist/index.css";
 import "./styles/element-plus.scss";
+
 // import ElementPlus from "element-plus";
 import {
   ElButton,

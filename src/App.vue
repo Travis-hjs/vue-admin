@@ -23,7 +23,3 @@ export default {
     <CurdPopupConfig />
   </el-config-provider>
 </template>
-<style lang="scss">
-@import url("./styles/index.scss");
-@import url("./styles/layout.scss");
-</style>

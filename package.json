@@ -15,8 +15,10 @@
   },
   "dependencies": {
     "@purge-icons/generated": "0.10.0",
+    "@tailwindcss/vite": "^4.1.7",
     "element-plus": "2.8.4",
     "nprogress": "0.2.0",
+    "tailwindcss": "^4.1.7",
     "vue": "3.4.21",
     "vue-router": "4.3.0"
   },
