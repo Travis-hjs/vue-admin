@@ -9,6 +9,7 @@ import { type PropType, ref } from "vue";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
 import type { UploadChange } from "./index";
+import { Icon } from "../Icon";
 
 const props = defineProps({
   /** 组件上传图片路径 */
@@ -105,7 +106,7 @@ function removeImg() {
       <div v-if="src" class="the-upload-image-box">
         <img class="image" :src="src" :style="{ 'height': autoHeight ? undefined : height }">
         <div class="remove fvc">
-          <svg-icon v-if="!disabled" name="delete" @click="removeImg()" />
+          <Icon v-if="!disabled" size="28px" name="ep:delete" class="cursor-pointer" @click="removeImg()" />
         </div>
       </div>
       <div v-else class="the-upload-box fvc" :style="{ 'height': height }">
@@ -166,12 +167,6 @@ function removeImg() {
         &:hover {
           opacity: 1;
         }
-      }
-
-      .svg-icon {
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
       }
     }
 

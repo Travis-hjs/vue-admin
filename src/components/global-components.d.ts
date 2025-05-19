@@ -1,5 +1,4 @@
 import type BaseDialog from "./base-dialog";
-import type SvgIcon from "../icons";
 
 
 // ---------------- 声明全局组件标签类型提示 ----------------
@@ -11,6 +10,5 @@ declare module "vue" {
    */
   export interface GlobalComponents {
     BaseDialog: typeof BaseDialog
-    SvgIcon: typeof SvgIcon
   }
 }

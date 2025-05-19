@@ -5,6 +5,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
+import { Icon } from "@/components/Icon";
 import Menu from "./Menu.vue";
 import { Scrollbar } from "@/components/Scrollbar";
 import store from "@/store";
@@ -31,8 +32,8 @@ function onClear() {
       </transition>
       <div class="the-layout-search-box">
         <input v-model="layoutInfo.keyword" type="text" placeholder="请输入关键字检索菜单">
-        <svg-icon v-if="layoutInfo.keyword" class="the-layout-search-icon" name="circle-close" @click="onClear()" />
-        <svg-icon v-else class="the-layout-search-icon" name="search" />
+        <Icon v-if="layoutInfo.keyword" class="the-layout-search-icon" name="tdesign:close-circle" @click="onClear()" />
+        <Icon v-else class="the-layout-search-icon" name="tdesign:search" />
       </div>
     </section>
     <section class="f1">

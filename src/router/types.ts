@@ -5,7 +5,10 @@ export interface RouteMeta {
   title: string;
   /** 外链地址，优先级会比`path`高 */
   link?: string;
-  /** `svg`名 */
+  /**
+   * `svg`名
+   * - [图标库](https://icones.netlify.app/collection/tdesign)
+   */
   icon?: string;
   /** 是否在侧边菜单栏不显示该路由 */
   hidden?: boolean;

@@ -74,8 +74,13 @@
   padding: 0 15px;
   outline: none;
   transition: 0.2s all;
+
   &:focus {
     border-color: var(--blue);
+  }
+
+  &::placeholder {
+    color: #999;
   }
 }
 
