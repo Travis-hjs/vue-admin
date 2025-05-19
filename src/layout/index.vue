@@ -80,3 +80,6 @@ onMounted(function () {
     <button :class="['the-layout-to-top', {'hidden' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
   </div>
 </template>
+<style lang="scss">
+@import "./styles/layout.scss";
+</style>

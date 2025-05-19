@@ -7,6 +7,9 @@ import { version } from "../package.json";
 import ripple from "./utils/ripple";
 import { message } from "./utils/message";
 
+import "./styles/tailwind.css";
+import "./styles/index.scss";
+
 window.version = version;
 
 const app = createApp(App);

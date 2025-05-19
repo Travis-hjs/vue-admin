@@ -1,4 +1,4 @@
-@import "./mixins.scss";
+@import "@/styles/mixins.scss";
 
 @mixin menu-block($height, $color) {
   display: flex;
