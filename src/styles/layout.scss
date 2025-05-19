@@ -156,15 +156,13 @@
       background: rgba(0, 0, 0, 0.08);
     }
 
-    .svg-icon {
-      width: 24px;
-      height: 24px;
+    .the-icon {
       transition: var(--transition);
     }
   }
 
   .hamburger-actived {
-    .svg-icon {
+    .the-icon {
       transform: rotate(180deg);
     }
   }

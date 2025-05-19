@@ -12,18 +12,18 @@ export const dynamicRouters: Array<RouteItem> = [
     name: "index",
     redirect: "/home",
     component: Layout,
-    meta: { title: "首页", icon: "home" },
+    meta: { title: "首页", icon: "tdesign:home" },
     children: [
       {
         path: "/home",
-        meta: { title: "首页展示", icon: "guide" },
+        meta: { title: "首页展示", icon: "tdesign:app" },
         component: () => import("../views/example/home.vue")
       },
       {
         path: "/nested",
         name: "nested",
         redirect: "/nested/menu-1",
-        meta: { title: "多级菜单嵌套", icon: "tree" },
+        meta: { title: "多级菜单嵌套", icon: "tdesign:tree-square-dot" },
         component: () => import("../views/example/nested.vue"),
         children: [
           {
@@ -94,14 +94,14 @@ export const dynamicRouters: Array<RouteItem> = [
         component: Page404, // 这里必需给一个组件
         meta: {
           title: "百度一下",
-          icon: "baidu",
+          icon: "tdesign:data-search-filled",
           link: "https://www.baidu.com"
         },
       },
       {
         path: "/menu-4",
         name: "menu-4",
-        meta: { title: "换行菜单标题换行菜单标题", icon: "nested" },
+        meta: { title: "换行菜单标题换行菜单标题", icon: "tdesign:component-layout" },
         component: () => import("../views/example/menu-4.vue")
       }
     ]
@@ -110,7 +110,7 @@ export const dynamicRouters: Array<RouteItem> = [
     path: "/example",
     name: "example",
     component: Layout,
-    meta: { title: "示例页栏目", icon: "menu" },
+    meta: { title: "示例页栏目", icon: "tdesign:tree-list" },
     redirect: "/example/request",
     children: [
       {
@@ -161,27 +161,12 @@ export const dynamicRouters: Array<RouteItem> = [
     ]
   },
   {
-    path: "/icon",
-    name: "icon",
-    meta: { title: "图标栏目", auth: [0], },
-    component: Layout,
-    redirect: "/icon/svg-icons",
-    children: [
-      {
-        path: "/icon/svg-icons",
-        name: "svg-icons",
-        component: () => import(/* webpackChunkName: "icons" */ "../views/svg-icons/index.vue"),
-        meta: { title: "svg-图标", icon: "svg-icon" }
-      }
-    ]
-  },
-  {
     path: "/" + store.projectInfo.link,
     name: "GitHub-Travis",
     component: Page404, // 这里必需给一个组件
     meta: {
       title: "项目地址",
-      icon: "github",
+      icon: "tdesign:logo-github-filled",
       link: store.projectInfo.link,
       auth: [0],
     }
@@ -197,7 +182,7 @@ export const dynamicRouters: Array<RouteItem> = [
         path: "/menu/list",
         name: "menu-list",
         component: () => import("../views/menu/index.vue"),
-        meta: { title: "菜单管理", icon: "menu" }
+        meta: { title: "菜单管理", icon: "tdesign:app" }
       }
     ]
   },

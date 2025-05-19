@@ -10,6 +10,7 @@ import store from "@/store";
 import { removeRoutes } from "@/router/permission";
 import TagList from "./TagList.vue";
 import { useLayoutRoute } from "./hooks";
+import { Icon } from "@/components/Icon";
 
 const layoutInfo = store.layout.info;
 const userInfo = store.user.info;
@@ -47,6 +48,7 @@ function onLogout() {
 
 .user-info-box {
   @include font();
+
   .avatar {
     width: 36px;
     height: 36px;
@@ -54,6 +56,7 @@ function onLogout() {
     margin-right: 10px;
     display: inline-block;
   }
+
   .logout {
     border: none;
     outline: none;
@@ -62,11 +65,9 @@ function onLogout() {
     line-height: 1;
     @include font();
     transition: var(--transition);
+  
     &:hover {
       color: var(--blue);
-    }
-    .svg-icon {
-      margin-right: 4px;
     }
   }
 }
@@ -75,14 +76,14 @@ function onLogout() {
   <div class="the-layout-header">
     <div class="the-layout-navbar flex">
       <div :class="['fvc hamburger', { 'hamburger-actived': layoutInfo.showSidebar }]" @click="onSwitch()">
-        <svg-icon name="hamburger" />
+        <Icon name="tdesign:menu-fold" size="24px" color="#555" />
       </div>
       <BreadCrumb class="f1" />
       <div class="user-info-box f-vertical">
         <img class="avatar" :src="userInfo.avatar || defaultAvatar">
         <span class="the-tag green mr-[10px]">{{ userInfo.name || userInfo.account || "用户未设置昵称" }}</span>
         <button class="logout f-vertical" @click="onLogout()">
-          <svg-icon name="exit" />
+          <Icon name="tdesign:logout" class="mr-[4px]" />
           <span>退出登录</span>
         </button>
       </div>

@@ -1,6 +1,5 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import SvgIcon from "./icons";
 import BaseDialog from "./components/base-dialog";
 import BaseTable from "./components/base-table";
 import BaseTableActions from "./components/base-table-actions";
@@ -132,8 +131,6 @@ app.directive("ripple", {
   }
 });
 
-// 注册全局组件: `svg-icon`
-app.component("svg-icon", SvgIcon);
 // 基础弹框
 app.component("base-dialog", BaseDialog);
 // 全局表格

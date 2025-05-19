@@ -206,7 +206,7 @@ async function onUpload() {
         cursor: pointer;
       }
 
-      .btn-icon+.btn-icon {
+      .btn-icon + .btn-icon {
         margin-left: 10px;
       }
     }

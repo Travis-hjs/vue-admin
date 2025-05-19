@@ -1,70 +1,3 @@
-<template>
-  <Drawer
-    :title="props.type === 'edit' ? '编辑菜单' : '添加菜单'"
-    v-model:show="state.show"
-    size="620px"
-    @close="onClose()"
-  >
-    <el-form
-      label-position="left"
-      label-width="128px"
-      class="menu-form"
-      ref="formRef"
-      :model="state.formData"
-      :rules="formRules"
-    >
-      <el-form-item label="上级菜单" prop="parentId">
-        <el-tree-select
-          v-model="state.formData.parentId"
-          placeholder="请选择上级菜单"
-          :data="options"
-          check-strictly
-          :render-after-expand="false"
-          clearable
-          filterable
-        />
-      </el-form-item>
-      <el-form-item label="类型" prop="meta.type">
-        <el-radio-group v-model="state.formData.meta.type" @change="onType()">
-          <el-radio-button label="菜单" value="menu" />
-          <el-radio-button label="权限功能" value="auth" />
-        </el-radio-group>
-      </el-form-item>
-      <template v-if="state.formData.meta.type === 'menu'">
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">基础配置</el-text>
-        </el-divider>
-        <TheFields :data="state.formData" :list="baseConfigs" />
-        <el-form-item label="菜单图标" prop="meta.icon">
-          <el-input
-            class="f1 mr-[10px]"
-            v-model="state.formData.meta.icon"
-            clearable
-            placeholder="请选择或者输入图标"
-          ></el-input>
-          <div class="fvc mr-[10px]" v-if="state.formData.meta.icon">
-            <el-icon :size="20" style="color: var(--el-color-primary);">
-              <svg-icon :name="state.formData.meta.icon" />
-            </el-icon>
-          </div>
-          <el-button type="primary" plain @click="state.showIcon = true">选择图标</el-button>
-        </el-form-item>
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">辅助配置</el-text>
-        </el-divider>
-        <TheFields :data="state.formData" :list="auxiliaryConfigs" />
-      </template>
-      <template v-else>
-        <TheFields :data="state.formData" :list="permissionConfigs" />
-      </template>
-    </el-form>
-    <IconList v-model:show="state.showIcon" @select="onIcon" />
-    <template #footer>
-      <el-button @click="onClose()">取 消</el-button>
-      <el-button @click="onSubmit()" type="primary">确 认</el-button>
-    </template>
-  </Drawer>
-</template>
 <script lang="ts">
 /** 菜单编辑表单 */
 export default {
@@ -75,11 +8,11 @@ export default {
 import { ref, reactive, watch, type PropType } from "vue";
 import { ElMessage, type FormInstance } from "element-plus"
 import { validateEX } from "@/utils/dom";
-import IconList from "./IconList.vue";
 import { Drawer } from "@/components/Drawer";
 import { getBoldLabel } from "@/components/Curd";
 import { type TheField, TheFields } from "@/components/TheFields";
 import type { MenuForm } from "@/router/types";
+import { Icon } from "@/components/Icon";
 
 const props = defineProps({
   show: {
@@ -305,12 +238,16 @@ const options = new Array(10).fill(0).map((_, index) => {
   }
 })
 
-function onIcon(icon: string) {
-  state.formData.meta.icon = icon;
-}
+// function onIcon(icon: string) {
+//   state.formData.meta.icon = icon;
+// }
 
 function onType() {
   state.formData.meta.status = 1;
+}
+
+function openIconTab() {
+  window.open("https://icones.netlify.app/collection/tdesign", "_blank");
 }
 
 watch(() => props.show, function(val) {
@@ -324,6 +261,72 @@ watch(() => props.show, function(val) {
   immediate: true
 });
 </script>
+<template>
+  <Drawer
+    :title="props.type === 'edit' ? '编辑菜单' : '添加菜单'"
+    v-model:show="state.show"
+    size="620px"
+    @close="onClose()"
+  >
+    <el-form
+      label-position="left"
+      label-width="128px"
+      class="menu-form"
+      ref="formRef"
+      :model="state.formData"
+      :rules="formRules"
+    >
+      <el-form-item label="上级菜单" prop="parentId">
+        <el-tree-select
+          v-model="state.formData.parentId"
+          placeholder="请选择上级菜单"
+          :data="options"
+          check-strictly
+          :render-after-expand="false"
+          clearable
+          filterable
+        />
+      </el-form-item>
+      <el-form-item label="类型" prop="meta.type">
+        <el-radio-group v-model="state.formData.meta.type" @change="onType()">
+          <el-radio-button label="菜单" value="menu" />
+          <el-radio-button label="权限功能" value="auth" />
+        </el-radio-group>
+      </el-form-item>
+      <template v-if="state.formData.meta.type === 'menu'">
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">基础配置</el-text>
+        </el-divider>
+        <TheFields :data="state.formData" :list="baseConfigs" />
+        <el-form-item label="菜单图标" prop="meta.icon">
+          <el-input
+            class="f1 mr-[10px]"
+            v-model="state.formData.meta.icon"
+            clearable
+            placeholder="请选择或者输入图标"
+          ></el-input>
+          <div class="fvc mr-[10px]" v-if="state.formData.meta.icon">
+            <el-icon :size="20" style="color: var(--el-color-primary);">
+              <Icon :name="state.formData.meta.icon" />
+            </el-icon>
+          </div>
+          <el-button type="primary" plain @click="openIconTab()">选择图标</el-button>
+        </el-form-item>
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">辅助配置</el-text>
+        </el-divider>
+        <TheFields :data="state.formData" :list="auxiliaryConfigs" />
+      </template>
+      <template v-else>
+        <TheFields :data="state.formData" :list="permissionConfigs" />
+      </template>
+    </el-form>
+    <template #footer>
+      <el-button @click="onClose()">取 消</el-button>
+      <el-button @click="onSubmit()" type="primary">确 认</el-button>
+    </template>
+  </Drawer>
+</template>
 <style lang="scss" scoped>
 // .value-box {
 //   width: 80%;

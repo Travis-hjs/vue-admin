@@ -1,4 +1,3 @@
-import type SvgIcon from "../icons";
 import type BaseDialog from "./base-dialog";
 import type BaseTable from "./base-table";
 import type BaseTableActions from "./base-table-actions";
@@ -13,7 +12,6 @@ declare module "vue" {
    */
   export interface GlobalComponents {
     BaseDialog: typeof BaseDialog
-    SvgIcon: typeof SvgIcon
     BaseTable: typeof BaseTable
     BaseTableActions: typeof BaseTableActions
     BasePagination: typeof BasePagination

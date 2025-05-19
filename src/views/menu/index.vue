@@ -1,59 +1,3 @@
-<template>
-  <div class="page-menu">
-    <div>
-      <el-button @click="openMenu('add')">新增菜单</el-button>
-    </div>
-    <section class="table-content">
-      <el-table-v2
-        :columns="columns"
-        :data="menuList"
-        :width="tableBoxSize.width"
-        :height="tableBoxSize.height"
-        expand-column-key="meta.title"
-        fixed
-        border
-      >
-        <template #cell="{ rowData, column }: SlotCell">
-          <template v-if="column.key === 'meta.title'">
-            <svg-icon v-if="rowData.meta.icon" class="el-icon--left" :name="rowData.meta.icon" />
-            <span>{{ rowData.meta.title }}</span>
-          </template>
-          <template v-if="column.key === 'meta.type'">
-            <span :class="['the-tag', rowData.meta.type === 'menu' ? 'blue' : 'green']">
-              {{ rowData.meta.type === 'menu' ? '菜单' : '权限' }}
-            </span>
-          </template>
-          <template v-if="column.key === 'sort'">
-            <el-input-number
-              v-model="rowData.sort"
-              :min="1"
-              @blur="onBlur(rowData)"
-            />
-          </template>
-          <template v-if="column.key === 'meta.status'">
-            <el-switch
-              v-model="rowData.meta.status"
-              :active-value="1"
-              :inactive-value="2"
-              inline-prompt
-              active-text="启用"
-              inactive-text="禁用"
-            />
-          </template>
-          <template v-if="column.key === 'meta.hidden'">
-            <span :class="['the-tag', rowData.meta.hidden ? 'red' : 'purple']">{{ rowData.meta.hidden ? '是' : '否' }}</span>
-          </template>
-          <div style="width: 100%; text-align: right;" v-if="column.key === 'option'">
-            <el-button link type="primary" v-if="rowData.meta.type === 'menu'" @click="onAdd(rowData)">新增</el-button>
-            <el-button link type="success" @click="onEdit(rowData)">编辑</el-button>
-            <el-button link type="danger">删除</el-button>
-          </div>
-        </template>
-      </el-table-v2>
-    </section>
-    <Form v-model:show="state.show" />
-  </div>
-</template>
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
 import Form from "./components/Form.vue";
@@ -63,6 +7,7 @@ import {
 } from "element-plus";
 import { useLayoutContentSize } from "@/hooks/common";
 import type { MenuForm } from "@/router/types";
+import { Icon } from "@/components/Icon";
 
 interface Row extends Omit<MenuForm, "id" | "parentId" | "children"> {
   /** 原来数据数据`id` */
@@ -123,7 +68,7 @@ function createData(length: number, level = 1, maxLevel?: number, pId?: string) 
       redirect: "",
       meta: {
         title: `${isMenu ? "菜单" : "权限"}-${level}-${index}`,
-        icon: (isMenu ? "menu" : "guide"),
+        icon: (isMenu ? "tdesign:app" : "tdesign:combination"),
         hidden: false,
         keepAlive: false,
         type: (isMenu ? "menu" : "auth"),
@@ -185,9 +130,67 @@ useLayoutContentSize({
     tableBoxSize.height = size.height;
     // console.log("size >>", size);
   }
-}) 
-
+});
 </script>
+<template>
+  <div class="page-menu">
+    <div class="f-right">
+      <el-button type="primary" @click="openMenu('add')">
+        <i class="el-icon-plus el-icon--left"></i>
+        新增菜单
+      </el-button>
+    </div>
+    <section class="table-content">
+      <el-table-v2
+        :columns="columns"
+        :data="menuList"
+        :width="tableBoxSize.width"
+        :height="tableBoxSize.height"
+        expand-column-key="meta.title"
+        fixed
+        border
+      >
+        <template #cell="{ rowData, column }: SlotCell">
+          <template v-if="column.key === 'meta.title'">
+            <Icon v-if="rowData.meta.icon" class="el-icon--left" :name="rowData.meta.icon" />
+            <span>{{ rowData.meta.title }}</span>
+          </template>
+          <template v-if="column.key === 'meta.type'">
+            <span :class="['the-tag', rowData.meta.type === 'menu' ? 'blue' : 'green']">
+              {{ rowData.meta.type === 'menu' ? '菜单' : '权限' }}
+            </span>
+          </template>
+          <template v-if="column.key === 'sort'">
+            <el-input-number
+              v-model="rowData.sort"
+              :min="1"
+              @blur="onBlur(rowData)"
+            />
+          </template>
+          <template v-if="column.key === 'meta.status'">
+            <el-switch
+              v-model="rowData.meta.status"
+              :active-value="1"
+              :inactive-value="2"
+              inline-prompt
+              active-text="启用"
+              inactive-text="禁用"
+            />
+          </template>
+          <template v-if="column.key === 'meta.hidden'">
+            <span :class="['the-tag', rowData.meta.hidden ? 'red' : 'purple']">{{ rowData.meta.hidden ? '是' : '否' }}</span>
+          </template>
+          <div style="width: 100%; text-align: right;" v-if="column.key === 'option'">
+            <el-button link type="primary" v-if="rowData.meta.type === 'menu'" @click="onAdd(rowData)">新增</el-button>
+            <el-button link type="success" @click="onEdit(rowData)">编辑</el-button>
+            <el-button link type="danger">删除</el-button>
+          </div>
+        </template>
+      </el-table-v2>
+    </section>
+    <Form v-model:show="state.show" />
+  </div>
+</template>
 <style lang="scss">
 .page-menu {
   display: flex;
