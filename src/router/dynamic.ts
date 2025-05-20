@@ -16,7 +16,7 @@ export const dynamicRouters: Array<RouteItem> = [
     children: [
       {
         path: "/home",
-        meta: { title: "首页展示", icon: "tdesign:app" },
+        meta: { title: "首页展示", icon: "tdesign:bookmark-double" },
         component: () => import("../views/example/home.vue")
       },
       {
@@ -94,7 +94,7 @@ export const dynamicRouters: Array<RouteItem> = [
         component: Page404, // 这里必需给一个组件
         meta: {
           title: "百度一下",
-          icon: "tdesign:data-search-filled",
+          icon: "tdesign:system-search-filled",
           link: "https://www.baidu.com"
         },
       },
@@ -110,7 +110,7 @@ export const dynamicRouters: Array<RouteItem> = [
     path: "/example",
     name: "example",
     component: Layout,
-    meta: { title: "示例页栏目", icon: "tdesign:tree-list" },
+    meta: { title: "示例页栏目", icon: "tdesign:play-demo" },
     redirect: "/example/request",
     children: [
       {

@@ -16,7 +16,7 @@
   user-select: none;
 
   .menu-icon {
-    font-size: var(--menu-title-size);
+    // font-size: var(--menu-title-size);
     margin-right: 8px;
     transition: var(--transition);
     color: $color;
@@ -529,30 +529,11 @@
   position: fixed;
   right: 30px;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  color: #fff;
   background-color: var(--theme-color);
   bottom: var(--page-padding);
   z-index: calc(var(--z-index) - 1);
   transition: var(--transition);
-
-  &::before, &::after {
-    position: absolute;
-    content: "";
-    top: 46%;
-    width: 14px;
-    height: 2px;
-    border-radius: 2px;
-    background-color: #fff;
-  }
-
-  &::before {
-    left: calc(50% - 3px);
-    transform: rotate(50deg);
-  }
-
-  &::after {
-    right: calc(50% - 3px);
-    transform: rotate(130deg);
-  }
 
   &.hidden {
     visibility: hidden;

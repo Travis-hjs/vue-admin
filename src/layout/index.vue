@@ -10,6 +10,7 @@ import HeaderBar from "./components/HeaderBar.vue";
 import Sidebar from "./components/Sidebar.vue";
 import store from "@/store";
 import type { RouteItem } from "@/router/types";
+import { Icon } from "@/components/Icon";
 
 const layoutInfo = store.layout.info;
 
@@ -77,7 +78,9 @@ onMounted(function () {
         </transition>
       </router-view>
     </div>
-    <button :class="['the-layout-to-top', {'hidden' : !showToTop}]" title="返回顶部" @click="toTop()"></button>
+    <button :class="['the-layout-to-top fvc', {'hidden' : !showToTop}]" title="返回顶部" @click="toTop()">
+      <Icon name="tdesign:align-top" :size="20" />
+    </button>
   </div>
 </template>
 <style lang="scss">
