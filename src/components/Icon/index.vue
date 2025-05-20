@@ -24,17 +24,14 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  /** `css`单位或像素值 */
+  size: {
+    type: [String, Number] as PropType<number | string>,
+    default: undefined,
+  },
   color: {
     type: String,
     default: undefined,
-  },
-  size: {
-    type: [String, Number] as PropType<number | string>,
-    default: 16,
-  },
-  spin: {
-    type: Boolean,
-    default: false,
   },
 });
 
@@ -87,6 +84,7 @@ onMounted(update);
 <style lang="scss">
 .the-icon {
   display: inline-flex;
+  font-size: 16px;
 }
 
 span.iconify {
