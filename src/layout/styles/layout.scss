@@ -151,6 +151,7 @@
     height: 100%;
     cursor: pointer;
     transition: var(--transition);
+    user-select: none;
 
     &:hover {
       background: rgba(0, 0, 0, 0.08);
