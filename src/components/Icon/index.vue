@@ -63,7 +63,7 @@ async function update() {
     el.append(svg);
   } else {
     const span = document.createElement("span");
-    span.className = "iconify";
+    span.className = "invalid-icon";
     span.dataset.icon = iconName;
     el.textContent = "";
     el.append(span);
@@ -85,13 +85,13 @@ onMounted(update);
 .the-icon {
   display: inline-flex;
   font-size: 16px;
-}
 
-span.iconify {
-  display: block;
-  min-width: 1em;
-  min-height: 1em;
-  background-color: #5551;
-  border-radius: 100%;
+  .invalid-icon {
+    display: block;
+    min-width: 1em;
+    min-height: 1em;
+    background-color: #eee;
+    border-radius: 50%;
+  }
 }
 </style>
