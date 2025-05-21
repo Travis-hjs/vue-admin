@@ -43,7 +43,7 @@ el-popup-component
 | 路由配置和权限使用 | 当前有 **静态** 和 **动态** 路由两种配置，[详细说明](./src/router/REAMDE.md) |
 | http-网络请求 | 直接使用原生封装的一个工具函数，[详细说明](./src/api/README.md) |
 | 状态管理 | 自行设计的一套管理方式，不限框架使用，[详细说明](./src/store/README.md) |
-| svg-图标 | 使用异步远程加载：[图标库](https://icones.netlify.app/collection/tdesign) |
+| svg-图标 | 使用异步远程加载：[详细说明](./src/components/Icon/README.md) |
 | 常用工具函数 | 在 [src/utils/index.ts](src/utils/index.ts) 中内置了一些使用频率极高的工具函数：类型判断、日期格式化、文本复制、深拷贝等。 |
 
 当前模板只提供必需的功能，功能模块之间尽可能保证低耦合性，这对所有开发者都是一件非常有利的事情，例如你无需担心替换、修改某一功能时影响到其他。另外更为重要的是：当前所有已实现功能都不依赖任何第三方库（`vue-router`除外），这意味着你可以无需关心`package.json`的依赖版本，因为根本就没有其他依赖，所以根据自己的喜好去引入第三方库的时候会非常舒服。

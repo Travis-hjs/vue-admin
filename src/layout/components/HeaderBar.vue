@@ -75,7 +75,7 @@ function onLogout() {
 <template>
   <div class="the-layout-header">
     <div class="the-layout-navbar flex">
-      <div :class="['fvc hamburger', { 'hamburger-actived': layoutInfo.showSidebar }]" @click="onSwitch()">
+      <div :class="['fvc menu-fold', { 'menu-fold-actived': layoutInfo.showSidebar }]" @click="onSwitch()">
         <Icon name="tdesign:menu-fold" size="24px" color="#555" />
       </div>
       <BreadCrumb class="f1" />
