@@ -105,7 +105,7 @@ const state = reactive({
       :options="options"
       :option-setting="optionSetting"
       :disabled-method="(opt) => opt.id === '2-2'"
-      :filter-method="(opt) => opt.name.indexOf(state.keyword) > -1"
+      :filter-method="(opt) => opt.name.includes(state.keyword)"
     />
   </div>
 </template>

@@ -22,7 +22,7 @@ const props = defineProps({
   },
   /** 选项配置对象 */
   optionSetting: {
-    type: Object as PropType<TreeType.Setting>,
+    type: Object as PropType<TreeType.Setting<any>>,
     default: () => ({}),
   },
   /** 是否需要选择功能 */
@@ -70,7 +70,7 @@ const setting = computed<TreeType.Setting>(() => {
     label: "label",
     value: "value",
     children: "children",
-    ...props.optionSetting,
+    ...(props.optionSetting as any),
   }
 });
 
