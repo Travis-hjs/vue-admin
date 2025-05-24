@@ -10,6 +10,7 @@ import { getKey, getLabel } from './hooks';
 import { useCollapseHeight } from '@/layout/components/hooks';
 import globalEvent from '@/utils/event';
 import type { TreeType } from './types';
+// import { Icon } from '@/components/Icon';
 
 const props = defineProps({
   /** 选项对象 */
@@ -105,9 +106,11 @@ function onCheck() {
     <div class="the-tree-item f-vertical">
       <div v-if="subList.length > 0" class="the-tree-icon fvc cursor-pointer" @click="onOpen()">
         <i :class="['el-icon-caret-right', { 'is-opened': isOpened }]"></i>
+        <!-- <Icon :name="`tdesign:${isOpened ? 'minus' : 'add' }-rectangle`" /> -->
       </div>
       <div v-else class="the-tree-icon fvc">
         <i class="el-icon-collection-tag"></i>
+        <!-- <Icon name="tdesign:folder" /> -->
       </div>
       <span
         v-if="checkbox"
