@@ -1,7 +1,7 @@
 {
   "name": "vue3-admin-template",
   "description": "Vue-admin-template without UI framework",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "private": false,
   "author": {
     "name": "Travis-hjs",
@@ -14,14 +14,14 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@purge-icons/generated": "0.10.0",
-    "@tailwindcss/vite": "^4.1.7",
     "nprogress": "0.2.0",
-    "tailwindcss": "^4.1.7",
+    "tailwindcss": "4.1.7",
     "vue": "3.4.21",
     "vue-router": "4.3.0"
   },
   "devDependencies": {
+    "@iconify/vue": "5.0.0",
+    "@tailwindcss/vite": "4.1.7",
     "@types/node": "20.11.28",
     "@types/nprogress": "0.2.0",
     "@vitejs/plugin-vue": "5.0.4",

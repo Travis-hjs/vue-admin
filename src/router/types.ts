@@ -7,7 +7,8 @@ export interface RouteMeta {
   link?: string;
   /**
    * `svg`名
-   * - [图标库](https://icones.netlify.app/collection/tdesign)
+   * - [图标库1](https://icon-sets.iconify.design/tdesign)
+   * - [图标库2](https://icones.netlify.app/collection/tdesign)
    */
   icon?: string;
   /** 是否在侧边菜单栏不显示该路由 */
