@@ -223,6 +223,42 @@ const treeData = computed(() => {
   return props.options;
 });
 
+const usableValueMap = computed(() => {
+  if (props.checkParent || props.checkChild) {
+    const map: BaseObj<Array<number | string>> = {};
+
+    function traverse(node: any) {
+      const subList = node[setting.value.children!] || [];
+      if (subList.length < 1) return;
+      const nodeKey = getKey(node, setting.value);
+      map[nodeKey] = [];
+
+      for (const sub of subList) {
+        const subKey = getKey(sub, setting.value);
+        const subValue = sub[setting.value.value!];
+        const disabled = props.disabledMethod ? props.disabledMethod(sub) : false;
+
+        if (!disabled) {
+          map[nodeKey].push(subValue);
+        }
+
+        traverse(sub);
+
+        if (map[subKey]) {
+          map[nodeKey].push(...map[subKey]);
+        }
+      }
+    }
+
+    for (const option of props.options) {
+      traverse(option);
+    }
+
+    return map;
+  }
+  return {};
+});
+
 watch(
   () => props.options,
   function(list) {
@@ -249,5 +285,6 @@ watch(
     :disabled="props.disabledMethod"
     :parent-keys="[]"
     :parent-values="[]"
+    :usable-value-map="usableValueMap"
   />
 </template>

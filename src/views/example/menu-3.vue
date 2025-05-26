@@ -54,6 +54,20 @@ const options = [
       {
         id: "2-1",
         name: "选项 2-1",
+        list: [
+          {
+            id: "**s",
+            name: "三级选项-1"
+          },
+          {
+            id: "**",
+            name: "三级选项-2"
+          },
+          {
+            id: "999",
+            name: "三级选项-3"
+          },
+        ]
       },
       {
         id: "2-2",
@@ -97,7 +111,7 @@ const state = reactive({
       check-child
       :options="options"
       :option-setting="optionSetting"
-      :disabled-method="(opt) => opt.id === '2-2'"
+      :disabled-method="(opt) => ['999', '2-2'].includes(opt.id)"
       :filter-method="(opt) => opt.name.includes(state.keyword)"
     />
   </div>

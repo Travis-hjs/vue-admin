@@ -59,6 +59,14 @@ const props = defineProps({
     type: Function as PropType<(option: any) => boolean>,
     default: undefined,
   },
+  /**
+   * 可以进行选中的值对象
+   * - `{ [key]: [value] }`
+   */
+  usableValueMap: {
+    type: Object as PropType<BaseObj<Array<number | string>>>,
+    required: true,
+  },
 });
 
 const subList = computed<Array<any>>(() => props.option[props.setting.children!] || []);
@@ -72,6 +80,17 @@ const isOpened = computed(() => props.openKeys.includes(currentKey.value));
 const isChecked = computed(() => props.values.includes(currentValue.value));
 
 const isDisabled = computed(() => props.disabled ? props.disabled(props.option) : false);
+
+const isIndeterminate = computed(() => {
+  if (!isChecked.value) {
+    return false;
+  }
+  const current = props.usableValueMap[currentKey.value];
+  if (!current) {
+    return false;
+  }
+  return current.some((val) => !props.values.includes(val));
+});
 
 const {
   onBeforeEnter,
@@ -120,6 +139,7 @@ function onCheck() {
           {
             'is-checked': isChecked,
             'is-disabled': isDisabled,
+            'is-indeterminate': isIndeterminate,
           }
         ]"
       >
@@ -148,6 +168,7 @@ function onCheck() {
           :checkbox="props.checkbox"
           :values="props.values"
           :disabled="props.disabled"
+          :usable-value-map="props.usableValueMap"
           :parent-keys="[...props.parentKeys, currentKey]"
           :parent-values="[...props.parentValues, currentValue]"
         />
