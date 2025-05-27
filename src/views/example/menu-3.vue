@@ -95,15 +95,15 @@ const state = reactive({
 </script>
 <template>
   <div class="menu-3">
-    <div class="mb-[10px]">
-      <span class="the-tag purple">树形组件</span>
-    </div>
     <el-input
       class="max-w-[300px] mb-[10px]"
       v-model="state.keyword"
       clearable
       placeholder="请输入关键字检索"
     />
+    <div class="mb-[10px]">
+      <span class="the-tag purple">树形组件-带复选框</span>
+    </div>
     <Tree
       v-model:values="state.values"
       checkbox
@@ -114,6 +114,19 @@ const state = reactive({
       :disabled-method="(opt) => ['999', '2-2'].includes(opt.id)"
       :filter-method="(opt) => opt.name.includes(state.keyword)"
     />
+    <div class="pt-[10px] mb-[10px]">
+      <span class="the-tag purple">树形组件-插槽模式</span>
+    </div>
+    <Tree
+      :options="options"
+      :option-setting="optionSetting"
+      :filter-method="(opt) => opt.name.includes(state.keyword)"
+    >
+      <template #default="option">
+        <span>{{ option.name }}</span>
+        <span class="ml-[4px] text-amber-400 text-[12px]">({{ option.id }})</span>
+      </template>
+    </Tree>
   </div>
 </template>
 <style lang="scss">

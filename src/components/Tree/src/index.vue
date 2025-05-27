@@ -286,5 +286,9 @@ watch(
     :parent-keys="[]"
     :parent-values="[]"
     :usable-value-map="usableValueMap"
-  />
+  >
+    <template #treeitem="option: T">
+      <slot v-bind="option"></slot>
+    </template>
+  </Level>
 </template>

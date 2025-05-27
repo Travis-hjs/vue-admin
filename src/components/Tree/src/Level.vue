@@ -171,7 +171,11 @@ function onCheck() {
           :usable-value-map="props.usableValueMap"
           :parent-keys="[...props.parentKeys, currentKey]"
           :parent-values="[...props.parentValues, currentValue]"
-        />
+        >
+          <template #treeitem="subProps: any">
+            <slot name="treeitem" v-bind="subProps"></slot>
+          </template>
+        </Level>
       </div>
     </transition>
     </div>
