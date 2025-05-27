@@ -1,6 +1,4 @@
 <script lang="ts">
-/** 一直累加的`id` */
-let treeId = 1;
 /** 树形组件 */
 export default {
   name: "Tree"
@@ -13,6 +11,7 @@ import { getKey } from "./hooks";
 import globalEvent from "@/utils/event";
 import type { TreeType } from "./types";
 import { deepClone } from '@/utils';
+import { getCountId } from '@/hooks/common';
 
 const props = defineProps({
   /** 选项数据 */
@@ -178,11 +177,9 @@ function onItemCheck(params: TreeType.ItemCheckParams) {
 }
 
 const eventMap: TreeType.EventMap = {
-  itemCheck: `tree-item-check-${treeId}`,
-  itemOpen: `tree-item-open-${treeId}`
+  itemCheck: getCountId("tree-item-check"),
+  itemOpen: getCountId("tree-item-open"),
 }
-
-treeId++;
 
 globalEvent.on(eventMap.itemOpen, onItemOpen);
 globalEvent.on(eventMap.itemCheck, onItemCheck);
