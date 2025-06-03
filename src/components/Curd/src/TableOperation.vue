@@ -173,7 +173,7 @@ watch(
             重置
           </el-button>
         </div>
-        <transition-group name="the-group" tag="div" class="the-curd-setting-list the-curd-scrollbar">
+        <transition-group name="the-group" tag="div" class="the-curd-setting-list">
           <div
             v-for="(item, itemIndex) in props.config.columns"
             class="the-curd-option-item f-vertical"

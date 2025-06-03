@@ -626,7 +626,7 @@ watch(
 );
 </script>
 <template>
-  <section :class="['the-curd-editor the-curd-scrollbar', { 'is-show': props.show }]">
+  <section :class="['the-curd-editor', { 'is-show': props.show }]">
     <transition name="the-curd-editor-move">
       <div v-if="props.show" class="the-curd-editor-content">
         <h2 class="the-title mb-[20px]">基础设置</h2>

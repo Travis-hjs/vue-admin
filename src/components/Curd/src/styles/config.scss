@@ -89,7 +89,9 @@
   }
 
   .the-curd-editor {
-    height: var(--layout-content-height);
+    height: fit-content;
+    // height: var(--layout-content-height);
+    min-height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 
@@ -320,19 +322,6 @@
   width: 80px;
   height: 80px;
   cursor: pointer;
-}
-
-.the-curd-scrollbar {
-  &::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    background-color: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(153 153 153 / 50%);
-    border-radius: 3px;
-  }
 }
 
 .the-curd-option-list {

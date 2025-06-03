@@ -332,7 +332,7 @@ function onSetWidth() {
     :config="props.config"
     @action="onOption"
   />
-  <div class="the-curd-table-model the-curd-scrollbar">
+  <div class="the-curd-table-model">
     <TableForm
       v-if="curdConfigState.editor.showForm"
       :config="tableForm.form!"

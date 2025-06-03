@@ -68,7 +68,7 @@ function onTab() {
           <i class="the-curd-popup-close" @click="onClose()"></i>
         </nav>
         <section class="the-curd-popup-content">
-          <div class="w-full h-full flex the-curd-scrollbar" style="overflow: auto;">
+          <div class="w-full h-full flex overflow-auto">
             <div class="f1">
               <Search
                 v-if="curdConfigState.type === 'search'"
