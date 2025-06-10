@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import store from "@/store";
 import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
-import { modifyData } from "@/utils";
 import { message } from "@/utils/message";
 import { CheckBox } from "@/components/CheckBox";
 
@@ -21,6 +20,7 @@ const state = reactive({
     account: "",
     password: "",
   },
+  remember: false,
 });
 
 /**
@@ -61,11 +61,8 @@ function onLogin(adopt: boolean) {
   start();
 }
 
-/** 是否记住密码 */
-const remember = ref(false);
-
 function saveLoginInfo() {
-  if (remember.value) {
+  if (state.remember) {
     localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...state.form }));
   } else {
     localStorage.removeItem(cacheName);
@@ -77,7 +74,7 @@ function getLoginInfo() {
   if (value) {
     try {
       const info = JSON.parse(value);
-      remember.value = !!info.remember;
+      state.remember = !!info.remember;
       state.form = info;
     } catch (error) {
       console.warn(error);
@@ -106,7 +103,7 @@ getLoginInfo();
           >
             {{ state.loading ? '登录中...' : '登录' }}
           </button>
-          <CheckBox class="mb-[20px]" v-model:value="remember" label="记住账号/密码" />
+          <CheckBox class="mb-[20px]" v-model:value="state.remember" label="记住账号/密码" />
           <div class="tips f-vertical" v-for="(item, index) in tipList" :key="index">
             <button class="the-btn mini green" v-ripple v-copy="item" :disabled="state.loading">点击复制</button>
             <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>

@@ -365,8 +365,8 @@ onUnmounted(function() {
     </div>
     <h2 class="the-title is-line mb-[30px]">打赏一下</h2>
     <div class="code-box">
-      <img class="hovercode" src="https://travis-hjs.github.io/images/wxcode1.jpg">
-      <img class="qrcode" src="https://travis-hjs.github.io/images/reward-code.jpg">
+      <img class="hover-code" src="https://travis-hjs.github.io/images/wxcode1.jpg">
+      <img class="qr-code" src="https://travis-hjs.github.io/images/reward-code.jpg">
     </div>
   </div>
 </template>
@@ -384,14 +384,14 @@ onUnmounted(function() {
       box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
       transition: 0.3s all;
     }
-    .hovercode {
+    .hover-code {
       cursor: pointer;
-      &:hover + .qrcode {
+      &:hover + .qr-code {
         opacity: 1;
         transform: translateX(0px);
       }
     }
-    .qrcode {
+    .qr-code {
       opacity: 0;
       transform: translateX(100px);
     }
