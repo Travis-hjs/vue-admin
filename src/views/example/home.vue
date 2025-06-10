@@ -334,10 +334,10 @@ onUnmounted(function() {
     </div>
     <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
     <div class="options-box mb-[40px]">
-      <CheckBox class="mb-[20px]" label="显示侧边栏logo" v-model="layoutInfo.showSidebarLogo" />
-      <CheckBox class="mb-[20px]" label="显示历史记录标签" v-model="layoutInfo.showTagList" />
-      <CheckBox class="mb-[20px]" label="侧边栏展开" v-model="layoutInfo.showSidebar" />
-      <CheckBox label="顶部填满" :model-value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
+      <CheckBox class="mb-[20px]" label="显示侧边栏logo" v-model:value="layoutInfo.showSidebarLogo" />
+      <CheckBox class="mb-[20px]" label="显示历史记录标签" v-model:value="layoutInfo.showTagList" />
+      <CheckBox class="mb-[20px]" label="侧边栏展开" v-model:value="layoutInfo.showSidebar" />
+      <CheckBox label="顶部填满" :value="layoutInfo.layoutMode === 'full-header'" @change="onMode()" />
     </div>
     <div v-for="item in settingList" :key="item.label + item.key" class="form-item f-vertical">
       <h2 v-if="item.type === 'title'" class="the-title is-line">{{ item.label }}</h2>

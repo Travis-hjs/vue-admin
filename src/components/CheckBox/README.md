@@ -15,8 +15,8 @@ const state = reactive({
 </script>
 <template>
   <div>
-    <CheckBox v-model="state.check1" label="带label的复选框" />
-    <CheckBox v-model="state.check2" />
+    <CheckBox v-model:value="state.check1" label="带label的复选框" />
+    <CheckBox v-model:value="state.check2" />
   </div>
 </template>
 ```
