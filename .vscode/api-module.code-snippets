@@ -1,0 +1,38 @@
+{
+  "vue-model": {
+    "scope": "javascript,typescript",
+    "prefix": "api_module",
+    "body": [
+      "import type { ApiTest } from \"./types\";",
+      "",
+      "import request from \"@/utils/request\";",
+      "",
+      "/** 测试-接口模块 */",
+      "export const apiTest = {",
+      "  /**",
+      "   * [获取列表]()",
+      "   * @param params ",
+      "   */",
+      "  getList(params: Partial<ApiTest.Search>) {",
+      "    return request<Api.List<ApiTest.Row>>(\"GET\", `/api/getList`, params);",
+      "  },",
+      "  /**",
+      "   * [获取列表]()",
+      "   * @param params ",
+      "   */",
+      "  save(params: Partial<ApiTest.Row>) {",
+      "    return request(\"POST\", `/api/save`, params);",
+      "  },",
+      "  /**",
+      "   * [获取列表]()",
+      "   * @param id ",
+      "   */",
+      "  delete(id: number | string) {",
+      "    return request(\"DELETE\", `/api/delete`, { id });",
+      "  },",
+      "};",
+      ""
+    ],
+    "description": "接口模块快捷代码片段"
+  }
+}

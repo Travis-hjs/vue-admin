@@ -1,0 +1,23 @@
+{
+  "vue-model": {
+    "scope": "javascript,typescript",
+    "prefix": "api_types",
+    "body": [
+      "/** 测试-接口模块类型 */",
+      "export namespace ApiTest {",
+      "  /** 查询条件类型 */",
+      "  export interface Search {",
+      "    keyword: string;",
+      "  }",
+      "",
+      "  /** 表格行类型 */",
+      "  export interface Row {",
+      "    id: number;",
+      "    name: string;",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "接口类型快捷代码片段"
+  }
+}
