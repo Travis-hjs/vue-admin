@@ -9,6 +9,7 @@
     "iconify",
     "tdesign",
     "monthrange",
-    "popconfirm"
+    "popconfirm",
+    "Vite"
   ],
 }

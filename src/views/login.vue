@@ -3,7 +3,7 @@ import { reactive, ref } from "vue";
 import store from "@/store";
 import { login } from "@/api/common";
 import { openNextPage } from "@/router/permission";
-import { jsonParse, modifyData } from "@/utils";
+import { jsonParse } from "@/utils";
 import { type FormInstance } from "element-plus";
 import { validateEX } from "@/utils/dom";
 
@@ -30,6 +30,7 @@ const state = reactive({
     account: "",
     password: "",
   },
+  remember: false,
 });
 
 /**
@@ -58,11 +59,8 @@ function onLogin() {
   });
 }
 
-/** 是否记住密码 */
-const remember = ref(false);
-
 function saveLoginInfo() {
-  if (remember.value) {
+  if (state.remember) {
     localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...state.form }));
   } else {
     localStorage.removeItem(cacheName);
@@ -71,7 +69,7 @@ function saveLoginInfo() {
 
 function getLoginInfo() {
   const info = jsonParse(localStorage.getItem(cacheName));
-  remember.value = !!info.remember;
+  state.remember = !!info.remember;
   state.form = info;
 }
 
@@ -121,7 +119,7 @@ getLoginInfo();
               <div class="w-full">
                 <el-button type="primary" class="w-full" :loading="state.loading" @click="onLogin">立即登录</el-button>
               </div>
-              <el-checkbox v-model="remember" size="large">记住账号/密码</el-checkbox>
+              <el-checkbox v-model="state.remember" size="large">记住账号/密码</el-checkbox>
             </el-form-item>
           </el-form>
           <div class="mb-[10px] w-full f-vertical" v-for="(item, index) in tipList" :key="index">
