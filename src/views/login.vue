@@ -15,12 +15,6 @@ const info = store.projectInfo;
 
 const copyRight = "Copyright © Travis-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、非 IE 等浏览器"
 
-/** 表单数据 */
-const formData = reactive({
-  account: "",
-  password: ""
-});
-
 const formRules = {
   account: [
     { required: true, message: "请输入手机号", trigger: "blur" },
@@ -30,27 +24,33 @@ const formRules = {
   ],
 }
 
-const loading = ref(false);
+const state = reactive({
+  loading: false,
+  form: {
+    account: "",
+    password: "",
+  },
+});
 
 /**
  * 一键登录
  * @param account 账号
  */
 function setLoginInfo(account: string) {
-  formData.account = account;
-  formData.password = Math.random().toString(36).substr(2);
+  state.form.account = account;
+  state.form.password = Math.random().toString(36).substr(2);
   onLogin();
 }
 
 const theForm = ref<FormInstance>();
 
 function onLogin() {
-  theForm.value!.validate(async function(state) {
-    validateEX("#the-form", state);
+  theForm.value!.validate(async function(val) {
+    validateEX("#the-form", val);
     if (!state) return;
-    loading.value = true;
-    const res = await login(formData)
-    loading.value = false;
+    state.loading = true;
+    const res = await login(state.form)
+    state.loading = false;
     if (res.code === 1) {
       saveLoginInfo();
       openNextPage();
@@ -63,7 +63,7 @@ const remember = ref(false);
 
 function saveLoginInfo() {
   if (remember.value) {
-    localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...formData }));
+    localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...state.form }));
   } else {
     localStorage.removeItem(cacheName);
   }
@@ -72,7 +72,7 @@ function saveLoginInfo() {
 function getLoginInfo() {
   const info = jsonParse(localStorage.getItem(cacheName));
   remember.value = !!info.remember;
-  modifyData(formData, info);
+  state.form = info;
 }
 
 getLoginInfo();
@@ -90,13 +90,13 @@ getLoginInfo();
             ref="theForm"
             id="the-form"
             size="large"
-            :model="formData"
+            :model="state.form"
             :rules="formRules"
             status-icon
           >
             <el-form-item prop="account">
               <el-input
-                v-model="formData.account"
+                v-model="state.form.account"
                 :placeholder="formRules.account[0].message"
                 clearable
                 type="text"
@@ -107,7 +107,7 @@ getLoginInfo();
             </el-form-item>
             <el-form-item prop="password">
               <el-input
-                v-model="formData.password"
+                v-model="state.form.password"
                 :placeholder="formRules.password[0].message"
                 clearable
                 type="password"
@@ -118,15 +118,15 @@ getLoginInfo();
               </el-input>
             </el-form-item>
             <el-form-item prop="">
-              <div class="w100">
-                <el-button type="primary" class="w100" :loading="loading" @click="onLogin">立即登录</el-button>
+              <div class="w-full">
+                <el-button type="primary" class="w-full" :loading="state.loading" @click="onLogin">立即登录</el-button>
               </div>
               <el-checkbox v-model="remember" size="large">记住账号/密码</el-checkbox>
             </el-form-item>
           </el-form>
-          <div class="mb-[10px] w100 f-vertical" v-for="(item, index) in tipList" :key="index">
+          <div class="mb-[10px] w-full f-vertical" v-for="(item, index) in tipList" :key="index">
             <div class="f1"><span class="the-tag gray">账号: {{ item }}; 密码: 随便填</span></div>
-            <el-button type="primary" plain :disabled="loading" @click="setLoginInfo(item)">一键登录</el-button>
+            <el-button type="primary" plain :disabled="state.loading" @click="setLoginInfo(item)">一键登录</el-button>
           </div>
         </div>
       </div>
@@ -180,9 +180,6 @@ getLoginInfo();
         color: var(--blue);
         margin-bottom: 30px;
         text-align: center;
-      }
-      .w100 {
-        width: 100%;
       }
     }
     .title {
