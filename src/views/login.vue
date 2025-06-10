@@ -15,21 +15,21 @@ const info = store.projectInfo;
 
 const copyRight = "Copyright © Travis-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、非 IE 等浏览器"
 
-/** 表单数据 */
-const formData = reactive({
-  account: "",
-  password: ""
-})
-
-const loading = ref(false);
+const state = reactive({
+  loading: false,
+  form: {
+    account: "",
+    password: "",
+  },
+});
 
 /**
  * 一键登录
  * @param account 账号
  */
 function setLoginInfo(account: string) {
-  formData.account = account;
-  formData.password = Math.random().toString(36).substr(2);
+  state.form.account = account;
+  state.form.password = Math.random().toString(36).substr(2);
   onLogin(true);
 }
 
@@ -39,9 +39,9 @@ function setLoginInfo(account: string) {
  */
 function onLogin(adopt: boolean) {
   async function start() {
-    loading.value = true;
-    const res = await login(formData)
-    loading.value = false;
+    state.loading = true;
+    const res = await login(state.form);
+    state.loading = false;
     if (res.code === 1) {
       saveLoginInfo();
       openNextPage();
@@ -52,10 +52,10 @@ function onLogin(adopt: boolean) {
   if (adopt) {
     return start();
   }
-  if (!formData.account) {
+  if (!state.form.account) {
     return message.error("请输入账号");
   }
-  if (!formData.password) {
+  if (!state.form.password) {
     return message.error("请输入密码");
   }
   start();
@@ -66,7 +66,7 @@ const remember = ref(false);
 
 function saveLoginInfo() {
   if (remember.value) {
-    localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...formData }));
+    localStorage.setItem(cacheName, JSON.stringify({ remember: true, ...state.form }));
   } else {
     localStorage.removeItem(cacheName);
   }
@@ -78,7 +78,7 @@ function getLoginInfo() {
     try {
       const info = JSON.parse(value);
       remember.value = !!info.remember;
-      modifyData(formData, info);
+      state.form = info;
     } catch (error) {
       console.warn(error);
     }
@@ -96,14 +96,21 @@ getLoginInfo();
       <div class="form-box">
         <div class="login-form">
           <div class="login-title">平台登录</div>
-          <input class="the-input mb-[20px]" type="text" v-model="formData.account" placeholder="请输入账号">
-          <input class="the-input mb-[20px]" type="password" v-model="formData.password" placeholder="请输入密码">
-          <button class="the-btn blue mb-[20px]" v-ripple style="width: 100%" @click="onLogin(false)" :disabled="loading">{{ loading ? '登录中...' : '登录' }}</button>
-          <CheckBox class="mb-[20px]" v-model="remember" label="记住账号/密码" />
+          <input class="the-input mb-[20px]" type="text" v-model="state.form.account" placeholder="请输入账号">
+          <input class="the-input mb-[20px]" type="password" v-model="state.form.password" placeholder="请输入密码">
+          <button
+            v-ripple
+            class="the-btn blue mb-[20px] w-full"
+            @click="onLogin(false)"
+            :disabled="state.loading"
+          >
+            {{ state.loading ? '登录中...' : '登录' }}
+          </button>
+          <CheckBox class="mb-[20px]" v-model:value="remember" label="记住账号/密码" />
           <div class="tips f-vertical" v-for="(item, index) in tipList" :key="index">
-            <button class="the-btn mini green" v-ripple v-copy="item" :disabled="loading">点击复制</button>
+            <button class="the-btn mini green" v-ripple v-copy="item" :disabled="state.loading">点击复制</button>
             <div class="tips_text f1">账号: {{ item }}; 密码: 随便填</div>
-            <button class="the-btn mini blue" v-ripple :disabled="loading" @click="setLoginInfo(item)">一键登录</button>
+            <button class="the-btn mini blue" v-ripple :disabled="state.loading" @click="setLoginInfo(item)">一键登录</button>
           </div>
         </div>
       </div>
