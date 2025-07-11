@@ -1,29 +1,10 @@
-<template>
-  <div class="the-common-table-page">
-    <SearchHeader
-      :search-info="state.searchInfo"
-      :list="state.searchFields"
-      :loading="state.loading"
-      @search="onSearch"
-    />
-
-    <base-table
-      class="f1"
-      :columns="tableColumns"
-      :data="state.data"
-      :actions="tableActions"
-      :loading="state.loading"
-    ></base-table>
-
-    <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
-  </div>
-</template>
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getPageInfo } from "@/hooks/common";
 import { SearchHeader } from "@/components/SearchHeader";
-import { type TheField } from "@/components/TheFields";
+import { type FieldType } from "@/components/Fields";
 import { formatDate, randomText } from "@/utils";
+import { Table, type TableType } from "@/components/Table";
 
 type TableRow = {
   id: number;
@@ -43,7 +24,7 @@ function getSearchInfo(): Partial<SearchInfo> {
   return {}
 }
 
-const searchFields: Array<TheField.Type<SearchInfo>> = [
+const searchFields: Array<FieldType.Member<SearchInfo>> = [
   {
     label: "查询名称",
     prop: "keyword",
@@ -57,25 +38,26 @@ const searchFields: Array<TheField.Type<SearchInfo>> = [
     dateType: "datetimerange",
     bind: ["start", "end"],
     placeholder: "请选择日期",
-    class: "date-input"
+    class: "w-[380px]"
   }
 ];
 
 const state = reactive({
   loading: false,
   data: [] as Array<TableRow>,
+  selectList: [] as Array<TableRow>,
   pageInfo: getPageInfo(),
   searchFields,
   searchInfo: getSearchInfo(),
 });
 
-const tableColumns: Array<BaseTableColumn<TableRow>> = [
+const tableColumns: Array<TableType.Column<TableRow>> = [
   { title: "名称", prop: "name", minWidth: 180 },
   { title: "日期", prop: "date", width: 180 },
   { title: "操作", prop: "action-right", width: 140 },
 ];
 
-const tableActions: Array<BaseTableAction<TableRow>> = [
+const tableActions: Array<TableType.Action<TableRow>> = [
   { text: "编辑", icon: "el-icon-edit" },
   { text: "删除", icon: "el-icon-delete", type: "danger", },
 ];
@@ -109,8 +91,25 @@ function onSearch(reset?: boolean) {
 
 onSearch();
 </script>
-<style>
-.the-common-table-page .date-input {
-  width: 380px;
-}
-</style>
+<template>
+  <div class="the-common-table-page">
+    <SearchHeader
+      :search-info="state.searchInfo"
+      :list="state.searchFields"
+      :loading="state.loading"
+      @search="onSearch"
+    />
+
+    <Table
+      class="f1"
+      select-key="id"
+      v-model:select-list="state.selectList"
+      :columns="tableColumns"
+      :data="state.data"
+      :actions="tableActions"
+      :page-info="state.pageInfo"
+      :loading="state.loading"
+      @page="getTableData"
+    />
+  </div>
+</template>

@@ -4,6 +4,7 @@ import { getPageInfo } from "@/hooks/common";
 import { FilterWrap, FilterItem  } from "@/components/FilterBox";
 import { formatDate, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
+import { Table, type TableType } from "@/components/Table";
 
 interface TableRow {
   id: number
@@ -22,14 +23,14 @@ const state = reactive({
   selectList: [] as Array<TableRow>,
 });
 
-const tableColumns: Array<BaseTableColumn<TableRow>> = [
+const tableColumns: Array<TableType.Column<TableRow>> = [
   { title: "ID", prop: "id", width: 90 },
   { title: "名称", prop: "name", minWidth: 180, slot: "fuck" },
   { title: "创建时间", prop: "date", width: 180 },
   { title: "操作", prop: "action-right", width: 200 },
 ];
 
-const tableActions: Array<BaseTableAction<TableRow>> = [
+const tableActions: Array<TableType.Action<TableRow>> = [
   { text: "编辑", icon: "el-icon-edit" },
   {
     text: "删除",
@@ -108,27 +109,21 @@ function onSearch() {
       </template>
     </FilterWrap>
 
-    <base-table
+    <Table
       :columns="tableColumns"
       :data="state.data"
       :actions="tableActions"
       :loading="state.loading"
+      :page-info="state.pageInfo"
       select-key="id"
       v-model:select-list="state.selectList"
       :select-disabled="(row) => (row.id % 4) === 0"
+      @page="getTableData"
     >
       <template #fuck="{ row, $index }">
         {{ $index + 1 }}、{{ row.name }}
       </template>
-    </base-table>
-
-    <div class="f-vertical">
-      <div style="width: 200px;" v-if="state.selectList.length > 0">
-        <span class="the-tag blue">已选择：{{ state.selectList.length }} 条数据</span>
-      </div>
-      <base-pagination :disabled="state.loading" :page-info="state.pageInfo" @change="getTableData" />
-    </div>
-
+    </Table>
   </div>
 </template>
 <style lang="scss">

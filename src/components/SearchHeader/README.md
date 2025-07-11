@@ -1,6 +1,6 @@
 # 基础通用搜索头部
 
-将`<TheFields />`与`<FilterBox />`做整合，传参配置完全相同；
+将`<Fields />`与`<FilterBox />`做整合，传参配置完全相同；
 
 在`*.vue`文件中输入`vue3-table-list-v2`可生成快捷代码片段
 
@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { SearchHeader } from "@/components/SearchHeader";
-import { type TheField, setFieldOptions } from "@/components/TheFields";
+import { type FieldType, setFieldOptions } from "@/components/Fields";
 
 interface Search {
   keyword: string;
@@ -24,7 +24,7 @@ function getSearchInfo(): Search {
   }
 }
 
-const searchFields: Array<TheField.Type<Search>> = [
+const searchFields: Array<FieldType.Member<Search>> = [
   {
     label: "搜索关键字",
     prop: "keyword",

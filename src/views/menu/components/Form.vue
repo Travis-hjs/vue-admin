@@ -10,7 +10,7 @@ import { ElMessage, type FormInstance } from "element-plus"
 import { validateEX } from "@/utils/dom";
 import { Drawer } from "@/components/Drawer";
 import { getBoldLabel } from "@/components/Curd";
-import { type TheField, TheFields } from "@/components/TheFields";
+import { type FieldType, Fields } from "@/components/Fields";
 import type { MenuForm } from "@/router/types";
 import { Icon } from "@/components/Icon";
 
@@ -88,7 +88,7 @@ const formRules = {
   }
 }
 
-const baseConfigs: Array<TheField.Type<MenuForm>> = [
+const baseConfigs: Array<FieldType.Member<MenuForm>> = [
   {
     label: "菜单名称",
     prop: "meta.title",
@@ -122,7 +122,7 @@ const baseConfigs: Array<TheField.Type<MenuForm>> = [
   },
 ];
 
-const auxiliaryConfigs: Array<TheField.Type<MenuForm>> = [
+const auxiliaryConfigs: Array<FieldType.Member<MenuForm>> = [
   {
     label: "菜单排序",
     prop: "sort",
@@ -161,7 +161,7 @@ const auxiliaryConfigs: Array<TheField.Type<MenuForm>> = [
   }
 ];
 
-const permissionConfigs: Array<TheField.Type<MenuForm>> = [
+const permissionConfigs: Array<FieldType.Member<MenuForm>> = [
   {
     label: "权限标识",
     prop: "code",
@@ -297,7 +297,7 @@ watch(() => props.show, function(val) {
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">基础配置</el-text>
         </el-divider>
-        <TheFields :data="state.formData" :list="baseConfigs" />
+        <Fields :data="state.formData" :list="baseConfigs" />
         <el-form-item label="菜单图标" prop="meta.icon">
           <el-input
             class="f1 mr-[10px]"
@@ -315,10 +315,10 @@ watch(() => props.show, function(val) {
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">辅助配置</el-text>
         </el-divider>
-        <TheFields :data="state.formData" :list="auxiliaryConfigs" />
+        <Fields :data="state.formData" :list="auxiliaryConfigs" />
       </template>
       <template v-else>
-        <TheFields :data="state.formData" :list="permissionConfigs" />
+        <Fields :data="state.formData" :list="permissionConfigs" />
       </template>
     </el-form>
     <template #footer>

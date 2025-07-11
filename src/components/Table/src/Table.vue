@@ -208,7 +208,7 @@ function onSelect(item: any) {
 }
 </script>
 <template>
-  <div class="base-table" :id="adaptive.id" v-loading="props.loading">
+  <div class="base-table" :class="$attrs.class" :id="adaptive.id" v-loading="props.loading">
     <el-table
       ref="the-table"
       stripe
@@ -267,6 +267,7 @@ function onSelect(item: any) {
   </div>
   <Pagination
     v-if="props.pageInfo"
+    class="mt-[20px]"
     :disabled="props.loading"
     :page-info="props.pageInfo"
     :page-sizes="props.pageSizes"
@@ -281,7 +282,6 @@ function onSelect(item: any) {
 .base-table {
   width: 100%;
   min-height: 500px;
-  margin-bottom: 28px;
 
   .el-table {
     width: 100%;

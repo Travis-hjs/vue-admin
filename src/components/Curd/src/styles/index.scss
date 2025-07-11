@@ -1,9 +1,9 @@
-.the-curd-main-page {
+body .the-curd-main-page {
   display: flex;
   flex-direction: column;
   width: 100%;
   // min-height: 100%;
-  min-height: var(--layout-content-height);
+  height: var(--layout-content-height);
 
   .the-curd-entrance {
     position: fixed;

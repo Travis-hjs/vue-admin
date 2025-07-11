@@ -1,7 +1,7 @@
 <script lang="ts">
 /**
  * 基础通用搜索头部
- * - 将`<TheFields />`与`<FilterBox />`做整合，传参配置完全相同
+ * - 将`<Fields />`与`<FilterBox />`做整合，传参配置完全相同
  */
 export default {
   name: "SearchHeader"
@@ -9,7 +9,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { type TheField, TheFields } from "../TheFields";
+import { type FieldType, Fields } from "../Fields";
 import { FilterWrap, SearchBtn } from "../FilterBox";
 
 const props = defineProps({
@@ -21,9 +21,9 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  /** 与`<TheFields />`参数一致 */
+  /** 与`<Fields />`参数一致 */
   list: {
-    type: Array as PropType<Array<TheField.Type>>,
+    type: Array as PropType<Array<FieldType.Member>>,
     required: true
   }
 });
@@ -40,11 +40,11 @@ function onSearch(reset: boolean) {
 </script>
 <template>
   <FilterWrap :label-width="props.labelWidth">
-    <TheFields type="search" :data="props.searchInfo" :list="props.list">
+    <Fields type="search" :data="props.searchInfo" :list="props.list">
       <template v-for="slot in slotList" :key="slot" #[slot]="field">
         <slot :name="slot" v-bind="field"></slot>
       </template>
-    </TheFields>
+    </Fields>
     <template #right>
       <SearchBtn :loading="props.loading" @search="onSearch" />
     </template>

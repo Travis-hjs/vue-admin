@@ -1,7 +1,4 @@
 import type BaseDialog from "./base-dialog";
-import type BaseTable from "./base-table";
-import type BaseTableActions from "./base-table-actions";
-import type BasePagination from "./base-pagination";
 
 // ---------------- 声明全局组件标签类型提示 ----------------
 // declare module "@vue/runtime-core"
@@ -12,9 +9,6 @@ declare module "vue" {
    */
   export interface GlobalComponents {
     BaseDialog: typeof BaseDialog
-    BaseTable: typeof BaseTable
-    BaseTableActions: typeof BaseTableActions
-    BasePagination: typeof BasePagination
 
     // 用到哪些再手动放开注释
     // ElAffix: typeof import("element-plus")["ElAffix"]

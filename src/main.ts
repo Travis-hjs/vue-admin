@@ -1,9 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import BaseDialog from "./components/base-dialog";
-import BaseTable from "./components/base-table";
-import BaseTableActions from "./components/base-table-actions";
-import BasePagination from "./components/base-pagination";
 import router from "./router";
 import { copyText, isMobile } from "./utils";
 import { version } from "../package.json";
@@ -136,12 +133,6 @@ app.directive("ripple", {
 
 // 基础弹框
 app.component("base-dialog", BaseDialog);
-// 全局表格
-app.component('base-table', BaseTable);
-// 全局表格选项
-app.component('base-table-actions', BaseTableActions);
-// 全局分页
-app.component('base-pagination', BasePagination);
 
 app.use(router);
 

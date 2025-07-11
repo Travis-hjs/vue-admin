@@ -21,7 +21,7 @@ import { checkType, isType } from "@/utils";
 import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
-import { TheFields, type TheField } from "@/components/TheFields";
+import { Fields, type FieldType } from "@/components/Fields";
 import { curdConfigState } from "./hooks";
 
 const props = defineProps({
@@ -81,7 +81,7 @@ const shortcutOptions = computed(() => {
   return option;
 });
 
-const searchConfigs: Array<TheField.Type<CurdType.Search>> = [
+const searchConfigs: Array<FieldType.Member<CurdType.Search>> = [
   {
     label: "整体文字宽度",
     prop: "labelWidth",
@@ -95,7 +95,7 @@ const searchConfigs: Array<TheField.Type<CurdType.Search>> = [
   }
 ];
 
-const formConfigs: Array<TheField.Type<CurdType.Table.From>> = [
+const formConfigs: Array<FieldType.Member<CurdType.Table.From>> = [
   {
     label: "表单宽度",
     prop: "width",
@@ -184,7 +184,7 @@ const formRules = {
 
 const formItems = computed(() => {
   const fieldType = state.formData ? state.formData.type : "";
-  const list: Array<TheField.Type<CurdType.Field>> = [
+  const list: Array<FieldType.Member<CurdType.Field>> = [
     {
       label: "组件标题",
       prop: "label",
@@ -224,7 +224,7 @@ const formItems = computed(() => {
   ];
 
   if (checkNumberFields.includes(fieldType)) {
-    const isNumberItem: TheField.Type<CurdType.Field> = {
+    const isNumberItem: FieldType.Member<CurdType.Field> = {
       label: "绑定值为数字类型",
       prop: "valueType",
       type: "switch",
@@ -260,7 +260,7 @@ const formItems = computed(() => {
   }
 
   if (hasOptions.includes(fieldType)) {
-    const optionItems: Array<TheField.Type<CurdType.Select>> = [
+    const optionItems: Array<FieldType.Member<CurdType.Select>> = [
       {
         label: "选项数据",
         prop: "options",
@@ -282,7 +282,7 @@ const formItems = computed(() => {
     ];
 
     if (fieldType === "cascader") {
-      const cascaderItems: Array<TheField.Type<CurdType.Cascader>> = [
+      const cascaderItems: Array<FieldType.Member<CurdType.Cascader>> = [
         {
           label: "下级字段",
           prop: "optionSetting.children",
@@ -316,7 +316,7 @@ const formItems = computed(() => {
   }
 
   if (fieldType === "date") {
-    const dateItems: Array<TheField.Type<CurdType.Date>> = [
+    const dateItems: Array<FieldType.Member<CurdType.Date>> = [
       {
         label: "日期类型",
         prop: "dateType",
@@ -631,12 +631,12 @@ watch(
       <div v-if="props.show" class="the-curd-editor-content">
         <h2 class="the-title mb-[20px]">基础设置</h2>
         <el-form label-position="right" label-width="120px">
-          <TheFields
+          <Fields
             v-if="curdConfigState.type === 'search'"
             :data="props.config.search"
             :list="searchConfigs"
           />
-          <TheFields
+          <Fields
             v-if="curdConfigState.type === 'table' && curdConfigState.editor.form"
             :data="curdConfigState.editor.form"
             :list="formConfigs"
@@ -672,7 +672,7 @@ watch(
             label-position="right"
             label-width="128px"
           >
-            <TheFields :data="state.formData" :list="formItems">
+            <Fields :data="state.formData" :list="formItems">
               <template #ruleText>
                 <template v-if="state.formData.type === 'input-between'">
                   <el-input
@@ -714,7 +714,7 @@ watch(
                   </a>
                 </el-button>
               </template>
-            </TheFields>
+            </Fields>
             <div class="f-right">
               <el-button @click="onClose()">关闭</el-button>
               <el-button v-if="isAdd" type="primary" @click="onSubmit()">

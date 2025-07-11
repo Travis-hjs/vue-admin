@@ -19,9 +19,7 @@
 当前程序设计基于以下功能组件
 
 - [搜索组件](../FilterBox/README.md)
-- [通用表格组件](../base-table/README.md)
-- [通用表格按钮操作列组件](../base-table-actions/README.md)
-- [通用表格分页器组件](../base-pagination/README.md)
+- [通用表格组件](../Table/README.md)
 
 进行`功能设计` + `配置数据结构`然后组合起来实现，代码耦合度极低，每一个功能或组件都是可以单独抽离使用，并且不依赖除 [Element-plus UI](https://element-plus.org/zh-CN/) 外的任何第三方库。
 

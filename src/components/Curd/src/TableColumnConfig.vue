@@ -11,7 +11,7 @@ import { getBoldLabel, getColumnData } from "./data";
 import type { FormInstance } from "element-plus";
 import { deepClone } from "@/utils";
 import { FooterBtn } from "./part";
-import { TheFields, type TheField } from "@/components/TheFields";
+import { Fields, type FieldType } from "@/components/Fields";
 
 const props = defineProps({
   show: {
@@ -107,7 +107,7 @@ const codeTips = `
 <p>也可以是HTML：${getBoldLabel("return `html 标签`")};</p>
 `;
 
-const itemList: Array<TheField.Type<CurdType.Table.Column>> = [
+const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
   {
     label: "表格列标题",
     prop: "title",
@@ -272,7 +272,7 @@ watch(
       label-position="right"
       label-width="130px"
     >
-      <TheFields :data="state.form" :list="itemList" />
+      <Fields :data="state.form" :list="itemList" />
     </el-form>
     <template #footer>
       <FooterBtn @close="onClose" @submit="onSubmit" />

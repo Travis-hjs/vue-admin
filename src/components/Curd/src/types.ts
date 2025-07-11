@@ -1,3 +1,4 @@
+import type { TableType } from "@/components/Table";
 import type { CascaderOption } from "element-plus";
 
 type NativeDate = Date;
@@ -174,7 +175,7 @@ export namespace CurdType {
 
   export namespace Table {
     /** 表格列配置 */
-    export interface Column<T extends object = Record<string, any>> extends BaseTableColumn<T> {
+    export interface Column<T extends object = Record<string, any>> extends TableType.Column<T> {
       /**
        * 表格列渲染内容
        * | 字段 | 说明 |
@@ -236,7 +237,7 @@ export namespace CurdType {
     }
 
     /** 表格操作按钮类型 */
-    export interface Action<T extends object = Record<string, any>> extends BaseTableAction<T> {
+    export interface Action<T extends object = Record<string, any>> extends TableType.Action<T> {
       /**
        * 标记用
        * - 当等于`"action-edit"`时，点击事件自动设置为内部的打开编辑表单功能，在`TableModel.vue`中，当配置完编辑表单数据后会自动添加，具体位置看`onFormEdit`方法
@@ -331,7 +332,7 @@ interface GetDataSort {
   action: CurdType.Table.Column["sort"];
 }
 
-interface GetDataPage extends PaginationChange {
+interface GetDataPage extends TableType.Page {
   key: "page";
 }
 

@@ -1,5 +1,5 @@
 /**
- * 表格相关类型
+ * 通用表格相关类型
  */
 export namespace TableType {
   /**

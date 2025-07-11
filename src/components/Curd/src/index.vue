@@ -19,6 +19,7 @@ import { copyText, formatDate, isType, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
 import { openCurdConfig } from "./hooks";
+import { Table } from "@/components/Table";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */
@@ -356,22 +357,18 @@ onMounted(function() {
         :config="tableConfig"
         :disabled="state.loading"
         @action="onTableOperation"
-      >
-        <template #left>
-          <span v-if="tableConfig.selectKey" class="the-tag blue">
-            已选择 {{ tableState.selectList.length }} 条数据
-          </span>
-        </template>
-      </TableOperation>
-      <base-table
+      />
+      <Table
         class="f1"
         v-model:select-list="tableState.selectList"
         :data="tableState.data"
         :columns="tableColumns"
         :actions="actionList"
-        :actionMax="tableConfig.actionMax"
+        :action-max="tableConfig.actionMax"
         :loading="state.loading"
         :select-key="tableConfig.selectKey!"
+        :page-info="tableState.pageInfo"
+        @page="info => getData({ key: 'page', ...info })"
       >
         <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
           <TableHeader
@@ -387,13 +384,9 @@ onMounted(function() {
             :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
           />
         </template>
-      </base-table>
-      <base-pagination
-        :disabled="state.loading"
-        :pageInfo="tableState.pageInfo"
-        @change="info => getData({ key: 'page', ...info })"
-      />
+      </Table>
     </template>
+
     <el-empty v-else description="当前页面没有表格配置数据，请配置后再操作~">
       <el-button type="primary" @click="openConfig('table')">去配置</el-button>
     </el-empty>
@@ -420,7 +413,11 @@ onMounted(function() {
         :disabled="tableState.formLoading"
       />
       <template #footer>
-        <FooterBtn :loading="tableState.formLoading" @close="onCloseForm()" @submit="onSubmitForm()" />
+        <FooterBtn
+          :loading="tableState.formLoading"
+          @close="onCloseForm()"
+          @submit="onSubmitForm()"
+        />
       </template>
     </base-dialog>
   </div>

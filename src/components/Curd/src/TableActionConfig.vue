@@ -12,7 +12,7 @@ import { actionEditKey, getActionData, getBoldLabel } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { FooterBtn, IconInput } from "./part";
 import { deepClone, isType } from "@/utils";
-import { TheFields, type TheField } from "@/components/TheFields";
+import { Fields, type FieldType } from "@/components/Fields";
 
 const props = defineProps({
   show: {
@@ -97,7 +97,7 @@ const columnRules = {
   }
 }
 
-const columnItems: Array<TheField.Type<typeof form.column>> = [
+const columnItems: Array<FieldType.Member<typeof form.column>> = [
   {
     label: "操作列宽度",
     prop: "width",
@@ -136,7 +136,7 @@ const btnRules = {
   }
 }
 
-const btnItems: Array<TheField.Type<CurdType.Table.Action>> = [
+const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
   {
     label: "按钮文字",
     prop: "text",
@@ -301,7 +301,7 @@ function getBtnText(action: CurdType.Table.Action) {
           labelPosition="right"
           labelWidth="128px"
         >
-          <TheFields :data="form.column" :list="columnItems" />
+          <Fields :data="form.column" :list="columnItems" />
         </el-form>
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">操作按钮配置</el-text>
@@ -315,11 +315,11 @@ function getBtnText(action: CurdType.Table.Action) {
           :class="{'the-filter-mask': !state.formEdit}"
           data-tips="待新增或编辑操作"
         >
-          <TheFields :data="form.btn" :list="btnItems">
+          <Fields :data="form.btn" :list="btnItems">
             <template #iconInput>
               <IconInput v-model:value="form.btn.icon" />
             </template>
-          </TheFields>
+          </Fields>
           <el-form-item>
             <div class="f-right w-full">
               <el-button @click="onRestBtn()">取 消</el-button>

@@ -19,6 +19,7 @@ import TableDeleteConfig from "./TableDeleteConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
 import { curdConfigState } from "./hooks";
+import { TableActions } from "@/components/Table";
 
 const props = defineProps({
   config: {
@@ -414,7 +415,7 @@ function onSetWidth() {
           </el-button>
         </div>
         <div class="fake-table-cell disabled">
-          <base-table-actions
+          <TableActions
             v-if="props.config.actions.length"
             :row="{}"
             :index="1"
