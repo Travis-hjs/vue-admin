@@ -1,7 +1,7 @@
 <script lang="ts">
 /** 表格操作列组件 */
 export default {
-  name: "Actions"
+  name: "ActionCell"
 }
 </script>
 <script lang="ts" setup>
@@ -131,7 +131,7 @@ function onBoxClick(e: MouseEvent) {
 }
 </script>
 <template>
-  <div class="the-table-actions fvc" @click="onBoxClick">
+  <div class="the-table-action-cell fvc" @click="onBoxClick">
     <span v-if="!useList.btn.length">-</span>
     <el-button
       text
@@ -142,7 +142,7 @@ function onBoxClick(e: MouseEvent) {
       :disabled="getBoolean(btn, 'disabled')"
       @click="onBtnClick(btn)"
     >
-      <i :class="['the-table-actions-icon', getString(btn, 'icon')]" v-if="btn.icon && !getBoolean(btn, 'loading')"></i>
+      <i :class="['the-table-action-cell-icon', getString(btn, 'icon')]" v-if="btn.icon && !getBoolean(btn, 'loading')"></i>
       {{ getString(btn, 'text') }}
     </el-button>
     <el-dropdown v-if="useList.dropdown.length" trigger="click">
@@ -156,7 +156,7 @@ function onBoxClick(e: MouseEvent) {
             @click="onBtnClick(drop)"
           >
             <i class="el-icon-loading" v-if="getBoolean(drop, 'loading')"></i>
-            <i :class="['the-table-actions-icon', getString(drop, 'icon')]" v-else-if="drop.icon && !getBoolean(drop, 'loading')"></i>
+            <i :class="['the-table-action-cell-icon', getString(drop, 'icon')]" v-else-if="drop.icon && !getBoolean(drop, 'loading')"></i>
             {{ getString(drop, 'text') }}
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -165,7 +165,7 @@ function onBoxClick(e: MouseEvent) {
   </div>
 </template>
 <style lang="scss">
-.the-table-actions {
+.the-table-action-cell {
   line-height: 1;
   .el-button {
     height: 28px;
@@ -174,7 +174,7 @@ function onBoxClick(e: MouseEvent) {
   .el-button + .el-button {
     margin-left: 0;
   }
-  .the-table-actions-icon {
+  .the-table-action-cell-icon {
     padding-right: 4px;
   }
 }

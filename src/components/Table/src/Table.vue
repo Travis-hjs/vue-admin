@@ -9,7 +9,7 @@ import { type PropType, ref, computed, onUpdated } from "vue";
 import { ElTable, type Column } from "element-plus";
 import { filterRepeat, isType } from "@/utils";
 import { useAdaptiveTable } from "./hooks";
-import Actions from "./Actions.vue";
+import ActionCell from "./ActionCell.vue";
 import type { TableType } from "./types";
 import Pagination from "./Pagination.vue";
 
@@ -35,17 +35,17 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  /** 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<Actions />`组件的阻止事件冒泡作用 */
+  /** 表格行是否需要点击，其实就是加一个鼠标手点击的样式，和内部`<ActionCell />`组件的阻止事件冒泡作用 */
   isRowClick: {
     type: Boolean,
     default: false
   },
-  /** `<Actions :list="list">`组件的 list 数据 */
+  /** `<ActionCell :list="list">`组件的 list 数据 */
   actions: {
     type: Array as PropType<Array<TableType.Action<T>>>,
     default: () => []
   },
-  /** `<Actions :max="actionMax">` 组件的 max 属性 */
+  /** `<ActionCell :max="actionMax">` 组件的 max 属性 */
   actionMax: {
     type: Number,
     default: undefined
@@ -168,9 +168,9 @@ function selected(row: T) {
  */
 const canSelectList = computed(() => props.data.filter((item, index) => canSelect(item, index)));
 /** 是否禁用选择全部 */
-const disabledAll = computed(() => canSelectList.value.length === 0)
+const disabledAll = computed(() => canSelectList.value.length === 0);
 /** 是否选中全部（当前表格页） */
-const selectedAll = computed(function() {
+const selectedAll = computed(() => {
   if (disabledAll.value) {
     return false;
   }
@@ -208,7 +208,7 @@ function onSelect(item: any) {
 }
 </script>
 <template>
-  <div class="base-table" :class="$attrs.class" :id="adaptive.id" v-loading="props.loading">
+  <div class="the-table" :class="$attrs.class" :id="adaptive.id" v-loading="props.loading">
     <el-table
       ref="the-table"
       stripe
@@ -245,22 +245,27 @@ function onSelect(item: any) {
         :show-overflow-tooltip="hasTooltip(item)"
         :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
         :align="item.prop === 'action-right' ? 'center' : item.align"
-        :class-name="(isRowClick && item.prop !== 'action-right') ? 'base-column-click' : ''"
+        :class-name="(isRowClick && item.prop !== 'action-right') ? 'the-table-column-click' : ''"
       >
         <template #header="scope">
           <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
         </template>
         <template #default="scope: SlotType">
           <slot :name="item.slot" v-bind="scope" v-if="item.slot"></slot>
-          <Actions
+          <ActionCell
             v-else-if="item.prop === 'action-right'"
             :row="scope.row"
             :index="scope.$index"
             :actions="(props.actions as any)"
             :clickStop="props.isRowClick"
           />
-          <div v-else-if="item.rawContent" v-html="item.rawContent(scope.row[item.prop], scope.row)"></div>
-          <template v-else>{{ setTableDefaultContent(scope.row, item.prop as string, item) }}</template>
+          <div
+            v-else-if="item.rawContent"
+            v-html="item.rawContent(scope.row[item.prop], scope.row)"
+          ></div>
+          <template v-else>
+            {{ setTableDefaultContent(scope.row, item.prop as string, item) }}
+          </template>
         </template>
       </el-table-column>
     </el-table>
@@ -279,7 +284,7 @@ function onSelect(item: any) {
   </Pagination>
 </template>
 <style lang="scss">
-.base-table {
+.the-table {
   width: 100%;
   min-height: 500px;
 
@@ -302,7 +307,7 @@ function onSelect(item: any) {
   //   height: 100% !important;
   // }
 
-  .base-column-click {
+  .the-table-column-click {
     cursor: pointer;
   }
 }
