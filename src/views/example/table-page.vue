@@ -4,7 +4,8 @@ import { getPageInfo } from "@/hooks/common";
 import { SearchHeader } from "@/components/SearchHeader";
 import { type FieldType } from "@/components/Fields";
 import { formatDate, randomText } from "@/utils";
-import { Table, type TableType } from "@/components/Table";
+import { Table, TableOperationBar, type TableType } from "@/components/Table";
+import { message } from "@/utils/message";
 
 type TableRow = {
   id: number;
@@ -42,6 +43,41 @@ const searchFields: Array<FieldType.Member<SearchInfo>> = [
   }
 ];
 
+const tableColumns: Array<TableType.Column<TableRow>> = [
+  { title: "名称", prop: "name", minWidth: 180 },
+  { title: "日期", prop: "date", width: 180 },
+  { title: "操作", prop: "action-right", width: 140 },
+];
+
+const tableOperations: Array<TableType.Operation> = [
+  {
+    text: "新增",
+    icon: "el-icon-plus",
+    click() {
+      message.info(`新增`);
+    } 
+  }
+];
+
+const tableActions: Array<TableType.Action<TableRow>> = [
+  {
+    text: "编辑",
+    icon: "el-icon-edit",
+    type: "success",
+    click(row) {
+      message.success(`编辑: ${row.name}`);
+    },
+  },
+  {
+    text: "删除",
+    icon: "el-icon-delete",
+    type: "danger",
+    click(row) {
+      message.error(`删除: ${row.name}`);
+    },
+  },
+];
+
 const state = reactive({
   loading: false,
   data: [] as Array<TableRow>,
@@ -49,18 +85,8 @@ const state = reactive({
   pageInfo: getPageInfo(),
   searchFields,
   searchInfo: getSearchInfo(),
+  tableColumns,
 });
-
-const tableColumns: Array<TableType.Column<TableRow>> = [
-  { title: "名称", prop: "name", minWidth: 180 },
-  { title: "日期", prop: "date", width: 180 },
-  { title: "操作", prop: "action-right", width: 140 },
-];
-
-const tableActions: Array<TableType.Action<TableRow>> = [
-  { text: "编辑", icon: "el-icon-edit" },
-  { text: "删除", icon: "el-icon-delete", type: "danger", },
-];
 
 const testList = Array.from({ length: 62 }).map((_, index) => ({
   id: index + 1,
@@ -100,11 +126,17 @@ onSearch();
       @search="onSearch"
     />
 
+    <TableOperationBar
+      v-model:columns="state.tableColumns"
+      :operations="tableOperations"
+      :loading="state.loading"
+    />
+
     <Table
       class="f1"
       select-key="id"
       v-model:select-list="state.selectList"
-      :columns="tableColumns"
+      :columns="state.tableColumns"
       :data="state.data"
       :actions="tableActions"
       :page-info="state.pageInfo"

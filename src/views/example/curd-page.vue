@@ -5,12 +5,12 @@
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
   actionEditKey,
-  columnActionProp,
   Curd,
   getColumnData,
   getFieldData,
   type CurdType
 } from "@/components/Curd";
+import { columnActionProp } from "@/components/Table";
 import { formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { ref } from "vue";

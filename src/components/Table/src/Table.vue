@@ -8,7 +8,7 @@ export default {
 import { type PropType, ref, computed, onUpdated } from "vue";
 import { ElTable, type Column } from "element-plus";
 import { filterRepeat, isType } from "@/utils";
-import { useAdaptiveTable } from "./hooks";
+import { columnActionProp, useAdaptiveTable } from "./hooks";
 import ActionCell from "./ActionCell.vue";
 import type { TableType } from "./types";
 import Pagination from "./Pagination.vue";
@@ -114,7 +114,7 @@ function isEmpty(val: any) {
 }
 
 function hasTooltip(col: TableType.Column<T>) {
-  const defaultVal = col.prop === "action-right" ? false : true;
+  const defaultVal = col.prop === columnActionProp ? false : true;
   return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
 }
 
@@ -235,39 +235,41 @@ function onSelect(item: any) {
           />
         </template>
       </el-table-column>
-      <el-table-column
-        v-for="item in props.columns"
-        :key="item.prop"
-        :prop="(item.prop as string)"
-        :label="item.title"
-        :min-width="item.minWidth"
-        :width="item.width"
-        :show-overflow-tooltip="hasTooltip(item)"
-        :fixed="item.prop === 'action-right' ? 'right' : item.fixed"
-        :align="item.prop === 'action-right' ? 'center' : item.align"
-        :class-name="(isRowClick && item.prop !== 'action-right') ? 'the-table-column-click' : ''"
-      >
-        <template #header="scope">
-          <slot v-if="item.slotHead" :name="item.slotHead" v-bind="scope" />
-        </template>
-        <template #default="scope: SlotType">
-          <slot :name="item.slot" v-bind="scope" v-if="item.slot"></slot>
-          <ActionCell
-            v-else-if="item.prop === 'action-right'"
-            :row="scope.row"
-            :index="scope.$index"
-            :actions="(props.actions as any)"
-            :clickStop="props.isRowClick"
-          />
-          <div
-            v-else-if="item.rawContent"
-            v-html="item.rawContent(scope.row[item.prop], scope.row)"
-          ></div>
-          <template v-else>
-            {{ setTableDefaultContent(scope.row, item.prop as string, item) }}
+      <template v-for="column in props.columns" :key="column.prop">
+        <el-table-column
+          v-if="typeof column.visible === 'boolean' ? column.visible : true"
+          :key="column.prop"
+          :prop="(column.prop as string)"
+          :label="column.title"
+          :min-width="column.minWidth"
+          :width="column.width"
+          :show-overflow-tooltip="hasTooltip(column)"
+          :fixed="column.prop === columnActionProp ? 'right' : column.fixed"
+          :align="column.prop === columnActionProp ? 'center' : column.align"
+          :class-name="(isRowClick && column.prop !== columnActionProp) ? 'the-table-column-click' : ''"
+        >
+          <template #header="scope">
+            <slot v-if="column.slotHead" :name="column.slotHead" v-bind="scope" />
           </template>
-        </template>
-      </el-table-column>
+          <template #default="scope: SlotType">
+            <slot :name="column.slot" v-bind="scope" v-if="column.slot"></slot>
+            <ActionCell
+              v-else-if="column.prop === columnActionProp"
+              :row="scope.row"
+              :index="scope.$index"
+              :actions="(props.actions as any)"
+              :clickStop="props.isRowClick"
+            />
+            <div
+              v-else-if="column.rawContent"
+              v-html="column.rawContent(scope.row[column.prop], scope.row)"
+            ></div>
+            <template v-else>
+              {{ setTableDefaultContent(scope.row, column.prop as string, column) }}
+            </template>
+          </template>
+        </el-table-column>
+      </template>
     </el-table>
   </div>
   <Pagination

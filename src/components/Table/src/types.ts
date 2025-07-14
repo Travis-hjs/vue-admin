@@ -10,7 +10,7 @@ export namespace TableType {
     title: string;
     /**
      * 对应表格数据值的键值
-     * - `"action-right"`为固定右边
+     * - `"action-right"`为固定右边，也可以使用`columnActionProp`常量代替
      * - 请确保唯一性
      */
     prop: keyof T | "action-right";
@@ -47,6 +47,17 @@ export namespace TableType {
      * - 当`prop: "action-right"`时，不需要设置该值，固定为居中状态
      */
     align?: "left" | "center" | "right";
+    /**
+     * 排序
+     * - 当为字符串的时候是默认排序操作
+     * - 升序`"asc"`，降序`"desc"`
+     */
+    sort?: boolean | "asc" | "desc";
+    /**
+     * 表格列是否可见
+     * - 默认`true`
+     */
+    visible?: boolean;
     /**
      * 格式化当前值
      * - 在不使用插槽的情况下快速给内容做格式化，比如添加单位，格式化时间等
@@ -100,6 +111,32 @@ export namespace TableType {
      * - 可以在`<Curd />`组件中配置运行代码，这个时候是`string`类型，并解析运行对应的代码片段
      */
     click?: ((row: T, index?: number) => void) | string;
+  }
+
+  /**
+   * 操作类型
+   */
+  export interface Operation extends Pick<Action, "type"> {
+    /**
+     * 唯一标识，不传则自动生成
+     * - 生成规则为`item-${index}`
+     */
+    key?: string | number;
+    /** 按钮文字 */
+    text: string | (() => string);
+    /**
+     * 按钮图标`class`
+     * - [el-element icon地址](https://element.eleme.cn/#/zh-CN/component/icon)
+     */
+    icon?: string | (() => string);
+    /** 是否禁用 */
+    disabled?: boolean | (() => boolean);
+    /** 是否加载状态 */
+    loading?: boolean | (() => boolean);
+    /** 显示按钮的条件，不传则显示，和`v-if`一样的作用 */
+    show?: boolean | (() => boolean);
+    /** 点击事件 */
+    click: () => void;
   }
 
   /** 分页器`change`事件参数 */

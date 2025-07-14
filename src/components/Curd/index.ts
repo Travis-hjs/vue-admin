@@ -12,7 +12,6 @@ export {
   getBoldLabel,
   getCurdConfigDefault,
   exportPropToWindow,
-  columnActionProp as columnActionProp,
   actionEditKey,
 } from "./src/data";
 

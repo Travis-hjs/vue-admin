@@ -1,16 +1,13 @@
 <script lang="ts">
-/** 表格操作按钮相关 */
+/** 表格操作栏相关 */
 export default {
   name: "TableOperation"
 }
 </script>
 <script lang="ts" setup>
-import { type PropType, computed, reactive } from "vue";
+import { type PropType, computed } from "vue";
 import type { CurdType, TableOperationType } from "./types";
-import { columnActionProp } from "./data";
-import { useListDrag } from "@/hooks/common";
-import { watch } from "vue";
-import { deepClone } from "@/utils";
+import { TableOperationBar, type TableType } from "@/components/Table";
 
 const props = defineProps({
   /** 配置数据 */
@@ -43,8 +40,8 @@ const icon = {
 const has = computed(() => {
   const state = props.config;
   return {
-    add: state.formAdd && state.formAdd.fields.length > 0,
-    edit: state.formEdit && state.formEdit.fields.length > 0,
+    add: !!state.formAdd && state.formAdd.fields.length > 0,
+    edit: !!state.formEdit && state.formEdit.fields.length > 0,
     delete: !!state.selectKey
   }
 });
@@ -75,63 +72,40 @@ const formActions = computed(() => {
   ] as const;
 });
 
-const fixedOptions = [
+const operations: Array<TableType.Operation> = [
   {
-    label: "固定左边",
-    value: "left"
+    text: "删除",
+    type: "danger",
+    icon: "el-icon-delete",
+    show: () => !props.editMode && has.value.delete,
+    disabled: () => props.disabled,
+    click: () => onAction('delete'),
   },
   {
-    label: "默认",
-    value: false
+    text: "新增",
+    icon: "el-icon-plus",
+    show: () => !props.editMode && has.value.add,
+    disabled: () => props.disabled,
+    click: () => onAction('add'),
   },
   {
-    label: "固定右边",
-    value: "right"
-  }
+    text: "导出",
+    icon: "el-icon-download",
+    show: () => !props.editMode,
+    disabled: () => props.disabled,
+    click: () => onAction('export'),
+  },
 ];
-
-const { onDragStart, onDragMove, onDropEnd } = useListDrag({
-  list: () => props.config.columns,
-  key: "prop",
-});
-
-function getDragProps(col: CurdType.Table.Column, index: number) {
-  const isAction = col.prop === columnActionProp;
-  const key = col.prop;
-  return {
-    "data-key": key,
-    key: key,
-    draggable: !isAction ? true : undefined,
-    title: isAction ? "操作栏不可排序，只能显示隐藏操作" : undefined,
-    onDragstart: !isAction ? () => onDragStart(index) : undefined,
-    onDragover: !isAction ? (e: DragEvent) => onDragMove(e, index) : undefined,
-    onDrop: !isAction ? onDropEnd : undefined,
-  };
-}
-
-const setting = reactive({
-  showFixed: false,
-});
-
-let initColumns: Array<CurdType.Table.Column> = [];
-
-function onReset() {
-  props.config.columns = initColumns;
-}
-
-watch(
-  () => props.config.columns,
-  function(list) {
-    if (props.editMode) return;
-    // console.log("执行 >>", list);
-    initColumns = deepClone(list);
-  },
-  { immediate: true }
-);
 </script>
 <template>
-  <div class="w-full f-vertical mb-[10px]">
-    <template v-if="props.editMode">
+  <TableOperationBar
+    v-model:columns="props.config.columns"
+    :operations="operations"
+    :not-watch="props.editMode"
+    :disabled="props.disabled"
+    :hide-setting="props.editMode"
+  >
+    <template v-if="props.editMode" #left>
       <el-button
         v-for="btn in formActions"
         :key="btn.type"
@@ -143,63 +117,5 @@ watch(
         {{ btn.text }}
       </el-button>
     </template>
-    <slot name="left"></slot>
-    <template v-if="!props.editMode">
-      <div class="f1"></div>
-      <slot name="right"></slot>
-      <el-button v-if="has.delete" type="danger" link :disabled="props.disabled" @click="onAction('delete')">
-        <i class="el-icon--left el-icon-delete"></i>
-        删除
-      </el-button>
-      <el-button v-if="has.add" type="primary" link :disabled="props.disabled" @click="onAction('add')">
-        <i class="el-icon--left el-icon-plus"></i>
-        新增
-      </el-button>
-      <el-button type="primary" link :disabled="props.disabled" @click="onAction('export')">
-        <i class="el-icon--left el-icon-download"></i>
-        导出
-      </el-button>
-      <el-popover placement="bottom-start" :width="setting.showFixed ? 500 : 300" transition="el-zoom-in-top" trigger="click">
-        <template #reference>
-          <el-button type="primary" link :disabled="props.disabled">
-            <i class="el-icon--left el-icon-setting"></i>
-            表格列设置
-          </el-button>
-        </template>
-        <div class="f-vertical f-between mb-[10px]">
-          <el-checkbox v-model="setting.showFixed" label="配置固定列" />
-          <el-button type="primary" link @click="onReset()">
-            <i class="el-icon--left el-icon-refresh-left"></i>
-            重置
-          </el-button>
-        </div>
-        <transition-group name="the-group" tag="div" class="the-curd-setting-list">
-          <div
-            v-for="(item, itemIndex) in props.config.columns"
-            class="the-curd-option-item f-vertical"
-            v-bind="getDragProps(item, itemIndex)"
-          >
-            <i v-if="item.prop !== columnActionProp" class="el-icon--left el-icon-rank"></i>
-            <span class="f1">{{ item.title }}</span>
-            <el-radio-group v-if="setting.showFixed" v-model="item.fixed" size="small" class="mr-[10px]">
-              <el-radio-button
-                v-for="opt in fixedOptions"
-                :key="opt.value.toString()"
-                :value="opt.value"
-              >
-                {{ opt.label }}
-              </el-radio-button>
-            </el-radio-group>
-            <el-switch
-              v-model="item.visible"
-              inline-prompt
-              active-text="显示"
-              inactive-text="隐藏"
-            />
-          </div>
-          <el-empty v-if="!props.config.columns.length" key="empty" :image-size="120" description="暂无可以设置的表格列" />
-        </transition-group>
-      </el-popover>
-    </template>
-  </div>
+  </TableOperationBar>
 </template>

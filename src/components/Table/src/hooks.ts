@@ -52,3 +52,9 @@ export function useAdaptiveTable() {
     adaptive,
   }
 }
+
+/**
+ * 表格操作列的`prop`
+ * - 固定值 
+ */
+export const columnActionProp = "action-right";

@@ -196,12 +196,6 @@ export namespace CurdType {
        * - 当`cellType: "image"`时生效，css中设置默认`80px`
        */
       imageHeight?: number;
-      /**
-       * 排序
-       * - 当为字符串的时候是默认排序操作
-       * - 升序`"asc"`，降序`"desc"`
-       */
-      sort: boolean | "asc" | "desc";
       /** 表头图标提示文字 */
       iconTips: string;
       /**
@@ -211,12 +205,6 @@ export namespace CurdType {
        * - 代码中有两个参数：第一个参数`cellValue`是表格值，第二个参数`row`是完整对象
        */
       jsCode: string;
-      /**
-       * 表格列是否可见
-       * - 用户动态编辑表格列时需要该字段为标识符
-       * - 默认`true`
-       */
-      visible: boolean;
     }
 
     export interface ColumnOption<K extends "cellType" | "sort"> {

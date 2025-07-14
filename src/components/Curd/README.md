@@ -234,7 +234,6 @@ exportPropToWindow({
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
   actionEditKey,
-  columnActionProp,
   Curd,
   getColumnData,
   getFieldData,
@@ -243,6 +242,7 @@ import {
 import { formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { reactive } from "vue";
+import { columnActionProp } from "@/components/Table";
 
 const option = {
   gameType: [

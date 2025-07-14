@@ -2,10 +2,9 @@ import { nextTick, onUnmounted } from "vue";
 import type { CurdConfig, CurdType } from "./types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 import { getCountId } from "@/hooks/common";
+import { columnActionProp } from "@/components/Table";
 // ----------------------- 数据相关 -----------------------
 
-/** 表格列操作栏的标记 */
-export const columnActionProp = "action-right";
 /** 表格操作列中，编辑按钮的`key` */
 export const actionEditKey = "action-edit";
 

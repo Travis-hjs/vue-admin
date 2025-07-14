@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType, reactive } from "vue";
-import { actionEditKey, columnActionProp, getColumnData } from "./data";
+import { actionEditKey, getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
 import type { CurdType, TableOperationType } from "./types";
@@ -19,7 +19,7 @@ import TableDeleteConfig from "./TableDeleteConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
 import { curdConfigState } from "./hooks";
-import { TableActionCell } from "@/components/Table";
+import { columnActionProp, TableActionCell } from "@/components/Table";
 
 const props = defineProps({
   config: {
