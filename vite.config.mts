@@ -1,8 +1,11 @@
+import fs from 'node:fs';
 import path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import tailwindcss from "@tailwindcss/vite";
+
+const version = Date.now();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,6 +13,19 @@ export default defineConfig({
     vue(),
     vueJsx(),
     tailwindcss(),
+    {
+      buildEnd() {
+        const versionFilePath = path.join(__dirname, "./public/version.json");
+        fs.writeFileSync(versionFilePath, JSON.stringify({ version }, null, 2));
+      },
+      name: "inject-version",
+      transformIndexHtml(html) {
+        return html.replace(
+          /<\/head>/,
+          `<script>window._version = ${version};</script></head>`,
+        );
+      },
+    },
   ],
   base: "./",
   resolve: {

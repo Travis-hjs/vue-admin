@@ -3,7 +3,6 @@ import App from "./App.vue";
 import BaseDialog from "./components/base-dialog";
 import router from "./router";
 import { copyText, isMobile } from "./utils";
-import { version } from "../package.json";
 import ripple from "./utils/ripple";
 import { message } from "./utils/message";
 
@@ -54,8 +53,6 @@ import {
   ElPopover,
   vLoading,
 } from "element-plus";
-
-window.version = version;
 
 const app = createApp(App);
 

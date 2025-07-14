@@ -198,9 +198,11 @@ interface PageInfo {
 
 interface Window {
   /**
-   * 当前版本，方便在控制台查看调试用
-   * @description 引用的是`package.json`中的`version`
-  */
-  version: string
+   * 当前版本，用于版本更新做对应的提示操作
+   * - 本地开发时会生成该变量
+   * - `run npm build`后会生成一个版本文件，并设置对应的变量
+   * - 具体看`vite.config.mts`文件
+   */
+  _version: string
 }
 
