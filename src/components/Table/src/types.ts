@@ -49,6 +49,7 @@ export namespace TableType {
     align?: "left" | "center" | "right";
     /**
      * 排序
+     * - 因为排序字段需要依赖该值作为响应数据，所以外部表格配置对象需要设置为响应式数据
      * - 当为字符串的时候是默认排序操作
      * - 升序`"asc"`，降序`"desc"`
      */

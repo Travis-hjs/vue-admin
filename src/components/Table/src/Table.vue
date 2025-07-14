@@ -12,6 +12,7 @@ import { columnActionProp, useAdaptiveTable } from "./hooks";
 import ActionCell from "./ActionCell.vue";
 import type { TableType } from "./types";
 import Pagination from "./Pagination.vue";
+import SortBar from "./SortBar.vue";
 
 interface SlotType {
   /** 表格行数据 */
@@ -88,12 +89,19 @@ const props = defineProps({
     type: Array as PropType<Array<number>>,
     default: undefined,
   },
+  /** 是否多选排序 */
+  sortMultiple: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits<{
   (event: "update:selectList", list: Array<T>): void;
+  (event: "update:pageInfo", info: PageInfo): void;
   (event: "row", row: T, col: any, e: Event): void;
   (event: "page", info: TableType.Page): void;
+  (event: "sort", sortInfo: PageInfo, prop: string): void;
 }>();
 
 const theTable = ref<InstanceType<typeof ElTable>>();
@@ -206,6 +214,64 @@ function onSelect(item: any) {
   }
   emit("update:selectList", list);
 }
+
+const sortData = {
+  fields: [] as Array<string>,
+  rules: [] as Array<number>,
+};
+
+/**
+ * 排序操作
+ * @param prop
+ * @param type
+ * @param init 是否初始化
+ */
+function onSort(prop: string, type: TableType.Column["sort"], init?: boolean) {
+  const columns = props.columns;
+  const ascList: Array<string> = [];
+  for (const column of columns) {
+    const key = column.prop as string;
+    if (key === prop) {
+      column.sort = type;
+    } else if (!props.sortMultiple && column.sort) {
+      column.sort = true;
+      sortData.fields = sortData.fields.filter(el => el !== column.prop);
+    }
+    if (column.sort === "asc") {
+      ascList.push(key);
+    }
+  }
+  if (typeof type === "string") {
+    sortData.fields.push(prop);
+  } else if (type) {
+    sortData.fields = sortData.fields.filter(el => el !== prop);
+  }
+  sortData.fields = [...new Set(sortData.fields)];
+  const info = {
+    ...(props.pageInfo || {}),
+  } as PageInfo;
+  if (sortData.fields.length > 0) {
+    sortData.rules = sortData.fields.map(el => ascList.includes(el) ? 1 : 0);
+    info.sortFields = sortData.fields.toString();
+    info.sortRules = sortData.rules.toString();
+  } else {
+    sortData.rules = [];
+    delete info.sortFields;
+    delete info.sortRules;
+  }
+  emit("update:pageInfo", info);
+  !init && emit("sort", info, prop);
+}
+
+// 初始化的时候更新一遍排序数据
+for (const column of props.columns) {
+  if (typeof column.sort === "string") {
+    onSort(column.prop as string, column.sort, true);
+    if (!props.sortMultiple) {
+      break;
+    }
+  }
+}
 </script>
 <template>
   <div class="the-table" :class="$attrs.class" :id="adaptive.id" v-loading="props.loading">
@@ -250,6 +316,7 @@ function onSelect(item: any) {
         >
           <template #header="scope">
             <slot v-if="column.slotHead" :name="column.slotHead" v-bind="scope" />
+            <SortBar v-else-if="column.sort" :column="column" @sort="onSort" />
           </template>
           <template #default="scope: SlotType">
             <slot :name="column.slot" v-bind="scope" v-if="column.slot"></slot>

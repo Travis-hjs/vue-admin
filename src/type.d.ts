@@ -183,6 +183,17 @@ interface PageInfo {
   currentPage: number
   /** 总数 */
   total?: number
+  /**
+   * 排序字段
+   * - 多个用逗号分割
+   */
+  sortFields?: string;
+  /**
+   * 排序规则
+   * - 1 升序，0降序
+   * - 多选排序的时候记录顺序用
+   */
+  sortRules?: string;
 }
 
 interface Window {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import { getPageInfo } from "@/hooks/common";
 import { SearchHeader } from "@/components/SearchHeader";
 import { type FieldType } from "@/components/Fields";
@@ -10,6 +10,7 @@ import { message } from "@/utils/message";
 type TableRow = {
   id: number;
   name: string;
+  type: string;
   date: string;
 }
 
@@ -44,8 +45,10 @@ const searchFields: Array<FieldType.Member<SearchInfo>> = [
 ];
 
 const tableColumns: Array<TableType.Column<TableRow>> = [
-  { title: "名称", prop: "name", minWidth: 180 },
-  { title: "日期", prop: "date", width: 180 },
+  { title: "ID", prop: "id", width: 80 },
+  { title: "名称", prop: "name", minWidth: 180, sort: "asc" },
+  { title: "类型", prop: "type", width: 100, sort: true },
+  { title: "日期", prop: "date", width: 180, sort: "desc" },
   { title: "操作", prop: "action-right", width: 140 },
 ];
 
@@ -91,10 +94,12 @@ const state = reactive({
 const testList = Array.from({ length: 62 }).map((_, index) => ({
   id: index + 1,
   name: randomText(2, 40),
-  date: formatDate()
+  date: formatDate(),
+  type: Math.random() < 0.5 ? "正常" : "异常",
 }));
 
 async function getTableData() {
+  console.log("pageInfo >>", state.pageInfo);
   // state.loading = true;
   // const res = await getApiTableList({ ...state.pageInfo, ...state.searchInfo })
   // state.loading = false;
@@ -115,7 +120,9 @@ function onSearch(reset?: boolean) {
   getTableData();
 }
 
-onSearch();
+onMounted(function() {
+  onSearch();
+});
 </script>
 <template>
   <div class="the-common-table-page">
@@ -135,13 +142,15 @@ onSearch();
     <Table
       class="f1"
       select-key="id"
+      sort-multiple
       v-model:select-list="state.selectList"
+      v-model:page-info="state.pageInfo"
       :columns="state.tableColumns"
       :data="state.data"
       :actions="tableActions"
-      :page-info="state.pageInfo"
       :loading="state.loading"
       @page="getTableData"
+      @sort="getTableData"
     />
   </div>
 </template>
