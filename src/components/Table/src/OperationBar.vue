@@ -79,7 +79,7 @@ function getString(btn: TableType.Operation, type: "text" | "icon") {
   return false;
 }
 
-function getBoolean(btn: TableType.Operation, type: "loading" | "disabled" | "show") {
+function getBoolean(btn: TableType.Operation, type: "loading" | "disabled" | "show", defaultValue = false) {
   const val = btn[type];
   if (typeof val === "boolean") {
     return val;
@@ -87,7 +87,7 @@ function getBoolean(btn: TableType.Operation, type: "loading" | "disabled" | "sh
   if (typeof val === "function") {
     return val();
   }
-  return false;
+  return defaultValue;
 }
 
 let initColumns: typeof props.columns = [];
@@ -121,7 +121,7 @@ if (!props.notWatch) {
     <slot name="right"></slot>
     <template v-for="(btn, index) in props.operations" :key="btn.key || `btn-${index}`">
       <el-button
-        v-if="getBoolean(btn, 'show')"
+        v-if="getBoolean(btn, 'show', true)"
         :type="btn.type || 'primary'"
         :loading="getBoolean(btn, 'loading')"
         :disabled="props.disabled || getBoolean(btn, 'disabled')"

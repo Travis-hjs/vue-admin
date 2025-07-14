@@ -110,11 +110,11 @@ function onSearch() {
     </FilterWrap>
 
     <Table
+      v-model:page-info="state.pageInfo"
       :columns="tableColumns"
       :data="state.data"
       :actions="tableActions"
       :loading="state.loading"
-      :page-info="state.pageInfo"
       select-key="id"
       v-model:select-list="state.selectList"
       :select-disabled="(row) => (row.id % 4) === 0"
