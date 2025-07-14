@@ -203,6 +203,6 @@ interface Window {
    * - `run npm build`后会生成一个版本文件，并设置对应的变量
    * - 具体看`vite.config.mts`文件
    */
-  _version: string
+  _version: string;
 }
 
