@@ -28,9 +28,11 @@ export default {
           messageBox({
             title: `版本更新提示`,
             content: `
-            <p>当前页面有新版本, 是否更新？</p>
-            <p>新版发布时间：<span class="text-amber-600">${formatDate(res.version)}</span></p>
-            <p>不更新则需要手动刷新页面，否则影响部分功能使用。</p>
+            <div class="text-[14px]">
+              <p>当前页面有新版本发布, 是否更新？</p>
+              <p>新版发布时间：<span class="text-amber-600">${formatDate(res.version)}</span></p>
+              <p>不更新则需要手动刷新页面，否则影响部分功能使用。</p>
+            </div>
             `,
             confirmText: "更新",
             cancelText: "取消(关闭提醒)",
