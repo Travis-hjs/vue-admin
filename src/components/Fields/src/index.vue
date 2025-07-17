@@ -170,6 +170,7 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
     v-for="(field, fieldIndex) in fields"
     :key="field.key || `${field.prop}-${fieldIndex}`"
     :label="field.label"
+    :label-width="field.labelWidth"
     :prop="field.prop"
     class="the-fields-item"
   >

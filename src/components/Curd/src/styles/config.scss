@@ -220,29 +220,30 @@
         cursor: no-drop;
       }
     }
-
-    .is-edit-form {
-      box-sizing: content-box;
-      padding-right: var(--gap);
-      border-right: var(--border);
-      border-right-style: dashed;
-
-      .el-form-item[draggable="true"] {
-        cursor: move;
-        .el-form-item__label {
-          cursor: move;
-          user-select: none;
-        }
-      }
-
-      .el-form-item {
-        position: relative;
-      }
-    }
   }
 
   .el-input-number .el-input__inner {
     text-align: left;
+  }
+}
+
+.the-curd-edit-form {
+  box-sizing: content-box;
+  height: fit-content;
+  padding: 0 var(--gap);
+  border-right: var(--border);
+  border-right-style: dashed;
+  border-left: var(--border);
+  border-left-style: dashed;
+
+  .is-drag-item.el-form-item,
+  .is-drag-item .el-form-item__label {
+    cursor: move;
+    user-select: none;
+  }
+
+  .el-form-item {
+    position: relative;
   }
 }
 

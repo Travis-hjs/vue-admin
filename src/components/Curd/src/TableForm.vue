@@ -10,11 +10,8 @@ import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { convertPx, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { watch } from "vue";
-import { messageBox } from "@/utils/message";
-import { useListDrag } from "@/hooks/common";
 import Field from "./Field.vue";
-import { deepClone, isType } from "@/utils";
-import { curdConfigState } from "./hooks";
+import { deepClone, isType, modifyData } from "@/utils";
 
 const props = defineProps({
   /** 表单配置 */
@@ -35,74 +32,16 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits<{
-  (event: "change", config?: CurdType.Table.From, sync?: boolean): void;
-}>();
-
 const formRef = ref<FormInstance>();
-const config = getFormConfig();
+
 const state = reactive({
-  config,
+  config: getFormConfig(),
   form: {} as BaseObj<any>,
   rules: {} as BaseObj<any>
 });
 
-/** 当前表单操作名 */
-const currentName = computed(() => props.type === "add" ? "新增" : "编辑");
-
-const isEdit = computed(() => curdConfigState.editor.show);
-
-function openEditor(index: number) {
-  clear();
-  curdConfigState.editor.action = index >= 0 ? "edit" : "add";
-  curdConfigState.editor.form = state.config;
-  curdConfigState.editor.index = index;
-  curdConfigState.editor.show = true;
-}
-
-function onDelete(index: number) {
-  const list = state.config.fields;
-  clear();
-  messageBox({
-    title: "操作提示",
-    content: `是否删除【${list[index].label}】？`,
-    cancelText: "取消",
-    confirm() {
-      list.splice(index, 1);
-    }
-  });
-}
-
-function onDeleteAll() {
-  messageBox({
-    title: "操作提示",
-    content: `是否移除【${currentName.value}】表单？移除后将不会出现对应功能按钮。`,
-    cancelText: "取消",
-    confirm() {
-      state.config.fields = [];
-    }
-  });
-}
-
-function onExit() {
-  emit("change");
-}
-
-function onComplete() {
-  const name = props.type === "add" ? "编辑" : "新增";
-  messageBox({
-    title: "操作提示",
-    content: `是否将表单数据同步到【${name}】表单？`,
-    cancelText: "不同步",
-    confirmText: "同步",
-    cancel() {
-      emit("change", state.config);
-    },
-    confirm() {
-      emit("change", state.config, true);
-    }
-  });
-}
+/** 表格行数据，不需要为响应式 */
+let tableRow = undefined as undefined | BaseObj<any>;
 
 /**
  * 表单验证
@@ -111,19 +50,34 @@ function onComplete() {
 function validate(callback?: (formData: BaseObj<any>, current: BaseObj<any>) => void) {
   formRef.value?.validate(val => {
     if (val && callback) {
-      const data = formData.value;
-      const current: BaseObj<any> = {};
+      let data = formData.value;
+      let current: BaseObj<any> = {};
       usableFields.value.forEach(field => {
         current[field.key] = data[field.key];
       });
-      callback(data, current);
+      // data = formatDeepKeyObj(data);
+      // current = formatDeepKeyObj(current);
+      if (tableRow) {
+        // 编辑逻辑
+        const form = JSON.parse(JSON.stringify(tableRow));
+        // 将表单项以外的数据合并到表单数据中
+        modifyData(form, data);
+        // TODO: 用完就清空
+        // tableRow = undefined;
+        callback(form, current);
+      } else {
+        // 新增逻辑
+        callback(data, current);
+      }
     }
   });
 }
 
 /** 表单移除验证 */
 function clear() {
-  formRef.value?.clearValidate();
+  setTimeout(() => {
+    formRef.value?.clearValidate()
+  });
 }
 
 /** 表单重置 */
@@ -158,66 +112,57 @@ function setFormData(data: BaseObj<any>) {
           break;
       }
     }
+    // TODO: 表单回显时，条件显示的表单项会读到默认值，所以这里设置默认值
+    (field as any).defaultValue = deepClone(field.value);
   });
+  clear();
 }
 
-const { onDragStart, onDragMove, onDropEnd } = useListDrag({
-  list: () => state.config.fields,
-  key: "id",
-  findLevel: 10,
-});
-
-watch(() => props.config, function (config) {
-  // console.log("config >>", config);
-  if (config) {
-    state.config = deepClone(config);
-  }
-}, { immediate: true });
-
-watch(
-  () => state.config.fields,
-  function (fields) {
-    // console.log("表单项变动 >>", fields);
-    const form: typeof state.form = {};
-    const rules: typeof state.rules = {};
-    const blurs = ["input", "input-between", "textarea"];
-    fields && fields.forEach(field => {
-      // TODO: 这里赋值什么都不重要，因为校验规则和组件绑定的数据不是这个对象，只是表单组件需要绑定而已
-      form[field.key] = field.value;
-      if (field.required) {
-        // TODO: 验证数据的操作才是关键
-        rules[field.key] = [
-          {
-            required: true,
-            validator(_: any, val: any, callback: (err?: Error) => void) {
-              const empty: Array<any> = [undefined, null, ""];
-              // console.log("validator >>", val);
-              if (field.type === "input-between" && !field.value[0] && !field.value[1]) {
-                callback(new Error("请输入两个范围字段"));
-                return;
-              }
-              if (field.valueType === "array" && !(field.value as Array<string>).length) {
-                callback(new Error((field.placeholder as string) || "请选择"));
-                return;
-              }
-              if (field.valueType !== "boolean" && empty.includes(field.value)) {
-                const tips = blurs.includes(field.type) ? "请输入内容" : "请选择";
-                callback(new Error((field.placeholder as string) || tips));
-                return;
-              }
-              callback();
-            },
-            trigger: blurs.includes(field.type) ? "blur" : "change"
-          }
-        ];
-      }
-    });
-    state.form = form;
-    state.rules = rules;
-    setTimeout(clear);
-  },
-  { immediate: true }
-);
+/**
+ * 更新表单配置
+ * @param config 传入的配置
+ */
+function update(config: CurdType.Table.From) {
+  state.config = deepClone(config || getFormConfig());
+  const fields = state.config.fields || [];
+  const form: typeof state.form = {};
+  const rules: typeof state.rules = {};
+  const blurs = ["input", "input-between", "textarea"];
+  fields.forEach(field => {
+    // TODO: 这里赋值什么都不重要，因为校验规则和组件绑定的数据不是这个对象，只是表单组件需要绑定而已
+    form[field.key] = field.value;
+    if (field.required) {
+      // TODO: 验证数据的操作才是关键
+      rules[field.key] = [
+        {
+          required: true,
+          validator(_: any, val: any, callback: (err?: Error) => void) {
+            const empty: Array<any> = [undefined, null, ""];
+            // console.log("validator >>", val);
+            if (field.type === "input-between" && !field.value[0] && !field.value[1]) {
+              callback(new Error("请输入两个范围字段"));
+              return;
+            }
+            if (field.valueType === "array" && !(field.value as Array<string>).length) {
+              callback(new Error((field.placeholder as string) || "请选择"));
+              return;
+            }
+            if (field.valueType !== "boolean" && empty.includes(field.value)) {
+              const tips = blurs.includes(field.type) ? "请输入内容" : "请选择";
+              callback(new Error((field.placeholder as string) || tips));
+              return;
+            }
+            callback();
+          },
+          trigger: blurs.includes(field.type) ? "blur" : "change"
+        }
+      ];
+    }
+  });
+  state.form = form;
+  state.rules = rules;
+  clear();
+}
 
 const formData = computed(() => {
   const data: BaseObj<any> = {};
@@ -247,8 +192,23 @@ const usableFields = computed(() => {
   });
 });
 
+/**
+ * 解析禁用条件
+ * @param val
+ */
+function getDisabled(val?: boolean | string) {
+  if (typeof val !== "string") return val;
+  if (!val.includes("return")) return;
+  try {
+    const fn = new Function("formData", val);
+    return fn(formData.value);
+  } catch (error) {
+    console.warn("解析表单项禁用代码错误 >>", error);
+  }
+}
+
 defineExpose({
-  clear,
+  update,
   validate,
   reset,
   setFormData,
@@ -259,81 +219,18 @@ defineExpose({
     ref="formRef"
     :model="state.form"
     :rules="state.rules"
-    :labelWidth="convertPx(state.config.labelWidth)"
-    :labelPosition="state.config.labelPosition"
+    :label-width="convertPx(state.config.labelWidth)"
+    :label-position="state.config.labelPosition"
     :disabled="props.disabled"
-    :style="props.editMode ? { width: convertPx(state.config.width) } : null"
-    :class="[{'is-edit-form': props.editMode}]"
   >
-    <template v-if="props.editMode">
-      <transition-group name="the-group" tag="div">
-        <el-form-item
-          v-for="(field, fieldIndex) in state.config.fields"
-          :class="[{'the-curd-selected': curdConfigState.editor.index === fieldIndex && isEdit}]"
-          :prop="field.key"
-          :key="field.id"
-          :data-key="field.id"
-          :draggable="state.config.fields.length > 1 && props.editMode ? true : null"
-          @dragstart="onDragStart(fieldIndex)"
-          @dragover="e => onDragMove(e, fieldIndex)"
-          @drop="onDropEnd"
-        >
-          <template #label>
-            <i
-              v-if="state.config.fields.length > 1 && props.editMode"
-              class="el-icon-rank el-icon--left"
-              style="line-height: 32px"
-            ></i>
-            <span>{{ field.label }}</span>
-          </template>
-          <div class="f-vertical w-full">
-            <Field class="mr-[10px]" :fieldData="field" editMode />
-            <el-button link type="success" :disabled="isEdit" @click="openEditor(fieldIndex)">
-              <i class="el-icon-edit"></i>
-            </el-button>
-            <el-button link type="danger" :disabled="isEdit" @click="onDelete(fieldIndex)">
-              <i class="el-icon-delete"></i>
-            </el-button>
-          </div>
-        </el-form-item>
-      </transition-group>
-      <el-empty v-if="!state.config.fields.length" :description="`当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`">
-        <el-button v-if="!isEdit" type="primary" @click="openEditor(-1)">
-          <i class="el-icon--left el-icon-plus"></i>
-          添加表单项
-        </el-button>
-      </el-empty>
-      <template v-if="!isEdit">
-        <el-form-item v-if="state.config.fields.length" key="bottom-add">
-          <el-button type="primary" @click="openEditor(-1)">
-            <i class="el-icon--left el-icon-plus"></i>
-            继续添加
-          </el-button>
-          <!-- <el-button @click="validate()">调试验证</el-button> -->
-        </el-form-item>
-        <div key="bottom-setting">
-          <el-button link @click="onExit()">
-            退出编辑
-          </el-button>
-          <el-button type="danger" link :disabled="!state.config.fields.length" @click="onDeleteAll()">
-            <i class="el-icon--left el-icon-delete"></i>
-            清空表单
-          </el-button>
-          <el-button type="success" link @click="onComplete()">
-            <i class="el-icon--left el-icon-check"></i>
-            保存表单
-          </el-button>
-        </div>
-      </template>
-    </template>
-    <template v-if="!props.editMode && state.config && state.config.fields">
+    <template v-if="state.config && state.config.fields">
       <el-form-item
         v-for="field in usableFields"
+        :key="field.id"
         :label="field.label"
         :prop="field.key"
-        :key="field.id"
       >
-        <Field :fieldData="field" />
+        <Field :fieldData="field" :disabled="getDisabled(field.disabled)" />
       </el-form-item>
     </template>
   </el-form>

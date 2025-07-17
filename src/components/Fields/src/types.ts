@@ -9,6 +9,8 @@ export namespace FieldType {
     key?: string;
     /** 展示文案 */
     label: string;
+    /** `label`宽度 */
+    labelWidth?: string;
     /** 表单数据对象键值 */
     prop: keyof T | NestedKeyOf<T>;
     /** 组件的`placeholder` */

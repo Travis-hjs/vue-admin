@@ -12,7 +12,7 @@ import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import { FooterBtn, TableImage } from "./part";
 import type { CurdConfig, CurdType, GetDataParams, TableOperationType } from "./types";
-import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, initFieldValue } from "./data";
+import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getPageInfo } from "@/hooks/common";
 import { copyText, formatDate, isType, jsonToPath } from "@/utils";
@@ -67,9 +67,6 @@ const tableState = reactive({
   selectList: [] as Array<BaseObj>,
   data: [] as Array<BaseObj>,
   pageInfo: getPageInfo(),
-  formShow: false,
-  formType: "add" as "add" | "edit",
-  formLoading: false
 });
 
 const tableConfig = computed(() => props.data.table);
@@ -106,8 +103,16 @@ const actionList = computed(() => {
     };
     // 处理内部编辑功能
     if (newAction.key === actionEditKey) {
-      newAction.click = openTableForm;
+      newAction.click = function (row) {
+        openForm(row);
+      }
     }
+    // 其他按钮配置的表单处理
+    // if (isType(newAction.formConfig, "object")) {
+    //   newAction.click = function (row) {
+    //     openForm(row, newAction.formConfig);
+    //   };
+    // }
     return newAction;
   });
 });
@@ -141,18 +146,21 @@ function getColumnByProp(prop: string) {
 
 const formRef = ref<InstanceType<typeof TableForm>>();
 
-const formInfo = computed(() => {
-  const config = tableConfig.value;
-  const info = {
-    title: "编辑表单",
-    config: (config.formEdit || {}) as CurdType.Table.From
-  }
-  if (tableState.formType === "add") {
-    info.title = "新增表单";
-    info.config = (config.formAdd || {}) as CurdType.Table.From;
-  }
-  return info;
+const formSate = reactive({
+  type: "add" as "add" | "edit" | "other",
+  /** 表单加载状态 */
+  loading: false,
+  /** 是否打开表单 */
+  show: false,
+  /** 表单配置 */
+  config: getFormConfig(),
 });
+
+/**
+ * 设置表单数据
+ * - 为什么需要单独抽离这个方法？因为`<el-select>`多选回显有问题，所以这里用过渡结束来控制
+ */
+let onSetForm = function () {};
 
 /** 点击操作的表格数据，不需要为响应式 */
 let tableRow = null as null | BaseObj<any>;
@@ -160,47 +168,76 @@ let tableRow = null as null | BaseObj<any>;
 /**
  * 新增 or 编辑表单
  * @param row
+ * @param other 其他传入的表单
  */
-function openTableForm(row?: any) {
-  if (row) {
-    tableState.formType = "edit";
-    tableRow = row;
+function openForm(row?: any, other?: CurdType.Table.From) {
+  tableRow = row ? JSON.parse(JSON.stringify(row)) : {};
+  const config = tableConfig.value;
+  const add = config.formAdd || getFormConfig();
+  const edit = config.formEdit || getFormConfig();
+  if (isType(other, "object")) {
+    formSate.config = other;
+    formSate.type = "other";
   } else {
-    tableState.formType = "add";
+    formSate.type = !!row ? "edit" : "add";
+    // 正常新增编辑逻辑
+    formSate.config = JSON.parse(JSON.stringify(row ? edit : add));
   }
-  tableState.formShow = true;
-  // <el-form> 验证 bug ，nextTick 有时候会不生效
-  setTimeout(() => formRef.value?.clear());
-  // TODO: 为什么需要在 nextTick 设置表单数据？因为`<Field />`组件中会在初始化时设置默认值，
-  // 如果在这之前就设置值的话，会导致被覆盖不生效的情况。
-  nextTick(() => tableRow && formRef.value?.setFormData(tableRow));
+  // const openCode = formSate.config.openCode;
+  // if (typeof openCode === "string") {
+  //   try {
+  //     const fn = new Function("row", openCode);
+  //     fn(tableRow);
+  //   } catch (error) {
+  //     console.warn("解析打开表单前执行代码错误 >>", error);
+  //   }
+  // }
+  formSate.show = true;
+  formRef.value?.update(formSate.config);
+
+  if (JSON.stringify(tableRow) !== "{}" && formRef.value) {
+    onSetForm = function () {
+      formRef.value?.setFormData(tableRow!);
+    };
+  } else {
+    onSetForm = function () {
+      // console.log("新增表单 >>");
+    };
+  }
 }
 
 function onCloseForm() {
-  tableState.formShow = false;
+  formSate.show = false;
   formRef.value?.reset();
   tableRow = null;
 }
 
 function onSubmitForm() {
   formRef.value?.validate(async (formData, current) => {
-    // console.log("提交表单 >>", formData, current);
-    if (tableState.formType === "add" && props.action.onAdd) {
-      tableState.formLoading = true;
-      const res = await props.action.onAdd(formData, current);
-      tableState.formLoading = false;
+    let fn: typeof props.action.onAdd;
+    if (formSate.type === "add" && props.action.onAdd) {
+      fn = props.action.onAdd;
+    }
+    if (formSate.type === "edit" && props.action.onEdit) {
+      fn = props.action.onEdit;
+    }
+    if (fn) {
+      formSate.loading = true;
+      const res = await fn(formData, current);
+      formSate.loading = false;
       if (res.code !== 1) return;
       onCloseForm();
       getData();
     }
-    if (tableState.formType === "edit" && props.action.onEdit) {
-      tableState.formLoading = true;
-      const res = await props.action.onEdit(formData, current);
-      tableState.formLoading = false;
-      if (res.code !== 1) return;
-      onCloseForm();
-      getData();
-    }
+    // const code = formSate.config.submitCode;
+    // const name = formSate.config.title ? `【${formSate.config.title}】` : "";
+    // if (!code) return message.error(`未找到对应的${name}提交代码！`);
+    // try {
+    //   const fn = new Function("formData", "current", code);
+    //   fn(formData, current);
+    // } catch (error) {
+    //   console.warn("表单提交代码出错 >>", error);
+    // }
   });
 }
 
@@ -286,7 +323,7 @@ function onTableOperation(type: TableOperationType) {
   const selects = tableState.selectList;
   switch (type) {
     case "add":
-      openTableForm();
+      openForm();
       break;
 
     case "delete":
@@ -401,20 +438,16 @@ onMounted(function() {
     </el-button>
 
     <base-dialog
-      v-model:show="tableState.formShow"
-      :title="formInfo.title"
-      :width="convertPx(formInfo.config.width)"
-      @close="onCloseForm()"
+      v-model:show="formSate.show"
+      :title="formSate.config.title"
+      :width="convertPx(formSate.config.width)"
+      @close="onCloseForm"
+      @after-end="onSetForm"
     >
-      <TableForm
-        ref="formRef"
-        :config="formInfo.config"
-        :type="tableState.formType"
-        :disabled="tableState.formLoading"
-      />
+      <TableForm ref="formRef" :disabled="formSate.loading" />
       <template #footer>
         <FooterBtn
-          :loading="tableState.formLoading"
+          :loading="formSate.loading"
           @close="onCloseForm()"
           @submit="onSubmitForm()"
         />

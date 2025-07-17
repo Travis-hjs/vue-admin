@@ -20,6 +20,7 @@ import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
 import { curdConfigState } from "./hooks";
 import { columnActionProp, TableActionCell } from "@/components/Table";
+import TableFormConfig from "./TableFormConfig.vue";
 
 const props = defineProps({
   config: {
@@ -229,34 +230,47 @@ function onConfigAction(list: typeof props.config.actions, width?: number) {
   column!.width = width;
 }
 
+interface EditTarget {
+  formConfig?: CurdType.Table.From;
+}
+
 const tableForm = reactive({
   form: null as (CurdType.Table.From | null),
-  type: "add" as "add" | "edit"
+  type: "add" as "add" | "edit" | "other",
+  editTarget: {} as EditTarget,
 });
 
-function openTableForm(type: typeof tableForm.type) {
+function openTableForm(type: typeof tableForm.type, target: EditTarget = {}) {
   tableForm.type = type;
-  if (type === "add" && props.config.formAdd) {
-    tableForm.form = props.config.formAdd;
-  }
-  if (type === "edit" && props.config.formEdit) {
-    tableForm.form = props.config.formEdit;
+  tableForm.editTarget = target;
+  switch (type) {
+    case "add":
+      tableForm.form = props.config.formAdd!;
+      break;
+
+    case "edit":
+      tableForm.form = props.config.formEdit!;
+      break;
+
+    case "other":
+      tableForm.form = target.formConfig!;
+      break;
   }
   curdConfigState.editor.showForm = true;
 }
 
 /**
  * 表单配置编辑
- * @param config 表单配置
+ * @param formConfig 表单配置
  * @param sync 是否同步其他表单
  */
-function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
+function onFormEdit(formConfig?: CurdType.Table.From, sync?: boolean) {
   const data = props.config;
   const actions = data.actions;
   /** 判断并在操作列中添加一个数据 */
   function handleEditAction() {
     const hasEditAction = actions.length > 0 && actions[0].key === actionEditKey;
-    if (config && config.fields.length > 0) {
+    if (formConfig && formConfig.fields.length > 0) {
       if (!actionColumn.value) {
         addActionColumn();
       }
@@ -272,19 +286,49 @@ function onFormEdit(config?: CurdType.Table.From, sync?: boolean) {
       hasEditAction && actions.splice(0, 1);
     }
   }
-  if (config) {
-    if (tableForm.type === "add") {
-      data.formAdd = config;
-      if (sync) {
-        data.formEdit = deepClone(config);
+  if (formConfig) {
+    switch (tableForm.type) {
+      case "add":
+        data.formAdd = formConfig;
+        if (sync) {
+          if (!data.formEdit) {
+            data.formEdit = {
+              title: "编辑",
+              width: formConfig.width,
+              labelWidth: formConfig.labelWidth,
+              labelPosition: formConfig.labelPosition,
+              fields: deepClone(formConfig.fields)
+            };
+          } else {
+            data.formEdit.fields = deepClone(formConfig.fields);
+          }
+          handleEditAction();
+        }
+        break;
+
+      case "edit":
+        data.formEdit = formConfig;
+        if (sync) {
+          if (!data.formAdd) {
+            data.formAdd = {
+              title: "新增",
+              width: formConfig.width,
+              labelWidth: formConfig.labelWidth,
+              labelPosition: formConfig.labelPosition,
+              fields: deepClone(formConfig.fields)
+            };
+          } else {
+            data.formAdd.fields = deepClone(formConfig.fields);
+          }
+        }
         handleEditAction();
-      }
-    } else {
-      data.formEdit = config;
-      if (sync) {
-        data.formAdd = deepClone(config);
-      }
-      handleEditAction();
+        break;
+
+      case "other":
+        // TODO: 这里目前没有使用到，留着后面其他按钮需要配置表单时用
+        tableForm.editTarget.formConfig = formConfig;
+        tableForm.editTarget = {}; // 用完移除引用
+        break;
     }
   }
   curdConfigState.editor.showForm = false;
@@ -334,14 +378,7 @@ function onSetWidth() {
     @action="onOption"
   />
   <div class="the-curd-table-model">
-    <TableForm
-      v-if="curdConfigState.editor.showForm"
-      :config="tableForm.form!"
-      :type="tableForm.type"
-      :editMode="true"
-      @change="onFormEdit"
-    />
-    <transition-group v-else name="the-group" tag="div" class="fake-table">
+    <transition-group name="the-group" tag="div" class="fake-table">
       <el-empty
         v-if="!props.config.columns.length"
         key="empty"
@@ -449,6 +486,7 @@ function onSetWidth() {
       当前表格列配置中存在没配置【宽度/最小宽度】，建议一件设置最小宽度，提高表格美观性。
     </span>
   </div>
+  
   <TableColumnConfig
     v-model:show="configCol.show"
     :type="configCol.type"
@@ -456,17 +494,27 @@ function onSetWidth() {
     :form="configCol.form"
     @submit="onColSubmit"
   />
+
   <TableDeleteConfig
     v-model:show="configDele.show"
     :select-key="configDele.keyword"
     @submit="onConfigDele"
   />
+  
+  <!-- @openFormConfig="e => openTableForm('other', e)" -->
   <TableActionConfig
     v-model:show="configAction.show"
     :columnWidth="configAction.columnWidth"
     :actionMax="configAction.actionMax"
     :list="props.config.actions"
     @submit="onConfigAction"
+  />
+
+  <TableFormConfig
+    v-model:show="curdConfigState.editor.showForm"
+    :config="tableForm.form!"
+    :type="tableForm.type"
+    @change="onFormEdit"
   />
 </template>
 

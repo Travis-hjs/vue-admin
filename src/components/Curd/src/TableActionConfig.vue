@@ -186,6 +186,7 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
 ];
 
 function onClose() {
+  onRestBtn();
   emit("update:show", false);
 }
 

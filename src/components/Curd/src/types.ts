@@ -64,6 +64,11 @@ export namespace CurdType {
      * @param formData 表单数据
      */
     show?: ((formData: BaseObj<any>) => boolean) | string;
+    /**
+     * 表单项禁用
+     * - 筛选部分时为`boolean`类型，表单部分时为`string`类型
+     */
+    disabled?: boolean | string;
   }
 
   type HasOption = "options" | "optionSetting";
@@ -214,6 +219,8 @@ export namespace CurdType {
 
     /** 表单配置 */
     export interface From {
+      /** 表单标题 */
+      title?: string;
       /** 表单整体宽度 */
       width: number;
       /** 标题宽度 */
@@ -222,6 +229,21 @@ export namespace CurdType {
       labelPosition: "left" | "right";
       /** 表单项列表 */
       fields: Array<Field>;
+      /**
+       * `"新增"`or`"编辑"`按钮显示逻辑代码片段
+       * - 未实现，预留字段
+       */
+      showCode?: string;
+      /** 
+       * 打开表单前执行的代码片段
+       * - 未实现，预留字段
+       */
+      openCode?: string;
+      /** 
+       * 表单提交代码片段
+       * - 未实现，预留字段
+       */
+      submitCode?: string;
     }
 
     /** 表格操作按钮类型 */
@@ -339,7 +361,7 @@ export namespace CurdConfig {
     /** 是否显示表单编辑 */
     showForm: boolean;
     /** 编辑操作类型 */
-    action: "add" | "edit";
+    action: "add" | "edit" | "copy";
     /** 编辑的索引 */
     index: number;
     /**

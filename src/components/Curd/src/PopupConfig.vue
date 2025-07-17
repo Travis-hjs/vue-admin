@@ -5,7 +5,6 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import { useZIndex } from "@/hooks/common";
 import { curdConfigState } from "./hooks";
 import { computed, reactive } from "vue";
 import type { CurdType } from "./types";
@@ -15,13 +14,28 @@ import { getCurdConfigEditor } from "./data";
 import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
 import Editor from "./Editor.vue";
-
-const currentZIndex = useZIndex();
+import FullPopup from "./FullPopup.vue";
+import { Fields, type FieldType } from "@/components/Fields";
 
 const tabList = [
   { label: "筛选部分", value: "search" },
   { label: "表格部分", value: "table" },
   // { label: "图表部分", value: "chart" },
+];
+
+const searchConfigs: Array<FieldType.Member<CurdType.Search>> = [
+  {
+    label: "整体文字宽度",
+    prop: "labelWidth",
+    type: "number",
+    placeholder: "例如：120(px)",
+    class: "min-w-[200px]"
+  },
+  {
+    label: "文字靠右对齐",
+    prop: "labelRight",
+    type: "switch"
+  }
 ];
 
 const state = reactive({
@@ -51,56 +65,62 @@ function onTab() {
 }
 </script>
 <template>
-  <section>
-    <transition name="page-y" mode="out-in">
-      <div v-if="curdConfigState.show" class="the-curd-popup-config" :style="{ 'z-index': currentZIndex }">
-        <nav class="the-curd-popup-top f-vertical">
-          <h2 class="the-title">{{ curdConfigState.title }}</h2>
-          <el-radio-group v-model="curdConfigState.type" class="ml-[20px]" @change="onTab">
-            <el-radio-button
-              v-for="item in tabList"
-              :label="item.label"
-              :value="item.value"
-              :key="item.value"
-            />
-          </el-radio-group>
-          <div class="f1"></div>
-          <i class="the-curd-popup-close" @click="onClose()"></i>
-        </nav>
-        <section class="the-curd-popup-content">
-          <div class="w-full h-full flex overflow-auto">
-            <div class="f1">
-              <Search
-                v-if="curdConfigState.type === 'search'"
-                :search="curdConfigState.config.search"
-                edit-mode
-              />
-              <TableModel
-                v-if="curdConfigState.type === 'table'"
-                :config="curdConfigState.config.table"
-              />
-            </div>
-            <Editor v-model:show="curdConfigState.editor.show" :config="curdConfigState.config" />
-          </div>
-        </section>
-        <footer class="the-curd-popup-footer">
-          <el-button type="success" plain @click="onCopyJson()">
-            <i class="el-icon--left el-icon-document-copy"></i>
-            复制JSON
-          </el-button>
-          <el-button :disabled="disabledSave" @click="onClose()">关闭</el-button>
-          <el-button
-            type="primary"
-            :loading="state.loading"
-            :disabled="disabledSave"
-            @click="onSubmit()"
-          >
-            保存配置
-          </el-button>
-        </footer>
-      </div>
-    </transition>
-  </section>
+  <FullPopup
+    v-model:show="curdConfigState.show"
+    :title="curdConfigState.title"
+    @close="onClose"
+  >
+    <template #top>
+      <el-radio-group v-model="curdConfigState.type" @change="onTab">
+        <el-radio-button
+          v-for="item in tabList"
+          :label="item.label"
+          :value="item.value"
+          :key="item.value"
+        />
+      </el-radio-group>
+    </template>
+    <div class="w-full h-full overflow-auto">
+      <template v-if="curdConfigState.type === 'search'">
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">基础配置</el-text>
+        </el-divider>
+        <el-form label-position="right" label-width="120px">
+          <Fields
+            :data="curdConfigState.config.search"
+            :list="searchConfigs"
+          />
+        </el-form>
+        <el-divider content-position="left" border-style="dashed">
+          <el-text type="info">筛选条件配置</el-text>
+        </el-divider>
+        <Search
+          :search="curdConfigState.config.search"
+          edit-mode
+        />
+      </template>
+      <TableModel
+        v-if="curdConfigState.type === 'table'"
+        :config="curdConfigState.config.table"
+      />
+    </div>
+    <Editor v-model:show="curdConfigState.editor.show" :config="curdConfigState.config" />
+    <template #footer>
+      <el-button :disabled="disabledSave" @click="onClose()">关闭</el-button>
+      <el-button type="success" plain @click="onCopyJson()">
+        <i class="el-icon--left el-icon-document-copy"></i>
+        复制JSON
+      </el-button>
+      <el-button
+        type="primary"
+        :loading="state.loading"
+        :disabled="disabledSave"
+        @click="onSubmit()"
+      >
+        保存配置
+      </el-button>
+    </template>
+  </FullPopup>
 </template>
 <style lang="scss">
 @import url("./styles/config.scss");

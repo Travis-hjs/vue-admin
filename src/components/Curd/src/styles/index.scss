@@ -1,23 +1,29 @@
-body .the-curd-main-page {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  // min-height: 100%;
-  height: var(--layout-content-height);
-
-  .the-curd-entrance {
-    position: fixed;
-    bottom: var(--page-padding);
-    right: 0;
-    z-index: 10;
-    padding: 5px 0;
-
-    &:hover {
-      padding: 5px 11px;
+body {
+  .the-curd-main-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    // min-height: 100%;
+    height: var(--layout-content-height);
+  
+    .the-curd-entrance {
+      position: fixed;
+      bottom: var(--page-padding);
+      right: 0;
+      z-index: 10;
+      padding: 5px 0;
+  
+      &:hover {
+        padding: 5px 11px;
+      }
+    }
+  
+    .el-input-number .el-input__inner {
+      text-align: left;
     }
   }
-
-  .el-input-number .el-input__inner {
-    text-align: left;
+  
+  .the-curd-search {
+    height: fit-content;
   }
 }

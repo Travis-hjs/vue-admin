@@ -23,6 +23,7 @@ import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
 import { Fields, type FieldType } from "@/components/Fields";
 import { curdConfigState } from "./hooks";
+import { useZIndex } from "@/hooks/common";
 
 const props = defineProps({
   show: {
@@ -80,42 +81,6 @@ const shortcutOptions = computed(() => {
   });
   return option;
 });
-
-const searchConfigs: Array<FieldType.Member<CurdType.Search>> = [
-  {
-    label: "整体文字宽度",
-    prop: "labelWidth",
-    type: "number",
-    placeholder: "例如：120(px)"
-  },
-  {
-    label: "文字靠右对齐",
-    prop: "labelRight",
-    type: "switch"
-  }
-];
-
-const formConfigs: Array<FieldType.Member<CurdType.Table.From>> = [
-  {
-    label: "表单宽度",
-    prop: "width",
-    type: "number",
-    placeholder: "例如：500(px)"
-  },
-  {
-    label: "文字宽度",
-    prop: "labelWidth",
-    type: "number",
-    placeholder: "例如：140(px)"
-  },
-  {
-    label: "文字靠右排版",
-    prop: "labelPosition",
-    type: "switch",
-    inactiveValue: "left",
-    activeValue: "right"
-  },
-];
 
 const state = reactive({
   step: 0,
@@ -567,7 +532,8 @@ function onSubmit() {
         }
       }
     }
-    actionMap[curdConfigState.type!](isAdd.value);
+    const add = isAdd.value || curdConfigState.editor.action === "copy";
+    actionMap[curdConfigState.type!](add);
     onClose();
   });
 }
@@ -595,13 +561,15 @@ function updateKeyList(excludeKey?: string) {
   }
 }
 
+function resetForm() {
+  state.step = 0;
+  state.formData = undefined;
+}
+
 watch(
   () => props.show,
   function(show) {
-    if (!show) {
-      state.formData = undefined;
-      return;
-    }
+    if (!show) return;
     const editor = curdConfigState.editor;
     if (editor.action === "add") {
       state.step = 0;
@@ -624,111 +592,116 @@ watch(
     }
   }
 );
+
+const title = computed(() => {
+  let text = `配置${curdConfigState.type === "search" ? "筛选项" : "表单项"}`;
+  if (state.step && state.formData) {
+    text = `${text} 《${fieldTitleMap[state.formData.type]}》`;
+  }
+  return text;
+});
+
+const currentIndex = useZIndex() + 5;
 </script>
 <template>
-  <section :class="['the-curd-editor', { 'is-show': props.show }]">
-    <transition name="the-curd-editor-move">
-      <div v-if="props.show" class="the-curd-editor-content">
-        <h2 class="the-title mb-[20px]">基础设置</h2>
-        <el-form label-position="right" label-width="120px">
-          <Fields
-            v-if="curdConfigState.type === 'search'"
-            :data="props.config.search"
-            :list="searchConfigs"
-          />
-          <Fields
-            v-if="curdConfigState.type === 'table' && curdConfigState.editor.form"
-            :data="curdConfigState.editor.form"
-            :list="formConfigs"
-          />
-        </el-form>
-        <template v-if="state.step === 0">
-          <div class="f-vertical f-between mb-[20px]">
-            <h2 class="the-title">第1步：点击选取组件</h2>
-            <el-button link type="primary" @click="onClose()">退出编辑</el-button>
-          </div>
-          <Example
-            :selected="state.formData?.type"
-            :type="curdConfigState.type"
-            @choose="chooseField"
-          />
-        </template>
-        <template v-if="state.step === 1">
-          <div class="f-vertical mb-[20px]">
-            <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
-            <div class="f1"></div>
-            <el-button link type="success" @click="onStep(0)">上一步</el-button>
-            <el-button link type="primary" @click="onClose()">退出编辑</el-button>
-          </div>
-          <div v-if="state.formData" class="the-curd-target-box">
-            <Field :field-data="state.formData" edit-mode />
-          </div>
-          <el-form
-            v-if="state.formData"
-            id="the-editor-form"
-            ref="formRef"
-            :model="state.formData"
-            :rules="formRules"
-            label-position="right"
-            label-width="128px"
-          >
-            <Fields :data="state.formData" :list="formItems">
-              <template #ruleText>
-                <template v-if="state.formData.type === 'input-between'">
-                  <el-input
-                    v-model="state.formData.placeholder[0]"
-                    class="f1"
-                    clearable
-                    placeholder="请输入提示-1"
-                  />
-                  <el-text style="padding: 0 6px;">-</el-text>
-                  <el-input
-                    v-model="state.formData.placeholder[1]"
-                    class="f1"
-                    clearable
-                    placeholder="请输入提示-2"
-                  />
-                </template>
-                <el-input v-else v-model="state.formData.placeholder" clearable placeholder="请输入规则提示/输入框提示文字" />
-              </template>
-              <template #defaultValue>
-                <el-input
-                  v-model="json.defaultValue"
-                  type="textarea"
-                  clearable
-                  placeholder="请输入JSON，值为 value"
-                  @blur="onDefaultValue()"
-                />
-              </template>
-              <template #options>
-                <el-input
-                  v-model="json.options"
-                  type="textarea"
-                  placeholder="请输入数组JSON"
-                  style="margin-bottom: 4px;"
-                  @blur="onOptions()"
-                />
-                <el-button link type="primary">
-                  <a href="https://www.json.cn/" target="_blank">
-                    JSON编辑工具
-                  </a>
-                </el-button>
-              </template>
-            </Fields>
-            <div class="f-right">
-              <el-button @click="onClose()">关闭</el-button>
-              <el-button v-if="isAdd" type="primary" @click="onSubmit()">
-                <i class="el-icon--left el-icon-plus"></i>
-                新增
-              </el-button>
-              <el-button v-else type="success" @click="onSubmit()">
-                <i class="el-icon--left el-icon-edit"></i>
-                确认
-              </el-button>
-            </div>
-          </el-form>
-        </template>
+  <base-dialog
+    :show="props.show"
+    :title="title"
+    :z-index="currentIndex"
+    width="680px"
+    @close="onClose"
+    @afterLeave="resetForm"
+  >
+    <template v-if="state.step === 0">
+      <div class="f-vertical f-between mb-[20px]">
+        <h2 class="the-title">第1步：点击选取组件</h2>
+        <el-button link type="primary" @click="onClose">退出编辑</el-button>
       </div>
-    </transition>
-  </section>
+      <Example
+        :selected="state.formData?.type"
+        :type="curdConfigState.type"
+        @choose="chooseField"
+      />
+    </template>
+    <template v-if="state.step === 1 && state.formData">
+      <div class="f-vertical mb-[20px]">
+        <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
+        <div class="f1"></div>
+        <el-button link type="success" @click="onStep(0)">上一步</el-button>
+        <el-button link type="primary" @click="onClose">退出编辑</el-button>
+      </div>
+      <div v-if="state.formData" class="the-curd-target-box">
+        <Field :field-data="state.formData" edit-mode />
+      </div>
+      <el-form
+        v-if="state.formData"
+        id="the-editor-form"
+        ref="formRef"
+        :model="state.formData"
+        :rules="formRules"
+        label-position="right"
+        label-width="128px"
+      >
+        <Fields :data="state.formData" :list="formItems">
+          <template #ruleText>
+            <template v-if="state.formData.type === 'input-between'">
+              <el-input
+                v-model="state.formData.placeholder[0]"
+                class="f1"
+                clearable
+                placeholder="请输入提示-1"
+              />
+              <el-text style="padding: 0 6px;">-</el-text>
+              <el-input
+                v-model="state.formData.placeholder[1]"
+                class="f1"
+                clearable
+                placeholder="请输入提示-2"
+              />
+            </template>
+            <el-input
+              v-else
+              v-model="state.formData.placeholder"
+              clearable
+              placeholder="请输入规则提示/输入框提示文字"
+            />
+          </template>
+          <template #defaultValue>
+            <el-input
+              v-model="json.defaultValue"
+              type="textarea"
+              clearable
+              placeholder="请输入JSON，值为 value"
+              @blur="onDefaultValue"
+            />
+          </template>
+          <template #options>
+            <el-input
+              v-model="json.options"
+              type="textarea"
+              placeholder="请输入数组JSON"
+              style="margin-bottom: 4px;"
+              @blur="onOptions"
+            />
+            <el-button link type="primary">
+              <a href="https://www.json.cn/" target="_blank">
+                JSON编辑工具
+              </a>
+            </el-button>
+          </template>
+        </Fields>
+      </el-form>
+    </template>
+    <template #footer>
+      <el-button @click="onClose">关闭</el-button>
+      <el-button v-if="isAdd" type="primary" @click="onSubmit">
+        <i class="el-icon--left el-icon-plus"></i>
+        新增
+      </el-button>
+      <el-button v-else type="success" @click="onSubmit">
+        <i class="el-icon--left el-icon-edit"></i>
+        确认
+      </el-button>
+    </template>
+  </base-dialog>
 </template>
