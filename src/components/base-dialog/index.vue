@@ -33,6 +33,14 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  /**
+   * 定位层级
+   * - 默认使用`useZIndex()`
+   */
+  zIndex: {
+    type: Number,
+    default: () => useZIndex(),
+  },
 });
 
 const emit = defineEmits<{
@@ -41,8 +49,6 @@ const emit = defineEmits<{
   (event: "afterLeave"): void;
   (event: "afterEnd"): void;
 }>();
-
-const currentZIndex = useZIndex();
 
 /** 当前组件节点 */
 const el = ref<HTMLElement>();
@@ -130,7 +136,7 @@ onUnmounted(function () {
   <section>
     <teleport to="body" :disabled="!props.appendToBody">
       <transition name="fade">
-        <div ref="el" class="base-dialog fvc" :style="{ 'zIndex': currentZIndex }" v-show="props.show" @click="onClose">
+        <div v-show="props.show" ref="el" class="base-dialog fvc" :style="{ 'z-index': props.zIndex }" @click="onClose">
           <transition name="dialog-move" @after-leave="onAfterLeave" @after-enter="onAfterEnter">
             <div
               ref="contentBox"
