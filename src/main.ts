@@ -6,8 +6,8 @@ import { copyText, isMobile } from "./utils";
 import ripple from "./utils/ripple";
 import { message } from "./utils/message";
 
-import "./styles/tailwind.css";
 import "./styles/index.scss";
+import "./styles/tailwind.css";
 
 const app = createApp(App);
 

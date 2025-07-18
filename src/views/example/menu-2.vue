@@ -1,7 +1,13 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const colorList = ["green", "blue", "gray", "red", "orange", "purple", "cyan"];
+</script>
 <template>
   <div class="menu-2">
-    <span class="the-tag green">menu-2</span>
+    <span
+      v-for="color in colorList"
+      :key="color"
+      :class="['the-tag', color]"
+    >{{ color }}</span>
   </div>
 </template>
 <style lang="scss">
