@@ -14,13 +14,13 @@ export default {
     CurdPopupConfig,
   },
   setup() {
-    const interval = 1000 * 60;
+    const interval = 1000 * 60 * 3;
     let timer: number;
 
     function checkVersion() {
       const t = Date.now();
-      const { protocol, host, href } = location;
-      const url = `${protocol}//${host}/version.json?t=${t}`;
+      const { origin, pathname, href } = location;
+      const url = `${origin + pathname}version.json?t=${t}`;
       fetch(url).then(r => r.json()).then(res => {
         if (res.version && res.version !== window._version) {
           // 弹一次后直接关闭查询

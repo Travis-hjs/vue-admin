@@ -17,7 +17,7 @@ const config = (function () {
   }
 
   // 正式环境
-  if (location.hostname === "prod.com") {
+  if (location.hostname === "travis-hjs.github.io") {
     env = "prod";
     requestUrl = "https://api.prod.com";
     url = "https://prod.com";
