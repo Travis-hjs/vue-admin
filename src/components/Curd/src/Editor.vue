@@ -160,20 +160,23 @@ const formItems = computed(() => {
       label: "绑定的键值",
       prop: "key",
       type: "input",
-      placeholder: "请输入绑定的键值"
+      placeholder: "请输入绑定的键值",
+      class: "value-box-short",
     },
     {
       label: "标题宽度",
       prop: "labelWidth",
       type: "number",
-      placeholder: "例如：120(px)"
+      placeholder: "例如：120(px)",
+      class: "value-box-short",
     },
     {
       label: "组件宽度",
       prop: "valueWidth",
       type: "number",
       placeholder: "例如：140(px)",
-      show: () => !noValueWidth.includes(fieldType)
+      show: () => !noValueWidth.includes(fieldType),
+      class: "value-box-short",
     },
     {
       label: "提示/规则文字",
@@ -220,7 +223,8 @@ const formItems = computed(() => {
       label: "串联符号",
       prop: "separator" as any,
       type: "input",
-      placeholder: formRules.separator.message
+      placeholder: formRules.separator.message,
+      class: "value-box-short",
     });
   }
 
@@ -236,13 +240,15 @@ const formItems = computed(() => {
         label: "数据展示字段",
         prop: "optionSetting.label",
         type: "input",
-        placeholder: "不填则使用 label"
+        placeholder: "不填则使用 label",
+        class: "value-box-short",
       },
       {
         label: "数据值字段",
         prop: "optionSetting.value",
         type: "input",
-        placeholder: "不填则使用 value"
+        placeholder: "不填则使用 value",
+        class: "value-box-short",
       }
     ];
 
@@ -252,7 +258,8 @@ const formItems = computed(() => {
           label: "下级字段",
           prop: "optionSetting.children",
           type: "input",
-          placeholder: "不填则使用 children"
+          placeholder: "不填则使用 children",
+          class: "value-box-short",
         },
         {
           label: "是否多选",
@@ -288,20 +295,23 @@ const formItems = computed(() => {
         type: "select",
         options: dateTypeOptions,
         noClear: true,
-        onChange: onDateType
+        onChange: onDateType,
+        class: "value-box-short",
       },
       {
         label: "日期默认值",
         prop: "shortcutIndex",
         type: "select",
         options: shortcutOptions.value,
-        placeholder: "请选择"
+        placeholder: "请选择",
+        class: "value-box-short",
       },
       {
         label: "格式化规则",
         prop: "format",
         type: "input",
-        tooltip: formatTips
+        tooltip: formatTips,
+        class: "value-box-short",
       }
     ];
 
@@ -467,7 +477,7 @@ function isNumber(value: string) {
 
 function onSubmit() {
   formRef.value?.validate(valid => {
-    validateEX("#the-editor-form", valid);
+    validateEX(".the-curd-editor-form", valid);
     if (!valid) return
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
@@ -613,10 +623,7 @@ const currentIndex = useZIndex() + 10;
     @afterLeave="resetForm"
   >
     <template v-if="state.step === 0">
-      <div class="f-vertical f-between mb-[20px]">
-        <h2 class="the-title">第1步：点击选取组件</h2>
-        <el-button link type="primary" @click="onClose">退出编辑</el-button>
-      </div>
+      <h2 class="the-title mb-[20px]">第1步：点击选取组件</h2>
       <Example
         :selected="state.formData?.type"
         :type="curdConfigState.type"
@@ -627,16 +634,18 @@ const currentIndex = useZIndex() + 10;
       <div class="f-vertical mb-[20px]">
         <h2 class="the-title">第2步：配置{{ fieldTitleMap[state.formData!.type] }}</h2>
         <div class="f1"></div>
-        <el-button link type="success" @click="onStep(0)">上一步</el-button>
-        <el-button link type="primary" @click="onClose">退出编辑</el-button>
+        <el-button size="small" type="warning" @click="onStep(0)">
+          <i class="el-icon--left el-icon-back" />
+          上一步
+        </el-button>
       </div>
       <div v-if="state.formData" class="the-curd-target-box">
         <Field :field-data="state.formData" edit-mode />
       </div>
       <el-form
         v-if="state.formData"
-        id="the-editor-form"
         ref="formRef"
+        class="the-curd-editor-form"
         :model="state.formData"
         :rules="formRules"
         label-position="right"
@@ -693,15 +702,21 @@ const currentIndex = useZIndex() + 10;
       </el-form>
     </template>
     <template #footer>
-      <el-button @click="onClose">关闭</el-button>
-      <el-button v-if="isAdd" type="primary" @click="onSubmit">
-        <i class="el-icon--left el-icon-plus"></i>
-        新增
-      </el-button>
-      <el-button v-else type="success" @click="onSubmit">
-        <i class="el-icon--left el-icon-edit"></i>
-        确认
-      </el-button>
+      <el-button @click="onClose">退出编辑</el-button>
+      <template v-if="state.step === 1">
+        <el-button type="warning" @click="onStep(0)">
+          <i class="el-icon--left el-icon-back" />
+          上一步
+        </el-button>
+        <el-button v-if="isAdd" type="primary" @click="onSubmit">
+          <i class="el-icon--left el-icon-plus"></i>
+          新 增
+        </el-button>
+        <el-button v-else type="success" @click="onSubmit">
+          <i class="el-icon--left el-icon-edit"></i>
+          保存修改
+        </el-button>
+      </template>
     </template>
   </base-dialog>
 </template>
