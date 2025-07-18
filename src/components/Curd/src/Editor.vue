@@ -601,7 +601,7 @@ const title = computed(() => {
   return text;
 });
 
-const currentIndex = useZIndex() + 5;
+const currentIndex = useZIndex() + 10;
 </script>
 <template>
   <base-dialog
