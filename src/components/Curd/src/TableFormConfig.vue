@@ -222,8 +222,8 @@ function onComplete() {
     }
     const name = props.type === "add" ? "编辑" : "新增";
     messageBox({
-      title: "操作提示",
-      content: `是否将表单数据同步到【${name}】表单？`,
+      title: "表单操作提示",
+      content: `是否将《表单项》数据同步到【${name}】表单？`,
       cancelText: "同步",
       confirmText: "不同步",
       cancel() {

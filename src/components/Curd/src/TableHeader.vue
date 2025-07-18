@@ -34,7 +34,7 @@ function onSwitch(type: SortType) {
   <template v-if="isText">{{ props.column.title }}</template>
   <div v-else class="the-curd-table-header f-vertical w-full">
     <el-tooltip v-if="props.column.iconTips" effect="dark" :content="props.column.iconTips" placement="top">
-      <span class="the-curd-table-header-title">{{ props.column.title }}</span>
+      <span class="the-curd-table-header-title is-tooltip">{{ props.column.title }}</span>
     </el-tooltip>
     <span v-else class="the-curd-table-header-title">{{ props.column.title }}</span>
     <div v-if="props.column.sort" style="padding-left: 6px;">
@@ -47,6 +47,10 @@ function onSwitch(type: SortType) {
 .the-curd-table-header-title {
   flex: 1;
   line-height: 1;
+
+  &.is-tooltip {
+    color: #448000;
+  }
 
   &.el-tooltip__trigger {
     cursor: help;

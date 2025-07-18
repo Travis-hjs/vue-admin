@@ -11,7 +11,7 @@ import Field from "./Field.vue";
 import { convertPx } from "./data";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
-import type { CurdType } from "./types";
+import type { CurdConfig, CurdType } from "./types";
 import { curdConfigState } from "./hooks";
 
 const props = defineProps({
@@ -46,9 +46,10 @@ function onDeleteItem(index: number) {
   });
 }
 
-function onEditItem(index: number) {
+function onEditItem(index: number, action: CurdConfig.Editor["action"] = "edit") {
+  // curdConfigState.editor.form;
   curdConfigState.editor.index = index;
-  curdConfigState.editor.action = "edit";
+  curdConfigState.editor.action = action;
   curdConfigState.editor.show = true;
 }
 
@@ -98,6 +99,10 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
             <el-button link type="danger" @click="onDeleteItem(itemIndex)">
               <i class="el-icon-delete el-icon--left"></i>
               删除
+            </el-button>
+            <el-button link type="primary" @click="onEditItem(itemIndex, 'copy')">
+              <i class="el-icon-document-copy el-icon--left"></i>
+              复制
             </el-button>
             <el-button link type="success" @click="onEditItem(itemIndex)">
               <i class="el-icon-edit el-icon--left"></i>

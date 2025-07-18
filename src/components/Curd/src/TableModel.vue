@@ -240,7 +240,12 @@ const tableForm = reactive({
   editTarget: {} as EditTarget,
 });
 
-function openTableForm(type: typeof tableForm.type, target: EditTarget = {}) {
+/**
+ * 打开表单配置弹框
+ * @param type 进行编辑的表单类型
+ * @param target `type === "other"`时用，需要进行编辑的目标对象
+ */
+function openFormConfig(type: typeof tableForm.type, target: EditTarget = {}) {
   tableForm.type = type;
   tableForm.editTarget = target;
   switch (type) {
@@ -264,7 +269,7 @@ function openTableForm(type: typeof tableForm.type, target: EditTarget = {}) {
  * @param formConfig 表单配置
  * @param sync 是否同步其他表单
  */
-function onFormEdit(formConfig?: CurdType.Table.From, sync?: boolean) {
+function onFormConfig(formConfig?: CurdType.Table.From, sync?: boolean) {
   const data = props.config;
   const actions = data.actions;
   /** 判断并在操作列中添加一个数据 */
@@ -342,11 +347,11 @@ function onOption(type: TableOperationType) {
       break;
 
     case "add":
-      openTableForm("add");
+      openFormConfig("add");
       break;
 
     case "edit":
-      openTableForm("edit");
+      openFormConfig("edit");
       break;
   }
 }
@@ -501,7 +506,7 @@ function onSetWidth() {
     @submit="onConfigDele"
   />
   
-  <!-- @openFormConfig="e => openTableForm('other', e)" -->
+  <!-- @openFormConfig="e => openFormConfig('other', e)" -->
   <TableActionConfig
     v-model:show="configAction.show"
     :columnWidth="configAction.columnWidth"
@@ -514,7 +519,7 @@ function onSetWidth() {
     v-model:show="curdConfigState.editor.showForm"
     :config="tableForm.form!"
     :type="tableForm.type"
-    @change="onFormEdit"
+    @change="onFormConfig"
   />
 </template>
 

@@ -67,8 +67,6 @@ const showTips = `
 <p>例如：${getBoldLabel("return formData.type !== 2")}</p>
 `;
 
-const isAdd = computed(() => curdConfigState.editor.action === "add");
-
 const shortcutOptions = computed(() => {
   let option: Array<{ label: string; value: number }> = [];
   if (state.formData && state.formData.type === "date") {
@@ -478,7 +476,7 @@ function isNumber(value: string) {
 function onSubmit() {
   formRef.value?.validate(valid => {
     validateEX(".the-curd-editor-form", valid);
-    if (!valid) return
+    if (!valid) return;
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
     const editor = curdConfigState.editor;
@@ -526,24 +524,14 @@ function onSubmit() {
       },
       table(add: boolean) {
         if (add) {
-          const fields = JSON.parse(JSON.stringify(editor.form!.fields));
-          fields.push(form);
-          editor.form!.fields = fields;
-          // TODO: 这里不直接调用数组方法或者修改的理由是想要出发配置表单组件里面的`watch`
-          // 因为不想`deep`去遍历深层，在有选项数据的时候会有性能问题，所以这里用最原始的方式处理
-          // 在 vue3.5+ deep可以设置层数，那样就可以不用这么麻烦
-          // editor.form!.fields.push(form);
+          editor.form!.fields.push(form);
         } else {
-          const fields = JSON.parse(JSON.stringify(editor.form!.fields));
-          fields[editor.index] = form;
-          editor.form!.fields = fields;
-          // TODO: 与上面同理
-          // editor.form!.fields[editor.index] = form;
+          editor.form!.fields[editor.index] = form;
         }
       }
     }
-    const add = isAdd.value || curdConfigState.editor.action === "copy";
-    actionMap[curdConfigState.type!](add);
+    const isAdd = editor.action !== "edit";
+    actionMap[curdConfigState.type!](isAdd);
     onClose();
   });
 }
@@ -582,8 +570,7 @@ watch(
     if (!show) return;
     const editor = curdConfigState.editor;
     if (editor.action === "add") {
-      state.step = 0;
-      state.formData = undefined;
+      resetForm();
       updateKeyList();
     } else {
       const current = editor.index;
@@ -596,6 +583,10 @@ watch(
         }
       }
       actionMap[curdConfigState.type!]();
+      if (editor.action === "copy") {
+        state.formData!.id += `${state.formData!.id}-copy-${Date.now()}`;
+        state.formData!.key = "";
+      }
       setJson(state.formData!);
       updateKeyList(state.formData!.key);
       state.step = 1;
@@ -708,13 +699,13 @@ const currentIndex = useZIndex() + 10;
           <i class="el-icon--left el-icon-back" />
           上一步
         </el-button>
-        <el-button v-if="isAdd" type="primary" @click="onSubmit">
-          <i class="el-icon--left el-icon-plus"></i>
-          新 增
-        </el-button>
-        <el-button v-else type="success" @click="onSubmit">
+        <el-button v-if="curdConfigState.editor.action === 'edit'" type="success" @click="onSubmit">
           <i class="el-icon--left el-icon-edit"></i>
           保存修改
+        </el-button>
+        <el-button v-else type="primary" @click="onSubmit">
+          <i class="el-icon--left el-icon-plus"></i>
+          {{ curdConfigState.editor.action === 'copy' ? '新增复制' : '新 增' }}
         </el-button>
       </template>
     </template>
