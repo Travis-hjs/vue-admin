@@ -71,6 +71,7 @@ const fields: Array<FieldType.Member<ReturnType<typeof useFormData>>> = [
     type: "date",
     dateType: "daterange",
     bind: ["startDate", "endDate"],
+    format: "Y-M-D",
     placeholder: formRules.startDate.message,
   },
   {
