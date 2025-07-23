@@ -51,6 +51,7 @@ import {
   ElImageViewer,
   ElPopconfirm,
   ElPopover,
+  ElInputTag,
   vLoading,
 } from "element-plus";
 
@@ -98,7 +99,8 @@ const elComponents = [
   ElImageViewer,
   ElPopconfirm,
   ElPopover,
-]
+  ElInputTag,
+];
 
 elComponents.forEach(item => {
   app.use(item);
