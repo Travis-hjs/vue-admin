@@ -101,8 +101,7 @@ export namespace FieldType {
      */
     type: "date";
     /**
-     * 当日期组件发生变化时`onChange`设置的绑定值
-     * - 当前为单向绑定，即组件值发生变动时会修改`bind: ["updateTime"]`，`obj.updateTime = "xxx"`不会修改组件数据
+     * 由于日期组件值特殊的原因，这里用`bind`代替`prop`，所以`prop`填什么都不重要，重要的是该值绑定的字段
      * - 当为日期范围时，按照数组顺序进行值的绑定，例如：`bind: ["startDate", "endDate"]`
      */
     bind: Array<keyof T | NestedKeyOf<T>>;
@@ -142,11 +141,27 @@ export namespace FieldType {
     type: "text";
   }
 
+  export interface Radio<T extends object> extends Common<T>, HasOption {
+    /** 单选组件 */
+    type: "radio";
+  }
+
   export interface Slot<T extends object> extends Common<T> {
     /** 插槽类型 */
     type: "slot";
     /** 插槽名 */
     slotName: string;
+  }
+
+  export interface InputTag<T extends object> extends Common<T> {
+    /** 标签输入框 */
+    type: "input-tag";
+    /** 触发类型 */
+    trigger?: "Enter" | "Space";
+    /** 输入指定分隔符自动分隔 */
+    delimiter?: string;
+    /** 最大标签数量 */
+    max?: number;
   }
 
   /**
@@ -160,5 +175,7 @@ export namespace FieldType {
     | Date<T>
     | Switch<T>
     | Text<T>
-    | Slot<T>;
+    | Radio<T>
+    | Slot<T>
+    | InputTag<T>;
 }

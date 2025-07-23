@@ -42,8 +42,12 @@ export function LabelTips(props: LabelTipsProps) {
  */
 export const TheDatePicker = defineComponent({
   props: {
-    attrs: {
-      type: Object,
+    field: {
+      type: Object as PropType<FieldType.Date<any>>,
+      required: true,
+    },
+    getValueByKey: {
+      type: Function as PropType<(key: string) => string>,
       required: true,
     },
   },
@@ -51,18 +55,26 @@ export const TheDatePicker = defineComponent({
   setup(props, { emit }) {
     const date = computed({
       get() {
-        const value = props.attrs.modelValue;
-        if (isType<Array<string>>(value, "array")) {
-          return value.map((el) => new Date(el));
-        } else if (value) {
-          return new Date(value);
+        const getValue = props.getValueByKey;
+        const keys = props.field.bind as Array<string>;
+        const first = keys[0] ? getValue(keys[0]) : undefined;
+        const second = keys[1] ? getValue(keys[1]) : undefined;
+        if (props.field.dateType.includes("range")) {
+          const values = [];
+          if (first) {
+            values.push(new Date(first));
+          }
+          if (second) {
+            values.push(new Date(second));
+          }
+          return values;
         }
-        return value;
+        return first ? new Date(first) : undefined;
       },
       set(val) {
         const list = val as Array<Date>;
         // 处理两个相同的范围日期
-        if (["daterange", "datetimerange"].includes(props.attrs.type)) {
+        if (props.field.dateType.includes("range")) {
           if (list && new Date(list[0]).getTime() === new Date(list[1]).getTime()) {
             list[1] = new Date(formatDate(list[1], "Y-M-D 23:59:59"));
           }
@@ -70,12 +82,18 @@ export const TheDatePicker = defineComponent({
         emit("change", list);
       }
     });
+
     return () => (
       <el-date-picker
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
-        {...props.attrs}
+        class={props.field.class}
+        placeholder={props.field.placeholder}
+        disabled={typeof props.field.disabled === "function" ? props.field.disabled() : props.field.disabled}
+        clearable={props.field.noClear ? false : true}
+        type={props.field.dateType}
+        format={props.field.formatShow}
         v-model={date.value}
         // onChange={(e: any) => emit("change", e)}
       />

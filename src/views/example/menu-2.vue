@@ -3,6 +3,12 @@ import { message } from "@/utils/message";
 import { type FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { validateEX } from "@/utils/dom";
+import { Fields, type FieldType } from "@/components/Fields";
+
+const options = Array.from({ length: 10000 }).map((_, index) => ({
+  value: index + 1,
+  label: `最多${index + 1}次`,
+}));
 
 const formRef = ref<FormInstance>();
 
@@ -16,32 +22,103 @@ function useFormData() {
     delivery: false,
     type: [] as Array<string>,
     resource: "",
-    desc: ""
+    desc: "",
+    labels: [] as Array<string>,
   }
 }
 
+const formRules = {
+  name: [
+    { required: true, message: "请输入活动名称", trigger: "blur" },
+    { min: 3, max: 20, message: "长度为3到20个字符", trigger: "blur" },
+  ],
+  region: { required: true, message: "请选择活动地区", trigger: "change" },
+  count: { required: true, message: "请选择活动次数", trigger: "change" },
+  startDate: { required: true, message: "请选择活动时间", trigger: "change" },
+  type: { required: true, message: "请选择活动类型", trigger: "change" },
+  resource: { required: true, message: "请选择活动来源", trigger: "change" },
+  desc: { required: false, message: "请输入活动描述", trigger: "blur" },
+}
+
+const fields: Array<FieldType.Member<ReturnType<typeof useFormData>>> = [
+  {
+    label: "活动名称",
+    prop: "name",
+    type: "input",
+    placeholder: formRules.name[0].message,
+  },
+  {
+    label: "活动区域",
+    prop: "region",
+    type: "radio",
+    options: [
+      { label: "上海", value: "shanghai" },
+      { label: "北京", value: "beijing" },
+      { label: "深圳", value: "shenzhen" },
+    ],
+    placeholder: formRules.region.message,
+  },
+  {
+    label: "活动次数",
+    prop: "count",
+    type: "select",
+    options: options,
+    placeholder: formRules.count.message,
+  },
+  {
+    label: "活动时间",
+    prop: "startDate",
+    type: "date",
+    dateType: "daterange",
+    bind: ["startDate", "endDate"],
+    placeholder: formRules.startDate.message,
+  },
+  {
+    label: "即时送达",
+    prop: "delivery",
+    type: "switch",
+  },
+  {
+    label: "活动类型",
+    prop: "type",
+    type: "select-multiple",
+    showAll: true,
+    options: [
+      { label: "在线活动", value: "a" },
+      { label: "促销活动", value: "b" },
+      { label: "线下活动", value: "c" },
+      { label: "简单的品牌曝光", value: "d" },
+    ],
+    placeholder: formRules.type.message,
+  },
+  {
+    label: "来源",
+    prop: "resource",
+    type: "radio",
+    options: [
+      { label: "赞助", value: 1 },
+      { label: "地点", value: 2 },
+    ],
+    placeholder: formRules.resource.message,
+  },
+  {
+    label: "活动描述",
+    prop: "desc",
+    type: "textarea",
+    placeholder: formRules.desc.message,
+  },
+  {
+    label: "标签分类",
+    prop: "labels",
+    type: "input-tag",
+    placeholder: "请输入内容摁回车新增标签",
+  }
+];
+
 const form = reactive({
   data: useFormData(),
-  rules: {
-    name: [
-      { required: true, message: "请输入活动名称", trigger: "blur" },
-      { min: 3, max: 20, message: "长度为3到20个字符", trigger: "blur" },
-    ],
-    region: [{ required: true, message: "请选择活动地区", trigger: "change" }],
-    count: [{ required: true, message: "请选择活动次数", trigger: "change" }],
-    startDate: [{ required: true, message: "请选择活动开始时间", trigger: "change" }],
-    endDate: [{ required: true, message: "请选择活动结束时间", trigger: "change" }],
-    type: [{ required: true, message: "请选择活动类型", trigger: "change" }],
-    resource: [{ required: true, message: "请选择活动来源", trigger: "change" }],
-    desc: [{ required: false, message: "请输入活动描述", trigger: "blur" }],
-  }
-  // } as FormRules
+  fields,
 });
-
-const options = Array.from({ length: 10000 }).map((_, index) => ({
-  value: index + 1,
-  label: `最多${index + 1}次`,
-}))
 
 function onSubmit() {
   formRef.value!.validate(valid => {
@@ -62,61 +139,8 @@ function onReset() {
 <template>
   <div class="menu-2">
     <span class="the-tag green mb-[20px]">表单验证操作</span>
-    <el-form style="width: 600px;" id="the-form" ref="formRef" :model="form.data" :rules="form.rules" label-width="120px">
-      <el-form-item label="活动名称" prop="name">
-        <el-input v-model="form.data.name" :placeholder="form.rules.name[0].message" />
-      </el-form-item>
-      <el-form-item label="活动区域" prop="region">
-        <el-select v-model="form.data.region" :placeholder="form.rules.region[0].message">
-          <el-option label="上海" value="shanghai" />
-          <el-option label="北京" value="beijing" />
-          <el-option label="深圳" value="shenzhen" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="活动次数" prop="count">
-        <el-select-v2 v-model="form.data.count" :placeholder="form.rules.region[0].message" :options="options" />
-      </el-form-item>
-      <el-form-item label="活动时间" required>
-        <div class="f-vertical" style="width: 100%;">
-          <el-form-item prop="startDate">
-            <el-date-picker
-              v-model="form.data.startDate"
-              type="date"
-              label="选择一个日期"
-              :placeholder="form.rules.startDate[0].message"
-            />
-          </el-form-item>
-          <div class="f1 fvc">至</div>
-          <el-form-item prop="endDate">
-            <el-date-picker
-              v-model="form.data.endDate"
-              type="date"
-              label="选择一个日期"
-              :placeholder="form.rules.endDate[0].message"
-            />
-          </el-form-item>
-        </div>
-      </el-form-item>
-      <el-form-item label="即时送达" prop="delivery">
-        <el-switch v-model="form.data.delivery" />
-      </el-form-item>
-      <el-form-item label="活动类型" prop="type">
-        <el-checkbox-group v-model="form.data.type">
-          <el-checkbox label="在线活动" value="a" name="type" />
-          <el-checkbox label="促销活动" value="b" name="type" />
-          <el-checkbox label="线下活动" value="c" name="type" />
-          <el-checkbox label="简单的品牌曝光" value="d" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="来源" prop="resource">
-        <el-radio-group v-model="form.data.resource">
-          <el-radio value="sponsor" label="赞助" />
-          <el-radio value="place" label="地点" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="活动描述" prop="desc">
-        <el-input v-model="form.data.desc" type="textarea" :placeholder="form.rules.desc[0].message" />
-      </el-form-item>
+    <el-form class="w-[600px]" id="the-form" ref="formRef" :model="form.data" :rules="formRules" label-width="120px">
+      <Fields :data="form.data" :list="form.fields" />
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onReset">重置</el-button>

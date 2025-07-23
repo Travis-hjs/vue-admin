@@ -68,7 +68,7 @@ function getFieldValue(field: FieldType.Member, key?: string) {
     }
     return obj;
   }
-  return model[field.prop];
+  return model[_key];
 }
 
 /**
@@ -148,9 +148,8 @@ function getTextContent(field: FieldType.Text<any>) {
 }
 
 function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
-  const keys = field.bind;
-  setFieldValue(field, value); // 为什么要先设置值？因为bind的值和组件的值可能是同一个，所以要先设置，最后再格式化
-  if (["daterange", "datetimerange"].includes(field.dateType)) {
+  const keys = field.bind;  
+  if (field.dateType.includes("range")) {
     if (value) {
       setFieldValue(field, formatDate(value[0], field.format), keys[0]);
       setFieldValue(field, formatDate(value[1], field.format), keys[1]);
@@ -206,13 +205,22 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
     />
     <TheDatePicker
       v-if="field.type === 'date'"
-      :attrs="{
-        type: field.dateType,
-        format: field.formatShow,
-        ...getCommonProps(field),
-      }"
+      :getValueByKey="(key: string) => getFieldValue(field, key)"
+      :field="field"
       @change="(e: any) => onDatePicker(field, e)"
     />
+    <el-radio-group
+      v-if="field.type === 'radio'"
+      :model-value="getFieldValue(field)"
+      @change="e => onChange(field, e)"
+    >
+      <el-radio-button
+        v-for="item in field.options"
+        :key="item[field.optionSetting?.value || 'value']"
+        :label="item[field.optionSetting?.label || 'label']"
+        :value="item[field.optionSetting?.value || 'value']"
+      />
+    </el-radio-group>
     <el-switch
       v-if="field.type === 'switch'"
       :model-value="getFieldValue(field)"
@@ -222,6 +230,15 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
       :active-value="field.activeValue"
       :inactive-value="field.inactiveValue"
       @change="e => onChange(field, e)"
+    />
+    <el-input-tag
+      v-if="field.type === 'input-tag'"
+      v-bind="getCommonProps(field)"
+      tag-type="primary"
+      :trigger="field.trigger"
+      :max="field.max"
+      :delimiter="field.delimiter"
+      @change="(e: Array<string>) => onChange(field, e)"
     />
     <div v-if="field.type === 'text'" :class="['text-box', field.class || 'w-full'] ">
       <el-text>{{ getTextContent(field) }}</el-text>
