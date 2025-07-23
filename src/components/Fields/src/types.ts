@@ -1,5 +1,7 @@
 import type { CurdType } from "@/components/Curd";
 
+type NativeDate = Date;
+
 /**
  * `<Fields :list="fields">`组件类型
  */
@@ -105,6 +107,11 @@ export namespace FieldType {
      * - 当为日期范围时，按照数组顺序进行值的绑定，例如：`bind: ["startDate", "endDate"]`
      */
     bind: Array<keyof T | NestedKeyOf<T>>;
+    /**
+     * 日期禁用函数
+     * @param value
+     */
+    disabledDate?: (value: NativeDate) => boolean;
   }
 
   export interface Switch<T extends object> extends Omit<Common<T>, "placeholder"> {

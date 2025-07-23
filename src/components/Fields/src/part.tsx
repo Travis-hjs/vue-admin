@@ -94,6 +94,7 @@ export const TheDatePicker = defineComponent({
         clearable={props.field.noClear ? false : true}
         type={props.field.dateType}
         format={props.field.formatShow}
+        disabled-date={props.field.disabledDate}
         v-model={date.value}
         // onChange={(e: any) => emit("change", e)}
       />
