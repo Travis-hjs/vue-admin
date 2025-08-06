@@ -124,17 +124,16 @@ function getCommonProps(field: FieldType.Member) {
   }
 }
 
-function getSelectProps(field: FieldType.Select<any> | FieldType.SelectMultiple<any>) {
-  const isMultiple = field.type === "select-multiple";
+function getSelectProps(field: FieldType.Select<any>) {
   const isDisabled = isType(field.disabled, "function") ? field.disabled() : field.disabled;
-  const showAll = field.type === "select-multiple" ? field.showAll : false;
   return {
     placeholder: field.placeholder,
     disabled: isDisabled,
-    multiple: isMultiple,
+    multiple: field.multiple,
     clearable: field.noClear ? false : true,
     filterable: true,
-    collapseTags: !showAll,
+    collapseTags: true,
+    maxCollapseTags: field.max,
     class: getClassName(field),
     modelValue: getFieldValue(field),
   }
@@ -198,7 +197,7 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
       @input="e => onChange(field, e)"
     />
     <TheSelect
-      v-if="field.type === 'select' || field.type === 'select-multiple'"
+      v-if="field.type === 'select'"
       :attrs="getSelectProps(field)"
       :field="field"
       @change="e => onChange(field, e)"

@@ -114,7 +114,7 @@ export const TheSelect = defineComponent({
       required: true,
     },
     field: {
-      type: Object as PropType<FieldType.Select<any> | FieldType.SelectMultiple<any>>,
+      type: Object as PropType<FieldType.Select<any>>,
       required: true,
     },
   },

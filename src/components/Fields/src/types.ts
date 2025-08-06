@@ -81,15 +81,16 @@ export namespace FieldType {
   }
 
   export interface Select<T extends object> extends Common<T>, HasOption {
-    /** 单选下拉选择组件 */
+    /** 下拉选择组件 */
     type: "select";
-  }
-
-  export interface SelectMultiple<T extends object> extends Common<T>, HasOption {
-    /** 多选下拉选择组件 */
-    type: "select-multiple";
-    /** 是否展示全部选中项 */
-    showAll?: boolean;
+    /** 是否多选 */
+    multiple?: boolean;
+    /**
+     * 多选最大显示数量，默认为`1`
+     * - `max-collapse-tags`属性的缩写
+     * - [文档](https://element-plus.org/zh-CN/component/select.html#select-attributes)
+     */
+    max?: number;
   }
 
   export interface Date<T extends object>
@@ -178,7 +179,6 @@ export namespace FieldType {
     | Input<T>
     | NumberInput<T>
     | Select<T>
-    | SelectMultiple<T>
     | Date<T>
     | Switch<T>
     | Text<T>
