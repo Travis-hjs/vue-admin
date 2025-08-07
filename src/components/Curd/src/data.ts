@@ -215,7 +215,7 @@ export function getColumnData(prop: string, title: string): CurdType.Table.Colum
     cellType: "text",
     sort: false,
     fixed: false,
-    iconTips: "",
+    titleTips: "",
     imageWidth: undefined,
     imageHeight: undefined,
     jsCode: "",

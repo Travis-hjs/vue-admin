@@ -5,13 +5,12 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, reactive, ref, type PropType } from "vue";
+import { computed, onMounted, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
-import TableHeader from "./TableHeader.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
-import { FooterBtn, TableImage } from "./part";
-import type { CurdConfig, CurdType, GetDataParams, TableOperationType } from "./types";
+import { FooterBtn, TableImage, type TableImageProps } from "./part";
+import type { CurdConfig, CurdType, TableOperationType } from "./types";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getPageInfo } from "@/hooks/common";
@@ -71,29 +70,50 @@ const tableState = reactive({
 
 const tableConfig = computed(() => props.data.table);
 
-const tableColumns = computed(() => {
-  const list = tableConfig.value.columns.filter(item => item.visible);
-  return list.map(item => {
-    const column = {
-      ...item
-    };
-    // TODO: 判断是否有代码片段并设置对应的函数
-    if (column.cellType === "js" && column.jsCode) {
-      column.rawContent = function (cellValue, row): string {
-        let content = "";
-        try {
-          const fn = new Function("cellValue", "row", column.jsCode);
-          content = fn(cellValue, row);
-        } catch (error) {
-          console.warn("解析 rawContent 代码错误 >>", error);
-          content = "-";
-        }
-        return content;
-      };
+/**
+ * 通过键值获取对应的`column`对象
+ * @param prop 注意这里值和插槽名相同
+ */
+function getColumnByProp(prop: string) {
+  const column = tableConfig.value.columns.find(col => col.prop === prop);
+  return column || ({} as CurdType.Table.Column);
+}
+
+/**
+ * 渲染表格`js`代码
+ * @param cellValue 
+ * @param row 
+ */
+function renderTableCell(row: BaseObj<any>, key: string) {
+  let content = "-";
+  const column = getColumnByProp(key);
+  if (!column.jsCode) {
+    return content;
+  }
+  try {
+    const fn = new Function("cellValue", "row", column.jsCode);
+    content = fn(row[key], row);
+  } catch (error) {
+    console.warn("解析 rawContent 代码错误 >>", error);
+  }
+  return content;
+}
+
+function getTableImageProps(row: any, key: string): TableImageProps {
+  const prefix = `preview-image-`;
+  const prop = key.replace(prefix, "");
+  const list: Array<string> = [];
+  tableSlot.value.forEach(slot => {
+    if (slot.includes(prefix)) {
+      list.push(row[slot.replace(prefix, "")]);
     }
-    return column;
   });
-});
+  return {
+    column: getColumnByProp(prop),
+    src: row[prop],
+    previewList: list,
+  }
+}
 
 const actionList = computed(() => {
   const list = tableConfig.value.actions;
@@ -122,27 +142,12 @@ const actionList = computed(() => {
  * - TODO: 由于动态插槽的写法受限，所以要将所有插槽的值给罗列出来在模板上循环渲染
  */
  const tableSlot = computed(() => {
-  const head: Array<string> = [];
   const cell: Array<string> = [];
-  tableColumns.value.forEach(column => {
-    column.slotHead && head.push(column.slotHead);
+  tableConfig.value.columns.forEach(column => {
     column.slot && cell.push(column.slot);
   });
-  return {
-    head,
-    cell
-  };
+  return cell;
 });
-
-/**
- * 通过键值获取对应的`column`对象
- * @param prop 注意这里值和插槽名相同
- */
-function getColumnByProp(prop: string) {
-  const column = tableConfig.value.columns.find(col => col.prop === prop);
-  // console.log("getColumnByProp >>", column, prop);
-  return column || ({} as CurdType.Table.Column);
-}
 
 const formRef = ref<InstanceType<typeof TableForm>>();
 
@@ -241,11 +246,8 @@ function onSubmitForm() {
   });
 }
 
-/**
- * 检测并校验搜索数据
- * @param params 
- */
-function getSearchInfo(params?: GetDataParams) {
+/** 检测并校验搜索数据 */
+function getSearchInfo() {
   const searchList = props.data.search.list;
   const searchInfo: BaseObj<any> = {};
   // 处理搜索字段并进行赋值 
@@ -255,10 +257,6 @@ function getSearchInfo(params?: GetDataParams) {
     if (field.required && isType(res.result, "string")) {
       setElementShake(document.querySelector(`.${field.id}`));
       message.error(res.result);
-      // 还原分页器操作之前的数据
-      if (params && params.key === "page") {
-        tableState.pageInfo = params.before;
-      }
       return null;
     }
     // TODO: 只设置有值的情况
@@ -268,44 +266,12 @@ function getSearchInfo(params?: GetDataParams) {
     // TODO: 看情况可以使用这种方式，将所有的值都往外传，不管是否通过检验的值
     // searchInfo[field.key] = res.value;
   }
-  // 处理排序字段
-  const columns = tableConfig.value.columns;
-  const ascList: Array<string> = [];
-  const descList: Array<string> = [];
-  if (params && params.key === "sort") {
-    columns.forEach(column => {
-      if (column.sort) {
-        if (column.prop === params.prop) {
-          column.sort = params.action;
-        } else {
-          // 将其他的全部重置掉
-          column.sort = true;
-        }
-      }
-      column.sort === "asc" && ascList.push(column.prop);
-      column.sort === "desc" && descList.push(column.prop);
-    });
-  } else {
-    columns.forEach(column => {
-      column.sort === "asc" && ascList.push(column.prop);
-      column.sort === "desc" && descList.push(column.prop);
-    });
-  }
-  if (ascList.length) {
-    searchInfo.asc = ascList.toString();
-  }
-  if (descList.length) {
-    searchInfo.desc = descList.toString();
-  }
   return searchInfo;
 }
 
-/**
- * 获取表格数据
- * @param params 
- */
-async function getData(params?: GetDataParams) {
-  const searchInfo = getSearchInfo(params);
+/** 获取表格数据 */
+async function getData() {
+  const searchInfo = getSearchInfo();
   if (!searchInfo) return;
   const page = JSON.parse(JSON.stringify(tableState.pageInfo));
   // 最后请求列表并把参数传入到外部声明方法中
@@ -399,27 +365,24 @@ onMounted(function() {
         class="f1"
         v-model:select-list="tableState.selectList"
         :data="tableState.data"
-        :columns="tableColumns"
+        :columns="tableConfig.columns"
         :actions="actionList"
         :action-max="tableConfig.actionMax"
         :loading="state.loading"
         :select-key="tableConfig.selectKey!"
         :page-info="tableState.pageInfo"
-        @page="info => getData({ key: 'page', ...info })"
+        @page="getData()"
+        @sort="getData()"
       >
-        <template v-for="head in tableSlot.head" :key="head" v-slot:[head]="{ $index }">
-          <TableHeader
-            :column="tableColumns[tableConfig.selectKey ? $index - 1 : $index]"
-            @sort="(prop, action) => getData({ key: 'sort', prop, action })"
-          />
-        </template>
-        <template v-for="cell in tableSlot.cell" :key="cell" v-slot:[cell]="{ row }">
-          <!-- TODO: 因为插槽中只有图片这个功能，所以不需要做条件判断 -->
+        <template v-for="cell in tableSlot" :key="cell" v-slot:[cell]="{ row }">
           <TableImage
-            :column="getColumnByProp(cell)"
-            :src="(row[cell] as string)"
-            :previewList="(tableSlot.cell.map(k => row[k]) as Array<string>)"
+            v-if="cell.includes('preview-image-')"
+            v-bind="getTableImageProps(row, cell)"
           />
+          <div
+            v-if="cell.includes('render-cell-')"
+            v-html="renderTableCell(row, cell.replace('render-cell-', ''))"
+          ></div>
         </template>
       </Table>
     </template>

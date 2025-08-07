@@ -46,9 +46,9 @@ const searchFields: Array<FieldType.Member<SearchInfo>> = [
 
 const tableColumns: Array<TableType.Column<TableRow>> = [
   { title: "ID", prop: "id", width: 80 },
-  { title: "名称", prop: "name", minWidth: 180, sort: "asc" },
+  { title: "名称\\n描述", prop: "name", minWidth: 180, sort: "asc" },
   { title: "类型", prop: "type", width: 100, sort: true },
-  { title: "日期", prop: "date", width: 180, sort: "desc" },
+  { title: "日期", prop: "date", width: 180, sort: "desc", titleTips: "静态数据，当前刷新日期" },
   { title: "操作", prop: "action-right", width: 140 },
 ];
 

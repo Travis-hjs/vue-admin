@@ -190,7 +190,7 @@ interface PageInfo {
   sortFields?: string;
   /**
    * 排序规则
-   * - 1 升序，0降序
+   * - `"asc"`升序，`"desc"`降序
    * - 多选排序的时候记录顺序用
    */
   sortRules?: string;

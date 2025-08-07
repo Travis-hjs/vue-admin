@@ -12,14 +12,12 @@ import { messageBox } from "@/utils/message";
 import type { CurdType, TableOperationType } from "./types";
 import { TableImage } from "./part";
 import TableOperation from "./TableOperation.vue";
-import TableForm from "./TableForm.vue";
-import TableHeader from "./TableHeader.vue";
 import TableColumnConfig from "./TableColumnConfig.vue";
 import TableDeleteConfig from "./TableDeleteConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
 import { curdConfigState } from "./hooks";
-import { columnActionProp, TableActionCell } from "@/components/Table";
+import { columnActionProp, TableActionCell, TableHeader } from "@/components/Table";
 import TableFormConfig from "./TableFormConfig.vue";
 
 const props = defineProps({

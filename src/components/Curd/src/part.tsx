@@ -46,7 +46,7 @@ function getImageStyle(column: CurdType.Table.Column) {
   return style;
 }
 
-interface TableImageProps {
+export interface TableImageProps {
   /** 表格列配置 */
   column: CurdType.Table.Column;
   /** 图片路径 */
@@ -65,7 +65,6 @@ export function TableImage(props: TableImageProps) {
       urls: props.previewList ? props.previewList : [props.src]
     });
   }
-
   return props.column.cellType === "image" ? (
     <el-image
       class="the-table-image"

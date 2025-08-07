@@ -12,7 +12,7 @@ import { columnActionProp, useAdaptiveTable } from "./hooks";
 import ActionCell from "./ActionCell.vue";
 import type { TableType } from "./types";
 import Pagination from "./Pagination.vue";
-import SortBar from "./SortBar.vue";
+import Header from "./Header.vue";
 
 interface SlotType {
   /** 表格行数据 */
@@ -217,7 +217,7 @@ function onSelect(item: any) {
 
 const sortData = {
   fields: [] as Array<string>,
-  rules: [] as Array<number>,
+  rules: [] as Array<string>,
 };
 
 /**
@@ -251,7 +251,7 @@ function onSort(prop: string, type: TableType.Column["sort"], init?: boolean) {
     ...(props.pageInfo || {}),
   } as PageInfo;
   if (sortData.fields.length > 0) {
-    sortData.rules = sortData.fields.map(el => ascList.includes(el) ? 1 : 0);
+    sortData.rules = sortData.fields.map(el => ascList.includes(el) ? "asc" : "desc");
     info.sortFields = sortData.fields.toString();
     info.sortRules = sortData.rules.toString();
   } else {
@@ -316,7 +316,12 @@ for (const column of props.columns) {
         >
           <template #header="scope">
             <slot v-if="column.slotHead" :name="column.slotHead" v-bind="scope" />
-            <SortBar v-else-if="column.sort" :column="column" @sort="onSort" />
+            <Header
+              v-else-if="column.prop !== columnActionProp"
+              :column="column"
+              :disabled="props.loading"
+              @sort="onSort"
+            />
           </template>
           <template #default="scope: SlotType">
             <slot :name="column.slot" v-bind="scope" v-if="column.slot"></slot>

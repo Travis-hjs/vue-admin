@@ -8,6 +8,8 @@ export namespace TableType {
   export interface Column<T extends object = Record<string, any>> {
     /** 表格列标题 */
     title: string;
+    /** 标题提示文字 */
+    titleTips?: string;
     /**
      * 对应表格数据值的键值
      * - `"action-right"`为固定右边，也可以使用`columnActionProp`常量代替

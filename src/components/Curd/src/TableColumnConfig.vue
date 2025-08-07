@@ -189,7 +189,7 @@ const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
   },
   {
     label: "表头提示文字",
-    prop: "iconTips",
+    prop: "titleTips",
     type: "input",
     placeholder: "请输入提示文字",
     tooltip: "鼠标放到表格头时出现提示文案"
@@ -228,12 +228,13 @@ function onSubmit() {
         form[item] = Number(form[item]);
       }
     });
-    // TODO: 设置必须属性
+    // TODO: 设置预览图片插槽
     if (form.cellType === "image") {
-      form.slot = form.prop;
+      form.slot = `preview-image-${form.prop}`;
     }
-    if (form.sort || form.iconTips) {
-      form.slotHead = `header-${form.prop}`;
+    // TODO: 设置渲染`js`插槽
+    if (form.cellType === "js") {
+      form.slot = `render-cell-${form.prop}`;
     }
     emit("submit", form);
     onClose();

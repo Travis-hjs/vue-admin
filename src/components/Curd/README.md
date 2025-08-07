@@ -340,7 +340,7 @@ const data = reactive<CurdType.Config>({
         },
         sort: true,
         slotHead: "date",
-        iconTips: "人工设置的时间"
+        titleTips: "人工设置的时间"
       },
       {
         ...getColumnData(columnActionProp, "操作"),

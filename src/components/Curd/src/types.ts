@@ -184,11 +184,12 @@ export namespace CurdType {
     export interface Column<T extends object = Record<string, any>> extends TableType.Column<T> {
       /**
        * 表格列渲染内容
+       * - 在页面配置中需要，手动配置的话指定`slot`字段规则即可
        * | 字段 | 说明 |
        * | --- | --- |
        * | text | 默认文本 |
-       * | image | 图片组件`<el-image>` |
-       * | js | `js`代码 |
+       * | image | 图片组件`<el-image>`, slot 需要设置`preview-image-${prop}` |
+       * | js | `js`代码, slot 需要设置`render-cell-${prop}` |
        */
       cellType: "text" | "image" | "js";
       /**
@@ -202,8 +203,6 @@ export namespace CurdType {
        * - 当`cellType: "image"`时生效，css中设置默认`80px`
        */
       imageHeight?: number;
-      /** 表头图标提示文字 */
-      iconTips: string;
       /**
        * `js`代码
        * - 当`cellType: "js"`时生效
@@ -338,19 +337,6 @@ export namespace CurdType {
 
 /** 表格操作类型 */
 export type TableOperationType = "delete" | "add" | "export" | "edit";
-
-interface GetDataSort {
-  key: "sort";
-  prop: string;
-  action: CurdType.Table.Column["sort"];
-}
-
-interface GetDataPage extends TableType.Page {
-  key: "page";
-}
-
-/** `index.vue`中`getData`方法传参对象 */
-export type GetDataParams = GetDataSort | GetDataPage;
 
 /** `curd`弹框配置 */
 export namespace CurdConfig {

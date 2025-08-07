@@ -145,7 +145,7 @@ export function getTableList<T extends PageInfo>(params: T) {
     setTimeout(() => {
       result.data.list = staticTableData.slice((page - 1) * size, page * size);
       resolve(result);
-    }, ranInt(100, 3000));
+    }, ranInt(100, 500));
   });
   // return request<Api.List>("POST", "/getTableList", params)
 }

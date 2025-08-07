@@ -87,13 +87,14 @@ const data = ref<CurdType.Config>({
         width: 140,
         cellType: "js",
         tooltip: false,
-        jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;'
+        jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;',
+        slot: "render-cell-num",
       },
       {
         ...getColumnData("banner", "游戏封面"),
         width: 110,
         cellType: "image",
-        slot: "banner"
+        slot: "preview-image-banner",
       },
       {
         ...getColumnData("gamePrice", "游戏价格"),
@@ -102,7 +103,6 @@ const data = ref<CurdType.Config>({
           return cellValue ? `￥${cellValue}` : "-";
         },
         sort: "desc",
-        slotHead: "gamePrice",
       },
       {
         ...getColumnData("date", "上架时间"),
@@ -111,8 +111,7 @@ const data = ref<CurdType.Config>({
           return cellValue ? formatDate(cellValue) : "-";
         },
         sort: true,
-        slotHead: "date",
-        iconTips: "人工设置的时间"
+        titleTips: "人工设置的时间"
       },
       {
         ...getColumnData(columnActionProp, "操作"),
@@ -219,7 +218,7 @@ const data = ref<CurdType.Config>({
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {
-    console.log("searchInfo >>", searchInfo);
+    console.log("getTableData >>", searchInfo, pageInfo);
     return getTableList({...searchInfo, ...pageInfo});
   },
   created(getData) {

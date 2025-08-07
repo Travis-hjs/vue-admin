@@ -1,12 +1,13 @@
 <script lang="ts">
-/** 表格排序组件 */
+/** 表格自定义表头组件 */
 export default {
-  name: "SortBar"
-}
+  name: "TableHeader"
+};
 </script>
 <script lang="ts" setup>
-import type { PropType } from "vue";
+import { computed, type PropType } from "vue";
 import type { TableType } from "./types";
+import { TableTitle } from "./part";
 
 const props = defineProps({
   /** 表格列配置数据 */
@@ -22,23 +23,40 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: "sort", prop: string, type: TableType.Column["sort"]): void;
+  (event: "sort", prop: string, action: TableType.Column["sort"]): void;
 }>();
 
-function onSwitch(type: TableType.Column["sort"]) {
+const isText = computed(() => !props.column.sort && !props.column.titleTips);
+
+function onSwitch(action: TableType.Column["sort"]) {
   if (props.disabled) return;
   const col = props.column;
-  if (col.sort === type) {
-    type = true;
+  if (props.column.sort === action) {
+    action = true;
   }
-  col.sort = type;
-  emit("sort", col.prop as string, type);
+  // col.sort = action;
+  emit("sort", col.prop as string, action);
 }
 </script>
 <template>
-  <div class="f-vertical f-between">
-    <span>{{ props.column.title }}</span>
-    <div class="pl-[6px]">
+  <template v-if="isText">
+    <TableTitle :text="props.column.title" />
+  </template>
+  <div v-else class="f-vertical w-full">
+    <el-tooltip
+      v-if="props.column.titleTips"
+      effect="dark"
+      :content="props.column.titleTips"
+      placement="top"
+    >
+      <div class="f1 cursor-help leading-none text-[#448000]">
+        <TableTitle :text="props.column.title" />
+      </div>
+    </el-tooltip>
+    <div v-else class="f1 leading-none">
+      <TableTitle :text="props.column.title" />
+    </div>
+    <div v-if="props.column.sort" class="pl-[6px]">
       <div
         class="the-sort-icon top"
         :class="[
