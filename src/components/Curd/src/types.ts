@@ -89,12 +89,14 @@ export namespace CurdType {
 
   export interface Select extends BaseField<string | number> {
     type: "select";
-    /** 是否将`label`和`value`串联在一起显示 */
-    joinShow: boolean;
-  }
-
-  export interface SelectMultiple extends BaseField<Array<string | number>> {
-    type: "select-multiple";
+    /** 是否多选 */
+    multiple?: boolean;
+    /**
+     * 多选最大显示数量，默认为`1`
+     * - `max-collapse-tags`属性的缩写
+     * - [文档](https://element-plus.org/zh-CN/component/select.html#select-attributes)
+     */
+    max?: number;
     /** 是否将`label`和`value`串联在一起显示 */
     joinShow: boolean;
   }
@@ -158,15 +160,14 @@ export namespace CurdType {
    * | input | 普通输入框 |
    * | input-between | 输入框-串联 |
    * | textarea | 文本域 |
-   * | select | 下拉框-单选 |
-   * | select-multiple | 下拉框-多选 |
+   * | select | 下拉框选择 |
    * | checkbox | 多选复选框 |
    * | radio | 单选选择框 |
    * | switch | 开关切换 |
    * | date | 日期选择器 |
    * | cascader | 级联选择器 |
    */
-  export type Field = Input | InputBetween | Select | SelectMultiple | Checkbox | Radio | Switch | Date | Cascader;
+  export type Field = Input | InputBetween | Select | Checkbox | Radio | Switch | Date | Cascader;
 
   /** 搜索/筛选节点类型 */
   export interface Search {
@@ -283,7 +284,9 @@ export namespace CurdType {
 
   /** 整体配置数据项 */
   export interface Config<T extends object = Record<string, any>> {
+    /** 筛选相关部分 */
     search: Search;
+    /** 表格相关部分 */
     table: Table.Config<T>;
   }
 

@@ -231,7 +231,7 @@ export const SelectField = defineComponent({
   props: {
     /** 表单组件配置 */
     config: {
-      type: Object as PropType<CurdType.Select | CurdType.SelectMultiple>,
+      type: Object as PropType<CurdType.Select>,
       required: true
     },
     /** 选项配置 */
@@ -276,15 +276,15 @@ export const SelectField = defineComponent({
 
     function getSelectProps() {
       const field = props.config;
-      const isMultiple = field.type === "select-multiple";
       return {
         placeholder: field.placeholder,
         disabled: props.disabled,
-        multiple: field.type === "select-multiple",
+        multiple: field.multiple,
         clearable: true,
         filterable: true,
         collapseTags: true,
-        class: `field-item${isMultiple ? " is-multiple-select" : ""}`,
+        maxCollapseTags: field.max,
+        class: `field-item${field.multiple ? " is-multiple-select" : ""}`,
         filterMethod(val: string) {
           keyword.value = val;
         },

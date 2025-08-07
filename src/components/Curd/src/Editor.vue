@@ -47,11 +47,11 @@ function onClose() {
 /** 没有宽度属性的组件类型 */
 const noValueWidth = ["checkbox", "radio", "switch"];
 /** 是否有选项数据的组件类型 */
-const hasOptions = ["select", "select-multiple", "radio", "checkbox", "cascader"];
+const hasOptions = ["select", "radio", "checkbox", "cascader"];
 /** 默认值为数字或字符串的组件类型 */
 const stringAndNumber = ["input", "textarea", "select", "radio"];
 /** 值为数组类型的组件 */
-const arrayFields = ["input-between", "select-multiple", "checkbox", "cascader"];
+const arrayFields = ["input-between", "checkbox", "cascader"];
 /** 允许为数字类型的组件 */
 const allowNumberFields = ["input", "select", "radio"];
 /** 需要校验为数字类型的组件 */
@@ -189,7 +189,8 @@ const formItems = computed(() => {
     }
   ];
 
-  if (checkNumberFields.includes(fieldType)) {
+  const isMultiple = fieldType === "select" && (state.formData as CurdType.Select).multiple;
+  if (checkNumberFields.includes(fieldType) || isMultiple) {
     const isNumberItem: FieldType.Member<CurdType.Field> = {
       label: "绑定值为数字类型",
       prop: "valueType",
@@ -273,13 +274,34 @@ const formItems = computed(() => {
       optionItems.push(...cascaderItems as any);
     }
 
-    if (["select", "select-multiple"].includes(fieldType)) {
-      optionItems.push({
-        label: "串联显示名称",
-        prop: "joinShow",
-        type: "switch",
-        tips: "例如【英雄联盟-12】"
-      });
+    if (fieldType === "select") {
+      const select = state.formData as CurdType.Select;
+      optionItems.push(
+        {
+          label: "是否为多选",
+          prop: "multiple",
+          type: "switch",
+          onChange(val) {
+            json.defaultValue = JSON.stringify({
+              value: val ? [] : ""
+            });
+          },
+        },
+        {
+          label: "选中标签最多数量",
+          prop: "max",
+          type: "number",
+          placeholder: "请输入数量，默认1",
+          class: "value-box-short",
+          show: () => !!select.multiple,
+        },
+        {
+          label: "串联显示名称",
+          prop: "joinShow",
+          type: "switch",
+          tips: "例如【英雄联盟-12】"
+        }
+      );
     }
 
     list.push(...optionItems as any);
@@ -375,17 +397,18 @@ function checkDefaultValue() {
   const type = state.formData!.type;
   const valueType = state.formData!.valueType;
   const name = fieldTitleMap[type];
+  const isMultiple = type === "select" && (state.formData as CurdType.Select).multiple;
   try {
     const obj = JSON.parse(val);
     if (!isType<{ value: any }>(obj, "object")) return formatError;
     if (type === "switch") {
       if (!isType(obj.value, "boolean")) return `${name}的绑定值应该为 boolean 类型`;
     }
-    if (arrayFields.includes(type)) {
+    if (arrayFields.includes(type) || isMultiple) {
       if (!isType(obj.value, "array")) return `${name}的绑定值应该为 array 类型`;
       if (valueType === "array<number>" && obj.value.some(val => (val !== "" && !isType(val , "number")))) return "数组中只能出现数字";
     }
-    if (stringAndNumber.includes(type)) {
+    if (stringAndNumber.includes(type) && !isMultiple) {
       if (!["string", "number"].includes(checkType(obj.value))) return `${name}的绑定值应该为 string/number 类型`;
     }
     if (type === "date") {
@@ -401,8 +424,8 @@ function checkDefaultValue() {
       return `${name}的绑定值应该为 number 类型`;
     }
   } catch (error) {
-    console.warn("checkDefaultValue >>", error);
-    return formatError;
+    console.warn("检查默认值是否合法错误 >>", error);
+    return `${error}`;
   }
   return true;
 }
@@ -640,7 +663,7 @@ const currentIndex = useZIndex() + 10;
         :model="state.formData"
         :rules="formRules"
         label-position="right"
-        label-width="128px"
+        label-width="140px"
       >
         <Fields :data="state.formData" :list="formItems">
           <template #ruleText>

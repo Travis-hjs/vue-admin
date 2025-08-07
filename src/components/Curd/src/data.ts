@@ -13,8 +13,7 @@ export const fieldTitleMap = {
   input: "输入框",
   textarea: "文本域",
   "input-between": "输入框-串联",
-  select: "下拉框-单选",
-  "select-multiple": "下拉框-多选",
+  select: "下拉选择框",
   checkbox: "多选复选框",
   radio: "单选选择框",
   switch: "开关切换",
@@ -66,7 +65,6 @@ interface FieldMap {
   textarea: CurdType.Input;
   "input-between": CurdType.InputBetween;
   select: CurdType.Select;
-  "select-multiple": CurdType.SelectMultiple;
   checkbox: CurdType.Checkbox;
   radio: CurdType.Radio;
   switch: CurdType.Switch;
@@ -126,21 +124,6 @@ export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSear
         value: ""
       },
       valueType: "string",
-      joinShow: false
-    },
-    "select-multiple": {
-      key,
-      id,
-      value: [],
-      defaultValue: [],
-      type: "select-multiple",
-      placeholder: tipsChange,
-      options: [],
-      optionSetting: {
-        label: "",
-        value: ""
-      },
-      valueType: "array",
       joinShow: false
     },
     checkbox: {
@@ -311,8 +294,7 @@ export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes
     res.result = field.placeholder as string;
     return res;
   }
-  const multiple: Array<CurdType.Field["type"]> = ["checkbox", "select-multiple"];
-  if (multiple.includes(field.type)) {
+  if (field.type === "checkbox" || (field.type === "select" && field.multiple)) {
     const list = field.value as Array<any>;
     if (!list.length) {
       res.result = field.placeholder as string;

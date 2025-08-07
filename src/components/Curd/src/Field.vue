@@ -157,7 +157,7 @@ function onBlurBetween(index: number) {
       />
     </template>
     <SelectField
-      v-if="data.type === 'select' || data.type === 'select-multiple'"
+      v-if="data.type === 'select'"
       :config="data"
       :setting="optionSetting"
       :disabled="props.disabled"

@@ -37,10 +37,6 @@ const example = [
     placeholder: fieldTitleMap.select
   },
   {
-    ...getFieldData("select-multiple"),
-    placeholder: fieldTitleMap["select-multiple"]
-  },
-  {
     ...getFieldData("cascader"),
     placeholder: fieldTitleMap.cascader
   },

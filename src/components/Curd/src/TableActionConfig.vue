@@ -256,7 +256,10 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   key: "key",
 });
 
-/** 是否能拖拽 */
+/**
+ * 是否能拖拽
+ * @param action 
+ */
 function canDraggable(action: CurdType.Table.Action) {
   if (action.key != actionEditKey && state.list.length > 1 && state.index === -1) {
     return true;
