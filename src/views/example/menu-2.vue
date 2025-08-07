@@ -82,8 +82,9 @@ const fields: Array<FieldType.Member<ReturnType<typeof useFormData>>> = [
   {
     label: "活动类型",
     prop: "type",
-    type: "select-multiple",
-    showAll: true,
+    type: "select",
+    multiple: true,
+    max: 999,
     options: [
       { label: "在线活动", value: "a" },
       { label: "促销活动", value: "b" },

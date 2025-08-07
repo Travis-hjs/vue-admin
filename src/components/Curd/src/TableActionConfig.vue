@@ -287,7 +287,7 @@ function getBtnText(action: CurdType.Table.Action) {
   <base-dialog
     v-model:show="state.show"
     title="配置操作列按钮功能"
-    width="880px"
+    width="920px"
     @close="onClose"
   >
     <div class="flex">

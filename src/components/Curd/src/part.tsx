@@ -4,7 +4,7 @@ import { computed, defineComponent, onMounted, ref } from "vue";
 import type { PropType } from "vue";
 import { formatDate, isType } from "@/utils";
 import { shortcutMap } from "./data";
-
+import icons from "./element-icons.json";
 // ----------------- 一些零散的单一组件 -----------------
 
 interface FooterBtnProps {
@@ -77,7 +77,10 @@ export function TableImage(props: TableImageProps) {
   ) : null;
 }
 
-/** 图标`class`输入框 */
+/**
+ * 图标`class`输入框
+ * - [图标库](https://element.eleme.cn/#/zh-CN/component/icon)
+ */
 export const IconInput = defineComponent({
   props: {
     value: {
@@ -97,21 +100,49 @@ export const IconInput = defineComponent({
       }
     });
 
-    const iconLink = "https://element.eleme.cn/#/zh-CN/component/icon";
+    const popoverRef = ref();
+
+    function selectIcon(icon: string) {
+      iconClass.value = icon;
+      popoverRef.value.hide();
+    }
 
     return () => (
       <div class="f-vertical w-full">
         <el-input
           v-model={iconClass.value}
           placeholder="请输入图标 class"
-          class="mr-[10px]"
-          clearable
+          class="mr-[6px]"
+          v-slots={{
+            suffix: () => <i class={iconClass.value}></i>
+          }}
         />
-        <el-button type="primary" link>
-          <a href={iconLink} target="_blank">
-            去官网复制
-          </a>
-        </el-button>
+        <el-popover
+          ref={popoverRef}
+          placement="top-start"
+          title="请点击选择图标"
+          width="400"
+          trigger="click"
+          v-slots={{
+            reference: () => (
+              <el-button type="primary" link>
+                选择图标
+              </el-button>
+            )
+          }}
+        >
+          <ul class="grid max-h-[420px] grid-cols-3 gap-[10px] overflow-auto">
+            {icons.map(icon => (
+              <li
+                class="fvc h-[80px] cursor-pointer flex-col border-[1px] border-dashed border-[#ccc] px-[4px] text-center"
+                onClick={() => selectIcon(icon)}
+              >
+                <i class={"mb-[4px] text-[#606266] " + icon} style="font-size: 24px"></i>
+                <span class="text-[12px] text-[#99a9bf]">{icon}</span>
+              </li>
+            ))}
+          </ul>
+        </el-popover>
       </div>
     );
   }

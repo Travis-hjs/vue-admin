@@ -1,259 +1,381 @@
 @import "@/styles/mixins.scss";
 
-.the-curd-popup-config {
-  --gap: 14px;
-  --border: solid 1px #eee;
-  --border-color: #dcdfe6;
+body {
+  .the-curd-popup-config {
+    --gap: 14px;
+    --border: solid 1px #eee;
+    --border-color: #dcdfe6;
 
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  position: fixed;
-  left: 0;
-  top: 0;
-
-  .w-full {
     width: 100%;
-  }
-  
-  .h-full {
-    height: 100%;
-  }
-
-  .the-curd-popup-top {
-    min-height: 50px;
-    padding: 12px var(--gap);
-    border-bottom: var(--border);
-
-    .the-curd-popup-close {
-      display: inline-block;
-      width: 28px;
-      height: 28px;
-      cursor: pointer;
-      transform: rotate(0);
-      transition: var(--transition);
-      @include close-icon(#666, 16px);
-  
-      &:hover {
-        transform: rotate(180deg);
-      }
-    }
-  }
-
-  .the-curd-popup-footer {
-    text-align: right;
-    border-top: var(--border);
-    padding: 12px var(--gap);
-  }
-
-  .the-curd-popup-content {
-    padding: var(--gap);
-    width: 100%;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .the-curd-edit-mask {
-    position: absolute;
-    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    position: fixed;
     left: 0;
-    background-color: rgba(255, 255, 255, 0.75);
-    width: 100%;
-    height: 100%;
-    cursor: move;
-    border: dashed 1px var(--border-color);
-    padding: 0 10px;
-    display: none;
-    animation: curd-edit-mask-move .3s ease;
-  }
-
-  .the-filter-item:hover {
-    .the-curd-edit-mask {
-      display: flex;
-      z-index: 5;
-    }
-  }
-
-  .the-curd-selected::after {
-    position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    content: "";
-    background-color: rgba(121, 187, 255, 0.5);
-    border: dashed var(--purple) 1px;
-    border-radius: var(--border-radius);
-  }
 
-  .the-curd-editor {
-    height: fit-content;
-    // height: var(--layout-content-height);
-    min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    &.is-show {
-      border-left: solid var(--border-color) 1px;
-      padding-left: var(--gap);
-      padding-right: 2px;
-    }
-
-    .the-curd-editor-content {
-      width: 420px;
-    }
-  }
-
-  .the-curd-target-box {
-    padding: 14px 18px;
-    margin-bottom: 16px;
-    border: dashed 1px var(--purple);
-    border-radius: var(--border-radius);
-    position: relative;
-
-    &::after {
-      position: absolute;
-      content: "组件预览区域";
-      font-size: var(--gap);
-      background-color: #fff;
-      color: var(--purple);
-      padding: 0px var(--gap);
-      left: 24px;
-      top: -10px;
-      animation: curd-target-text-move 3s 3;
-    }
-
-    .the-curd-form-field {
-      max-width: 100%;
-    }
-  }
-
-  .the-curd-example {
-    border: dashed 1px var(--border-color);
-
-    .the-curd-example-item {
-      position: relative;
+    .w-full {
       width: 100%;
-      min-height: 60px;
-      padding: 8px var(--gap);
-      border-top: dashed 1px var(--border-color);
-      cursor: pointer;
+    }
 
-      &:first-child {
-        border-top: none;
+    .h-full {
+      height: 100%;
+    }
+
+    .the-curd-popup-top {
+      min-height: 50px;
+      padding: 12px var(--gap);
+      border-bottom: var(--border);
+
+      .the-curd-popup-close {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        cursor: pointer;
+        transform: rotate(0);
+        transition: var(--transition);
+        @include close-icon(#666, 16px);
+
+        &:hover {
+          transform: rotate(180deg);
+        }
       }
+    }
+
+    .the-curd-popup-footer {
+      text-align: right;
+      border-top: var(--border);
+      padding: 12px var(--gap);
+    }
+
+    .the-curd-popup-content {
+      padding: var(--gap);
+      width: 100%;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .the-curd-edit-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(255, 255, 255, 0.75);
+      width: 100%;
+      height: 100%;
+      cursor: move;
+      border: dashed 1px var(--border-color);
+      padding: 0 10px;
+      display: none;
+      animation: curd-edit-mask-move 0.3s ease;
+    }
+
+    .the-filter-item:hover {
+      .the-curd-edit-mask {
+        display: flex;
+        z-index: 5;
+      }
+    }
+
+    .the-curd-selected::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      content: "";
+      background-color: rgba(121, 187, 255, 0.5);
+      border: dashed var(--purple) 1px;
+      border-radius: var(--border-radius);
+    }
+
+    .the-curd-editor {
+      height: fit-content;
+      // height: var(--layout-content-height);
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      &.is-show {
+        border-left: solid var(--border-color) 1px;
+        padding-left: var(--gap);
+        padding-right: 2px;
+      }
+
+      .the-curd-editor-content {
+        width: 420px;
+      }
+    }
+
+    .the-curd-target-box {
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      border: dashed 1px var(--purple);
+      border-radius: var(--border-radius);
+      position: relative;
 
       &::after {
         position: absolute;
+        content: "组件预览区域";
+        font-size: var(--gap);
+        background-color: #fff;
+        color: var(--purple);
+        padding: 0px var(--gap);
+        left: 24px;
+        top: -10px;
+        animation: curd-target-text-move 3s 3;
+      }
+
+      .the-curd-form-field {
+        max-width: 100%;
+      }
+    }
+
+    .the-curd-example {
+      border: dashed 1px var(--border-color);
+
+      .the-curd-example-item {
+        position: relative;
         width: 100%;
-        height: 100%;
+        min-height: 60px;
+        padding: 8px var(--gap);
+        border-top: dashed 1px var(--border-color);
         cursor: pointer;
-        content: "";
-        z-index: 2;
+
+        &:first-child {
+          border-top: none;
+        }
+
+        &::after {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+          content: "";
+          z-index: 2;
+        }
       }
     }
-  }
 
-  .the-curd-editor-form {
-    .value-box-short {
-      width: 240px;
+    .the-curd-editor-form {
+      .value-box-short {
+        width: 240px;
+      }
+
+      .value-box-default {
+        width: calc(100% - 10px);
+      }
     }
 
-    .value-box-default {
-      width: calc(100% - 10px);
-    }
-  }
+    .the-curd-table-model {
+      --border: 1px solid #ebeef5;
 
-  .the-curd-table-model {
-    --border: 1px solid #ebeef5;
+      width: 100%;
+      max-height: var(--layout-content-height);
+      margin-bottom: 20px;
+      overflow-x: auto;
 
-    width: 100%;
-    max-height: var(--layout-content-height);
-    margin-bottom: 20px;
-    overflow-x: auto;
+      .fake-table {
+        display: inline-flex;
+        flex-wrap: nowrap;
+        border: var(--border);
+      }
 
-    .fake-table {
-      display: inline-flex;
-      flex-wrap: nowrap;
-      border: var(--border);
-    }
-
-    .fake-table-item {
-      border-right: var(--border);
-
-      .el-empty {
+      .fake-table-item {
         border-right: var(--border);
+
+        .el-empty {
+          border-right: var(--border);
+        }
       }
-    }
 
-    .fake-table-item[draggable="true"] .fake-table-head {
-      cursor: move;
-    }
+      .fake-table-item[draggable="true"] .fake-table-head {
+        cursor: move;
+      }
 
-    .fake-table-head,
-    .fake-table-cell {
-      padding: var(--gap);
-      font-size: 14px;
-      line-height: 1;
-      color: var(--el-text-color-regular);
-      background-color: #fff;
-    }
+      .fake-table-head,
+      .fake-table-cell {
+        padding: var(--gap);
+        font-size: 14px;
+        line-height: 1;
+        color: var(--el-text-color-regular);
+        background-color: #fff;
+      }
 
-    .fake-table-head {
-      min-height: 54px;
-      font-weight: 600;
-      color: #18181a;
-      user-select: none;
-      background-color: #f6f7fb;
-      white-space: nowrap;
-    }
-
-    .fake-table-cell {
-      position: relative;
-      min-height: 40px;
-      border-top: var(--border);
-
-      &.operation {
+      .fake-table-head {
         min-height: 54px;
+        font-weight: 600;
+        color: #18181a;
+        user-select: none;
+        background-color: #f6f7fb;
+        white-space: nowrap;
       }
 
-      &.disabled::after {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        content: "";
-        background-color: transparent;
-        cursor: no-drop;
+      .fake-table-cell {
+        position: relative;
+        min-height: 40px;
+        border-top: var(--border);
+
+        &.operation {
+          min-height: 54px;
+        }
+
+        &.disabled::after {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: "";
+          background-color: transparent;
+          cursor: no-drop;
+        }
       }
+    }
+
+    .el-input-number .el-input__inner {
+      text-align: left;
     }
   }
 
-  .el-input-number .el-input__inner {
-    text-align: left;
+  .the-curd-edit-form {
+    box-sizing: content-box;
+    height: fit-content;
+    padding: 0 var(--gap);
+    border-right: var(--border);
+    border-right-style: dashed;
+    border-left: var(--border);
+    border-left-style: dashed;
+
+    .is-drag-item.el-form-item,
+    .is-drag-item .el-form-item__label {
+      cursor: move;
+      user-select: none;
+    }
+
+    .el-form-item {
+      position: relative;
+    }
   }
-}
 
-.the-curd-edit-form {
-  box-sizing: content-box;
-  height: fit-content;
-  padding: 0 var(--gap);
-  border-right: var(--border);
-  border-right-style: dashed;
-  border-left: var(--border);
-  border-left-style: dashed;
-
-  .is-drag-item.el-form-item,
-  .is-drag-item .el-form-item__label {
-    cursor: move;
-    user-select: none;
-  }
-
-  .el-form-item {
+  .the-filter-mask {
     position: relative;
+    &::before {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 5;
+      left: 0;
+      top: 0;
+    }
+
+    &::after {
+      position: absolute;
+      content: attr(data-tips);
+      z-index: 5;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 16px;
+      color: var(--blue);
+    }
+  }
+
+  .the-table-image {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+  }
+
+  .the-curd-option-list {
+    padding-left: var(--gap);
+    margin-left: var(--gap);
+    border-left: 1px solid #ebeef5;
+  }
+
+  .the-curd-option-item {
+    position: relative;
+    height: 38px;
+    padding: 0 var(--gap);
+    margin-bottom: var(--gap);
+    font-size: var(--el-font-size-base);
+    line-height: 34px;
+    color: var(--el-text-color-regular);
+    border: dashed #dcdfe6 1px;
+    border-radius: var(--border-radius);
+
+    &:hover {
+      color: var(--el-color-primary);
+      background-color: var(--el-fill-color-light);
+    }
+
+    &[draggable="true"] {
+      cursor: move;
+      user-select: none;
+    }
+  }
+
+  .the-curd-editor-move-enter-active,
+  .the-curd-editor-move-leave-active {
+    transition: var(--transition);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .the-curd-editor-move-enter-from,
+  .the-curd-editor-move-leave-to {
+    transform: translate3d(100%, 0, 0);
+  }
+
+  .the-group-move,
+  .the-group-enter-active,
+  .the-group-leave-active {
+    transition: var(--transition);
+  }
+
+  .the-group-enter-from,
+  .the-group-leave-to {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+
+  .the-group-leave-active {
+    position: absolute;
+  }
+
+  .the-sort-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+
+    &::after {
+      display: block;
+      content: "";
+      width: 0;
+      height: 0;
+      border: solid 5px transparent;
+    }
+
+    &.top::after {
+      border-bottom-color: #c0c4cc;
+    }
+
+    &.bottom::after {
+      border-top-color: #c0c4cc;
+    }
+
+    &.is-select.top::after {
+      border-bottom-color: var(--blue);
+    }
+
+    &.is-select.bottom::after {
+      border-top-color: var(--blue);
+    }
   }
 }
 
@@ -300,125 +422,5 @@
 
   100% {
     content: "组件预览区域";
-  }
-}
-
-.the-filter-mask {
-  position: relative;
-  &::before {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 5;
-    left: 0;
-    top: 0;
-  }
-
-  &::after {
-    position: absolute;
-    content: attr(data-tips);
-    z-index: 5;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    color: var(--blue);
-  }
-}
-
-.the-table-image {
-  width: 80px;
-  height: 80px;
-  cursor: pointer;
-}
-
-.the-curd-option-list {
-  padding-left: var(--gap);
-  margin-left: var(--gap);
-  border-left: 1px solid #ebeef5;
-}
-
-.the-curd-option-item {
-  position: relative;
-  height: 38px;
-  padding: 0 var(--gap);
-  margin-bottom: var(--gap);
-  font-size: var(--el-font-size-base);
-  line-height: 34px;
-  color: var(--el-text-color-regular);
-  border: dashed #dcdfe6 1px;
-  border-radius: var(--border-radius);
-
-  &:hover {
-    color: var(--el-color-primary);
-    background-color: var(--el-fill-color-light);
-  }
-
-  &[draggable="true"] {
-    cursor: move;
-    user-select: none;
-  }
-}
-
-.the-curd-editor-move-enter-active,
-.the-curd-editor-move-leave-active {
-  transition: var(--transition);
-  transform: translate3d(0, 0, 0);
-}
-
-.the-curd-editor-move-enter-from,
-.the-curd-editor-move-leave-to {
-  transform: translate3d(100%, 0, 0);
-}
-
-.the-group-move,
-.the-group-enter-active,
-.the-group-leave-active {
-  transition: var(--transition);
-}
-
-.the-group-enter-from,
-.the-group-leave-to {
-  opacity: 0;
-  transform: translate3d(0, 30px, 0);
-}
-
-.the-group-leave-active {
-  position: absolute;
-}
-
-.the-sort-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;
-  height: 12px;
-  cursor: pointer;
-  
-  &::after {
-    display: block;
-    content: "";
-    width: 0;
-    height: 0;
-    border: solid 5px transparent;
-  }
-
-  &.top::after {
-    border-bottom-color: #c0c4cc;
-  }
-
-  &.bottom::after {
-    border-top-color: #c0c4cc;
-  }
-
-  &.is-select.top::after {
-    border-bottom-color: var(--blue);
-  }
-
-  &.is-select.bottom::after {
-    border-top-color: var(--blue);
   }
 }
