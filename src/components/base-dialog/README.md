@@ -43,5 +43,5 @@ const show = ref(false);
 | 事件名 | 说明 |
 | --- | --- |
 | close | 关闭时触发 |
-| afterLeave | 动画关闭结束时触发 |
-| afterEnd | 动画打开结束时触发 |
+| closed | 动画关闭结束时触发 |
+| opened | 动画打开结束时触发 |
