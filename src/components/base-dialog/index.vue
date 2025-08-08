@@ -47,8 +47,8 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: "close"): void;
   (event: "update:show", show: boolean): void;
-  (event: "afterLeave"): void;
-  (event: "afterEnd"): void;
+  (event: "closed"): void;
+  (event: "opened"): void;
 }>();
 
 /** 当前组件节点 */
@@ -118,11 +118,11 @@ function onClose(e: MouseEvent) {
 
 function onAfterLeave() {
   contentShow.value && setVariable("0", "0");
-  emit("afterLeave");
+  emit("closed");
 }
 
 function onAfterEnter() {
-  emit("afterEnd");
+  emit("opened");
 }
 
 onMounted(function () {
