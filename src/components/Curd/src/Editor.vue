@@ -634,7 +634,7 @@ const currentIndex = useZIndex() + 10;
     :z-index="currentIndex"
     width="680px"
     @close="onClose"
-    @afterLeave="resetForm"
+    @closed="resetForm"
   >
     <template v-if="state.step === 0">
       <h2 class="the-title mb-[20px]">第1步：点击选取组件</h2>
