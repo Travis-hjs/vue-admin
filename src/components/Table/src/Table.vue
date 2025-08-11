@@ -276,7 +276,7 @@ for (const column of props.columns) {
 <template>
   <div class="the-table" :class="$attrs.class" :id="adaptive.id" v-loading="props.loading">
     <el-table
-      ref="the-table"
+      ref="theTable"
       stripe
       border
       :max-height="props.maxHeight || adaptive.height"
