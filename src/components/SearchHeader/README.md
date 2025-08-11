@@ -2,7 +2,7 @@
 
 将`<Fields />`与`<FilterBox />`做整合，传参配置完全相同；
 
-在`*.vue`文件中输入`vue3-table-list-v2`可生成快捷代码片段
+在`*.vue`文件中输入`el-table-list-v2`可生成快捷代码片段
 
 ## 使用示例
 

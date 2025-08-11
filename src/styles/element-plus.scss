@@ -17,29 +17,32 @@
   --el-button-mini-border-radius: var(--border-radius);
 }
 
-.app {
-  input, button, form {
+body {
+  input,
+  button,
+  form {
     &:disabled {
       cursor: no-drop;
     }
   }
-}
 
-.el-form {
-  .el-form-item__label {
-    color: var(--black);
-    font-weight: bold;
-  }
-}
-
-.el-input {
-  input {
-    &::selection {
-      color: #fff;
-      background-color: var(--blue);
+  .el-form {
+    .el-form-item__label {
+      color: var(--black);
+      font-weight: bold;
     }
   }
-  .el-input__wrapper {
-    width: 100%;
+
+  .el-input {
+    input {
+      &::selection {
+        color: #fff;
+        background-color: var(--blue);
+      }
+    }
+    .el-input__wrapper {
+      width: 100%;
+    }
   }
 }
+

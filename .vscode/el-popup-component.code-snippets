@@ -3,12 +3,6 @@
     "scope": "vue",
     "prefix": "el-popup-component",
     "body": [
-      "<script lang=\"ts\">",
-      "/** 组件名称 */",
-      "export default {",
-      "  name: \"$componentName\"",
-      "};",
-      "</script>",
       "<script lang=\"ts\" setup>",
       "import { computed, reactive, ref, type PropType } from \"vue\";",
       "import { type FormInstance } from \"element-plus\";",
