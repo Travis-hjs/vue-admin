@@ -99,9 +99,19 @@ export const IconInput = defineComponent({
       }
     });
 
+    const keyword = ref("");
+
+    const iconList = computed(() => {
+      if (keyword) {
+        return icons.filter(iconName => iconName.includes(keyword.value));
+      }
+      return icons;
+    });
+
     const popoverRef = ref();
 
     function selectIcon(icon: string) {
+      keyword.value = "";
       iconClass.value = icon;
       popoverRef.value.hide();
     }
@@ -119,7 +129,6 @@ export const IconInput = defineComponent({
         <el-popover
           ref={popoverRef}
           placement="top-start"
-          title="请点击选择图标"
           width="400"
           trigger="click"
           v-slots={{
@@ -130,17 +139,29 @@ export const IconInput = defineComponent({
             )
           }}
         >
-          <ul class="grid max-h-[420px] grid-cols-3 gap-[10px] overflow-auto">
-            {icons.map(icon => (
+          <el-input
+            class="mb-[10px]"
+            v-model={keyword.value}
+            placeholder="请输入关键字检索图标"
+            clearable
+            v-slots={{
+              prefix: () => <i class="el-icon-search"></i>
+            }}
+          ></el-input>
+          <ul class="grid max-h-[360px] grid-cols-3 gap-[10px] overflow-auto">
+            {iconList.value.map(icon => (
               <li
                 class="fvc h-[80px] cursor-pointer flex-col border-[1px] border-dashed border-[#ccc] px-[4px] text-center"
                 onClick={() => selectIcon(icon)}
               >
-                <i class={"mb-[4px] text-[#606266] " + icon} style="font-size: 24px"></i>
+                <i class={"mb-[10px] text-[24px] text-[#606266] " + icon}></i>
                 <span class="text-[12px] text-[#99a9bf]">{icon}</span>
               </li>
             ))}
           </ul>
+          {iconList.value.length <= 0 ? (
+            <el-empty description="未检索到对应图标"></el-empty>
+          ) : null}
         </el-popover>
       </div>
     );
