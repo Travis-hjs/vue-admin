@@ -12,6 +12,10 @@ import globalEvent from '@/utils/event';
 import type { TreeType } from './types';
 // import { Icon } from '@/components/Icon';
 
+defineSlots<{
+  treeitem: any
+}>()
+
 const props = defineProps({
   /** 选项对象 */
   option: {
@@ -172,7 +176,7 @@ function onCheck() {
           :parent-keys="[...props.parentKeys, currentKey]"
           :parent-values="[...props.parentValues, currentValue]"
         >
-          <template #treeitem="subProps: any">
+          <template #treeitem="subProps">
             <slot name="treeitem" v-bind="subProps"></slot>
           </template>
         </Level>
