@@ -36,6 +36,7 @@
       "",
       "const tableColumns: Array<TableType.Column<TableRow>> = [",
       "  { title: \"名称\", prop: \"name\", minWidth: 180 },",
+      "  { title: \"状态\", prop: \"status\", width: 120 },",
       "  { title: \"操作\", prop: \"action-right\", width: 140 },",
       "];",
       "",
