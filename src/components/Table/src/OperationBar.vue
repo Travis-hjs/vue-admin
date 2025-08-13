@@ -125,7 +125,7 @@ if (!props.notWatch) {
         :type="btn.type || 'primary'"
         :loading="getBoolean(btn, 'loading')"
         :disabled="props.disabled || getBoolean(btn, 'disabled')"
-        link
+        size="small"
         @click="btn.click"
       >
         <i
