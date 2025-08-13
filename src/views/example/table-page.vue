@@ -10,7 +10,7 @@ import { message } from "@/utils/message";
 type TableRow = {
   id: number;
   name: string;
-  type: string;
+  status: number;
   date: string;
 }
 
@@ -41,13 +41,32 @@ const searchFields: Array<FieldType.Member<SearchInfo>> = [
     bind: ["start", "end"],
     placeholder: "请选择日期",
     class: "w-[380px]"
+  },
+  {
+    label: "状态",
+    prop: "status",
+    type: "select",
+    options: [
+      { label: "正常", value: 0 },
+      { label: "禁用", value: 1 },
+    ],
   }
 ];
 
 const tableColumns: Array<TableType.Column<TableRow>> = [
   { title: "ID", prop: "id", width: 80 },
-  { title: "名称\\n描述", prop: "name", minWidth: 180, sort: "asc" },
-  { title: "类型", prop: "type", width: 100, sort: true },
+  { title: "名称\\n可以通过斜杠+n符号进行标题换行", prop: "name", minWidth: 180, sort: "asc" },
+  { 
+    title: "状态",
+    prop: "status",
+    width: 100,
+    sort: true,
+    rawContent(_, row) {
+      const color = row.status === 1 ? "green" : "gray";
+      const text = row.status === 1 ? "正常" : "禁用";
+      return `<span class="the-tag ${color}">${text}</span>`;
+    },
+  },
   { title: "日期", prop: "date", width: 180, sort: "desc", titleTips: "静态数据，当前刷新日期" },
   { title: "操作", prop: "action-right", width: 140 },
 ];
@@ -111,7 +130,7 @@ const testList = Array.from({ length: 62 }).map((_, index) => ({
   id: index + 1,
   name: randomText(2, 40),
   date: formatDate(),
-  type: Math.random() < 0.5 ? "正常" : "异常",
+  status: Math.random() < 0.5 ? 1 : 0,
 }));
 
 async function getTableData() {
