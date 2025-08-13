@@ -54,6 +54,22 @@ const tableColumns: Array<TableType.Column<TableRow>> = [
 
 const tableOperations: Array<TableType.Operation> = [
   {
+    text: "同步数据",
+    icon: "el-icon-refresh",
+    type: "warning",
+    click() {
+      message.warning(`同步数据`);
+    } 
+  },
+  {
+    text: "导出",
+    icon: "el-icon-download",
+    type: "success",
+    click() {
+      message.success(`导出`);
+    } 
+  },
+  {
     text: "新增",
     icon: "el-icon-plus",
     click() {

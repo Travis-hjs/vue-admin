@@ -1,19 +1,25 @@
 .the-filter-wrap {
+  --gap: 12px;
+
   width: 100%;
   border-bottom: dashed #dcdfe6 1px;
-  margin-bottom: 24px;
+  margin-bottom: var(--gap);
+
   .the-filter-content {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--gap);
   }
+
   .the-filter-content,
   .the-filter-side {
-    margin-bottom: 20px;
+    margin-bottom: var(--gap);
   }
+
   .the-filter-item {
     min-height: 32px;
     position: relative;
+
     &.is-required {
       .the-filter-label::before {
         color: var(--el-color-danger);
@@ -21,10 +27,12 @@
         margin-right: 4px;
       }
     }
+
     &.apply-shake {
       outline: dashed 1px var(--el-color-danger);
     }
   }
+
   .the-filter-label {
     min-width: var(--label-width);
     width: var(--label-width);
@@ -34,9 +42,11 @@
     color: #606266;
     white-space: nowrap;
   }
+
   .short-value {
     width: 220px;
   }
+
   .long-value {
     width: 380px;
   }

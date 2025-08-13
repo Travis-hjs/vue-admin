@@ -179,7 +179,7 @@ if (!props.notWatch) {
 <style lang="scss">
 .the-table-operation-bar {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .the-table-operation-bar-popper {

@@ -82,18 +82,19 @@ const operations: Array<TableType.Operation> = [
     click: () => onAction('delete'),
   },
   {
+    text: "导出",
+    icon: "el-icon-download",
+    type: "success",
+    show: () => !props.editMode,
+    disabled: () => props.disabled,
+    click: () => onAction('export'),
+  },
+  {
     text: "新增",
     icon: "el-icon-plus",
     show: () => !props.editMode && has.value.add,
     disabled: () => props.disabled,
     click: () => onAction('add'),
-  },
-  {
-    text: "导出",
-    icon: "el-icon-download",
-    show: () => !props.editMode,
-    disabled: () => props.disabled,
-    click: () => onAction('export'),
   },
 ];
 </script>
