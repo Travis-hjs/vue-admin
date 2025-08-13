@@ -55,7 +55,7 @@ const searchFields: Array<FieldType.Member<SearchInfo>> = [
 
 const tableColumns: Array<TableType.Column<TableRow>> = [
   { title: "ID", prop: "id", width: 80 },
-  { title: "名称\\n可以通过斜杠+n符号进行标题换行", prop: "name", minWidth: 180, sort: "asc" },
+  { title: "名称\\n通过斜杠+n换行", prop: "name", minWidth: 180, sort: "asc" },
   { 
     title: "状态",
     prop: "status",
