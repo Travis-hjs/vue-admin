@@ -405,7 +405,7 @@ onMounted(function() {
       :title="formSate.config.title"
       :width="convertPx(formSate.config.width)"
       @close="onCloseForm"
-      @after-end="onSetForm"
+      @opened="onSetForm"
     >
       <TableForm ref="formRef" :disabled="formSate.loading" />
       <template #footer>
