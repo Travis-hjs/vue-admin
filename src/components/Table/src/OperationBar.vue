@@ -136,7 +136,7 @@ if (!props.notWatch) {
       </el-button>
     </template>
     <el-popover
-      v-if="!hideSetting"
+      v-if="!hideSetting && props.columns.length > 0"
       placement="bottom-start"
       :width="300"
       transition="el-zoom-in-top"
