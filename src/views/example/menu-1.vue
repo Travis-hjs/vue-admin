@@ -5,6 +5,8 @@ import { FilterWrap, FilterItem  } from "@/components/FilterBox";
 import { formatDate, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { Table, type TableType } from "@/components/Table";
+import { openDialog } from "@/components/base-dialog";
+import TsxExample from "../tsx/example";
 
 interface TableRow {
   id: number
@@ -84,6 +86,20 @@ function onSearch() {
   getTableData();
 }
 
+function onTest() {
+  openDialog({
+    component: TsxExample,
+    dialogProps: {
+      title: "函数式打开弹框",
+      width: "500px",
+    },
+    cancelText: "关 闭",
+    confirm() {
+      console.log("确 认");
+    },
+  });
+}
+
 </script>
 <template>
   <div class="menu-1">
@@ -105,7 +121,7 @@ function onSearch() {
         <el-date-picker v-model="state.searchInfo.date" type="datetime" placeholder="请选择日期" @change="onSearch" />
       </FilterItem>
       <template #right>
-        <el-button type="primary"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
+        <el-button type="primary" @click="onTest()"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
       </template>
     </FilterWrap>
 

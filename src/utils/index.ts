@@ -1,3 +1,5 @@
+import { message } from "./message";
+
 /**
  * 检测类型
  * @param target 检测的目标
@@ -130,7 +132,11 @@ export function copyText(text: string, success?: () => void, fail?: (res: string
   clipboard.setSelectionRange(0, clipboard.value.length);
   const state = document.execCommand("copy");
   if (state) {
-    success && success();
+    if (success) {
+      success();
+    } else {
+      message.success("复制成功");
+    }
   } else {
     fail && fail("复制失败");
   }
