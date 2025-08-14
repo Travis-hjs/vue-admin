@@ -24,7 +24,7 @@ interface DialogParams<Props> {
 }
 
 /**
- * 指令式打开弹框
+ * 函数式打开弹框
  * @param params 参数配置
  */
 export function openDialog<Props extends object>(params: DialogParams<Props>) {
