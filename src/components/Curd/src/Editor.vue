@@ -625,13 +625,13 @@ const title = computed(() => {
   return text;
 });
 
-const currentIndex = useZIndex() + 10;
+// const currentIndex = useZIndex() + 10;
 </script>
 <template>
   <base-dialog
     :show="props.show"
     :title="title"
-    :z-index="currentIndex"
+    :z-index="useZIndex() + 10"
     width="680px"
     @close="onClose"
     @closed="resetForm"
