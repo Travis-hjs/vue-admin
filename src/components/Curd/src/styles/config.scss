@@ -318,17 +318,6 @@ body {
     }
   }
 
-  .the-curd-editor-move-enter-active,
-  .the-curd-editor-move-leave-active {
-    transition: var(--transition);
-    transform: translate3d(0, 0, 0);
-  }
-
-  .the-curd-editor-move-enter-from,
-  .the-curd-editor-move-leave-to {
-    transform: translate3d(100%, 0, 0);
-  }
-
   .the-group-move,
   .the-group-enter-active,
   .the-group-leave-active {

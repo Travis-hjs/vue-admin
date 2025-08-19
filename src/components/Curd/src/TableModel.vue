@@ -393,9 +393,9 @@ function onSetWidth() {
         v-for="(column, columnIndex) in columnInfo.drag"
         :key="column.prop"
         :data-key="column.prop"
-        class="fake-table-item"
         :draggable="columnInfo.drag.length > 1"
         :style="getColumnWidth(column)"
+        class="fake-table-item"
         @dragstart="onDragStart(columnIndex)"
         @dragover="onDragMove($event, columnIndex)"
         @drop="onDropEnd()"
@@ -430,7 +430,7 @@ function onSetWidth() {
           <TableImage :column="column" :src="demoUrl" />
         </div>
       </div>
-      <div v-if="actionColumn" :style="getColumnWidth(actionColumn)" :key="columnActionProp" class="fake-table-item">
+      <div v-if="actionColumn" :key="columnActionProp" :style="getColumnWidth(actionColumn)" class="fake-table-item">
         <div class="fake-table-head fvc">操作</div>
         <div class="fake-table-cell operation fvc">
           <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">
@@ -464,7 +464,7 @@ function onSetWidth() {
           <el-text v-else type="info">待添加操作~</el-text>
         </div>
       </div>
-      <div class="f-vertical" key="right-setting">
+      <div key="column-setting" class="f-vertical">
         <div>
           <p>
             <el-button type="primary" text @click="openConfigCol('add')">
