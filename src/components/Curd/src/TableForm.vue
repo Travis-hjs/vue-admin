@@ -9,7 +9,6 @@ import { computed, reactive, ref, type PropType } from "vue";
 import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { convertPx, getFieldValue, getFormConfig, initFieldValue } from "./data";
-import { watch } from "vue";
 import Field from "./Field.vue";
 import { deepClone, isType, modifyData } from "@/utils";
 
