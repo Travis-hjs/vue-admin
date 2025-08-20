@@ -8,7 +8,6 @@
   --el-color-success-light-3: #60e49b;
   --el-color-success-dark-2: #08b355;
   --el-button-font-weight: 400;
-  --el-color-text-regular: var(--black);
   --el-border-color-light: #dfe4ed;
   --el-border-color-lighter: #e6ebf5;
   --el-table-border: 1px solid #dfe6ec;
@@ -28,7 +27,6 @@ body {
 
   .el-form {
     .el-form-item__label {
-      color: var(--black);
       font-weight: bold;
     }
   }

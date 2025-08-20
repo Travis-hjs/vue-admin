@@ -189,8 +189,7 @@ const formItems = computed(() => {
     }
   ];
 
-  const isMultiple = fieldType === "select" && (state.formData as CurdType.Select).multiple;
-  if (checkNumberFields.includes(fieldType) || isMultiple) {
+  if (checkNumberFields.includes(fieldType)) {
     const isNumberItem: FieldType.Member<CurdType.Field> = {
       label: "绑定值为数字类型",
       prop: "valueType",
