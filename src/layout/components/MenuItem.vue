@@ -1,3 +1,9 @@
+<script lang="ts">
+/** 菜单项-递归组件 */
+export default {
+  name: "MenuItem"
+}
+</script>
 <script lang="ts" setup>
 import { type PropType, computed } from "vue";
 import type { LayoutType } from "@/store/types";
