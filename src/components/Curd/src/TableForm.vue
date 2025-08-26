@@ -10,7 +10,7 @@ import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { convertPx, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import Field from "./Field.vue";
-import { deepClone, isType, modifyData } from "@/utils";
+import { deepClone, formatDeepKeyObj, isType, modifyData } from "@/utils";
 
 const props = defineProps({
   /** 表单配置 */
@@ -47,15 +47,21 @@ let tableRow = undefined as undefined | BaseObj<any>;
  * @param callback 回调函数，第一个参数`formData`为完整对象，第二个参数`current`为当前展示中的字段
  */
 function validate(callback?: (formData: BaseObj<any>, current: BaseObj<any>) => void) {
-  formRef.value?.validate(val => {
+  formRef.value && formRef.value.validate(val => {
     if (val && callback) {
       let data = formData.value;
       let current: BaseObj<any> = {};
       usableFields.value.forEach(field => {
-        current[field.key] = data[field.key];
+        const empty = field.valueType === "string" ? [undefined] : ["", undefined];
+        let val = data[field.key];
+        // 处理空值
+        if (empty.includes(val)) {
+          val = null;
+        }
+        current[field.key] = val;
       });
-      // data = formatDeepKeyObj(data);
-      // current = formatDeepKeyObj(current);
+      data = formatDeepKeyObj(data);
+      current = formatDeepKeyObj(current);
       if (tableRow) {
         // 编辑逻辑
         const form = JSON.parse(JSON.stringify(tableRow));

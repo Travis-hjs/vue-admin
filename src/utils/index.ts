@@ -294,3 +294,42 @@ export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolea
     return self.findIndex(el => compare(el, element)) === index
   })
 }
+
+/**
+ * 将深嵌套层`key`的对象转换成标准结构对象
+ * @example
+ * ```js
+ * const target = {
+ *   id: 12,
+ *   "info.name": "sub-1",
+ *   "info.price": 12,
+ *   "info.desc.date": "2024-12-22",
+ *   content: "this is a text!"
+ * }
+ * const result = formatObj(target);
+ * // 输出为正确结构的对象
+ * console.log(result);
+ * ```
+ * @param obj
+ */
+export function formatDeepKeyObj<T extends object>(obj: T) {
+  const result: BaseObj<any> = {};
+
+  for (const key in obj) {
+    const value = obj[key];
+    const keys = key.split(".");
+    // 递归构建嵌套对象
+    keys.reduce((acc, part, index) => {
+      if (index === keys.length - 1) {
+        // 最后一个部分赋值
+        acc[part] = value;
+      } else {
+        // 创建嵌套对象
+        acc[part] = acc[part] || {};
+      }
+      return acc[part];
+    }, result);
+  }
+
+  return result;
+}
