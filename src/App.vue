@@ -53,6 +53,7 @@ export default {
 
     onMounted(function () {
       if (window._version && !config.isDev) {
+        checkVersion();
         timer = setTimeout(checkVersion, interval);
       }
     });
