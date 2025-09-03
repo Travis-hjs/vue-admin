@@ -148,13 +148,16 @@ export const IconInput = defineComponent({
               prefix: () => <i class="el-icon-search"></i>
             }}
           ></el-input>
-          <ul class="grid max-h-[360px] grid-cols-3 gap-[10px] overflow-auto">
+          <ul class="grid max-h-[50vh] grid-cols-3 gap-[10px] overflow-auto">
             {iconList.value.map(icon => (
               <li
-                class="fvc h-[80px] cursor-pointer flex-col border-[1px] border-dashed border-[#ccc] px-[4px] text-center"
+                class="fvc h-[100px] cursor-pointer flex-col border border-dashed border-[#ccc] px-[4px] text-center hover:border-[var(--blue)]"
                 onClick={() => selectIcon(icon)}
               >
-                <i class={"mb-[10px] text-[24px] text-[#606266] " + icon}></i>
+                <i
+                  class={"mb-[10px] text-[#606266] " + icon}
+                  style="font-size: 24px"
+                ></i>
                 <span class="text-[12px] text-[#99a9bf]">{icon}</span>
               </li>
             ))}
