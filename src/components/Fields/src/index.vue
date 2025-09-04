@@ -141,7 +141,7 @@ function getSelectProps(field: FieldType.Select<any>) {
 
 function getTextContent(field: FieldType.Text<any>) {
   const empty = ["", null, undefined];
-  const value = props.data[field.prop as string];
+  const value = getFieldValue(field);
   const text = empty.includes(value) ? field.placeholder : value;
   return text || "-";
 }
