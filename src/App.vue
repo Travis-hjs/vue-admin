@@ -19,7 +19,7 @@ export default {
 
     function checkVersion() {
       const t = Date.now();
-      const { origin, pathname, href } = location;
+      const { origin, pathname } = location;
       const url = `${origin + pathname}version.json?t=${t}`;
       fetch(url).then(r => r.json()).then(res => {
         if (res.version && res.version !== window._version) {
@@ -37,9 +37,14 @@ export default {
             confirmText: "更新",
             cancelText: "取消(关闭提醒)",
             confirm() {
-              const url = new URL(href);
-              url.searchParams.set("t", t.toString());
-              location.href = url.toString();
+              // const url = new URL(href);
+              // url.searchParams.set("t", t.toString());
+              // location.href = url.toString();
+
+              // TODO: index.html 加了不缓存设置，所以这里可以直接刷新（保险起见，可以在 ng 或者 cdn 也配置不缓存）
+              // 为什么不在 url 上加时间戳刷新？理由是浏览器会缓存不带参数的链接，
+              // 重新输入网址之后依然是缓存上次的文件
+              location.reload();
             },
           });
         } else {
