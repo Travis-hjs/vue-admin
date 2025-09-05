@@ -24,7 +24,7 @@ export default {
       fetch(url).then(r => r.json()).then(res => {
         if (res.version && res.version !== window._version) {
           // 弹一次后直接关闭查询
-          timer && clearTimeout(timer);
+          clearTimeout(timer);
           messageBox({
             title: `版本更新提示`,
             content: `
