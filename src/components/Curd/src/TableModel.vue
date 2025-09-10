@@ -9,16 +9,17 @@ import { computed, type PropType, reactive } from "vue";
 import { actionEditKey, getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
-import type { CurdType, TableOperationType } from "./types";
+import type { CurdType, TableOperationAction } from "./types";
 import { TableImage } from "./part";
 import TableOperation from "./TableOperation.vue";
 import TableColumnConfig from "./TableColumnConfig.vue";
-import TableDeleteConfig from "./TableDeleteConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
 import { curdConfigState } from "./hooks";
 import { columnActionProp, TableActionCell, TableHeader } from "@/components/Table";
 import TableFormConfig from "./TableFormConfig.vue";
+import TableBatchConfig from "./TableBatchConfig.vue";
+import TableOperationConfig from "./TableOperationConfig.vue";
 
 const props = defineProps({
   config: {
@@ -195,19 +196,18 @@ function deleteActionColumn() {
   });
 }
 
-const configDele = reactive({
-  show: false,
-  keyword: ""
+const configBatch = reactive({
+  show: false
 });
 
-function openConfigDele() {
-  const key = props.config.selectKey;
-  configDele.keyword = key ? key.toString() : "";
-  configDele.show = true;
+function openConfigBatch() {
+  configBatch.show = true;
 }
 
-function onConfigDele(val: string) {
-  props.config.selectKey = val;
+function onConfigBatch(val: string, list: Array<CurdType.Table.Batch>) {
+  const config = props.config;
+  config.selectKey = val;
+  config.batchs = list;
 }
 
 const configAction = reactive({
@@ -338,10 +338,22 @@ function onFormConfig(formConfig?: CurdType.Table.From, sync?: boolean) {
   tableForm.form = null;
 }
 
-function onOption(type: TableOperationType) {
+const configOperation = reactive({
+  show: false
+});
+
+function onConfigOperation(list: Array<CurdType.Table.Operation>) {
+  props.config.operations = list;
+}
+
+/**
+ * 操作栏配置
+ * @param type 
+ */
+function onOperation(type: TableOperationAction) {
   switch (type) {
-    case "delete":
-      openConfigDele();
+    case "batch":
+      openConfigBatch();
       break;
 
     case "add":
@@ -350,6 +362,10 @@ function onOption(type: TableOperationType) {
 
     case "edit":
       openFormConfig("edit");
+      break;
+      
+    case "operation":
+      configOperation.show = true;
       break;
   }
 }
@@ -378,7 +394,7 @@ function onSetWidth() {
     v-if="!curdConfigState.editor.showForm"
     :editMode="true"
     :config="props.config"
-    @action="onOption"
+    @action="onOperation"
   />
   <div class="the-curd-table-model">
     <transition-group name="the-group" tag="div" class="fake-table">
@@ -459,6 +475,7 @@ function onSetWidth() {
             v-if="props.config.actions.length"
             :row="{}"
             :index="1"
+            :max="props.config.actionMax"
             :actions="props.config.actions"
           />
           <el-text v-else type="info">待添加操作~</el-text>
@@ -498,19 +515,28 @@ function onSetWidth() {
     @submit="onColSubmit"
   />
 
-  <TableDeleteConfig
-    v-model:show="configDele.show"
-    :select-key="configDele.keyword"
-    @submit="onConfigDele"
+  <TableBatchConfig
+    v-model:show="configBatch.show"
+    :select-key="props.config.selectKey"
+    :list="props.config.batchs"
+    @submit="onConfigBatch"
+    @openFormConfig="e => openFormConfig('other', e)"
   />
   
-  <!-- @openFormConfig="e => openFormConfig('other', e)" -->
   <TableActionConfig
     v-model:show="configAction.show"
     :columnWidth="configAction.columnWidth"
     :actionMax="configAction.actionMax"
     :list="props.config.actions"
     @submit="onConfigAction"
+    @openFormConfig="e => openFormConfig('other', e)"
+  />
+
+  <TableOperationConfig
+    v-model:show="configOperation.show"
+    :list="props.config.operations"
+    @submit="onConfigOperation"
+    @openFormConfig="e => openFormConfig('other', e)"
   />
 
   <TableFormConfig

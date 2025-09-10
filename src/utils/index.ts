@@ -333,3 +333,26 @@ export function formatDeepKeyObj<T extends object>(obj: T) {
 
   return result;
 }
+
+/**
+ * 辅助函数：获取嵌套对象的值
+ * @example
+ * ```js
+ * const obj = {
+ *   info: {
+ *     value: "content"
+ *   },
+ *   id: 12
+ * }
+ * getValueByDeepKey(obj, "info.value");
+ * getValueByDeepKey(obj, "id");
+ * ```
+ * @param map
+ * @param key
+ */
+export function getValueByDeepKey<T extends object>(map: T, key: string): any {
+  if (key.includes(".")) {
+    return key.split(".").reduce((acc: any, part) => acc && acc[part], map);
+  }
+  return (map as any)[key];
+}

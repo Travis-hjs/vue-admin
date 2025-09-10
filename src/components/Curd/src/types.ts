@@ -7,8 +7,11 @@ export namespace CurdType {
 
   interface BaseField<T> {
     id: number | string;
+    /** 表单项标题 */
     label?: string;
-    /** 单独的`label`宽度 */
+    /** 标题提示文案 */
+    tooltip?: string;
+    /** 标题宽度 */
     labelWidth?: number;
     /** 内容部分宽度 */
     valueWidth?: number;
@@ -175,6 +178,8 @@ export namespace CurdType {
     labelWidth?: number;
     /** `label`整体靠右排列 */
     labelRight: boolean;
+    /** 查询数据前校验代码 */
+    validateCode?: string;
     /** 操作列表 */
     list: Array<Field>;
   }
@@ -253,6 +258,39 @@ export namespace CurdType {
        * - 当等于`"action-edit"`时，点击事件自动设置为内部的打开编辑表单功能，在`TableModel.vue`中，当配置完编辑表单数据后会自动添加，具体位置看`onFormEdit`方法
        */
       key: string;
+      /** 表单配置 */
+      formConfig?: From;
+    }
+
+    /** 表格操作栏按钮类型 */
+    export interface Operation extends Pick<TableType.Action<BaseObj>, "type" | "text" | "icon"> {
+      /** 按钮唯一值 */
+      key: string;
+      /** 点击事件 */
+      click: (() => void) | string;
+      /**
+       * 是否显示按钮
+       * - 字符串类型必须带有`return`关键字
+       */
+      show?: (() => boolean) | string;
+      /** 是否为实心按钮 */
+      solid?: boolean;
+      /**
+       * 表单配置
+       * - 如果存在，则直接调用`openForm`方法，跳过执行`click`事件
+       */
+      formConfig?: From;
+    }
+
+    /** 表格批量操作 */
+    export interface Batch extends Pick<Operation, "key" | "type" | "text" | "icon" | "solid"> {
+      /** 批量选中操作自定义代码 */
+      batchCode: string;
+      /**
+       * 表单配置
+       * - 如果存在，则直接调用`openForm`方法，跳过执行`jsCode`事件
+       */
+      formConfig?: From;
     }
 
     /** 表格相关配置 */
@@ -278,6 +316,10 @@ export namespace CurdType {
       formEdit?: From;
       /** 复选框选中目标键值值 */
       selectKey?: string;
+      /** 表格批量选择操作按钮列表 */
+      batchs?: Array<Batch>;
+      /** 表格操作按钮列表 */
+      operations?: Array<Operation>;
     }
   }
 
@@ -310,11 +352,6 @@ export namespace CurdType {
      */
     saved?(type: keyof Config): void;
     /**
-     * 删除功能
-     * @param selectList 
-     */
-    onDelete?(selectList: Array<BaseObj<any>>): Promise<Api.Result>;
-    /**
      * 新增表单
      * @param form 完整表单对象
      * @param current 当前展示中的字段对象
@@ -326,17 +363,12 @@ export namespace CurdType {
      * @param current 当前展示中的字段对象
      */
     onEdit?(form: BaseObj<any>, current: BaseObj<any>): Promise<Api.Result>;
-    /**
-     * 导出功能
-     * - 待开发者自己根据项目情况实现
-     */
-    onExport?(): void;
   }
-  
+
 }
 
-/** 表格操作类型 */
-export type TableOperationType = "delete" | "add" | "export" | "edit";
+/** 表格操作栏点击行为类型 */
+export type TableOperationAction = "add" | "edit" | "batch" | "operation" | "open-form";;
 
 /** `curd`弹框配置 */
 export namespace CurdConfig {
@@ -363,6 +395,12 @@ export namespace CurdConfig {
   /** `curd`弹框功能状态 */
   export interface State {
     show: boolean;
+    /**
+     * 页面标识
+     * - 唯一值
+     * - 可以通过菜单配置指定唯一值
+     */
+    pageId: string;
     /** 弹框标题 */
     title: string;
     /** 传入需要修改的`curd`配置 */
@@ -376,5 +414,23 @@ export namespace CurdConfig {
      * @param newConfig 修改后新的配置
      */
     callback(newConfig: CurdType.Config): void;
+  }
+}
+
+/** 预设代码类型 */
+export namespace PresetCodeType {
+  /** 分类 */
+  export type Key = 
+    | "form-submit"
+    | "batch-submit"
+    | "table-cell"
+    | "action-submit"
+    | "operation-submit"
+    | "search-validate";
+  
+  export interface Item {
+    id: number;
+    name: string;
+    code: string;
   }
 }

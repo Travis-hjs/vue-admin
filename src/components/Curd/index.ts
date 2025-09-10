@@ -15,11 +15,6 @@ export {
   actionEditKey,
 } from "./src/data";
 
-export {
-  openCurdConfig,
-} from "./src/hooks";
+export { openCurdConfig } from "./src/hooks";
 
-export type {
-  CurdType,
-  TableOperationType as TableOperationAction,
-} from "./src/types";
+export type { CurdType, TableOperationAction } from "./src/types";

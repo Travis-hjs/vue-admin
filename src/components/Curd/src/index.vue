@@ -5,12 +5,12 @@ export default {
 }
 </script>
 <script lang="ts" setup>
+import type { CurdConfig, CurdType, TableOperationAction } from "./types";
 import { computed, onMounted, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import { FooterBtn, TableImage, type TableImageProps } from "./part";
-import type { CurdConfig, CurdType, TableOperationType } from "./types";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getPageInfo } from "@/hooks/common";
@@ -30,6 +30,11 @@ const props = defineProps({
   action: {
     type: Object as PropType<CurdType.Action>,
     required: true
+  },
+  /** 页面标识 */
+  pageId: {
+    type: String,
+    required: true
   }
 });
 
@@ -45,6 +50,7 @@ function openConfig(type?: CurdConfig.Type) {
   openCurdConfig({
     title: "低代码配置",
     config: props.data,
+    pageId: props.pageId,
     type: type,
     callback(newConfig) {
       // console.log("保存的新配置 >>", newConfig);
@@ -68,14 +74,12 @@ const tableState = reactive({
   pageInfo: getPageInfo(),
 });
 
-const tableConfig = computed(() => props.data.table);
-
 /**
  * 通过键值获取对应的`column`对象
  * @param prop 注意这里值和插槽名相同
  */
 function getColumnByProp(prop: string) {
-  const column = tableConfig.value.columns.find(col => col.prop === prop);
+  const column = props.data.table.columns.find(col => col.prop === prop);
   return column || ({} as CurdType.Table.Column);
 }
 
@@ -116,7 +120,7 @@ function getTableImageProps(row: any, key: string): TableImageProps {
 }
 
 const actionList = computed(() => {
-  const list = tableConfig.value.actions;
+  const list = props.data.table.actions;
   return list.map(item => {
     const newAction = {
       ...item
@@ -128,11 +132,11 @@ const actionList = computed(() => {
       }
     }
     // 其他按钮配置的表单处理
-    // if (isType(newAction.formConfig, "object")) {
-    //   newAction.click = function (row) {
-    //     openForm(row, newAction.formConfig);
-    //   };
-    // }
+    if (isType(newAction.formConfig, "object")) {
+      newAction.click = function (row) {
+        openForm(row, newAction.formConfig);
+      };
+    }
     return newAction;
   });
 });
@@ -143,7 +147,7 @@ const actionList = computed(() => {
  */
  const tableSlot = computed(() => {
   const cell: Array<string> = [];
-  tableConfig.value.columns.forEach(column => {
+  props.data.table.columns.forEach(column => {
     column.slot && cell.push(column.slot);
   });
   return cell;
@@ -177,7 +181,7 @@ let tableRow = null as null | BaseObj<any>;
  */
 function openForm(row?: any, other?: CurdType.Table.From) {
   tableRow = row ? JSON.parse(JSON.stringify(row)) : {};
-  const config = tableConfig.value;
+  const config = props.data.table;
   const add = config.formAdd || getFormConfig();
   const edit = config.formEdit || getFormConfig();
   if (isType(other, "object")) {
@@ -211,13 +215,14 @@ function openForm(row?: any, other?: CurdType.Table.From) {
   }
 }
 
-function onCloseForm() {
-  formSate.show = false;
+function closeForm() {
   formRef.value?.reset();
+  formSate.show = false;
   tableRow = null;
+  batchData.selects = batchData.list = [];
 }
 
-function onSubmitForm() {
+function submitForm() {
   formRef.value?.validate(async (formData, current) => {
     let fn: typeof props.action.onAdd;
     if (formSate.type === "add" && props.action.onAdd) {
@@ -231,18 +236,19 @@ function onSubmitForm() {
       const res = await fn(formData, current);
       formSate.loading = false;
       if (res.code !== 1) return;
-      onCloseForm();
+      closeForm();
       getData();
+    } else {
+      const code = formSate.config.submitCode;
+      const name = formSate.config.title ? `【${formSate.config.title}】` : "表单";
+      if (!code) return message.error(`未找到对应的${name}提交代码！`);
+      try {
+        const fn = new Function("formData", "current", "other", code);
+        fn(formData, current, batchData);
+      } catch (error) {
+        console.warn("表单提交代码出错 >>", error);
+      }
     }
-    // const code = formSate.config.submitCode;
-    // const name = formSate.config.title ? `【${formSate.config.title}】` : "";
-    // if (!code) return message.error(`未找到对应的${name}提交代码！`);
-    // try {
-    //   const fn = new Function("formData", "current", code);
-    //   fn(formData, current);
-    // } catch (error) {
-    //   console.warn("表单提交代码出错 >>", error);
-    // }
   });
 }
 
@@ -273,8 +279,18 @@ function getSearchInfo() {
 async function getData() {
   const searchInfo = getSearchInfo();
   if (!searchInfo) return;
-  const page = JSON.parse(JSON.stringify(tableState.pageInfo));
+  // console.log("searchInfo >>", searchInfo);
+  // 处理自定义查询校验代码
+  const code = props.data.search.validateCode;
+  if (code) {
+    const fn = new Function("params", code);
+    const result = fn(searchInfo);
+    if (result === false) {
+      return;
+    }
+  }
   // 最后请求列表并把参数传入到外部声明方法中
+  const page = JSON.parse(JSON.stringify(tableState.pageInfo));
   state.loading = true;
   const res = await props.action.getTableData(searchInfo, page);
   state.loading = false;
@@ -285,43 +301,44 @@ async function getData() {
   }
 }
 
-function onTableOperation(type: TableOperationType) {
-  const selects = tableState.selectList;
+const batchData = {
+  /** 当前选中完整数据 */
+  selects: [] as Array<BaseObj>,
+  /** 当前选中键值列表 */
+  list: [] as Array<number | string>
+};
+
+/**
+ * 表格操作栏
+ * @param type 操作类型
+ * @param val 自定义代码或者表单配置
+ */
+function onTableOperation(type: TableOperationAction, val?: string | CurdType.Table.From) {
   switch (type) {
     case "add":
       openForm();
       break;
-
-    case "delete":
-      if (!selects.length) return message.warning("请选择要删除的列表再进行操作~");
-      messageBox({
-        title: "操作提示",
-        content: `是否删除选中的 ${selects.length} 条数据？`,
-        cancelText: "取消",
-        async confirm() {
-          if (props.action.onDelete) {
-            state.loading = true;
-            const res = await props.action.onDelete(JSON.parse(JSON.stringify(tableState.selectList)));
-            if (res.code === 1) {
-              message.success("删除成功！");
-              tableState.selectList = [];
-              getData();
-            } else {
-              state.loading = false;
-            }
-          } else {
-            message.info("请设置 action.onDelete 删除逻辑");
-          }
-        }
-      });
+    
+    case "batch":
+      batchData.selects = JSON.parse(JSON.stringify(tableState.selectList));
+      if (!batchData.selects.length) return message.warning("请选择要操作的列！");
+      if (!val) return message.error("当前按钮未配置动态代码或表单配置！");
+      batchData.list = batchData.selects.map(item => item[props.data.table.selectKey!]);
+      // TODO: 走表单逻辑
+      if (isType<CurdType.Table.From>(val, "object")) {
+        openForm(undefined, val);
+        return;
+      }
+      try {
+        const fn = new Function("list", "selectList", val);
+        fn(batchData.list, batchData.selects);
+      } catch (error) {
+        console.warn("批量操作代码出错 >>", error);
+      }
       break;
 
-    case "export":
-      if (props.action.onExport) {
-        props.action.onExport();
-      } else {
-        message.info("请设置 action.onExport 导出逻辑");
-      }
+    case "open-form":
+      openForm(undefined, val as CurdType.Table.From);
       break;
   }
 }
@@ -330,6 +347,28 @@ function setLoading(val: boolean) {
   state.loading = val;
 }
 
+function setFormLoading(val: boolean) {
+  formSate.loading = val;
+}
+
+/**
+ * 表格自定义方法对象
+ * - TODO: 非常重要！！！，在表格列用原生实现自定义方法点击时使用
+ * @example
+ * ```js
+ * const pageId = "demo-page";
+ * const page = window[`_${pageId}`];
+ * 
+ * function onCell() {
+ *   console.log("表格点击 >>", row);
+ *   page.openForm();
+ * }
+ * page.cellFn[row.id] = onCell;
+ * return `<button class="the-tag" onclick="window['_${pageId}'].cellFn['${row.id}']()">打开表格</button>`;
+ * ```
+ */
+ const cellFn = {};
+
 exportPropToWindow({
   formatDate,
   copyText,
@@ -337,12 +376,20 @@ exportPropToWindow({
   message,
   jsonToPath,
   request,
-  getData,
-  setLoading,
+  // TODO: 类似沙盒一样的全局方法隔离操作
+  [props.pageId]: {
+    onSearch,
+    getData,
+    setLoading,
+    setFormLoading,
+    openForm,
+    closeForm,
+    cellFn,
+  },
 });
 
 onMounted(function() {
-  if (props.action.created && tableConfig.value.columns.length) {
+  if (props.action.created && props.data.table.columns.length) {
     props.action.created(getData);
   }
 });
@@ -355,9 +402,9 @@ onMounted(function() {
       :loading="state.loading"
       @search="onSearch"
     />
-    <template v-if="tableConfig.columns.length > 0">
+    <template v-if="props.data.table.columns.length > 0">
       <TableOperation
-        :config="tableConfig"
+        :config="props.data.table"
         :disabled="state.loading"
         @action="onTableOperation"
       />
@@ -365,11 +412,11 @@ onMounted(function() {
         class="f1"
         v-model:select-list="tableState.selectList"
         :data="tableState.data"
-        :columns="tableConfig.columns"
+        :columns="props.data.table.columns"
         :actions="actionList"
-        :action-max="tableConfig.actionMax"
+        :action-max="props.data.table.actionMax"
         :loading="state.loading"
-        :select-key="tableConfig.selectKey!"
+        :select-key="props.data.table.selectKey!"
         :page-info="tableState.pageInfo"
         @page="getData()"
         @sort="getData()"
@@ -404,15 +451,15 @@ onMounted(function() {
       v-model:show="formSate.show"
       :title="formSate.config.title"
       :width="convertPx(formSate.config.width)"
-      @close="onCloseForm"
+      @close="closeForm"
       @opened="onSetForm"
     >
       <TableForm ref="formRef" :disabled="formSate.loading" />
       <template #footer>
         <FooterBtn
           :loading="formSate.loading"
-          @close="onCloseForm()"
-          @submit="onSubmitForm()"
+          @close="closeForm"
+          @submit="submitForm"
         />
       </template>
     </base-dialog>

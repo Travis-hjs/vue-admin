@@ -1,5 +1,5 @@
 <template>
-  <Curd v-model:data="data" :action="action" />
+  <Curd v-model:data="data" :action="action" :pageId="pageId" />
 </template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
@@ -14,6 +14,11 @@ import { columnActionProp } from "@/components/Table";
 import { formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const pageId = route.name as string;
 
 const option = {
   gameType: [
@@ -144,7 +149,6 @@ const data = ref<CurdType.Config>({
         },
       }
     ],
-    selectKey: "id",
     formAdd: {
       width: 520,
       labelPosition: "left",

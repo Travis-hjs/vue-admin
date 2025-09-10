@@ -10,7 +10,7 @@ import { type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { actionEditKey, getActionData, getBoldLabel } from "./data";
 import { useListDrag } from "@/hooks/common";
-import { FooterBtn, IconInput } from "./part";
+import { FooterBtn, IconInput, PresetCode } from "./part";
 import { deepClone, isType } from "@/utils";
 import { Fields, type FieldType } from "@/components/Fields";
 
@@ -37,6 +37,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: "update:show", show: boolean): void;
   (event: "submit", list: Array<CurdType.Table.Action>, width?: number, max?: number): void;
+  (event: "openFormConfig", target: CurdType.Table.Action): void;
 }>();
 
 const textTips = `
@@ -147,9 +148,17 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
   {
     label: "按钮功能代码",
     prop: "click",
-    type: "textarea",
+    type: "slot",
+    slotName: "clickCode",
     placeholder: "请输入代码片段",
-    tooltip: fnTips
+    tooltip: fnTips,
+    show: () => !form.btn.formConfig
+  },
+  {
+    label: "表单功能",
+    prop: "formConfig",
+    type: "slot",
+    slotName: "formConfig"
   },
   {
     label: "按钮显示条件",
@@ -230,6 +239,10 @@ function onDelete(index: number) {
   state.list.splice(index, 1);
 }
 
+function onFormConfig() {
+  emit("openFormConfig", form.btn);
+}
+
 watch(
   () => props.show,
   function (show) {
@@ -290,7 +303,7 @@ function getBtnText(action: CurdType.Table.Action) {
   <base-dialog
     v-model:show="state.show"
     title="配置操作列按钮功能"
-    width="920px"
+    width="1000px"
     @close="onClose"
   >
     <div class="flex">
@@ -319,8 +332,32 @@ function getBtnText(action: CurdType.Table.Action) {
           :class="{'the-filter-mask': !state.formEdit}"
           data-tips="待新增或编辑操作"
         >
-          <Fields :data="form.btn" :list="btnItems">
-            <template #iconInput>
+        <Fields :data="form.btn" :list="btnItems">
+            <template #clickCode>
+              <PresetCode v-model:value="(form.btn.click as string)" type="action-submit" />
+            </template>
+            <template #formConfig>
+              <el-button
+                :type="form.btn.formConfig ? 'success' : 'primary'"
+                size="small"
+                plain
+                @click="onFormConfig"
+              >
+                <i :class="['el-icon--left', form.btn.formConfig ? 'el-icon-edit' : 'el-icon-setting']" />
+                {{ form.btn.formConfig ? "修改表单" : "配置表单" }}
+              </el-button>
+              <el-button
+                v-if="form.btn.formConfig"
+                type="danger"
+                size="small"
+                plain
+                @click="form.btn.formConfig = undefined"
+              >
+                <i class="el-icon--left el-icon-delete" />
+                删除表单
+              </el-button>
+            </template>
+            <template #icon>
               <IconInput v-model:value="form.btn.icon" />
             </template>
           </Fields>

@@ -11,6 +11,7 @@
     "monthrange",
     "popconfirm",
     "tdesign",
-    "Vite"
+    "Vite",
+    "batchs"
   ],
 }

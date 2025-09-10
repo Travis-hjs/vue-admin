@@ -1,10 +1,13 @@
 import { openPreview } from "@/components/ImageViewer";
-import type { CurdType } from "./types";
-import { computed, defineComponent, onMounted, ref } from "vue";
+import type { CurdType, PresetCodeType } from "./types";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import type { PropType } from "vue";
 import { formatDate, isType } from "@/utils";
 import { shortcutMap } from "./data";
-import icons from "./element-icons.json";
+import icons from "./data/element-icons.json";
+import { curdConfigState } from "./hooks";
+import { watch } from "vue";
+import { presetCodeMap } from "./data/code";
 // ----------------- 一些零散的单一组件 -----------------
 
 interface FooterBtnProps {
@@ -350,5 +353,99 @@ export const SelectField = defineComponent({
         )}
       </>
     )
+  }
+});
+
+/**
+ * 预设代码组件
+ */
+export const PresetCode = defineComponent({
+  props: {
+    /** 字典类型 */
+    type: {
+      type: String as PropType<PresetCodeType.Key>,
+      required: true,
+    },
+    /** 输入框绑定值 */
+    value: {
+      type: [String, Function],
+      default: "",
+    }
+  },
+  emits: ["update:value", "blur"],
+  setup(props, { emit }) {
+    const input = computed({
+      get() {
+        return props.value;
+      },
+      set(val) {
+        emit("update:value", val);
+      }
+    });
+
+    const state = reactive({
+      loading: false,
+      options: [] as Array<PresetCodeType.Item>,
+      selected: undefined as undefined | number
+    });
+
+    function onInput() {
+      state.selected = undefined;
+    }
+
+    function onSelect() {
+      const option = state.options.find(opt => opt.id === state.selected);
+      if (!option) return;
+      const { pageId } = curdConfigState;
+      input.value = option.code.replace("_pageId", pageId);
+    }
+
+    async function getOptions() {
+      // state.loading = true;
+      // const res = await getCurdTableList();
+      // state.loading = false;
+      // if (res.code !== 1) return;
+      // console.log("getOptions >>", res.data);
+      // state.options = res.data.records || [];
+      state.options = presetCodeMap[props.type]
+    }
+
+    watch(
+      () => props.type,
+      () => {
+        getOptions();
+        onInput();
+      },
+      { immediate: true }
+    );
+
+    return () => (
+      <>
+        <el-input
+          v-model={input.value}
+          rows={6}
+          type="textarea"
+          placeholder="请输入代码片段"
+          class="mb-[10px]"
+          onInput={onInput}
+          onBlur={() => emit("blur")}
+        />
+        <div class="f-vertical w-full">
+          <el-text type="primary" class="min-w-[86px]">
+            <i class="el-icon--left el-icon-position"></i>
+            预设代码
+          </el-text>
+          <el-select
+            v-model={state.selected}
+            placeholder="请选择示例代码"
+            onChange={onSelect}
+          >
+            {state.options.map(item => (
+              <el-option key={item.id} label={item.name} value={item.id} />
+            ))}
+          </el-select>
+        </div>
+      </>
+    );
   }
 });

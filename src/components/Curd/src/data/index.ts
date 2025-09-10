@@ -1,5 +1,5 @@
 import { nextTick, onUnmounted } from "vue";
-import type { CurdConfig, CurdType } from "./types";
+import type { CurdConfig, CurdType } from "../types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 import { getCountId } from "@/hooks/common";
 import { columnActionProp } from "@/components/Table";
@@ -237,6 +237,17 @@ export function getFormConfig(): CurdType.Table.From {
 export function getActionData(): CurdType.Table.Action {
   return {
     key: getCountId("action"),
+    text: "",
+    icon: "",
+    click: "",
+    type: "primary"
+  };
+}
+
+/** 自定义按钮操作数据 */
+export function getOperationData(): CurdType.Table.Operation {
+  return {
+    key: getCountId("operation"),
     text: "",
     icon: "",
     click: "",

@@ -5,12 +5,12 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, reactive, ref, watch, type PropType } from "vue";
 import type { CurdType } from "./types";
-import { getBoldLabel, getColumnData } from "./data";
 import type { FormInstance } from "element-plus";
+import { computed, reactive, ref, watch, type PropType } from "vue";
+import { getBoldLabel, getColumnData } from "./data";
 import { deepClone } from "@/utils";
-import { FooterBtn } from "./part";
+import { FooterBtn, PresetCode } from "./part";
 import { Fields, type FieldType } from "@/components/Fields";
 
 const props = defineProps({
@@ -104,7 +104,7 @@ const codeTips = `
 <p>第一个参数${getBoldLabel("cellValue")}是表格值;</p>
 <p>第二个参数${getBoldLabel("row")}是完整对象;</p>
 <p>例如：${getBoldLabel("return cellValue + row.id;")};</p>
-<p>也可以是HTML：${getBoldLabel("return `html 标签`")};</p>
+<p>也可以是HTML：${getBoldLabel("return `<html 标签>`")};</p>
 `;
 
 const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
@@ -153,12 +153,11 @@ const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
     show: () => state.form.cellType === "image"
   },
   {
-    label: "js代码",
+    label: "JS代码",
     prop: "jsCode",
-    type: "textarea",
-    placeholder: "请输入代码片段",
+    type: "slot",
+    slotName: "jsCode",
     tooltip: codeTips,
-    tips: '例如：return `<span class="the-tag blue">${cellValue || "-"}<span>`;',
     show: () => state.form.cellType === "js"
   },
   {
@@ -273,7 +272,11 @@ watch(
       label-position="right"
       label-width="130px"
     >
-      <Fields :data="state.form" :list="itemList" />
+      <Fields :data="state.form" :list="itemList">
+        <template #jsCode>
+          <PresetCode v-model:value="state.form.jsCode" type="table-cell" />
+        </template>
+      </Fields>
     </el-form>
     <template #footer>
       <FooterBtn @close="onClose" @submit="onSubmit" />

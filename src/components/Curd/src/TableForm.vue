@@ -10,7 +10,8 @@ import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { convertPx, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import Field from "./Field.vue";
-import { deepClone, formatDeepKeyObj, isType, modifyData } from "@/utils";
+import { deepClone, formatDeepKeyObj, getValueByDeepKey, isType, modifyData } from "@/utils";
+import { LabelTips } from "@/components/Fields";
 
 const props = defineProps({
   /** 表单配置 */
@@ -95,10 +96,12 @@ function reset() {
  * @param data 
  */
 function setFormData(data: BaseObj<any>) {
+  tableRow = data;
+  const empty: Array<any> = [undefined, null, ""];
   state.config.fields.forEach(field => {
     if (Object.prototype.hasOwnProperty.call(data, field.key)) {
-      const value = data[field.key];
-      if (!value) return;
+      const value = getValueByDeepKey(data, field.key);
+      if (empty.includes(value)) return;
       switch (field.type) {
         case "date":
           if (isType(value, "array")) {
@@ -235,6 +238,9 @@ defineExpose({
         :label="field.label"
         :prop="field.key"
       >
+        <template v-if="field.label && field.tooltip" #label>
+          <LabelTips :label="field.label" :tips="field.tooltip" />
+        </template>
         <Field :fieldData="field" :disabled="getDisabled(field.disabled)" />
       </el-form-item>
     </template>

@@ -1,10 +1,15 @@
 <template>
-  <Curd v-model:data="data" :action="action" />
+  <Curd v-model:data="data" :action="action" :pageId="pageId" />
 </template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
 import { Curd, getCurdConfigDefault, type CurdType } from "@/components/Curd";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const pageId = route.name as string;
 
 const data = ref(getCurdConfigDefault());
 

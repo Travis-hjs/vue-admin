@@ -5,17 +5,18 @@ export default {
 };
 </script>
 <script lang="ts" setup>
+import type { CurdType } from "./types";
 import { curdConfigState } from "./hooks";
 import { computed, reactive } from "vue";
-import type { CurdType } from "./types";
 import { copyText } from "@/utils";
 import { message } from "@/utils/message";
-import { getCurdConfigEditor } from "./data";
+import { getBoldLabel, getCurdConfigEditor } from "./data";
 import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
 import Editor from "./Editor.vue";
 import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
+import { PresetCode } from "./part";
 
 const tabList = [
   { label: "筛选部分", value: "search" },
@@ -35,8 +36,31 @@ const searchConfigs: Array<FieldType.Member<CurdType.Search>> = [
     label: "文字靠右对齐",
     prop: "labelRight",
     type: "switch"
+  },
+  {
+    label: "查询数据校验逻辑代码",
+    prop: "validateCode",
+    type: "slot",
+    slotName: "validateCode",
+    tooltip: `<p>查询数据函数代码片段：</p>
+<p>函数携带一个参数${getBoldLabel("params")}为当前查询参数对象</p>
+<p>返回${getBoldLabel("true")}则可以查询，返回${getBoldLabel("false")}则终止查询；</p>`
   }
 ];
+
+const configRules = {
+  validateCode: {
+    required: false,
+    trigger: "blur",
+    validator(r: any, v: string, callback: (err?: Error) => void) {
+      if (v && !v.includes("return")) {
+        callback(new Error("函数必须带有 return 字段"));
+      } else {
+        callback();
+      }
+    }
+  }
+};
 
 const state = reactive({
   loading: false,
@@ -67,7 +91,7 @@ function onTab() {
 <template>
   <FullPopup
     v-model:show="curdConfigState.show"
-    :title="curdConfigState.title"
+    :title="`${curdConfigState.title} (${curdConfigState.pageId})`"
     @close="onClose"
   >
     <template #top>
@@ -85,11 +109,22 @@ function onTab() {
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">基础配置</el-text>
         </el-divider>
-        <el-form label-position="right" label-width="120px">
-          <Fields
-            :data="curdConfigState.config.search"
-            :list="searchConfigs"
-          />
+        <el-form 
+          :model="curdConfigState.config.search"
+          :rules="configRules"
+          label-position="right"
+          label-width="180px"
+        >
+          <Fields :data="curdConfigState.config.search" :list="searchConfigs">
+            <template #validateCode>
+              <div class="w-full max-w-[680px]">
+                <PresetCode
+                  v-model:value="curdConfigState.config.search.validateCode"
+                  type="search-validate"
+                />
+              </div>
+            </template>
+          </Fields>
         </el-form>
         <el-divider content-position="left" border-style="dashed">
           <el-text type="info">筛选条件配置</el-text>

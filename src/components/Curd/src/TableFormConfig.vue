@@ -7,7 +7,7 @@ export default {
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
 import type { CurdConfig, CurdType } from "./types";
-import { convertPx, getFormConfig } from "./data";
+import { convertPx, getBoldLabel, getFormConfig } from "./data";
 import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
 import Field from "./Field.vue";
@@ -17,6 +17,7 @@ import { messageBox } from "@/utils/message";
 import type { FormInstance } from "element-plus";
 import { validateEX } from "@/utils/dom";
 import { deepClone } from "@/utils";
+import { PresetCode } from "./part";
 
 const props = defineProps({
   show: {
@@ -39,6 +40,30 @@ const emit = defineEmits<{
   (event: "update:show", val: boolean): void;
   (event: "change", config?: CurdType.Table.From, sync?: boolean): void;
 }>();
+
+const showCodeTips = `
+<p>按钮显示逻辑代码片段：</p>
+<p>例如${getBoldLabel("return false;")}为隐藏，</p>
+<p>不填则默认显示</p>
+<p>下划线开头的均是全局函数，可在控制台直接运行。</p>
+`;
+
+// const openCodeTips = `
+// <p>表单提交函数代码片段：</p>
+// <p>函数会携带一个参数${getBoldLabel("row")}，当编辑时存在</p>
+// <p>可以对${getBoldLabel("row")}进行数据处理操作</p>
+// <p>示例：${getBoldLabel('console.log("表单打开 >>", row);')}</p>
+// <p>下划线开头的均是全局函数，可在控制台直接运行。</p>
+// `;
+
+const submitCodeTips = `
+<p>表单提交函数代码片段：</p>
+<p>第一个参数${getBoldLabel("formData")}表单完整对象，</p>
+<p>第二个参数${getBoldLabel("current")}界面展示中的字段对象，</p>
+<p>第三个参数${getBoldLabel("other")}其他操作（如批量操作中为选中的列表参数对象），</p>
+<p>可以点击${getBoldLabel("使用示例代码")}进行快速编辑</p>
+<p>下划线开头的均是全局函数，可在控制台直接运行。</p>
+`;
 
 const formRules = {
   title: {
@@ -85,15 +110,15 @@ const formConfigs: Array<FieldType.Member<CurdType.Table.From>> = [
     inactiveValue: "left",
     activeValue: "right"
   },
-  // {
-  //   label: "按钮显示逻辑",
-  //   labelWidth,
-  //   prop: "showCode",
-  //   type: "textarea",
-  //   tooltip: showCodeTips,
-  //   placeholder: "请输入代码片段",
-  //   show: () => !isOther.value,
-  // },
+  {
+    label: "按钮显示逻辑",
+    labelWidth,
+    prop: "showCode",
+    type: "textarea",
+    tooltip: showCodeTips,
+    placeholder: "请输入代码片段",
+    show: () => !isOther.value,
+  },
   // {
   //   label: "表单打开前逻辑",
   //   labelWidth,
@@ -102,15 +127,15 @@ const formConfigs: Array<FieldType.Member<CurdType.Table.From>> = [
   //   tooltip: openCodeTips,
   //   placeholder: "请输入代码片段",
   // },
-  // {
-  //   label: "表单提交逻辑",
-  //   labelWidth,
-  //   prop: "submitCode",
-  //   type: "slot",
-  //   slotName: "submitCode",
-  //   tooltip: submitCodeTips,
-  //   placeholder: "请输入代码片段",
-  // },
+  {
+    label: "表单提交逻辑",
+    labelWidth,
+    prop: "submitCode",
+    type: "slot",
+    slotName: "submitCode",
+    tooltip: submitCodeTips,
+    placeholder: "请输入代码片段",
+  },
 ];
 
 const state = reactive({
@@ -304,12 +329,12 @@ watch(
           </el-divider>
           <div v-show="state.showInfo">
             <Fields :data="state.config" :list="formConfigs">
-              <!-- <template #submitCode>
+              <template #submitCode>
                 <PresetCode
-                  v-model:value="state.config.jsCode"
+                  v-model:value="state.config.submitCode"
                   type="form-submit"
                 />
-              </template> -->
+              </template>
             </Fields>
           </div>
           <el-divider content-position="left" border-style="dashed">
@@ -363,11 +388,7 @@ watch(
         </transition-group>
         <el-empty
           v-if="!state.config.fields.length"
-          :description="
-            isOther
-              ? `请配置表单项`
-              : `当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`
-          "
+          :description="isOther ? `请配置表单项` : `当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`"
         >
           <!-- <el-button v-if="!isEdit" type="primary" plain @click="onAddId()">
             <i class="el-icon--left el-icon-plus" />
