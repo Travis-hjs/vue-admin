@@ -54,7 +54,7 @@ function getFormData(): CurdType.Table.Batch {
     type: "primary",
     icon: "",
     text: "",
-    batchCode: ""
+    click: ""
   };
 }
 
@@ -64,7 +64,7 @@ const formRules = {
     message: "请输入按钮文字",
     trigger: "blur"
   },
-  batchCode: {
+  click: {
     required: true,
     message: "请输入按钮操作代码",
     trigger: "blur"
@@ -80,7 +80,7 @@ const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [
   },
   {
     label: "按钮功能代码",
-    prop: "batchCode",
+    prop: "click",
     type: "slot",
     slotName: "batchCode",
     tooltip: fnTips,
@@ -242,7 +242,7 @@ watch(
           <Fields :data="state.formData" :list="formItems">
             <template #batchCode>
               <PresetCode
-                v-model:value="state.formData.batchCode"
+                v-model:value="state.formData.click"
                 type="batch-submit"
               />
             </template>

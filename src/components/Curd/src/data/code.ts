@@ -97,7 +97,6 @@ _messageBox({
   cancelText: "取消",
   async confirm() {
     // 发起请求操作
-    // 开始发起请求
     const res = await _request("POST", path, params, { domain });
     // code为 1 时表示成功，其他的直接跳出停止后面的操作
     if (res.code !== 1) return false;

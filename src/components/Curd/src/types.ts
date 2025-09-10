@@ -266,7 +266,10 @@ export namespace CurdType {
     export interface Operation extends Pick<TableType.Action<BaseObj>, "type" | "text" | "icon"> {
       /** 按钮唯一值 */
       key: string;
-      /** 点击事件 */
+      /**
+       * 点击事件
+       * - 当为字符串时是自定义代码
+       */
       click: (() => void) | string;
       /**
        * 是否显示按钮
@@ -283,14 +286,12 @@ export namespace CurdType {
     }
 
     /** 表格批量操作 */
-    export interface Batch extends Pick<Operation, "key" | "type" | "text" | "icon" | "solid"> {
-      /** 批量选中操作自定义代码 */
-      batchCode: string;
+    export interface Batch extends Omit<Operation, "click"> {
       /**
-       * 表单配置
-       * - 如果存在，则直接调用`openForm`方法，跳过执行`jsCode`事件
+       * 点击事件
+       * - 当为字符串时是自定义代码
        */
-      formConfig?: From;
+      click: ((list: Array<string|number>, selectList: Array<any>) => void) | string;
     }
 
     /** 表格相关配置 */
@@ -352,13 +353,13 @@ export namespace CurdType {
      */
     saved?(type: keyof Config): void;
     /**
-     * 新增表单
+     * 新增表单-优先级比页面自定义配置代码高
      * @param form 完整表单对象
      * @param current 当前展示中的字段对象
      */
     onAdd?(form: BaseObj<any>, current: BaseObj<any>): Promise<Api.Result>;
     /**
-     * 编辑表单
+     * 编辑表单-优先级比页面自定义配置代码高
      * @param form 完整表单对象
      * @param current 当前展示中的字段对象
      */

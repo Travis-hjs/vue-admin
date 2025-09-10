@@ -313,7 +313,7 @@ const batchData = {
  * @param type 操作类型
  * @param val 自定义代码或者表单配置
  */
-function onTableOperation(type: TableOperationAction, val?: string | CurdType.Table.From) {
+function onTableOperation(type: TableOperationAction, val?: CurdType.Table.Batch["click"] | CurdType.Table.From) {
   switch (type) {
     case "add":
       openForm();
@@ -327,6 +327,10 @@ function onTableOperation(type: TableOperationAction, val?: string | CurdType.Ta
       // TODO: 走表单逻辑
       if (isType<CurdType.Table.From>(val, "object")) {
         openForm(undefined, val);
+        return;
+      }
+      if (isType(val, "function")) {
+        val(batchData.list, batchData.selects);
         return;
       }
       try {

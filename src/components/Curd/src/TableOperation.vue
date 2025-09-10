@@ -26,11 +26,13 @@ const props = defineProps({
   }
 });
 
+type ActionValue = CurdType.Table.Batch["click"] | CurdType.Table.From;
+
 const emit = defineEmits<{
-  (event: "action", action: TableOperationAction, value?: string | CurdType.Table.From): void;
+  (event: "action", action: TableOperationAction, value?: ActionValue): void;
 }>();
 
-function onAction(val: TableOperationAction, code?: string | CurdType.Table.From) {
+function onAction(val: TableOperationAction, code?: ActionValue) {
   emit("action", val, code);
 }
 
@@ -124,7 +126,7 @@ function onBatch(btn: CurdType.Table.Batch) {
   if (btn.formConfig) {
     onAction("batch", btn.formConfig);
   } else {
-    onAction("batch", btn.batchCode);
+    onAction("batch", btn.click);
   }
 }
 

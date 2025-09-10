@@ -120,7 +120,7 @@ const data = ref<CurdType.Config>({
       },
       {
         ...getColumnData(columnActionProp, "操作"),
-        width: 160,
+        width: 220,
       },
     ],
     actions: [
@@ -147,6 +147,22 @@ const data = ref<CurdType.Config>({
             },
           });
         },
+      },
+      {
+        key: "2",
+        text: "同步数据",
+        type: "primary",
+        click: `const pageId = "${pageId}";
+const page = window[\`_\${pageId}\`];
+_messageBox({
+  title: "操作提示",
+  content: \`是否同步【\${row.gameName}】数据？\`,
+  cancelText: "取消",
+  confirm() {
+    _message.success("同步数据成功！");
+    page.getData();
+  }
+});`,
       }
     ],
     formAdd: {
@@ -217,6 +233,46 @@ const data = ref<CurdType.Config>({
         },
       ]
     },
+    selectKey: "id",
+    batchs: [
+      {
+        text: "批量删除",
+        type: "danger",
+        key: "batch-delete",
+        click: `
+const pageId = "${pageId}";
+const page = window[\`_${pageId}\`];
+const text = "删除";
+_messageBox({
+  title: "操作提示",
+  content: \`是否\${text}选中的 \${list.length} 条数据？\`,
+  cancelText: "取消",
+  confirm() {
+    _message.success(text + "成功！");
+    page.onSearch();
+  }
+});`
+      },
+      {
+        text: "批量上报",
+        type: "primary",
+        key: "batch-post",
+        click(list, selectList) {
+          console.log("多选数据 >>", list, selectList);
+          message.info("上报成功！");
+          const page = (window as any)[`_${pageId}`];
+          page.onSearch();
+        },
+      }
+    ],
+    operations: [
+      {
+        text: "导出数据",
+        type: "primary",
+        key: "export-data",
+        click: `_message.success("导出成功！")`
+      }
+    ]
   }
 });
 
