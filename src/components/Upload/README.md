@@ -7,20 +7,20 @@
 ```html
 <script lang="ts" setup>
 import { reactive } from "vue";
-import { UploadImage, type UploadChange } from "@/components/Upload";
+import { UploadImage, type UploadType } from "@/components/Upload";
 
 const formData = reactive({
   banner: "",
-  logo: ""
-})
+  logo: "",
+});
 
 /**
  * 监听上传图片
  * @param info 回调数据
  */
-function onUpload(info: UploadChange<"banner"|"logo">) {
+function onUpload(info: UploadType.Image<keyof typeof formData>) {
   // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
-  formData[info.id] = info.src;
+  formData[info.id] = info.url;
 }
 </script>
 <template>
@@ -50,7 +50,7 @@ function onUpload(info: UploadChange<"banner"|"logo">) {
 
 | 事件名 | 说明 |
 | --- | --- |
-| change | 上传成功时回调，参数类型为`UploadChange` |
+| change | 上传成功时回调，参数类型为`UploadType.Image` |
 
 ## 上传包裹组件
 
@@ -59,7 +59,7 @@ function onUpload(info: UploadChange<"banner"|"logo">) {
 ```html
 <script lang="ts" setup>
 import { reactive } from "vue";
-import { UploadWrap, type UploadChange } from "@/components/Upload";
+import { UploadWrap, type UploadType } from "@/components/Upload";
 
 const formData = reactive({
   file: "",
@@ -69,8 +69,8 @@ const formData = reactive({
  * 监听上传
  * @param info 回调数据
  */
-function onUpload(info: UploadChange) {
-  formData.file = info.src;
+function onUpload(info: UploadType.Image) {
+  formData.file = info.url;
 }
 </script>
 <template>

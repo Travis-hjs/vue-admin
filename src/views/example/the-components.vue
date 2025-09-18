@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { Scrollbar } from "@/components/Scrollbar";
-import { UploadImage, type UploadChange } from "@/components/Upload";
+import { UploadImage, type UploadType } from "@/components/Upload";
 import { CollapseHeight } from "@/components/CollapseHeight";
 import { type Message, message, messageBox } from "@/utils/message";
 
 const formData = reactive({
   banner: "",
-  logo: ""
-})
+  logo: "",
+});
 
 const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
 
@@ -16,9 +16,9 @@ const list = ref(new Array(10).fill(0).map((_, index) => index + 1));
  * 监听上传图片
  * @param info 回调数据
  */
-function onUpload(info: UploadChange<"banner" | "logo">) {
+function onUpload(info: UploadType.Image<keyof typeof formData>) {
   // info.id 就是组件绑定的 uploadId，多个上传组件的时候用来区分用，可传可不传
-  formData[info.id] = info.src;
+  formData[info.id] = info.url;
 }
 
 const dialogInfo = reactive({

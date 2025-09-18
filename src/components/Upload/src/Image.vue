@@ -9,8 +9,8 @@ import { ref } from "vue"
 import { copyText } from "@/utils";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
-import type { UploadChange } from "./index";
-import { openPreview } from "../ImageViewer";
+import { openPreview } from "@/components/ImageViewer";
+import type { UploadType } from "./types";
 
 const props = defineProps({
   /** 组件上传图片路径 */
@@ -68,14 +68,14 @@ const loading = ref(false);
 const uploadInput = ref<HTMLInputElement>();
 
 const emit = defineEmits<{
-  (event: "change", res: UploadChange<any>): void
+  (event: "change", res: UploadType.Image<any>): void
 }>()
 
 /** 清除当前图片 */
 function removeImg() {
   emit("change", {
     id: props.uploadId,
-    src: "",
+    url: "",
   });
 }
 
@@ -108,8 +108,8 @@ async function onUpload() {
     const result = res.data.url;
     emit("change", {
       id: props.uploadId,
-      src: result,
-      // result: res.data
+      url: result,
+      // apiData: res.data,
     });
   }
 }

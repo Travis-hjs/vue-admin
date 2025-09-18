@@ -8,7 +8,7 @@ export default {
 import { type PropType, ref } from "vue";
 import { uploadFile } from "@/api/common";
 import { message } from "@/utils/message";
-import type { UploadChange } from "./index";
+import type { UploadType } from "./types";
 
 const props = defineProps({
   /** 组件`id`,多个组件使用时区分用 */
@@ -66,7 +66,7 @@ const uploadInput = ref<HTMLInputElement>();
 
 const emit = defineEmits<{
   (event: "load" , res: boolean): void
-  (event: "change" , res: UploadChange<any>): void
+  (event: "change" , res: UploadType.Image<any>): void
 }>()
 
 function beforeUpload() {
@@ -114,8 +114,8 @@ async function onUpload() {
     const result = res.data.fileUrl;
     emit("change", {
       id: props.uploadId,
-      src: result,
-      result: res.data
+      url: result,
+      apiData: res.data
     });
   }
 };
