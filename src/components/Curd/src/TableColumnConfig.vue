@@ -12,6 +12,7 @@ import { getBoldLabel, getColumnData } from "./data";
 import { deepClone } from "@/utils";
 import { FooterBtn, PresetCode } from "./part";
 import { Fields, type FieldType } from "@/components/Fields";
+import { getInputRule, getSelectRule } from "@/hooks/common";
 
 const props = defineProps({
   show: {
@@ -51,7 +52,7 @@ const title = computed(() => {
 const formRef = ref<FormInstance>();
 
 const formRules = {
-  title: { required: true, message: "请输入表格列标题", trigger: "blur" },
+  title: getInputRule("请输入表格列标题"),
   prop: {
     required: true,
     validator(_: any, v: string, callback: (err?: Error) => void) {
@@ -67,8 +68,8 @@ const formRules = {
     },
     trigger: "blur"
   },
-  cellType: { required: true, message: "请选择展示类型", trigger: "change" },
-  sort: { required: true, message: "请选择排序操作", trigger: "change" },
+  cellType: getSelectRule("请选择展示类型"),
+  sort: getSelectRule("请选择排序操作"),
   jsCode: {
     required: true,
     validator(_: any, v: string, callback: (err?: Error) => void) {

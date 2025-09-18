@@ -12,7 +12,7 @@ import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
 import Field from "./Field.vue";
 import { curdConfigState } from "./hooks";
-import { useListDrag } from "@/hooks/common";
+import { getInputRule, useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
 import type { FormInstance } from "element-plus";
 import { validateEX } from "@/utils/dom";
@@ -66,16 +66,8 @@ const submitCodeTips = `
 `;
 
 const formRules = {
-  title: {
-    required: true,
-    message: "请输入表单标题",
-    trigger: "blur"
-  },
-  submitCode: {
-    required: true,
-    message: "请输入代码片段",
-    trigger: "blur"
-  },
+  title: getInputRule("请输入表单标题"),
+  submitCode: getInputRule("请输入代码片段"),
 };
 
 const labelWidth = "140px";

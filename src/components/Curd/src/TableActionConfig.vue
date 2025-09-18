@@ -9,7 +9,7 @@ import { reactive, ref, watch, type PropType } from "vue";
 import { type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { actionEditKey, getActionData, getBoldLabel } from "./data";
-import { useListDrag } from "@/hooks/common";
+import { getInputRule, getSelectRule, useListDrag } from "@/hooks/common";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { deepClone, isType } from "@/utils";
 import { Fields, type FieldType } from "@/components/Fields";
@@ -86,16 +86,8 @@ const form = reactive({
 });
 
 const columnRules = {
-  width: {
-    required: true,
-    message: "请输入表格列宽度，例如：160",
-    trigger: "blur"
-  },
-  max: {
-    required: false,
-    message: "请输入数量，超出用“更多”下拉展示",
-    trigger: "blur"
-  }
+  width: getInputRule("请输入表格列宽度，例如：160"),
+  max: getInputRule("请输入数量，超出用“更多”下拉展示", false),
 }
 
 const columnItems: Array<FieldType.Member<typeof form.column>> = [
@@ -115,26 +107,10 @@ const columnItems: Array<FieldType.Member<typeof form.column>> = [
 ];
 
 const btnRules = {
-  text: {
-    required: true,
-    message: "请输入按钮文字",
-    trigger: "blur"
-  },
-  click: {
-    required: true,
-    message: "请输入按钮操作代码",
-    trigger: "blur"
-  },
-  icon: {
-    required: false,
-    message: "请输入图标 class",
-    trigger: "blur"
-  },
-  type: {
-    required: false,
-    message: "请选择按钮类型",
-    trigger: "change"
-  }
+  text: getInputRule("请输入按钮文字"),
+  click: getInputRule("请输入按钮操作代码"),
+  icon: getInputRule("请输入图标 class", false),
+  type: getSelectRule("请选择按钮类型", false),
 }
 
 const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [

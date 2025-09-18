@@ -6,6 +6,7 @@ import { openNextPage } from "@/router/permission";
 import { jsonParse } from "@/utils";
 import { type FormInstance } from "element-plus";
 import { validateEX } from "@/utils/dom";
+import { getInputRule } from "@/hooks/common";
 
 const cacheName = "login-info";
 
@@ -16,12 +17,8 @@ const info = store.projectInfo;
 const copyRight = "Copyright © Travis-hjs.github.io All Rights Reserved 请使用 Google Chrome、Microsoft Edge、360浏览器、非 IE 等浏览器"
 
 const formRules = {
-  account: [
-    { required: true, message: "请输入手机号", trigger: "blur" },
-  ],
-  password: [
-    { required: true, message: "请输入密码", trigger: "blur" },
-  ],
+  account: getInputRule("请输入手机号"),
+  password: getInputRule("请输入密码"),
 }
 
 const state = reactive({
@@ -95,7 +92,7 @@ getLoginInfo();
             <el-form-item prop="account">
               <el-input
                 v-model="state.form.account"
-                :placeholder="formRules.account[0].message"
+                :placeholder="formRules.account.message"
                 clearable
                 type="text"
                 @keyup.enter.native="onLogin"
@@ -106,7 +103,7 @@ getLoginInfo();
             <el-form-item prop="password">
               <el-input
                 v-model="state.form.password"
-                :placeholder="formRules.password[0].message"
+                :placeholder="formRules.password.message"
                 clearable
                 type="password"
                 :show-password="true"

@@ -183,3 +183,29 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
     onDropEnd
   }
 }
+
+/**
+ * 表单输入验证对象
+ * @param message
+ * @param required 默认`true`
+ */
+export function getInputRule(message: string, required = true) {
+  return {
+    required,
+    message,
+    trigger: "blur",
+  }
+}
+
+/**
+ * 表单选择验证对象
+ * @param message
+ * @param required 默认`true`
+ */
+export function getSelectRule(message: string, required = true) {
+  return {
+    required,
+    message,
+    trigger: "change",
+  }
+}

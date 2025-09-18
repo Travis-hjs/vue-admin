@@ -11,7 +11,7 @@ import { type PropType, reactive, ref, watch } from "vue";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { Fields, type FieldType } from "@/components/Fields";
 import { getBoldLabel } from "./data";
-import { getCountId, useListDrag } from "@/hooks/common";
+import { getCountId, getInputRule, useListDrag } from "@/hooks/common";
 
 const props = defineProps({
   show: {
@@ -59,16 +59,8 @@ function getFormData(): CurdType.Table.Batch {
 }
 
 const formRules = {
-  text: {
-    required: true,
-    message: "请输入按钮文字",
-    trigger: "blur"
-  },
-  click: {
-    required: true,
-    message: "请输入按钮操作代码",
-    trigger: "blur"
-  }
+  text: getInputRule("请输入按钮文字"),
+  click: getInputRule("请输入按钮操作代码"),
 };
 
 const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [

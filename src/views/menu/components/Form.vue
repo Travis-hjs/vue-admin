@@ -13,6 +13,7 @@ import { getBoldLabel } from "@/components/Curd";
 import { type FieldType, Fields } from "@/components/Fields";
 import type { MenuForm } from "@/router/types";
 import { Icon } from "@/components/Icon";
+import { getInputRule } from "@/hooks/common";
 
 const props = defineProps({
   show: {
@@ -66,6 +67,7 @@ const tips = {
 
 const formRules = {
   "meta.icon": {
+    trigger: "blur",
     validator(_: any, value: string, callback: (err?: Error) => void) {
       if (!state.formData.parentId && !value) {
         callback(new Error("首级菜单必需设置图标"));
@@ -74,8 +76,8 @@ const formRules = {
       }
     }
   },
-  "meta.title": { required: true, message: "请输入名称", trigger: "blur" },
-  code: { required: true, message: "请输入权限标识", trigger: "blur" },
+  "meta.title": getInputRule("请输入名称"),
+  code: getInputRule("请输入权限标识"),
   name: {
     trigger: "blur",
     validator(_: any, value: string, callback: (err?: Error) => void) {

@@ -23,7 +23,7 @@ import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
 import { Fields, type FieldType } from "@/components/Fields";
 import { curdConfigState } from "./hooks";
-import { useZIndex } from "@/hooks/common";
+import { getInputRule, useZIndex } from "@/hooks/common";
 
 const props = defineProps({
   show: {
@@ -90,7 +90,7 @@ function onStep(n: number) {
 }
 
 const formRules = {
-  label: { required: true, message: "请输入功能标题", trigger: "blur" },
+  label: getInputRule("请输入功能标题"),
   key: {
     required: true,
     trigger: "blur",
@@ -106,8 +106,8 @@ const formRules = {
       }
     }
   },
-  format: { required: true, message: "格式化规则不能为空", trigger: "blur" },
-  separator: { required: true, message: "请输入串联符号", trigger: "blur" },
+  format: getInputRule("格式化规则不能为空"),
+  separator: getInputRule("请输入串联符号"),
   defaultValue: {
     required: true,
     trigger: "blur",

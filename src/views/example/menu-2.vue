@@ -4,6 +4,7 @@ import { type FormInstance } from "element-plus";
 import { reactive, ref } from "vue";
 import { validateEX } from "@/utils/dom";
 import { Fields, type FieldType } from "@/components/Fields";
+import { getInputRule, getSelectRule } from "@/hooks/common";
 
 const options = Array.from({ length: 10000 }).map((_, index) => ({
   value: index + 1,
@@ -29,15 +30,15 @@ function useFormData() {
 
 const formRules = {
   name: [
-    { required: true, message: "请输入活动名称", trigger: "blur" },
+    getInputRule("请输入活动名称"),
     { min: 3, max: 20, message: "长度为3到20个字符", trigger: "blur" },
   ],
-  region: { required: true, message: "请选择活动地区", trigger: "change" },
-  count: { required: true, message: "请选择活动次数", trigger: "change" },
-  startDate: { required: true, message: "请选择活动时间", trigger: "change" },
-  type: { required: true, message: "请选择活动类型", trigger: "change" },
-  resource: { required: true, message: "请选择活动来源", trigger: "change" },
-  desc: { required: false, message: "请输入活动描述", trigger: "blur" },
+  region: getSelectRule("请选择活动地区"),
+  count: getSelectRule("请选择活动次数"),
+  startDate: getSelectRule("请选择活动时间"),
+  type: getSelectRule("请选择活动类型"),
+  resource: getSelectRule("请选择活动来源"),
+  desc: getInputRule("请输入活动描述", false),
 }
 
 const fields: Array<FieldType.Member<ReturnType<typeof useFormData>>> = [

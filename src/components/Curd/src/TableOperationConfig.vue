@@ -10,7 +10,7 @@ import type { FormInstance } from "element-plus";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { type PropType, ref, watch } from "vue";
 import { reactive } from "vue";
-import { useListDrag } from "@/hooks/common";
+import { getInputRule, useListDrag } from "@/hooks/common";
 import { getBoldLabel, getOperationData } from "./data";
 import { Fields, type FieldType } from "@/components/Fields";
 
@@ -59,26 +59,10 @@ const form = reactive({
 });
 
 const formRules = {
-  text: {
-    required: true,
-    message: "请输入按钮文字",
-    trigger: "blur"
-  },
-  click: {
-    required: true,
-    message: "请输入按钮操作代码",
-    trigger: "blur"
-  },
-  icon: {
-    required: false,
-    message: "请输入图标 class",
-    trigger: "blur"
-  },
-  type: {
-    required: false,
-    message: "请选择按钮类型",
-    trigger: "change"
-  }
+  text: getInputRule("请输入按钮文字"),
+  click: getInputRule("请输入按钮操作代码"),
+  icon: getInputRule("请输入图标 class", false),
+  type: getInputRule("请选择按钮类型", false),
 };
 
 const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
