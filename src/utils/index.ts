@@ -356,3 +356,23 @@ export function getValueByDeepKey<T extends object>(map: T, key: string): any {
   }
   return (map as any)[key];
 }
+
+/**
+ * 下载文件
+ * @param blob
+ * @param filename
+ */
+export function downloadFile(blob: Blob, filename: string) {
+  // 创建 URL 对象
+  const url = URL.createObjectURL(blob);
+  // 创建链接
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  // 模拟点击链接进行下载
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // 释放 URL 对象
+  URL.revokeObjectURL(url);
+}

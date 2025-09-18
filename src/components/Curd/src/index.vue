@@ -14,11 +14,12 @@ import { FooterBtn, TableImage, type TableImageProps } from "./part";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getPageInfo } from "@/hooks/common";
-import { copyText, formatDate, isType, jsonToPath } from "@/utils";
+import { copyText, downloadFile, formatDate, isType, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
 import { openCurdConfig } from "./hooks";
 import { Table } from "@/components/Table";
+import { onUploadFile } from "@/components/Upload";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */
@@ -347,14 +348,6 @@ function onTableOperation(type: TableOperationAction, val?: CurdType.Table.Batch
   }
 }
 
-function setLoading(val: boolean) {
-  state.loading = val;
-}
-
-function setFormLoading(val: boolean) {
-  formSate.loading = val;
-}
-
 /**
  * 表格自定义方法对象
  * - TODO: 非常重要！！！，在表格列用原生实现自定义方法点击时使用
@@ -371,7 +364,36 @@ function setFormLoading(val: boolean) {
  * return `<button class="the-tag" onclick="window['_${pageId}'].cellFn['${row.id}']()">打开表格</button>`;
  * ```
  */
- const cellFn = {};
+const cellFn = {};
+
+/**
+ * 设置页面加载状态
+ * @param val 
+ */
+function setLoading(val: boolean) {
+  state.loading = val;
+}
+
+/**
+ * 设置表单加载状态
+ * @param val 
+ */
+function setFormLoading(val: boolean) {
+  formSate.loading = val;
+}
+
+/** 获取当前查询参数 */
+function getSearchParams() {
+  const info: BaseObj<any> = {};
+  const emptyList: Array<any> = [undefined, null, ""];
+  props.data.search.list.forEach(item => {
+    const value = item.value;
+    if (!emptyList.includes(value)) {
+      info[item.key] = value;
+    }
+  });
+  return info;
+}
 
 exportPropToWindow({
   formatDate,
@@ -380,6 +402,8 @@ exportPropToWindow({
   message,
   jsonToPath,
   request,
+  onUploadFile,
+  downloadFile,
   // TODO: 类似沙盒一样的全局方法隔离操作
   [props.pageId]: {
     onSearch,
@@ -389,6 +413,7 @@ exportPropToWindow({
     openForm,
     closeForm,
     cellFn,
+    getSearchParams,
   },
 });
 

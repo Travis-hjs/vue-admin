@@ -169,33 +169,74 @@ _messageBox({
   "operation-submit": [
     {
       id: 400,
-      name: "自定义按钮提交",
+      name: "导入文件(Excel)",
       code: `// 当前页面/菜单标识
 const pageId = "_pageId";
-/** 请求方法，全大写 */
-const method = "POST";
-/** 接口请求路径 */
-const path = "/operation/xxx";
-/** 接口传参对象 */
-const params = {
-  type: "xxx",
-};
-/** 接口请求域名，不填则使用默认 */
-const domain = "";
 // 当前页面功能对象
 const page = window[\`_\${pageId}\`];
-// 发起弹框提示
-_messageBox({
-  title: "操作提示",
-  content: "是否xxx当前操作？",
-  cancelText: "取消",
-  async confirm() {
-    const res = await _request(method, path, params, { domain });
-    if (res.code !== 1) return false;
-    _message.success("xxx成功！");
-    page.getData();
-    return true;
+// 导入请求路径
+const path = "/upload/file";
+// 导入请求域名，不传则使用默认域名
+const domain = "";
+
+_onUploadFile({
+  // 弹框标题
+  title: "导入文件",
+  // 指定上传文件类型，逗号分割多种
+  accept: ".xls,.xlsx",
+  /**
+   * 上传文件最大体积
+   * - 单位\`M\`,
+   * - 0 为不限制大小
+   */
+  maxSize: 0,
+  /** 是否多个文件 */
+  multiple: false,
+  /**
+   * @param {File | Array<File>} file 当个文件或列表，由\`multiple\`指定
+   * @param callback 关闭回调
+   */
+  async change(file) {
+    // 声明一个表单对象
+    const formData = new FormData();
+    // 处理单个文件
+    formData.append("file", file);
+    // 发起请求
+    page.setLoading(true);
+    const res = await _request("POST", path, formData, { domain });
+    page.setLoading(false);
+    if (res.code === 1) {
+      _message.success("导入成功！");
+      page.getData();
+    }
   }
+});`,
+    },
+    {
+      id: 401,
+      name: "导出数据(Excel)",
+      code: `// 当前页面/菜单标识
+const pageId = "_pageId";
+// 当前页面功能对象
+const page = window[\`_\${pageId}\`];
+// 请求域名，不传则使用默认域名
+const domain = "";
+const method = "GET";
+const path = "/export/xxx";
+const params = page.getSearchParams();
+page.setLoading(true);
+_request(method, path, params,
+  {
+    responseType: "blob",
+    timeout: 5 * 1000 * 60,
+    domain: domain,
+  }
+).then(res => {
+  if (res.code !== 1) return;
+  _downloadFile(res.data, res.msg);
+  _message.success("导出成功!");
+}).finally(() => {
+  page.setLoading(false);
 });`,
     }
   ],
