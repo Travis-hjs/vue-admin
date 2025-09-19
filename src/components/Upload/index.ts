@@ -1,14 +1,13 @@
-import { message } from "@/utils/message";
 import type { UploadType } from "./src/types";
+import { message } from "@/utils/message";
 
 export { default as UploadImage } from "./src/Image.vue";
 export { default as UploadWrap } from "./src/Wrap.vue";
-// export { default as UploadVideo } from "./Video.vue";
 
 export type { UploadType } from "./src/types";
 
 /**
- * 指令式上传文件
+ * 函数式调用上传文件
  * @param params
  */
 export function onUploadFile(params: UploadType.Command) {
@@ -22,8 +21,7 @@ export function onUploadFile(params: UploadType.Command) {
     if (input.multiple) {
       const list = Array.from(files);
       if (max) {
-        for (let i = 0; i < list.length; i++) {
-          const file = list[i];
+        for (const file of list) {
           if (file.size > max * 1024 * 1024) {
             input.remove();
             return message.warning(`上传的文件：【${file.name}】不能大于 ${max}M`);
@@ -31,8 +29,7 @@ export function onUploadFile(params: UploadType.Command) {
         }
       }
       params.change(list);
-    }
-    else {
+    } else {
       const file = files[0];
       if (max && file.size > max * 1024 * 1024) {
         input.remove();

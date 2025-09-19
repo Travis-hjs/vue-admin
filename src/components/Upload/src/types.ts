@@ -35,7 +35,8 @@ export namespace UploadType {
      */
     maxSize?: number;
     /**
-     * `<input onchange="onChange" />`
+     * 上传回调
+     * - `<input onchange="change" />`
      * @param file 文件对象，由`multiple`指定是单个还是列表
      */
     change(file: File | Array<File>): void;
