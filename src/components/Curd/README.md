@@ -8,7 +8,7 @@
 
 | 功能 | 描述 |
 | --- | --- |
-| 增、删、改、查 | 通用形核心功能，表格数据条件查询、表格多选删除、表格行数据表单修改、表格行数据表单新增 |
+| 增、删、改、查 | 通用形核心功能，表格数据条件查询、表格多选操作、表格行数据操作、自定义按钮功能操作 |
 | 搜索条件配置 | 可配置条件字段、规则、数据等组合式筛选功能 |
 | 表格配置 | 可配置展示类型、展示规则、动态代码、表格操作功能 |
 | 表单配置及验证 | 可配置条件字段、规则、数据、展示逻辑代码等组合式功能表单 |
@@ -46,9 +46,11 @@ const data = reactive<CurdType.Config>({
   table: {
     columns: [],
     actions: [],
+    batchs: [],
+    operations: [],
     selectKey: undefined,
     formAdd: undefined,
-    formEdit: undefined
+    formEdit: undefined,
   }
 });
 
@@ -86,9 +88,17 @@ const action: CurdType.Action = {
 
 ![示例图片](./assets/curd-2.png)
 
-总共分为两大部分，选择对应的功能进入对应的配置，`新增`、`编辑`表单在表格配置的里面。
+页面按钮操作总共分为3类，分别对应：`actions`、`batchs`、`operations`字段，对照图：
 
 ![示例图片](./assets/curd-3.png)
+
+因为新增和编辑用的频率比较高，所以单独提取到最外边的配置入口，同时在保存时提供了同步表单项的功能，也是方便使用
+
+![示例图片](./assets/curd-4.png)
+
+每个按钮都可以单独配置点击事件（直接写js），包括可以接收不同按钮点击的传参字段，所以理论上可以实现任意功能；内置的预设代码示例可以拓展为接口提供，这样可以单独管理按钮的代码片段，实现实时修改和高拓展场景。
+
+![示例图片](./assets/curd-5.png)
 
 ### 表单项组件的配置
 
@@ -96,21 +106,17 @@ const action: CurdType.Action = {
 
 当前在数据结构的定义中区分了不同组件的所需数据结构，所以在编辑时有步骤的先后顺序，选取对应的组件之后会呈现差异化的配置表单，部分相同字段位置不变。
 
-![示例图片](./assets/curd-4.jpg)
+![示例图片](./assets/curd-6.png)
 
 在配置不同的组件时，可以自由地配置对应的默认值和绑定的数据，当然，也可以由接口请求获取数据再做字段的填充，两者是等价的；在搜索【重置】时，会恢复为默认值；默认值在选取组件时会自动设置为对应类型的值，不设置就是空的处理。
 
 需要注意的是：组件默认值的设置为`JSON`字段，`value: xxx`中的`xxx`就是要设置的默认值。
 
-![示例图片](./assets/curd-5.jpg)
+![示例图片](./assets/curd-7.png)
 
 组件的配置中，**日期组件** 的默认值配置需要特殊处理，将不再支持手动输入`JSON`的方式，而是使用预设的快捷日期选项；因为日期的值比较特殊，而且格式化的配置以及日期类型比较复杂，全部开放给使用者手动填写会有可能写错，所以为了更好的容错率使用，这里设计成只保留必须的输入操作，并且提供了多种日期类型的设置。
 
-![示例图片](./assets/curd-date.jpg)
-
-![示例图片](./assets/curd-date-1.jpg)
-
-![示例图片](./assets/curd-date-2.jpg)
+![示例图片](./assets/curd-8.png)
 
 表单项条件显示的 **动态代码配置**：这里输入的就是`javascript`代码片段了，可以自由根据表单的动态值做逻辑处理，注意必须要有`return`关键字，内部做了字符串的判断处理，没有`return`则不做代码解析处理。
 
@@ -136,7 +142,7 @@ if (formData.type === 1) {
 // ...do some
 ```
 
-![示例图片](./assets/curd-form-code.png)
+![示例图片](./assets/curd-9.png)
 
 ### 表格列配置
 
@@ -144,11 +150,11 @@ if (formData.type === 1) {
 
 因为操作列中为固定靠右、永远处于数组最后一项、并且只渲染按钮操作组件，所以需要分开去配置，这样在配置的表单中会更加清晰明确。
 
-![示例图片](./assets/curd-table-1.png)
+![示例图片](./assets/curd-10.png)
 
-配置列的时候，会校验 **表格列键值** 字段的唯一性，所以无效担心重复的情况；并且支持`3`展示类型，具体的展示通过预览区域可以看到。
+配置列的时候，会校验 **表格列键值** 字段的唯一性，所以无效担心重复的情况；并且支持`3`种展示类型，具体的展示通过预览区域可以看到。
 
-![示例图片](./assets/curd-table-2.png)
+![示例图片](./assets/curd-11.png)
 
 这里需要详细说明的是 **自定义js代码** 选项，选择该配置之后将应用代码片段去做渲染处理，例如：
 
@@ -163,26 +169,30 @@ return `${cellValue} 条`;
 
 ```js
 console.log("table cell >>", row, cellValue);
-return `<button class="el-button" onclick="_onCustom(${row.id})">点击执行方法</button>`;
+return `<button class="el-button" onclick="_copyText(${row.id})">复制ID</button>`;
 ```
 
-`_onCustom`方法为项目中自定义约定好的暴露给外部使用的方法，当然，`return`关键字是必须的，不要忘记了。暴露的使用方式在下面具体说明。
+`_copyText`方法为项目中自定义约定好的暴露给外部使用的方法，当然，`return`关键字是必须的，不要忘记了。暴露的使用方式在下面具体说明。
 
-![示例图片](./assets/curd-table-3.png)
+![示例图片](./assets/curd-12.png)
+
+注意！！！页面方法不能直接抛出到全局，因为会存在多个低代码配置页，所以程序中实现需要隔离开来；使用时需要用页面标识来调用对应配置页的方法：
+
+```js
+// 当前页面/菜单标识
+const pageId = "_pageId";
+// 当前页面功能对象
+const page = window[`_${pageId}`];
+
+// 调用当前页面的方法
+page.setLoading(true);
+page.onSearch();
+page.getSearchParams();
+```
 
 ### 操作列配置
 
-相信看到这里你已经非常清晰了，按钮的每一个属性都可以通过自定义代码的输入方式进行配置，除了 **按钮功能代码** 外，其他的配置全部以`return`关键字为判定解析代码处理，**按钮文字** 中如果不需要条件显示，那就直接输入文本即可。
-
-![示例图片](./assets/curd-table-4.png)
-
-### 删除、新增、编辑配置
-
-这三个功能分别对应文字按钮，高亮的表示已经存在配置，再次点击配置则是修改处理；这里配置的删除为批里删除，则表格列开启多选列；
-
-删除、新增、编辑的方法操作需要在`action`里面定义，可视化配置只是配置界面功能展示，这个需要记住。
-
-![示例图片](./assets/curd-table-5.png)
+相信看到这里你已经非常清晰了，按钮的每一个属性都可以通过自定义代码的输入方式进行配置，除了 **按钮功能代码** 外，其他的配置全部以`return`关键字为判定解析代码处理。
 
 ### 自定义暴露的全局方法
 
@@ -205,7 +215,11 @@ async function onCustom(id: number) {
 }
 
 exportPropToWindow({
-  onCustom,
+  // 省略其他代码...
+  [props.pageId]: {
+    // 省略其他代码...
+    onCustom, // 这里为页面的方法，所以要放在 props.pageId 对象内
+  }
 });
 ```
 
@@ -219,7 +233,7 @@ exportPropToWindow({
 
 完成编辑则应用当前修改并返回到使用页。
 
-![示例图片](./assets/curd-copy.png)
+![示例图片](./assets/curd-13.png)
 
 ## 使用说明-代码配置
 
@@ -230,6 +244,9 @@ exportPropToWindow({
 在设计数据结构时，为了更好的区分数据结构和类型检查，这里每一个表单项对象`Field`都是不同的属性，所以在使用时，要先输入`type: xxx`的类型，之后才会做对应的类型检查，在`getFieldData`方法中第一个参数就是`type`，传入对应的组件类型时就能获取对应的返回类型。
 
 ```html
+<template>
+  <Curd v-model:data="data" :action="action" :pageId="pageId" />
+</template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
@@ -239,10 +256,15 @@ import {
   getFieldData,
   type CurdType
 } from "@/components/Curd";
+import { columnActionProp } from "@/components/Table";
 import { formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
-import { reactive } from "vue";
-import { columnActionProp } from "@/components/Table";
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+const pageId = route.name as string;
 
 const option = {
   gameType: [
@@ -251,10 +273,10 @@ const option = {
   ]
 }
 
-const data = reactive<CurdType.Config>({
+const data = ref<CurdType.Config>({
   search: {
     labelRight: false,
-    labelWidth: 0,
+    labelWidth: undefined,
     list: [
       {
         ...getFieldData("input", "gameName"),
@@ -315,13 +337,15 @@ const data = reactive<CurdType.Config>({
         ...getColumnData("num", "游戏编号"),
         width: 140,
         cellType: "js",
-        jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;'
+        tooltip: false,
+        jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;',
+        slot: "render-cell-num",
       },
       {
         ...getColumnData("banner", "游戏封面"),
         width: 110,
         cellType: "image",
-        slot: "banner"
+        slot: "preview-image-banner",
       },
       {
         ...getColumnData("gamePrice", "游戏价格"),
@@ -330,7 +354,6 @@ const data = reactive<CurdType.Config>({
           return cellValue ? `￥${cellValue}` : "-";
         },
         sort: "desc",
-        slotHead: "gamePrice",
       },
       {
         ...getColumnData("date", "上架时间"),
@@ -339,12 +362,11 @@ const data = reactive<CurdType.Config>({
           return cellValue ? formatDate(cellValue) : "-";
         },
         sort: true,
-        slotHead: "date",
         titleTips: "人工设置的时间"
       },
       {
         ...getColumnData(columnActionProp, "操作"),
-        width: 160,
+        width: 220,
       },
     ],
     actions: [
@@ -371,9 +393,24 @@ const data = reactive<CurdType.Config>({
             },
           });
         },
+      },
+      {
+        key: "2",
+        text: "同步数据",
+        type: "primary",
+        click: `const pageId = "${pageId}";
+const page = window[\`_\${pageId}\`];
+_messageBox({
+  title: "操作提示",
+  content: \`是否同步【\${row.gameName}】数据？\`,
+  cancelText: "取消",
+  confirm() {
+    _message.success("同步数据成功！");
+    page.getData();
+  }
+});`,
       }
     ],
-    selectKey: "id",
     formAdd: {
       width: 520,
       labelPosition: "left",
@@ -442,12 +479,52 @@ const data = reactive<CurdType.Config>({
         },
       ]
     },
+    selectKey: "id",
+    batchs: [
+      {
+        text: "批量删除",
+        type: "danger",
+        key: "batch-delete",
+        click: `
+const pageId = "${pageId}";
+const page = window[\`_${pageId}\`];
+const text = "删除";
+_messageBox({
+  title: "操作提示",
+  content: \`是否\${text}选中的 \${list.length} 条数据？\`,
+  cancelText: "取消",
+  confirm() {
+    _message.success(text + "成功！");
+    page.onSearch();
+  }
+});`
+      },
+      {
+        text: "批量上报",
+        type: "primary",
+        key: "batch-post",
+        click(list, selectList) {
+          console.log("多选数据 >>", list, selectList);
+          message.info("上报成功！");
+          const page = (window as any)[`_${pageId}`];
+          page.onSearch();
+        },
+      }
+    ],
+    operations: [
+      {
+        text: "导出数据",
+        type: "primary",
+        key: "export-data",
+        click: `_message.success("导出成功！")`
+      }
+    ]
   }
 });
 
 const action: CurdType.Action = {
   getTableData(searchInfo, pageInfo) {
-    // console.log("searchInfo >>", searchInfo);
+    console.log("getTableData >>", searchInfo, pageInfo);
     return getTableList({...searchInfo, ...pageInfo});
   },
   created(getData) {
@@ -464,77 +541,6 @@ const action: CurdType.Action = {
   },
 }
 </script>
-<template>
-  <Curd :data="data" :action="action" />
-</template>
-```
-
-## 如何拓展表单项自定义组件
-
-首先设计数据结构，然后在`CurdType`类型声明中声明自定义类型，并继承`BaseField`，最后在`Field.vue`中写入条件展示即可。
-
-例如新增一个上传组件：
-
-> `Curd/src/type.ts` 文件中
-
-```ts
-export namespace CurdType {
-  // 省略已有代码...
-
-  export interface Upload extends Omit<BaseField<string>, HasOption> {
-    type: "upload";
-    // 其他字段省略
-  }
-}
-```
-
-> `Curd/src/data.ts` 文件中找到 `getFieldData` 方法，并添加一个 upload 类型数据
-
-```ts
-interface FieldMap {
-  // 省略已有代码
-  upload: CurdType.Upload;
-}
-/**
- * 表单组件数据
- * @param type 表单类型
- * @param key 键值
- * @param isSearch 是否为搜索数据使用，可以为表单和搜索数据做字段区分（预留参数，目前暂无区分）
- */
-export function getFieldData<T extends keyof FieldMap>(type: T, key = "", isSearch?: boolean): FieldMap[T] {
-  // 省略已有代码
-  const map: FieldMap = {
-    // 省略已有代码
-    upload: {
-      key,
-      id,
-      type: "upload",
-      value: "",
-      defaultValue: "",
-      placeholder: "请上传",
-      valueType: "string"
-    },
-  }
-  // 省略已有代码
-}
-```
-
-> 最后在 `Curd/src/Field.vue` 中引入上传组件即可
-
-```html
-<script lang="ts" setup>
-import TheUpload from "@/components/Upload";
-
-</script>
-<template>
-  <div class="the-curd-form-field f-vertical short-value" :style="{ width: convertPx(data.valueWidth) }">
-    <TheUpload
-      v-if="data.type === 'upload'"
-      v-model="data.value"
-      class="the-curd-field"
-    />
-  </div>
-</template>
 ```
 
 如果自定义的组件需要处理默认值和最终获取的值处理时，需要在 [data.ts](./src/data.ts) 中同步修改`getFieldValue`和`initFieldValue`这两个方法。当前程序在做其他操作时会统一调用这两个函数。
@@ -550,7 +556,7 @@ import TheUpload from "@/components/Upload";
 开头写到，当前程序所做的事情只是将几个 **基础通用组件** 通过数据配置的形式组合起来，最后呈现使用；那么开发者可以独立使用这些基础组件去做定制化页面，例如在空白的`.vue`文件中输入：
 
 ```html
-vue3-table-list
+el-table-list-v2
 ```
 
 > 就能能快速生成表格列表页
@@ -558,7 +564,7 @@ vue3-table-list
 输入：
 
 ```html
-vue3-popup-component
+el-popup-component
 ```
 
 > 就能快速生成弹框组件
