@@ -16,6 +16,7 @@ export function onUploadFile(params: UploadType.Command) {
   input.accept = params.accept || "*";
   input.multiple = !!params.multiple;
   const max = params.maxSize;
+  const showTips = (f: File) => message.warning(`上传的文件：【${f.name}】不能大于 ${max}MB`);
   input.onchange = function () {
     const files = input.files!;
     if (input.multiple) {
@@ -24,7 +25,7 @@ export function onUploadFile(params: UploadType.Command) {
         for (const file of list) {
           if (file.size > max * 1024 * 1024) {
             input.remove();
-            return message.warning(`上传的文件：【${file.name}】不能大于 ${max}M`);
+            return showTips(file);
           }
         }
       }
@@ -33,7 +34,7 @@ export function onUploadFile(params: UploadType.Command) {
       const file = files[0];
       if (max && file.size > max * 1024 * 1024) {
         input.remove();
-        return message.warning(`上传的文件：【${file.name}】不能大于 ${max}M`);
+        return showTips(file);
       }
       params.change(file);
     }
