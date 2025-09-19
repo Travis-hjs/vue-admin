@@ -147,3 +147,14 @@
   display: flex;
   flex-direction: column;
 }
+
+body .the-blue-text,
+.the-blue-text {
+  display: inherit;
+  overflow: hidden;
+  font-size: var(--el-text-font-size);
+  color: var(--blue);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}

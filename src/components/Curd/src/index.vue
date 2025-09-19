@@ -13,8 +13,8 @@ import TableForm from "./TableForm.vue";
 import { FooterBtn, TableImage, type TableImageProps } from "./part";
 import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initFieldValue } from "./data";
 import { message, messageBox } from "@/utils/message";
-import { getPageInfo } from "@/hooks/common";
-import { copyText, downloadFile, formatDate, isType, jsonToPath } from "@/utils";
+import { getCountId, getPageInfo } from "@/hooks/common";
+import { copyText, downloadFile, formatDate, isType, jsonToHtml, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
 import { openCurdConfig } from "./hooks";
@@ -404,6 +404,8 @@ exportPropToWindow({
   request,
   onUploadFile,
   downloadFile,
+  getCountId,
+  jsonToHtml,
   // TODO: 类似沙盒一样的全局方法隔离操作
   [props.pageId]: {
     onSearch,

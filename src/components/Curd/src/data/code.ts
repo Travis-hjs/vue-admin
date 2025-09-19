@@ -130,7 +130,46 @@ const color = {
 }
 
 return text[cellValue] ? \`<span class="the-tag \${color[cellValue]}">\${text[cellValue]}</span>\` : "-";`,
+    },
+    {
+      id: 201,
+      name: "预览JSON",
+      code: `// 当前页面/菜单标识
+const pageId = "_pageId";
+// 当前页面功能对象
+const page = window[\`_\${pageId}\`];
+// 设置表格行唯一值，key一定要是唯一值
+const key = _getCountId("json");
+if (cellValue) {
+  if (typeof cellValue === "string") {
+    try {
+      cellValue = JSON.parse(cellValue);
+    } catch (error) {
+      console.log("表格列解析JSON字符串出错！");
+      return "-";
     }
+  }
+  const text = JSON.stringify(cellValue);
+  const json = encodeURIComponent(text);
+
+  function onCell() {
+    // console.log("表格点击 >>", row);
+    _messageBox({
+      title: "预览JSON",
+      width: "500px",
+      content: _jsonToHtml(JSON.stringify(JSON.parse(decodeURIComponent(json)))),
+      confirmText: "关闭",
+      cancelText: "复制JSON",
+      cancel() {
+        _copyText(text);
+      }
+    });
+  }
+  page.cellFn[key] = onCell;
+  return \`<span class="the-blue-text" onclick="window['_\${menuTag}'].cellFn['\${key}']()">\${text}</span>\`;
+}
+return "-";`,
+    },
   ],
   "action-submit": [
     {
