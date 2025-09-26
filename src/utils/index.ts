@@ -306,7 +306,7 @@ export function filterRepeat<T>(array: Array<T>, compare: (a: T, b: T) => boolea
  *   "info.desc.date": "2024-12-22",
  *   content: "this is a text!"
  * }
- * const result = formatObj(target);
+ * const result = formatDeepKeyObj(target);
  * // 输出为正确结构的对象
  * console.log(result);
  * ```
