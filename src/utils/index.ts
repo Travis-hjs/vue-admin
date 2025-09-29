@@ -250,3 +250,31 @@ export function isMobile() {
   const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
   return pattern.test(navigator.userAgent);
 }
+
+/**
+ * 对象转选项列表
+ * @param map
+ * @param disabledKeys 
+ * @example
+ * ```js
+ * const map = { 1: "价格", "goods": "商品", "game": "游戏" };
+ * const options = toMapOptions(map);
+ * console.log(options);
+ * // [{ label: "价格", value: 1 }, { label: "商品", value: "goods" }, { label: "游戏", value: "game" }]
+ * ```
+ */
+export function toMapOptions<T extends object>(
+  map: T,
+  disabledKeys: Array<keyof T> = [],
+) {
+  const list: Array<{ disabled: boolean; label: string; value: keyof T }> = [];
+  const isNumber = /^-?\d+(\.\d+)?$/;
+  for (const key in map) {
+    list.push({
+      label: map[key],
+      value: isNumber.test(key) ? Number(key) : key,
+      disabled: disabledKeys.includes(key),
+    } as typeof list[0]);
+  }
+  return list;
+}
