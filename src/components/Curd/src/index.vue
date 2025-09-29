@@ -211,7 +211,8 @@ function openForm(row?: any, other?: CurdType.Table.From) {
     };
   } else {
     onSetForm = function () {
-      // console.log("新增表单 >>");
+      // console.log("无传参表单 >>");
+      formRef.value?.setFormData({});
     };
   }
 }
