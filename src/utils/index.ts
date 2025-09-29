@@ -260,7 +260,11 @@ export function isMobile() {
  * const map = { 1: "价格", "goods": "商品", "game": "游戏" };
  * const options = toMapOptions(map);
  * console.log(options);
- * // [{ label: "价格", value: 1 }, { label: "商品", value: "goods" }, { label: "游戏", value: "game" }]
+ * // [
+ * //   { label: "价格", value: 1, disabled: false },
+ * //   { label: "商品", value: "goods", disabled: false },
+ * //   { label: "游戏", value: "game", disabled: false }
+ * // ]
  * ```
  */
 export function toMapOptions<T extends object>(
