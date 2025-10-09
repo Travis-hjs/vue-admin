@@ -8,7 +8,7 @@ export default {
 import { computed, reactive, ref, type PropType } from "vue";
 import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { convertPx, getFieldValue, getFormConfig, initFieldValue } from "./data";
+import { convertPx, getFieldValue, getFormConfig, initField } from "./data";
 import Field from "./Field.vue";
 import { deepClone, formatDeepKeyObj, getValueByDeepKey, isType, modifyData } from "@/utils";
 import { LabelTips } from "@/components/Fields";
@@ -88,7 +88,7 @@ function clear() {
 
 /** 表单重置 */
 function reset() {
-  state.config.fields.forEach(initFieldValue);
+  state.config.fields.forEach(initField);
 }
 
 /**

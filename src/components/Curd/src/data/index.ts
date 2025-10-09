@@ -22,11 +22,11 @@ export const fieldTitleMap = {
 };
 
 /**
- * 初始化设置表单绑定值
+ * 初始化表单项
  * - 将对应的默认值设置到绑定的`value`中去
  * @param field
  */
-export function initFieldValue(field: CurdType.Field) {
+export function initField(field: CurdType.Field) {
   if (field.type == "date") {
     const shortcut = field.shortcutIndex;
     // 先移除当前有选中的快捷选中日期样式

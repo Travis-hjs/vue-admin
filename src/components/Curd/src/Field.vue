@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { convertPx, fieldTitleMap, initFieldValue } from "./data";
+import { convertPx, fieldTitleMap, initField } from "./data";
 import type { CurdType } from "./types";
 import { deepClone, inputOnlyNumber, isType } from "@/utils";
 import { DatePicker, SelectField } from "./part";
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 }>();
 
 // TODO: 初始化时设置默认值给组件
-initFieldValue(props.fieldData);
+initField(props.fieldData);
 
 function onChange<T>(val?: T) {
   let result = val || props.fieldData.value;

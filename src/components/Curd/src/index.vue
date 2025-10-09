@@ -11,7 +11,7 @@ import Search from "./Search.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import { FooterBtn, TableImage, type TableImageProps } from "./part";
-import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initFieldValue } from "./data";
+import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initField } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getCountId, getPageInfo } from "@/hooks/common";
 import { copyText, downloadFile, formatDate, isType, jsonToHtml, jsonToPath } from "@/utils";
@@ -62,7 +62,7 @@ function openConfig(type?: CurdConfig.Type) {
 
 function onSearch(reset: boolean) {
   if (reset) {
-    props.data.search.list.forEach(initFieldValue);
+    props.data.search.list.forEach(initField);
   }
   tableState.pageInfo.currentPage = 1;
   tableState.selectList = []; // TODO: 搜索的时候情况选中
