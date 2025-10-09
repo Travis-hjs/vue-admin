@@ -10,7 +10,7 @@ import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { convertPx, getFieldValue, getFormConfig, initField } from "./data";
 import Field from "./Field.vue";
-import { deepClone, formatDeepKeyObj, getValueByDeepKey, isType, modifyData } from "@/utils";
+import { deepClone, formatDeepKeyObj, getValueByDeepKey, isType } from "@/utils";
 import { LabelTips } from "@/components/Fields";
 
 const props = defineProps({
@@ -65,9 +65,10 @@ function validate(callback?: (formData: BaseObj<any>, current: BaseObj<any>) => 
       current = formatDeepKeyObj(current);
       if (tableRow) {
         // 编辑逻辑
-        const form = JSON.parse(JSON.stringify(tableRow));
-        // 将表单项以外的数据合并到表单数据中
-        modifyData(form, data);
+        const form = {
+          ...data,
+          ...JSON.parse(JSON.stringify(tableRow))
+        };
         // TODO: 用完就清空
         // tableRow = undefined;
         callback(form, current);
