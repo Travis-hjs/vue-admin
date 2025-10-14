@@ -8,7 +8,7 @@ export default {
 import { type PropType, ref, computed, onUpdated } from "vue";
 import { ElTable, type Column } from "element-plus";
 import { filterRepeat, isType } from "@/utils";
-import { columnActionProp, useAdaptiveTable } from "./hooks";
+import { TableEnum, useAdaptiveTable } from "./hooks";
 import ActionCell from "./ActionCell.vue";
 import type { TableType } from "./types";
 import Pagination from "./Pagination.vue";
@@ -122,7 +122,7 @@ function isEmpty(val: any) {
 }
 
 function hasTooltip(col: TableType.Column<T>) {
-  const defaultVal = col.prop === columnActionProp ? false : true;
+  const defaultVal = col.prop === TableEnum.Right ? false : true;
   return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
 }
 
@@ -310,14 +310,14 @@ for (const column of props.columns) {
           :min-width="column.minWidth"
           :width="column.width"
           :show-overflow-tooltip="hasTooltip(column)"
-          :fixed="column.prop === columnActionProp ? 'right' : column.fixed"
-          :align="column.prop === columnActionProp ? 'center' : column.align"
-          :class-name="(isRowClick && column.prop !== columnActionProp) ? 'the-table-column-click' : ''"
+          :fixed="column.prop === TableEnum.Right ? 'right' : column.fixed"
+          :align="column.prop === TableEnum.Right ? 'center' : column.align"
+          :class-name="(isRowClick && column.prop !== TableEnum.Right) ? 'the-table-column-click' : ''"
         >
           <template #header="scope">
             <slot v-if="column.slotHead" :name="column.slotHead" v-bind="scope" />
             <Header
-              v-else-if="column.prop !== columnActionProp"
+              v-else-if="column.prop !== TableEnum.Right"
               :column="column"
               :disabled="props.loading"
               @sort="onSort"
@@ -326,7 +326,7 @@ for (const column of props.columns) {
           <template #default="scope: SlotType">
             <slot :name="column.slot" v-bind="scope" v-if="column.slot"></slot>
             <ActionCell
-              v-else-if="column.prop === columnActionProp"
+              v-else-if="column.prop === TableEnum.Right"
               :row="scope.row"
               :index="scope.$index"
               :actions="(props.actions as any)"

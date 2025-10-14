@@ -53,8 +53,8 @@ export function useAdaptiveTable() {
   }
 }
 
-/**
- * 表格操作列的`prop`
- * - 固定值 
- */
-export const columnActionProp = "action-right";
+/** `<Table />`组件相关枚举集合 */
+export const enum TableEnum {
+  /** 表格操作列的`prop` */
+  Right = "action-right",
+}

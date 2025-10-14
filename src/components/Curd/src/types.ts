@@ -433,6 +433,7 @@ export namespace PresetCodeType {
   }
 }
 
+/** `<Curd />`组件功能相关枚举集合 */
 export const enum CurdEnum {
   /** 表格操作列中，编辑按钮的`key` */
   ActionEdit = "action-edit",

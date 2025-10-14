@@ -1,6 +1,6 @@
 export type { TableType } from "./src/types";
 
-export { columnActionProp } from "./src/hooks";
+export { TableEnum } from "./src/hooks";
 
 export { default as Table } from "./src/Table.vue";
 export { default as TableActionCell } from "./src/ActionCell.vue";

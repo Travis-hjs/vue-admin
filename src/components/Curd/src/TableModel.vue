@@ -16,7 +16,7 @@ import TableColumnConfig from "./TableColumnConfig.vue";
 import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
 import { curdConfigState } from "./hooks";
-import { columnActionProp, TableActionCell, TableHeader } from "@/components/Table";
+import { TableActionCell, TableEnum, TableHeader } from "@/components/Table";
 import TableFormConfig from "./TableFormConfig.vue";
 import TableBatchConfig from "./TableBatchConfig.vue";
 import TableOperationConfig from "./TableOperationConfig.vue";
@@ -76,7 +76,7 @@ const columnInfo = computed(() => {
   const action = [];
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
-    if (column.prop === columnActionProp) {
+    if (column.prop === TableEnum.Right) {
       action.push(column);
     } else {
       drag.push(column);
@@ -159,12 +159,12 @@ function getColumnWidth(column?: CurdType.Table.Column) {
 const actionColumn = computed(function () {
   const list = props.config.columns;
   // TODO: 因为操作栏永远都是处于最后一列，所以可以直接判最后一个即可
-  if (list.length > 0 && list[list.length - 1].prop === columnActionProp) {
+  if (list.length > 0 && list[list.length - 1].prop === TableEnum.Right) {
     return list[list.length - 1];
   }
   // for (let i = list.length - 1; i >= 0; i--) {
   //   const column = list[i];
-  //   if (column.key === actionColumn) {
+  //   if (column.key === TableEnum.Right) {
   //     return column;
   //   }
   // }
@@ -173,7 +173,7 @@ const actionColumn = computed(function () {
 
 /** 添加操作列 */
 function addActionColumn() {
-  const action = getColumnData(columnActionProp, "操作");
+  const action = getColumnData(TableEnum.Right, "操作");
   action.minWidth = 120;
   action.width = 160;
   props.config.columns.push(action);
@@ -224,7 +224,7 @@ function openConfigAction() {
 
 function onConfigAction(list: typeof props.config.actions, width?: number) {
   props.config.actions = list;
-  const column = props.config.columns.find(item => item.prop === columnActionProp);
+  const column = props.config.columns.find(item => item.prop === TableEnum.Right);
   column!.width = width;
 }
 
@@ -446,7 +446,7 @@ function onSetWidth() {
           <TableImage :column="column" :src="demoUrl" />
         </div>
       </div>
-      <div v-if="actionColumn" :key="columnActionProp" :style="getColumnWidth(actionColumn)" class="fake-table-item">
+      <div v-if="actionColumn" :key="TableEnum.Right" :style="getColumnWidth(actionColumn)" class="fake-table-item">
         <div class="fake-table-head fvc">操作</div>
         <div class="fake-table-cell operation fvc">
           <el-tooltip effect="dark" content="配置【操作按钮】和【操作列】的宽度" placement="top">

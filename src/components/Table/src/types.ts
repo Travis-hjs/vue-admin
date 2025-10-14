@@ -12,7 +12,7 @@ export namespace TableType {
     titleTips?: string;
     /**
      * 对应表格数据值的键值
-     * - `"action-right"`为固定右边，也可以使用`columnActionProp`常量代替
+     * - `"action-right"`为固定右边，也可以使用`TableEnum.Right`枚举常量代替
      * - 请确保唯一性
      */
     prop: keyof T | "action-right";

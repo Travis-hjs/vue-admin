@@ -2,7 +2,7 @@ import { nextTick } from "vue";
 import type { CurdConfig, CurdType } from "../types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 import { getCountId } from "@/hooks/common";
-import { columnActionProp } from "@/components/Table";
+import { TableEnum } from "@/components/Table";
 // ----------------------- 数据相关 -----------------------
 
 /** 表单组件标题对象 */
@@ -208,7 +208,7 @@ export function getColumnData(prop: string, title: string): CurdType.Table.Colum
     prop,
     width: undefined,
     minWidth: undefined,
-    tooltip: prop === columnActionProp ? false : true,
+    tooltip: prop === TableEnum.Right ? false : true,
     cellType: "text",
     sort: false,
     fixed: false,

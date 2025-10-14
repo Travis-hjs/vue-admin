@@ -9,7 +9,7 @@ import { watch, type PropType } from "vue";
 import type { TableType } from "./types";
 import { useListDrag } from "@/hooks/common";
 import { deepClone } from "@/utils";
-import { columnActionProp } from "./hooks";
+import { TableEnum } from "./hooks";
 
 const props = defineProps({
   /** 操作列列表数据 */
@@ -55,7 +55,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
 });
 
 function getDragProps(col: TableType.Column, index: number) {
-  const isAction = col.prop === columnActionProp;
+  const isAction = col.prop === TableEnum.Right;
   const key = col.prop;
   return {
     "data-key": key,
@@ -162,7 +162,7 @@ if (!props.notWatch) {
           class="the-setting-item f-vertical"
           v-bind="getDragProps(item, itemIndex)"
         >
-          <i v-if="item.prop !== columnActionProp" class="el-icon--left el-icon-rank"></i>
+          <i v-if="item.prop !== TableEnum.Right" class="el-icon--left el-icon-rank"></i>
           <span class="f1">{{ item.title }}</span>
           <el-switch
             v-model="item.visible"

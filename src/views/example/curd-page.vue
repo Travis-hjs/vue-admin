@@ -10,7 +10,7 @@ import {
   getFieldData,
   type CurdType
 } from "@/components/Curd";
-import { columnActionProp } from "@/components/Table";
+import { TableEnum } from "@/components/Table";
 import { formatDate } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { ref } from "vue";
@@ -119,7 +119,7 @@ const data = ref<CurdType.Config>({
         titleTips: "人工设置的时间"
       },
       {
-        ...getColumnData(columnActionProp, "操作"),
+        ...getColumnData(TableEnum.Right, "操作"),
         width: 220,
       },
     ],
