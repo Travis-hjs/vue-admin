@@ -5,19 +5,19 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import type { CurdConfig, CurdType, TableOperationAction } from "./types";
+import { CurdEnum, type CurdConfig, type CurdType } from "./types";
 import { computed, onMounted, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import { FooterBtn, TableImage, type TableImageProps } from "./part";
-import { actionEditKey, convertPx, exportPropToWindow, getFieldValue, getFormConfig, initField } from "./data";
+import { convertPx, getFieldValue, getFormConfig, initField } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getCountId, getPageInfo } from "@/hooks/common";
 import { copyText, downloadFile, formatDate, isType, jsonToHtml, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
-import { openCurdConfig } from "./hooks";
+import { openCurdConfig, exportPropToWindow } from "./hooks";
 import { Table } from "@/components/Table";
 import { onUploadFile } from "@/components/Upload";
 
@@ -127,7 +127,7 @@ const actionList = computed(() => {
       ...item
     };
     // 处理内部编辑功能
-    if (newAction.key === actionEditKey) {
+    if (newAction.key === CurdEnum.ActionEdit) {
       newAction.click = function (row) {
         openForm(row);
       }
@@ -315,13 +315,13 @@ const batchData = {
  * @param type 操作类型
  * @param val 自定义代码或者表单配置
  */
-function onTableOperation(type: TableOperationAction, val?: CurdType.Table.Batch["click"] | CurdType.Table.From) {
+function onTableOperation(type: CurdEnum, val?: CurdType.Table.Batch["click"] | CurdType.Table.From) {
   switch (type) {
-    case "add":
+    case CurdEnum.Add:
       openForm();
       break;
     
-    case "batch":
+    case CurdEnum.Batch:
       batchData.selects = JSON.parse(JSON.stringify(tableState.selectList));
       if (!batchData.selects.length) return message.warning("请选择要操作的列！");
       if (!val) return message.error("当前按钮未配置动态代码或表单配置！");
@@ -343,7 +343,7 @@ function onTableOperation(type: TableOperationAction, val?: CurdType.Table.Batch
       }
       break;
 
-    case "open-form":
+    case CurdEnum.OpenForm:
       openForm(undefined, val as CurdType.Table.From);
       break;
   }

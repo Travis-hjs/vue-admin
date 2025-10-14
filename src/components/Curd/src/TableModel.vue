@@ -6,10 +6,10 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType, reactive } from "vue";
-import { actionEditKey, getColumnData } from "./data";
+import { getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
-import type { CurdType, TableOperationAction } from "./types";
+import { CurdEnum, type CurdType } from "./types";
 import { TableImage } from "./part";
 import TableOperation from "./TableOperation.vue";
 import TableColumnConfig from "./TableColumnConfig.vue";
@@ -272,14 +272,14 @@ function onFormConfig(formConfig?: CurdType.Table.From, sync?: boolean) {
   const actions = data.actions;
   /** 判断并在操作列中添加一个数据 */
   function handleEditAction() {
-    const hasEditAction = actions.length > 0 && actions[0].key === actionEditKey;
+    const hasEditAction = actions.length > 0 && actions[0].key === CurdEnum.ActionEdit;
     if (formConfig && formConfig.fields.length > 0) {
       if (!actionColumn.value) {
         addActionColumn();
       }
       if (!hasEditAction) {
         actions.unshift({
-          key: actionEditKey,
+          key: CurdEnum.ActionEdit,
           text: "编辑",
           type: "success",
           icon: "el-icon-edit"
@@ -350,21 +350,21 @@ function onConfigOperation(list: Array<CurdType.Table.Operation>) {
  * 操作栏配置
  * @param type 
  */
-function onOperation(type: TableOperationAction) {
+function onOperation(type: CurdEnum) {
   switch (type) {
-    case "batch":
+    case CurdEnum.Batch:
       openConfigBatch();
       break;
 
-    case "add":
+    case CurdEnum.Add:
       openFormConfig("add");
       break;
 
-    case "edit":
+    case CurdEnum.Edit:
       openFormConfig("edit");
       break;
       
-    case "operation":
+    case CurdEnum.Operation:
       configOperation.show = true;
       break;
   }

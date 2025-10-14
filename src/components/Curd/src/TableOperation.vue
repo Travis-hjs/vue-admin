@@ -6,10 +6,9 @@ export default {
 </script>
 <script lang="ts" setup>
 import { type PropType, computed } from "vue";
-import type { CurdType, TableOperationAction } from "./types";
+import { type CurdType, CurdEnum } from "./types";
 import { TableOperationBar } from "@/components/Table";
 import { isType } from "@/utils";
-import { message } from "@/utils/message";
 
 const props = defineProps({
   /** 配置数据 */
@@ -29,10 +28,10 @@ const props = defineProps({
 type ActionValue = CurdType.Table.Batch["click"] | CurdType.Table.From;
 
 const emit = defineEmits<{
-  (event: "action", action: TableOperationAction, value?: ActionValue): void;
+  (event: "action", action: CurdEnum, value?: ActionValue): void;
 }>();
 
-function onAction(val: TableOperationAction, code?: ActionValue) {
+function onAction(val: CurdEnum, code?: ActionValue) {
   emit("action", val, code);
 }
 
@@ -58,25 +57,25 @@ const btnActions = computed(() => {
   const hasOperation = has.value.operation;
   return [
     {
-      type: "add",
+      type: CurdEnum.Add,
       text: hasAdd ? "修改新增表单" : "配置新增表单",
       icon: hasAdd ? icon.on : icon.off,
       style: hasAdd ? "primary" : "info"
     },
     {
-      type: "edit",
+      type: CurdEnum.Edit,
       text: hasEdit ? "修改编辑表单" : "配置编辑表单",
       icon: hasEdit ? icon.on : icon.off,
       style: hasEdit ? "primary" : "info"
     },
     {
-      type: "batch",
+      type: CurdEnum.Batch,
       text: `${hasBatch ? "修改" : "配置"}批量按钮操作`,
       icon: hasBatch ? icon.on : icon.off,
       style: hasBatch ? "primary" : "info"
     },
     {
-      type: "operation",
+      type: CurdEnum.Operation,
       text: `${hasOperation ? "修改" : "配置"}自定义按钮操作`,
       icon: hasOperation ? icon.on : icon.off,
       style: hasOperation ? "primary" : "info"
@@ -124,15 +123,15 @@ const formBtnShow = computed(() => {
 
 function onBatch(btn: CurdType.Table.Batch) {
   if (btn.formConfig) {
-    onAction("batch", btn.formConfig);
+    onAction(CurdEnum.Batch, btn.formConfig);
   } else {
-    onAction("batch", btn.click);
+    onAction(CurdEnum.Batch, btn.click);
   }
 }
 
 function onOperation(btn: CurdType.Table.Operation) {
   if (isType(btn.formConfig, "object")) {
-    onAction("open-form", btn.formConfig);
+    onAction(CurdEnum.OpenForm, btn.formConfig);
   }
   if (!btn.click) return;
   if (isType(btn.click, "string")) {
@@ -198,7 +197,7 @@ function onOperation(btn: CurdType.Table.Operation) {
         type="primary"
         link
         :disabled="props.disabled"
-        @click="onAction('add')"
+        @click="onAction(CurdEnum.Add)"
       >
         <i class="el-icon--left el-icon-plus" />
         新增

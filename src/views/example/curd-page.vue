@@ -4,8 +4,8 @@
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
-  actionEditKey,
   Curd,
+  CurdEnum,
   getColumnData,
   getFieldData,
   type CurdType
@@ -125,7 +125,7 @@ const data = ref<CurdType.Config>({
     ],
     actions: [
       {
-        key: actionEditKey,
+        key: CurdEnum.ActionEdit,
         text: "编辑",
         type: "success",
         icon: "el-icon-edit"

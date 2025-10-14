@@ -368,9 +368,6 @@ export namespace CurdType {
 
 }
 
-/** 表格操作栏点击行为类型 */
-export type TableOperationAction = "add" | "edit" | "batch" | "operation" | "open-form";;
-
 /** `curd`弹框配置 */
 export namespace CurdConfig {
   /** 编辑类型 */
@@ -434,4 +431,19 @@ export namespace PresetCodeType {
     name: string;
     code: string;
   }
+}
+
+export const enum CurdEnum {
+  /** 表格操作列中，编辑按钮的`key` */
+  ActionEdit = "action-edit",
+  /** 表单新增 */
+  Add = "add",
+  /** 表单编辑 */
+  Edit = "edit",
+  /** 表格批量操作 */
+  Batch = "batch",
+  /** 表格操作栏 */
+  Operation = "operation",
+  /** 打开表单操作 */
+  OpenForm = "open-form",
 }

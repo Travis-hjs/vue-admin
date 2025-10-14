@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { onUnmounted, reactive } from "vue";
 import type { CurdConfig, CurdType } from "./types";
 import { deepClone } from "@/utils";
 import { getCurdConfigDefault, getCurdConfigEditor } from "./data";
@@ -29,4 +29,25 @@ export function openCurdConfig(option: Partial<Pick<CurdConfig.State, "title" | 
   if (!option.pageId) {
     console.error("openCurdConfig 缺少页面唯一标识 pageId");
   }
+}
+
+/**
+ * 将属性挂载到全局，以下划线为标识符开头
+ * - 配合`jsCode`中动态代码调用
+ * @param target 
+ */
+export function exportPropToWindow<T extends object>(target: T) {
+  const global: any = window;
+  for (const key in target) {
+    const props = `_${key}`;
+    global[props] = target[key];
+  }
+
+  // 组件卸载的时候将全局属性清空，避免占用内存或者爆栈
+  onUnmounted(function() {
+    for (const key in target) {
+      const props = `_${key}`;
+      global[props] = null;
+    }
+  });
 }

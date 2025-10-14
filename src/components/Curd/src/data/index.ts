@@ -1,12 +1,9 @@
-import { nextTick, onUnmounted } from "vue";
+import { nextTick } from "vue";
 import type { CurdConfig, CurdType } from "../types";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 import { getCountId } from "@/hooks/common";
 import { columnActionProp } from "@/components/Table";
 // ----------------------- 数据相关 -----------------------
-
-/** 表格操作列中，编辑按钮的`key` */
-export const actionEditKey = "action-edit";
 
 /** 表单组件标题对象 */
 export const fieldTitleMap = {
@@ -548,27 +545,6 @@ export const shortcutMap: Record<DateType, Array<Shortcut>> = {
       value: () => [new Date(), getLastMonth(6)]
     }
   ]
-}
-
-/**
- * 将属性挂载到全局，以下划线为标识符开头
- * - 配合`jsCode`中动态代码调用
- * @param target 
- */
-export function exportPropToWindow<T extends object>(target: T) {
-  const global: any = window;
-  for (const key in target) {
-    const props = `_${key}`;
-    global[props] = target[key];
-  }
-
-  // 组件卸载的时候将全局属性清空，避免占用内存或者爆栈
-  onUnmounted(function() {
-    for (const key in target) {
-      const props = `_${key}`;
-      global[props] = null;
-    }
-  });
 }
 
 /**

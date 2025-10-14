@@ -6,9 +6,9 @@ export default {
 </script>
 <script lang="ts" setup>
 import { reactive, ref, watch, type PropType } from "vue";
-import { type CurdType } from "./types";
+import { CurdEnum, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { actionEditKey, getActionData, getBoldLabel } from "./data";
+import { getActionData, getBoldLabel } from "./data";
 import { getInputRule, getSelectRule, useListDrag } from "@/hooks/common";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { deepClone, isType } from "@/utils";
@@ -225,7 +225,7 @@ watch(
     state.show = show;
     if (!show) return;
     state.list = deepClone(props.list);
-    state.hasEdit = state.list.some(item => item.key === actionEditKey);
+    state.hasEdit = state.list.some(item => item.key === CurdEnum.ActionEdit);
     state.index = -1;
     form.btn = getActionData();
     form.column = {
@@ -250,7 +250,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
  * @param action 
  */
 function canDraggable(action: CurdType.Table.Action) {
-  if (action.key != actionEditKey && state.list.length > 1 && state.index === -1) {
+  if (action.key != CurdEnum.ActionEdit && state.list.length > 1 && state.index === -1) {
     return true;
   }
   return undefined;
@@ -357,19 +357,19 @@ function getBtnText(action: CurdType.Table.Action) {
           v-for="(item, itemIndex) in state.list"
           :class="['the-curd-option-item f-vertical', {'the-curd-selected': itemIndex === state.index}]"
           :key="item.key"
-          :data-key="item.key !== actionEditKey ? item.key : null"
+          :data-key="item.key !== CurdEnum.ActionEdit ? item.key : null"
           :draggable="canDraggable(item)"
           @dragstart="onDragStart(itemIndex)"
           @dragover="e => onDragMove(e, itemIndex)"
           @drop="onDropEnd"
         >
-          <i v-if="state.index === -1 && item.key !== actionEditKey" class="el-icon--left el-icon-rank"></i>
+          <i v-if="state.index === -1 && item.key !== CurdEnum.ActionEdit" class="el-icon--left el-icon-rank"></i>
           <el-button :type="item.type" link>
             <i v-if="item.icon" :class="['el-icon--left', item.icon]"></i>
             {{ getBtnText(item) }}
           </el-button>
           <div class="f1"></div>
-          <el-text v-if="item.key === actionEditKey" type="info" size="small">编辑按钮不可删除、拖拽等操作，且处于首位</el-text>
+          <el-text v-if="item.key === CurdEnum.ActionEdit" type="info" size="small">编辑按钮不可删除、拖拽等操作，且处于首位</el-text>
           <template v-else>
             <el-popconfirm
               width="186px"

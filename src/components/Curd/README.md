@@ -250,11 +250,11 @@ exportPropToWindow({
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
 import {
-  actionEditKey,
   Curd,
   getColumnData,
   getFieldData,
-  type CurdType
+  type CurdType,
+  CurdEnum,
 } from "@/components/Curd";
 import { columnActionProp } from "@/components/Table";
 import { formatDate } from "@/utils";
@@ -371,7 +371,7 @@ const data = ref<CurdType.Config>({
     ],
     actions: [
       {
-        key: actionEditKey,
+        key: CurdEnum.ActionEdit,
         text: "编辑",
         type: "success",
         icon: "el-icon-edit"

@@ -11,10 +11,13 @@ export {
   getFormConfig,
   getBoldLabel,
   getCurdConfigDefault,
-  exportPropToWindow,
-  actionEditKey,
 } from "./src/data";
 
-export { openCurdConfig } from "./src/hooks";
+export {
+  openCurdConfig,
+  exportPropToWindow,
+} from "./src/hooks";
 
-export type { CurdType, TableOperationAction } from "./src/types";
+export type { CurdType } from "./src/types";
+
+export { CurdEnum } from "./src/types";
