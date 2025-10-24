@@ -16,7 +16,7 @@ export namespace FieldType {
     /** 表单数据对象键值 */
     prop: keyof T | NestedKeyOf<T>;
     /** 组件的`placeholder` */
-    placeholder?: string;
+    placeholder?: string | (() => string);
     /** 额外的提示文案 */
     tips?: string | (() => string);
     /** 类名 */

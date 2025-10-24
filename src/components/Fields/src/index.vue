@@ -109,7 +109,7 @@ function onChange(field: FieldType.Member, val: any) {
   emit("change", key, value);
 }
 
-function getString(field: FieldType.Member, key: "class" | "label" | "labelWidth" | "tips" | "tooltip") {
+function getString(field: any, key: "class" | "label" | "labelWidth" | "tips" | "tooltip" | "placeholder"): string {
   return typeof field[key] === "function" ? field[key]() : field[key];
 }
 
@@ -120,7 +120,7 @@ function getClassName(field: FieldType.Member) {
 function getCommonProps(field: FieldType.Member) {
   const isDisabled = isType(field.disabled, "function") ? field.disabled() : field.disabled;
   return {
-    placeholder: (field as any).placeholder,
+    placeholder: getString(field, "placeholder"),
     disabled: isDisabled,
     class: getClassName(field),
     clearable: field.type === "textarea" ? undefined : field.noClear ? false : true,
@@ -131,7 +131,7 @@ function getCommonProps(field: FieldType.Member) {
 function getSelectProps(field: FieldType.Select<any>) {
   const isDisabled = isType(field.disabled, "function") ? field.disabled() : field.disabled;
   return {
-    placeholder: field.placeholder,
+    placeholder: getString(field, "placeholder"),
     disabled: isDisabled,
     multiple: field.multiple,
     clearable: field.noClear ? false : true,
@@ -146,7 +146,7 @@ function getSelectProps(field: FieldType.Select<any>) {
 function getTextContent(field: FieldType.Text<any>) {
   const empty = ["", null, undefined];
   const value = getFieldValue(field);
-  const text = empty.includes(value) ? field.placeholder : value;
+  const text = empty.includes(value) ? getString(field, "placeholder") : value;
   return text || "-";
 }
 
@@ -177,7 +177,7 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
     class="the-fields-item"
   >
     <template v-if="field.tooltip" #label>
-      <LabelTips :label="getString(field, 'label')!" :tips="getString(field, 'tooltip')!" />
+      <LabelTips :label="getString(field, 'label')" :tips="getString(field, 'tooltip')" />
     </template>
     <el-input
       v-if="field.type === 'input'"
