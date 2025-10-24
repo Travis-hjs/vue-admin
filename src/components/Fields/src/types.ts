@@ -10,17 +10,17 @@ export namespace FieldType {
     /** 表单项唯一值，一些特殊场景需要设置 */
     key?: string;
     /** 展示文案 */
-    label: string;
+    label: string | (() => string);
     /** `label`宽度 */
-    labelWidth?: string;
+    labelWidth?: string | (() => string);
     /** 表单数据对象键值 */
     prop: keyof T | NestedKeyOf<T>;
     /** 组件的`placeholder` */
     placeholder?: string;
     /** 额外的提示文案 */
-    tips?: string;
+    tips?: string | (() => string);
     /** 类名 */
-    class?: string;
+    class?: string | (() => string);
     /** 是否禁用状态 */
     disabled?: boolean | (() => boolean);
     /**
@@ -37,7 +37,7 @@ export namespace FieldType {
      * 表单项的`label`提示内容
      * - 当组件传入`:type="form"`时生效
      */
-    tooltip?: string;
+    tooltip?: string | (() => string);
     /** 是否不设置清除功能 */
     noClear?: boolean;
     /**

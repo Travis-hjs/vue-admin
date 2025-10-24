@@ -109,8 +109,12 @@ function onChange(field: FieldType.Member, val: any) {
   emit("change", key, value);
 }
 
+function getString(field: FieldType.Member, key: "class" | "label" | "labelWidth" | "tips" | "tooltip") {
+  return typeof field[key] === "function" ? field[key]() : field[key];
+}
+
 function getClassName(field: FieldType.Member) {
-  return field.class || (props.type === "form" ? "w-full" : "short-value");
+  return getString(field, "class") || (props.type === "form" ? "w-full" : "short-value");
 }
 
 function getCommonProps(field: FieldType.Member) {
@@ -167,13 +171,13 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
     :is="props.type === 'form' ? ElFormItem : FilterItem"
     v-for="(field, fieldIndex) in fields"
     :key="field.key || `${field.prop}-${fieldIndex}`"
-    :label="field.label"
-    :label-width="field.labelWidth"
+    :label="getString(field, 'label')"
+    :label-width="getString(field, 'labelWidth')"
     :prop="field.prop"
     class="the-fields-item"
   >
     <template v-if="field.tooltip" #label>
-      <LabelTips :label="field.label" :tips="field.tooltip" />
+      <LabelTips :label="getString(field, 'label')!" :tips="getString(field, 'tooltip')!" />
     </template>
     <el-input
       v-if="field.type === 'input'"
@@ -239,14 +243,14 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
       :delimiter="field.delimiter"
       @change="(e: Array<string>) => onChange(field, e)"
     />
-    <div v-if="field.type === 'text'" :class="['text-box', field.class || 'w-full'] ">
+    <div v-if="field.type === 'text'" :class="['text-box', getString(field, 'class') || 'w-full'] ">
       <el-text>{{ getTextContent(field) }}</el-text>
     </div>
     <slot v-if="field.type === 'slot' && field.slotName" :name="field.slotName" v-bind="field"></slot>
     <div v-if="field.tips" class="tips-box">
       <span class="the-tag blue">
         <i class="el-icon--left el-icon-info"></i>
-        {{ field.tips }}
+        {{ getString(field, "tips") }}
       </span>
     </div>
   </component>
