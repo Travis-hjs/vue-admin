@@ -177,6 +177,12 @@ const formItems = computed(() => {
       class: "value-box-short",
     },
     {
+      label: "标题提示文案",
+      prop: "tooltip",
+      type: "input",
+      placeholder: "鼠标移上文字的提示文案"
+    },
+    {
       label: "提示/规则文字",
       prop: "placeholder",
       type: "slot",

@@ -33,10 +33,7 @@ export namespace FieldType {
      * - 当组件传入`:type="search"`时生效，对应`<FilterItem />`的属性
      */
     required?: boolean;
-    /**
-     * 表单项的`label`提示内容
-     * - 当组件传入`:type="form"`时生效
-     */
+    /** 标题的`label`提示内容 */
     tooltip?: string | (() => string);
     /** 是否不设置清除功能 */
     noClear?: boolean;

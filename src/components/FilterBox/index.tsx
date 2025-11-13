@@ -41,17 +41,24 @@ export const FilterItem = defineComponent({
     /** 优先级比`FilterWrap`高 */
     labelWidth: String,
     /** 是否必填（样式区分） */
-    required: Boolean
+    required: Boolean,
+    /** 提示文案 */
+    tooltip: String
   },
   setup(props, { slots }) {
     return () => (
       <div class={`the-filter-item flex${props.required ? " is-required" : ""}`}>
-        {
-          slots.label || props.label ? (
-            <span class="the-filter-label f-vertical" style={{ [width]: props.labelWidth }}>{ slots.label ? slots.label() : props.label }</span>
-          ) : null
-        }
-        { slots.default && slots.default() }
+        {slots.prefix ? slots.prefix() : null}
+        {slots.label || props.label ? (
+          <span
+            class={`the-filter-label f-vertical ${props.tooltip ? "the-tooltip" : ""}`}
+            style={{ [width]: props.labelWidth }}
+            data-tooltip={props.tooltip}
+          >
+            {slots.label ? slots.label() : props.label}
+          </span>
+        ) : undefined}
+        {slots.default && slots.default()}
       </div>
     )
   },

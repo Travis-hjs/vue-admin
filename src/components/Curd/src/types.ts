@@ -263,7 +263,7 @@ export namespace CurdType {
     }
 
     /** 表格操作栏按钮类型 */
-    export interface Operation extends Pick<TableType.Action<BaseObj>, "type" | "text" | "icon"> {
+    export interface Operation extends Pick<TableType.Operation, "type" | "text" | "icon" | "tooltip"> {
       /** 按钮唯一值 */
       key: string;
       /**

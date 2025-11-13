@@ -73,6 +73,12 @@ const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
     placeholder: formRules.text.message
   },
   {
+    label: "按钮提示文字",
+    prop: "tooltip",
+    type: "input",
+    placeholder: "请输入提示文字"
+  },
+  {
     label: "按钮点击功能",
     prop: "click",
     type: "slot",

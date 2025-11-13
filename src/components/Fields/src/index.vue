@@ -174,9 +174,10 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
     :label="getString(field, 'label')"
     :label-width="getString(field, 'labelWidth')"
     :prop="field.prop"
+    :tooltip="props.type === 'search' ? getString(field, 'tooltip') : undefined"
     class="the-fields-item"
   >
-    <template v-if="field.tooltip" #label>
+    <template v-if="props.type === 'form' && field.tooltip" #label>
       <LabelTips :label="getString(field, 'label')" :tips="getString(field, 'tooltip')" />
     </template>
     <el-input

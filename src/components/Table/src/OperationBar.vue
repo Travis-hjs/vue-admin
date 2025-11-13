@@ -68,7 +68,7 @@ function getDragProps(col: TableType.Column, index: number) {
   };
 }
 
-function getString(btn: TableType.Operation, type: "text" | "icon") {
+function getString(btn: TableType.Operation, type: "text" | "icon" | "tooltip") {
   const val = btn[type];
   if (typeof val === "string") {
     return val;
@@ -76,7 +76,7 @@ function getString(btn: TableType.Operation, type: "text" | "icon") {
   if (typeof val === "function") {
     return val();
   }
-  return false;
+  return undefined;
 }
 
 function getBoolean(btn: TableType.Operation, type: "loading" | "disabled" | "show", defaultValue = false) {
@@ -125,6 +125,8 @@ if (!props.notWatch) {
         :type="btn.type || 'primary'"
         :loading="getBoolean(btn, 'loading')"
         :disabled="props.disabled || getBoolean(btn, 'disabled')"
+        :class="[{ 'the-tooltip': !!btn.tooltip }]"
+        :data-tooltip="getString(btn, 'tooltip')"
         size="small"
         @click="btn.click"
       >

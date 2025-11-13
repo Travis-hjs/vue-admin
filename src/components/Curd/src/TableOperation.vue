@@ -174,6 +174,8 @@ function onOperation(btn: CurdType.Table.Operation) {
           :disabled="props.disabled"
           :link="!batch.solid"
           :size="batch.solid ? 'small' : undefined"
+          :class="[{ 'the-tooltip': !!batch.tooltip }]"
+          :data-tooltip="batch.tooltip"
           @click="onBatch(batch)"
         >
           <i v-if="batch.icon" :class="['el-icon--left', batch.icon]" />
@@ -187,6 +189,8 @@ function onOperation(btn: CurdType.Table.Operation) {
         :link="!item.solid"
         :size="item.solid ? 'small' : undefined"
         :disabled="props.disabled"
+        :class="[{ 'the-tooltip': !!item.tooltip }]"
+        :data-tooltip="item.tooltip"
         @click="onOperation(item)"
       >
         <i v-if="item.icon" :class="['el-icon--left', item.icon]" />

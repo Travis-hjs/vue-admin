@@ -43,6 +43,14 @@
     white-space: nowrap;
   }
 
+  .the-filter-label.the-tooltip {
+    --z-index: 110; // 覆盖至 layout 层上面
+
+    overflow: visible;
+    color: #448000;
+    cursor: help;
+  }
+
   .short-value {
     width: 220px;
   }

@@ -32,6 +32,7 @@ const searchFields: Array<FieldType.Member<SearchInfo>> = [
     prop: "keyword",
     type: "input",
     placeholder: "请输入查询关键字",
+    tooltip: "提示：模糊查询"
   },
   {
     label: "日期范围",

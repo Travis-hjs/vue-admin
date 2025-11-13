@@ -86,6 +86,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
           :label-width="convertPx(item.labelWidth)"
           :required="item.required"
           :draggable="props.editMode"
+          :tooltip="item.tooltip"
           @dragstart="onDragStart(itemIndex)"
           @dragover="onDragMove($event, itemIndex)"
           @drop="onDropEnd()"

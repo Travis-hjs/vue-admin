@@ -138,6 +138,8 @@ export namespace TableType {
     loading?: boolean | (() => boolean);
     /** 显示按钮的条件，不传则显示，和`v-if`一样的作用 */
     show?: boolean | (() => boolean);
+    /** 按钮提示文字 */
+    tooltip?: string | (() => string);
     /** 点击事件 */
     click: () => void;
   }
