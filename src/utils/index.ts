@@ -167,8 +167,12 @@ export function inputOnlyNumber(value: string | number, decimal?: boolean, negat
 /**
  * 深度克隆对象或数组
  * @param target 
+ * @param jsonClone 是否使用`JSON.parse(JSON.stringify(target))`进行克隆
  */
-export function deepClone<T>(target: T) {
+export function deepClone<T>(target: T, jsonClone?: boolean): T {
+  if (jsonClone) {
+    return JSON.parse(JSON.stringify(target));
+  }
   const cache = new Map();
   function clone(value: any): T {
     // 处理空和非对象类型

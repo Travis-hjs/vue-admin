@@ -5,13 +5,14 @@ export default {
 }
 </script>
 <script lang="ts" setup>
+import type { RouteItem } from "@/router/types";
+import type { LayoutType } from "@/store/types";
 import store from "@/store";
 import MenuItem from "./MenuItem.vue";
 import { ref, watch } from "vue";
-import type { RouteItem } from "@/router/types";
-import type { LayoutType } from "@/store/types";
 import { getMenuId, useLayoutRoute } from "./hooks";
 import { Empty } from "@/components/Empty";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   /**
@@ -162,7 +163,7 @@ function updateActive() {
 watch(
   () => layoutInfo.keyword,
   function (val) {
-    const list = JSON.parse(JSON.stringify(formatList));
+    const list = deepClone(formatList, true);
     if (val) {
       const filterList = hasKeyword(list);
       menuList.value = filterList;
