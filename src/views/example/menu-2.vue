@@ -5,6 +5,7 @@ import { reactive, ref } from "vue";
 import { validateEX } from "@/utils/dom";
 import { Fields, type FieldType } from "@/components/Fields";
 import { getInputRule, getSelectRule } from "@/hooks/common";
+import { deepClone } from "@/utils";
 
 const options = Array.from({ length: 10000 }).map((_, index) => ({
   value: index + 1,
@@ -128,7 +129,7 @@ function onSubmit() {
     validateEX("#the-form", valid);
     if (valid) {
       message.success("验证成功，表单数据已打印至控制台");
-      console.log("form.data >>", JSON.parse(JSON.stringify(form.data)));
+      console.log("form.data >>", deepClone(form.data, true));
     }
   })
 }

@@ -8,6 +8,7 @@ export default {
 import { getPageInfo } from "@/hooks/common";
 import { type PropType } from "vue";
 import type { TableType } from "./types";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   pageInfo: {
@@ -37,14 +38,14 @@ const emit = defineEmits<{
 }>();
 
 function onSizeChange(n: number) {
-  const before = JSON.parse(JSON.stringify(props.pageInfo));
+  const before = deepClone(props.pageInfo, true);
   props.pageInfo.currentPage = 1;
   props.pageInfo.pageSize = n;
   emit("change", { type: "pageSize", value: n, before });
 }
 
 function onCurrentChange(n: number) {
-  const before = JSON.parse(JSON.stringify(props.pageInfo));
+  const before = deepClone(props.pageInfo, true);
   props.pageInfo.currentPage = n;
   emit("change", { type: "currentPage", value: n, before });
 }

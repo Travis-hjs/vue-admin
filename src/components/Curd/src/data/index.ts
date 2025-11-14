@@ -295,7 +295,7 @@ export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes
       res.result = field.placeholder[1];
       return res;
     }
-    res.value = JSON.parse(JSON.stringify(inputList));
+    res.value = deepClone(inputList, true);
   }
   const single: Array<CurdType.Field["type"]> = ["input", "textarea", "radio", "select"];
   if (single.includes(field.type) && empty.includes(field.value)) {
@@ -308,7 +308,7 @@ export function getFieldValue<T extends CurdType.Field>(field: T): FieldValueRes
       res.result = field.placeholder as string;
       return res;
     }
-    res.value = JSON.parse(JSON.stringify(list));
+    res.value = deepClone(list, true);
   }
   // if (field.type === "cascader") {
   //   // TODO: 级联的值处理待开发者自己根据具体情况处理

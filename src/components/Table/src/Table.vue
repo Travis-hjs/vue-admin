@@ -7,7 +7,7 @@ export default {
 <script lang="ts" generic="T extends BaseObj<any>" setup>
 import { type PropType, ref, computed, onUpdated } from "vue";
 import { ElTable, type Column } from "element-plus";
-import { filterRepeat, isType } from "@/utils";
+import { deepClone, filterRepeat, isType } from "@/utils";
 import { TableEnum, useAdaptiveTable } from "./hooks";
 import ActionCell from "./ActionCell.vue";
 import type { TableType } from "./types";
@@ -187,7 +187,7 @@ const selectedAll = computed(() => {
 /** 是否有选中（当前表格页） */
 const isIndeterminate = computed(() => selectedAll.value ? false : canSelectList.value.some(item => selected(item)));
 
-const getCloneList = () => JSON.parse(JSON.stringify(props.selectList)) as Array<any>;
+const getCloneList = () => deepClone<Array<any>>(props.selectList!, true);
 
 function onSelectAll() {
   if (!props.selectList) return console.warn("选择功能需要绑定 selectList 属性！");

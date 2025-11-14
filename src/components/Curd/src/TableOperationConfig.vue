@@ -13,6 +13,7 @@ import { reactive } from "vue";
 import { getInputRule, useListDrag } from "@/hooks/common";
 import { getBoldLabel, getOperationData } from "./data";
 import { Fields, type FieldType } from "@/components/Fields";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   show: {
@@ -130,14 +131,14 @@ function onClose() {
 }
 
 function onSubmit() {
-  emit("submit", JSON.parse(JSON.stringify(state.list)));
+  emit("submit", deepClone(state.list, true));
   onClose();
 }
 
 function onSubmitBtn(type: "add" | "edit") {
   formRef.value!.validate(val => {
     if (!val) return;
-    const data = JSON.parse(JSON.stringify(form.data));
+    const data = deepClone(form.data, true);
     if (type === "add") {
       state.list.push(data);
     } else {
@@ -156,7 +157,7 @@ function onRestBtn() {
 
 function onEdit(index: number) {
   const data = state.list[index];
-  form.data = JSON.parse(JSON.stringify(data));
+  form.data = deepClone(data, true);
   state.index = index;
   state.formEdit = true;
 }
@@ -170,7 +171,7 @@ watch(
   show => {
     state.show = show;
     if (show) {
-      state.list = JSON.parse(JSON.stringify(props.list));
+      state.list = deepClone(props.list, true);
       form.data = getOperationData();
       state.index = -1;
       setTimeout(() => {

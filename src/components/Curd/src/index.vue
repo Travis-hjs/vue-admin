@@ -14,7 +14,7 @@ import { FooterBtn, TableImage, type TableImageProps } from "./part";
 import { convertPx, getFieldValue, getFormConfig, initField } from "./data";
 import { message, messageBox } from "@/utils/message";
 import { getCountId, getPageInfo } from "@/hooks/common";
-import { copyText, downloadFile, formatDate, isType, jsonToHtml, jsonToPath } from "@/utils";
+import { copyText, deepClone, downloadFile, formatDate, isType, jsonToHtml, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
 import { openCurdConfig, exportPropToWindow } from "./hooks";
@@ -181,7 +181,7 @@ let tableRow = null as null | BaseObj<any>;
  * @param other 其他传入的表单
  */
 function openForm(row?: any, other?: CurdType.Table.From) {
-  tableRow = row ? JSON.parse(JSON.stringify(row)) : {};
+  tableRow = row ? deepClone(row, true) : {};
   const config = props.data.table;
   const add = config.formAdd || getFormConfig();
   const edit = config.formEdit || getFormConfig();
@@ -191,7 +191,7 @@ function openForm(row?: any, other?: CurdType.Table.From) {
   } else {
     formSate.type = !!row ? "edit" : "add";
     // 正常新增编辑逻辑
-    formSate.config = JSON.parse(JSON.stringify(row ? edit : add));
+    formSate.config = deepClone(row ? edit : add, true);
   }
   // const openCode = formSate.config.openCode;
   // if (typeof openCode === "string") {
@@ -292,7 +292,7 @@ async function getData() {
     }
   }
   // 最后请求列表并把参数传入到外部声明方法中
-  const page = JSON.parse(JSON.stringify(tableState.pageInfo));
+  const page = deepClone(tableState.pageInfo, true);
   state.loading = true;
   const res = await props.action.getTableData(searchInfo, page);
   state.loading = false;
@@ -322,7 +322,7 @@ function onTableOperation(type: CurdEnum, val?: CurdType.Table.Batch["click"] | 
       break;
     
     case CurdEnum.Batch:
-      batchData.selects = JSON.parse(JSON.stringify(tableState.selectList));
+      batchData.selects = deepClone(tableState.selectList, true);
       if (!batchData.selects.length) return message.warning("请选择要操作的列！");
       if (!val) return message.error("当前按钮未配置动态代码或表单配置！");
       batchData.list = batchData.selects.map(item => item[props.data.table.selectKey!]);

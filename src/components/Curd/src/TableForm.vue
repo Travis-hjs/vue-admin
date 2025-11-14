@@ -67,7 +67,7 @@ function validate(callback?: (formData: BaseObj<any>, current: BaseObj<any>) => 
         // 编辑逻辑
         const form = {
           ...data,
-          ...JSON.parse(JSON.stringify(tableRow))
+          ...deepClone(tableRow, true)
         };
         // TODO: 用完就清空
         // tableRow = undefined;

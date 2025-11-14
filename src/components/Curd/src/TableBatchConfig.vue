@@ -12,6 +12,7 @@ import { FooterBtn, IconInput, PresetCode } from "./part";
 import { Fields, type FieldType } from "@/components/Fields";
 import { getBoldLabel } from "./data";
 import { getCountId, getInputRule, useListDrag } from "@/hooks/common";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   show: {
@@ -135,7 +136,7 @@ function onClose() {
 
 function onSubmit() {
   onClose();
-  emit("submit", state.keyword, JSON.parse(JSON.stringify(state.batchList)));
+  emit("submit", state.keyword, deepClone(state.batchList, true));
 }
 
 function onRestBtn() {
@@ -147,7 +148,7 @@ function onRestBtn() {
 
 function onEdit(index: number) {
   const data = state.batchList[index];
-  state.formData = JSON.parse(JSON.stringify(data));
+  state.formData = deepClone(data, true);
   state.index = index;
   state.formEdit = true;
 }
@@ -159,7 +160,7 @@ function onDelete(index: number) {
 function onSubmitBtn(type: "add" | "edit") {
   formBtn.value!.validate(val => {
     if (!val) return;
-    const data = JSON.parse(JSON.stringify(state.formData));
+    const data = deepClone(state.formData, true);
     if (type === "add") {
       state.batchList.push(data);
     } else {
@@ -192,7 +193,7 @@ watch(
     state.show = show;
     if (!show) return;
     state.keyword = props.selectKey || "";
-    state.batchList = props.list ? JSON.parse(JSON.stringify(props.list)) : [];
+    state.batchList = props.list ? deepClone(props.list, true) : [];
   },
   { immediate: true }
 );

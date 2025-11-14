@@ -14,6 +14,7 @@ import { type FieldType, Fields } from "@/components/Fields";
 import type { MenuForm } from "@/router/types";
 import { Icon } from "@/components/Icon";
 import { getInputRule } from "@/hooks/common";
+import { deepClone } from "@/utils";
 
 const props = defineProps({
   show: {
@@ -201,7 +202,7 @@ function onClose() {
 const formRef = ref<FormInstance>();
 
 function onSubmit() {
-  console.log("formData >>", JSON.parse(JSON.stringify(state.formData)));
+  console.log("formData >>", deepClone(state.formData, true));
   formRef.value!.validate(val => {
     validateEX(".menu-form", val);
     if (!val) return;
@@ -220,7 +221,7 @@ function onSubmit() {
       state.formData.path = `/auto-set-${Date.now()}`;
     }
     // 提交数据
-    emit("submit", JSON.parse(JSON.stringify(state.formData)));
+    emit("submit", deepClone(state.formData, true));
     onClose();
   })
 }
@@ -256,7 +257,7 @@ watch(() => props.show, function(val) {
   state.show = val;
   if (val) {
     // 可以做一些重置操作
-    state.formData = props.type === "edit" ? JSON.parse(JSON.stringify(props.form)) : useFormData();
+    state.formData = props.type === "edit" ? deepClone(props.form, true) : useFormData();
     formRef.value && setTimeout(() => formRef.value!.clearValidate());
   }
 }, {

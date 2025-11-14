@@ -17,7 +17,7 @@ import {
 import Example from "./Example.vue";
 import Field from "./Field.vue";
 import type { FormInstance } from "element-plus";
-import { checkType, isType } from "@/utils";
+import { checkType, deepClone, isType } from "@/utils";
 import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
 import type { CurdType } from "./types";
@@ -508,7 +508,7 @@ function onSubmit() {
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
     const editor = curdConfigState.editor;
-    const form = JSON.parse(JSON.stringify(state.formData));
+    const form = deepClone<any>(state.formData, true);
     hasOptions.includes(form.type) && onOptions();
     // TODO: 处理空类型
     if (!form.valueType) {
@@ -604,10 +604,10 @@ watch(
       const current = editor.index;
       const actionMap = {
         search() {
-          state.formData = JSON.parse(JSON.stringify(props.config.search.list[current]));
+          state.formData = deepClone(props.config.search.list[current], true);
         },
         table() {
-          state.formData = JSON.parse(JSON.stringify(editor.form?.fields[current]));
+          state.formData = deepClone(editor.form?.fields[current], true);
         }
       }
       actionMap[curdConfigState.type!]();

@@ -206,7 +206,7 @@ function onRestBtn() {
 
 function onEdit(index: number) {
   const data = state.list[index];
-  form.btn = JSON.parse(JSON.stringify(data));
+  form.btn = deepClone(data, true);
   state.index = index;
   state.formEdit = true;
 }
