@@ -8,11 +8,12 @@ export default {
 import type { CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { computed, reactive, ref, watch, type PropType } from "vue";
-import { getBoldLabel, getColumnData } from "./data";
+import { getColumnData } from "./data";
 import { deepClone } from "@/utils";
 import { FooterBtn, PresetCode } from "./part";
 import { Fields, type FieldType } from "@/components/Fields";
 import { getInputRule, getSelectRule } from "@/hooks/common";
+import { tableColumn } from "./data/html";
 
 const props = defineProps({
   show: {
@@ -100,14 +101,6 @@ const sortOptions: Array<CurdType.Table.ColumnOption<"sort">> = [
   { label: "默认降序", value: "desc" }
 ];
 
-const codeTips = `
-<p>函数代码片段：</p>
-<p>第一个参数${getBoldLabel("cellValue")}是表格值;</p>
-<p>第二个参数${getBoldLabel("row")}是完整对象;</p>
-<p>例如：${getBoldLabel("return cellValue + row.id;")};</p>
-<p>也可以是HTML：${getBoldLabel("return `<html 标签>`")};</p>
-`;
-
 const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
   {
     label: "表格列标题",
@@ -158,7 +151,7 @@ const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
     prop: "jsCode",
     type: "slot",
     slotName: "jsCode",
-    tooltip: codeTips,
+    tooltip: tableColumn.codeTips,
     show: () => state.form.cellType === "js"
   },
   {

@@ -11,7 +11,6 @@ import {
   getFieldData,
   dateTypeOptions,
   shortcutMap,
-  getBoldLabel,
   dataArrayTypes
 } from "./data";
 import Example from "./Example.vue";
@@ -24,6 +23,7 @@ import type { CurdType } from "./types";
 import { Fields, type FieldType } from "@/components/Fields";
 import { curdConfigState } from "./hooks";
 import { getInputRule, useZIndex } from "@/hooks/common";
+import { editor } from "./data/html";
 
 const props = defineProps({
   show: {
@@ -56,16 +56,6 @@ const arrayFields = ["input-between", "checkbox", "cascader"];
 const allowNumberFields = ["input", "select", "radio"];
 /** 需要校验为数字类型的组件 */
 const checkNumberFields = allowNumberFields.concat(arrayFields);
-
-const formatTips = `<p>参考 src/utils/index.ts 中的${getBoldLabel("formatDate")}函数</p>`;
-
-const showTips = `
-<p>动态表单项的条件显示逻辑函数；</p>
-<p>返回${getBoldLabel("false")}则不展示对应项；</p>
-<p>函数有一个参数：${getBoldLabel("formData")}为当前表单的数据值；</p>
-<p>以${getBoldLabel("return")}为函数代码片段标记；</p>
-<p>例如：${getBoldLabel("return formData.type !== 2")}</p>
-`;
 
 const shortcutOptions = computed(() => {
   let option: Array<{ label: string; value: number }> = [];
@@ -335,7 +325,7 @@ const formItems = computed(() => {
         label: "格式化规则",
         prop: "format",
         type: "input",
-        tooltip: formatTips,
+        tooltip: editor.formatTips,
         class: "value-box-short",
       }
     ];
@@ -349,7 +339,7 @@ const formItems = computed(() => {
       prop: "show",
       type: "textarea",
       placeholder: "请输入条件代码，为空则默认展示",
-      tooltip: showTips
+      tooltip: editor.showTips
     });
   }
 

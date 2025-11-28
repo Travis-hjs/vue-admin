@@ -25,6 +25,10 @@ const props = defineProps({
   config: {
     type: Object as PropType<CurdType.Table.Config>,
     required: true
+  },
+  pageId: {
+    type: String,
+    required: true
   }
 });
 
@@ -394,6 +398,7 @@ function onSetWidth() {
     v-if="!curdConfigState.editor.showForm"
     :editMode="true"
     :config="props.config"
+    :page-id="props.pageId"
     @action="onOperation"
   />
   <div class="the-curd-table-model">

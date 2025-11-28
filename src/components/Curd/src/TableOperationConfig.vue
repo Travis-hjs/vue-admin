@@ -11,9 +11,10 @@ import { FooterBtn, IconInput, PresetCode } from "./part";
 import { type PropType, ref, watch } from "vue";
 import { reactive } from "vue";
 import { getInputRule, useListDrag } from "@/hooks/common";
-import { getBoldLabel, getOperationData } from "./data";
+import { getOperationData } from "./data";
 import { Fields, type FieldType } from "@/components/Fields";
 import { deepClone } from "@/utils";
+import { tableOperation } from "./data/html";
 
 const props = defineProps({
   show: {
@@ -32,18 +33,6 @@ const emit = defineEmits<{
   (event: "submit", list: Array<CurdType.Table.Operation>): void;
   (event: "openFormConfig", target: CurdType.Table.Operation): void;
 }>();
-
-const fnTips = `
-<p>函数代码片段，点击的时候运行</p>
-<p>函数当前函数没有传参字段</p>
-<p>例如：${getBoldLabel('console.log("测试");')}</p>
-`;
-
-const showTips = `
-<p>可以输入代码片段，</p>
-<p>以${getBoldLabel("return")}关键字为函数标记，</p>
-<p>例如：${getBoldLabel('return _hasAuth("权限标识");')}返回布尔值进行判断显示或者隐藏。</p>
-`;
 
 const formRef = ref<FormInstance>();
 
@@ -84,7 +73,7 @@ const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
     prop: "click",
     type: "slot",
     slotName: "clickCode",
-    tooltip: fnTips,
+    tooltip: tableOperation.fnTips,
     show: () => !form.data.formConfig
   },
   {
@@ -98,7 +87,7 @@ const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
     prop: "show",
     type: "textarea",
     placeholder: "请输入条件代码，为空则默认显示",
-    tooltip: showTips
+    tooltip: tableOperation.showTips
   },
   {
     label: "按钮类型",

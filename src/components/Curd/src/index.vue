@@ -96,8 +96,8 @@ function renderTableCell(row: BaseObj<any>, key: string) {
     return content;
   }
   try {
-    const fn = new Function("cellValue", "row", column.jsCode);
-    content = fn(row[key], row);
+    const fn = new Function("sandbox", column.jsCode);
+    content = fn({ cellValue: row[key], row, pageId: props.pageId });
   } catch (error) {
     console.warn("解析 rawContent 代码错误 >>", error);
   }
@@ -196,8 +196,8 @@ function openForm(row?: any, other?: CurdType.Table.From) {
   // const openCode = formSate.config.openCode;
   // if (typeof openCode === "string") {
   //   try {
-  //     const fn = new Function("row", openCode);
-  //     fn(tableRow);
+  //     const fn = new Function("sandbox", openCode);
+  //     fn({ row: tableRow, pageId: props.pageId });
   //   } catch (error) {
   //     console.warn("解析打开表单前执行代码错误 >>", error);
   //   }
@@ -245,8 +245,8 @@ function submitForm() {
       const name = formSate.config.title ? `【${formSate.config.title}】` : "表单";
       if (!code) return message.error(`未找到对应的${name}提交代码！`);
       try {
-        const fn = new Function("formData", "current", "other", code);
-        fn(formData, current, batchData);
+        const fn = new Function("sandbox", code);
+        fn({ formData, current, batch: batchData, pageId: props.pageId });
       } catch (error) {
         console.warn("表单提交代码出错 >>", error);
       }
@@ -285,8 +285,8 @@ async function getData() {
   // 处理自定义查询校验代码
   const code = props.data.search.validateCode;
   if (code) {
-    const fn = new Function("params", code);
-    const result = fn(searchInfo);
+    const fn = new Function("sandbox", code);
+    const result = fn({ params: searchInfo, pageId: props.pageId });
     if (result === false) {
       return;
     }
@@ -326,18 +326,19 @@ function onTableOperation(type: CurdEnum, val?: CurdType.Table.Batch["click"] | 
       if (!batchData.selects.length) return message.warning("请选择要操作的列！");
       if (!val) return message.error("当前按钮未配置动态代码或表单配置！");
       batchData.list = batchData.selects.map(item => item[props.data.table.selectKey!]);
+      const parameter = { list: batchData.list, selectList: batchData.selects, pageId: props.pageId };
       // TODO: 走表单逻辑
       if (isType<CurdType.Table.From>(val, "object")) {
         openForm(undefined, val);
         return;
       }
       if (isType(val, "function")) {
-        val(batchData.list, batchData.selects);
+        val(parameter);
         return;
       }
       try {
-        const fn = new Function("list", "selectList", val);
-        fn(batchData.list, batchData.selects);
+        const fn = new Function("sandbox", val);
+        fn(parameter);
       } catch (error) {
         console.warn("批量操作代码出错 >>", error);
       }
@@ -438,6 +439,7 @@ onMounted(function() {
       <TableOperation
         :config="props.data.table"
         :disabled="state.loading"
+        :page-id="props.pageId"
         @action="onTableOperation"
       />
       <Table
@@ -450,6 +452,7 @@ onMounted(function() {
         :loading="state.loading"
         :select-key="props.data.table.selectKey!"
         :page-info="tableState.pageInfo"
+        :page-id="props.pageId"
         @page="getData()"
         @sort="getData()"
       >
@@ -486,7 +489,7 @@ onMounted(function() {
       @close="closeForm"
       @opened="onSetForm"
     >
-      <TableForm ref="formRef" :disabled="formSate.loading" />
+      <TableForm ref="formRef" :disabled="formSate.loading" :page-id="props.pageId" />
       <template #footer>
         <FooterBtn
           :loading="formSate.loading"

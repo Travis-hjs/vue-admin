@@ -8,11 +8,12 @@ export default {
 import { reactive, ref, watch, type PropType } from "vue";
 import { CurdEnum, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { getActionData, getBoldLabel } from "./data";
+import { getActionData } from "./data";
 import { getInputRule, getSelectRule, useListDrag } from "@/hooks/common";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { deepClone, isType } from "@/utils";
 import { Fields, type FieldType } from "@/components/Fields";
+import { tableAction } from "./data/html";
 
 const props = defineProps({
   show: {
@@ -39,27 +40,6 @@ const emit = defineEmits<{
   (event: "submit", list: Array<CurdType.Table.Action>, width?: number, max?: number): void;
   (event: "openFormConfig", target: CurdType.Table.Action): void;
 }>();
-
-const textTips = `
-<p>可以输入代码片段，</p>
-<p>以${getBoldLabel("return")}关键字为函数标记，</p>
-<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>例如：${getBoldLabel('return row.status === 1 ? "下架" : "上架";')}</p>
-`;
-
-const fnTips = `
-<p>函数代码片段，点击的时候运行</p>
-<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>第二个参数${getBoldLabel("index")}是当前索引</p>
-<p>例如：${getBoldLabel("console.log(row, index);")}</p>
-`;
-
-const booleanTips = `
-<p>可以输入代码片段，</p>
-<p>以${getBoldLabel("return")}关键字为函数标记，</p>
-<p>函数第一个参数${getBoldLabel("row")}是表格对象值</p>
-<p>例如：${getBoldLabel("return row.status === 1;")}返回布尔值进行判断</p>
-`;
 
 const formBtn = ref<FormInstance>();
 
@@ -119,7 +99,7 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
     prop: "text",
     type: "textarea",
     placeholder: btnRules.text.message,
-    tooltip: textTips
+    tooltip: tableAction.textTips
   },
   {
     label: "按钮功能代码",
@@ -127,7 +107,7 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
     type: "slot",
     slotName: "clickCode",
     placeholder: "请输入代码片段",
-    tooltip: fnTips,
+    tooltip: tableAction.fnTips,
     show: () => !form.btn.formConfig
   },
   {
@@ -141,14 +121,14 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
     prop: "show",
     type: "textarea",
     placeholder: "请输入条件代码，为空则默认显示",
-    tooltip: booleanTips
+    tooltip: tableAction.booleanTips
   },
   {
     label: "按钮禁用条件",
     prop: "disabled",
     type: "textarea",
     placeholder: "请输入条件代码，为空则默认不禁用",
-    tooltip: booleanTips
+    tooltip: tableAction.booleanTips
   },
   {
     label: "按钮图标",
@@ -262,8 +242,8 @@ function getBtnText(action: CurdType.Table.Action) {
     if (!text.includes("return")) return text; 
     let str = "文字配置有误";
     try {
-      const fn = new Function("row", text);
-      str = fn({});
+      const fn = new Function("sandbox", text);
+      str = fn({ row: {} });
     } catch (error) {
       console.warn("解析按钮文字代码错误 >>", error);
     }

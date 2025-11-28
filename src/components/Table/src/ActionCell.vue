@@ -35,6 +35,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  pageId: {
+    type: String,
+  }
 });
 
 const useList = computed(() => {
@@ -68,8 +71,8 @@ function getString(item: TableType.Action, key: "text" | "icon") {
     let text = value;
     if (value.includes("return")) {
       try {
-        const fn = new Function("row", value);
-        text = fn(props.row);
+        const fn = new Function("sandbox", value);
+        text = fn({ row: props.row, pageId: props.pageId });
       } catch (error) {
         console.warn("解析按钮文字代码错误 >>", error);
       }
@@ -93,8 +96,8 @@ function getBoolean(item: TableType.Action, key: "loading" | "disabled" | "show"
     let val = key === "show";
     if (value.includes("return")) {
       try {
-        const fn = new Function("row", value);
-        val = fn(props.row);
+        const fn = new Function("sandbox", value);
+        val = fn({ row: props.row, pageId: props.pageId });
       }  catch (error) {
         console.warn(`解析 ${key} 字段代码错误 >>`, error);
       }
@@ -115,8 +118,8 @@ function onBtnClick(item: TableType.Action) {
     fn(row, index);
   } else if (isType(fn, "string")) {
     try {
-      const _click = new Function("row", "index", fn);
-      _click(row, index);
+      const _click = new Function("sandbox", fn);
+      _click({ row, index, pageId: props.pageId });
     } catch (error) {
       console.warn("解析按钮点击代码错误 >>", error);
     }

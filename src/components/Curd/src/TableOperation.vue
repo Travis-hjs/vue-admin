@@ -22,6 +22,10 @@ const props = defineProps({
   },
   disabled: {
     type: Boolean
+  },
+  pageId: {
+    type: String,
+    required: true
   }
 });
 
@@ -91,8 +95,8 @@ const operations = computed(() => {
       return item.show();
     }
     try {
-      const fn = new Function(item.show);
-      return fn();
+      const fn = new Function("sandbox", item.show);
+      return fn({ pageId: props.pageId });
     } catch (error) {
       console.warn("解析 operation.show 代码错误 >>", error);
       return false;
@@ -106,8 +110,8 @@ const formBtnShow = computed(() => {
   function getShow(code?: string) {
     if (code) {
       try {
-        const fn = new Function("row", code);
-        return fn({});
+        const fn = new Function("sandbox", code);
+        return fn({ row: {}, pageId: props.pageId });
       } catch (error) {
         console.warn("解析【表单按钮展示】代码错误 >>", error);
         return true;
@@ -136,8 +140,8 @@ function onOperation(btn: CurdType.Table.Operation) {
   if (!btn.click) return;
   if (isType(btn.click, "string")) {
     try {
-      const fn = new Function(btn.click);
-      fn();
+      const fn = new Function("sandbox", btn.click);
+      fn({ pageId: props.pageId });
     } catch (error) {
       console.warn("解析 operation.click 代码错误 >>", error);
     }

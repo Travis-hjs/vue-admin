@@ -29,6 +29,10 @@ const props = defineProps({
   },
   disabled: {
     type: Boolean
+  },
+  pageId: {
+    type: String,
+    required: true
   }
 });
 
@@ -191,8 +195,8 @@ const usableFields = computed(() => {
     }
     if (show.includes("return")) {
       try {
-        const fn = new Function("formData", show);
-        return fn(formData.value);
+        const fn = new Function("sandbox", show);
+        return fn({ formData: formData.value, pageId: props.pageId });
       } catch (error) {
         console.warn("解析表单展示逻辑代码错误 >>", error);
       }
@@ -209,8 +213,8 @@ function getDisabled(val?: boolean | string) {
   if (typeof val !== "string") return val;
   if (!val.includes("return")) return;
   try {
-    const fn = new Function("formData", val);
-    return fn(formData.value);
+    const fn = new Function("sandbox", val);
+    return fn({ formData: formData.value, pageId: props.pageId });
   } catch (error) {
     console.warn("解析表单项禁用代码错误 >>", error);
   }

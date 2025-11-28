@@ -10,9 +10,9 @@ import type { FormInstance } from "element-plus";
 import { type PropType, reactive, ref, watch } from "vue";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { Fields, type FieldType } from "@/components/Fields";
-import { getBoldLabel } from "./data";
 import { getCountId, getInputRule, useListDrag } from "@/hooks/common";
 import { deepClone } from "@/utils";
+import { tableBatch } from "./data/html";
 
 const props = defineProps({
   show: {
@@ -35,19 +35,6 @@ const emit = defineEmits<{
   (event: "submit", key: string, list: Array<CurdType.Table.Batch>): void;
   (event: "openFormConfig", target: CurdType.Table.Batch): void;
 }>();
-
-const tips = `[{ id: 1, name: "名称", status: 2 }]`;
-
-const fnTips = `
-<p>函数代码片段，点击的时候运行</p>
-<p>函数第一个参数${getBoldLabel("list")}是当前选中键值列表；</p>
-<p>第二个参数${getBoldLabel("selectList")}是当前选中的完整列表；</p>
-<p>例如：${getBoldLabel("console.log(list, selectList);")}</p>
-<p>
-  <a class="el-link el-link--primary" target="_blank" href="https://github.com/Travis-hjs/vue-admin/blob/el-plus/src/components/Curd/src/index.vue">查看已暴露的函数</a>
-</p>
-<p>下划线开头的均是全局函数，可在控制台直接运行。</p>
-`;
 
 function getFormData(): CurdType.Table.Batch {
   return {
@@ -82,7 +69,7 @@ const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [
     prop: "click",
     type: "slot",
     slotName: "batchCode",
-    tooltip: fnTips,
+    tooltip: tableBatch.fnTips,
     show: () => !state.formData.formConfig,
   },
   {
@@ -217,7 +204,7 @@ watch(
             />
             <div class="the-tag blue">
               <p class="mb-[8px]">表格数据中的字段，例如表格数：</p>
-              <p class="mb-[8px]">{{ tips }}</p>
+              <p class="mb-[8px]">{{ tableBatch.tips }}</p>
               <p class="mb-[8px]">则键值可以为 id</p>
               <p>
                 <i class="el-icon-info el-icon--left" />

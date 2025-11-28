@@ -291,7 +291,13 @@ export namespace CurdType {
        * 点击事件
        * - 当为字符串时是自定义代码
        */
-      click: ((list: Array<string|number>, selectList: Array<any>) => void) | string;
+      click: ((
+        sandbox: {
+          list: Array<string | number>;
+          selectList: Array<any>;
+          pageId: string;
+        }
+      ) => void) | string;
     }
 
     /** 表格相关配置 */

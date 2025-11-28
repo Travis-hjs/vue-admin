@@ -94,6 +94,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  pageId: {
+    type: String,
+  }
 });
 
 const emit = defineEmits<{
@@ -331,6 +334,7 @@ for (const column of props.columns) {
               :index="scope.$index"
               :actions="(props.actions as any)"
               :clickStop="props.isRowClick"
+              :pageId="props.pageId"
             />
             <div
               v-else-if="column.rawContent"

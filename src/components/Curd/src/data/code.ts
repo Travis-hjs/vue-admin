@@ -9,9 +9,9 @@ export const presetCodeMap: Record<PresetCodeType.Key, Array<PresetCodeType.Item
     {
       id: 1,
       name: "表单提交（完整数据）",
-      code: `console.log("表单提交 >>", formData, current);
-// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId, formData, current } = sandbox;
+console.log("表单提交 >>", formData, current);
 // 请求路径
 const path = \`/save/xxx\`;
 // 接口传参
@@ -40,9 +40,9 @@ _request("POST", path, params, { domain }).then(res => {
     {
       id: 12,
       name: "表单提交（当前展示表单项数据）",
-      code: `console.log("表单提交 >>", formData, current);
-// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId, formData, current } = sandbox;
+console.log("表单提交 >>", formData, current);
 // 请求路径
 const path = \`/save/xxx\`;
 // 接口传参
@@ -76,9 +76,9 @@ _request("POST", path, params, { domain }).then(res => {
     {
       id: 100,
       name: "批量提交请求",
-      code: `console.log("批量操作 >>", list, selectList);
-// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId, list, selectList } = sandbox;
+console.log("批量操作 >>", list, selectList);
 // 操作文案
 const text = "批量xxx";
 // 请求路径
@@ -113,7 +113,9 @@ _messageBox({
     {
       id: 200,
       name: "颜色枚举值展示",
-      code: `const text = {
+      code: `
+const { pageId, cellValue, row } = sandbox;
+const text = {
   0: "蓝色",
   1: "绿色",
   2: "橙色",
@@ -134,8 +136,8 @@ return text[cellValue] ? \`<span class="the-tag \${color[cellValue]}">\${text[ce
     {
       id: 201,
       name: "预览JSON",
-      code: `// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId, cellValue, row } = sandbox;
 // 当前页面功能对象
 const page = window[\`_\${pageId}\`];
 // 设置表格行唯一值，key一定要是唯一值
@@ -166,7 +168,7 @@ if (cellValue) {
     });
   }
   page.cellFn[key] = onCell;
-  return \`<span class="the-blue-text" onclick="window['_\${menuTag}'].cellFn['\${key}']()">\${text}</span>\`;
+  return \`<span class="the-blue-text" onclick="window['_\${pageId}'].cellFn['\${key}']()">\${text}</span>\`;
 }
 return "-";`,
     },
@@ -175,9 +177,8 @@ return "-";`,
     {
       id: 300,
       name: "通用确认提交",
-      code: `console.log("表格行数据 >>", row);
-// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId, cellValue, row } = sandbox;
 /** 请求方法，全大写 */
 const method = "POST";
 /** 接口请求路径 */
@@ -209,8 +210,8 @@ _messageBox({
     {
       id: 400,
       name: "导入文件(Excel)",
-      code: `// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId } = sandbox;
 // 当前页面功能对象
 const page = window[\`_\${pageId}\`];
 // 导入请求路径
@@ -254,8 +255,8 @@ _onUploadFile({
     {
       id: 401,
       name: "导出数据(Excel)",
-      code: `// 当前页面/菜单标识
-const pageId = "_pageId";
+      code: `
+const { pageId } = sandbox;
 // 当前页面功能对象
 const page = window[\`_\${pageId}\`];
 // 请求域名，不传则使用默认域名
@@ -283,8 +284,8 @@ _request(method, path, params,
     {
       id: 500,
       name: "校验查询参数",
-      code: `console.log("查询参数 >>", params);
-
+      code: `
+const { pageId, params } = sandbox;
 if (!params.userId && !params.userName) {
   _message.warning("用户ID、用户名称 必须填一个！");
   return false;

@@ -1,5 +1,5 @@
 <template>
-  <Curd v-model:data="data" :action="action" :pageId="pageId" />
+  <Curd v-model:data="data" :action="action" :page-id="pageId" />
 </template>
 <script lang="ts" setup>
 import { getTableList, saveForm, setReport } from "@/api/common";
@@ -92,7 +92,7 @@ const data = ref<CurdType.Config>({
         width: 140,
         cellType: "js",
         tooltip: false,
-        jsCode: 'return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;',
+        jsCode: 'const { cellValue } = sandbox; return `<button type="button" class="el-button el-button--primary is-link" onclick="_copyText(${cellValue}, () => _message.success(\'复制成功\'))"><span>Num: ${cellValue}</span></button>`;',
         slot: "render-cell-num",
       },
       {
@@ -152,7 +152,8 @@ const data = ref<CurdType.Config>({
         key: "2",
         text: "同步数据",
         type: "primary",
-        click: `const pageId = "${pageId}";
+        click: `
+const { pageId, row } = sandbox;
 const page = window[\`_\${pageId}\`];
 _messageBox({
   title: "操作提示",
@@ -240,8 +241,8 @@ _messageBox({
         type: "danger",
         key: "batch-delete",
         click: `
-const pageId = "${pageId}";
-const page = window[\`_${pageId}\`];
+const { pageId, list } = sandbox;
+const page = window[\`_\${pageId}\`];
 const text = "删除";
 _messageBox({
   title: "操作提示",
@@ -257,7 +258,7 @@ _messageBox({
         text: "批量上报",
         type: "primary",
         key: "batch-post",
-        click(list, selectList) {
+        click({ list, selectList, pageId }) {
           console.log("多选数据 >>", list, selectList);
           message.info("上报成功！");
           const page = (window as any)[`_${pageId}`];

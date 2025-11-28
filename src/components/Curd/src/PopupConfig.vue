@@ -10,13 +10,14 @@ import { curdConfigState } from "./hooks";
 import { computed, reactive } from "vue";
 import { copyText } from "@/utils";
 import { message } from "@/utils/message";
-import { getBoldLabel, getCurdConfigEditor } from "./data";
+import { getCurdConfigEditor } from "./data";
 import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
 import Editor from "./Editor.vue";
 import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
 import { PresetCode } from "./part";
+import { searchSubmitTips } from "./data/html";
 
 const tabList = [
   { label: "筛选部分", value: "search" },
@@ -42,9 +43,7 @@ const searchConfigs: Array<FieldType.Member<CurdType.Search>> = [
     prop: "validateCode",
     type: "slot",
     slotName: "validateCode",
-    tooltip: `<p>查询数据函数代码片段：</p>
-<p>函数携带一个参数${getBoldLabel("params")}为当前查询参数对象</p>
-<p>返回${getBoldLabel("true")}则可以查询，返回${getBoldLabel("false")}则终止查询；</p>`
+    tooltip: searchSubmitTips
   }
 ];
 
@@ -137,6 +136,7 @@ function onTab() {
       <TableModel
         v-if="curdConfigState.type === 'table'"
         :config="curdConfigState.config.table"
+        :page-id="curdConfigState.pageId"
       />
     </div>
     <Editor v-model:show="curdConfigState.editor.show" :config="curdConfigState.config" />
