@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, reactive, ref, watch, type PropType } from "vue";
-import type { CurdConfig, CurdType } from "./types";
+import { PresetCodeType, type CurdConfig, type CurdType } from "./types";
 import { convertPx, getFormConfig } from "./data";
 import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
@@ -301,7 +301,7 @@ watch(
               <template #submitCode>
                 <PresetCode
                   v-model:value="state.config.submitCode"
-                  type="form-submit"
+                  :type="PresetCodeType.Map.FormSubmit"
                 />
               </template>
             </Fields>

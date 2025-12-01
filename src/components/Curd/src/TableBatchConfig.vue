@@ -5,7 +5,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import type { CurdType } from "./types";
+import { PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { type PropType, reactive, ref, watch } from "vue";
 import { FooterBtn, IconInput, PresetCode } from "./part";
@@ -229,7 +229,7 @@ watch(
             <template #batchCode>
               <PresetCode
                 v-model:value="state.formData.click"
-                type="batch-submit"
+                :type="PresetCodeType.Map.BatchSubmit"
               />
             </template>
             <template #icon>

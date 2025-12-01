@@ -363,7 +363,7 @@ export const PresetCode = defineComponent({
   props: {
     /** 字典类型 */
     type: {
-      type: String as PropType<PresetCodeType.Key>,
+      type: String as PropType<PresetCodeType.Map>,
       required: true,
     },
     /** 输入框绑定值 */

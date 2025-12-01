@@ -5,7 +5,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import type { CurdType } from "./types";
+import { PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { computed, reactive, ref, watch, type PropType } from "vue";
 import { getColumnData } from "./data";
@@ -268,7 +268,10 @@ watch(
     >
       <Fields :data="state.form" :list="itemList">
         <template #jsCode>
-          <PresetCode v-model:value="state.form.jsCode" type="table-cell" />
+          <PresetCode
+            v-model:value="state.form.jsCode"
+            :type="PresetCodeType.Map.TableCell"
+          />
         </template>
       </Fields>
     </el-form>

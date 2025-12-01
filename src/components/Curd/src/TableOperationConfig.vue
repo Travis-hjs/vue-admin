@@ -5,7 +5,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import type { CurdType } from "./types";
+import { PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { FooterBtn, IconInput, PresetCode } from "./part";
 import { type PropType, ref, watch } from "vue";
@@ -210,7 +210,7 @@ function onFormConfig() {
             <template #clickCode>
               <PresetCode
                 v-model:value="form.data.click"
-                type="operation-submit"
+                :type="PresetCodeType.Map.OperationSubmit"
               />
             </template>
             <template #formConfig>

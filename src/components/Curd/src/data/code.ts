@@ -4,7 +4,7 @@ import type { PresetCodeType } from "../types";
  * 预设代码
  * - 后面可以改用接口形式在`<PresetCode />`组件中进行动态获取预设代码
  */
-export const presetCodeMap: Record<PresetCodeType.Key, Array<PresetCodeType.Item>> = {
+export const presetCodeMap: Record<PresetCodeType.Map, Array<PresetCodeType.Item>> = {
   "form-submit": [
     {
       id: 1,

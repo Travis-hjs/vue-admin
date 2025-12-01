@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { reactive, ref, watch, type PropType } from "vue";
-import { CurdEnum, type CurdType } from "./types";
+import { CurdEnum, PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
 import { getActionData } from "./data";
 import { getInputRule, getSelectRule, useListDrag } from "@/hooks/common";
@@ -290,7 +290,10 @@ function getBtnText(action: CurdType.Table.Action) {
         >
         <Fields :data="form.btn" :list="btnItems">
             <template #clickCode>
-              <PresetCode v-model:value="(form.btn.click as string)" type="action-submit" />
+              <PresetCode
+                v-model:value="(form.btn.click as string)"
+                :type="PresetCodeType.Map.ActionSubmit"
+              />
             </template>
             <template #formConfig>
               <el-button

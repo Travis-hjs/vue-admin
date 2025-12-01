@@ -421,16 +421,26 @@ export namespace CurdConfig {
   }
 }
 
+// TODO: 改用接口获取预设代码后，可以优化枚举的定义和使用方式
+// export const enum PresetCodeType {}
+
 /** 预设代码类型 */
-export namespace PresetCodeType {
-  /** 分类 */
-  export type Key = 
-    | "form-submit"
-    | "batch-submit"
-    | "table-cell"
-    | "action-submit"
-    | "operation-submit"
-    | "search-validate";
+export namespace PresetCodeType {    
+  /** 预设`JS`代码类型枚举 */
+  export const enum Map {
+    /** 表单提交 */
+    FormSubmit = "form-submit",
+    /** 批量表单提交 */
+    BatchSubmit = "batch-submit",
+    /** 表格单元格渲染 */
+    TableCell = "table-cell",
+    /** 表格操作列按钮点击 */
+    ActionSubmit = "action-submit",
+    /** 自定义操作列按钮点击 */
+    OperationSubmit = "operation-submit",
+    /** 查询前校验代码 */
+    SearchValidate = "search-validate",
+  }
   
   export interface Item {
     id: number;

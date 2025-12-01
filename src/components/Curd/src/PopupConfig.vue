@@ -5,7 +5,7 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import type { CurdType } from "./types";
+import { PresetCodeType, type CurdType } from "./types";
 import { curdConfigState } from "./hooks";
 import { computed, reactive } from "vue";
 import { copyText } from "@/utils";
@@ -119,7 +119,7 @@ function onTab() {
               <div class="w-full max-w-[680px]">
                 <PresetCode
                   v-model:value="curdConfigState.config.search.validateCode"
-                  type="search-validate"
+                  :type="PresetCodeType.Map.SearchValidate"
                 />
               </div>
             </template>
