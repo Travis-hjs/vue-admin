@@ -482,6 +482,7 @@ function onSetWidth() {
             :index="1"
             :max="props.config.actionMax"
             :actions="props.config.actions"
+            :page-id="props.pageId"
           />
           <el-text v-else type="info">待添加操作~</el-text>
         </div>
