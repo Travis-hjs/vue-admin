@@ -16,28 +16,33 @@ export function useLayoutRoute() {
 
   /**
    * 目标路由是否处于激活状态
-   * @param tag
+   * @param target
+   * @param useStrict 是否严格匹配路由
    */
-  function isActive<T extends ActiveItem>(tag: T) {
-    return (
-      tag.path === route.path &&
-      toString(tag.query) === toString(route.query) &&
-      toString(tag.params) === toString(route.params)
-    );
+  function isActive<T extends ActiveItem>(target: T, useStrict?: boolean) {
+    if (useStrict) {
+      return (
+        target.path === route.path &&
+        toString(target.query) === toString(route.query) &&
+        toString(target.params) === toString(route.params)
+      );
+    }
+    return target.path === route.path;
   }
 
   /**
    * 查找某个菜单项下面或自身是否有处于路由激活状态
-   * @param menu 菜单项
+   * @param target 
+   * @param useStrict 是否严格匹配路由
    */
-  function hasActive(menu: LayoutType.Menu) {
-    if (isActive(menu)) {
+  function hasActive(target: LayoutType.Menu, useStrict?: boolean) {
+    if (isActive(target, useStrict)) {
       return true;
     }
-    if (menu.children && menu.children.length) {
-      for (let i = 0; i < menu.children.length; i++) {
-        const sub = menu.children[i];
-        if (hasActive(sub)) {
+    if (target.children && target.children.length) {
+      for (let i = 0; i < target.children.length; i++) {
+        const sub = target.children[i];
+        if (hasActive(sub, useStrict)) {
           return true;
         }
       }

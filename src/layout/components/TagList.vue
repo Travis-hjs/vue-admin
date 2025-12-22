@@ -17,7 +17,7 @@ const layoutInfo = store.layout.info;
 const { route, router, isActive } = useLayoutRoute();
 
 function onRemove(index: number) {
-  if (isActive(layoutInfo.tagList[index])) {
+  if (isActive(layoutInfo.tagList[index], true)) {
     const target = index > 0 ? index - 1 : index + 1;
     const tag = layoutInfo.tagList[target];
     router.push({
@@ -34,7 +34,7 @@ watch(
   () => route.path,
   function () {
     // console.log("route >>", route);
-    const hasItem = layoutInfo.tagList.some(item => isActive(item))
+    const hasItem = layoutInfo.tagList.some(item => isActive(item, true))
     if (!hasItem) {
       layoutInfo.tagList.push({
         name: route.name as string,
@@ -42,13 +42,11 @@ watch(
         query: route.query,
         params: route.params,
         meta: route.meta as any
-      })
+      });
     }
   },
-  {
-    immediate: true
-  }
-)
+  { immediate: true }
+);
 
 const tagMenu = reactive({
   show: false,
@@ -63,7 +61,7 @@ const tagData = {
       click() {
         tagMenu.show = false;
         const tag = tagData.current!;
-        if (!isActive(tag)) {
+        if (!isActive(tag, true)) {
           router.push(tag.path).then(() => {
             layoutInfo.tagList = [tag];
           });
@@ -133,7 +131,7 @@ onUnmounted(function () {
       <div class="the-layout-tags">
         <router-link
           v-for="(item, itemIndex) in layoutInfo.tagList"
-          :class="['the-layout-tag', {'is-active': isActive(item)}]"
+          :class="['the-layout-tag', {'is-active': isActive(item, true)}]"
           :key="item.path + itemIndex"
           :to="({ path: item.path, query: item.query, params: item.params } as any)"
           @contextmenu.prevent="openTagMenu($event, item)"
