@@ -165,10 +165,6 @@ body .the-tooltip,
 
   position: relative;
 
-  &.help {
-    cursor: help;
-  }
-
   &::after {
     position: absolute;
     bottom: calc(100% + 6px);
@@ -206,6 +202,10 @@ body .the-tooltip,
   &:hover::after,
   &:hover::before {
     opacity: 1;
+  }
+
+  &.help {
+    cursor: help;
   }
 
   &.wrap {
