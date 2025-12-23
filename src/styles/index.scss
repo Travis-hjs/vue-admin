@@ -162,6 +162,7 @@ body .the-blue-text,
 body .the-tooltip,
 .the-tooltip {
   --z-index: 10;
+  --bg-color: rgba(0, 0, 0, 0.7);
 
   position: relative;
 
@@ -177,7 +178,7 @@ body .the-tooltip,
     color: #fafafa;
     white-space: nowrap;
     content: attr(data-tooltip);
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--bg-color);
     border-radius: var(--border-radius);
     opacity: 0;
     transition: var(--transition);
@@ -193,7 +194,7 @@ body .the-tooltip,
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-top-color: rgba(0, 0, 0, 0.7);
+    border-top-color: var(--bg-color);
     transform: translateX(-50%);
     transition: var(--transition);
     opacity: 0;
