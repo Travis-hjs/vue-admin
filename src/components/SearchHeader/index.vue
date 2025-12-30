@@ -40,7 +40,7 @@ function onSearch(reset: boolean) {
 </script>
 <template>
   <FilterWrap :label-width="props.labelWidth">
-    <Fields type="search" :data="props.searchInfo" :list="props.list">
+    <Fields type="search" :data="props.searchInfo" :list="props.list" @enter="onSearch(false)">
       <template v-for="slot in slotList" :key="slot" #[slot]="field">
         <slot :name="slot" v-bind="field"></slot>
       </template>

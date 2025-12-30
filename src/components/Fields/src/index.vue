@@ -36,6 +36,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
   (event: "change", prop: string, value: any): void;
+  (event: "enter", prop: string, value: any): void;
 }>();
 
 const fields = computed(() => props.list.filter(item => {
@@ -165,6 +166,13 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
   }
   onChange(field, value);
 }
+
+function onInputEnter(field: FieldType.Input<any> | FieldType.NumberInput<any>) {
+  const prop = field.prop as string;
+  const value = props.data[prop];
+  field.onEnter && field.onEnter(value as never);
+  emit("enter", prop, value);
+}
 </script>
 <template>
   <component
@@ -184,6 +192,7 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
       v-if="field.type === 'input'"
       v-bind="getCommonProps(field)"
       @input="e => onChange(field, e)"
+      @keydown.enter="onInputEnter(field)"
     />
     <el-input
       v-if="field.type === 'textarea'"
@@ -192,6 +201,7 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
       show-word-limit
       type="textarea"
       @input="e => onChange(field, e)"
+      @keydown.enter="onInputEnter(field)"
     />
     <el-input-number
       v-if="field.type === 'number'"
@@ -200,6 +210,7 @@ function onDatePicker(field: FieldType.Date<Record<string, any>>, value: any) {
       :max="field.max"
       controls-position="right"
       @input="e => onChange(field, e)"
+      @keydown.enter="onInputEnter(field)"
     />
     <TheSelect
       v-if="field.type === 'select'"

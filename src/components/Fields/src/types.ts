@@ -68,6 +68,11 @@ export namespace FieldType {
      * - 仅`"textarea"`生效
      */
     rows?: number;
+    /**
+     * 输入框摁回车事件
+     * @param val
+     */
+    onEnter?(val: string): void;
   }
 
   export interface NumberInput<T extends object> extends Common<T> {
@@ -75,6 +80,11 @@ export namespace FieldType {
     type: "number";
     min?: number;
     max?: number;
+    /**
+     * 输入框摁回车事件
+     * @param val
+     */
+    onEnter?(val: number): void;
   }
 
   export interface Select<T extends object> extends Common<T>, HasOption {
