@@ -90,7 +90,9 @@ export const IconInput = defineComponent({
       default: ""
     }
   },
-  emits: ["update:value"],
+  emits: {
+    "update:value": (val: string) => true
+  },
   setup(props, { emit }) {
     const iconClass = computed({
       get() {
@@ -186,7 +188,9 @@ export const DatePicker = defineComponent({
       type: Boolean
     }
   },
-  emits: ["change"],
+  emits: {
+    change: () => true
+  },
   setup(props, { emit }) {
     /** 日期侧边栏按钮列表 */
     let shortcutBtnList: Array<HTMLElement> = [];
@@ -269,7 +273,9 @@ export const SelectField = defineComponent({
       type: Boolean
     }
   },
-  emits: ["change"],
+  emits: {
+    change: (val: string | number) => true
+  },
   setup(props, { emit }) {
     const selected = computed({
       get() {
@@ -372,11 +378,14 @@ export const PresetCode = defineComponent({
       default: "",
     }
   },
-  emits: ["update:value", "blur"],
+  emits: {
+    "update:value": (val: string) => true,
+     blur: () => true
+  },
   setup(props, { emit }) {
     const input = computed({
       get() {
-        return props.value;
+        return props.value as string;
       },
       set(val) {
         emit("update:value", val);

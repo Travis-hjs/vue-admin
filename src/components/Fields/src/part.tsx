@@ -51,7 +51,9 @@ export const TheDatePicker = defineComponent({
       required: true,
     },
   },
-  emits: ["change"],
+  emits: {
+    change: (val: Array<Date> | Date) => true,
+  },
   setup(props, { emit }) {
     const date = computed({
       get() {
@@ -118,7 +120,9 @@ export const TheSelect = defineComponent({
       required: true,
     },
   },
-  emits: ["change"],
+  emits: {
+    change: (val: string | number) => true,
+  },
   setup(props, { emit }) {
     const select = computed({
       get() {
