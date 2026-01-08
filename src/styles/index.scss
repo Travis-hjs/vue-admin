@@ -164,6 +164,7 @@ body .the-tooltip,
   --z-index: 10;
   --bg-color: rgba(0, 0, 0, 0.7);
   --color: #fafafa;
+  --tip-width: auto;
 
   position: relative;
 
@@ -214,6 +215,7 @@ body .the-tooltip,
 
   &.wrap {
     &::after {
+      width: var(--tip-width);
       white-space: normal;
     }
   }
