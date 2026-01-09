@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { ElFormItem } from "element-plus";
-import { FilterItem } from "@/components/FilterBox";
+import { FilterItem } from "@/components/LayoutDisplay";
 import { computed, type PropType } from "vue";
 import type { FieldType } from "./types";
 import { formatDate, isType } from "@/utils";
@@ -180,7 +180,7 @@ function onInputEnter(field: FieldType.Input<any> | FieldType.NumberInput<any>) 
     v-for="(field, fieldIndex) in fields"
     :key="field.key || `${field.prop}-${fieldIndex}`"
     :label="getString(field, 'label')"
-    :label-width="getString(field, 'labelWidth')"
+    :labelWidth="getString(field, 'labelWidth')"
     :prop="field.prop"
     :tooltip="props.type === 'search' ? getString(field, 'tooltip') : undefined"
     class="the-fields-item"

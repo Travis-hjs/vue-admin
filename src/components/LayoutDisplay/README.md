@@ -1,12 +1,60 @@
-# 描述容器组件
+# 布局展示类相关组件
 
-使用 grid + flex 布局实现
+- 无状态组件，只负责展示布局
+- 注意无状态函数组件传参不支持小写+横杆
 
-## 使用示例
+## 筛选组件（表格页）
 
 ```html
 <script lang="ts" setup>
-  import { Description, type DescriptionType } from "@/components/Description";
+import { reactive } from "vue";
+import { FilterWrap, FilterItem } from "@/components/LayoutDisplay";
+
+const searchInfo = reactive({
+  value: "",
+  date: [],
+})
+
+const options = [{ label: "xxx", value: 1 }]
+
+</script>
+<template>
+  <div class="demo">
+    <FilterWrap>
+      <FilterItem label="筛选一">
+        <el-select v-model="searchInfo.value" placeholder="请选择">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </FilterItem>
+      <FilterItem label="筛选二">
+        <el-select v-model="searchInfo.value" placeholder="请选择">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </FilterItem>
+      <FilterItem label="日期">
+        <el-date-picker
+          v-model="searchInfo.date"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+        />
+      </FilterItem>
+      <template #right>
+        <el-button type="primary"><i class="el-icon-plus el-icon--left"></i>新增</el-button>
+      </template>
+    </FilterWrap>
+  </div>
+</template>
+```
+
+## 描述展示组件
+
+使用 grid + flex 布局实现
+
+```html
+<script lang="ts" setup>
+  import { Description, type DescriptionType } from "@/components/LayoutDisplay";
 
   const list: Array<DescriptionType.Item> = [
     {
@@ -40,7 +88,7 @@
 </template>
 ```
 
-## 布局实现
+> 布局实现
 
 ```html
 <!doctype html>
@@ -131,5 +179,3 @@
   </body>
 </html>
 ```
-
-上面代码中，如何让最后一个`the-description-item`默认填满剩余空间？

@@ -2,6 +2,7 @@
   "editor.tabSize": 2,
   "cSpell.words": [
     "Backtop",
+    "batchs",
     "Cascader",
     "daterange",
     "datetime",
@@ -10,8 +11,8 @@
     "indexs",
     "monthrange",
     "popconfirm",
+    "rgba",
     "tdesign",
-    "Vite",
-    "batchs"
+    "Vite"
   ],
 }

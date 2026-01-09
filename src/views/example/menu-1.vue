@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { getPageInfo } from "@/hooks/common";
-import { FilterWrap, FilterItem  } from "@/components/FilterBox";
+import { FilterWrap, FilterItem } from "@/components/LayoutDisplay";
 import { formatDate, randomText } from "@/utils";
 import { message, messageBox } from "@/utils/message";
 import { Table, type TableType } from "@/components/Table";

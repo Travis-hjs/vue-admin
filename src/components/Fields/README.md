@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { Fields, type FieldType } from "@/components/Fields";
-import { FilterWrap  } from "@/components/FilterBox";
+import { FilterWrap } from "@/components/LayoutDisplay";
 
 interface FormData {
   name: string;

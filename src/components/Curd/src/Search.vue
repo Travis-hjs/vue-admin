@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { type PropType } from "vue";
-import { FilterWrap, FilterItem, SearchBtn } from "@/components/FilterBox";
+import { FilterWrap, FilterItem, SearchBtn } from "@/components/LayoutDisplay";
 import Field from "./Field.vue";
 import { convertPx } from "./data";
 import { messageBox } from "@/utils/message";
@@ -72,8 +72,8 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
 <template>
   <FilterWrap
     class="the-curd-search"
-    :label-right="props.search.labelRight"
-    :label-width="convertPx(props.search.labelWidth) || 'auto'"
+    :labelRight="props.search.labelRight"
+    :labelWidth="convertPx(props.search.labelWidth) || 'auto'"
   >
     <template #content>
       <transition-group name="the-group" tag="div" class="the-filter-content f1">
@@ -83,7 +83,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
           :data-key="item.id"
           :class="[{ 'the-curd-selected': isEdit(itemIndex) }, item.id]"
           :label="item.label"
-          :label-width="convertPx(item.labelWidth)"
+          :labelWidth="convertPx(item.labelWidth)"
           :required="item.required"
           :draggable="props.editMode"
           :tooltip="item.tooltip"
@@ -126,4 +126,3 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
     </template>
   </FilterWrap>
 </template>
-

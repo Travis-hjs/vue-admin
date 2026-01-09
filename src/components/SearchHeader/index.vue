@@ -10,7 +10,7 @@ export default {
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
 import { type FieldType, Fields } from "../Fields";
-import { FilterWrap, SearchBtn } from "../FilterBox";
+import { FilterWrap, SearchBtn } from "../LayoutDisplay";
 
 const props = defineProps({
   loading: Boolean,
@@ -39,7 +39,7 @@ function onSearch(reset: boolean) {
 }
 </script>
 <template>
-  <FilterWrap :label-width="props.labelWidth">
+  <FilterWrap :labelWidth="props.labelWidth">
     <Fields type="search" :data="props.searchInfo" :list="props.list" @enter="onSearch(false)">
       <template v-for="slot in slotList" :key="slot" #[slot]="field">
         <slot :name="slot" v-bind="field"></slot>
