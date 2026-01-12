@@ -327,13 +327,13 @@ onUnmounted(function() {
 </script>
 <template>
   <div class="page-home">
-    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mb-[40px]">
+    <h2 class="the-title is-line mb-[20px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mb-[20px]">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
     </div>
-    <h2 class="the-title is-line mb-[30px]">布局操作开关</h2>
-    <div class="options-box mb-[40px]">
+    <h2 class="the-title is-line mb-[20px]">布局操作开关</h2>
+    <div class="options-box mb-[20px]">
       <CheckBox class="mb-[20px]" label="显示侧边栏logo" v-model:value="layoutInfo.showSidebarLogo" />
       <CheckBox class="mb-[20px]" label="显示历史记录标签" v-model:value="layoutInfo.showTagList" />
       <CheckBox class="mb-[20px]" label="侧边栏展开" v-model:value="layoutInfo.showSidebar" />
@@ -355,7 +355,7 @@ onUnmounted(function() {
         </template>
       </template>
     </div>
-    <div class="pt-[20px] mb-[30px]">
+    <div class="pt-[20px] mb-[20px]">
       <button class="the-btn green mini" v-ripple @click="copyStyle()">复制当前配置</button>
       <button class="the-btn yellow mini" v-ripple @click="resetStyle()">重置默认样式</button>
       <button class="the-btn blue mini" v-ripple @click="onPreset('green')">应用预设配置-绿色</button>
