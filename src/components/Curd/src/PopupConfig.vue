@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { PresetCodeType, type CurdType } from "./types";
-import { curdConfigState } from "./hooks";
+import { curdConfigState, openJsonPopup } from "./hooks";
 import { computed, reactive } from "vue";
 import { copyText } from "@/utils";
 import { message } from "@/utils/message";
@@ -75,7 +75,13 @@ function onClose() {
 }
 
 function onCopyJson() {
-  copyText(JSON.stringify(curdConfigState.config), () => message.success("复制成功！"));
+  copyText(JSON.stringify(curdConfigState.config), () => message.success("复制配置JSON成功~"));
+}
+
+function onSetCopy() {
+  openJsonPopup<CurdType.Config>(data => {
+    curdConfigState.config = data;
+  });
 }
 
 function onSubmit() {
@@ -141,10 +147,14 @@ function onTab() {
     </div>
     <Editor v-model:show="curdConfigState.editor.show" :config="curdConfigState.config" />
     <template #footer>
-      <el-button :disabled="disabledSave" @click="onClose()">关闭</el-button>
+      <el-button :disabled="disabledSave" @click="onClose()">退出编辑</el-button>
       <el-button type="success" plain @click="onCopyJson()">
-        <i class="el-icon--left el-icon-document-copy"></i>
-        复制JSON
+        <i class="el-icon--left el-icon-document-copy" />
+        复制配置
+      </el-button>
+      <el-button type="primary" plain @click="onSetCopy()">
+        <i class="el-icon--left el-icon-edit-outline" />
+        回填配置
       </el-button>
       <el-button
         type="primary"

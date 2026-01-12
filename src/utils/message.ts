@@ -244,9 +244,11 @@ namespace Dialog {
    * - close 为`true`时为关闭
    * - `Promise`返回值为`true`时亦是如此
    */
-  export type Callback = ((callback?: (close: boolean) => void) => void) | (() => Promise<boolean>);
+  export type Callback = ((callback: (close: boolean) => void) => void) | (() => Promise<boolean>);
 
   export interface Show {
+    /** 对话框宽度 */
+    width?: string;
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
     title?: string;
     /** 提示内容（可传html） */
@@ -381,8 +383,9 @@ function useDialog() {
     clickSize.x = "0vw";
     clickSize.y = "0vh";
     const cancelBtn = option.cancelText ? `<button class="el-button ${className.cancel}">${option.cancelText}</button>` : "";
+    const style = option.width ? ` style="width: ${option.width}; max-width: 100%"` : "";
     el.innerHTML = `
-    <div class="${className.popup}">
+    <div class="${className.popup}"${style}>
       <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
       <div class="${className.content}">${option.content}</div>
       <div class="${className.footer}">
@@ -447,6 +450,7 @@ function useDialog() {
         });
         return;
       }
+      // @ts-ignore
       cb();
       hide();
     }

@@ -159,6 +159,7 @@ body .the-blue-text,
   cursor: pointer;
 }
 
+// css提示组件，注意！！父容器不能设置`overflow: hidden | auto;`，不然会被隐藏
 body .the-tooltip,
 .the-tooltip {
   --z-index: 10;

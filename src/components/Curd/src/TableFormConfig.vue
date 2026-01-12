@@ -11,12 +11,12 @@ import { convertPx, getFormConfig } from "./data";
 import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
 import Field from "./Field.vue";
-import { curdConfigState } from "./hooks";
+import { curdConfigState, openJsonPopup } from "./hooks";
 import { getInputRule, useListDrag } from "@/hooks/common";
-import { messageBox } from "@/utils/message";
+import { message, messageBox } from "@/utils/message";
 import type { FormInstance } from "element-plus";
 import { validateEX } from "@/utils/dom";
-import { deepClone } from "@/utils";
+import { copyText, deepClone } from "@/utils";
 import { PresetCode } from "./part";
 import { tableForm } from "./data/html";
 
@@ -247,6 +247,19 @@ function onComplete() {
 //   });
 // }
 
+function onCopy() {
+  copyText(JSON.stringify(state.config, null, 2), () =>
+    message.success("复制表单JSON成功~")
+  );
+}
+
+function onSetCopy() {
+  openJsonPopup<CurdType.Table.From>(data => {
+    state.config = data;
+    message.success("设置表单数据成功~");
+  });
+}
+
 function openEditor(action: CurdConfig.Editor["action"], index: number) {
   curdConfigState.editor.action = action;
   curdConfigState.editor.form = state.config;
@@ -374,7 +387,7 @@ watch(
         </el-empty>
         <div v-if="!isEdit">
           <el-form-item v-if="state.config.fields.length" key="bottom-add">
-            <el-button type="primary" @click="openEditor('add', -1)">
+            <el-button type="primary" class="w-full" @click="openEditor('add', -1)">
               <i class="el-icon--left el-icon-plus" />
               继续添加
             </el-button>
@@ -395,6 +408,14 @@ watch(
     <template #footer>
       <el-button @click="onExit">
         退出编辑
+      </el-button>
+      <el-button type="success" plain @click="onCopy()">
+        <i class="el-icon--left el-icon-copy-document" />
+        复制表单
+      </el-button>
+      <el-button type="primary" plain @click="onSetCopy()">
+        <i class="el-icon--left el-icon-edit-outline" />
+        回填表单
       </el-button>
       <el-button
         v-if="!isOther"

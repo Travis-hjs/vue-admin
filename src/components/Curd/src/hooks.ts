@@ -2,6 +2,8 @@ import { onUnmounted, reactive } from "vue";
 import type { CurdConfig, CurdType } from "./types";
 import { deepClone } from "@/utils";
 import { getCurdConfigDefault, getCurdConfigEditor } from "./data";
+import { getCountId } from "@/hooks/common";
+import { message, messageBox } from "@/utils/message";
 
 export const curdConfigState = reactive<CurdConfig.State>({
   show: false,
@@ -48,6 +50,46 @@ export function exportPropToWindow<T extends object>(target: T) {
     for (const key in target) {
       const props = `_${key}`;
       global[props] = null;
+    }
+  });
+}
+
+/**
+ * 打开`JSON`回填弹框
+ * @param callback
+ */
+export function openJsonPopup<T = any>(callback: (data: T) => void) {
+  const id = getCountId("copy-json");
+  const tips = "请粘贴/填写JSON数据";
+  messageBox({
+    width: "60vw",
+    title: "回填JSON数据",
+    content: `<div class="el-textarea w-full">
+    <textarea
+      class="el-textarea__inner"
+      placeholder="${tips}"
+      rows="20"
+      id="${id}"
+    ></textarea>
+    </div>`,
+    cancelText: "取消",
+    confirmText: "设置回填数据",
+    confirm(cb) {
+      const input = document.getElementById(id) as HTMLTextAreaElement;
+      const value = input.value;
+      if (!value) {
+        message.warning(tips);
+        return cb(false);
+      }
+      try {
+        const data = JSON.parse(value);
+        callback(data);
+      } catch (error) {
+        console.warn(error);
+        message.error(`输入的JSON有误：${error}`);
+        return cb(false);
+      }
+      cb(true);
     }
   });
 }
