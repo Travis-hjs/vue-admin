@@ -394,7 +394,8 @@
   background-color: var(--whole-bg-color);
   transition: var(--transition);
 
-  &:visited {
+  &:visited,
+  &:link {
     color: var(--menu-text-color);
   }
 

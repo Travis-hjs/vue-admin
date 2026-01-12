@@ -5,33 +5,41 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+// import type { RouteItem } from "@/router/types";
+import { computed, onMounted, ref } from "vue";
 import HeaderBar from "./components/HeaderBar.vue";
 import Sidebar from "./components/Sidebar.vue";
 import store from "@/store";
-import type { RouteItem } from "@/router/types";
 import { Icon } from "@/components/Icon";
 
 const layoutInfo = store.layout.info;
 
-function getCacheList(list: Array<RouteItem>) {
-  let result: Array<string> = [];
-  for (let i = 0; i < list.length; i++) {
-    const item = list[i];
-    const child = item.children;
-    if (child && child.length > 0) {
-      result = result.concat(getCacheList(child));
-    }
-    if (item.meta.keepAlive && item.name) {
-      result.push(item.name);
-    }
-  }
-  return result.filter(item => item);
-}
+// function getCacheList(list: Array<RouteItem>) {
+//   let result: Array<string> = [];
+//   for (let i = 0; i < list.length; i++) {
+//     const item = list[i];
+//     const child = item.children;
+//     if (child && child.length > 0) {
+//       result = result.concat(getCacheList(child));
+//     }
+//     if (item.meta.keepAlive && item.name) {
+//       result.push(item.name);
+//     }
+//   }
+//   return result.filter(item => item);
+// }
 
 // 这里不是动态的，所以可以不用响应式
-const cacheList = getCacheList(store.layout.completeRouters);
+// const cacheList = getCacheList(store.layout.completeRouters);
 // console.log("路由缓存列表 >>", cacheList);
+
+const cacheList = computed(() => {
+  const list: Array<string> = [];
+  store.layout.info.tagList.forEach(el => {
+    el.meta.keepAlive && el.name && list.push(el.name);
+  });
+  return list;
+});
 
 const contentBox = ref<HTMLElement>();
 
