@@ -54,8 +54,8 @@ function handleAuth(routes: Array<RouteItem>) {
  * @param fn 获取组件异步函数
  * @param name 组件名称
  */
-async function getComponent(component: Promise<any>, name: string) {
-  const res = await component;
+async function getComponent(fn: () => Promise<any>, name: string) {
+  const res = await fn();
   if (!res.default.name) {
     res.default.name = name;
   }
@@ -69,9 +69,9 @@ async function getComponent(component: Promise<any>, name: string) {
 function eachRouter(list: Array<RouteItem>) {
   list.forEach(item => {
     const { meta, component, name, children } = item;
-    if (meta.keepAlive && isType(component, "promise")) {
+    if (meta.keepAlive && isType(component, "function")) {
       if (name) {
-        item.component = () => getComponent(component, name);
+        item.component = () => getComponent(component as any, name);
       } else {
         console.warn("当前路由需要设置 name 属性才能实现缓存功能：", item);
       }
