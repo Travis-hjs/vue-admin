@@ -111,9 +111,9 @@ function onTab() {
     </template>
     <div class="w-full h-full overflow-auto">
       <template v-if="curdConfigState.type === 'search'">
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">基础配置</el-text>
-        </el-divider>
+        <div class="pl-[10px] mb-[10px]">
+          <h2 class="the-title is-line">基础配置</h2>
+        </div>
         <el-form 
           :model="curdConfigState.config.search"
           :rules="configRules"
@@ -131,9 +131,9 @@ function onTab() {
             </template>
           </Fields>
         </el-form>
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">筛选条件配置</el-text>
-        </el-divider>
+        <div class="pl-[10px] mb-[20px]">
+          <h2 class="the-title is-line">筛选条件配置</h2>
+        </div>
         <Search
           :search="curdConfigState.config.search"
           edit-mode

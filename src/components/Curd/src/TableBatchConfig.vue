@@ -213,9 +213,9 @@ watch(
             </div>
           </el-form-item>
         </el-form>
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">操作按钮配置</el-text>
-        </el-divider>
+        <div class="mb-[10px]">
+          <h2 class="the-title is-line">操作按钮配置</h2>
+        </div>
         <el-form
           ref="formBtn"
           :model="state.formData"

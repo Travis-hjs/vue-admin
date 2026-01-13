@@ -292,8 +292,8 @@ watch(
         class="the-curd-edit-form the-table-config-form"
       >
         <template v-if="state.config.fields.length">
-          <el-divider content-position="left" border-style="dashed">
-            <el-text type="info">配置表单信息</el-text>
+          <div class="f-between f-vertical mb-[10px]">
+            <h2 class="the-title is-line">配置表单信息</h2>
             <el-button
               link
               type="primary"
@@ -308,7 +308,7 @@ watch(
                 ]"
               />
             </el-button>
-          </el-divider>
+          </div>
           <div v-show="state.showInfo">
             <Fields :data="state.config" :list="formConfigs">
               <template #submitCode>
@@ -319,9 +319,9 @@ watch(
               </template>
             </Fields>
           </div>
-          <el-divider content-position="left" border-style="dashed">
-            <el-text type="info">配置表单项</el-text>
-          </el-divider>
+          <div class="mb-[10px]">
+            <h2 class="the-title is-line">配置表单项</h2>
+          </div>
         </template>
         <transition-group name="the-group" tag="div">
           <el-form-item
@@ -367,42 +367,43 @@ watch(
               </el-tooltip>
             </div>
           </el-form-item>
-        </transition-group>
-        <el-empty
-          v-if="!state.config.fields.length"
-          :description="isOther ? `请配置表单项` : `当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`"
-        >
-          <!-- <el-button v-if="!isEdit" type="primary" plain @click="onAddId()">
-            <i class="el-icon--left el-icon-plus" />
-            新增默认ID项
-          </el-button> -->
-          <el-button
-            v-if="!isEdit"
-            type="primary"
-            @click="openEditor('add', -1)"
+          <el-empty
+            v-if="!state.config.fields.length"
+            :description="isOther ? `请配置表单项` : `当前没有表单项，当没有表单项时【${currentName}】功能按钮不会出现~`"
+            key="empty"
           >
-            <i class="el-icon--left el-icon-plus" />
-            添加表单项
-          </el-button>
-        </el-empty>
-        <div v-if="!isEdit">
-          <el-form-item v-if="state.config.fields.length" key="bottom-add">
-            <el-button type="primary" class="w-full" @click="openEditor('add', -1)">
-              <i class="el-icon--left el-icon-plus" />
-              继续添加
-            </el-button>
-            <!-- <el-button
-              v-if="!state.config.fields.some(item => item.key === 'id')"
-              type="primary"
-              plain
-              @click="onAddId()"
-            >
+            <!-- <el-button v-if="!isEdit" type="primary" plain @click="onAddId()">
               <i class="el-icon--left el-icon-plus" />
               新增默认ID项
             </el-button> -->
-            <!-- <el-button @click="validate()">调试验证</el-button> -->
-          </el-form-item>
-        </div>
+            <el-button
+              v-if="!isEdit"
+              type="primary"
+              @click="openEditor('add', -1)"
+            >
+              <i class="el-icon--left el-icon-plus" />
+              添加表单项
+            </el-button>
+          </el-empty>
+          <div v-if="!isEdit" key="bottom">
+            <el-form-item v-if="state.config.fields.length" key="bottom-add">
+              <el-button type="primary" class="w-full" @click="openEditor('add', -1)">
+                <i class="el-icon--left el-icon-plus" />
+                继续添加
+              </el-button>
+              <!-- <el-button
+                v-if="!state.config.fields.some(item => item.key === 'id')"
+                type="primary"
+                plain
+                @click="onAddId()"
+              >
+                <i class="el-icon--left el-icon-plus" />
+                新增默认ID项
+              </el-button> -->
+              <!-- <el-button @click="validate()">调试验证</el-button> -->
+            </el-form-item>
+          </div>
+        </transition-group>
       </el-form>
     </div>
     <template #footer>

@@ -132,6 +132,7 @@ const auxiliaryConfigs: Array<FieldType.Member<MenuForm>> = [
     type: "number",
     placeholder: "请输入排序值",
     min: 1,
+    class: "w-[160px]"
   },
   {
     label: "菜单隐藏",
@@ -297,9 +298,9 @@ watch(() => props.show, function(val) {
         </el-radio-group>
       </el-form-item>
       <template v-if="state.formData.meta.type === 'menu'">
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">基础配置</el-text>
-        </el-divider>
+        <div class="mb-[10px]">
+          <h2 class="the-title is-line">基础配置</h2>
+        </div>
         <Fields :data="state.formData" :list="baseConfigs" />
         <el-form-item label="菜单图标" prop="meta.icon">
           <el-input
@@ -315,9 +316,9 @@ watch(() => props.show, function(val) {
           </div>
           <el-button type="primary" plain @click="openIconTab()">选择图标</el-button>
         </el-form-item>
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">辅助配置</el-text>
-        </el-divider>
+        <div class="mb-[10px]">
+          <h2 class="the-title is-line">辅助配置</h2>
+        </div>
         <Fields :data="state.formData" :list="auxiliaryConfigs" />
       </template>
       <template v-else>

@@ -264,9 +264,9 @@ function getBtnText(action: CurdType.Table.Action) {
   >
     <div class="flex">
       <section class="f1">
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">操作列配置</el-text>
-        </el-divider>
+        <div class="mb-[10px]">
+          <h2 class="the-title is-line">操作列配置</h2>
+        </div>
         <el-form
           ref="formColumn"
           :model="form.column"
@@ -276,9 +276,9 @@ function getBtnText(action: CurdType.Table.Action) {
         >
           <Fields :data="form.column" :list="columnItems" />
         </el-form>
-        <el-divider content-position="left" border-style="dashed">
-          <el-text type="info">操作按钮配置</el-text>
-        </el-divider>
+        <div class="mb-[10px]">
+          <h2 class="the-title is-line">操作按钮配置</h2>
+        </div>
         <el-form
           ref="formBtn"
           :model="form.btn"
