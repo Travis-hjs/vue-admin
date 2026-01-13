@@ -2,8 +2,9 @@ import store from "../store";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import type { Router } from "vue-router";
-import { dynamicRouters } from "./dynamic";
+import { staticRouters } from "./static";
 import type { RouteItem } from "./types";
+import { isType } from "@/utils";
 
 // NProgress.configure({ showSpinner: false });
 
@@ -48,24 +49,37 @@ function handleAuth(routes: Array<RouteItem>) {
 }
 
 /**
- * 处理权限路由列表
- * - 这里可以做获取动态路由处理，比如通过接口请求，然后返回的权限列表
+ * 获取组件并设置组件名称
+ * - 用于便捷操作，不需要在对应文件定义`name`
+ * @param fn 获取组件异步函数
+ * @param name 组件名称
  */
-async function getDynamic() {
-  // TODO: 通过接口加载路由操作
-  // 这里不要放到函数之外，理由是文件过多时，会占用内存，
-  // 而放在函数内部中，用完就给销毁了，所以不存在占用内存问题
-  // const modules = import.meta.glob("@/views/**/**.vue");
-  // let list: Array<RouteItem> = [];
-  // const res = await getUserRouters()
-  // if (res.code === 1) {
-  //   list = res.data.list;
-  //   list.forEach(item => eachRouter(item, modules));
-  // }
-  // return list;
-  // TODO: 静态路由操作
-  const list = handleAuth(dynamicRouters);
-  return list;
+async function getComponent(component: Promise<any>, name: string) {
+  const res = await component;
+  if (!res.default.name) {
+    res.default.name = name;
+  }
+  return res;
+}
+
+/**
+ * 递归处理路由
+ * @param list 
+ */
+function eachRouter(list: Array<RouteItem>) {
+  list.forEach(item => {
+    const { meta, component, name, children } = item;
+    if (meta.keepAlive && isType(component, "promise")) {
+      if (name) {
+        item.component = () => getComponent(component, name);
+      } else {
+        console.warn("当前路由需要设置 name 属性才能实现缓存功能：", item);
+      }
+    }
+    if (children && children.length > 0) {
+      eachRouter(children);
+    }
+  });
 }
 
 // /**
@@ -92,6 +106,29 @@ async function getDynamic() {
 // }
 
 /**
+ * 处理权限路由列表
+ * - 这里可以做获取动态路由处理，比如通过接口请求，然后返回的权限列表
+ */
+async function getDynamic() {
+  // TODO: 通过接口加载路由操作
+  // 这里不要放到函数之外，理由是文件过多时，会占用内存，
+  // 而放在函数内部中，用完就给销毁了，所以不存在占用内存问题
+  // const modules = import.meta.glob("@/views/**/**.vue");
+  // let list: Array<RouteItem> = [];
+  // const res = await getUserRouters()
+  // if (res.code === 1) {
+  //   list = res.data.list;
+  //   list.forEach(item => eachRouter(item, modules));
+  // }
+  // return list;
+
+  // TODO: 静态路由操作
+  const list = handleAuth(staticRouters);
+  eachRouter(list);
+  return list;
+}
+
+/**
  * 初始化权限管理
  * @param vueRouter 路由实例
  * @param baseRoutes 基础路由
@@ -116,11 +153,6 @@ export function initPermission(vueRouter: Router, baseRoutes: Array<RouteItem>) 
         }
 
         // 在最后加一个404重定向的路由进去
-
-        // vue 2.x 写法
-        // router.addRoute({ path: "*", redirect: "/404" });
-
-        // vue 3.x 之后路由取消了自动匹配，要手动设置匹配方式
         // learn https://my.oschina.net/qinghuo111/blog/4832051
         if (!router.hasRoute(redirectRouteName)) {
           // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });

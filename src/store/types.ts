@@ -62,8 +62,8 @@ export interface UserInfo {
   token: string
   /**
    * 用户类型
-   * 
-   * | number | 用户类型 |
+   * - 作用：和 [permission.ts](../router/permission.ts) 中的`handleAuth`方法进行联动，不需要则直接删除对应逻辑即可
+   * | 值 | 说明 |
    * | --- | --- |
    * | 0 | 超级管理员 |
    * | 1 | 普通用户 |
