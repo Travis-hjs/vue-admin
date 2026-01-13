@@ -144,19 +144,19 @@ export const staticRouters: Array<RouteItem> = [
       {
         path: "/example/curd",
         name: "example-curd",
-        meta: { title: "curd 低代码" },
+        meta: { title: "curd 低代码", keepAlive: true },
         component: () => import("../views/example/curd-page.vue")
       },
       {
         path: "/example/curd-config",
         name: "example-curd-config",
-        meta: { title: "curd 低代码配置" },
+        meta: { title: "curd 低代码配置", keepAlive: true },
         component: () => import("../views/example/curd-config.vue")
       },
       {
         path: "/example/table-page",
         name: "example-table-page",
-        meta: { title: "通用表格页" },
+        meta: { title: "通用表格页", keepAlive: true },
         component: () => import("../views/example/table-page.vue")
       }
     ]
@@ -183,7 +183,7 @@ export const staticRouters: Array<RouteItem> = [
         path: "/menu/list",
         name: "menu-list",
         component: () => import("../views/menu/index.vue"),
-        meta: { title: "菜单管理", icon: "tdesign:app" }
+        meta: { title: "菜单管理", icon: "tdesign:app", keepAlive: true }
       }
     ]
   },
