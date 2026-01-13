@@ -136,8 +136,8 @@ onUnmounted(function () {
           :to="({ path: item.path, query: item.query, params: item.params } as any)"
           @contextmenu.prevent="openTagMenu($event, item)"
         >
-          <span>{{ item.meta.title }}</span>
-          <i class="close" @click.prevent.stop="onRemove(itemIndex)">-</i>
+          <span :class="[{ 'pr-[2px]': layoutInfo.tagList.length <= 1 }]">{{ item.meta.title }}</span>
+          <i v-if="layoutInfo.tagList.length > 1" class="close" @click.prevent.stop="onRemove(itemIndex)">-</i>
         </router-link>
       </div>
     </Scrollbar>

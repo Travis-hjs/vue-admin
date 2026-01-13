@@ -4,9 +4,9 @@ import Page404 from "@/views/page-404.vue";
 import type { RouteItem } from "./types";
 
 /**
- * 动态路由
+ * 静态路由
  */
-export const dynamicRouters: Array<RouteItem> = [
+export const staticRouters: Array<RouteItem> = [
   {
     path: "/",
     name: "index",
@@ -16,75 +16,76 @@ export const dynamicRouters: Array<RouteItem> = [
     children: [
       {
         path: "/home",
-        meta: { title: "首页展示", icon: "tdesign:bookmark-double" },
-        component: () => import("../views/example/home.vue")
+        name: "home",
+        meta: { title: "首页展示", icon: "tdesign:bookmark-double", keepAlive: true },
+        component: import("../views/example/home.vue"),
       },
       {
         path: "/nested",
         name: "nested",
         redirect: "/nested/menu-1",
-        meta: { title: "多级菜单嵌套", icon: "tdesign:tree-square-dot" },
-        component: () => import("../views/example/nested.vue"),
+        meta: { title: "多级菜单嵌套", icon: "tdesign:tree-square-dot", keepAlive: true },
+        component: import("../views/example/nested.vue"),
         children: [
           {
             path: "/nested/menu-1",
             name: "nested/menu-1",
-            meta: { title: "el-plus 表格" },
-            component: () => import("../views/example/menu-1.vue")
+            meta: { title: "el-plus 表格", keepAlive: true },
+            component: import("../views/example/menu-1.vue"),
           },
           {
             path: "/nested/menu-2",
             name: "nested/menu-2",
-            meta: { title: "el-plus 表单验证" },
-            component: () => import("../views/example/menu-2.vue")
+            meta: { title: "el-plus 表单验证", keepAlive: true },
+            component: import("../views/example/menu-2.vue"),
           },
           {
             path: "/nested/three-level",
             name: "nested/three-level",
-            meta: { title: "三级菜单" },
-            redirect: "/nested/three-level/menu-1",
-            component: () => import("../views/example/nested.vue"),
+            meta: { title: "三级菜单", keepAlive: true },
+            redirect: "nested/three-level/menu-1",
+            component: import("../views/example/nested.vue"),
             children: [
               {
                 path: "/nested/three-level/menu-1",
-                name: "/nested/three-level/menu-1",
-                meta: { title: "菜单 3-1" },
-                component: () => import("../views/example/menu-1.vue")
+                name: "nested/three-level/menu-1",
+                meta: { title: "菜单 3-1", keepAlive: true },
+                component: import("../views/example/menu-1.vue"),
               },
               {
                 path: "/nested/three-level/menu-2",
-                name: "/nested/three-level/menu-2",
-                meta: { title: "菜单 3-2" },
-                component: () => import("../views/example/menu-2.vue")
+                name: "nested/three-level/menu-2",
+                meta: { title: "菜单 3-2", keepAlive: true },
+                component: import("../views/example/menu-2.vue"),
               },
             ]
           },
           {
             path: "/nested/four-level",
             name: "nested/four-level",
-            meta: { title: "三级菜单-2" },
+            meta: { title: "三级菜单-2", keepAlive: true },
             redirect: "/nested/four-level/menu-1",
-            component: () => import("../views/example/nested.vue"),
+            component: import("../views/example/nested.vue"),
             children: [
               {
                 path: "/nested/four-level/menu-1",
-                name: "/nested/four-level/menu-1",
-                meta: { title: "菜单 3-2-1" },
-                component: () => import("../views/example/menu-1.vue")
+                name: "nested/four-level/menu-1",
+                meta: { title: "菜单 3-2-1", keepAlive: true },
+                component: import("../views/example/menu-1.vue"),
               },
               // {
               //     path: "/nested/four-level/menu-2",
               //     name: "/nested/four-level/menu-2",
-              //     meta: { title: "菜单 3-2-2" },
-              //     component: () => import("../views/example/menu-2.vue")
+              //     meta: { title: "菜单 3-2-2", keepAlive: true },
+              //     component: () => () => import("/example/menu-2.vue")
               // },
             ]
           },
           {
             path: "/nested/menu-3",
             name: "nested/menu-3",
-            meta: { title: "菜单 2-3" },
-            component: () => import("../views/example/menu-3.vue")
+            meta: { title: "菜单 2-3", keepAlive: true },
+            component: import("../views/example/menu-3.vue"),
           }
         ]
       },
@@ -101,8 +102,8 @@ export const dynamicRouters: Array<RouteItem> = [
       {
         path: "/menu-4",
         name: "menu-4",
-        meta: { title: "换行菜单标题换行菜单标题", icon: "tdesign:component-layout" },
-        component: () => import("../views/example/menu-4.vue")
+        meta: { title: "换行菜单标题换行菜单标题", icon: "tdesign:component-layout", keepAlive: true },
+        component: import("../views/example/menu-4.vue"),
       }
     ]
   },
@@ -110,26 +111,26 @@ export const dynamicRouters: Array<RouteItem> = [
     path: "/example",
     name: "example",
     component: Layout,
-    meta: { title: "示例页栏目", icon: "tdesign:play-demo" },
+    meta: { title: "示例页栏目", icon: "tdesign:play-demo", keepAlive: true },
     redirect: "/example/request",
     children: [
       {
         path: "/example/request",
         name: "example-request",
         meta: { title: "http-请求示例", keepAlive: true },
-        component: () => import("../views/example/request.vue"),
+        component: import("../views/example/request.vue"),
       },
       {
         path: "/example/components",
         name: "example-components",
-        meta: { title: "自定义组件" },
-        component: () => import("../views/example/the-components.vue")
+        meta: { title: "自定义组件", keepAlive: true },
+        component: import("../views/example/the-components.vue"),
       },
       {
         path: "/example/tsx",
         name: "example-tsx",
-        meta: { title: "tsx-示例" },
-        component: () => import("../views/tsx/example")
+        meta: { title: "tsx-示例", keepAlive: true },
+        component: import("../views/tsx/example"),
       },
       {
         path: "/example/no-found",

@@ -41,7 +41,8 @@ export type RouteItem = {
   /**
    * 路由名，类似唯一`key`
    * - 路由第一层必须要设置，因为动态路由删除时需要用到，且唯一
-   * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置，不然路由缓存不生效
+   * - 当设置`meta.keepAlive`为`true`时，该值必填，且唯一，另外组件中的`name`也需要对应的同步设置
+   * - 或者参考[permission.ts](./permission.ts)中的`getComponent`方法进行组件名称的动态设置
    */
   name?: string;
   /** 子级路由 */

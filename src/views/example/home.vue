@@ -338,8 +338,8 @@ onUnmounted(function() {
 </script>
 <template>
   <div class="page-home">
-    <h2 class="the-title is-line mb-[30px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
-    <div class="mb-[40px]">
+    <h2 class="the-title is-line mb-[20px]">Vue3 + Vite + TypeScript 后台管理模板</h2>
+    <div class="mb-[20px]">
       <span class="the-tag blue">无 UI 框架依赖，可以无缝接入自己喜欢的任何第三方库</span>
       <a class="the-tag green" :href="project" target="_blank">项目地址</a>
     </div>
