@@ -6,7 +6,7 @@ export default {
 </script>
 <script lang="ts" setup>
 import { computed, type PropType } from "vue";
-import { checkType, isType } from "@/utils";
+import { checkType } from "@/utils";
 import type { TableType } from "./types";
 
 const props = defineProps({
@@ -60,14 +60,14 @@ const useList = computed(() => {
 // function getString(item: TableType.Action, key: "text" | "icon") {
 //   const value = item[key];
 //   if (!value) return "-";
-//   return isType(value, "function") ? value(props.row) : value;
+//   return typeof value === "function" ? value(props.row) : value;
 // }
 function getString(item: TableType.Action, key: "text" | "icon") {
   const value = item[key];
-  if (isType(value, "function")) {
+  if (typeof value === "function") {
     return value(props.row);
   }
-  if (isType(value, "string")) {
+  if (typeof value === "string") {
     let text = value;
     if (value.includes("return")) {
       try {
@@ -85,14 +85,14 @@ function getString(item: TableType.Action, key: "text" | "icon") {
 // function getBoolean(item: TableType.Action, key: "loading" | "disabled" | "show") {
 //   const value = item[key];
 //   if (!value) return false;
-//   return isType(value, "function") ? value(props.row) : value;
+//   return typeof value === "function" ? value(props.row) : value;
 // }
 function getBoolean(item: TableType.Action, key: "loading" | "disabled" | "show") {
   const value = item[key];
-  if (isType(value, "function")) {
+  if (typeof value === "function") {
     return value(props.row);
   }
-  if (isType(value, "string")) {
+  if (typeof value === "string") {
     let val = key === "show";
     if (value.includes("return")) {
       try {
@@ -114,9 +114,9 @@ function onBtnClick(item: TableType.Action) {
   const fn = item.click;
   if (!fn) return;
   const { row, index } = props;
-  if (isType(fn, "function")) {
+  if (typeof fn === "function") {
     fn(row, index);
-  } else if (isType(fn, "string")) {
+  } else if (typeof fn === "string") {
     try {
       const _click = new Function("sandbox", fn);
       _click({ row, index, pageId: props.pageId });
