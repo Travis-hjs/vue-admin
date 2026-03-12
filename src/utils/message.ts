@@ -19,33 +19,41 @@ function useMessage(params: Message.Option = {}) {
   const doc = document;
   const cssModule = `__${Math.random().toString(36).slice(2, 7)}`;
   const className = {
+    item: `msg-item${cssModule}`,
     box: `msg-box${cssModule}`,
     hide: `hide${cssModule}`,
     text: `msg-text${cssModule}`,
-    icon: `msg-icon${cssModule}`
-  }
+    icon: `msg-icon${cssModule}`,
+  };
   const style = doc.createElement("style");
-  style.textContent = `
-  .${className.box}, .${className.icon}, .${className.text} {
+  const cssText = `
+  .${className.item}, ${className.box}, .${className.icon}, .${className.text} {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
   }
-  .${className.box} {
+  .${className.item} {
     position: fixed;
     top: 0;
-    left: 50%;
+    width: 100vw;
     display: flex;
+    justify-content: center;
+    animation: ${className.item}-move .4s;
+    transition: .4s all;
+    opacity: 1;
+    pointer-events: none;
+  }
+  .${className.box} {
+    position: relative;
+    display: flex;
+    width: fit-content;
+    max-width: 90%;
     padding: 12px 16px;
     border-radius: 2px;
     background-color: #fff;
     box-shadow: 0 3px 3px -2px rgba(0,0,0,.2),0 3px 4px 0 rgba(0,0,0,.14),0 1px 8px 0 rgba(0,0,0,.12);
-    white-space: nowrap;
-    animation: ${className.box}-move .4s;
-    transition: .4s all;
-    transform: translate3d(-50%, 0%, 0);
-    opacity: 1;
     overflow: hidden;
+    pointer-events: auto;
   }
   .${className.box}::after {
     content: "";
@@ -55,25 +63,27 @@ function useMessage(params: Message.Option = {}) {
     height: 100%;
     width: 4px;
   }
-  @keyframes ${className.box}-move {
+  @keyframes ${className.item}-move {
     0% {
       opacity: 0;
-      transform: translate3d(-50%, -100%, 0);
+      transform: translate3d(0, -100%, 0);
     }
     100% {
       opacity: 1;
-      transform: translate3d(-50%, 0%, 0);
+      transform: translate3d(0, 0%, 0);
     }
   }
-  .${className.box}.${className.hide} {
+  .${className.item}.${className.hide} {
     opacity: 0;
-    /* transform: translate3d(-50%, -100%, 0); */
-    transform: translate3d(-50%, -100%, 0) scale(0);
+    /* transform: translate3d(0, -100%, 0); */
+    transform: translate3d(0, -100%, 0) scale(0);
   }
   .${className.icon} {
     display: inline-block;
     width: 18px;
+    min-width: 18px;
     height: 18px;
+    min-height: 18px;
     border-radius: 50%;
     overflow: hidden;
     margin-right: 6px;
@@ -119,7 +129,7 @@ function useMessage(params: Message.Option = {}) {
     width: 2px;
     height: 40%;
   }
-  .${className.box}.error .${className.icon}::after, 
+  .${className.box}.error .${className.icon}::after,
   .${className.box}.error .${className.icon}::before {
     top: 20%;
     left: 50%;
@@ -147,14 +157,15 @@ function useMessage(params: Message.Option = {}) {
     width: 20%;
     transform-origin: center;
   }
-  `.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
+  `;
+  style.textContent = cssText.replace(/(\s)*/g, "$1").replace(/\n|\t|\s([{},:;])/g, "$1").replace(/([{},:;])\s/g, "$1");
   doc.head.appendChild(style);
   /** 消息队列 */
   const messageList: Array<HTMLElement> = [];
 
   /**
    * 获取指定`item`的定位`top`
-   * @param el 
+   * @param el
    */
   function getItemTop(el?: HTMLElement) {
     let top = 10;
@@ -170,7 +181,7 @@ function useMessage(params: Message.Option = {}) {
 
   /**
    * 删除指定列表项
-   * @param el 
+   * @param el
    */
   function removeItem(el: HTMLElement) {
     for (let i = 0; i < messageList.length; i++) {
@@ -181,7 +192,7 @@ function useMessage(params: Message.Option = {}) {
       }
     }
     el.classList.add(className.hide);
-    messageList.forEach(function(item) {
+    messageList.forEach(item => {
       item.style.top = `${getItemTop(item)}px`;
     });
   }
@@ -194,12 +205,14 @@ function useMessage(params: Message.Option = {}) {
    */
   function show(content: string, type: Message.Type = "info", duration?: number) {
     const el = doc.createElement("div");
-    el.className = `${className.box} ${type}`;
+    el.className = className.item;
     el.style.top = `${getItemTop()}px`;
     el.style.zIndex = zIndex.message;
     el.innerHTML = `
-    <span class="${className.icon}"></span>
-    <span class="${className.text}">${content}</span>
+    <div class="${className.box} ${type}">
+      <span class="${className.icon}"></span>
+      <span class="${className.text}">${content}</span>
+    </div>
     `;
     messageList.push(el);
     doc.body.appendChild(el);
@@ -210,13 +223,14 @@ function useMessage(params: Message.Option = {}) {
     }
     el.addEventListener("animationend", animationEnd);
     function transitionEnd() {
-      if (getComputedStyle(el).opacity !== "0") return;
+      if (getComputedStyle(el).opacity !== "0")
+        return;
       el.removeEventListener("transitionend", transitionEnd);
       el.remove();
     }
     el.addEventListener("transitionend", transitionEnd);
   }
-  
+
   return {
     show,
     /** 普通描述提示 */
@@ -234,7 +248,7 @@ function useMessage(params: Message.Option = {}) {
     /** 错误提示 */
     error(msg: string) {
       show(msg, "error");
-    }
+    },
   }
 }
 
