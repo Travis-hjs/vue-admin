@@ -157,8 +157,8 @@ onUnmounted(function () {
                 <slot name="header"></slot>
                 <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>
               </div>
-              <div class="base-dialog-body">
-                <el-scrollbar :maxheight="props.full ? 'calc(100vh - 138px)' : '76vh'">
+              <div :class="['base-dialog-body', { 'f1': props.full }]">
+                <el-scrollbar :maxheight="props.full ? 'calc(100vh - 134px)' : '76vh'">
                   <slot></slot>
                 </el-scrollbar>
               </div>
