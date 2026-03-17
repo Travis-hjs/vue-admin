@@ -1,0 +1,30 @@
+{
+  "vue-model": {
+    "scope": "javascript,typescript",
+    "prefix": "el-popup-form",
+    "body": [
+      "openPopupForm<{ account: string; password: string }>({",
+      "  title: \"新增修改\",",
+      "  rules: {",
+      "    password: getInputRule(\"请输入新密码\"),",
+      "  },",
+      "  fields: [",
+      "    { label: \"账号\", prop: \"account\", type: \"text\" },",
+      "    { label: \"新密码\", prop: \"password\", type: \"input\", placeholder: \"请输入密码\" },",
+      "  ],",
+      "  cancelText: \"取消\",",
+      "  async onConfirm(form, cb) {",
+      "    const res = await api.update(form);",
+      "    const success = res.code === 1;",
+      "    cb(success);",
+      "    if (success) {",
+      "      message.success(\"操作成功\");",
+      "      // 这里可做更新数据操作",
+      "    }",
+      "  },",
+      "});",
+      ""
+    ],
+    "description": "函数式调用弹框表单"
+  }
+}
