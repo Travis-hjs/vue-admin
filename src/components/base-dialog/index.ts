@@ -3,7 +3,7 @@ import { createApp, h, ref } from "vue";
 import BaseDialog from "./index.vue";
 import { registerPlugins } from "@/utils/plugins";
 
-type DialogProps = ExtractPropTypes<InstanceType<typeof BaseDialog>>;
+export type DialogProps = ExtractPropTypes<InstanceType<typeof BaseDialog>>;
 
 interface DialogParams<Props> {
   /** 弹框内容插槽组件 */

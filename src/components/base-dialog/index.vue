@@ -24,6 +24,14 @@ const props = defineProps({
     type: String,
     default: "50%"
   },
+  /**
+   * 是否全屏
+   * - 设置之后`width`属性无效
+   */
+  full: {
+    type: Boolean,
+    default: false
+  },
   /** 是否可以通过点击遮罩层关闭`Dialog` */
   closeByMask: {
     type: Boolean,
@@ -140,18 +148,18 @@ onUnmounted(function () {
         <div v-show="props.show" ref="el" class="base-dialog fvc" :style="{ 'z-index': props.zIndex }" @click="onClose">
           <transition name="dialog-move" @after-leave="onAfterLeave" @after-enter="onAfterEnter">
             <div
+              v-show="contentShow"
               ref="contentBox"
               class="base-dialog-content flex"
-              :style="{ 'width': props.width }"
-              v-show="contentShow"
+              :style="{ width: props.full ? '100%' : props.width, height: props.full ? '100vh' : undefined }"
             >
               <div class="base-dialog-title f-between f-vertical">
                 <h2 class="base-dialog-text" v-if="!$slots.header">{{ title }}</h2>
                 <slot name="header"></slot>
                 <i class="base-dialog-icon" ref="closeBtn" @click="onClose"></i>
               </div>
-              <div class="base-dialog-body">
-                <Scrollbar maxHeight="76vh">
+              <div :class="['base-dialog-body', { 'f1': props.full }]">
+                <Scrollbar :maxHeight="props.full ? 'calc(100vh - 138px)' : '76vh'">
                   <slot></slot>
                 </Scrollbar>
               </div>
