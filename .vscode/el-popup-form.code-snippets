@@ -1,6 +1,6 @@
 {
   "vue-model": {
-    "scope": "javascript,typescript",
+    "scope": "javascript,typescript,vue",
     "prefix": "el-popup-form",
     "body": [
       "openPopupForm<{ account: string; password: string }>({",
