@@ -332,6 +332,7 @@ for (const column of props.columns) {
               v-else-if="column.prop === TableEnum.Right"
               :row="scope.row"
               :index="scope.$index"
+              :max="props.actionMax"
               :actions="(props.actions as any)"
               :clickStop="props.isRowClick"
               :pageId="props.pageId"
