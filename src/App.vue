@@ -21,7 +21,7 @@ export default {
       const t = Date.now();
       const { origin, pathname } = location;
       const url = `${origin + pathname}version.json?t=${t}`;
-      fetch(url).then(r => r.json()).then(res => {
+      fetch(url).then(r => r.status === 200 ? r.json() : ({} as any)).then(res => {
         if (res.version && res.version !== window._version) {
           // 弹一次后直接关闭查询
           clearTimeout(timer);
