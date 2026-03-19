@@ -65,6 +65,12 @@ function onClosed() {
   emit("closed");
   setForm();
 }
+
+defineExpose({
+  getFormData() {
+    return state.form;
+  },
+});
 </script>
 
 <template>

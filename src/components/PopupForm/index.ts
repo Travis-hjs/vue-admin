@@ -19,9 +19,11 @@ export function openPopupForm<T extends BaseObj<any>>(props: Omit<PopupFormProp<
     div.remove();
   }
 
+  const popup = ref();
+
   const dialog = () => h(
     PopupForm,
-    { ...props, show: show.value, onClose, onClosed } as any,
+    { ...props, show: show.value, onClose, onClosed, ref: popup } as any,
   );
 
   const app = createApp(dialog);
@@ -35,4 +37,10 @@ export function openPopupForm<T extends BaseObj<any>>(props: Omit<PopupFormProp<
   app.mount(div);
 
   show.value = true;
+
+  return {
+    getFromData(): T {
+      return popup.value?.getFormData();
+    },
+  }
 }
