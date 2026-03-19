@@ -327,6 +327,7 @@ function useDialog() {
     font-size: 15px;
     color: var(--text-color);
     text-align: left;
+    line-height: 20px;
   }
   .${className.footer} {
     width: 100%;
