@@ -1,26 +1,42 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "incremental": true,
-    "target": "ES2023",
-    "module": "ESNext",
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"],
-    "skipLibCheck": true,
-
-    /* Linting */
     "strict": true,
+    "noEmit": true,
+    "incremental": true,
+    "useDefineForClassFields": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+
+    // 格式相关
     "noUnusedLocals": true,
+    // "noImplicitThis": true,
     "noUnusedParameters": true,
     // "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     // "noUncheckedSideEffectImports": true
 
-    "moduleResolution": "bundler",
+    // 编译器相关
+    "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
-    "noEmit": true,
-    
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+
+    // jsx 相关配置
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+
+    // 导入类型必需带有 type 关键字
+    "verbatimModuleSyntax": true,
+
+    "sourceMap": true,        // 调试友好
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    // "libReplacement": false,
+    "skipLibCheck": true,
+
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
