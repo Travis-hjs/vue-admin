@@ -1,4 +1,4 @@
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins";
 
 @mixin menu-block($height, $color) {
   display: flex;
@@ -425,7 +425,7 @@
     color: transparent;
     margin-left: 4px;
     transition: var(--transition);
-    @include close-icon(var(--menu-text-color), 8px);
+    @include mixins.close-icon(var(--menu-text-color), 8px);
 
     &:hover {
       background-color: #b4bccc;

@@ -174,7 +174,7 @@ onUnmounted(function () {
   </section>
 </template>
 <style lang="scss">
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins";
 
 .base-dialog {
   width: 100%;
@@ -218,7 +218,7 @@ onUnmounted(function () {
     height: 28px;
     cursor: pointer;
     transform: rotate(0);
-    @include close-icon(#666, 16px);
+    @include mixins.close-icon(#666, 16px);
     transition: var(--transition);
 
     &:hover {

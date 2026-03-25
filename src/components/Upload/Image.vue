@@ -126,7 +126,7 @@ function removeImg() {
   </div>
 </template>
 <style lang="scss">
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins";
 
 .the-upload-image {
   .the-upload-content {
@@ -190,7 +190,7 @@ function removeImg() {
         width: 30px;
         height: 30px;
         transform: rotate(-45deg);
-        @include close-icon(#999, 100%, 2px);
+        @include mixins.close-icon(#999, 100%, 2px);
       }
     }
   }

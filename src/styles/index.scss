@@ -1,7 +1,7 @@
-@import "./variables.scss";
-@import "./mixins.scss";
-@import "./common.scss";
-@import "./ripple.scss";
+@use "./variables";
+@use "./mixins";
+@use "./common";
+@use "./ripple";
 
 // ===================== 全局动画 =====================
 // 页面 X 平移动画
@@ -150,13 +150,13 @@
   margin-left: 10px;
 }
 
-.the-tag.green { @include tag-color(#e7faf0, var(--green)); }
-.the-tag.blue { @include tag-color(#e8f3ff, var(--blue)); }
-.the-tag.gray { @include tag-color(#efefef, var(--gray)); }
-.the-tag.red { @include tag-color(#ffeded, var(--red)); }
-.the-tag.orange { @include tag-color(#fff7e6, var(--orange)); }
-.the-tag.purple { @include tag-color(#f9f0ff, var(--purple)); }
-.the-tag.cyan { @include tag-color(#e6fffb, var(--cyan)); }
+.the-tag.green { @include mixins.tag-color(#e7faf0, var(--green)); }
+.the-tag.blue { @include mixins.tag-color(#e8f3ff, var(--blue)); }
+.the-tag.gray { @include mixins.tag-color(#efefef, var(--gray)); }
+.the-tag.red { @include mixins.tag-color(#ffeded, var(--red)); }
+.the-tag.orange { @include mixins.tag-color(#fff7e6, var(--orange)); }
+.the-tag.purple { @include mixins.tag-color(#f9f0ff, var(--purple)); }
+.the-tag.cyan { @include mixins.tag-color(#e6fffb, var(--cyan)); }
 
 .the-title {
   letter-spacing: 3px;
