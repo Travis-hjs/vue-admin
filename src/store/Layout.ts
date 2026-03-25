@@ -5,6 +5,8 @@ import type { LayoutType } from "./types";
 
 const cacheName = "ModuleLayout";
 
+const logoutName = "admin-system-logout";
+
 /**
  * `layout`状态模块
 */
@@ -26,6 +28,19 @@ export default class ModuleLayout {
         sessionStorage.setItem(cacheName, JSON.stringify(this.info));
       }
     );
+  }
+
+  /** 是否主动点击退出登录 */
+  get isLogout() {
+    return sessionStorage.getItem(logoutName) === "true";
+  }
+
+  set isLogout(value) {
+    if (value) {
+      sessionStorage.setItem(logoutName, "true");
+    } else {
+      sessionStorage.removeItem(logoutName);
+    }
   }
 
   /**
