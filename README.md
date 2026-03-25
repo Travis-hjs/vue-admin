@@ -23,6 +23,13 @@ el-table-list-v2
 el-popup-component
 ```
 
+在任意`.vue, .ts`文件中输入以下指令可快速生成对应代码
+
+```bash
+# 生成弹框表单函数
+el-popup-form
+```
+
 > 以上为 vscode 代码快捷片段，需要手动输入，直接复制粘贴无法触发提示
 
 ## 版本及分支说明
