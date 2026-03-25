@@ -1,11 +1,12 @@
-import fs from "node:fs";
-import path from "path";
+import { writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import tailwindcss from "@tailwindcss/vite";
 
-const version = Date.now();
+const [version, __dirname] = [Date.now(), dirname(fileURLToPath(import.meta.url))];
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,8 +16,8 @@ export default defineConfig({
     tailwindcss(),
     {
       buildEnd() {
-        const versionFilePath = path.join(__dirname, "./public/version.json");
-        fs.writeFileSync(versionFilePath, JSON.stringify({ version }, null, 2));
+        const versionFilePath = join(__dirname, "./public/version.json");
+        writeFileSync(versionFilePath, JSON.stringify({ version }, null, 2));
       },
       name: "inject-version",
       transformIndexHtml(html) {
@@ -30,7 +31,7 @@ export default defineConfig({
   base: "./",
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src")
+      "@": resolve(__dirname, "src")
     }
   },
   server: {

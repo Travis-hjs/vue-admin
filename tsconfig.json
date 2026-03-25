@@ -1,36 +1,7 @@
 {
-  "compilerOptions": {
-    "strict": true,
-    "module": "ESNext",
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "resolveJsonModule": true,
-    // "moduleResolution": "node",
-    
-    // jsx 相关配置
-    "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "jsxImportSource": "vue",
-
-    // 导入类型必需带有 type 关键字
-    "verbatimModuleSyntax": true,
-
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "lib": ["ESNext", "DOM"],
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "skipLibCheck": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
-  ],
-  "exclude": [
-    "node_modules"
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ]
 }
