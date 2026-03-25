@@ -48,9 +48,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          // "package-name": ["file-name"],
-          "element-plus": ["element-plus"],
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("element-plus")) {
+              return "ui";
+            }
+            return "vendor";
+          }
         },
         // manualChunks(id) {
         //   if (id.includes("node_modules")) {
