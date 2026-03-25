@@ -48,11 +48,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // manualChunks: {
-        //   "package-name": ["file-name"],
-        //   "element-plus": ["element-plus"],
-        // },
         manualChunks(id) {
+          // plugin-vue:export-helper 默认会被构建成下划线开头的文件，在一些浏览器中会404
+          if (id.includes("plugin-vue:export-helper")) {
+            return "plugin-vue-export-helper";
+          }
+          // 处理第三方库
           if (id.includes("node_modules")) {
             return "vendor";
           }
