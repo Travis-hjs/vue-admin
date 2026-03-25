@@ -29,9 +29,8 @@ el-popup-component
 
 | 分支 | 演示地址 | 所用技术 | 补充/说明 |
 | --- | --- | --- | --- |
-| [master](https://github.com/Travis-hjs/vue-admin) | [预览](https://travis-hjs.github.io/vue-admin) | vite 5.x、vue 3.x、vue-router 4.x、typescript | vue3 版本，无引用任何 UI 框架 |
-| [el-plus](https://github.com/Travis-hjs/vue-admin/tree/el-plus) | [预览](https://travis-hjs.github.io/vue-admin-el) | vite 5.x、vue 3.x、vue-router 4.x、typescript、element-plus | 基于`master`加入了 UI 框架的配置使用，并增加了 [curd 低代码功能](https://github.com/Travis-hjs/vue-admin/tree/el-plus/src/components/Curd) |
-| [v2](https://github.com/Travis-hjs/vue-admin/tree/v2) | [预览](https://travis-hjs.github.io/vue2-admin) | vue-cli 4.x 、vue 2.x、vue-router 3.x、typescript、element-ui | vue2 版本，`element-ui`在这里默认作为常规功能展示引用，模板核心功能依然是无 UI 框架依赖 |
+| [master](https://github.com/Travis-hjs/vue-admin) | [预览](https://travis-hjs.github.io/vue-admin) | vite 8.x、vue 3.x、vue-router 5.x、typescript | vue3 版本，无引用任何 UI 框架 |
+| [el-plus](https://github.com/Travis-hjs/vue-admin/tree/el-plus) | [预览](https://travis-hjs.github.io/vue-admin-el) | vite 8.x、vue 3.x、vue-router 5.x、typescript、element-plus | 基于`master`加入了 UI 框架的配置使用，并增加了 [curd 低代码功能](https://github.com/Travis-hjs/vue-admin/tree/el-plus/src/components/Curd) |
 
 ## 功能清单
 
@@ -44,15 +43,15 @@ el-popup-component
 | svg-图标 | 使用异步远程加载：[详细说明](./src/components/Icon/README.md) |
 | 常用工具函数 | 在 [src/utils/index.ts](src/utils/index.ts) 中内置了一些使用频率极高的工具函数：类型判断、日期格式化、文本复制、深拷贝等。 |
 
-当前模板只提供必需的功能，功能模块之间尽可能保证低耦合性，这对所有开发者都是一件非常有利的事情，例如你无需担心替换、修改某一功能时影响到其他。另外更为重要的是：当前所有已实现功能都不依赖任何第三方库（`vue-router`除外），这意味着你可以无需关心`package.json`的依赖版本，因为根本就没有其他依赖，所以根据自己的喜好去引入第三方库的时候会非常舒服。
+当前模板只提供必需的功能，功能模块之间尽可能保证低耦合性，这对所有开发者都是一件非常有利的事情，例如你无需担心替换、修改某一功能时影响到其他。另外更为重要的是：当前所有已实现功能都不依赖任何第三方库，这意味着你可以无需关心`package.json`的依赖版本，因为根本就没有其他依赖，所以根据自己的喜好去引入第三方库的时候会非常舒服。
 
-像前端工程化配置`ESLint`、`StyleLint`、`git-husky`等这类开发约束工具这里一律不使用，理由有以下几点：
+像前端工程化配置`ESLint`、`styleLint`、`git-husky`等这类开发约束工具这里没有使用，理由有以下几点：
 
 - 规则的东西不适用作为通用型项目，因为有很多自由开发者、初学者、后端开发者等，他们在使用时并不需要，这些工具只会使其在初次接触中变得束手无策，所以这违背了我写这个项目的初衷。
 
-- 其次就是这些约束工具对开发效率的提升通常为 **0**，因为在提交代码的时候需要进行全局检查或者对部分文件检查，所以要花费大量的时间去干等；另外`ESlint`这个东西在实际的开发场景中，并不能有效地提高代码质量，因为爱写垃圾的人不管用什么工具都始终会写垃圾代码，有了这些工具只不过是让写出来的垃圾代码变得好看而已，而且在`ts`中，只要不是写的过多`any`，基本都有语法和写法的报错检查，所以`ESlint`的作用就显得很鸡肋，在过去`js`项目中或许有用，但在`ts`中真的可有可无，不如来一个`Prettier`代码格式化工具来得实际。
+- 其次就是这些约束工具对开发效率的提升并不大，只不过是将代码格式化得好看而已；我始终认为代码质量由编码水平决定而不是约束工具。
 
-- 代码约束的工具运行时会消耗过大的内存，在一些电脑性能不那么高的设备上会非常卡顿，这使得开发过程十分笨重。更重要的是，有时候过多的工具检测报错会导致进程崩溃，尽管你的代码可以正常运行。
+- 代码约束的工具运行时会占用内存，在一些电脑性能不那么高的设备上会出现卡顿，这使得开发过程十分笨重。更重要的是，有时候过多的工具检测报错会导致进程崩溃，尽管你的代码可以正常运行。
 
 ## 项目运行
 
