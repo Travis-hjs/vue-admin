@@ -61,11 +61,6 @@ export default defineConfig({
             return "vendor";
           }
         },
-        // manualChunks(id) {
-        //   if (id.includes("node_modules")) {
-        //     return "vendor";
-        //   }
-        // },
         entryFileNames: "js/[name]-[hash].js",
         chunkFileNames: "js/[name]-[hash].js",
         /**
