@@ -137,44 +137,50 @@ export function initPermission(vueRouter: Router, baseRoutes: Array<RouteItem>) 
   // 设置路由实例
   router = vueRouter;
 
-  router.beforeEach(async function (to, _, next) {
+  router.beforeEach(async function (to) {
     NProgress.start();
 
     if (store.user.info.token) {
+
       if (store.layout.addRouters.length > 0) {
-        next();
-      } else {
-        store.layout.addRouters = await getDynamic();
-
-        // 逐个添加进去
-        for (let i = 0; i < store.layout.addRouters.length; i++) {
-          const item = store.layout.addRouters[i];
-          router.addRoute(item);
-        }
-
-        // 在最后加一个404重定向的路由进去
-        // learn https://my.oschina.net/qinghuo111/blog/4832051
-        if (!router.hasRoute(redirectRouteName)) {
-          // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
-          // 不重定向到`/404`
-          router.addRoute({ ...baseRoutes[1], path: "/:catchAll(.*)", name: redirectRouteName });
-        }
-
-        store.layout.completeRouters = baseRoutes.concat(store.layout.addRouters);
-
-        next({ ...to, replace: true });
+        return true;
       }
-    } else {
-      if (to.path === "/login") {
-        next();
-      } else {
-        routerTo.path = to.path;
-        routerTo.query = to.query;
-        next({ path: "/login" });
-        NProgress.done();
+
+      store.layout.addRouters = await getDynamic();
+
+      // 逐个添加进去
+      for (let i = 0; i < store.layout.addRouters.length; i++) {
+        const item = store.layout.addRouters[i];
+        router.addRoute(item);
+      }
+
+      // 在最后加一个404重定向的路由进去
+      // learn https://my.oschina.net/qinghuo111/blog/4832051
+      if (!router.hasRoute(redirectRouteName)) {
+        // router.addRoute({ path: "/:catchAll(.*)", name: redirectRouteName, redirect: "/404" });
+        // 不重定向到`/404`
+        router.addRoute({ ...baseRoutes[1], path: "/:catchAll(.*)", name: redirectRouteName });
+      }
+
+      store.layout.completeRouters = baseRoutes.concat(store.layout.addRouters);
+
+      return {
+        ...to,
+        replace: true,
       }
     }
 
+    if (to.path === "/login") {
+      return true;
+    }
+
+    routerTo.path = to.path;
+    routerTo.query = to.query;
+    NProgress.done();
+
+    return {
+      path: "/login",
+    }
   });
 
   router.afterEach(to => {
