@@ -501,5 +501,5 @@ onMounted(function() {
   </div>
 </template>
 <style lang="scss">
-@import url("./styles/index.scss");
+@use "./styles/index";
 </style>

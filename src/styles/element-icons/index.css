@@ -9,7 +9,7 @@
 [class^="el-icon-"],
 [class*=" el-icon-"] {
   font-family: "element-icons" !important;
-  speak: none;
+  -webkit-speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;

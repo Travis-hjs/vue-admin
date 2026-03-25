@@ -147,5 +147,5 @@ onUnmounted(function() {
   </div>
 </template>
 <style lang="scss">
-@import url("./search.scss");
+@use "./search";
 </style>

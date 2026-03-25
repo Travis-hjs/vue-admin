@@ -168,5 +168,5 @@ function onTab() {
   </FullPopup>
 </template>
 <style lang="scss">
-@import url("./styles/config.scss");
+@use "./styles/config";
 </style>

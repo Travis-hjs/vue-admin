@@ -92,5 +92,5 @@ onMounted(function () {
   </div>
 </template>
 <style lang="scss">
-@import "./styles/layout.scss";
+@use "./styles/layout";
 </style>

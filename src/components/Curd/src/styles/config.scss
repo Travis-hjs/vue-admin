@@ -1,4 +1,4 @@
-@import "@/styles/mixins.scss";
+@use "@/styles/mixins";
 
 body {
   .the-curd-popup-config {
@@ -35,7 +35,7 @@ body {
         cursor: pointer;
         transform: rotate(0);
         transition: var(--transition);
-        @include close-icon(#666, 16px);
+        @include mixins.close-icon(#666, 16px);
 
         &:hover {
           transform: rotate(180deg);

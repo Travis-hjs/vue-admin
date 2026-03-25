@@ -7,7 +7,6 @@ export default {
 <script lang="ts" setup>
 import BreadCrumb from "./BreadCrumb.vue";
 import store from "@/store";
-import { removeRoutes } from "@/router/permission";
 import TagList from "./TagList.vue";
 import { useLayoutRoute } from "./hooks";
 import { Icon } from "@/components/Icon";
@@ -23,18 +22,13 @@ function onSwitch() {
 const defaultAvatar = "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif";
 
 function onLogout() {
+  store.layout.isLogout = true;
   store.user.reset();
   router.push("/login").then(() => {
     // 清空历史记录，确保切换用户类型时缓存不存在的路由记录，没有用户类型权限时可以忽略
     layoutInfo.tagList = [];
-
-    // vue 2.x 做法退出登陆后，需要刷新页面，因为我们是通过`addRoutes`添加的，`router`没有`deleteRoutes`这个api
-    // 所以清除`token`,清除`permissionList`等信息，刷新页面是最保险的。
-    // 网上有另外一种方法是二次封装`addRoutes`去实现无刷新切换动态路由，我嫌麻烦就直接清空缓存信息并刷新实现
-    // location.reload();
-
-    // 现在不需要了，vue 3.x 之后路由增加了删除路由方法
-    removeRoutes();
+    // 可以直接刷新重置
+    location.reload();
   });
 }
 
