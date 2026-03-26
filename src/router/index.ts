@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { initPermission } from "./permission";
-import Page404 from "@/views/page-404.vue";
 import type { RouteItem } from "./types";
 
 /**
@@ -19,7 +18,7 @@ const base: Array<RouteItem> = [
   }, {
     path: "/404",
     name: "page-404",
-    component: Page404,
+    component: () => import("../views/page-404.vue"),
     meta: { hidden: true, title: "不存在该页面" },
   }, {
     path: "/401",
