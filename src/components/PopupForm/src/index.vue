@@ -1,6 +1,7 @@
 <script lang="ts" generic="T extends BaseObj<any>" setup>
 import type { FormInstance } from "element-plus";
 import type { PopupFormProp } from "./types";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { computed, reactive, ref } from "vue";
 import { Fields } from "@/components/Fields";
 import { deepClone } from "@/utils";
@@ -82,17 +83,19 @@ defineExpose({
     @closed="onClosed()"
     @opened="onOpened()"
   >
-    <el-form
-      ref="formRef"
-      :label-width="props.labelWidth || '120px'"
-      :label-position="props.labelPosition || 'left'"
-      :model="state.form"
-      :rules="props.rules"
-      :disabled="state.loading"
-      @submit.prevent
-    >
-      <Fields :data="state.form" :list="(props.fields as any)" />
-    </el-form>
+    <el-config-provider :locale="zhCn">
+      <el-form
+        ref="formRef"
+        :label-width="props.labelWidth || '120px'"
+        :label-position="props.labelPosition || 'left'"
+        :model="state.form"
+        :rules="props.rules"
+        :disabled="state.loading"
+        @submit.prevent
+      >
+        <Fields :data="state.form" :list="(props.fields as any)" />
+      </el-form>
+    </el-config-provider>
     <template #footer>
       <el-button v-if="props.cancelText" @click="onClose()">
         {{ props.cancelText }}
