@@ -300,7 +300,8 @@ function useDialog() {
     --transition: .3s all;
     --black: #333;
     --text-color: #555;
-    --confirm-bg: #2ec1cb;
+    --confirm-bg: var(--blue);
+    --border-radius: 2px;
     position: fixed;
     top: 0;
     left: 0;
@@ -413,6 +414,7 @@ function useDialog() {
     el.addEventListener("transitionend", function(e) {
       e.target === el && el.classList.contains(className.hide) && el.remove();
     });
+    
     const confirm = el.querySelector(`.${className.confirm}`) as HTMLButtonElement;
     const cancel = el.querySelector(`.${className.cancel}`) as HTMLButtonElement;
     let pending = false;

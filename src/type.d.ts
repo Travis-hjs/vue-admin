@@ -41,7 +41,7 @@ type DeepRequired<T> = {
 type ValueOf<T> = T[keyof T];
 
 // /**
-//  * 获取嵌套属性的键
+//  * 获取嵌套属性的键（不排除数组类型定义）
 //  * - 辅助类型，用于生成嵌套属性的字符串拼写
 //  * - 这里`(string | number)`是为了兼容数组下标，在深层嵌套时也能正确拼写
 //  */
@@ -52,7 +52,7 @@ type ValueOf<T> = T[keyof T];
 // }[keyof T & (string | number)];
 
 /**
- * 获取嵌套属性的键
+ * 获取嵌套属性的键（排除数组类型）
  * - 辅助类型，用于生成嵌套属性的字符串拼写
  * - 这里`(string | number)`是为了兼容数组下标，在深层嵌套时也能正确拼写
  */
@@ -72,18 +72,18 @@ type NumberSymbols = "+" | "-" | "*" | "/";
  * - 这里只枚举一些常见类型，后续根据使用场景自行添加即可
  */
 interface JavaScriptType {
-  string: string
-  number: number
-  boolean: boolean
-  null: null
-  undefined: undefined
-  array: Array<any>
-  object: object
-  regexp: RegExp
-  function: Function
+  string: string;
+  number: number;
+  boolean: boolean;
+  null: null;
+  undefined: undefined;
+  array: Array<any>;
+  object: object;
+  regexp: RegExp;
+  function: Function;
   asyncfunction: (...params: any) => Promise<any>;
-  promise: Promise<any>
-  formdata: FormData
+  promise: Promise<any>;
+  formdata: FormData;
 }
 
 /** `JavaScript`类型 */
@@ -92,7 +92,7 @@ type JavaScriptTypes = keyof JavaScriptType;
 
 /** 基础对象 */
 interface BaseObj<T = string | number> {
-  [key: string]: T
+  [key: string]: T;
 }
 
 interface AjaxParams {
