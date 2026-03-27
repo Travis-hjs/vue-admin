@@ -1,4 +1,5 @@
 import { useZIndex } from "@/hooks/common";
+import { isType } from ".";
 
 export namespace Message {
   export interface Option {
@@ -252,19 +253,26 @@ function useMessage(params: Message.Option = {}) {
 }
 
 namespace Dialog {
+  /**
+   * 回调类型，支持回调和`Promise`两种处理方式
+   * - close 为`true`时为关闭
+   * - `Promise`返回值为`true`时亦是如此
+   */
+  export type Callback = ((callback: (close: boolean) => void) => void) | (() => Promise<boolean>);
+
   export interface Show {
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
-    title?: string
+    title?: string;
     /** 提示内容（可传html） */
-    content: string
+    content: string;
     /** 确认回调 */
-    confirm?: () => void
+    confirm?: Callback;
     /** 确认按钮文字，默认为`"确认"` */
-    confirmText?: string
+    confirmText?: string;
     /** 取消回调 */
-    cancel?: () => void
+    cancel?: Callback;
     /** 取消按钮文字，不传则没有取消操作 */
-    cancelText?: string
+    cancelText?: string;
   }
 }
 
@@ -279,6 +287,7 @@ function useDialog() {
     content: `dialog-content${cssModule}`,
     footer: `dialog-footer${cssModule}`,
     confirm: `confirm${cssModule}`,
+    cancel: `cancel${cssModule}`,
     fade: `fade${cssModule}`,
     show: `show${cssModule}`,
     hide: `hide${cssModule}`
@@ -289,7 +298,8 @@ function useDialog() {
     --transition: .3s all;
     --black: #333;
     --text-color: #555;
-    --confirm-bg: #2ec1cb;
+    --confirm-bg: var(--blue);
+    --border-radius: 2px;
     position: fixed;
     top: 0;
     left: 0;
@@ -333,7 +343,32 @@ function useDialog() {
     width: 100%;
     text-align: right;
     border-top: solid 1px #eee;
-    padding: 12px 15px;
+    padding: 10px 15px;
+    font-size: 0;
+  }
+  .${className.footer} button {
+    height: 34px;
+    font-size: 14px;
+    border-radius: var(--border-radius);
+    border: 1px var(--confirm-bg) solid;
+    color: var(--confirm-bg);
+    padding: 0 14px;
+    min-width: 70px;
+    cursor: pointer;
+  }
+  .${className.footer} button:active {
+    opacity: 0.8;
+  }
+  .${className.footer} button:disabled {
+    cursor: no-drop;
+    opacity: 0.8;
+  }
+  .${className.footer} button + button {
+    margin-left: 10px;
+  }
+  .${className.footer} .${className.confirm} {
+    background-color: var(--confirm-bg);
+    color: #fff;
   }
   @keyframes ${className.fade} {
     0% { opacity: 0; }
@@ -382,14 +417,14 @@ function useDialog() {
     // 设置完之后还原坐标位置
     clickSize.x = "0vw";
     clickSize.y = "0vh";
-    const cancelBtn = option.cancelText ? `<button class="the-btn">${option.cancelText}</button>` : "";
+    const cancelBtn = option.cancelText ? `<button class="${className.cancel}">${option.cancelText}</button>` : "";
     el.innerHTML = `
     <div class="${className.popup}">
       <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
       <div class="${className.content}">${option.content}</div>
       <div class="${className.footer}">
         ${cancelBtn}
-        <button class="${className.confirm} the-btn blue">${option.confirmText || "确认"}</button>
+        <button class="${className.confirm}">${option.confirmText || "确认"}</button>
       </div>
     </div>
     `;
@@ -397,18 +432,67 @@ function useDialog() {
     el.addEventListener("transitionend", function(e) {
       e.target === el && el.classList.contains(className.hide) && el.remove();
     });
+    const confirm = el.querySelector(`.${className.confirm}`) as HTMLButtonElement;
+    const cancel = el.querySelector(`.${className.cancel}`) as HTMLButtonElement;
+    let pending = false;
+    
     function hide() {
       el.classList.add(className.hide);
     }
-    if (option.cancelText) {
-      (el.querySelector(`.${className.footer} button`) as HTMLButtonElement).onclick = function() {
-        hide();
-        option.cancel && option.cancel();
+
+    function showLoading() {
+      pending = true;
+      confirm.setAttribute("data-text", confirm.textContent!);
+      confirm.disabled = true;
+      confirm.textContent = "loading.."
+      if (cancel) {
+        confirm.disabled = true;
       }
     }
-    (el.querySelector(`.${className.confirm}`) as HTMLButtonElement).onclick = function() {
+
+    function hideLoading() {
+      pending = false;
+      confirm.textContent = confirm.getAttribute("data-text");
+      confirm.disabled = false;
+      if (cancel) {
+        cancel.disabled = false;
+      }
+    }
+
+    async function handleAsync(cb?: Dialog.Callback) {
+      if (pending) return;
+      if (!cb) return hide();
+      if (isType(cb, "asyncfunction")) {
+        showLoading();
+        const close = await cb();
+        hideLoading();
+        if (isType(close, "boolean")) {
+          close && hide();
+        } else {
+          hide();
+        }
+        return;
+      }
+      // TODO: 严格模式下不允许使用 arguments，所以这里直接用长度来判断
+      // if (isType(cb.arguments[0], "function")) {
+      if (cb.length) {
+        showLoading();
+        cb(close => {
+          hideLoading();
+          close && hide();
+        });
+        return;
+      }
+      cb(() => {});
       hide();
-      option.confirm && option.confirm();
+    }
+    if (option.cancelText) {
+      cancel.onclick = function () {
+        handleAsync(option.cancel);
+      }
+    }
+    confirm.onclick = function () {
+      handleAsync(option.confirm);
     }
   }
 
