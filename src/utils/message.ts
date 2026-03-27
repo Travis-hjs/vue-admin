@@ -1,5 +1,5 @@
 import { useZIndex } from "@/hooks/common";
-import { isType } from ".";
+import { isType } from "./index";
 
 export namespace Message {
   export interface Option {
@@ -483,7 +483,8 @@ function useDialog() {
         });
         return;
       }
-      cb(() => {});
+      // @ts-ignore
+      cb();
       hide();
     }
     if (option.cancelText) {
