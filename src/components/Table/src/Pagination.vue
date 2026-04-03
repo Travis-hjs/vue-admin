@@ -63,6 +63,7 @@ function onCurrentChange(n: number) {
       :total="props.pageInfo.total"
       :current-page="props.pageInfo.currentPage"
       :page-sizes="props.pageSizes"
+      :default-page-size="props.pageInfo.pageSize"
       @size-change="onSizeChange"
       @current-change="onCurrentChange"
     />
