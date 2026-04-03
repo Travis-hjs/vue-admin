@@ -243,7 +243,6 @@ export const DatePicker = defineComponent({
           shortcuts={shortcutMap[props.config.dateType]}
           disabled={props.disabled}
           popper-class={props.config.id.toString()}
-          default-time={new Date()}
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
