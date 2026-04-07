@@ -36,7 +36,6 @@ export namespace TableType {
     minWidth?: string | number;
     /**
      * 超出...提示
-     * - 当`prop !== "action-right"`时，默认为`true`
      */
     tooltip?: boolean;
     /** 

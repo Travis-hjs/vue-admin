@@ -124,10 +124,10 @@ function isEmpty(val: any) {
   return ["", null, undefined, "null", "undefined"].includes(val);
 }
 
-function hasTooltip(col: TableType.Column<T>) {
-  const defaultVal = col.prop === TableEnum.Right ? false : true;
-  return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
-}
+// function hasTooltip(col: TableType.Column<T>) {
+//   const defaultVal = col.prop === TableEnum.Right ? false : true;
+//   return isType(col.tooltip, "boolean") ? col.tooltip : defaultVal;
+// }
 
 /** 
  * 设置默认的表格内容 
@@ -312,7 +312,7 @@ for (const column of props.columns) {
           :label="column.title"
           :min-width="column.minWidth"
           :width="column.width"
-          :show-overflow-tooltip="hasTooltip(column)"
+          :show-overflow-tooltip="column.tooltip"
           :fixed="column.prop === TableEnum.Right ? 'right' : column.fixed"
           :align="column.prop === TableEnum.Right ? 'center' : column.align"
           :class-name="(isRowClick && column.prop !== TableEnum.Right) ? 'the-table-column-click' : ''"
