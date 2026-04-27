@@ -51,7 +51,7 @@ const configRules = {
   validateCode: {
     required: false,
     trigger: "blur",
-    validator(r: any, v: string, callback: (err?: Error) => void) {
+    validator(_r: any, v: string, callback: (err?: Error) => void) {
       if (v && !v.includes("return")) {
         callback(new Error("函数必须带有 return 字段"));
       } else {

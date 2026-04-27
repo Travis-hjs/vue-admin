@@ -93,7 +93,7 @@ defineExpose({
         :disabled="state.loading"
         @submit.prevent
       >
-        <Fields :data="state.form" :list="(props.fields as any)" />
+        <Fields :data="state.form" :list="props.fields" />
       </el-form>
     </el-config-provider>
     <template #footer>

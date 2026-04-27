@@ -84,7 +84,7 @@ const formRules = {
   key: {
     required: true,
     trigger: "blur",
-    validator(r: any, val: string, callback: (err?: Error) => void) {
+    validator(_r: any, val: string, callback: (err?: Error) => void) {
       if (!val) {
         callback(new Error("绑定的键值不能为空"));
       } else {
@@ -101,7 +101,7 @@ const formRules = {
   defaultValue: {
     required: true,
     trigger: "blur",
-    validator(r: any, v: string, callback: (err?: Error) => void) {
+    validator(_r: any, _v: string, callback: (err?: Error) => void) {
       const res = checkDefaultValue();
       if (res === true) {
         callback();
@@ -114,7 +114,7 @@ const formRules = {
   options: {
     required: true,
     trigger: "blur",
-    validator(r: any, v: string, callback: (err?: Error) => void) {
+    validator(_r: any, _v: string, callback: (err?: Error) => void) {
       const res = checkOptions();
       if (res === true) {
         callback();
@@ -125,7 +125,7 @@ const formRules = {
   },
   show: {
     trigger: "blur",
-    validator(r: any, v: string, callback: (err?: Error) => void) {
+    validator(_r: any, v: string, callback: (err?: Error) => void) {
       if (v && !v.includes("return")) {
         callback(new Error("逻辑代码必须包含 return 关键字"));
         return;

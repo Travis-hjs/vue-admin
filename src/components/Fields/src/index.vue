@@ -4,7 +4,7 @@ export default {
   name: "Fields"
 }
 </script>
-<script lang="ts" setup>
+<script lang="ts" generic="T extends BaseObj<any>" setup>
 import { ElFormItem } from "element-plus";
 import { FilterItem } from "@/components/LayoutDisplay";
 import { computed, type PropType } from "vue";
@@ -29,7 +29,7 @@ const props = defineProps({
   },
   /** 表单项配置列表 */
   list: {
-    type: Array as PropType<Array<FieldType.Member>>,
+    type: Array as PropType<Array<FieldType.Member<T>>>,
     required: true
   },
 });
@@ -53,8 +53,8 @@ const fields = computed(() => props.list.filter(item => {
  * @param field 表单项配置
  * @param key 指定的键值
  */
-function getFieldValue(field: FieldType.Member, key?: string) {
-  const _key = key || field.prop;
+function getFieldValue(field: FieldType.Member<T>, key?: string) {
+  const _key = key || field.prop as string;
   const model = props.data;
   // 处理嵌套属性：`props.data["sub.name"]`这种
   if (_key.includes(".")) {
@@ -78,8 +78,8 @@ function getFieldValue(field: FieldType.Member, key?: string) {
  * @param value 变更的值
  * @param key 指定的键值
  */
-function setFieldValue(field: FieldType.Member, value: any, key?: string) {
-  const _key = key || field.prop;
+function setFieldValue(field: FieldType.Member<T>, value: any, key?: string) {
+  const _key = key || field.prop as string;
   const model = props.data;
   // 处理嵌套属性：`props.data["sub.name"]`这种
   if (_key.includes(".")) {
@@ -99,8 +99,8 @@ function setFieldValue(field: FieldType.Member, value: any, key?: string) {
   }
 }
 
-function onChange(field: FieldType.Member, val: any) {
-  const key = field.prop;
+function onChange(field: FieldType.Member<T>, val: any) {
+  const key = field.prop as string;
   const value = val;
   // 日期的特殊处理一下
   if (field.type !== "date") {
@@ -114,11 +114,11 @@ function getString(field: any, key: "class" | "label" | "labelWidth" | "tips" | 
   return typeof field[key] === "function" ? field[key]() : field[key];
 }
 
-function getClassName(field: FieldType.Member) {
+function getClassName(field: FieldType.Member<T>) {
   return getString(field, "class") || (props.type === "form" ? "w-full" : "short-value");
 }
 
-function getCommonProps(field: FieldType.Member) {
+function getCommonProps(field: FieldType.Member<T>) {
   const isDisabled = isType(field.disabled, "function") ? field.disabled() : field.disabled;
   return {
     placeholder: getString(field, "placeholder"),
@@ -178,7 +178,7 @@ function onInputEnter(field: FieldType.Input<any> | FieldType.NumberInput<any>) 
   <component
     :is="props.type === 'form' ? ElFormItem : FilterItem"
     v-for="(field, fieldIndex) in fields"
-    :key="field.key || `${field.prop}-${fieldIndex}`"
+    :key="field.key || `${field.prop as string}-${fieldIndex}`"
     :label="getString(field, 'label')"
     :labelWidth="getString(field, 'labelWidth')"
     :prop="field.prop"
@@ -222,7 +222,7 @@ function onInputEnter(field: FieldType.Input<any> | FieldType.NumberInput<any>) 
       v-if="field.type === 'date'"
       :getValueByKey="(key: string) => getFieldValue(field, key)"
       :field="field"
-      @change="(e: any) => onDatePicker(field, e)"
+      @change="(e: any) => onDatePicker(field as any, e)"
     />
     <el-radio-group
       v-if="field.type === 'radio'"
