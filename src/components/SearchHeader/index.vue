@@ -23,7 +23,7 @@ const props = defineProps({
   },
   /** 与`<Fields />`参数一致 */
   list: {
-    type: Array as PropType<Array<FieldType.Member>>,
+    type: Array as PropType<Array<FieldType.Member<any>>>,
     required: true
   }
 });
