@@ -5,4 +5,5 @@
     "tdesign",
     "Vite"
   ],
+  "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
 }
