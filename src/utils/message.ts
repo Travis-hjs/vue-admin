@@ -273,6 +273,8 @@ namespace Dialog {
     cancel?: Callback;
     /** 取消按钮文字，不传则没有取消操作 */
     cancelText?: string;
+    /** 弹框宽度 */
+    width?: string;
   }
 }
 
@@ -338,6 +340,8 @@ function useDialog() {
     color: var(--text-color);
     text-align: left;
     line-height: 20px;
+    max-height: 80vh;
+    overflow: auto;
   }
   .${className.footer} {
     width: 100%;
@@ -418,8 +422,9 @@ function useDialog() {
     clickSize.x = "0vw";
     clickSize.y = "0vh";
     const cancelBtn = option.cancelText ? `<button class="${className.cancel}">${option.cancelText}</button>` : "";
+    const style = option.width ? `style="width: ${option.width}; max-width: 100%"` : "";
     el.innerHTML = `
-    <div class="${className.popup}">
+    <div class="${className.popup}" ${style}>
       <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
       <div class="${className.content}">${option.content}</div>
       <div class="${className.footer}">
