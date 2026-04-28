@@ -261,8 +261,6 @@ namespace Dialog {
   export type Callback = ((callback: (close: boolean) => void) => void) | (() => Promise<boolean>);
 
   export interface Show {
-    /** 对话框宽度 */
-    width?: string;
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
     title?: string;
     /** 提示内容（可传html） */
@@ -275,6 +273,8 @@ namespace Dialog {
     cancel?: Callback;
     /** 取消按钮文字，不传则没有取消操作 */
     cancelText?: string;
+    /** 弹框宽度 */
+    width?: string;
   }
 }
 
@@ -340,6 +340,8 @@ function useDialog() {
     color: var(--text-color);
     text-align: left;
     line-height: 20px;
+    max-height: 80vh;
+    overflow: auto;
   }
   .${className.footer} {
     width: 100%;
