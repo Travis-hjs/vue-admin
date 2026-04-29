@@ -150,12 +150,18 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
 });
 
 function getColumnWidth(column?: CurdType.Table.Column) {
-  const style: { width?: string; minWidth?: string } = {};
+  const style: { minWidth?: string } = {};
+  let width = 0;
+  let minWidth = 0;
   if (column && column.width) {
-    style.width = `${column.width}px`;
+    width = Number.parseFloat(column.width.toString());
   }
   if (column && column.minWidth) {
-    style.minWidth = `${column.minWidth}px`;
+    minWidth = Number.parseFloat(column.minWidth.toString());
+  }
+  const size = Math.max(width, minWidth);
+  if (size) {
+    style.minWidth = `${size}px`;
   }
   return style;
 }
