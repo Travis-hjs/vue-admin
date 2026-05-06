@@ -1,1 +1,4 @@
+@layer theme, base, element-plus, components, utilities;
+
+@import "element-plus/dist/index.css" layer(element-plus);
 @import "tailwindcss";
