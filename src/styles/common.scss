@@ -1,40 +1,41 @@
+﻿// ======================= 元素重置全局样式 =======================
 
-// --------------------------------------------------------------
-// ----------------------常用基本全局样式文------------------------
-// --------------------------------------------------------------
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
 
-// ======================= 元素重置全局样式 =======================
+  body {
+    font-family: "Microsoft YaHei";
+  }
 
-*, *:before, *:after {
-  box-sizing: border-box;
-  // padding: 0;
-  // margin: 0;
-}
-  
-body {
-  font-family: "微软雅黑";
-}
+  a, a:visited, a:focus, a:hover, a:link, a:active {
+    color: inherit;
+    outline: none;
+    text-decoration: none;
+  }
 
-a, a:visited, a:focus, a:hover, a:link, a:active {
-  color: inherit;
-  outline: none;
-  text-decoration: none;
-}
+  button, input {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    border-radius: 0;
+    font-size: inherit;
+  }
 
-button, input {
-  border: none;
-  background-color: transparent;
-  outline: none;
-  border-radius: 0;
-  font-size: inherit;
-}
+  a, button {
+    cursor: pointer;
+  }
 
-a, button {
-  cursor: pointer;
-}
+  ul, li, ol {
+    list-style: none;
+  }
 
-ul, li, ol {
-  list-style: none;
+  div:focus {
+    outline: none;
+  }
 }
 
 // FIXME: html2canvas 生成图片时，会因为设置全局 img 样式而导致文字变形、偏移，所以不及建议修改全局 img 样式
@@ -45,10 +46,6 @@ ul, li, ol {
 //   display: inline-block;
 //   object-fit: cover;
 // }
-
-div:focus {
-  outline: none;
-}
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -86,7 +83,7 @@ div:focus {
 /* 水平居中 */
 .f-center { display: flex; justify-content: center; }
 /* 水平 + 垂直居中 */
-.fvc { display: flex; align-items: center; justify-content: center; }
+.f-vc, .fvc { display: flex; align-items: center; justify-content: center; }
 /* 右对齐 */
 .f-right { display: flex; justify-content: flex-end; }
 /* 两端对齐 */
@@ -103,7 +100,8 @@ div:focus {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 /* 溢出...显示 子节点生效 */
-.ellipsis-1 { -webkit-line-clamp: 1; }
-.ellipsis-2 { -webkit-line-clamp: 2; }
-.ellipsis-3 { -webkit-line-clamp: 3; }
+.ellipsis-1 { line-clamp: 1; -webkit-line-clamp: 1; }
+.ellipsis-2 { line-clamp: 2; -webkit-line-clamp: 2; }
+.ellipsis-3 { line-clamp: 3; -webkit-line-clamp: 3; }
