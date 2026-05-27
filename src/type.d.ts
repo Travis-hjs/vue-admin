@@ -57,12 +57,10 @@ type ValueOf<T> = T[keyof T];
  * - 这里`(string | number)`是为了兼容数组下标，在深层嵌套时也能正确拼写
  */
 type NestedKeyOf<T extends object> = {
-  [K in keyof T & (string | number)]: T[K] extends Array<any>
-    ? never // 排除数组类型
-    : T[K] extends object
-      ? `${K}` | `${K}.${NestedKeyOf<T[K]>}`
-      : `${K}`;
-}[keyof T & (string | number)];
+  [K in keyof T & (number | string)]: T[K] extends Array<any>
+    ? `${K}` : T[K] extends object
+      ? `${K}.${NestedKeyOf<T[K]>}` | `${K}` : `${K}`;
+}[keyof T & (number | string)];
 
 /** 运算符号 */
 type NumberSymbols = "+" | "-" | "*" | "/";
