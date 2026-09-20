@@ -104,7 +104,7 @@ const data = ref<CurdType.Config>({
       {
         ...getColumnData("gamePrice", "游戏价格"),
         width: 140,
-        formatter(row, cellValue) {
+        formatter(cellValue) {
           return cellValue ? `￥${cellValue}` : "-";
         },
         sort: "desc",
@@ -112,7 +112,7 @@ const data = ref<CurdType.Config>({
       {
         ...getColumnData("date", "上架时间"),
         width: 200,
-        formatter(row, cellValue) {
+        formatter(cellValue) {
           return cellValue ? formatDate(cellValue) : "-";
         },
         sort: true,
@@ -286,11 +286,11 @@ const action: CurdType.Action = {
     // console.log("curd created");
     getData();
   },
-  onAdd(form, current) {
+  onAdd(_form, current) {
     // console.log("onAdd >>", form, current);
     return saveForm(current);
   },
-  onEdit(form, current) {
+  onEdit(form, _current) {
     // console.log("onEdit >>", form, current);
     return saveForm(form);
   },

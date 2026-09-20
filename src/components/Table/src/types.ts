@@ -65,16 +65,16 @@ export namespace TableType {
      * - 在不使用插槽的情况下快速给内容做格式化，比如添加单位，格式化时间等
      * 函数会传递三个参数 function (row, cellValue, column)
      * 第一个参数是行信息，第一个参数的当前值，第三个参数是列信息
-     * @param row 表格项数据
      * @param cellValue 表格值
+     * @param row 表格项数据
      * @param column 表格列配置
      */
-    formatter?: (row: T, cellValue: any, column: any) => string;
+    formatter?: (cellValue: any, row: T, column: any) => string;
     /**
      * 类似`formatter()`功能，作用是可以返回接收`html`
      * - 为什么不直接修改`formatter()`的实现方式？因为在一些特殊场景会使用到，而且缺点是渲染性能没有`formatter()`好
-     * @param cellValue 表格值
      * @param row 表格项数据
+     * @param cellValue 表格值
      */
     rawContent?: (cellValue: any, row: T) => string;
   }

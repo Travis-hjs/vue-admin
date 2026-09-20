@@ -350,7 +350,7 @@ const data = ref<CurdType.Config>({
       {
         ...getColumnData("gamePrice", "游戏价格"),
         width: 140,
-        formatter(row, cellValue) {
+        formatter(cellValue) {
           return cellValue ? `￥${cellValue}` : "-";
         },
         sort: "desc",
@@ -358,7 +358,7 @@ const data = ref<CurdType.Config>({
       {
         ...getColumnData("date", "上架时间"),
         width: 200,
-        formatter(row, cellValue) {
+        formatter(cellValue) {
           return cellValue ? formatDate(cellValue) : "-";
         },
         sort: true,

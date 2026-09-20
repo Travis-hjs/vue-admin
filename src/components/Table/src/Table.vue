@@ -137,7 +137,7 @@ function isEmpty(val: any) {
  * */
 function setTableDefaultContent(row: any, key: string, column: TableType.Column<T>) {
   if (isType(column.formatter, "function")) {
-    return column.formatter(row, row[key], column);
+    return column.formatter(row[key], row, column);
   }
   return isEmpty(row[column.prop]) ? "-" : row[column.prop];
 }
