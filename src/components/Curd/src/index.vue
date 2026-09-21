@@ -5,7 +5,8 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { CurdEnum, type CurdConfig, type CurdType } from "./types";
+import { CurdEnum, type CurdType } from "./types";
+import type { CurdConfig } from "./popup/types";
 import { computed, onMounted, reactive, ref, type PropType } from "vue";
 import Search from "./Search.vue";
 import TableOperation from "./TableOperation.vue";
@@ -17,9 +18,10 @@ import { getCountId, getPageInfo } from "@/hooks/common";
 import { copyText, deepClone, downloadFile, formatDate, isType, jsonToHtml, jsonToPath } from "@/utils";
 import { setElementShake } from "@/utils/dom";
 import request from "@/utils/request";
-import { openCurdConfig, exportPropToWindow } from "./hooks";
+import { exportPropToWindow } from "./hooks";
 import { Table } from "@/components/Table";
 import { onUploadFile } from "@/components/Upload";
+import { openCurdConfig } from "./popup/index";
 
 const props = defineProps({
   /** 是配置，同时也是响应数据 */

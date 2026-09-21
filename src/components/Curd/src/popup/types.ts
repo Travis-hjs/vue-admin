@@ -1,4 +1,4 @@
-import type { CurdConfig, CurdType } from "../types";
+import type { CurdType } from "../types";
 
 interface Common {
   /** 页面唯一标识 */
@@ -153,4 +153,26 @@ export namespace FieldEditorType {
   }
 
   export interface Config extends Omit<Props, "show"> {}
+}
+
+/** `curd`弹框配置 */
+export namespace CurdConfig {
+  /** 编辑类型 */
+  export type Type = "search" | "table";
+
+  /** `curd`弹框功能状态 */
+  export interface Props extends Common {
+    show: boolean;
+    /** 弹框标题 */
+    title: string;
+    /** 传入需要修改的`curd`配置 */
+    config: CurdType.Config;
+    /** 编辑配置类型 */
+    type: Type;
+    /**
+     * 保存回调
+     * @param newConfig 修改后新的配置
+     */
+    onSubmit(newConfig: CurdType.Config): void;
+  }
 }

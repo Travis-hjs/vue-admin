@@ -374,34 +374,6 @@ export namespace CurdType {
 
 }
 
-/** `curd`弹框配置 */
-export namespace CurdConfig {
-  /** 编辑类型 */
-  export type Type = "search" | "table";
-
-  /** `curd`弹框功能状态 */
-  export interface Props {
-    show: boolean;
-    /**
-     * 页面标识
-     * - 唯一值
-     * - 可以通过菜单配置指定唯一值
-     */
-    pageId: string;
-    /** 弹框标题 */
-    title: string;
-    /** 传入需要修改的`curd`配置 */
-    config: CurdType.Config;
-    /** 编辑配置类型 */
-    type: Type;
-    /**
-     * 保存回调
-     * @param newConfig 修改后新的配置
-     */
-    onSubmit(newConfig: CurdType.Config): void;
-  }
-}
-
 // TODO: 改用接口获取预设代码后，可以优化枚举的定义和使用方式
 // export const enum PresetCodeType {}
 

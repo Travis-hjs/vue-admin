@@ -1,5 +1,6 @@
 import type { RendererElement, RendererNode, VNode } from "vue";
 import type {
+  CurdConfig,
   FieldEditorType,
   TableActionType,
   TableBatchType,
@@ -17,12 +18,14 @@ import TableColumn from "./TableColumn.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import FieldEditor from "./FieldEditor.vue";
+import { getCurdConfigDefault } from "../data/index.ts";
+import CurdConfigPopup from "./Config.vue";
 
 /**
  * 输出组件
  * @param com
  */
-export function render(com: () => VNode<RendererNode, RendererElement, { [key: string]: any }>) {
+function render(com: () => VNode<RendererNode, RendererElement, { [key: string]: any }>) {
   const app = createApp(() =>
     h(
       ElConfigProvider,
@@ -205,6 +208,48 @@ export function openFieldEditor(option: FieldEditorType.Config) {
     onClosed,
     onClose,
     ...option,
+  });
+
+  const [app, el] = render(component);
+
+  show.value = true;
+}
+
+/**
+ * 打开表单项编辑器组件选项配置
+ * @param option
+ */
+export function openCurdConfig(option: Partial<Omit<CurdConfig.Props, "show">>) {
+  if (!option.pageId) {
+    console.error("openCurdConfig 缺少页面唯一标识 pageId");
+    option.pageId = "null"
+  }
+  if (!option.title) {
+    option.title = "低代码配置";
+  }
+  if (!option.type) {
+    option.type = "search";
+  }
+  if (!option.config) {
+    option.config = getCurdConfigDefault();
+  }
+
+  const show = ref(false);
+
+  function onClose() {
+    show.value = false;
+  }
+
+  function onClosed() {
+    app.unmount();
+    el.remove();
+  }
+
+  const component = () => h(CurdConfigPopup, {
+    ...(option as CurdConfig.Props),
+    onClosed,
+    onClose,
+    show: show.value,
   });
 
   const [app, el] = render(component);

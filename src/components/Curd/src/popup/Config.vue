@@ -1,22 +1,22 @@
 <script lang="ts">
 /** `curd`配置弹出层组件 */
 export default {
-  name: "CurdPopupConfig"
+  name: "CurdConfigPopup"
 };
 </script>
 <script lang="ts" setup>
-import type { CurdConfig, CurdType } from "./types";
-import { PresetCodeType } from "./types";
-import { openJsonPopup } from "./hooks";
+import type { CurdConfig } from "./types";
+import { PresetCodeType, type CurdType } from "../types";
+import { openJsonPopup } from "../hooks";
 import { reactive } from "vue";
 import { copyText, deepClone } from "@/utils";
 import { message } from "@/utils/message";
-import Search from "./Search.vue";
-import TableModel from "./TableModel.vue";
-import FullPopup from "./popup/FullPopup.vue";
+import Search from "../Search.vue";
+import TableModel from "../TableModel.vue";
+import FullPopup from "../popup/FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
-import { PresetCode } from "./part";
-import { searchSubmitTips } from "./data/html";
+import { PresetCode } from "../part";
+import { searchSubmitTips } from "../data/html";
 
 const props = defineProps<CurdConfig.Props>();
 
@@ -168,5 +168,5 @@ function onSubmit() {
   </FullPopup>
 </template>
 <style lang="scss">
-@use "./styles/config";
+@use "../styles/config";
 </style>

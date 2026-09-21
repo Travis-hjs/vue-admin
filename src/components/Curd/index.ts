@@ -12,10 +12,9 @@ export {
   getCurdConfigDefault,
 } from "./src/data";
 
-export {
-  openCurdConfig,
-  exportPropToWindow,
-} from "./src/hooks";
+export { exportPropToWindow } from "./src/hooks";
+
+export { openCurdConfig } from "./src/popup";
 
 export type { CurdType } from "./src/types";
 

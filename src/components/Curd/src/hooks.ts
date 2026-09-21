@@ -1,52 +1,6 @@
-import { h, onUnmounted, ref } from "vue";
-import type { CurdConfig } from "./types";
-import { getCurdConfigDefault } from "./data";
+import { onUnmounted } from "vue";
 import { getCountId } from "@/hooks/common";
 import { message, messageBox } from "@/utils/message";
-import PopupConfig from "./PopupConfig.vue";
-import { render } from "./popup";
-
-/**
- * 打开表单项编辑器组件选项配置
- * @param option
- */
-export function openCurdConfig(option: Partial<Omit<CurdConfig.Props, "show">>) {
-  if (!option.pageId) {
-    console.error("openCurdConfig 缺少页面唯一标识 pageId");
-    option.pageId = "null"
-  }
-  if (!option.title) {
-    option.title = "低代码配置";
-  }
-  if (!option.type) {
-    option.type = "search";
-  }
-  if (!option.config) {
-    option.config = getCurdConfigDefault();
-  }
-
-  const show = ref(false);
-
-  function onClose() {
-    show.value = false;
-  }
-
-  function onClosed() {
-    app.unmount();
-    el.remove();
-  }
-
-  const component = () => h(PopupConfig, {
-    ...(option as CurdConfig.Props),
-    onClosed,
-    onClose,
-    show: show.value,
-  });
-
-  const [app, el] = render(component);
-
-  show.value = true;
-}
 
 /**
  * 将属性挂载到全局，以下划线为标识符开头
