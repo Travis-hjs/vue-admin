@@ -25,6 +25,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: "update:show", val: boolean): void;
   (event: "close", val: boolean): void;
+  (event: "closed"): void;
 }>();
 
 function onClose() {
@@ -34,7 +35,7 @@ function onClose() {
 </script>
 <template>
   <section>
-    <transition name="page-y" mode="out-in">
+    <transition name="page-y" mode="out-in" @after-leave="emit('closed')">
       <div
         v-if="props.show"
         class="the-curd-popup-config"

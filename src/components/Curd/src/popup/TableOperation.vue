@@ -1,62 +1,68 @@
 <script lang="ts">
-/** 表格配置批量操作功能弹框 */
+/** 表格操作按钮配置弹框 */
 export default {
-  name: "TableBatchConfig"
+  name: "TableOperation"
 };
 </script>
 <script lang="ts" setup>
-import { PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { type PropType, reactive, ref, watch } from "vue";
-import { FooterBtn, IconInput, PresetCode } from "./part";
+import { PresetCodeType, type CurdType } from "../types";
+import { FooterBtn, IconInput, PresetCode } from "../part";
+import { computed, onBeforeMount, ref } from "vue";
+import { reactive } from "vue";
+import { getInputRule, useListDrag } from "@/hooks/common";
+import { getOperationData } from "../data";
 import { Fields, type FieldType } from "@/components/Fields";
-import { getCountId, getInputRule, useListDrag } from "@/hooks/common";
 import { deepClone } from "@/utils";
-import { tableBatch } from "./data/html";
+import { tableOperation } from "../data/html";
+import type { TableOperationType } from "./types";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false
-  },
-  selectKey: {
-    type: String,
-    default: ""
-  },
-  /** 按钮列表 */
-  list: {
-    type: Array as PropType<Array<CurdType.Table.Batch>>,
-    default: () => []
-  }
-});
+const props = defineProps<TableOperationType.Props>();
 
 const emit = defineEmits<{
   (event: "update:show", show: boolean): void;
-  (event: "submit", key: string, list: Array<CurdType.Table.Batch>): void;
-  (event: "openFormConfig", target: CurdType.Table.Batch): void;
+  (event: "close"): void;
+  (event: "closed"): void;
+  (event: "submit", operations: Array<CurdType.Table.Operation>): void;
+  (event: "form", target: CurdType.Table.Operation): void;
 }>();
 
-function getFormData(): CurdType.Table.Batch {
-  return {
-    key: getCountId("batch"),
-    type: "primary",
-    icon: "",
-    text: "",
-    click: ""
-  };
-}
+const open = computed({
+  get() {
+    return props.show;
+  },
+  set(val) {
+    emit("close");
+    emit("update:show", val);
+  },
+});
+
+const formRef = ref<FormInstance>();
+
+const state = reactive({
+  list: [] as typeof props.operations,
+  index: -1,
+  /** 当前表单是否处于编辑状态 */
+  formEdit: false
+});
+
+const form = reactive({
+  data: getOperationData()
+});
 
 const formRules = {
   text: getInputRule("请输入按钮文字"),
   click: getInputRule("请输入按钮操作代码"),
+  icon: getInputRule("请输入图标 class", false),
+  type: getInputRule("请选择按钮类型", false),
 };
 
-const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [
+const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
   {
     label: "按钮文字",
     prop: "text",
     type: "textarea",
-    placeholder: formRules.text.message,
+    placeholder: formRules.text.message
   },
   {
     label: "按钮提示文字",
@@ -65,18 +71,25 @@ const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [
     placeholder: "请输入提示文字"
   },
   {
-    label: "按钮功能代码",
+    label: "按钮点击功能",
     prop: "click",
     type: "slot",
-    slotName: "batchCode",
-    tooltip: tableBatch.fnTips,
-    show: () => !state.formData.formConfig,
+    slotName: "clickCode",
+    tooltip: tableOperation.fnTips,
+    show: () => !form.data.formConfig
   },
   {
     label: "表单功能",
     prop: "formConfig",
     type: "slot",
-    slotName: "formConfig",
+    slotName: "formConfig"
+  },
+  {
+    label: "按钮显示条件",
+    prop: "show",
+    type: "textarea",
+    placeholder: "请输入条件代码，为空则默认显示",
+    tooltip: tableOperation.showTips
   },
   {
     label: "按钮类型",
@@ -87,174 +100,152 @@ const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [
       { label: "成功（绿色）", value: "success" },
       { label: "警告（橙色）", value: "warning" },
       { label: "危险（红色）", value: "danger" },
-      { label: "文本（灰色）", value: "info" },
+      { label: "文本（灰色）", value: "info" }
     ]
   },
   {
     label: "按钮图标",
     prop: "icon",
     type: "slot",
-    slotName: "icon",
+    slotName: "icon"
   },
   {
-    label: "是否实心按钮",
+    label: "是否为实心按钮",
     prop: "solid",
-    type: "switch",
+    type: "switch"
   }
 ];
 
-const formBtn = ref<FormInstance>();
-
-const state = reactive({
-  show: false,
-  keyword: "",
-  batchList: [] as Array<CurdType.Table.Batch>,
-  formData: getFormData(),
-  index: -1,
-  /** 是否有编辑按钮在当前列表中 */
-  hasEdit: false,
-  /** 当前表单是否处于编辑状态 */
-  formEdit: false
-});
-
 function onClose() {
-  emit("update:show", false);
+  onRestBtn();
+  open.value = false;
 }
 
 function onSubmit() {
+  emit("submit", deepClone(state.list, true));
   onClose();
-  emit("submit", state.keyword, deepClone(state.batchList, true));
-}
-
-function onRestBtn() {
-  state.index = -1;
-  state.formData = getFormData();
-  state.formEdit = false;
-  setTimeout(() => formBtn.value?.clearValidate());
-}
-
-function onEdit(index: number) {
-  const data = state.batchList[index];
-  state.formData = deepClone(data, true);
-  state.index = index;
-  state.formEdit = true;
-}
-
-function onDelete(index: number) {
-  state.batchList.splice(index, 1);
 }
 
 function onSubmitBtn(type: "add" | "edit") {
-  formBtn.value!.validate(val => {
+  formRef.value!.validate(val => {
     if (!val) return;
-    const data = deepClone(state.formData, true);
+    const data = deepClone(form.data, true);
     if (type === "add") {
-      state.batchList.push(data);
+      state.list.push(data);
     } else {
-      state.batchList[state.index] = data;
+      state.list[state.index] = form.data;
     }
     onRestBtn();
   });
 }
 
+function onRestBtn() {
+  state.index = -1;
+  form.data = getOperationData();
+  state.formEdit = false;
+  setTimeout(() => formRef.value?.clearValidate());
+}
+
+function onEdit(index: number) {
+  const data = state.list[index];
+  form.data = deepClone(data, true);
+  state.index = index;
+  state.formEdit = true;
+}
+
+function onDelete(index: number) {
+  state.list.splice(index, 1);
+}
+
+// watch(
+//   () => props.show,
+//   show => {
+//     state.show = show;
+//     if (show) {
+//       state.list = deepClone(props.list, true);
+//       form.data = getOperationData();
+//       state.index = -1;
+//       setTimeout(() => {
+//         formRef.value?.clearValidate();
+//       });
+//     }
+//   },
+//   { immediate: true }
+// );
+
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
-  list: () => state.batchList,
+  list: () => state.list,
   key: "key"
 });
 
 /** 是否能拖拽 */
 function canDraggable() {
-  if (state.batchList.length > 1 && state.index === -1) {
+  if (state.list.length > 1 && state.index === -1) {
     return true;
   }
   return undefined;
 }
 
 function onFormConfig() {
-  emit("openFormConfig", state.formData);
+  emit("form", form.data);
 }
 
-watch(
-  () => props.show,
-  function (show) {
-    state.show = show;
-    if (!show) return;
-    state.keyword = props.selectKey || "";
-    state.batchList = props.list ? deepClone(props.list, true) : [];
-  },
-  { immediate: true }
-);
+onBeforeMount(() => {
+  state.list = deepClone(props.operations, true);
+  form.data = getOperationData();
+  state.index = -1;
+})
 </script>
 <template>
   <base-dialog
-    v-model:show="state.show"
-    title="配置批量操作功能"
+    v-model:show="open"
+    title="配置自定义按钮功能"
     width="1000px"
     @close="onClose"
+    @closed="emit('closed')"
   >
     <div class="flex">
       <section class="f3">
-        <el-form labelPosition="right" labelWidth="120px">
-          <el-form-item label="数据键值">
-            <el-input
-              v-model="state.keyword"
-              class="mb-[8px]"
-              placeholder="请输入数据键值"
-              clearable
-            />
-            <div class="the-tag blue">
-              <p class="mb-[8px]">表格数据中的字段，例如表格数：</p>
-              <p class="mb-[8px]">{{ tableBatch.tips }}</p>
-              <p class="mb-[8px]">则键值可以为 id</p>
-              <p>
-                <i class="el-icon-info el-icon--left" />
-                不填则没有批量功能，即使配置了批量按钮
-              </p>
-            </div>
-          </el-form-item>
-        </el-form>
-        <div class="mb-[10px]">
-          <h2 class="the-title is-line">操作按钮配置</h2>
-        </div>
         <el-form
-          ref="formBtn"
-          :model="state.formData"
+          ref="formRef"
+          :model="form.data"
           :rules="formRules"
           labelPosition="right"
           labelWidth="128px"
           :class="{ 'the-filter-mask': !state.formEdit }"
           data-tips="待新增或编辑操作"
         >
-          <Fields :data="state.formData" :list="formItems">
-            <template #batchCode>
+          <Fields :data="form.data" :list="formItems">
+            <template #clickCode>
               <PresetCode
-                v-model:value="state.formData.click"
-                :type="PresetCodeType.Map.BatchSubmit"
+                v-model:value="form.data.click"
+                :type="PresetCodeType.Map.OperationSubmit"
+                :page-id="props.pageId"
               />
-            </template>
-            <template #icon>
-              <IconInput v-model:value="state.formData.icon" />
             </template>
             <template #formConfig>
               <el-button
-                :type="state.formData.formConfig ? 'success' : 'primary'"
+                :type="form.data.formConfig ? 'success' : 'primary'"
                 size="small"
                 plain
                 @click="onFormConfig"
               >
-                <i :class="['el-icon--left', state.formData.formConfig ? 'el-icon-edit' : 'el-icon-setting']" />
-                {{ state.formData.formConfig ? "修改表单" : "配置表单" }}
+                <i :class="['el-icon--left', form.data.formConfig ? 'el-icon-edit' : 'el-icon-setting']" />
+                {{ form.data.formConfig ? "修改表单" : "配置表单" }}
               </el-button>
               <el-button
-                v-if="state.formData.formConfig"
+                v-if="form.data.formConfig"
                 type="danger"
                 size="small"
                 plain
-                @click="state.formData.formConfig = undefined"
+                @click="form.data.formConfig = undefined"
               >
                 <i class="el-icon--left el-icon-delete" />
                 删除表单
               </el-button>
+            </template>
+            <template #icon>
+              <IconInput v-model:value="form.data.icon" />
             </template>
           </Fields>
           <el-form-item>
@@ -288,7 +279,7 @@ watch(
         tag="div"
       >
         <div
-          v-for="(item, itemIndex) in state.batchList"
+          v-for="(item, itemIndex) in state.list"
           :key="item.key"
           :class="[
             'the-curd-option-item f-vertical',
@@ -300,7 +291,10 @@ watch(
           @dragover="e => onDragMove(e, itemIndex)"
           @drop="onDropEnd"
         >
-          <i v-if="state.index === -1" class="el-icon--left el-icon-rank" />
+          <i
+            v-if="state.index === -1 && state.list.length > 1"
+            class="el-icon--left el-icon-rank"
+          />
           <el-button :type="item.type" link>
             <i v-if="item.icon" :class="['el-icon--left', item.icon]" />
             {{ item.text }}
@@ -333,7 +327,7 @@ watch(
           </el-button>
         </div>
         <el-empty
-          v-if="!state.batchList.length"
+          v-if="!state.list.length"
           key="empty"
           :image-size="120"
           description="请添加操作列功能按钮"

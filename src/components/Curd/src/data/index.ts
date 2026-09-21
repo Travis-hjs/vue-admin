@@ -1,4 +1,4 @@
-import type { CurdConfig, CurdType } from "../types";
+import type { CurdType } from "../types";
 import { nextTick } from "vue";
 import { checkType, deepClone, formatDate, isType } from "@/utils";
 import { getCountId } from "@/hooks/common";
@@ -570,16 +570,5 @@ export function getCurdConfigDefault(): CurdType.Config {
       formAdd: undefined,
       formEdit: undefined
     }
-  }
-}
-
-/** 配置编辑器默认状态 */
-export function getCurdConfigEditor(): CurdConfig.Editor {
-  return {
-    show: false,
-    showForm: false,
-    form: undefined,
-    action: "add",
-    index: -1
   }
 }

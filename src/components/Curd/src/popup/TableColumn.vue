@@ -1,53 +1,42 @@
 <script lang="ts">
 /** 表格列配置弹框 */
 export default {
-  name: "TableColumnConfig"
+  name: "TableColumn"
 }
 </script>
 <script lang="ts" setup>
-import { PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { computed, reactive, ref, watch, type PropType } from "vue";
-import { getColumnData } from "./data";
+import type { TableColumnType } from "./types";
+import { PresetCodeType, type CurdType } from "../types";
+import { computed, onBeforeMount, reactive, ref } from "vue";
+import { getColumnData } from "../data";
 import { deepClone } from "@/utils";
-import { FooterBtn, PresetCode } from "./part";
+import { FooterBtn, PresetCode } from "../part";
 import { Fields, type FieldType } from "@/components/Fields";
 import { getInputRule, getSelectRule } from "@/hooks/common";
-import { tableColumn } from "./data/html";
+import { tableColumn } from "../data/html";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    required: true
-  },
-  type: {
-    type: String as PropType<"add" | "edit" | "copy">,
-    required: true
-  },
-  keys: {
-    type: Array as PropType<Array<string>>,
-    required: true
-  },
-  form: Object as PropType<CurdType.Table.Column>
-});
+const props = defineProps<TableColumnType.Props>();
 
 const emit = defineEmits<{
   (event: "update:show", show: boolean): void;
+  (event: "close"): void;
+  (event: "closed"): void;
   (event: "submit", form: CurdType.Table.Column): void;
 }>();
 
-const state = reactive({
-  show: false,
-  form: getColumnData("", "")
+const open = computed({
+  get() {
+    return props.show;
+  },
+  set(val) {
+    emit("close");
+    emit("update:show", val);
+  },
 });
 
-const title = computed(() => {
-  const map = {
-    add: "新增",
-    edit: "编辑",
-    copy: "复制"
-  }
-  return map[props.type] + "表格列";
+const state = reactive({
+  form: getColumnData("", "")
 });
 
 const formRef = ref<FormInstance>();
@@ -202,7 +191,7 @@ const itemList: Array<FieldType.Member<CurdType.Table.Column>> = [
 ];
 
 function onClose() {
-  emit("update:show", false);
+  open.value = false;
 }
 
 function onSubmit() {
@@ -234,30 +223,42 @@ function onSubmit() {
   });
 }
 
-watch(
-  () => props.show,
-  function (show) {
-    state.show = show;
-    if (!show) return;
-    if (props.type === "add") {
-      state.form = getColumnData("", "");
-    } else {
-      state.form = deepClone(props.form)!;
-      if (props.type === "copy") {
-        state.form.prop = "";
-      }
+// watch(
+//   () => props.show,
+//   function (show) {
+//     state.show = show;
+//     if (!show) return;
+//     if (props.type === "add") {
+//       state.form = getColumnData("", "");
+//     } else {
+//       state.form = deepClone(props.column)!;
+//       if (props.type === "copy") {
+//         state.form.prop = "";
+//       }
+//     }
+//     setTimeout(() => formRef.value?.clearValidate());
+//   },
+//   { immediate: true }
+// );
+
+onBeforeMount(() => {
+  if (props.type === "add") {
+    state.form = getColumnData("", "");
+  } else {
+    state.form = deepClone(props.column)!;
+    if (props.type === "copy") {
+      state.form.prop = "";
     }
-    setTimeout(() => formRef.value?.clearValidate());
-  },
-  { immediate: true }
-);
+  }
+})
 </script>
 <template>
   <base-dialog
-    v-model:show="state.show"
-    :title="title"
-    width="580px"
+    v-model:show="open"
+    :title="props.title"
+    width="620px"
     @close="onClose"
+    @closed="emit('closed')"
   >
     <el-form
       ref="formRef"
@@ -271,6 +272,7 @@ watch(
           <PresetCode
             v-model:value="state.form.jsCode"
             :type="PresetCodeType.Map.TableCell"
+            :page-id="props.pageId"
           />
         </template>
       </Fields>

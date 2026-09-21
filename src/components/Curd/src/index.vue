@@ -53,7 +53,7 @@ function openConfig(type?: CurdConfig.Type) {
     config: props.data,
     pageId: props.pageId,
     type: type,
-    callback(newConfig) {
+    onSubmit(newConfig) {
       // console.log("保存的新配置 >>", newConfig);
       emit("update:data", newConfig);
     },

@@ -1,46 +1,46 @@
 <script lang="ts">
 /** 表单配置 */
 export default {
-  name: "TableFormConfig"
+  name: "TableForm"
 };
 </script>
 <script lang="ts" setup>
-import { computed, reactive, ref, watch, type PropType } from "vue";
-import { PresetCodeType, type CurdConfig, type CurdType } from "./types";
-import { convertPx, getFormConfig } from "./data";
+import type { FormInstance } from "element-plus";
+import type { FieldEditorType, TableFormType } from "./types";
+import type { CurdType } from "../types";
+import { computed, onBeforeMount, reactive, ref } from "vue";
+import { PresetCodeType } from "../types";
+import { convertPx, getFormConfig } from "../data";
 import FullPopup from "./FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
-import Field from "./Field.vue";
-import { curdConfigState, openJsonPopup } from "./hooks";
+import Field from "../Field.vue";
+import { openJsonPopup } from "../hooks";
 import { getInputRule, useListDrag } from "@/hooks/common";
 import { message, messageBox } from "@/utils/message";
-import type { FormInstance } from "element-plus";
 import { validateEX } from "@/utils/dom";
 import { copyText, deepClone } from "@/utils";
-import { PresetCode } from "./part";
-import { tableForm } from "./data/html";
+import { PresetCode } from "../part";
+import { tableForm } from "../data/html";
+import { openFieldEditor } from "./index";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false
-  },
-  /** 表单配置 */
-  config: {
-    type: Object as PropType<CurdType.Table.From>,
-    default: () => getFormConfig()
-  },
-  /** 表单类型 */
-  type: {
-    type: String as PropType<"add" | "edit" | "other">,
-    required: true
-  }
-});
+const props = defineProps<TableFormType.Props>();
 
 const emit = defineEmits<{
   (event: "update:show", val: boolean): void;
-  (event: "change", config?: CurdType.Table.From, sync?: boolean): void;
+  (event: "close"): void;
+  (event: "closed"): void;
+  (event: "submit", config?: CurdType.Table.From, sync?: boolean): void;
 }>();
+
+const open = computed({
+  get() {
+    return props.show;
+  },
+  set(val) {
+    emit("close");
+    emit("update:show", val);
+  },
+});
 
 const formRules = {
   title: getInputRule("请输入表单标题"),
@@ -163,21 +163,19 @@ const currentName = computed(() => props.type === "add" ? "新增" : "编辑");
 
 const isOther = computed(() => props.type === "other");
 
-const isEdit = computed(() => curdConfigState.editor.show);
-
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.config.fields,
   key: "id",
   findLevel: 10,
 });
 
-function onClose(val = false) {
-  emit("update:show", val);
+function onClose() {
+  open.value = false;
 }
 
 function onExit() {
   onClose();
-  emit("change");
+  emit("submit");
 }
 
 function onDelete(index: number) {
@@ -211,7 +209,7 @@ function onComplete() {
     if (!val) return;
     if (isOther.value) {
       onClose();
-      emit("change", state.config);
+      emit("submit", state.config);
       return;
     }
     const name = props.type === "add" ? "编辑" : "新增";
@@ -222,11 +220,11 @@ function onComplete() {
       confirmText: "不同步",
       cancel() {
         onClose();
-        emit("change", state.config, true);
+        emit("submit", state.config, true);
       },
       confirm() {
         onClose();
-        emit("change", state.config);
+        emit("submit", state.config);
       }
     });
   });
@@ -260,27 +258,46 @@ function onSetCopy() {
   });
 }
 
-function openEditor(action: CurdConfig.Editor["action"], index: number) {
-  curdConfigState.editor.action = action;
-  curdConfigState.editor.form = state.config;
-  curdConfigState.editor.index = index;
-  curdConfigState.editor.show = true;
+function openEditor(action: FieldEditorType.Props["action"], index: number) {
+  openFieldEditor({
+    type: "table",
+    action,
+    index,
+    form: state.config,
+  })
 }
 
-watch(
-  () => props.show,
-  function (val) {
-    state.config = val ? deepClone(props.config) : getFormConfig();
-    if (!isOther.value && !state.config.title) {
-      state.config.title = props.type === "edit" ? "编辑" : "新增";
-    }
-    state.showInfo = true;
-  },
-  { immediate: true },
-);
+// watch(
+//   () => props.show,
+//   function (val) {
+//     state.config = val ? deepClone(props.config) : getFormConfig();
+//     if (!isOther.value && !state.config.title) {
+//       state.config.title = props.type === "edit" ? "编辑" : "新增";
+//     }
+//     state.showInfo = true;
+//   },
+//   { immediate: true },
+// );
+
+onBeforeMount(() => {
+  const data = props.config ? deepClone(props.config) : getFormConfig();
+  if (typeof data.labelPosition !== "string") {
+    data.labelPosition = "left";
+  }
+  if (!isOther.value && !data.title) {
+    data.title = props.type === "edit" ? "编辑" : "新增";
+  }
+  state.showInfo = true;
+  state.config = data;
+});
 </script>
 <template>
-  <FullPopup :show="props.show" :title="title" @close="onClose">
+  <FullPopup
+    :show="open"
+    :title="title"
+    @close="onClose"
+    @closed="emit('closed')"
+  >
     <div class="f-center h-full w-full overflow-auto">
       <el-form
         ref="formRef"
@@ -315,6 +332,7 @@ watch(
                 <PresetCode
                   v-model:value="state.config.submitCode"
                   :type="PresetCodeType.Map.FormSubmit"
+                  :page-id="props.pageId"
                 />
               </template>
             </Fields>
@@ -329,7 +347,7 @@ watch(
             :class="[
               'is-drag-item',
               { 'is-required': !!field.required },
-              {'the-curd-selected': curdConfigState.editor.index === fieldIndex && isEdit}
+              {'the-curd-selected': null }
             ]"
             :prop="field.key"
             :key="field.id"
@@ -359,7 +377,6 @@ watch(
                 <el-button
                   link
                   :type="btn.type"
-                  :disabled="isEdit"
                   @click="btn.click(fieldIndex)"
                 >
                   <i :class="btn.icon" />
@@ -377,7 +394,6 @@ watch(
               新增默认ID项
             </el-button> -->
             <el-button
-              v-if="!isEdit"
               type="primary"
               @click="openEditor('add', -1)"
             >
@@ -385,7 +401,7 @@ watch(
               添加表单项
             </el-button>
           </el-empty>
-          <div v-if="!isEdit" key="bottom">
+          <div key="bottom">
             <el-form-item v-if="state.config.fields.length" key="bottom-add">
               <el-button type="primary" class="w-full" @click="openEditor('add', -1)">
                 <i class="el-icon--left el-icon-plus" />

@@ -1,54 +1,53 @@
 <script lang="ts">
 /** 表格操作列配置弹框 */
 export default {
-  name: "TableActionConfig"
+  name: "TableAction"
 }
 </script>
 <script lang="ts" setup>
-import { reactive, ref, watch, type PropType } from "vue";
-import { CurdEnum, PresetCodeType, type CurdType } from "./types";
 import type { FormInstance } from "element-plus";
-import { getActionData } from "./data";
+import type { TableActionType } from "./types";
+import { computed, onBeforeMount, reactive, ref } from "vue";
+import { CurdEnum, PresetCodeType, type CurdType } from "../types";
+import { getActionData } from "../data";
 import { getInputRule, getSelectRule, useListDrag } from "@/hooks/common";
-import { FooterBtn, IconInput, PresetCode } from "./part";
+import { FooterBtn, IconInput, PresetCode } from "../part";
 import { deepClone, isType } from "@/utils";
 import { Fields, type FieldType } from "@/components/Fields";
-import { tableAction } from "./data/html";
+import { tableAction } from "../data/html";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false
-  },
-  /** 操作列按钮列表 */
-  list: {
-    type: Array as PropType<Array<CurdType.Table.Action>>,
-    required: true
-  },
-  /** 列宽 */
-  columnWidth: {
-    type: Number
-  },
-  /** 最大限制几个按钮出现，超过则用【更多】下拉菜单代替展示 */
-  actionMax: {
-    type: Number
-  }
-});
+const props = defineProps<TableActionType.Props>();
 
 const emit = defineEmits<{
   (event: "update:show", show: boolean): void;
-  (event: "submit", list: Array<CurdType.Table.Action>, width?: number, max?: number): void;
-  (event: "openFormConfig", target: CurdType.Table.Action): void;
+  (event: "close"): void;
+  (event: "closed"): void;
+  (
+    event: "submit",
+    list: Array<CurdType.Table.Action>,
+    width: number,
+    max: number
+  ): void;
+  (event: "form", target: CurdType.Table.Action): void;
 }>();
+
+const open = computed({
+  get() {
+    return props.show;
+  },
+  set(val) {
+    emit("close");
+    emit("update:show", val);
+  },
+});
 
 const formBtn = ref<FormInstance>();
 
 const formColumn = ref<FormInstance>();
 
 const state = reactive({
-  show: false,
   /** 按钮列表 */
-  list: [] as typeof props.list,
+  list: [] as typeof props.actions,
   /** 当前编辑的索引 */
   index: -1,
   /** 是否有编辑按钮在当前列表中 */
@@ -152,7 +151,7 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
 
 function onClose() {
   onRestBtn();
-  emit("update:show", false);
+  open.value = false;
 }
 
 function onSubmit() {
@@ -196,29 +195,8 @@ function onDelete(index: number) {
 }
 
 function onFormConfig() {
-  emit("openFormConfig", form.btn);
+  emit("form", form.btn);
 }
-
-watch(
-  () => props.show,
-  function (show) {
-    state.show = show;
-    if (!show) return;
-    state.list = deepClone(props.list);
-    state.hasEdit = state.list.some(item => item.key === CurdEnum.ActionEdit);
-    state.index = -1;
-    form.btn = getActionData();
-    form.column = {
-      width: props.columnWidth as number,
-      max: props.actionMax as number
-    };
-    setTimeout(() => {
-      formBtn.value?.clearValidate();
-      formColumn.value?.clearValidate();
-    });
-  },
-  { immediate: true }
-);
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => state.list,
@@ -243,7 +221,7 @@ function getBtnText(action: CurdType.Table.Action) {
     let str = "文字配置有误";
     try {
       const fn = new Function("sandbox", text);
-      str = fn({ row: {} });
+      str = fn({ row: {}, pageId: props.pageId });
     } catch (error) {
       console.warn("解析按钮文字代码错误 >>", error);
     }
@@ -254,13 +232,29 @@ function getBtnText(action: CurdType.Table.Action) {
   }
   return "未设置按钮";
 }
+
+onBeforeMount(() => {
+  state.list = deepClone(props.actions);
+  state.hasEdit = state.list.some(item => item.key === CurdEnum.ActionEdit);
+  state.index = -1;
+  form.btn = getActionData();
+  form.column = {
+    width: props.columnWidth as number,
+    max: props.actionMax || 3
+  };
+  // setTimeout(() => {
+  //   formBtn.value?.clearValidate();
+  //   formColumn.value?.clearValidate();
+  // });
+});
 </script>
 <template>
   <base-dialog
-    v-model:show="state.show"
+    v-model:show="open"
     title="配置操作列按钮功能"
     width="1000px"
     @close="onClose"
+    @closed="emit('closed')"
   >
     <div class="flex">
       <section class="f1">
@@ -293,6 +287,7 @@ function getBtnText(action: CurdType.Table.Action) {
               <PresetCode
                 v-model:value="(form.btn.click as string)"
                 :type="PresetCodeType.Map.ActionSubmit"
+                :page-id="props.pageId"
               />
             </template>
             <template #formConfig>

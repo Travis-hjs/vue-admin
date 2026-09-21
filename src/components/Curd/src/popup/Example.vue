@@ -5,10 +5,10 @@ export default {
 }
 </script>
 <script lang="ts" setup>
+import type { CurdConfig, CurdType } from "../types";
 import { computed, type PropType } from "vue";
-import Field from "./Field.vue";
-import { fieldTitleMap, getFieldData } from "./data";
-import type { CurdConfig, CurdType } from "./types";
+import Field from "../Field.vue";
+import { fieldTitleMap, getFieldData } from "../data";
 
 type FieldType = CurdType.Field["type"];
 

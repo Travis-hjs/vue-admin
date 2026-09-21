@@ -379,25 +379,8 @@ export namespace CurdConfig {
   /** 编辑类型 */
   export type Type = "search" | "table";
 
-  /** 表单配置器类型 */
-  export interface Editor {
-    /** 是否显示编辑器 */
-    show: boolean;
-    /** 是否显示表单编辑 */
-    showForm: boolean;
-    /** 编辑操作类型 */
-    action: "add" | "edit" | "copy";
-    /** 编辑的索引 */
-    index: number;
-    /**
-     * 正在编辑的表单
-     * - 注意该值在赋值时不能克隆，不然`<Editor />`里面无法进行数据修改处理
-     */
-    form?: CurdType.Table.From;
-  }
-
   /** `curd`弹框功能状态 */
-  export interface State {
+  export interface Props {
     show: boolean;
     /**
      * 页面标识
@@ -411,13 +394,11 @@ export namespace CurdConfig {
     config: CurdType.Config;
     /** 编辑配置类型 */
     type: Type;
-    /** 编辑器信息 */
-    editor: Editor;
     /**
      * 保存回调
      * @param newConfig 修改后新的配置
      */
-    callback(newConfig: CurdType.Config): void;
+    onSubmit(newConfig: CurdType.Config): void;
   }
 }
 

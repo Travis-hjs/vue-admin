@@ -1,7 +1,6 @@
 <script lang="ts">
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { ImageViewer } from "./components/ImageViewer";
-import { CurdPopupConfig } from "./components/Curd";
 import { messageBox } from "./utils/message";
 import { onMounted } from "vue";
 import config from "./utils/config";
@@ -11,7 +10,6 @@ export default {
   name: "App",
   components: {
     ImageViewer,
-    CurdPopupConfig,
   },
   setup() {
     const interval = 1000 * 60 * 3;
@@ -73,6 +71,5 @@ export default {
   <el-config-provider :locale="zhCn">
     <router-view />
     <ImageViewer />
-    <CurdPopupConfig />
   </el-config-provider>
 </template>

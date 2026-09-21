@@ -5,21 +5,23 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType, reactive } from "vue";
+import { computed, type PropType } from "vue";
 import { getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
 import { CurdEnum, type CurdType } from "./types";
 import { TableImage } from "./part";
 import TableOperation from "./TableOperation.vue";
-import TableColumnConfig from "./TableColumnConfig.vue";
-import TableActionConfig from "./TableActionConfig.vue";
 import { deepClone } from "@/utils";
-import { curdConfigState } from "./hooks";
 import { TableActionCell, TableEnum, TableHeader } from "@/components/Table";
-import TableFormConfig from "./TableFormConfig.vue";
-import TableBatchConfig from "./TableBatchConfig.vue";
-import TableOperationConfig from "./TableOperationConfig.vue";
+import {
+  openTableActionConfig,
+  openTableBatchConfig,
+  openTableColumnConfig,
+  openTableFormConfig,
+  openTableOperationConfig
+} from "./popup";
+import type { TableColumnType, TableFormType } from "./popup/types";
 
 const props = defineProps({
   config: {
@@ -64,14 +66,6 @@ const columnMenus = [
   },
 ]; 
 
-const configCol = reactive({
-  show: false,
-  type: "add" as "add" | "edit" | "copy",
-  index: -1,
-  form: undefined as CurdType.Table.Column | undefined,
-  keys: [] as Array<string>
-});
-
 const columnInfo = computed(() => {
   const columns = props.config.columns;
   /** 可以拖拽的列表 */
@@ -92,42 +86,60 @@ const columnInfo = computed(() => {
   }
 });
 
-function openConfigCol(type: typeof configCol.type, index?: number) {
-  configCol.keys = props.config.columns.map(col => col.prop);
+/**
+ * 打开表格列配置
+ * @param type 
+ * @param index 
+ */
+function openConfigCol(type: TableColumnType.Props["type"], index?: number) {
+  const table = props.config;
+  let keys = table.columns.map(col => col.prop);
+  let cForm: CurdType.Table.Column | undefined;
+  let cIndex: number | undefined;
+  let label = "";
   const actionMap = {
     add() {
-      configCol.form = undefined;
+      label = "新增";
+      cForm = undefined;
     },
     edit() {
-      const form = props.config.columns[index!];
-      configCol.keys = configCol.keys.filter(val => val !== form.prop);
-      configCol.index = index!;
-      configCol.form = form;
+      label = "编辑";
+      const form = table.columns[index!];
+      keys = keys.filter(val => val !== form.prop);
+      cIndex = index!;
+      cForm = form;
     },
     copy() {
-      const form = props.config.columns[index!];
-      configCol.index = index!;
-      configCol.form = form;
+      label = "复制";
+      const form = table.columns[index!];
+      cIndex = index!;
+      cForm = form;
     }
   }
   actionMap[type]();
-  configCol.type = type;
-  configCol.show = true;
-}
-
-function onColSubmit(form: CurdType.Table.Column) {
-  const config = props.config;
-  if (["add", "copy"].includes(configCol.type)) {
-    const drag = deepClone(columnInfo.value.drag);
-    if (configCol.type === "add") {
-      drag.push(form);
-    } else {
-      drag.splice(configCol.index + 1, 0, form);
-    }
-    config.columns = drag.concat(columnInfo.value.action);
-  } else {
-    config.columns[configCol.index] = form;
-  }
+  type = type;
+  openTableColumnConfig({
+    title: `${label}表格列`,
+    keys,
+    type,
+    column: cForm,
+    pageId: props.pageId,
+    onSubmit(column) {
+      if (["add", "copy"].includes(type)) {
+        const drag = deepClone(columnInfo.value.drag);
+        if (type === "add") {
+          drag.push(column);
+        }
+        else {
+          drag.splice(cIndex! + 1, 0, column);
+        }
+        table.columns = drag.concat(columnInfo.value.action);
+      }
+      else {
+        table.columns[cIndex!] = column;
+      }
+    },
+  });
 }
 
 function deleteColumn(index: number) {
@@ -206,154 +218,136 @@ function deleteActionColumn() {
   });
 }
 
-const configBatch = reactive({
-  show: false
-});
-
 function openConfigBatch() {
-  configBatch.show = true;
+  const table = props.config;
+  openTableBatchConfig({
+    list: table.batchs,
+    selectKey: table.selectKey,
+    pageId: props.pageId,
+    onSubmit(key, list) {
+      table.selectKey = key;
+      table.batchs = list;
+    },
+    onForm(target) {
+      openFormConfig("other", target);
+    },
+  });
 }
-
-function onConfigBatch(val: string, list: Array<CurdType.Table.Batch>) {
-  const config = props.config;
-  config.selectKey = val;
-  config.batchs = list;
-}
-
-const configAction = reactive({
-  show: false,
-  columnWidth: 0,
-  actionMax: 0
-});
 
 function openConfigAction() {
-  configAction.show = true;
-  configAction.columnWidth = actionColumn.value!.width as number;
-  configAction.actionMax = props.config.actionMax as number;
-}
-
-function onConfigAction(list: typeof props.config.actions, width?: number) {
-  props.config.actions = list;
-  const column = props.config.columns.find(item => item.prop === TableEnum.Right);
-  column!.width = width;
+  const table = props.config;
+  openTableActionConfig({
+    actionMax: table.actionMax,
+    actions: table.actions,
+    columnWidth: actionColumn.value!.width as number,
+    pageId: props.pageId,
+    onSubmit(actions, width, max) {
+      table.actions = actions;
+      const column = table.columns.find(item => item.prop === TableEnum.Right);
+      column!.width = width;
+      table.actionMax = max;
+    },
+    onForm(target) {
+      openFormConfig("other", target);
+    },
+  });
 }
 
 interface EditTarget {
   formConfig?: CurdType.Table.From;
 }
 
-const tableForm = reactive({
-  form: null as (CurdType.Table.From | null),
-  type: "add" as "add" | "edit" | "other",
-  editTarget: {} as EditTarget,
-});
-
 /**
  * 打开表单配置弹框
  * @param type 进行编辑的表单类型
  * @param target `type === "other"`时用，需要进行编辑的目标对象
  */
-function openFormConfig(type: typeof tableForm.type, target: EditTarget = {}) {
-  tableForm.type = type;
-  tableForm.editTarget = target;
+function openFormConfig(type: TableFormType.Props["type"], target: EditTarget = {}) {
+  let form: CurdType.Table.From;
   switch (type) {
     case "add":
-      tableForm.form = props.config.formAdd!;
+      form = props.config.formAdd!;
       break;
 
     case "edit":
-      tableForm.form = props.config.formEdit!;
+      form = props.config.formEdit!;
       break;
 
     case "other":
-      tableForm.form = target.formConfig!;
+      form = target.formConfig!;
       break;
   }
-  curdConfigState.editor.showForm = true;
-}
-
-/**
- * 表单配置编辑
- * @param formConfig 表单配置
- * @param sync 是否同步其他表单
- */
-function onFormConfig(formConfig?: CurdType.Table.From, sync?: boolean) {
-  const data = props.config;
-  const actions = data.actions;
-  /** 判断并在操作列中添加一个数据 */
-  function handleEditAction() {
-    const hasEditAction = actions.length > 0 && actions[0].key === CurdEnum.ActionEdit;
-    if (formConfig && formConfig.fields.length > 0) {
-      if (!actionColumn.value) {
-        addActionColumn();
-      }
-      if (!hasEditAction) {
-        actions.unshift({
-          key: CurdEnum.ActionEdit,
-          text: "编辑",
-          type: "success",
-          icon: "el-icon-edit"
-        });
-      }
-    } else {
-      hasEditAction && actions.splice(0, 1);
-    }
-  }
-  if (formConfig) {
-    switch (tableForm.type) {
-      case "add":
-        data.formAdd = formConfig;
-        if (sync) {
-          if (!data.formEdit) {
-            data.formEdit = {
-              title: "编辑",
-              width: formConfig.width,
-              labelWidth: formConfig.labelWidth,
-              labelPosition: formConfig.labelPosition,
-              fields: deepClone(formConfig.fields)
-            };
-          } else {
-            data.formEdit.fields = deepClone(formConfig.fields);
+  openTableFormConfig({
+    type,
+    config: form!,
+    pageId: props.pageId,
+    onSubmit(formConfig, sync) {
+      const data = props.config;
+      const actions = data.actions;
+      /** 判断并在操作列中添加一个数据 */
+      function handleEditAction() {
+        const hasEditAction = actions.length > 0 && actions[0].key === CurdEnum.ActionEdit;
+        if (formConfig && formConfig.fields.length > 0) {
+          if (!actionColumn.value) {
+            addActionColumn();
           }
-          handleEditAction();
-        }
-        break;
-
-      case "edit":
-        data.formEdit = formConfig;
-        if (sync) {
-          if (!data.formAdd) {
-            data.formAdd = {
-              title: "新增",
-              width: formConfig.width,
-              labelWidth: formConfig.labelWidth,
-              labelPosition: formConfig.labelPosition,
-              fields: deepClone(formConfig.fields)
-            };
-          } else {
-            data.formAdd.fields = deepClone(formConfig.fields);
+          if (!hasEditAction) {
+            actions.unshift({
+              key: CurdEnum.ActionEdit,
+              text: "编辑",
+              type: "success",
+              icon: "el-icon-edit"
+            });
           }
+        } else {
+          hasEditAction && actions.splice(0, 1);
         }
-        handleEditAction();
-        break;
+      }
+      if (formConfig) {
+        switch (type) {
+          case "add":
+            data.formAdd = formConfig;
+            if (sync) {
+              if (!data.formEdit) {
+                data.formEdit = {
+                  title: "编辑",
+                  width: formConfig.width,
+                  labelWidth: formConfig.labelWidth,
+                  labelPosition: formConfig.labelPosition,
+                  fields: deepClone(formConfig.fields)
+                };
+              } else {
+                data.formEdit.fields = deepClone(formConfig.fields);
+              }
+              handleEditAction();
+            }
+            break;
 
-      case "other":
-        // TODO: 这里目前没有使用到，留着后面其他按钮需要配置表单时用
-        tableForm.editTarget.formConfig = formConfig;
-        tableForm.editTarget = {}; // 用完移除引用
-        break;
-    }
-  }
-  curdConfigState.editor.showForm = false;
-  tableForm.form = null;
-}
+          case "edit":
+            data.formEdit = formConfig;
+            if (sync) {
+              if (!data.formAdd) {
+                data.formAdd = {
+                  title: "新增",
+                  width: formConfig.width,
+                  labelWidth: formConfig.labelWidth,
+                  labelPosition: formConfig.labelPosition,
+                  fields: deepClone(formConfig.fields)
+                };
+              } else {
+                data.formAdd.fields = deepClone(formConfig.fields);
+              }
+            }
+            handleEditAction();
+            break;
 
-const configOperation = reactive({
-  show: false
-});
-
-function onConfigOperation(list: Array<CurdType.Table.Operation>) {
-  props.config.operations = list;
+            case "other":
+            target.formConfig = formConfig
+            break;
+        }
+      }
+    },
+  })
 }
 
 /**
@@ -375,7 +369,19 @@ function onOperation(type: CurdEnum) {
       break;
       
     case CurdEnum.Operation:
-      configOperation.show = true;
+      {
+        const table = props.config;
+        openTableOperationConfig({
+          operations: table.operations!,
+          pageId: props.pageId,
+          onSubmit(operations) {
+            table.operations = operations;
+          },
+          onForm(target) {
+            openFormConfig("other", target);
+          },
+        })
+      }
       break;
   }
 }
@@ -401,7 +407,6 @@ function onSetWidth() {
 </script>
 <template>
   <TableOperation
-    v-if="!curdConfigState.editor.showForm"
     :editMode="true"
     :config="props.config"
     :page-id="props.pageId"
@@ -511,51 +516,12 @@ function onSetWidth() {
       </div>
     </transition-group>
   </div>
-  <div v-if="!curdConfigState.editor.showForm && hasNotWidth">
+  <div v-if="hasNotWidth">
     <el-button type="primary" @click="onSetWidth()">一键设置最小宽度</el-button>
     <span class="the-tag blue ml-[10px]">
       <i class="el-icon--left el-icon-info"></i>
       当前表格列配置中存在没配置【宽度/最小宽度】，建议一件设置最小宽度，提高表格美观性。
     </span>
   </div>
-  
-  <TableColumnConfig
-    v-model:show="configCol.show"
-    :type="configCol.type"
-    :keys="configCol.keys"
-    :form="configCol.form"
-    @submit="onColSubmit"
-  />
-
-  <TableBatchConfig
-    v-model:show="configBatch.show"
-    :select-key="props.config.selectKey"
-    :list="props.config.batchs"
-    @submit="onConfigBatch"
-    @openFormConfig="e => openFormConfig('other', e)"
-  />
-  
-  <TableActionConfig
-    v-model:show="configAction.show"
-    :columnWidth="configAction.columnWidth"
-    :actionMax="configAction.actionMax"
-    :list="props.config.actions"
-    @submit="onConfigAction"
-    @openFormConfig="e => openFormConfig('other', e)"
-  />
-
-  <TableOperationConfig
-    v-model:show="configOperation.show"
-    :list="props.config.operations"
-    @submit="onConfigOperation"
-    @openFormConfig="e => openFormConfig('other', e)"
-  />
-
-  <TableFormConfig
-    v-model:show="curdConfigState.editor.showForm"
-    :config="tableForm.form!"
-    :type="tableForm.type"
-    @change="onFormConfig"
-  />
 </template>
 

@@ -5,19 +5,26 @@ export default {
 };
 </script>
 <script lang="ts" setup>
-import { PresetCodeType, type CurdType } from "./types";
-import { curdConfigState, openJsonPopup } from "./hooks";
-import { computed, reactive } from "vue";
-import { copyText } from "@/utils";
+import type { CurdConfig, CurdType } from "./types";
+import { PresetCodeType } from "./types";
+import { openJsonPopup } from "./hooks";
+import { reactive } from "vue";
+import { copyText, deepClone } from "@/utils";
 import { message } from "@/utils/message";
-import { getCurdConfigEditor } from "./data";
 import Search from "./Search.vue";
 import TableModel from "./TableModel.vue";
-import Editor from "./Editor.vue";
-import FullPopup from "./FullPopup.vue";
+import FullPopup from "./popup/FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
 import { PresetCode } from "./part";
 import { searchSubmitTips } from "./data/html";
+
+const props = defineProps<CurdConfig.Props>();
+
+const emit = defineEmits<{
+  (event: "close"): void;
+  (event: "closed"): void;
+  (event: "submit", config: CurdType.Config): void;
+}>();
 
 const tabList = [
   { label: "筛选部分", value: "search" },
@@ -62,45 +69,39 @@ const configRules = {
 };
 
 const state = reactive({
+  type: props.type,
+  config: deepClone(props.config, true),
   loading: false,
 });
 
-const disabledSave = computed(() => curdConfigState.editor.show || curdConfigState.editor.showForm);
-
 function onClose() {
-  curdConfigState.show = false;
-  // 一定要清空状态
-  curdConfigState.config = {} as CurdType.Config;
-  curdConfigState.editor = getCurdConfigEditor();
+  emit("close");
 }
 
 function onCopyJson() {
-  copyText(JSON.stringify(curdConfigState.config), () => message.success("复制配置JSON成功~"));
+  copyText(JSON.stringify(state.config), () => message.success("复制配置JSON成功~"));
 }
 
 function onSetCopy() {
   openJsonPopup<CurdType.Config>(data => {
-    curdConfigState.config = data;
+    state.config = data;
   });
 }
 
 function onSubmit() {
-  curdConfigState.callback(curdConfigState.config as CurdType.Config);
+  emit("submit", state.config);
   onClose();
-}
-
-function onTab() {
-  curdConfigState.editor = getCurdConfigEditor(); 
 }
 </script>
 <template>
   <FullPopup
-    v-model:show="curdConfigState.show"
-    :title="`${curdConfigState.title} (${curdConfigState.pageId})`"
+    :show="props.show"
+    :title="`${props.title} (${props.pageId})`"
     @close="onClose"
+    @closed="emit('closed')"
   >
     <template #top>
-      <el-radio-group v-model="curdConfigState.type" @change="onTab">
+      <el-radio-group v-model="state.type">
         <el-radio-button
           v-for="item in tabList"
           :label="item.label"
@@ -110,22 +111,23 @@ function onTab() {
       </el-radio-group>
     </template>
     <div class="w-full h-full overflow-auto">
-      <template v-if="curdConfigState.type === 'search'">
+      <template v-if="state.type === 'search'">
         <div class="pl-[10px] mb-[10px]">
           <h2 class="the-title is-line">基础配置</h2>
         </div>
         <el-form 
-          :model="curdConfigState.config.search"
+          :model="state.config.search"
           :rules="configRules"
           label-position="right"
           label-width="180px"
         >
-          <Fields :data="curdConfigState.config.search" :list="searchConfigs">
+          <Fields :data="state.config.search" :list="searchConfigs">
             <template #validateCode>
               <div class="w-full max-w-[680px]">
                 <PresetCode
-                  v-model:value="curdConfigState.config.search.validateCode"
+                  v-model:value="state.config.search.validateCode"
                   :type="PresetCodeType.Map.SearchValidate"
+                  :page-id="props.pageId"
                 />
               </div>
             </template>
@@ -135,19 +137,18 @@ function onTab() {
           <h2 class="the-title is-line">筛选条件配置</h2>
         </div>
         <Search
-          :search="curdConfigState.config.search"
+          :search="state.config.search"
           edit-mode
         />
       </template>
       <TableModel
-        v-if="curdConfigState.type === 'table'"
-        :config="curdConfigState.config.table"
-        :page-id="curdConfigState.pageId"
+        v-if="state.type === 'table'"
+        :config="state.config.table"
+        :page-id="props.pageId"
       />
     </div>
-    <Editor v-model:show="curdConfigState.editor.show" :config="curdConfigState.config" />
     <template #footer>
-      <el-button :disabled="disabledSave" @click="onClose()">退出编辑</el-button>
+      <el-button @click="onClose()">退出编辑</el-button>
       <el-button type="success" plain @click="onCopyJson()">
         <i class="el-icon--left el-icon-document-copy" />
         复制配置
@@ -159,7 +160,6 @@ function onTab() {
       <el-button
         type="primary"
         :loading="state.loading"
-        :disabled="disabledSave"
         @click="onSubmit()"
       >
         保存配置

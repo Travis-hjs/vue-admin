@@ -1,47 +1,50 @@
 <script lang="ts">
 /** 表单项编辑器组件 */
 export default {
-  name: "Editor"
+  name: "FieldEditor"
 }
 </script>
 <script lang="ts" setup>
-import { computed, reactive, ref, watch, type PropType } from "vue";
+import type { FormInstance } from "element-plus";
+import type { CurdType } from "../types";
+import type { FieldEditorType } from "./types";
+import { computed, onBeforeMount, reactive, ref } from "vue";
 import {
   fieldTitleMap,
   getFieldData,
   dateTypeOptions,
   shortcutMap,
   dataArrayTypes
-} from "./data";
+} from "../data";
 import Example from "./Example.vue";
-import Field from "./Field.vue";
-import type { FormInstance } from "element-plus";
+import Field from "../Field.vue";
 import { checkType, deepClone, isType } from "@/utils";
 import { message } from "@/utils/message";
 import { validateEX } from "@/utils/dom";
-import type { CurdType } from "./types";
 import { Fields, type FieldType } from "@/components/Fields";
-import { curdConfigState } from "./hooks";
-import { getInputRule, useZIndex } from "@/hooks/common";
-import { editor } from "./data/html";
+import { getInputRule } from "@/hooks/common";
+import { editor } from "../data/html";
 
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false
-  },
-  config: {
-    type: Object as PropType<CurdType.Config>,
-    required: true
-  }
-});
+const props = defineProps<FieldEditorType.Props>();
 
 const emit = defineEmits<{
   (event: "update:show", val: boolean): void;
+  (event: "close"): void;
+  (event: "closed"): void;
 }>();
 
+const open = computed({
+  get() {
+    return props.show;
+  },
+  set(val) {
+    emit("close");
+    emit("update:show", val);
+  },
+});
+
 function onClose() {
-  emit("update:show", false);
+  open.value = false;
 }
 
 /** 没有宽度属性的组件类型 */
@@ -333,7 +336,7 @@ const formItems = computed(() => {
     list.push(...dateItems as any);
   }
 
-  if (curdConfigState.type === "table") {
+  if (props.type === "table") {
     list.push({
       label: "表单显示逻辑",
       prop: "show",
@@ -377,7 +380,7 @@ function setJson(field: CurdType.Field) {
  * @param type
  */
 function chooseField(type: CurdType.Field["type"]) {
-  const field = getFieldData(type, "", curdConfigState.type === "search");
+  const field = getFieldData(type, "", props.type === "search");
   state.formData = field;
   setJson(field);
   formRef.value?.clearValidate();
@@ -497,7 +500,6 @@ function onSubmit() {
     if (!valid) return;
     onDefaultValue();
     hasOptions.includes(state.formData!.type) && onOptions();
-    const editor = curdConfigState.editor;
     const form = deepClone<any>(state.formData, true);
     hasOptions.includes(form.type) && onOptions();
     // TODO: 处理空类型
@@ -535,21 +537,21 @@ function onSubmit() {
     const actionMap = {
       search(add: boolean) {
         if (add) {
-          props.config.search.list.push(form);
+          props.searches!.push(form);
         } else {
-          props.config.search.list[editor.index] = form;
+          props.searches![props.index] = form;
         }
       },
       table(add: boolean) {
         if (add) {
-          editor.form!.fields.push(form);
+          props.form!.fields.push(form);
         } else {
-          editor.form!.fields[editor.index] = form;
+          props.form!.fields[props.index] = form;
         }
       }
     }
-    const isAdd = editor.action !== "edit";
-    actionMap[curdConfigState.type!](isAdd);
+    const isAdd = props.action !== "edit";
+    actionMap[props.type!](isAdd);
     onClose();
   });
 }
@@ -561,81 +563,66 @@ let keyList: Array<string> = [];
  * @param excludeKey 需要排除的值
  */
 function updateKeyList(excludeKey?: string) {
-  const editor = curdConfigState.editor;
   keyList = [];
   const actionMap = {
     search() {
-      keyList = props.config.search.list.map(item => item.key);
+      keyList = props.searches!.map(item => item.key);
     },
     table() {
-      keyList = editor.form!.fields.map(item => item.key);
+      keyList = props.form!.fields.map(item => item.key);
     }
   }
-  actionMap[curdConfigState.type!]();
+  actionMap[props.type!]();
   if (excludeKey) {
     keyList = keyList.filter(val => val !== excludeKey);
   }
 }
 
-function resetForm() {
-  state.step = 0;
-  state.formData = undefined;
-}
-
-watch(
-  () => props.show,
-  function(show) {
-    if (!show) return;
-    const editor = curdConfigState.editor;
-    if (editor.action === "add") {
-      resetForm();
-      updateKeyList();
-    } else {
-      const current = editor.index;
-      const actionMap = {
-        search() {
-          state.formData = deepClone(props.config.search.list[current], true);
-        },
-        table() {
-          state.formData = deepClone(editor.form?.fields[current], true);
-        }
-      }
-      actionMap[curdConfigState.type!]();
-      if (editor.action === "copy") {
-        state.formData!.id += `${state.formData!.id}-copy-${Date.now()}`;
-        state.formData!.key = "";
-      }
-      setJson(state.formData!);
-      updateKeyList(state.formData!.key);
-      state.step = 1;
-    }
-  }
-);
-
 const title = computed(() => {
-  let text = `配置${curdConfigState.type === "search" ? "筛选项" : "表单项"}`;
+  let text = `配置${props.type === "search" ? "筛选项" : "表单项"}`;
   if (state.step && state.formData) {
     text = `${text} 《${fieldTitleMap[state.formData.type]}》`;
   }
   return text;
 });
 
-// const currentIndex = useZIndex() + 10;
+onBeforeMount(() => {
+  if (props.action === "add") {
+    updateKeyList();
+  } else {
+    const current = props.index;
+    const actionMap = {
+      search() {
+        state.formData = deepClone(props.searches![current], true);
+      },
+      table() {
+        state.formData = deepClone(props.form?.fields[current], true);
+      }
+    }
+    actionMap[props.type!]();
+    if (props.action === "copy") {
+      state.formData!.id += `${state.formData!.id}-copy-${Date.now()}`;
+      state.formData!.key = "";
+    }
+    setJson(state.formData!);
+    updateKeyList(state.formData!.key);
+    state.step = 1;
+  }
+})
 </script>
 <template>
   <base-dialog
-    :show="props.show"
+    :show="open"
     :title="title"
-    :z-index="useZIndex() + 10"
     width="680px"
     @close="onClose"
-    @closed="resetForm"
+    @closed="emit('closed')"
   >
     <template v-if="state.step === 0">
       <h2 class="the-title mb-[20px]">第1步：点击选取组件</h2>
       <Example
         :selected="state.formData?.type"
-        :type="curdConfigState.type"
+        :type="props.type"
         @choose="chooseField"
       />
     </template>
@@ -717,13 +704,13 @@ const title = computed(() => {
           <i class="el-icon--left el-icon-back" />
           上一步
         </el-button>
-        <el-button v-if="curdConfigState.editor.action === 'edit'" type="success" @click="onSubmit">
+        <el-button v-if="props.action === 'edit'" type="success" @click="onSubmit">
           <i class="el-icon--left el-icon-edit"></i>
           保存修改
         </el-button>
         <el-button v-else type="primary" @click="onSubmit">
           <i class="el-icon--left el-icon-plus"></i>
-          {{ curdConfigState.editor.action === 'copy' ? '新增复制' : '新 增' }}
+          {{ props.action === 'copy' ? '新增复制' : '新 增' }}
         </el-button>
       </template>
     </template>

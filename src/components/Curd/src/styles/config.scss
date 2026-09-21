@@ -1,11 +1,11 @@
 @use "@/styles/mixins";
 
 body {
-  .the-curd-popup-config {
-    --gap: 14px;
-    --border: solid 1px #eee;
-    --border-color: #dcdfe6;
+  --gap: 14px;
+  --border: solid 1px #eee;
+  --border-color: #dcdfe6;
 
+  .the-curd-popup-config {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -104,56 +104,6 @@ body {
 
       .the-curd-editor-content {
         width: 420px;
-      }
-    }
-
-    .the-curd-target-box {
-      padding: 14px 18px;
-      margin-bottom: 16px;
-      border: dashed 1px var(--purple);
-      border-radius: var(--border-radius);
-      position: relative;
-
-      &::after {
-        position: absolute;
-        content: "组件预览区域";
-        font-size: var(--gap);
-        background-color: #fff;
-        color: var(--purple);
-        padding: 0px var(--gap);
-        left: 24px;
-        top: -10px;
-        animation: curd-target-text-move 3s 3;
-      }
-
-      .the-curd-form-field {
-        max-width: 100%;
-      }
-    }
-
-    .the-curd-example {
-      border: dashed 1px var(--border-color);
-
-      .the-curd-example-item {
-        position: relative;
-        width: 100%;
-        min-height: 60px;
-        padding: 8px var(--gap);
-        border-top: dashed 1px var(--border-color);
-        cursor: pointer;
-
-        &:first-child {
-          border-top: none;
-        }
-
-        &::after {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          cursor: pointer;
-          content: "";
-          z-index: 2;
-        }
       }
     }
 
@@ -260,6 +210,7 @@ body {
 
   .the-filter-mask {
     position: relative;
+
     &::before {
       position: absolute;
       content: "";
@@ -332,6 +283,56 @@ body {
 
   .the-group-leave-active {
     position: absolute;
+  }
+
+  .the-curd-target-box {
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    border: dashed 1px var(--purple);
+    border-radius: var(--border-radius);
+    position: relative;
+
+    &::after {
+      position: absolute;
+      content: "组件预览区域";
+      font-size: var(--gap);
+      background-color: #fff;
+      color: var(--purple);
+      padding: 0px var(--gap);
+      left: 24px;
+      top: -10px;
+      animation: curd-target-text-move 3s 3;
+    }
+
+    .the-curd-form-field {
+      max-width: 100%;
+    }
+  }
+
+  .the-curd-example {
+    border: dashed 1px var(--border-color);
+
+    .the-curd-example-item {
+      position: relative;
+      width: 100%;
+      min-height: 60px;
+      padding: 8px var(--gap);
+      border-top: dashed 1px var(--border-color);
+      cursor: pointer;
+
+      &:first-child {
+        border-top: none;
+      }
+
+      &::after {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        content: "";
+        z-index: 2;
+      }
+    }
   }
 }
 

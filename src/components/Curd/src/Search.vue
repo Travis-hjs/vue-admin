@@ -5,14 +5,15 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { type PropType } from "vue";
+import type { CurdType } from "./types";
+import type { PropType } from "vue";
+import type { FieldEditorType } from "./popup/types";
 import { FilterWrap, FilterItem, SearchBtn } from "@/components/LayoutDisplay";
 import Field from "./Field.vue";
 import { convertPx } from "./data";
 import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
-import type { CurdConfig, CurdType } from "./types";
-import { curdConfigState } from "./hooks";
+import { openFieldEditor } from "./popup";
 
 const props = defineProps({
   search: {
@@ -46,21 +47,22 @@ function onDeleteItem(index: number) {
   });
 }
 
-function onEditItem(index: number, action: CurdConfig.Editor["action"] = "edit") {
-  // curdConfigState.editor.form;
-  curdConfigState.editor.index = index;
-  curdConfigState.editor.action = action;
-  curdConfigState.editor.show = true;
-}
-
-function isEdit(index: number) {
-  return curdConfigState.editor.index === index && curdConfigState.editor.show;
+function onEditItem(index: number, action: FieldEditorType.Props["action"] = "edit") {
+  openFieldEditor({
+    type: "search",
+    action,
+    index,
+    searches: props.search.list,
+  })
 }
 
 function onAddItem() {
-  curdConfigState.editor.index = -1;
-  curdConfigState.editor.action = "add";
-  curdConfigState.editor.show = true;
+  openFieldEditor({
+    type: "search",
+    action: "add",
+    index: -1,
+    searches: props.search.list,
+  })
 }
 
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
@@ -81,7 +83,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
           v-for="(item, itemIndex) in props.search.list"
           :key="item.id"
           :data-key="item.id"
-          :class="[{ 'the-curd-selected': isEdit(itemIndex) }, item.id]"
+          :class="[{ 'the-curd-selected': null }, item.id]"
           :label="item.label"
           :labelWidth="convertPx(item.labelWidth)"
           :required="item.required"
@@ -93,7 +95,7 @@ const { onDragStart, onDragMove, onDropEnd } = useListDrag({
         >
           <template v-if="props.editMode" #label>
             <i class="el-icon-rank el-icon--left" />
-            <span style="line-height: 1;">{{ item.label }}</span>
+            <span class="leading-1">{{ item.label }}</span>
           </template>
           <Field :field-data="item" :disabled="props.loading"/>
           <div v-if="props.editMode" class="the-curd-edit-mask f-vertical f-right">

@@ -5,7 +5,6 @@ import type { PropType } from "vue";
 import { formatDate, isType } from "@/utils";
 import { shortcutMap } from "./data";
 import icons from "./data/element-icons.json";
-import { curdConfigState } from "./hooks";
 import { watch } from "vue";
 import { presetCodeMap } from "./data/code";
 // ----------------- 一些零散的单一组件 -----------------
@@ -376,6 +375,10 @@ export const PresetCode = defineComponent({
     value: {
       type: [String, Function],
       default: "",
+    },
+    pageId: {
+      type: String,
+      required: true,
     }
   },
   emits: {
@@ -405,8 +408,7 @@ export const PresetCode = defineComponent({
     function onSelect() {
       const option = state.options.find(opt => opt.id === state.selected);
       if (!option) return;
-      const { pageId } = curdConfigState;
-      input.value = option.code.replace("_pageId", pageId);
+      input.value = option.code.replace("_pageId", props.pageId);
     }
 
     async function getOptions() {
