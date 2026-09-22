@@ -1,5 +1,6 @@
 import type { TableType } from "@/components/Table";
 import type { CascaderOption } from "element-plus";
+import type { Common } from "./popup";
 
 type NativeDate = Date;
 
@@ -416,4 +417,61 @@ export const enum CurdEnum {
   Operation = "operation",
   /** 打开表单操作 */
   OpenForm = "open-form",
+}
+
+export namespace ComponentProps {
+
+  /** Field 组件属性 */
+  export interface Field {
+    fieldData: CurdType.Field;
+    /**
+     * 是否为编辑模式
+     * - 主要为`radio`和`checkbox`组件做空数据占位显示用
+     */
+    editMode?: boolean;
+    readonly?: boolean;
+    disabled?: boolean;
+  }
+
+  /** Curd 组件属性 */
+  export interface Curd extends Common {
+    /** 是配置，同时也是响应数据 */
+    data: CurdType.Config;
+    /** 操作对象 */
+    action: CurdType.Action;
+  }
+
+  /** Search 组件属性 */
+  export interface Search {
+    search: CurdType.Search;
+    loading?: boolean;
+    /** 是否编辑模式 */
+    editMode?: boolean;
+  }
+
+  /** TableForm 组件属性 */
+  export interface TableForm extends Common {
+    /** 表单配置 */
+    config?: CurdType.Table.From;
+    /** 表单类型 */
+    type?: "add" | "edit";
+    /** 是否编辑模式 */
+    editMode?: boolean;
+    disabled?: boolean;
+  }
+
+  /** TableOperation 组件属性 */
+  export interface TableOperation extends Common {
+    /** 配置数据 */
+    config: CurdType.Table.Config;
+    /** 是否编辑模式 */
+    editMode?: boolean;
+    disabled?: boolean;
+  }
+
+  /** TableModel 组件属性 */
+  export interface TableModel extends Common {
+    config: CurdType.Table.Config;
+  }
+
 }

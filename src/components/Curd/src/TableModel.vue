@@ -5,11 +5,11 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 import { getColumnData } from "./data";
 import { useListDrag } from "@/hooks/common";
 import { messageBox } from "@/utils/message";
-import { CurdEnum, type CurdType } from "./types";
+import { CurdEnum, type ComponentProps, type CurdType } from "./types";
 import { TableImage } from "./part";
 import TableOperation from "./TableOperation.vue";
 import { deepClone } from "@/utils";
@@ -23,16 +23,7 @@ import {
 } from "./popup";
 import type { TableColumnType, TableFormType } from "./popup/types";
 
-const props = defineProps({
-  config: {
-    type: Object as PropType<CurdType.Table.Config>,
-    required: true
-  },
-  pageId: {
-    type: String,
-    required: true
-  }
-});
+const props = defineProps<ComponentProps.TableModel>();
 
 const demoUrl = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
 

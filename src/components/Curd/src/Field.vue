@@ -5,25 +5,13 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, type PropType } from "vue";
+import { computed } from "vue";
 import { convertPx, fieldTitleMap, initField } from "./data";
-import type { CurdType } from "./types";
+import { type ComponentProps, type CurdType } from "./types";
 import { deepClone, inputOnlyNumber, isType } from "@/utils";
 import { DatePicker, SelectField } from "./part";
 
-const props = defineProps({
-  fieldData: {
-    type: Object as PropType<CurdType.Field>,
-    required: true
-  },
-  /**
-   * 是否为编辑模式
-   * - 主要为`radio`和`checkbox`组件做空数据占位显示用
-   */
-  editMode: Boolean,
-  readonly: Boolean,
-  disabled: Boolean
-});
+const props = defineProps<ComponentProps.Field>();
 
 const emit = defineEmits<{
   (event: "change", val: any): void;

@@ -5,29 +5,12 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { type PropType, computed } from "vue";
-import { type CurdType, CurdEnum } from "./types";
+import { computed } from "vue";
+import { type ComponentProps, type CurdType, CurdEnum } from "./types";
 import { TableOperationBar } from "@/components/Table";
 import { isType } from "@/utils";
 
-const props = defineProps({
-  /** 配置数据 */
-  config: {
-    type: Object as PropType<CurdType.Table.Config>,
-    required: true,
-  },
-  /** 是否编辑模式 */
-  editMode: {
-    type: Boolean
-  },
-  disabled: {
-    type: Boolean
-  },
-  pageId: {
-    type: String,
-    required: true
-  }
-});
+const props = defineProps<ComponentProps.TableOperation>();
 
 type ActionValue = CurdType.Table.Batch["click"] | CurdType.Table.From;
 

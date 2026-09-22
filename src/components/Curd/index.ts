@@ -16,6 +16,6 @@ export { exportPropToWindow } from "./src/hooks";
 
 export { openCurdConfig } from "./src/popup";
 
-export type { CurdType } from "./src/types";
+export type { ComponentProps, CurdType } from "./src/types";
 
 export { CurdEnum } from "./src/types";

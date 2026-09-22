@@ -1,6 +1,6 @@
 import type { CurdType } from "../types";
 
-interface Common {
+export interface Common {
   /** 页面唯一标识 */
   pageId: string;
 }

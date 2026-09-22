@@ -21,6 +21,8 @@ import FieldEditor from "./FieldEditor.vue";
 import { getCurdConfigDefault } from "../data/index.ts";
 import CurdConfigPopup from "./Config.vue";
 
+export type * from "./types";
+
 /**
  * 输出组件
  * @param com

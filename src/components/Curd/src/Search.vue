@@ -5,8 +5,7 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import type { CurdType } from "./types";
-import type { PropType } from "vue";
+import type { ComponentProps } from "./types";
 import type { FieldEditorType } from "./popup/types";
 import { FilterWrap, FilterItem, SearchBtn } from "@/components/LayoutDisplay";
 import Field from "./Field.vue";
@@ -15,21 +14,7 @@ import { messageBox } from "@/utils/message";
 import { useListDrag } from "@/hooks/common";
 import { openFieldEditor } from "./popup";
 
-const props = defineProps({
-  search: {
-    type: Object as PropType<CurdType.Search>,
-    required: true
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  /** 是否编辑模式 */
-  editMode: {
-    type: Boolean,
-    default: false
-  },
-});
+const props = defineProps<ComponentProps.Search>();
 
 const emit = defineEmits<{
   (event: "search", reset: boolean): void;

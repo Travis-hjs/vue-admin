@@ -5,9 +5,9 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { CurdEnum, type CurdType } from "./types";
+import { CurdEnum, type ComponentProps, type CurdType } from "./types";
 import type { CurdConfig } from "./popup/types";
-import { computed, onMounted, reactive, ref, type PropType } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import Search from "./Search.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
@@ -23,23 +23,7 @@ import { Table } from "@/components/Table";
 import { onUploadFile } from "@/components/Upload";
 import { openCurdConfig } from "./popup/index";
 
-const props = defineProps({
-  /** 是配置，同时也是响应数据 */
-  data: {
-    type: Object as PropType<CurdType.Config>,
-    required: true
-  },
-  /** 操作对象 */
-  action: {
-    type: Object as PropType<CurdType.Action>,
-    required: true
-  },
-  /** 页面标识 */
-  pageId: {
-    type: String,
-    required: true
-  }
-});
+const props = defineProps<ComponentProps.Curd>();
 
 const emit = defineEmits<{
   (event: "update:data", value: typeof props.data): void;

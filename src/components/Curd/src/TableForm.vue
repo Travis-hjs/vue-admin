@@ -5,35 +5,16 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { computed, reactive, ref, type PropType } from "vue";
-import type { CurdType } from "./types";
+import type { ComponentProps, CurdType } from "./types";
 import type { FormInstance } from "element-plus";
+import { computed, reactive, ref } from "vue";
 import { convertPx, getFieldValue, getFormConfig, initField } from "./data";
 import Field from "./Field.vue";
 import { deepClone, formatDeepKeyObj, getValueByDeepKey, isType } from "@/utils";
 import { LabelTips } from "@/components/Fields";
 
-const props = defineProps({
-  /** 表单配置 */
-  config: {
-    type: Object as PropType<CurdType.Table.From>,
-    default: () => getFormConfig()
-  },
-  /** 表单类型 */
-  type: {
-    type: String as PropType<"add" | "edit">
-  },
-  /** 是否编辑模式 */
-  editMode: {
-    type: Boolean
-  },
-  disabled: {
-    type: Boolean
-  },
-  pageId: {
-    type: String,
-    required: true
-  }
+const props = withDefaults(defineProps<ComponentProps.TableForm>(), {
+  config: getFormConfig
 });
 
 const formRef = ref<FormInstance>();
@@ -149,9 +130,9 @@ function update(config: CurdType.Table.From) {
       rules[field.key] = [
         {
           required: true,
-          validator(_: any, val: any, callback: (err?: Error) => void) {
+          validator(_: any, _val: any, callback: (err?: Error) => void) {
             const empty: Array<any> = [undefined, null, ""];
-            // console.log("validator >>", val);
+            // console.log("validator >>", _val);
             if (field.type === "input-between" && !field.value[0] && !field.value[1]) {
               callback(new Error("请输入两个范围字段"));
               return;
