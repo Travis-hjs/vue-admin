@@ -16,6 +16,7 @@ import { Fields, type FieldType } from "@/components/Fields";
 import { deepClone } from "@/utils";
 import { tableOperation } from "../data/html";
 import type { TableOperationType } from "./types";
+import { CodeEditor } from "@/components/CodeEditor";
 
 const props = defineProps<TableOperationType.Props>();
 
@@ -87,7 +88,8 @@ const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
   {
     label: "按钮显示条件",
     prop: "show",
-    type: "textarea",
+    type: "slot",
+    slotName: "showCode",
     placeholder: "请输入条件代码，为空则默认显示",
     tooltip: tableOperation.showTips
   },
@@ -107,7 +109,7 @@ const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
     label: "按钮图标",
     prop: "icon",
     type: "slot",
-    slotName: "icon"
+    slotName: "IconInput"
   },
   {
     label: "是否为实心按钮",
@@ -223,6 +225,13 @@ onBeforeMount(() => {
                 :page-id="props.pageId"
               />
             </template>
+            <template #showCode>
+              <CodeEditor
+                v-model:value="(form.data.show as string)"
+                language="js"
+                placeholder="请输入条件代码，为空则默认显示"
+              />
+            </template>
             <template #formConfig>
               <el-button
                 :type="form.data.formConfig ? 'success' : 'primary'"
@@ -244,7 +253,7 @@ onBeforeMount(() => {
                 删除表单
               </el-button>
             </template>
-            <template #icon>
+            <template #IconInput>
               <IconInput v-model:value="form.data.icon" />
             </template>
           </Fields>

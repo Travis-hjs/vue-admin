@@ -93,7 +93,7 @@ const formItems: Array<FieldType.Member<CurdType.Table.Batch>> = [
     label: "按钮图标",
     prop: "icon",
     type: "slot",
-    slotName: "icon",
+    slotName: "IconInput",
   },
   {
     label: "是否实心按钮",
@@ -237,7 +237,7 @@ onBeforeMount(() => {
                 :page-id="props.pageId"
               />
             </template>
-            <template #icon>
+            <template #IconInput>
               <IconInput v-model:value="state.formData.icon" />
             </template>
             <template #formConfig>

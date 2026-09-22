@@ -15,6 +15,7 @@ import { FooterBtn, IconInput, PresetCode } from "../part";
 import { deepClone, isType } from "@/utils";
 import { Fields, type FieldType } from "@/components/Fields";
 import { tableAction } from "../data/html";
+import { CodeEditor } from "@/components/CodeEditor";
 
 const props = defineProps<TableActionType.Props>();
 
@@ -96,8 +97,8 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
   {
     label: "按钮文字",
     prop: "text",
-    type: "textarea",
-    placeholder: btnRules.text.message,
+    type: "slot",
+    slotName: "textCode",
     tooltip: tableAction.textTips
   },
   {
@@ -118,21 +119,23 @@ const btnItems: Array<FieldType.Member<CurdType.Table.Action>> = [
   {
     label: "按钮显示条件",
     prop: "show",
-    type: "textarea",
-    placeholder: "请输入条件代码，为空则默认显示",
+    type: "slot",
+    slotName: "showCode",
     tooltip: tableAction.booleanTips
   },
   {
     label: "按钮禁用条件",
     prop: "disabled",
-    type: "textarea",
-    placeholder: "请输入条件代码，为空则默认不禁用",
+    type: "slot",
+    slotName: "disabledCode",
     tooltip: tableAction.booleanTips
   },
   {
     label: "按钮图标",
     prop: "icon",
     type: "slot",
+    // placeholder: "请输入图标",
+    // tooltip: "el-icons 图标文档：" + getLinkLabel("查看", "https://element.eleme.cn/#/zh-CN/component/icon"),
     slotName: "iconInput"
   },
   {
@@ -252,12 +255,12 @@ onBeforeMount(() => {
   <base-dialog
     v-model:show="open"
     title="配置操作列按钮功能"
-    width="1000px"
+    width="1100px"
     @close="onClose"
     @closed="emit('closed')"
   >
     <div class="flex">
-      <section class="f1">
+      <section class="f3 overflow-hidden">
         <div class="mb-[10px]">
           <h2 class="the-title is-line">操作列配置</h2>
         </div>
@@ -290,6 +293,27 @@ onBeforeMount(() => {
                 :page-id="props.pageId"
               />
             </template>
+            <template #textCode>
+              <CodeEditor
+                v-model:value="(form.btn.text as string)"
+                language="js"
+                :placeholder="btnRules.text.message"
+              />
+            </template>
+            <template #showCode>
+              <CodeEditor
+                v-model:value="(form.btn.show as string)"
+                language="js"
+                placeholder="请输入条件代码，为空则默认显示"
+              />
+            </template>
+            <template #disabledCode>
+              <CodeEditor
+                v-model:value="(form.btn.disabled as string)"
+                language="js"
+                placeholder="请输入条件代码，为空则默认不禁用"
+              />
+            </template>
             <template #formConfig>
               <el-button
                 :type="form.btn.formConfig ? 'success' : 'primary'"
@@ -311,7 +335,7 @@ onBeforeMount(() => {
                 删除表单
               </el-button>
             </template>
-            <template #icon>
+            <template #iconInput>
               <IconInput v-model:value="form.btn.icon" />
             </template>
           </Fields>
@@ -330,7 +354,7 @@ onBeforeMount(() => {
           </el-form-item>
         </el-form>
       </section>
-      <transition-group name="the-group" tag="div" class="the-curd-option-list f1">
+      <transition-group name="the-group" tag="div" class="the-curd-option-list f2 overflow-hidden">
         <div
           v-for="(item, itemIndex) in state.list"
           :class="['the-curd-option-item f-vertical', {'the-curd-selected': itemIndex === state.index}]"

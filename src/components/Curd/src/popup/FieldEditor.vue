@@ -24,6 +24,7 @@ import { validateEX } from "@/utils/dom";
 import { Fields, type FieldType } from "@/components/Fields";
 import { getInputRule } from "@/hooks/common";
 import { editor } from "../data/html";
+import { CodeEditor } from "@/components/CodeEditor";
 
 const props = defineProps<FieldEditorType.Props>();
 
@@ -340,8 +341,8 @@ const formItems = computed(() => {
     list.push({
       label: "表单显示逻辑",
       prop: "show",
-      type: "textarea",
-      placeholder: "请输入条件代码，为空则默认展示",
+      type: "slot",
+      slotName: "showCode",
       tooltip: editor.showTips
     });
   }
@@ -656,7 +657,7 @@ onBeforeMount(() => {
                 clearable
                 placeholder="请输入提示-1"
               />
-              <el-text style="padding: 0 6px;">-</el-text>
+              <el-text class="px-[6px]!">-</el-text>
               <el-input
                 v-model="state.formData.placeholder[1]"
                 class="f1"
@@ -672,27 +673,35 @@ onBeforeMount(() => {
             />
           </template>
           <template #defaultValue>
-            <el-input
-              v-model="json.defaultValue"
-              type="textarea"
-              clearable
+            <CodeEditor
+              v-model:value="json.defaultValue"
+              language="json"
               placeholder="请输入JSON，值为 value"
-              @blur="onDefaultValue"
+              @blur="onDefaultValue()"
             />
           </template>
           <template #options>
-            <el-input
-              v-model="json.options"
-              type="textarea"
-              placeholder="请输入数组JSON"
-              style="margin-bottom: 4px;"
-              @blur="onOptions"
+            <CodeEditor
+              v-model:value="json.options"
+              language="json"
+              placeholder="请输入JSON数组"
+              class="mb-[10px]"
+              @blur="onOptions()"
             />
             <el-button link type="primary">
               <a href="https://www.json.cn/" target="_blank">
                 JSON编辑工具
               </a>
             </el-button>
+          </template>
+          <template #showCode>
+            <CodeEditor
+              v-model:value="(state.formData.show as string)"
+              language="js"
+              placeholder="请输入条件代码，为空则默认展示"
+              class="mb-[10px]"
+              @blur="onOptions()"
+            />
           </template>
         </Fields>
       </el-form>

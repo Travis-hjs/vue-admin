@@ -22,6 +22,7 @@ import { copyText, deepClone } from "@/utils";
 import { PresetCode } from "../part";
 import { tableForm } from "../data/html";
 import { openFieldEditor } from "./index";
+import { CodeEditor } from "@/components/CodeEditor";
 
 const props = defineProps<TableFormType.Props>();
 
@@ -83,7 +84,8 @@ const formConfigs: Array<FieldType.Member<CurdType.Table.From>> = [
     label: "按钮显示逻辑",
     labelWidth,
     prop: "showCode",
-    type: "textarea",
+    type: "slot",
+    slotName: "showCode",
     tooltip: tableForm.showCodeTips,
     placeholder: "请输入代码片段",
     show: () => !isOther.value,
@@ -333,6 +335,13 @@ onBeforeMount(() => {
                   v-model:value="state.config.submitCode"
                   :type="PresetCodeType.Map.FormSubmit"
                   :page-id="props.pageId"
+                />
+              </template>
+              <template #showCode>
+                <CodeEditor
+                  v-model:value="state.config.showCode"
+                  language="js"
+                  placeholder="请输入代码片段"
                 />
               </template>
             </Fields>

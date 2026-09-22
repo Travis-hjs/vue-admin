@@ -5,8 +5,9 @@ export default {
 }
 </script>
 <script lang="ts" setup>
-import { CurdEnum, type ComponentProps, type CurdType } from "./types";
 import type { CurdConfig } from "./popup/types";
+import type{ ComponentProps, CurdType } from "./types";
+import { CurdEnum } from "./types";
 import { computed, onMounted, reactive, ref } from "vue";
 import Search from "./Search.vue";
 import TableOperation from "./TableOperation.vue";
@@ -409,7 +410,22 @@ exportPropToWindow({
 
 onMounted(function() {
   if (props.action.created && props.data.table.columns.length) {
-    props.action.created(getData);
+    props.action.created(() => {
+      const code = props.data.search.initCode;
+      if (typeof code === "string") {
+        try {
+          const fn = new Function("sandbox", code);
+          fn({
+            config: props.data,
+            pageId: props.pageId,
+          });
+        }
+        catch (error) {
+          console.warn("页面初始化代码出错 >>", error);
+        }
+      }
+      return getData();
+    });
   }
 });
 </script>

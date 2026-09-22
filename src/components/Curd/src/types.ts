@@ -181,6 +181,8 @@ export namespace CurdType {
     labelRight: boolean;
     /** 查询数据前校验代码 */
     validateCode?: string;
+    /** 初始化执行代码 */
+    initCode?: string;
     /** 操作列表 */
     list: Array<Field>;
   }

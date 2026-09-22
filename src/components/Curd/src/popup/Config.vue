@@ -16,7 +16,8 @@ import TableModel from "../TableModel.vue";
 import FullPopup from "../popup/FullPopup.vue";
 import { Fields, type FieldType } from "@/components/Fields";
 import { PresetCode } from "../part";
-import { searchSubmitTips } from "../data/html";
+import { initCodeTips, searchSubmitTips } from "../data/html";
+import { CodeEditor } from "@/components/CodeEditor";
 
 const props = defineProps<CurdConfig.Props>();
 
@@ -46,11 +47,18 @@ const searchConfigs: Array<FieldType.Member<CurdType.Search>> = [
     type: "switch"
   },
   {
-    label: "查询数据校验逻辑代码",
+    label: "查询数据前校验代码",
     prop: "validateCode",
     type: "slot",
     slotName: "validateCode",
     tooltip: searchSubmitTips
+  },
+  {
+    label: "初始化执行代码",
+    prop: "initCode",
+    type: "slot",
+    slotName: "initCode",
+    tooltip: initCodeTips
   }
 ];
 
@@ -112,6 +120,13 @@ function onSubmit() {
     </template>
     <div class="w-full h-full overflow-auto">
       <template v-if="state.type === 'search'">
+        <div class="pl-[10px] mb-[20px]">
+          <h2 class="the-title is-line">筛选条件配置</h2>
+        </div>
+        <Search
+          :search="state.config.search"
+          edit-mode
+        />
         <div class="pl-[10px] mb-[10px]">
           <h2 class="the-title is-line">基础配置</h2>
         </div>
@@ -131,15 +146,16 @@ function onSubmit() {
                 />
               </div>
             </template>
+            <template #initCode>
+              <CodeEditor
+                class="w-full max-w-[680px]"
+                v-model:value="state.config.search.initCode"
+                language="js"
+                placeholder="请输入初始化执行代码"
+              />
+            </template>
           </Fields>
         </el-form>
-        <div class="pl-[10px] mb-[20px]">
-          <h2 class="the-title is-line">筛选条件配置</h2>
-        </div>
-        <Search
-          :search="state.config.search"
-          edit-mode
-        />
       </template>
       <TableModel
         v-if="state.type === 'table'"

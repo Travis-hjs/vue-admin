@@ -1,5 +1,9 @@
 import { getBoldLabel } from "./index";
 
+export function getLinkLabel(text: string, link: string) {
+  return `<a class="el-link el-link--primary" target="_blank" href="${link}">${text}</a>`
+}
+
 /**
  * 通用函数参数提示
  * @param value 
@@ -30,6 +34,13 @@ export const searchSubmitTips = `<p>查询数据函数代码片段：</p>
 ${commonTips("params")}
 <p>参数：${getBoldLabel("params")}为当前查询参数对象；</p>
 <p>返回${getBoldLabel("true")}则可以查询，返回${getBoldLabel("false")}则终止查询。</p>`;
+
+export const initCodeTips = `<p>页面初始化执行代码片段：</p>
+${commonTips("config")}
+<p>参数：${getBoldLabel("config")}为当前页面配置对象；</p>
+<p>例如：${getBoldLabel("console.log(\"页面配置 >>\", config);")}</p>
+<p>执行时机在获取配置完成后运行；</p>
+`;
 
 export const tableAction = {
   textTips: `

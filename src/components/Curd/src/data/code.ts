@@ -286,6 +286,7 @@ _request(method, path, params,
       name: "校验查询参数",
       code: `
 const { pageId, params } = sandbox;
+
 if (!params.userId && !params.userName) {
   _message.warning("用户ID、用户名称 必须填一个！");
   return false;

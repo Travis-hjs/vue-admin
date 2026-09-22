@@ -7,6 +7,7 @@ import { shortcutMap } from "./data";
 import icons from "./data/element-icons.json";
 import { watch } from "vue";
 import { presetCodeMap } from "./data/code";
+import { CodeEditor } from "@/components/CodeEditor";
 // ----------------- 一些零散的单一组件 -----------------
 
 interface FooterBtnProps {
@@ -90,7 +91,7 @@ export const IconInput = defineComponent({
     }
   },
   emits: {
-    "update:value": (val: string) => true
+    "update:value": (_val: string) => true
   },
   setup(props, { emit }) {
     const iconClass = computed({
@@ -273,7 +274,7 @@ export const SelectField = defineComponent({
     }
   },
   emits: {
-    change: (val: string | number) => true
+    change: (_val: string | number) => true
   },
   setup(props, { emit }) {
     const selected = computed({
@@ -382,7 +383,7 @@ export const PresetCode = defineComponent({
     }
   },
   emits: {
-    "update:value": (val: string) => true,
+    "update:value": (_val: string) => true,
      blur: () => true
   },
   setup(props, { emit }) {
@@ -408,7 +409,7 @@ export const PresetCode = defineComponent({
     function onSelect() {
       const option = state.options.find(opt => opt.id === state.selected);
       if (!option) return;
-      input.value = option.code.replace("_pageId", props.pageId);
+      input.value = option.code.trim();
     }
 
     async function getOptions() {
@@ -432,13 +433,12 @@ export const PresetCode = defineComponent({
 
     return () => (
       <>
-        <el-input
-          v-model={input.value}
-          rows={6}
-          type="textarea"
+        <CodeEditor
+          v-model:value={input.value}
+          language="js"
           placeholder="请输入代码片段"
           class="mb-[10px]"
-          onInput={onInput}
+          onChange={onInput}
           onBlur={() => emit("blur")}
         />
         <div class="f-vertical w-full">
