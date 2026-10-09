@@ -112,8 +112,8 @@ const formItems: Array<FieldType.Member<CurdType.Table.Operation>> = [
     slotName: "IconInput"
   },
   {
-    label: "是否为实心按钮",
-    prop: "solid",
+    label: "是否为文本按钮",
+    prop: "isText",
     type: "switch"
   }
 ];

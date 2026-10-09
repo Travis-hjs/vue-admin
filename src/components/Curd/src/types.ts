@@ -279,8 +279,8 @@ export namespace CurdType {
        * - 字符串类型必须带有`return`关键字
        */
       show?: (() => boolean) | string;
-      /** 是否为实心按钮 */
-      solid?: boolean;
+      /** 是否为文本按钮 */
+      isText?: boolean;
       /**
        * 表单配置
        * - 如果存在，则直接调用`openForm`方法，跳过执行`click`事件

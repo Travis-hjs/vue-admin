@@ -159,8 +159,8 @@ function onOperation(btn: CurdType.Table.Operation) {
           :key="batch.key"
           :type="batch.type"
           :disabled="props.disabled"
-          :link="!batch.solid"
-          :size="batch.solid ? 'small' : undefined"
+          :link="batch.isText"
+          :size="batch.isText ? undefined : 'small'"
           :class="[{ 'the-tooltip': !!batch.tooltip }]"
           :data-tooltip="batch.tooltip"
           @click="onBatch(batch)"
@@ -173,8 +173,8 @@ function onOperation(btn: CurdType.Table.Operation) {
         v-for="item in operations"
         :key="item.key"
         :type="item.type"
-        :link="!item.solid"
-        :size="item.solid ? 'small' : undefined"
+        :link="item.isText"
+        :size="item.isText ? undefined : 'small'"
         :disabled="props.disabled"
         :class="[{ 'the-tooltip': !!item.tooltip }]"
         :data-tooltip="item.tooltip"
@@ -186,7 +186,7 @@ function onOperation(btn: CurdType.Table.Operation) {
       <el-button
         v-if="has.add && formBtnShow.add"
         type="primary"
-        link
+        size="small"
         :disabled="props.disabled"
         @click="onAction(CurdEnum.Add)"
       >
