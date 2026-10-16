@@ -1,4 +1,3 @@
-import type { RendererElement, RendererNode, VNode } from "vue";
 import type {
   CurdConfig,
   FieldEditorType,
@@ -8,46 +7,19 @@ import type {
   TableFormType,
   TableOperationType
 } from "./types";
-import { createApp, h, ref } from "vue";
-import { registerPlugins } from "@/utils/plugins";
-import { ElConfigProvider } from "element-plus";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
+import {  h, ref } from "vue";
+import { render } from "@/components/PopupForm";
 import TableAction from "./TableAction.vue";
 import TableBatch from "./TableBatch.vue";
 import TableColumn from "./TableColumn.vue";
 import TableOperation from "./TableOperation.vue";
 import TableForm from "./TableForm.vue";
 import FieldEditor from "./FieldEditor.vue";
-import { getCurdConfigDefault } from "../data/index.ts";
+import { getCurdConfigDefault } from "../data";
 import CurdConfigPopup from "./Config.vue";
 
 export type * from "./types";
 
-/**
- * 输出组件
- * @param com
- */
-function render(com: () => VNode<RendererNode, RendererElement, { [key: string]: any }>) {
-  const app = createApp(() =>
-    h(
-      ElConfigProvider,
-      {
-        locale: zhCn,
-      },
-      {
-        default: () => com(),
-      },
-    ),
-  );
-
-  const el = document.createElement("div");
-  document.body.appendChild(el);
-
-  registerPlugins(app);
-  app.mount(el);
-
-  return [app, el] as const;
-}
 
 /**
  * 打开表格操作列配置

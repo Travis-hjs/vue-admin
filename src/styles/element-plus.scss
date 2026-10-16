@@ -45,6 +45,10 @@ body {
 
   .el-button--small {
     border-radius: 2px;
+    
+    &.is-circle {
+      border-radius: 50%;
+    }
   }
 }
 
