@@ -1,3 +1,5 @@
+import type { SetupContext } from "vue";
+
 export namespace FilterType {
   export interface Wrap {
     /** `label`宽度 */
@@ -38,7 +40,7 @@ export namespace FilterType {
     tooltipWidth?: string | number;
   }
 
-  export interface ItemCtx {
+  export interface ItemCtx extends Pick<SetupContext<Item>, "attrs" | "emit"> {
     slots: {
       /** `label`前缀 */
       prefix?(): any;

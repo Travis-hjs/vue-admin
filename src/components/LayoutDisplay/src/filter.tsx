@@ -1,5 +1,6 @@
 import "../styles/filter.scss";
 import type { FilterType } from "./types";
+import { mergeProps } from "vue";
 
 const width = "--label-width";
 
@@ -28,7 +29,7 @@ export function FilterWrap(props: FilterType.Wrap, { slots }: FilterType.WrapCtx
 /**
  * 筛选节点组件
  */
-export function FilterItem(props: FilterType.Item, { slots }: FilterType.ItemCtx) {
+export function FilterItem(props: FilterType.Item, { attrs, slots }: FilterType.ItemCtx) {
   function getWidth() {
     const val = props.tooltipWidth;
     if (!val) return undefined;
@@ -38,7 +39,7 @@ export function FilterItem(props: FilterType.Item, { slots }: FilterType.ItemCtx
     return val;
   }
   return (
-    <div class={`the-filter-item flex${props.required ? " is-required" : ""}`}>
+    <div {...mergeProps(attrs, { class: `the-filter-item flex${props.required ? " is-required" : ""}` })}>
       {slots.prefix ? slots.prefix() : null}
       {slots.label || props.label ? (
         <span

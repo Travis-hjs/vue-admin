@@ -103,6 +103,10 @@ interface ListDragOption<T> {
    * - 当有多种拖拽列表处于同一场景时，设置该值作为区分用
    */
   dataKey?: string;
+  /**
+   * 是否延迟到拖拽结束时才更新列表
+   */
+  defer?: boolean;
 }
 
 /**
@@ -116,9 +120,9 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
   const current = {
     index: -1
   }
-
   const target = {
-    key: ""
+    key: "",
+    index: -1,
   }
 
   function findDataKey(el: HTMLElement, level = 1) {
@@ -146,6 +150,9 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
   }
 
   function onDropEnd() {
+    if (option.defer && current.index >= 0 && target.index >= 0 && current.index !== target.index) {
+      updateList();
+    }
     current.index = -1;
   }
 
@@ -155,6 +162,14 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
     const targetKey = findDataKey(event.target as HTMLElement);
     if (!targetKey || targetKey === target.key) return;
     target.key = targetKey;
+    target.index = targetIndex;
+    if (!option.defer) {
+      updateList();
+    }
+  }
+
+  function updateList() {
+    const targetIndex = target.index;
     const optionList = option.list();
     const before = optionList.map(item => item[option.key]);
     // 记录原始数据字符串，下面做对比用
@@ -162,7 +177,10 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
     // 拷贝原来数组
     const next: typeof before = JSON.parse(beforeStr);
     // 交替数组位置
-    [next[current.index], next[targetIndex]] = [next[targetIndex], next[current.index]];
+    [next[current.index], next[targetIndex]] = [
+      next[targetIndex],
+      next[current.index],
+    ];
     // 上一次修改如果和当前数组一致则不作处理
     if (beforeStr === JSON.stringify(next)) return;
     // 最后设置排序
@@ -180,7 +198,7 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
   return {
     onDragStart,
     onDragMove,
-    onDropEnd
+    onDropEnd,
   }
 }
 

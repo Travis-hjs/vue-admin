@@ -53,7 +53,8 @@ function onAddItem() {
 const { onDragStart, onDragMove, onDropEnd } = useListDrag({
   list: () => props.search.list,
   key: "id",
-  findLevel: 5
+  findLevel: 5,
+  // defer: true,
 });
 </script>
 <template>
