@@ -1,6 +1,6 @@
 import store from "@/store";
 import { isType } from "@/utils";
-import { onMounted, onUnmounted, watch } from "vue";
+import { onMounted, onUnmounted, reactive, watch } from "vue";
 
 let zIndex = 1000;
 
@@ -200,6 +200,61 @@ export function useListDrag<T extends object>(option: ListDragOption<T>) {
     onDragMove,
     onDropEnd,
   }
+}
+
+/**
+ * 基于`useListDrag`包装的组合操作
+ * - 延迟拖拽结束更新操作时可以使用响应对象来设置节点样式
+ * @param option
+ */
+export function useComposeDrag<T extends object>(option: ListDragOption<T>) {
+  const { onDragStart, onDragMove, onDropEnd } = useListDrag(option);
+
+  const state = reactive<{ targetKey?: string | number; draggingKey?: string | number }>({
+    targetKey: undefined,
+    draggingKey: undefined,
+  });
+
+  function resetState() {
+    state.draggingKey = undefined;
+    state.targetKey = undefined;
+  }
+
+  /**
+   * 获取拖拽绑定属性
+   * @param key
+   * @param index
+   * @param isDraggable 是否能拖拽
+   */
+  function getProps(key: number | string, index: number, isDraggable = true) {
+    return {
+      key,
+      "data-key": key,
+      draggable: isDraggable,
+      onDragstart() {
+        state.draggingKey = key;
+        onDragStart(index);
+      },
+      onDragover(e: DragEvent) {
+        onDragMove(e, index);
+        if (state.draggingKey !== undefined && key !== state.draggingKey) {
+          state.targetKey = key;
+        }
+      },
+      onDragleave() {
+        if (state.targetKey === key) {
+          state.targetKey = undefined;
+        }
+      },
+      onDrop() {
+        onDropEnd();
+        resetState();
+      },
+      onDragend: resetState,
+    };
+  }
+
+  return [getProps, state] as const;
 }
 
 /**
