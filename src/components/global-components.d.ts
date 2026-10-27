@@ -1,4 +1,4 @@
-import type BaseDialog from "./base-dialog";
+import type { BaseDialog } from "./base-dialog";
 
 
 // ---------------- 声明全局组件标签类型提示 ----------------
